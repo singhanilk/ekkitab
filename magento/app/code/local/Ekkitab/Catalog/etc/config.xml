@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<config>    
+    <modules>
+        <Ekkitab_Catalog>
+            <version>0.1.0</version>
+        </Ekkitab_Catalog>
+    </modules>
+	<global>
+		<models>
+			<ekkitab_catalog>
+				<class>Ekkitab_Catalog_Model</class>
+				<!-- 
+				need to create our own resource, can't just use core_mysql4
+				-->
+				<resourceModel>ekkitab_catalog_resource_mysql4</resourceModel>
+			</ekkitab_catalog>   
+			<ekkitab_catalog_resource_mysql4>
+				<class>Ekkitab_Catalog_Model_Resource_Mysql4</class>  
+				 <entities>
+						<author_topAuthors>
+							<table>ek_catalog_top_authors</table>
+						</author_topAuthors>
+						<category_popular>
+							<table>ek_catalog_popular_categories</table>
+						</category_popular>
+				 </entities>
+			</ekkitab_catalog_resource_mysql4>
+		</models>
+		<!-- 
+		Following code is for resource connections
+		-->
+		<resources>
+			<ekkitab_catalog_write>
+				<connection>
+					<use>core_write</use>
+				</connection>
+			</ekkitab_catalog_write>
+			<ekkitab_catalog_read>
+				<connection>
+					<use>core_read</use>
+				</connection>
+			</ekkitab_catalog_read>      
+		</resources> 	
+		<!-- 
+		Since we are overwriting the core's catalog module ..we need to rewrite the modules under the new catalog module.
+		-->
+		<blocks>
+			<catalog>
+				<rewrite>
+						<author_topAuthors>Ekkitab_Catalog_Block_Author_TopAuthors</author_topAuthors>
+						<category_popular>Ekkitab_Catalog_Block_Category_Popular</category_popular>
+				</rewrite>
+			</catalog>
+		</blocks>
+	</global>
+	<!--frontend>
+		<routers>
+			<ekkitab_catalog>
+				<use>standard</use>
+				<args>
+					<module>Ekkitab_Catalog_Author</module>
+					<frontName>author</frontName>
+				</args>
+			</ekkitab_catalog>
+		</routers>
+	</frontend-->       
+</config>   

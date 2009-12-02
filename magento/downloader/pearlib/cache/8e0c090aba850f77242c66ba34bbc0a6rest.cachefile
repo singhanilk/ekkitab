@@ -1,0 +1,5 @@
+a:14:{s:7:"attribs";a:2:{s:5:"xmlns";s:36:"http://pear.php.net/dtd/rest.release";s:18:"xsi:schemaLocation";s:81:"http://pear.php.net/dtd/rest.release     http://pear.php.net/dtd/rest.release.xsd";}s:1:"p";a:2:{s:7:"attribs";a:1:{s:10:"xlink:href";s:44:"/Chiara_PEAR_Server_REST/p/mage_pear_helpers";}s:8:"_content";s:17:"Mage_Pear_Helpers";}s:1:"c";s:32:"connect.magentocommerce.com/core";s:1:"v";s:9:"1.0.18800";s:2:"st";s:6:"stable";s:1:"l";s:20:"Open Software Licens";s:1:"m";s:5:"moshe";s:1:"s";s:72:"Files that needs to be in PEAR library such as roles, tasks and commands";s:1:"d";s:120:"Includes:
+./pear
+./lib/pear/php/pearmage.php
+./lib/pear/php/PEAR/Command/Mage*
+./lib/pear/php/PEAR/Installer/Role//Mage*";s:2:"da";s:19:"2008-03-31 05:39:35";s:1:"n";s:20:"First stable release";s:1:"f";s:4:"9225";s:1:"g";s:71:"http://connect.magentocommerce.com/core/get/Mage_Pear_Helpers-1.0.18800";s:1:"x";a:1:{s:7:"attribs";a:1:{s:10:"xlink:href";s:21:"package.1.0.18800.xml";}}}

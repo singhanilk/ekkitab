@@ -1,0 +1,35 @@
+<?php
+/**
+ *
+ * @copyright  Copyright (c) 2009 Ekkitab Educational Services Pvt Ltd (http://www.ekkitab.com)
+ */
+?>
+<?php
+/**
+ * Most Popular Category List template
+ *
+ */
+?>
+<?php 
+		$topSearches= $this->getTopSearches();
+		
+		$_count = is_array($topSearches)?count($topSearches):$topSearches->count(); 
+?>
+ <script language="JavaScript"  type="text/javascript">
+    function searchTitle(query){
+		var searchForm = document.forms.search_popular;
+		searchForm.<?php echo $this->helper('catalogSearch')->getQueryParamName() ?>.value=query;
+		searchForm.submit();
+	}
+</script>
+<span>Popular Searches: </span>	
+<?php if($_count): ?>
+<form name="search_popular" action="<?php echo $this->helper('catalogSearch')->getResultUrl() ?>" method="get">
+	<input type="hidden" name="<?php echo $this->helper('catalogSearch')->getQueryParamName() ?>" value="" />
+</form>
+	<?php foreach ($topSearches as $tag): ?>
+		<?php if($tag->getIsActive()): ?>
+			<a href="javascript:searchTitle('<?php echo $tag->getQueryText()?>');"><?php echo $this->htmlEscape($tag->getQueryText()) ?></a>&nbsp; &nbsp;
+		<?php endif; ?>
+	<?php endforeach ?>
+<?php endif; ?>

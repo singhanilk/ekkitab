@@ -1,0 +1,712 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category   design_default
+ * @package    Mage
+ * @copyright  Copyright (c) 2008 Irubin Consulting Inc. DBA Varien (http://www.varien.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+
+<layout>
+    <adminhtml_sales_order_view>
+        <reference name="content">
+            <block type="adminhtml/sales_order_view" name="sales_order_edit"></block>
+        </reference>
+        <reference name="left">
+            <block type="adminhtml/sales_order_view_tabs" name="sales_order_tabs">
+                <block type="adminhtml/sales_order_view_tab_info" name="order_tab_info" template="sales/order/view/tab/info.phtml">
+                    <block type="adminhtml/sales_order_view_messages" name="order_messages"></block>
+                    <block type="adminhtml/sales_order_view_info" name="order_info" template="sales/order/view/info.phtml"></block>
+                    <block type="adminhtml/sales_order_view_items" name="order_items" template="sales/order/view/items.phtml">
+                        <action method="addItemRender"><type>default</type><block>adminhtml/sales_order_view_items_renderer_default</block><template>sales/order/view/items/renderer/default.phtml</template></action>
+                        <action method="addColumnRender"><column>qty</column><block>adminhtml/sales_items_column_qty</block><template>sales/items/column/qty.phtml</template></action>
+                        <action method="addColumnRender"><column>name</column><block>adminhtml/sales_items_column_name</block><template>sales/items/column/name.phtml</template></action>
+                        <action method="addColumnRender"><column>name</column><block>adminhtml/sales_items_column_name_grouped</block><template>sales/items/column/name.phtml</template><type>grouped</type></action>
+                    </block>
+                    <block type="adminhtml/sales_order_payment" name="order_payment"></block>
+                    <block type="adminhtml/sales_order_view_history" name="order_history" template="sales/order/view/history.phtml"></block>
+                    <block type="adminhtml/sales_order_view_giftmessage" name="order_giftmessage" template="sales/order/view/giftmessage.phtml"></block>
+                    <block type="adminhtml/sales_order_totals" name="order_totals" template="sales/order/totals.phtml">
+                        <block type="adminhtml/sales_order_totals_item" name="footer" template="sales/order/totals/footer.phtml">
+                            <block type="adminhtml/sales_order_totals_item" name="grand" template="sales/order/totals/grand.phtml" />
+                            <block type="adminhtml/sales_order_totals_item" name="paid" template="sales/order/totals/paid.phtml" />
+                            <block type="adminhtml/sales_order_totals_item" name="refunded" template="sales/order/totals/refunded.phtml" />
+                            <block type="adminhtml/sales_order_totals_item" name="due" template="sales/order/totals/due.phtml" />
+                        </block>
+                        <block type="adminhtml/sales_order_totals_item" name="sales.order.view.totals.main" as="main" template="sales/order/totals/main.phtml">
+                            <block type="adminhtml/sales_order_totals_item" name="subtotal" template="sales/order/totals/item.phtml">
+                                <action method="setSourceField"><value>subtotal</value></action>
+                                <action method="setLabel"><value>Subtotal</value></action>
+                            </block>
+                            <block type="adminhtml/sales_order_totals_tax" name="tax" template="sales/order/totals/tax.phtml" />
+                            <block type="adminhtml/sales_order_totals_item" name="shipping" template="sales/order/totals/shipping.phtml" />
+                            <block type="adminhtml/sales_order_totals_item" name="discount" template="sales/order/totals/discount.phtml" />
+                            <block type="adminhtml/sales_order_totals_item" name="giftcert" template="sales/order/totals/item.phtml">
+                                <action method="setSourceField"><value>giftcert_amount</value></action>
+                                <action method="setLabel"><value>Gift Certificate</value></action>
+                            </block>
+                            <block type="adminhtml/sales_order_totals_item" name="adjustment_positive" template="sales/order/totals/item.phtml">
+                                <action method="setSourceField"><value>adjustment_positive</value></action>
+                                <action method="setLabel"><value>Adjustment Refund</value></action>
+                            </block>
+                            <block type="adminhtml/sales_order_totals_item" name="adjustment_negative" template="sales/order/totals/item.phtml">
+                                <action method="setSourceField"><value>adjustment_negative</value></action>
+                                <action method="setLabel"><value>Adjustment Fee</value></action>
+                            </block>
+                        </block>
+                    </block>
+                </block>
+                <action method="addTab"><name>order_info</name><block>order_tab_info</block></action>
+                <action method="addTab"><name>order_invoices</name><block>adminhtml/sales_order_view_tab_invoices</block></action>
+                <action method="addTab"><name>order_creditmemos</name><block>adminhtml/sales_order_view_tab_creditmemos</block></action>
+                <action method="addTab"><name>order_shipments</name><block>adminhtml/sales_order_view_tab_shipments</block></action>
+                <action method="addTab"><name>order_history</name><block>adminhtml/sales_order_view_tab_history</block></action>
+            </block>
+        </reference>
+    </adminhtml_sales_order_view>
+
+    <adminhtml_sales_order_addcomment>
+        <block type="adminhtml/sales_order_view_history" name="order_history" template="sales/order/view/history.phtml" output="toHtml"/>
+    </adminhtml_sales_order_addcomment>
+
+    <adminhtml_sales_order_invoice_new>
+        <reference name="content">
+            <block type="adminhtml/sales_order_invoice_create" name="sales_invoice_create">
+                <block type="adminhtml/sales_order_invoice_create_form" name="form" template="sales/order/invoice/create/form.phtml">
+                    <block type="adminhtml/sales_order_view_info" name="order_info" template="sales/order/view/info.phtml"></block>
+                    <block type="adminhtml/sales_order_payment" name="order_payment"></block>
+                    <block type="adminhtml/sales_order_invoice_create_items" name="order_items" template="sales/order/invoice/create/items.phtml">
+                        <action method="addItemRender"><type>default</type><block>adminhtml/sales_items_renderer_default</block><template>sales/order/invoice/create/items/renderer/default.phtml</template></action>
+                        <action method="addColumnRender"><column>qty</column><block>adminhtml/sales_items_column_qty</block><template>sales/items/column/qty.phtml</template></action>
+                        <action method="addColumnRender"><column>name</column><block>adminhtml/sales_items_column_name</block><template>sales/items/column/name.phtml</template></action>
+                        <action method="addColumnRender"><column>name</column><block>adminhtml/sales_items_column_name_grouped</block><template>sales/items/column/name.phtml</template><type>grouped</type></action>
+
+                        <block type="adminhtml/sales_order_totalbar" name="order_totalbar" template="sales/order/totalbar.phtml"></block>
+
+
+                        <block type="adminhtml/sales_order_totals" name="order_totals" template="sales/order/totals.phtml">
+                            <block type="adminhtml/sales_order_totals_item" name="footer" template="sales/order/totals/footer.phtml">
+                                <block type="adminhtml/sales_order_totals_item" name="grand" template="sales/order/totals/grand.phtml" />
+                                <block type="adminhtml/sales_order_totals_item" name="paid" template="sales/order/totals/paid.phtml" />
+                                <block type="adminhtml/sales_order_totals_item" name="refunded" template="sales/order/totals/refunded.phtml" />
+                                <block type="adminhtml/sales_order_totals_item" name="due" template="sales/order/totals/due.phtml" />
+                            </block>
+                            <block type="adminhtml/sales_order_totals_item" name="sales.order.view.totals.main" as="main" template="sales/order/totals/main.phtml">
+                                <block type="adminhtml/sales_order_totals_item" name="subtotal" template="sales/order/totals/item.phtml">
+                                    <action method="setSourceField"><value>subtotal</value></action>
+                                    <action method="setLabel"><value>Subtotal</value></action>
+                                </block>
+                                <block type="adminhtml/sales_order_totals_item" name="tax" template="sales/order/totals/item.phtml">
+                                    <action method="setSourceField"><value>tax_amount</value></action>
+                                    <action method="setLabel"><value>Tax</value></action>
+                                </block>
+                                <block type="adminhtml/sales_order_totals_item" name="shipping" template="sales/order/totals/shipping.phtml" />
+                                <block type="adminhtml/sales_order_totals_item" name="discount" template="sales/order/totals/discount.phtml" />
+                                <block type="adminhtml/sales_order_totals_item" name="giftcert" template="sales/order/totals/item.phtml">
+                                    <action method="setSourceField"><value>giftcert_amount</value></action>
+                                    <action method="setLabel"><value>Gift Certificate</value></action>
+                                </block>
+                                <block type="adminhtml/sales_order_totals_item" name="adjustment_positive" template="sales/order/totals/item.phtml">
+                                    <action method="setSourceField"><value>adjustment_positive</value></action>
+                                    <action method="setLabel"><value>Adjustment Refund</value></action>
+                                </block>
+                                <block type="adminhtml/sales_order_totals_item" name="adjustment_negative" template="sales/order/totals/item.phtml">
+                                    <action method="setSourceField"><value>adjustment_negative</value></action>
+                                    <action method="setLabel"><value>Adjustment Fee</value></action>
+                                </block>
+                            </block>
+                        </block>
+                    </block>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_sales_order_invoice_new>
+
+    <adminhtml_sales_order_invoice_updateqty>
+        <block type="adminhtml/sales_order_invoice_create_items" name="order_items" template="sales/order/invoice/create/items.phtml">
+            <action method="addItemRender"><type>default</type><block>adminhtml/sales_items_renderer_default</block><template>sales/order/invoice/create/items/renderer/default.phtml</template></action>
+            <action method="addColumnRender"><column>qty</column><block>adminhtml/sales_items_column_qty</block><template>sales/items/column/qty.phtml</template></action>
+            <action method="addColumnRender"><column>name</column><block>adminhtml/sales_items_column_name</block><template>sales/items/column/name.phtml</template></action>
+            <action method="addColumnRender"><column>name</column><block>adminhtml/sales_items_column_name_grouped</block><template>sales/items/column/name.phtml</template><type>grouped</type></action>
+
+            <block type="adminhtml/sales_order_totalbar" name="order_totalbar" template="sales/order/totalbar.phtml"></block>
+            <block type="adminhtml/sales_order_totals" name="order_totals" template="sales/order/totals.phtml">
+                <block type="adminhtml/sales_order_totals_item" name="footer" template="sales/order/totals/footer.phtml">
+                    <block type="adminhtml/sales_order_totals_item" name="grand" template="sales/order/totals/grand.phtml" />
+                    <block type="adminhtml/sales_order_totals_item" name="paid" template="sales/order/totals/paid.phtml" />
+                    <block type="adminhtml/sales_order_totals_item" name="refunded" template="sales/order/totals/refunded.phtml" />
+                    <block type="adminhtml/sales_order_totals_item" name="due" template="sales/order/totals/due.phtml" />
+                </block>
+                <block type="adminhtml/sales_order_totals_item" name="sales.order.view.totals.main" as="main" template="sales/order/totals/main.phtml">
+                    <block type="adminhtml/sales_order_totals_item" name="subtotal" template="sales/order/totals/item.phtml">
+                        <action method="setSourceField"><value>subtotal</value></action>
+                        <action method="setLabel"><value>Subtotal</value></action>
+                    </block>
+                    <block type="adminhtml/sales_order_totals_item" name="tax" template="sales/order/totals/item.phtml">
+                        <action method="setSourceField"><value>tax_amount</value></action>
+                        <action method="setLabel"><value>Tax</value></action>
+                    </block>
+                    <block type="adminhtml/sales_order_totals_item" name="shipping" template="sales/order/totals/shipping.phtml" />
+                    <block type="adminhtml/sales_order_totals_item" name="discount" template="sales/order/totals/discount.phtml" />
+                    <block type="adminhtml/sales_order_totals_item" name="giftcert" template="sales/order/totals/item.phtml">
+                        <action method="setSourceField"><value>giftcert_amount</value></action>
+                        <action method="setLabel"><value>Gift Certificate</value></action>
+                    </block>
+                    <block type="adminhtml/sales_order_totals_item" name="adjustment_positive" template="sales/order/totals/item.phtml">
+                        <action method="setSourceField"><value>adjustment_positive</value></action>
+                        <action method="setLabel"><value>Adjustment Refund</value></action>
+                    </block>
+                    <block type="adminhtml/sales_order_totals_item" name="adjustment_negative" template="sales/order/totals/item.phtml">
+                        <action method="setSourceField"><value>adjustment_negative</value></action>
+                        <action method="setLabel"><value>Adjustment Fee</value></action>
+                    </block>
+                </block>
+            </block>
+        </block>
+    </adminhtml_sales_order_invoice_updateqty>
+
+    <adminhtml_sales_order_invoice_addcomment>
+        <block type="adminhtml/sales_order_invoice_view_comments" name="invoice_comments">
+            <block type="adminhtml/sales_order_comments_view"  name="order_comments" template="sales/order/comments/view.phtml"></block>
+        </block>
+    </adminhtml_sales_order_invoice_addcomment>
+
+    <adminhtml_sales_order_invoice_view>
+        <reference name="content">
+            <block type="adminhtml/sales_order_invoice_view" name="sales_invoice_view">
+                <block type="adminhtml/sales_order_invoice_view_form" name="form" template="sales/order/invoice/view/form.phtml">
+                    <block type="adminhtml/sales_order_view_info" name="order_info" template="sales/order/view/info.phtml"></block>
+                    <block type="adminhtml/sales_order_payment" name="order_payment"></block>
+
+                    <block type="adminhtml/sales_order_invoice_view_items" name="invoice_items" template="sales/order/invoice/view/items.phtml">
+                        <action method="addItemRender"><type>default</type><block>adminhtml/sales_items_renderer_default</block><template>sales/order/invoice/view/items/renderer/default.phtml</template></action>
+                        <action method="addColumnRender"><column>qty</column><block>adminhtml/sales_items_column_qty</block><template>sales/items/column/qty.phtml</template></action>
+                        <action method="addColumnRender"><column>name</column><block>adminhtml/sales_items_column_name</block><template>sales/items/column/name.phtml</template></action>
+                        <action method="addColumnRender"><column>name</column><block>adminhtml/sales_items_column_name_grouped</block><template>sales/items/column/name.phtml</template><type>grouped</type></action>
+                    </block>
+                    <block type="adminhtml/sales_order_comments_view" name="order_comments" template="sales/order/comments/view.phtml">
+                        <action method="setParentType"><type>invoice</type></action>
+                    </block>
+                    <block type="adminhtml/sales_order_totals" name="order_totals" template="sales/order/totals.phtml">
+                        <block type="adminhtml/sales_order_totals_item" name="footer" template="sales/order/totals/footer.phtml">
+                            <block type="adminhtml/sales_order_totals_item" name="grand" template="sales/order/totals/grand.phtml" />
+                            <block type="adminhtml/sales_order_totals_item" name="paid" template="sales/order/totals/paid.phtml" />
+                            <block type="adminhtml/sales_order_totals_item" name="refunded" template="sales/order/totals/refunded.phtml" />
+                            <block type="adminhtml/sales_order_totals_item" name="due" template="sales/order/totals/due.phtml" />
+                        </block>
+                        <block type="adminhtml/sales_order_totals_item" name="sales.order.view.totals.main" as="main" template="sales/order/totals/main.phtml">
+                            <block type="adminhtml/sales_order_totals_item" name="subtotal" template="sales/order/totals/item.phtml">
+                                <action method="setSourceField"><value>subtotal</value></action>
+                                <action method="setLabel"><value>Subtotal</value></action>
+                            </block>
+                            <block type="adminhtml/sales_order_totals_item" name="subtotal" template="sales/order/totals/item.phtml">
+                                <action method="setSourceField"><value>tax_amount</value></action>
+                                <action method="setLabel"><value>Tax</value></action>
+                            </block>
+                            <block type="adminhtml/sales_order_totals_item" name="shipping" template="sales/order/totals/shipping.phtml" />
+                            <block type="adminhtml/sales_order_totals_item" name="discount" template="sales/order/totals/discount.phtml" />
+                            <block type="adminhtml/sales_order_totals_item" name="giftcert" template="sales/order/totals/item.phtml">
+                                <action method="setSourceField"><value>giftcert_amount</value></action>
+                                <action method="setLabel"><value>Gift Certificate</value></action>
+                            </block>
+                            <block type="adminhtml/sales_order_totals_item" name="adjustment_positive" template="sales/order/totals/item.phtml">
+                                <action method="setSourceField"><value>adjustment_positive</value></action>
+                                <action method="setLabel"><value>Adjustment Refund</value></action>
+                            </block>
+                            <block type="adminhtml/sales_order_totals_item" name="adjustment_negative" template="sales/order/totals/item.phtml">
+                                <action method="setSourceField"><value>adjustment_negative</value></action>
+                                <action method="setLabel"><value>Adjustment Fee</value></action>
+                            </block>
+                        </block>
+                    </block>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_sales_order_invoice_view>
+
+    <adminhtml_sales_order_shipment_new>
+        <reference name="content">
+            <block type="adminhtml/sales_order_shipment_create" name="sales_shipment_create">
+                <block type="adminhtml/sales_order_shipment_create_form" name="form" template="sales/order/shipment/create/form.phtml">
+                    <block type="adminhtml/sales_order_view_info" name="order_info" template="sales/order/view/info.phtml"></block>
+                    <block type="adminhtml/sales_order_payment" name="order_payment"></block>
+                    <block type="adminhtml/sales_order_shipment_create_tracking" name="shipment_tracking" template="sales/order/shipment/create/tracking.phtml"></block>
+                    <block type="adminhtml/sales_order_shipment_create_items" name="order_items" template="sales/order/shipment/create/items.phtml">
+                        <action method="addItemRender"><type>default</type><block>adminhtml/sales_items_renderer_default</block><template>sales/order/shipment/create/items/renderer/default.phtml</template></action>
+                        <action method="addColumnRender"><column>qty</column><block>adminhtml/sales_items_column_qty</block><template>sales/items/column/qty.phtml</template></action>
+                        <action method="addColumnRender"><column>name</column><block>adminhtml/sales_items_column_name</block><template>sales/items/column/name.phtml</template></action>
+                    </block>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_sales_order_shipment_new>
+
+    <adminhtml_sales_order_shipment_addtrack>
+        <block type="adminhtml/sales_order_shipment_view_tracking" name="shipment_tracking" template="sales/order/shipment/view/tracking.phtml"></block>
+    </adminhtml_sales_order_shipment_addtrack>
+
+    <adminhtml_sales_order_shipment_removetrack>
+        <block type="adminhtml/sales_order_shipment_view_tracking" name="shipment_tracking" template="sales/order/shipment/view/tracking.phtml"></block>
+    </adminhtml_sales_order_shipment_removetrack>
+
+    <adminhtml_sales_order_shipment_addcomment>
+        <block type="adminhtml/sales_order_shipment_view_comments" name="shipment_comments">
+            <block type="adminhtml/sales_order_comments_view"  name="order_comments" template="sales/order/comments/view.phtml"></block>
+        </block>
+    </adminhtml_sales_order_shipment_addcomment>
+
+    <adminhtml_sales_order_shipment_view>
+        <reference name="content">
+            <block type="adminhtml/sales_order_shipment_view" name="sales_shipment_view">
+                <block type="adminhtml/sales_order_shipment_view_form" name="form" template="sales/order/shipment/view/form.phtml">
+                    <block type="adminhtml/sales_order_view_info" name="order_info" template="sales/order/view/info.phtml"></block>
+                    <block type="adminhtml/sales_order_payment" name="order_payment"></block>
+                    <block type="adminhtml/sales_order_shipment_view_tracking" name="shipment_tracking" template="sales/order/shipment/view/tracking.phtml"></block>
+                    <block type="adminhtml/sales_order_shipment_view_items" name="shipment_items" template="sales/order/shipment/view/items.phtml">
+                        <action method="addItemRender"><type>default</type><block>adminhtml/sales_items_renderer_default</block><template>sales/order/shipment/view/items/renderer/default.phtml</template></action>
+                        <action method="addColumnRender"><column>qty</column><block>adminhtml/sales_items_column_qty</block><template>sales/items/column/qty.phtml</template></action>
+                        <action method="addColumnRender"><column>name</column><block>adminhtml/sales_items_column_name</block><template>sales/items/column/name.phtml</template></action>
+                    </block>
+                    <block type="adminhtml/sales_order_invoice_create_tracking" name="invoice_tracking" template="sales/order/shipment/create/tracking.phtml"></block>
+                    <block type="adminhtml/sales_order_comments_view"  name="order_comments" template="sales/order/comments/view.phtml">
+                        <action method="setParentType"><type>shipment</type></action>
+                    </block>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_sales_order_shipment_view>
+
+    <adminhtml_sales_order_creditmemo_new>
+        <reference name="content">
+            <block type="adminhtml/sales_order_creditmemo_create" name="sales_creditmemo_create">
+                <block type="adminhtml/sales_order_creditmemo_create_form" name="form" template="sales/order/creditmemo/create/form.phtml">
+                    <block type="adminhtml/sales_order_view_info" name="order_info" template="sales/order/view/info.phtml"></block>
+                    <block type="adminhtml/sales_order_payment" name="order_payment"></block>
+                    <block type="adminhtml/sales_order_creditmemo_create_items" name="order_items" template="sales/order/creditmemo/create/items.phtml">
+                        <action method="addItemRender"><type>default</type><block>adminhtml/sales_items_renderer_default</block><template>sales/order/creditmemo/create/items/renderer/default.phtml</template></action>
+                        <action method="addColumnRender"><column>qty</column><block>adminhtml/sales_items_column_qty</block><template>sales/items/column/qty.phtml</template></action>
+                        <action method="addColumnRender"><column>name</column><block>adminhtml/sales_items_column_name</block><template>sales/items/column/name.phtml</template></action>
+                        <action method="addColumnRender"><column>name</column><block>adminhtml/sales_items_column_name_grouped</block><template>sales/items/column/name.phtml</template><type>grouped</type></action>
+                        <block type="adminhtml/sales_order_totalbar" name="order_totalbar" template="sales/order/totalbar.phtml"></block>
+
+                        <block type="adminhtml/sales_order_totals" name="order_totals" template="sales/order/totals.phtml">
+                            <block type="adminhtml/sales_order_totals_item" name="footer" template="sales/order/totals/footer.phtml">
+                                <block type="adminhtml/sales_order_totals_item" name="grand" template="sales/order/totals/grand.phtml">
+                                    <action method="setGrandTotalTitle"><title>Total Refund</title></action>
+                                </block>
+                            </block>
+                            <block type="adminhtml/sales_order_totals_item" name="sales.order.view.totals.main" as="main" template="sales/order/totals/main.phtml">
+                                <block type="adminhtml/sales_order_totals_item" name="subtotal" template="sales/order/totals/item.phtml">
+                                    <action method="setSourceField"><value>subtotal</value></action>
+                                    <action method="setLabel"><value>Subtotal</value></action>
+                                </block>
+                                <block type="adminhtml/sales_order_totals_item" name="tax" template="sales/order/totals/item.phtml">
+                                    <action method="setSourceField"><value>tax_amount</value></action>
+                                    <action method="setLabel"><value>Tax</value></action>
+                                </block>
+                                <block type="adminhtml/sales_order_totals_item" name="discount" template="sales/order/totals/item.phtml">
+                                    <action method="setSourceField"><value>discount_amount</value></action>
+                                    <action method="setLabel"><value>Discount</value></action>
+                                </block>
+                                <block type="adminhtml/sales_order_totals_item" name="adjustments" template="sales/order/creditmemo/create/totals/adjustments.phtml" />
+                            </block>
+                        </block>
+                        <block type="core/text_list" name="submit_before" />
+                        <block type="core/text_list" name="submit_after" />
+                    </block>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_sales_order_creditmemo_new>
+
+    <adminhtml_sales_order_creditmemo_updateqty>
+        <block type="adminhtml/sales_order_creditmemo_create_items" name="order_items" template="sales/order/creditmemo/create/items.phtml">
+            <action method="addItemRender"><type>default</type><block>adminhtml/sales_items_renderer_default</block><template>sales/order/creditmemo/create/items/renderer/default.phtml</template></action>
+            <action method="addColumnRender"><column>qty</column><block>adminhtml/sales_items_column_qty</block><template>sales/items/column/qty.phtml</template></action>
+            <action method="addColumnRender"><column>name</column><block>adminhtml/sales_items_column_name</block><template>sales/items/column/name.phtml</template></action>
+            <action method="addColumnRender"><column>name</column><block>adminhtml/sales_items_column_name_grouped</block><template>sales/items/column/name.phtml</template><type>grouped</type></action>
+            <block type="adminhtml/sales_order_totalbar" name="order_totalbar" template="sales/order/totalbar.phtml"></block>
+
+            <block type="adminhtml/sales_order_totals" name="order_totals" template="sales/order/totals.phtml">
+                <block type="adminhtml/sales_order_totals_item" name="footer" template="sales/order/totals/footer.phtml">
+                    <block type="adminhtml/sales_order_totals_item" name="grand" template="sales/order/totals/grand.phtml">
+                        <action method="setGrandTotalTitle"><title>Total Refund</title></action>
+                    </block>
+                </block>
+                <block type="adminhtml/sales_order_totals_item" name="sales.order.view.totals.main" as="main" template="sales/order/totals/main.phtml">
+                    <block type="adminhtml/sales_order_totals_item" name="subtotal" template="sales/order/totals/item.phtml">
+                        <action method="setSourceField"><value>subtotal</value></action>
+                        <action method="setLabel"><value>Subtotal</value></action>
+                    </block>
+                    <block type="adminhtml/sales_order_totals_item" name="tax" template="sales/order/totals/item.phtml">
+                        <action method="setSourceField"><value>tax_amount</value></action>
+                        <action method="setLabel"><value>Tax</value></action>
+                    </block>
+                    <block type="adminhtml/sales_order_totals_item" name="discount" template="sales/order/totals/item.phtml">
+                        <action method="setSourceField"><value>discount_amount</value></action>
+                        <action method="setLabel"><value>Discount</value></action>
+                    </block>
+                    <block type="adminhtml/sales_order_totals_item" name="adjustments" template="sales/order/creditmemo/create/totals/adjustments.phtml" />
+                </block>
+            </block>
+
+            <block type="core/text_list" name="submit_before" />
+            <block type="core/text_list" name="submit_after" />
+        </block>
+    </adminhtml_sales_order_creditmemo_updateqty>
+
+    <adminhtml_sales_order_creditmemo_addcomment>
+        <block type="adminhtml/sales_order_creditmemo_view_comments" name="creditmemo_comments">
+            <block type="adminhtml/sales_order_comments_view"  name="order_comments" template="sales/order/comments/view.phtml"></block>
+        </block>
+    </adminhtml_sales_order_creditmemo_addcomment>
+
+    <adminhtml_sales_order_creditmemo_view>
+        <reference name="content">
+            <block type="adminhtml/sales_order_creditmemo_view" name="sales_creditmemo_view">
+                <block type="adminhtml/sales_order_creditmemo_view_form" name="form" template="sales/order/creditmemo/view/form.phtml">
+                    <block type="adminhtml/sales_order_view_info" name="order_info" template="sales/order/view/info.phtml"></block>
+                    <block type="adminhtml/sales_order_payment" name="order_payment"></block>
+                    <block type="adminhtml/sales_order_creditmemo_view_items" name="creditmemo_items" template="sales/order/creditmemo/view/items.phtml">
+                        <action method="addItemRender"><type>default</type><block>adminhtml/sales_items_renderer_default</block><template>sales/order/creditmemo/view/items/renderer/default.phtml</template></action>
+                        <action method="addColumnRender"><column>qty</column><block>adminhtml/sales_items_column_qty</block><template>sales/items/column/qty.phtml</template></action>
+                        <action method="addColumnRender"><column>name</column><block>adminhtml/sales_items_column_name</block><template>sales/items/column/name.phtml</template></action>
+                        <action method="addColumnRender"><column>name</column><block>adminhtml/sales_items_column_name_grouped</block><template>sales/items/column/name.phtml</template><type>grouped</type></action>
+                    </block>
+                    <block type="adminhtml/sales_order_comments_view" name="order_comments" template="sales/order/comments/view.phtml">
+                        <action method="setParentType"><type>creditmemo</type></action>
+                    </block>
+
+                    <block type="adminhtml/sales_order_totals" name="order_totals" template="sales/order/totals.phtml">
+                        <block type="adminhtml/sales_order_totals_item" name="footer" template="sales/order/totals/footer.phtml">
+                            <block type="adminhtml/sales_order_totals_item" name="grand" template="sales/order/totals/grand.phtml" />
+                            <block type="adminhtml/sales_order_totals_item" name="paid" template="sales/order/totals/paid.phtml" />
+                            <block type="adminhtml/sales_order_totals_item" name="refunded" template="sales/order/totals/refunded.phtml" />
+                            <block type="adminhtml/sales_order_totals_item" name="due" template="sales/order/totals/due.phtml" />
+                        </block>
+                        <block type="adminhtml/sales_order_totals_item" name="sales.order.view.totals.main" as="main" template="sales/order/totals/main.phtml">
+                            <block type="adminhtml/sales_order_totals_item" name="subtotal" template="sales/order/totals/item.phtml">
+                                <action method="setSourceField"><value>subtotal</value></action>
+                                <action method="setLabel"><value>Subtotal</value></action>
+                            </block>
+                            <block type="adminhtml/sales_order_totals_tax" name="tax" template="sales/order/totals/tax.phtml" />
+                            <block type="adminhtml/sales_order_totals_item" name="shipping" template="sales/order/totals/shipping.phtml" />
+                            <block type="adminhtml/sales_order_totals_item" name="discount" template="sales/order/totals/discount.phtml" />
+                            <block type="adminhtml/sales_order_totals_item" name="giftcert" template="sales/order/totals/item.phtml">
+                                <action method="setSourceField"><value>giftcert_amount</value></action>
+                                <action method="setLabel"><value>Gift Certificate</value></action>
+                            </block>
+                            <block type="adminhtml/sales_order_totals_item" name="adjustment_positive" template="sales/order/totals/item.phtml">
+                                <action method="setSourceField"><value>adjustment_positive</value></action>
+                                <action method="setLabel"><value>Adjustment Refund</value></action>
+                            </block>
+                            <block type="adminhtml/sales_order_totals_item" name="adjustment_negative" template="sales/order/totals/item.phtml">
+                                <action method="setSourceField"><value>adjustment_negative</value></action>
+                                <action method="setLabel"><value>Adjustment Fee</value></action>
+                            </block>
+                        </block>
+                    </block>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_sales_order_creditmemo_view>
+
+    <adminhtml_sales_order_create_index>
+        <reference name="left">
+            <action method="setIsCollapsed"><value>true</value></action>
+        </reference>
+        <reference name="head">
+            <action method="addJs"><file>mage/adminhtml/sales.js</file></action>
+            <action method="addJs"><file>mage/adminhtml/giftmessage.js</file></action>
+        </reference>
+        <reference name="js">
+            <block type="adminhtml/template" template="sales/order/create/js.phtml" name="create" />
+        </reference>
+        <reference name="root">
+            <block type="adminhtml/sales_order_create" name="content">
+                <block type="adminhtml/sales_order_create_form" template="sales/order/create/form.phtml" name="form">
+                    <block type="adminhtml/sales_order_create_messages" name="message" />
+                    <block type="adminhtml/sales_order_create_customer" template="sales/order/create/abstract.phtml" name="customer">
+                        <block type="adminhtml/sales_order_create_customer_grid" name="grid" />
+                    </block>
+                    <block type="adminhtml/sales_order_create_store" template="sales/order/create/abstract.phtml" name="store">
+                        <block type="adminhtml/sales_order_create_store_select" template="sales/order/create/store/select.phtml" name="select" />
+                    </block>
+                    <block type="adminhtml/sales_order_create_data" template="sales/order/create/data.phtml" name="data">
+                        <block type="adminhtml/sales_order_create_sidebar" template="sales/order/create/sidebar.phtml" name="sidebar">
+                            <block type="adminhtml/sales_order_create_sidebar_cart" template="sales/order/create/sidebar/items.phtml" name="cart" />
+                            <block type="adminhtml/sales_order_create_sidebar_wishlist" template="sales/order/create/sidebar/items.phtml" name="wishlist" />
+                            <block type="adminhtml/sales_order_create_sidebar_reorder" template="sales/order/create/sidebar/items.phtml" name="reorder" />
+                            <block type="adminhtml/sales_order_create_sidebar_viewed" template="sales/order/create/sidebar/items.phtml" name="viewed" />
+                            <block type="adminhtml/sales_order_create_sidebar_compared" template="sales/order/create/sidebar/items.phtml" name="compared" />
+                            <block type="adminhtml/sales_order_create_sidebar_pcompared" template="sales/order/create/sidebar/items.phtml" name="pcompared" />
+                            <block type="adminhtml/sales_order_create_sidebar_pviewed" template="sales/order/create/sidebar/items.phtml" name="pviewed" />
+                        </block>
+                        <block type="adminhtml/sales_order_create_form_account" template="sales/order/create/form/account.phtml" name="form_account" />
+                        <block type="adminhtml/sales_order_create_shipping_address" template="sales/order/create/form/address.phtml" name="shipping_address" />
+                        <block type="adminhtml/sales_order_create_billing_address" template="sales/order/create/form/address.phtml" name="billing_address" />
+                        <block type="adminhtml/sales_order_create_shipping_method" template="sales/order/create/abstract.phtml" name="shipping_method">
+                            <block type="adminhtml/sales_order_create_shipping_method_form" template="sales/order/create/shipping/method/form.phtml" name="form" />
+                        </block>
+                        <block type="adminhtml/sales_order_create_billing_method" template="sales/order/create/abstract.phtml" name="billing_method">
+                            <block type="adminhtml/sales_order_create_billing_method_form" template="sales/order/create/billing/method/form.phtml" name="form" />
+                        </block>
+                        <block type="adminhtml/sales_order_create_newsletter" template="sales/order/create/abstract.phtml" name="newsletter">
+                            <block type="adminhtml/sales_order_create_newsletter_form" template="sales/order/create/newsletter/form.phtml" name="form" />
+                        </block>
+                        <block type="adminhtml/sales_order_create_search" template="sales/order/create/abstract.phtml" name="search">
+                            <block type="adminhtml/sales_order_create_search_grid" name="grid" />
+                        </block>
+                        <block type="adminhtml/sales_order_create_items" template="sales/order/create/items.phtml" name="items">
+                            <block type="adminhtml/sales_order_create_items_grid" template="sales/order/create/items/grid.phtml" name="items_grid">
+                                <block type="adminhtml/sales_order_create_coupons" template="sales/order/create/coupons/form.phtml" name="coupons">
+                                    <block type="adminhtml/sales_order_create_coupons_form" template="sales/order/create/coupons/form.phtml" name="form" />
+                                </block>
+                            </block>
+                        </block>
+                        <block type="adminhtml/sales_order_create_comment" template="sales/order/create/comment.phtml" name="comment" />
+                        <block type="adminhtml/sales_order_create_totals" template="sales/order/create/totals.phtml" name="totals" />
+                        <block type="adminhtml/sales_order_create_giftmessage" template="sales/order/create/giftmessage.phtml" name="giftmessage" />
+                    </block>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_sales_order_create_index>
+    
+    <adminhtml_sales_order_edit_index>
+        <update handle="adminhtml_sales_order_create_index" />
+    </adminhtml_sales_order_edit_index>
+
+    <adminhtml_sales_order_create_load_block_json>
+        <reference name="root">
+            <block type="adminhtml/sales_order_create_load" name="content" />
+        </reference>
+    </adminhtml_sales_order_create_load_block_json>
+
+    <adminhtml_sales_order_create_load_block_plain>
+        <reference name="root">
+            <block type="core/text_list" name="content" />
+        </reference>
+    </adminhtml_sales_order_create_load_block_plain>
+
+    <adminhtml_sales_order_create_load_block_data>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_data" template="sales/order/create/data.phtml" name="data">
+                <block type="adminhtml/sales_order_create_sidebar" template="sales/order/create/sidebar.phtml" name="sidebar">
+                    <block type="adminhtml/sales_order_create_sidebar_cart" template="sales/order/create/sidebar/items.phtml" name="cart" />
+                    <block type="adminhtml/sales_order_create_sidebar_wishlist" template="sales/order/create/sidebar/items.phtml" name="wishlist" />
+                    <block type="adminhtml/sales_order_create_sidebar_reorder" template="sales/order/create/sidebar/items.phtml" name="reorder" />
+                    <block type="adminhtml/sales_order_create_sidebar_viewed" template="sales/order/create/sidebar/items.phtml" name="viewed" />
+                    <block type="adminhtml/sales_order_create_sidebar_compared" template="sales/order/create/sidebar/items.phtml" name="compared" />
+                    <block type="adminhtml/sales_order_create_sidebar_pcompared" template="sales/order/create/sidebar/items.phtml" name="pcompared" />
+                    <block type="adminhtml/sales_order_create_sidebar_pviewed" template="sales/order/create/sidebar/items.phtml" name="pviewed" />
+                </block>
+                <block type="adminhtml/sales_order_create_form_account" template="sales/order/create/form/account.phtml" name="form_account" />
+                <block type="adminhtml/sales_order_create_shipping_address" template="sales/order/create/form/address.phtml" name="shipping_address" />
+                <block type="adminhtml/sales_order_create_billing_address" template="sales/order/create/form/address.phtml" name="billing_address" />
+                <block type="adminhtml/sales_order_create_shipping_method" template="sales/order/create/abstract.phtml" name="shipping_method">
+                    <block type="adminhtml/sales_order_create_shipping_method_form" template="sales/order/create/shipping/method/form.phtml" name="form" />
+                </block>
+                <block type="adminhtml/sales_order_create_billing_method" template="sales/order/create/abstract.phtml" name="billing_method">
+                    <block type="adminhtml/sales_order_create_billing_method_form" template="sales/order/create/billing/method/form.phtml" name="form" />
+                </block>
+                <block type="adminhtml/sales_order_create_newsletter" template="sales/order/create/abstract.phtml" name="newsletter">
+                    <block type="adminhtml/sales_order_create_newsletter_form" template="sales/order/create/newsletter/form.phtml" name="form" />
+                </block>
+                <block type="adminhtml/sales_order_create_search" template="sales/order/create/abstract.phtml" name="search">
+                    <block type="adminhtml/sales_order_create_search_grid" name="grid" />
+                </block>
+                <block type="adminhtml/sales_order_create_items" template="sales/order/create/items.phtml" name="items">
+                    <block type="adminhtml/sales_order_create_items_grid" template="sales/order/create/items/grid.phtml" name="items_grid">
+                        <block type="adminhtml/sales_order_create_coupons" template="sales/order/create/coupons/form.phtml" name="coupons">
+                            <block type="adminhtml/sales_order_create_coupons_form" template="sales/order/create/coupons/form.phtml" name="form" />
+                        </block>
+                    </block>
+                </block>
+                <block type="adminhtml/sales_order_create_comment" template="sales/order/create/comment.phtml" name="comment" />
+                <block type="adminhtml/sales_order_create_totals" template="sales/order/create/totals.phtml" name="totals" />
+                <block type="adminhtml/sales_order_create_giftmessage" template="sales/order/create/giftmessage.phtml" name="giftmessage" />
+            </block>
+        </reference>
+    </adminhtml_sales_order_create_load_block_data>
+
+    <adminhtml_sales_order_create_load_block_header>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_header" name="header" />
+        </reference>
+    </adminhtml_sales_order_create_load_block_header>
+
+
+    <adminhtml_sales_order_create_load_block_sidebar>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_sidebar" template="sales/order/create/sidebar.phtml" name="sidebar">
+                <block type="adminhtml/sales_order_create_sidebar_cart" template="sales/order/create/sidebar/items.phtml" name="cart" />
+                <block type="adminhtml/sales_order_create_sidebar_wishlist" template="sales/order/create/sidebar/items.phtml" name="wishlist" />
+                <block type="adminhtml/sales_order_create_sidebar_reorder" template="sales/order/create/sidebar/items.phtml" name="reorder" />
+                <block type="adminhtml/sales_order_create_sidebar_viewed" template="sales/order/create/sidebar/items.phtml" name="viewed" />
+                <block type="adminhtml/sales_order_create_sidebar_compared" template="sales/order/create/sidebar/items.phtml" name="compared" />
+                <block type="adminhtml/sales_order_create_sidebar_pcompared" template="sales/order/create/sidebar/items.phtml" name="pcompared" />
+                <block type="adminhtml/sales_order_create_sidebar_pviewed" template="sales/order/create/sidebar/items.phtml" name="pviewed" />
+            </block>
+        </reference>
+    </adminhtml_sales_order_create_load_block_sidebar>
+
+    <adminhtml_sales_order_create_load_block_form_account>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_form_account" template="sales/order/create/form/account.phtml" name="form_account" />
+        </reference>
+    </adminhtml_sales_order_create_load_block_form_account>
+
+    <adminhtml_sales_order_create_load_block_shipping_address>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_shipping_address" template="sales/order/create/form/address.phtml" name="shipping_address" />
+        </reference>
+    </adminhtml_sales_order_create_load_block_shipping_address>
+
+    <adminhtml_sales_order_create_load_block_billing_address>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_billing_address" template="sales/order/create/form/address.phtml" name="billing_address" />
+        </reference>
+    </adminhtml_sales_order_create_load_block_billing_address>
+
+    <adminhtml_sales_order_create_load_block_shipping_method>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_shipping_method" template="sales/order/create/abstract.phtml" name="shipping_method">
+                <block type="adminhtml/sales_order_create_shipping_method_form" template="sales/order/create/shipping/method/form.phtml" name="form" />
+            </block>
+        </reference>
+    </adminhtml_sales_order_create_load_block_shipping_method>
+
+    <adminhtml_sales_order_create_load_block_billing_method>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_billing_method" template="sales/order/create/abstract.phtml" name="billing_method">
+                <block type="adminhtml/sales_order_create_billing_method_form" template="sales/order/create/billing/method/form.phtml" name="form" />
+            </block>
+        </reference>
+    </adminhtml_sales_order_create_load_block_billing_method>
+
+    <adminhtml_sales_order_create_load_block_newsletter>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_newsletter" template="sales/order/create/abstract.phtml" name="newsletter">
+                <block type="adminhtml/sales_order_create_newsletter_form" template="sales/order/create/newsletter/form.phtml" name="form" />
+            </block>
+        </reference>
+    </adminhtml_sales_order_create_load_block_newsletter>
+
+    <adminhtml_sales_order_create_load_block_search>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_search" template="sales/order/create/abstract.phtml" name="search">
+                <block type="adminhtml/sales_order_create_search_grid" name="grid" />
+            </block>
+        </reference>
+    </adminhtml_sales_order_create_load_block_search>
+
+    <adminhtml_sales_order_create_load_block_search_grid>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_search_grid" name="grid" />
+        </reference>
+    </adminhtml_sales_order_create_load_block_search_grid>
+
+    <adminhtml_sales_order_create_load_block_items>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_items" template="sales/order/create/items.phtml" name="items">
+                <block type="adminhtml/sales_order_create_items_grid" template="sales/order/create/items/grid.phtml" name="items_grid">
+                    <block type="adminhtml/sales_order_create_coupons" template="sales/order/create/coupons/form.phtml" name="coupons">
+                        <block type="adminhtml/sales_order_create_coupons_form" template="sales/order/create/coupons/form.phtml" name="form" />
+                    </block>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_sales_order_create_load_block_items>
+
+    <adminhtml_sales_order_create_load_block_comment>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_comment" template="sales/order/create/comment.phtml" name="comment" />
+        </reference>
+    </adminhtml_sales_order_create_load_block_comment>
+
+    <adminhtml_sales_order_create_load_block_totals>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_totals" template="sales/order/create/totals.phtml" name="totals" />
+        </reference>
+    </adminhtml_sales_order_create_load_block_totals>
+
+    <adminhtml_sales_order_create_load_block_giftmessage>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_giftmessage" template="sales/order/create/giftmessage.phtml" name="giftmessage" />
+        </reference>
+    </adminhtml_sales_order_create_load_block_giftmessage>
+
+    <adminhtml_sales_order_create_load_block_message>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_messages" name="message" />
+        </reference>
+    </adminhtml_sales_order_create_load_block_message>
+
+    <adminhtml_sales_order_create_load_block_customer_grid>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_customer_grid" name="grid" />
+        </reference>
+    </adminhtml_sales_order_create_load_block_customer_grid>
+
+    <adminhtml_sales_order_create_load_block_sidebar_cart>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_sidebar_cart" template="sales/order/create/sidebar/items.phtml" name="sidebar_cart" />
+        </reference>
+    </adminhtml_sales_order_create_load_block_sidebar_cart>
+
+    <adminhtml_sales_order_create_load_block_sidebar_wishlist>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_sidebar_wishlist" template="sales/order/create/sidebar/items.phtml" name="sidebar_wishlist" />
+        </reference>
+    </adminhtml_sales_order_create_load_block_sidebar_wishlist>
+
+    <adminhtml_sales_order_create_load_block_sidebar_reorder>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_sidebar_reorder" template="sales/order/create/sidebar/items.phtml" name="sidebar_reorder" />
+        </reference>
+    </adminhtml_sales_order_create_load_block_sidebar_reorder>
+
+    <adminhtml_sales_order_create_load_block_sidebar_viewed>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_sidebar_viewed" template="sales/order/create/sidebar/items.phtml" name="sidebar_viewed" />
+        </reference>
+    </adminhtml_sales_order_create_load_block_sidebar_viewed>
+
+    <adminhtml_sales_order_create_load_block_sidebar_compared>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_sidebar_compared" template="sales/order/create/sidebar/items.phtml" name="sidebar_compared" />
+        </reference>
+    </adminhtml_sales_order_create_load_block_sidebar_compared>
+
+    <adminhtml_sales_order_create_load_block_sidebar_pviewed>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_sidebar_pviewed" template="sales/order/create/sidebar/items.phtml" name="sidebar_pviewed" />
+        </reference>
+    </adminhtml_sales_order_create_load_block_sidebar_pviewed>
+
+    <adminhtml_sales_order_create_load_block_sidebar_pcompared>
+        <reference name="content">
+            <block type="adminhtml/sales_order_create_sidebar_pcompared" template="sales/order/create/sidebar/items.phtml" name="sidebar_pcompared" />
+        </reference>
+    </adminhtml_sales_order_create_load_block_sidebar_pcompared>
+</layout>

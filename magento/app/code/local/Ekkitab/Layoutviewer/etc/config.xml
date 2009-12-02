@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<config>	
+	<modules>
+	    <Ekkitab_Layoutviewer>
+		    <version>0.1.0</version>
+	    </Ekkitab_Layoutviewer>
+    </modules>
+
+	<global>
+		<models>
+			<ekkitab_layoutviewer>
+				<class>Ekkitab_Layoutviewer_Model</class>
+			</ekkitab_layoutviewer>
+			
+			<core>
+				<rewrite>
+					<layout_update>Ekkitab_Layoutviewer_Model_Layout_Update</layout_update>
+				</rewrite>
+			</core>
+		</models>
+	
+		<events>
+			<controller_action_postdispatch>
+				<observers>
+					<ekkitab_layoutviewer_model_observer>
+						<type>singleton</type>						
+						<class>Ekkitab_Layoutviewer_Model_Observer</class>
+						<method>checkForLayoutDisplayRequest</method>
+					</ekkitab_layoutviewer_model_observer>
+				</observers>
+			</controller_action_postdispatch>
+		</events>
+	</global>	
+</config>

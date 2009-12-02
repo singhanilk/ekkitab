@@ -1,0 +1,8 @@
+<config>
+    <modules>
+        <Ekkitab_Layoutviewer>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Ekkitab_Layoutviewer>
+    </modules>
+</config>   

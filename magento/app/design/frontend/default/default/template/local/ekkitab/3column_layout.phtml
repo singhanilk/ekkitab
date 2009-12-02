@@ -1,0 +1,68 @@
+<?php
+/**
+ * Template for Mage_Page_Block_Html
+ */
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->getLang() ?>" lang="<?php echo $this->getLang() ?>">
+<head>
+    <?php echo $this->getChildHtml('head') ?>
+</head>
+<body <?php echo $this->getBodyClass()?'class="'.$this->getBodyClass().'"':'' ?>>
+<div class="wrapper">
+    <?php echo $this->getChildHtml('global_notices') ?>
+        <!-- start header -->
+        <div class="header">
+            <?php echo $this->getChildHtml('header') ?>
+        </div>
+        <!-- end header -->
+        <!-- start header -->
+        <div class="header">
+            My Page
+        </div>
+        <!-- end header -->
+
+        <!-- start middle -->
+        <div class="middle-container">
+            <div class="middle col-3-layout">
+            <?php echo $this->getChildHtml('breadcrumbs') ?>
+                <!-- start left -->
+                <div class="col-left side-col">
+                    <?php echo $this->getChildHtml('left') ?>&nbsp;
+                </div>
+                <!-- end left -->
+
+                <!-- start center -->
+                <div id="main" class="col-main">
+                    <!-- start global messages -->
+                        <?php echo $this->getChildHtml('global_messages') ?>
+                    <!-- end global messages -->
+
+                    <!-- start content -->
+                        <?php echo $this->getChildHtml('content') ?>&nbsp;
+                    <!-- end content -->
+                </div>
+                <!-- end center -->
+
+                <!-- start right -->
+                <div class="col-right side-col">
+                    <?php echo $this->getChildHtml('right') ?>&nbsp;
+                </div>
+                <!-- end right -->
+
+            </div>
+        </div>
+        <!-- end middle -->
+
+        <!-- start footer -->
+        <div class="footer-container">
+            <div class="footer">
+                <?php echo $this->getChildHtml('footer') ?>
+            </div>
+        </div>
+        <!-- end footer -->
+<?php echo $this->getChildHtml('before_body_end') ?>
+</div>
+<?php echo $this->getAbsoluteFooter() ?>
+</body>
+</html>

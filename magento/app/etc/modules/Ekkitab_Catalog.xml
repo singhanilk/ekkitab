@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+		<Ekkitab_Catalog>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Ekkitab_Catalog>
+    </modules>
+</config>
