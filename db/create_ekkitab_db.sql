@@ -10,17 +10,17 @@
 --
 -- @author Arun Kuppuswamy (arun@ekkitab.com)
 -- @version 1.0     Nov 11, 2009
---
+-- @version 1.1     Nov 11, 2009 (anisha@ekkitab.com)
+-- @version 1.2     Dec 03, 2009 (arun@ekkitab.com)
+-- @version 1.2     Dec 04, 2009 (arun@ekkitab.com)
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
-
--- droping the Database if it exists
 DROP DATABASE IF EXISTS `ekkitab_books`;
 
 -- Creating a DataBase
 
-CREATE DATABASE `ekkitab_books`;
+CREATE DATABASE `ekkitab_books` DEFAULT CHARACTER SET `utf8` COLLATE `utf8_general_ci`;
 USE `ekkitab_books`;
 
 --
@@ -247,16 +247,6 @@ CREATE TABLE IF NOT EXISTS `catalogindex_aggregation_tag` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
--- Dumping data for table `catalogindex_aggregation_tag`
---
-
-INSERT INTO `catalogindex_aggregation_tag` (`tag_id`, `tag_code`) VALUES
-(1, 'catalog_category1'),
-(2, 'catalog_category2'),
-(3, 'catalog_category30'),
-(4, 'SEARCH_QUERY');
-
---
 -- Table structure for table `catalogindex_aggregation_to_tag`
 --
 
@@ -282,13 +272,6 @@ CREATE TABLE IF NOT EXISTS `catalogindex_eav` (
   KEY `FK_CATALOGINDEX_EAV_ATTRIBUTE` (`attribute_id`),
   KEY `FK_CATALOGINDEX_EAV_STORE` (`store_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `catalogindex_eav`
---
-
-INSERT INTO `catalogindex_eav` (`store_id`, `entity_id`, `attribute_id`, `value`) VALUES
-(1, 1, 81, 0);
 
 --
 -- Table structure for table `catalogindex_minimal_price`
@@ -331,16 +314,6 @@ CREATE TABLE IF NOT EXISTS `catalogindex_price` (
   KEY `FK_CI_PRICE_WEBSITE_ID` (`website_id`),
   KEY `IDX_FULL` (`entity_id`,`attribute_id`,`customer_group_id`,`value`,`website_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `catalogindex_price`
---
-
-INSERT INTO `catalogindex_price` (`entity_id`, `attribute_id`, `customer_group_id`, `qty`, `value`, `tax_class_id`, `website_id`) VALUES
-(1, 60, 0, 0.0000, 16.5000, 0, 1),
-(1, 60, 1, 0.0000, 16.5000, 0, 1),
-(1, 60, 2, 0.0000, 16.5000, 0, 1),
-(1, 60, 3, 0.0000, 16.5000, 0, 1);
 
 --
 -- Table structure for table `cataloginventory_stock`
@@ -391,13 +364,6 @@ CREATE TABLE IF NOT EXISTS `cataloginventory_stock_item` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Inventory Stock Item Data' AUTO_INCREMENT=2 ;
 
 --
--- Dumping data for table `cataloginventory_stock_item`
---
-
-INSERT INTO `cataloginventory_stock_item` (`item_id`, `product_id`, `stock_id`, `qty`, `min_qty`, `use_config_min_qty`, `is_qty_decimal`, `backorders`, `use_config_backorders`, `min_sale_qty`, `use_config_min_sale_qty`, `max_sale_qty`, `use_config_max_sale_qty`, `is_in_stock`, `low_stock_date`, `notify_stock_qty`, `use_config_notify_stock_qty`, `manage_stock`, `use_config_manage_stock`, `stock_status_changed_automatically`) VALUES
-(1, 1, 1, 10.0000, 0.0000, 1, 0, 0, 1, 1.0000, 1, 0.0000, 1, 1, NULL, NULL, 1, 0, 1, 0);
-
---
 -- Table structure for table `cataloginventory_stock_status`
 --
 
@@ -411,13 +377,6 @@ CREATE TABLE IF NOT EXISTS `cataloginventory_stock_status` (
   KEY `FK_CATALOGINVENTORY_STOCK_STATUS_STOCK` (`stock_id`),
   KEY `FK_CATALOGINVENTORY_STOCK_STATUS_WEBSITE` (`website_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `cataloginventory_stock_status`
---
-
-INSERT INTO `cataloginventory_stock_status` (`product_id`, `website_id`, `stock_id`, `qty`, `stock_status`) VALUES
-(1, 1, 1, 10.0000, 1);
 
 --
 -- Table structure for table `catalogrule`
@@ -506,13 +465,6 @@ CREATE TABLE IF NOT EXISTS `catalogsearch_fulltext` (
   PRIMARY KEY (`product_id`,`store_id`),
   FULLTEXT KEY `data_index` (`data_index`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `catalogsearch_fulltext`
---
-
-INSERT INTO `catalogsearch_fulltext` (`product_id`, `store_id`, `data_index`) VALUES
-(1, 1, '9780345339706 Enabled None The Fellowship of the ring J. R. R. Tolkien 9780345339706 The lord of the ring trilogy frodo');
 
 --
 -- Table structure for table `catalogsearch_query`
@@ -1535,13 +1487,6 @@ CREATE TABLE IF NOT EXISTS `catalog_category_product` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `catalog_category_product`
---
-
-INSERT INTO `catalog_category_product` (`category_id`, `product_id`, `position`) VALUES
-(30, 1, 0);
-
---
 -- Table structure for table `catalog_category_product_index`
 --
 
@@ -1557,14 +1502,6 @@ CREATE TABLE IF NOT EXISTS `catalog_category_product_index` (
   KEY `IDX_JOIN` (`product_id`,`store_id`,`category_id`,`visibility`),
   KEY `IDX_BASE` (`store_id`,`category_id`,`visibility`,`is_parent`,`position`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `catalog_category_product_index`
---
-
-INSERT INTO `catalog_category_product_index` (`category_id`, `product_id`, `position`, `is_parent`, `store_id`, `visibility`) VALUES
-(2, 1, 0, 0, 1, 4),
-(30, 1, 0, 1, 1, 4);
 
 --
 -- Table structure for table `catalog_compare_item`
@@ -1658,13 +1595,6 @@ CREATE TABLE IF NOT EXISTS `catalog_product_enabled_index` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `catalog_product_enabled_index`
---
-
-INSERT INTO `catalog_product_enabled_index` (`product_id`, `store_id`, `visibility`) VALUES
-(1, 1, 4);
-
---
 -- Table structure for table `catalog_product_entity`
 --
 
@@ -1686,13 +1616,6 @@ CREATE TABLE IF NOT EXISTS `catalog_product_entity` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Product Entities' AUTO_INCREMENT=2 ;
 
 --
--- Dumping data for table `catalog_product_entity`
---
-
-INSERT INTO `catalog_product_entity` (`entity_id`, `entity_type_id`, `attribute_set_id`, `type_id`, `sku`, `category_ids`, `created_at`, `updated_at`, `has_options`, `required_options`) VALUES
-(1, 4, 26, 'simple', '9780345339706', '30', '2009-10-15 09:51:13', '2009-10-15 09:51:13', 0, 0);
-
---
 -- Table structure for table `catalog_product_entity_datetime`
 --
 
@@ -1711,13 +1634,6 @@ CREATE TABLE IF NOT EXISTS `catalog_product_entity_datetime` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- Dumping data for table `catalog_product_entity_datetime`
---
-
-INSERT INTO `catalog_product_entity_datetime` (`value_id`, `entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
-(1, 4, 501, 0, 1, '1989-01-11 00:00:00');
-
---
 -- Table structure for table `catalog_product_entity_decimal`
 --
 
@@ -1734,14 +1650,6 @@ CREATE TABLE IF NOT EXISTS `catalog_product_entity_decimal` (
   KEY `FK_CATALOG_PRODUCT_ENTITY_DECIMAL_PRODUCT_ENTITY` (`entity_id`),
   KEY `FK_CATALOG_PRODUCT_ENTITY_DECIMAL_ATTRIBUTE` (`attribute_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `catalog_product_entity_decimal`
---
-
-INSERT INTO `catalog_product_entity_decimal` (`value_id`, `entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
-(1, 4, 65, 0, 1, 0.2000),
-(2, 4, 60, 0, 1, 16.5000);
 
 --
 -- Table structure for table `catalog_product_entity_gallery`
@@ -1781,17 +1689,6 @@ CREATE TABLE IF NOT EXISTS `catalog_product_entity_int` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
--- Dumping data for table `catalog_product_entity_int`
---
-
-INSERT INTO `catalog_product_entity_int` (`value_id`, `entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
-(1, 4, 80, 0, 1, 1),
-(2, 4, 85, 0, 1, 4),
-(3, 4, 508, 0, 1, 1),
-(4, 4, 81, 0, 1, 0),
-(5, 4, 467, 0, 1, 1);
-
---
 -- Table structure for table `catalog_product_entity_media_gallery`
 --
 
@@ -1806,13 +1703,6 @@ CREATE TABLE IF NOT EXISTS `catalog_product_entity_media_gallery` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Catalog product media gallery' AUTO_INCREMENT=2 ;
 
 --
--- Dumping data for table `catalog_product_entity_media_gallery`
---
-
-INSERT INTO `catalog_product_entity_media_gallery` (`value_id`, `attribute_id`, `entity_id`, `value`) VALUES
-(1, 73, 1, '/1/7/175px-fellowshipofthering.jpg');
-
---
 -- Table structure for table `catalog_product_entity_media_gallery_value`
 --
 
@@ -1825,13 +1715,6 @@ CREATE TABLE IF NOT EXISTS `catalog_product_entity_media_gallery_value` (
   PRIMARY KEY (`value_id`,`store_id`),
   KEY `FK_CATALOG_PRODUCT_MEDIA_GALLERY_VALUE_STORE` (`store_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog product media gallery values';
-
---
--- Dumping data for table `catalog_product_entity_media_gallery_value`
---
-
-INSERT INTO `catalog_product_entity_media_gallery_value` (`value_id`, `store_id`, `label`, `position`, `disabled`) VALUES
-(1, 0, '', 1, 0);
 
 --
 -- Table structure for table `catalog_product_entity_text`
@@ -1850,17 +1733,6 @@ CREATE TABLE IF NOT EXISTS `catalog_product_entity_text` (
   KEY `FK_CATALOG_PRODUCT_ENTITY_TEXT_STORE` (`store_id`),
   KEY `FK_CATALOG_PRODUCT_ENTITY_TEXT_PRODUCT_ENTITY` (`entity_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
-
---
--- Dumping data for table `catalog_product_entity_text`
---
-
-INSERT INTO `catalog_product_entity_text` (`value_id`, `entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
-(1, 4, 502, 0, 1, 'bbury'),
-(2, 4, 57, 0, 1, 'The lord of the ring trilogy'),
-(3, 4, 58, 0, 1, 'frodo'),
-(4, 4, 68, 0, 1, ''),
-(5, 4, 89, 0, 1, '');
 
 --
 -- Table structure for table `catalog_product_entity_tier_price`
@@ -1897,37 +1769,6 @@ CREATE TABLE IF NOT EXISTS `catalog_product_entity_varchar` (
   KEY `FK_CATALOG_PRODUCT_ENTITY_VARCHAR_STORE` (`store_id`),
   KEY `FK_CATALOG_PRODUCT_ENTITY_VARCHAR_PRODUCT_ENTITY` (`entity_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
-
---
--- Dumping data for table `catalog_product_entity_varchar`
---
-
-INSERT INTO `catalog_product_entity_varchar` (`value_id`, `entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
-(1, 4, 56, 0, 1, 'The Fellowship of the ring'),
-(2, 4, 496, 0, 1, 'J. R. R. Tolkien'),
-(3, 4, 497, 0, 1, '9780345339706'),
-(4, 4, 500, 0, 1, '0345339706'),
-(5, 4, 506, 0, 1, ''),
-(6, 4, 507, 0, 1, ''),
-(7, 4, 503, 0, 1, 'English'),
-(8, 4, 504, 0, 1, '541'),
-(9, 4, 82, 0, 1, 'the-fellowship-of-the-ring'),
-(10, 4, 469, 0, 1, '2'),
-(11, 4, 499, 0, 1, 'Paperback'),
-(12, 4, 505, 0, 1, ''),
-(13, 4, 509, 0, 1, '5/5'),
-(14, 4, 67, 0, 1, ''),
-(15, 4, 69, 0, 1, ''),
-(16, 4, 70, 0, 1, '/1/7/175px-fellowshipofthering.jpg'),
-(17, 4, 71, 0, 1, '/1/7/175px-fellowshipofthering.jpg'),
-(18, 4, 72, 0, 1, '/1/7/175px-fellowshipofthering.jpg'),
-(19, 4, 86, 0, 1, ''),
-(20, 4, 90, 0, 1, ''),
-(21, 4, 92, 0, 1, 'container2'),
-(22, 4, 95, 0, 1, ''),
-(23, 4, 96, 0, 1, ''),
-(24, 4, 97, 0, 1, ''),
-(25, 4, 83, 0, 1, 'the-fellowship-of-the-ring.html');
 
 --
 -- Table structure for table `catalog_product_link`
@@ -2193,13 +2034,6 @@ CREATE TABLE IF NOT EXISTS `catalog_product_website` (
   PRIMARY KEY (`product_id`,`website_id`),
   KEY `FK_CATALOG_PRODUCT_WEBSITE_WEBSITE` (`website_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `catalog_product_website`
---
-
-INSERT INTO `catalog_product_website` (`product_id`, `website_id`) VALUES
-(1, 1);
 
 --
 -- Table structure for table `checkout_agreement`
@@ -2579,14 +2413,6 @@ CREATE TABLE IF NOT EXISTS `core_url_rewrite` (
   KEY `FK_CORE_URL_REWRITE_PRODUCT` (`product_id`),
   KEY `IDX_CATEGORY_REWRITE` (`category_id`,`is_system`,`product_id`,`store_id`,`id_path`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `core_url_rewrite`
---
-
-INSERT INTO `core_url_rewrite` (`url_rewrite_id`, `store_id`, `category_id`, `product_id`, `id_path`, `request_path`, `target_path`, `is_system`, `options`, `description`) VALUES
-(1, 1, 30, 1, 'product/1/30', 'science-fiction-fantasy/the-fellowship-of-the-ring.html', 'catalog/product/view/id/1/category/30', 1, '', NULL),
-(2, 1, NULL, 1, 'product/1', 'the-fellowship-of-the-ring.html', 'catalog/product/view/id/1', 1, '', NULL);
 
 --
 -- Table structure for table `core_website`
@@ -4059,7 +3885,7 @@ CREATE TABLE IF NOT EXISTS `eav_attribute` (
   UNIQUE KEY `entity_type_id` (`entity_type_id`,`attribute_code`),
   KEY `IDX_USED_FOR_SORT_BY` (`entity_type_id`,`used_for_sort_by`),
   KEY `IDX_USED_IN_PRODUCT_LISTING` (`entity_type_id`,`used_in_product_listing`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=510 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=512 ;
 
 --
 -- Dumping data for table `eav_attribute`
@@ -4565,15 +4391,16 @@ INSERT INTO `eav_attribute` (`attribute_id`, `entity_type_id`, `attribute_code`,
 (497, 4, 'bo_ISBN', NULL, NULL, 'varchar', NULL, NULL, 'text', NULL, 'ISBN-13', '', NULL, 1, 1, 1, 1, NULL, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, '', 0, '', 1),
 (499, 4, 'bo_binding', NULL, NULL, 'varchar', NULL, NULL, 'text', NULL, 'Binding', '', NULL, 2, 1, 1, 1, '', 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, '', 0, '', 1),
 (500, 4, 'bo_isbn10', NULL, NULL, 'varchar', NULL, NULL, 'text', NULL, 'ISBN-10', 'validate-digits', NULL, 1, 1, 0, 1, '', 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, '', 0, '', 1),
-(501, 4, 'bo_pu_date', NULL, 'eav/entity_attribute_backend_datetime', 'datetime', NULL, 'eav/entity_attribute_frontend_datetime', 'date', NULL, 'Publishing Date', '', NULL, 0, 1, 1, 1, '', 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, '', 0, '', 1),
-(502, 4, 'bo_publisher', NULL, NULL, 'text', NULL, NULL, 'textarea', NULL, 'Publisher', '', NULL, 1, 1, 1, 1, '', 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, '', 0, '', 1),
+(501, 4, 'bo_pu_date', NULL, 'eav/entity_attribute_backend_datetime', 'datetime', NULL, 'eav/entity_attribute_frontend_datetime', 'date', NULL, 'Publishing Date', '', NULL, 0, 1, 1, 1, '', 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, '', 0, '', 1),
+(502, 4, 'bo_publisher', NULL, NULL, 'text', NULL, NULL, 'textarea', NULL, 'Publisher', '', NULL, 1, 1, 1, 1, '', 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, '', 0, '', 1),
 (503, 4, 'bo_language', NULL, NULL, 'varchar', NULL, NULL, 'text', NULL, 'Language', '', NULL, 1, 1, 1, 1, '', 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, '', 0, '', 0),
 (504, 4, 'bo_no_pg', NULL, NULL, 'varchar', NULL, NULL, 'text', NULL, 'No of Pages', 'validate-digits', NULL, 0, 1, 1, 1, '', 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, '', 0, '', 0),
-(505, 4, 'bo_dimension', NULL, NULL, 'varchar', NULL, NULL, 'text', NULL, 'Dimension', '', NULL, 0, 1, 0, 1, '', 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, '', 0, '', 0),
-(506, 4, 'bo_illustrator', NULL, NULL, 'varchar', NULL, NULL, 'text', NULL, 'illustrator', '', NULL, 0, 1, 0, 1, '', 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, '', 0, '', 1),
-(507, 4, 'bo_edition', NULL, NULL, 'varchar', NULL, NULL, 'text', NULL, 'Edition', '', NULL, 0, 1, 0, 1, '', 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, '', 0, '', 1),
+(505, 4, 'bo_dimension', NULL, NULL, 'varchar', NULL, NULL, 'text', NULL, 'Dimension', '', NULL, 0, 1, 0, 1, '', 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, '', 0, '', 0),
+(506, 4, 'bo_illustrator', NULL, NULL, 'varchar', NULL, NULL, 'text', NULL, 'illustrator', '', NULL, 0, 1, 0, 1, '', 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, '', 0, '', 1),
+(507, 4, 'bo_edition', NULL, NULL, 'varchar', NULL, NULL, 'text', NULL, 'Edition', '', NULL, 0, 1, 0, 1, '', 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, '', 0, '', 1),
 (508, 4, 'bo_int_shipping', NULL, NULL, 'int', NULL, NULL, 'boolean', NULL, 'International Shipping', '', NULL, 0, 1, 1, 1, '0', 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, '', 0, '', 1),
-(509, 4, 'bo_rating', NULL, NULL, 'varchar', NULL, NULL, 'text', NULL, 'Rating', '', NULL, 0, 1, 0, 1, '', 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, '', 0, '', 0);
+(509, 4, 'bo_rating', NULL, NULL, 'varchar', NULL, NULL, 'text', NULL, 'Rating', '', NULL, 0, 1, 0, 1, '', 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, '', 0, '', 0),
+(511, 4, 'bo_shipping_region', NULL, NULL, 'varchar', NULL, NULL, 'text', NULL, 'Shipping Region', 'validate-digits', NULL, 0, 1, 1, 1, '', 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, '', 0, '', 0);
 
 --
 -- Table structure for table `eav_attribute_group`
@@ -5259,55 +5086,57 @@ INSERT INTO `eav_entity_attribute` (`entity_attribute_id`, `entity_type_id`, `at
 (553, 4, 26, 32, 476, 29),
 (555, 4, 26, 32, 477, 30),
 (569, 4, 26, 33, 84, 8),
-(605, 4, 26, 32, 56, 1),
-(607, 4, 26, 32, 57, 11),
-(609, 4, 26, 32, 58, 12),
-(611, 4, 26, 32, 59, 13),
-(613, 4, 26, 32, 65, 14),
-(615, 4, 26, 32, 66, 15),
-(617, 4, 26, 32, 76, 16),
-(619, 4, 26, 32, 77, 17),
-(621, 4, 26, 32, 78, 18),
-(623, 4, 26, 32, 80, 19),
-(625, 4, 26, 32, 82, 20),
-(627, 4, 26, 32, 85, 21),
-(629, 4, 26, 32, 469, 22),
-(631, 4, 26, 32, 496, 2),
-(633, 4, 26, 32, 497, 3),
-(635, 4, 26, 32, 499, 23),
-(637, 4, 26, 32, 500, 4),
-(639, 4, 26, 32, 501, 8),
-(641, 4, 26, 32, 502, 6),
-(643, 4, 26, 32, 503, 9),
-(645, 4, 26, 32, 504, 10),
-(647, 4, 26, 32, 505, 24),
-(649, 4, 26, 32, 506, 5),
-(651, 4, 26, 32, 507, 7),
-(653, 4, 26, 32, 508, 26),
-(655, 4, 26, 32, 509, 25),
-(657, 4, 26, 33, 60, 1),
-(659, 4, 26, 33, 61, 2),
-(661, 4, 26, 33, 62, 3),
-(663, 4, 26, 33, 63, 4),
-(665, 4, 26, 33, 64, 5),
-(667, 4, 26, 33, 75, 7),
-(669, 4, 26, 33, 81, 6),
-(671, 4, 26, 33, 467, 8),
-(673, 4, 26, 33, 473, 9),
-(675, 4, 26, 34, 67, 1),
-(677, 4, 26, 34, 68, 2),
-(679, 4, 26, 34, 69, 3),
-(681, 4, 26, 35, 70, 1),
-(683, 4, 26, 35, 71, 2),
-(685, 4, 26, 35, 72, 3),
-(687, 4, 26, 35, 73, 4),
-(689, 4, 26, 35, 79, 5),
-(691, 4, 26, 36, 86, 1),
-(693, 4, 26, 36, 87, 2),
-(695, 4, 26, 36, 88, 3),
-(697, 4, 26, 36, 89, 4),
-(699, 4, 26, 36, 90, 5),
-(701, 4, 26, 36, 92, 6);
+(755, 4, 26, 32, 510, 26),
+(803, 4, 26, 32, 56, 1),
+(805, 4, 26, 32, 57, 11),
+(807, 4, 26, 32, 58, 12),
+(809, 4, 26, 32, 59, 13),
+(811, 4, 26, 32, 65, 14),
+(813, 4, 26, 32, 66, 15),
+(815, 4, 26, 32, 76, 16),
+(817, 4, 26, 32, 77, 17),
+(819, 4, 26, 32, 78, 18),
+(821, 4, 26, 32, 80, 19),
+(823, 4, 26, 32, 82, 20),
+(825, 4, 26, 32, 85, 21),
+(827, 4, 26, 32, 469, 22),
+(829, 4, 26, 32, 496, 2),
+(831, 4, 26, 32, 497, 3),
+(833, 4, 26, 32, 499, 23),
+(835, 4, 26, 32, 500, 4),
+(837, 4, 26, 32, 501, 8),
+(839, 4, 26, 32, 502, 6),
+(841, 4, 26, 32, 503, 9),
+(843, 4, 26, 32, 504, 10),
+(845, 4, 26, 32, 505, 24),
+(847, 4, 26, 32, 506, 5),
+(849, 4, 26, 32, 507, 7),
+(851, 4, 26, 32, 508, 27),
+(853, 4, 26, 32, 509, 25),
+(855, 4, 26, 32, 511, 26),
+(857, 4, 26, 33, 60, 1),
+(859, 4, 26, 33, 61, 2),
+(861, 4, 26, 33, 62, 3),
+(863, 4, 26, 33, 63, 4),
+(865, 4, 26, 33, 64, 5),
+(867, 4, 26, 33, 75, 7),
+(869, 4, 26, 33, 81, 6),
+(871, 4, 26, 33, 467, 8),
+(873, 4, 26, 33, 473, 9),
+(875, 4, 26, 34, 67, 1),
+(877, 4, 26, 34, 68, 2),
+(879, 4, 26, 34, 69, 3),
+(881, 4, 26, 35, 70, 1),
+(883, 4, 26, 35, 71, 2),
+(885, 4, 26, 35, 72, 3),
+(887, 4, 26, 35, 73, 4),
+(889, 4, 26, 35, 79, 5),
+(891, 4, 26, 36, 86, 1),
+(893, 4, 26, 36, 87, 2),
+(895, 4, 26, 36, 88, 3),
+(897, 4, 26, 36, 89, 4),
+(899, 4, 26, 36, 90, 5),
+(901, 4, 26, 36, 92, 6);
 
 --
 -- Table structure for table `eav_entity_datetime`
@@ -5477,6 +5306,61 @@ CREATE TABLE IF NOT EXISTS `eav_entity_varchar` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Varchar values of attributes' AUTO_INCREMENT=1 ;
 
 --
+-- Table structure for table `ek_catalog_popular_categories`
+--
+
+CREATE TABLE IF NOT EXISTS `ek_catalog_popular_categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `category` varchar(100) NOT NULL,
+  `url_path` varchar(100) NOT NULL,
+  `order_no` int(11) NOT NULL,
+  `is_active` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `date` datetime DEFAULT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ek_popular_category` (`category`,`is_active`),
+  UNIQUE KEY `ek_popular_category_order` (`order_no`,`is_active`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Table structure for table `ek_catalog_top_authors`
+--
+
+CREATE TABLE IF NOT EXISTS `ek_catalog_top_authors` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `author` varchar(100) NOT NULL,
+  `order_no` int(11) DEFAULT NULL,
+  `is_active` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `date` datetime DEFAULT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ek_top_author` (`author`,`is_active`),
+  UNIQUE KEY `ek_top_author_order` (`order_no`,`is_active`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+--
+-- Table structure for table `ek_shipping_region`
+--
+
+CREATE TABLE IF NOT EXISTS `ek_shipping_region` (
+  `VALUE_ID` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `CODE` tinyint(4) NOT NULL,
+  `REGION` varchar(255) CHARACTER SET utf8 NOT NULL,
+  PRIMARY KEY (`VALUE_ID`),
+  UNIQUE KEY `code` (`CODE`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `ek_shipping_region`
+--
+
+INSERT INTO `ek_shipping_region` (`VALUE_ID`, `CODE`, `REGION`) VALUES
+(1, 1, 'India only'),
+(2, 2, 'Indian Sub-continent only'),
+(3, 3, 'International');
+
+--
 -- Table structure for table `gift_message`
 --
 
@@ -5642,21 +5526,6 @@ CREATE TABLE IF NOT EXISTS `log_url` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='URL visiting history';
 
 --
--- Dumping data for table `log_url`
---
-
-INSERT INTO `log_url` (`url_id`, `visitor_id`, `visit_time`) VALUES
-(1, 1, '2009-10-15 09:39:11'),
-(2, 1, '2009-10-15 09:41:20'),
-(3, 1, '2009-10-15 09:44:15'),
-(4, 1, '2009-10-15 09:44:19'),
-(5, 1, '2009-10-15 09:51:28'),
-(6, 1, '2009-10-15 09:51:33'),
-(7, 12, '2009-10-16 06:47:37'),
-(8, 2, '2009-10-16 07:13:22'),
-(9, 2, '2009-10-16 08:18:15');
-
---
 -- Table structure for table `log_url_info`
 --
 
@@ -5666,21 +5535,6 @@ CREATE TABLE IF NOT EXISTS `log_url_info` (
   `referer` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`url_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Detale information about url visit' AUTO_INCREMENT=10 ;
-
---
--- Dumping data for table `log_url_info`
---
-
-INSERT INTO `log_url_info` (`url_id`, `url`, `referer`) VALUES
-(1, 'http://localhost/magento/index.php/', 'http://localhost/magento/index.php/install/wizard/end/'),
-(2, 'http://localhost/magento/index.php/', 'http://localhost/magento/index.php/install/wizard/end/'),
-(3, 'http://localhost/magento/index.php/catalog/category/view/s/arts-photography/id/3/', 'http://localhost/magento/index.php/'),
-(4, 'http://localhost/magento/index.php/catalog/category/view/s/mystery-thrillers/id/19/', 'http://localhost/magento/index.php/catalog/category/view/s/arts-photography/id/3/'),
-(5, 'http://localhost/magento/index.php/catalog/category/view/s/science-fiction-fantasy/id/30/', 'http://localhost/magento/index.php/catalog/category/view/s/mystery-thrillers/id/19/'),
-(6, 'http://localhost/magento/index.php/catalog/product/view/id/1/category/30', 'http://localhost/magento/index.php/catalog/category/view/s/science-fiction-fantasy/id/30/'),
-(7, 'http://localhost/demo/magento/', ''),
-(8, 'http://localhost/magento/index.php/', 'http://localhost/magento/index.php/install/wizard/end/'),
-(9, 'http://localhost/magento/', '');
 
 --
 -- Table structure for table `log_visitor`
@@ -5697,14 +5551,6 @@ CREATE TABLE IF NOT EXISTS `log_visitor` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='System visitors log' AUTO_INCREMENT=3 ;
 
 --
--- Dumping data for table `log_visitor`
---
-
-INSERT INTO `log_visitor` (`visitor_id`, `session_id`, `first_visit_at`, `last_visit_at`, `last_url_id`, `store_id`) VALUES
-(1, 'dc33d4c77eb045715c4074f2239d4836', '2009-10-15 09:39:10', '2009-10-15 09:51:33', 6, 1),
-(2, 'd0ec9c679e62960a35b62bd018f52cdd', '2009-10-16 07:13:22', '2009-10-16 08:18:15', 9, 1);
-
---
 -- Table structure for table `log_visitor_info`
 --
 
@@ -5718,14 +5564,6 @@ CREATE TABLE IF NOT EXISTS `log_visitor_info` (
   `remote_addr` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`visitor_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Additional information by visitor';
-
---
--- Dumping data for table `log_visitor_info`
---
-
-INSERT INTO `log_visitor_info` (`visitor_id`, `http_referer`, `http_user_agent`, `http_accept_charset`, `http_accept_language`, `server_addr`, `remote_addr`) VALUES
-(1, 'http://localhost/magento/index.php/install/wizard/end/', 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3 (.NET CLR 3.5.30729)', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7', 'en-us,en;q=0.5', 2130706433, 2130706433),
-(2, 'http://localhost/magento/index.php/install/wizard/end/', 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3 (.NET CLR 3.5.30729)', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7', 'en-us,en;q=0.5', 2130706433, 2130706433);
 
 --
 -- Table structure for table `log_visitor_online`
@@ -6158,13 +5996,6 @@ CREATE TABLE IF NOT EXISTS `report_event` (
   KEY `IDX_SUBTYPE` (`subtype`),
   KEY `FK_REPORT_EVENT_STORE` (`store_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `report_event`
---
-
-INSERT INTO `report_event` (`event_id`, `logged_at`, `event_type_id`, `object_id`, `subject_id`, `subtype`, `store_id`) VALUES
-(1, '2009-10-15 09:51:32', 1, 1, 1, 1, 1);
 
 --
 -- Table structure for table `report_event_types`
@@ -7930,46 +7761,5 @@ DROP PROCEDURE IF EXISTS `test`.`drop_users_if_exists` ;
 CREATE USER 'ekkitabweb'@'localhost' IDENTIFIED BY 'eki22AbSt0re';
 
 GRANT ALL PRIVILEGES ON *.* TO 'ekkitabweb'@'localhost' IDENTIFIED BY 'eki22AbSt0re' WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;
-
-
-/* Droping off any table for top authors... by Anisha */
-
-DROP TABLE `ek_catalog_top_authors`
-
-/* Creating a new table for top authors... by Anisha */
-
-CREATE TABLE IF NOT EXISTS `ek_catalog_top_authors` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `author` varchar(100) NOT NULL,
-  `order_no` int(11) DEFAULT NULL,
-  `is_active` tinyint(1) unsigned NOT NULL DEFAULT '1',
-  `date` datetime DEFAULT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `ek_top_author` (`author`,`is_active`),
-  UNIQUE KEY `ek_top_author_order` (`order_no`,`is_active`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
-
-
-
-/* Droping off any table for top categories... by Anisha */
-
-DROP TABLE `ek_catalog_popular_categories`
-
-/* Creating a new table for top categories... by Anisha */
-
-CREATE TABLE IF NOT EXISTS `ek_catalog_popular_categories` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `category` varchar(100) NOT NULL,
-  `url_path` varchar(100) NOT NULL,
-  `order_no` int(11) NOT NULL,
-  `is_active` tinyint(1) unsigned NOT NULL DEFAULT '1',
-  `date` datetime DEFAULT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `ek_popular_category` (`category`,`is_active`),
-  UNIQUE KEY `ek_popular_category_order` (`order_no`,`is_active`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
-
 
 SET SQL_MODE=@OLD_SQL_MODE ;
