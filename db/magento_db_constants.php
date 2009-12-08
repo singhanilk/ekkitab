@@ -46,27 +46,27 @@ define (INT_SHIPPING,'INT_SHIPPING');
 define (store_id,0);           //magento store id
 define (entity_type_id ,4);    //magento entitiy type id
 define (attribute_set_id,26);  //magento book attribute set id
-define (has_options,0);	   // value for has_options
-define (required_option,0);	   // value for required_options
+define (has_options,0);	       //value for has_options
+define (required_option,0);	   //value for required_options
 define (option_enable,1);	   
-define (option_diable,0);
+define (option_disable,0);
 define (gift_message_value,2);
 
 
 // constants used for varchar table
 
-define (name_id,56);			 				 //book title eav_attribute code
-define (meta_title_id,67);	       				 //book meta title eav_attribute code
-define (meta_description_id,69);   				 //book meta description eav_attribute code
-define (bo_image_id, 70);		   				 //book image eav attribute code
-define (bo_small_image_id,71);     				 //book small image eav attribute code
-define (bo_thumb_image_id,72);     				 //book thumb image eav attribute code	
+define (name_id,56);			 				 // book title eav_attribute code
+define (meta_title_id,67);	       				 // book meta title eav_attribute code
+define (meta_description_id,69);   				 // book meta description eav_attribute code
+define (bo_image_id, 70);		   				 // book image eav attribute code
+define (bo_small_image_id,71);     				 // book small image eav attribute code
+define (bo_thumb_image_id,72);     				 // book thumb image eav attribute code	
 define (url_key_id,82); 		   				 // id of the url key used for product url 
 define (url_id,83);	  			   				 // id of the url used for product url
-define (options_container, 92);    				 //options container eav attribute code
-define (image_label_id, 95); 	   				 //id of label for book image 
-define (small_image_label_id, 96); 				 //id of label for small book image
-define (thumb_label_id ,97);	   				 //id of label for thumb book image
+define (options_container, 92);    				 // options container eav attribute code
+define (image_label_id, 95); 	   				 // id of label for book image 
+define (small_image_label_id, 96); 				 // id of label for small book image
+define (thumb_label_id ,97);	   				 // id of label for thumb book image
 define (gift_message_avialable_id ,469);		 // id of the gift_message_aviable
 define (bo_author_id,496); 						 // book author eav attribute code
 define (bo_isbn_id,497);	  					 // book isbn-13 eav attribute code
@@ -79,7 +79,7 @@ define (bo_illustrator_id,506);					 // book illustrator eav attribute code
 define (bo_edition_id,507);						 // book edition attribute code
 define (bo_rating_id,509);						 // book rating attribute code
 define (bo_shipping_region_id,511);				 // book shipping region attribute code
-define (options_container_value,"'container2'"); //value of the option_container
+define (options_container_value,"container2");   // value of the option_container
 
 
 // constants used for decimal
@@ -124,30 +124,30 @@ define (catalogindex_price_user_3,3);			// value for catalogindex_price_coustome
 define (catalogindex_price_qty_value,0.0000);	// Value for catalogindex_price_qty 
 
 //constants used for  catalogindex_stock_item
-define (stock_id,1);							//value for stock_id
-define (min_qty,0.0000);						//value for min_qty
-define (use_config_min_qty,1);					//value for use_config_min_qty
-define (is_qty_decimal,0);						//value for is_qty_decimal
-define (backorders,0);							//value for backorders
-define (use_config_backorders,0);				//value for use_config_backorders
-define (min_sale_qty,1.0000);					//value for min_sale_qty
-define (use_config_min_sale_qty,1);				//value for use_config_min_sale_qty
-define (use_config_max_sale_qty,1);				//value for use_config_max_sale_qty
-define (max_sale_qty,0.0000);					//value for max_sale_qty
-define (is_in_stock,1);							//value for is_in_stock
-define (use_config_notify_stock_qty,1);			//value for use_config_notify_stock_qty
-define (manage_stock,1);						//value for manage_stock
-define (use_config_manage_stock,1);				//value for use_config_manage_stock
-define (stock_status_changed_automatically,0);	//value for stock_status_changed_automatically
+define (stock_id,1);							// value for stock_id
+define (min_qty,0.0000);						// value for min_qty
+define (use_config_min_qty,1);					// value for use_config_min_qty
+define (is_qty_decimal,0);						// value for is_qty_decimal
+define (backorders,0);							// value for backorders
+define (use_config_backorders,0);				// value for use_config_backorders
+define (min_sale_qty,1.0000);					// value for min_sale_qty
+define (use_config_min_sale_qty,1);				// value for use_config_min_sale_qty
+define (use_config_max_sale_qty,1);				// value for use_config_max_sale_qty
+define (max_sale_qty,0.0000);					// value for max_sale_qty
+define (is_in_stock,1);							// value for is_in_stock
+define (use_config_notify_stock_qty,1);			// value for use_config_notify_stock_qty
+define (manage_stock,1);						// value for manage_stock
+define (use_config_manage_stock,1);				// value for use_config_manage_stock
+define (stock_status_changed_automatically,0);	// value for stock_status_changed_automatically
 
 //catalogindex_stock_status
-define (stock_status,1);						//value for stock_status
+define (stock_status,1);						// value for stock_status
 
 
 //catalog_category_product_index
-define (position,0);							//value for position
-define (is_parent_0,0);							//value for is_parent_0
-define (is_parent_1,1);							//value for is_parent_1
-define (root_category_value,2);					//value for root_category_value
-define (value_default,'default');				//constant for default string
-define (value_empty,'');						//constant for empty string
+define (position,0);							// value for position
+define (is_parent_0,0);							// value for is_parent_0
+define (is_parent_1,1);							// value for is_parent_1
+define (root_category_value,2);					// value for root_category_value
+define (value_default,'default');				// constant for default string
+define (value_empty,'');						// constant for empty string
