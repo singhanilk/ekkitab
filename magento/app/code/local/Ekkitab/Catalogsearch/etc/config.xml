@@ -6,12 +6,38 @@
         </Ekkitab_Catalogsearch>
     </modules>
 	<global>
+		<models>
+			<ekkitab_catalogsearch>
+				<class>Ekkitab_Catalogsearch_Model</class>
+				<resourceModel>ekkitab_catalogsearch_mysql4</resourceModel>
+			</ekkitab_catalogsearch>   
+			<ekkitab_catalogsearch_mysql4>
+				<class>Ekkitab_Catalogsearch_Model_Mysql4</class>  
+			</ekkitab_catalogsearch_mysql4>
+		</models>
+		<helpers>
+            <ekkitab_catalogsearch>
+                <class>Ekkitab_Catalogsearch_Helper</class>
+            </ekkitab_catalogsearch>
+        </helpers>
 		<blocks>
 			<catalogsearch>
 				<rewrite>
+						<custom_result>Ekkitab_CatalogSearch_Block_Custom_Result</custom_result>
 						<top>Ekkitab_Catalogsearch_Block_Top</top>
 				</rewrite>
 			</catalogsearch>
 		</blocks>
 	</global>
+	<frontend>
+		<routers>
+			<ekkitab_catalogsearch>
+				<use>standard</use>
+				<args>
+					<module>Ekkitab_Catalogsearch</module>
+					<frontName>ekkitab_catalogsearch</frontName>
+				</args>
+			</ekkitab_catalogsearch>
+		</routers>
+	</frontend>       
 </config>   

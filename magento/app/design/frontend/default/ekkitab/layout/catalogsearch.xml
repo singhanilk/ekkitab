@@ -30,7 +30,8 @@
 
     <default>
         <reference name="root">
-            <block type="core/template" name="top.search" as="topSearch" template="catalogsearch/form.mini.phtml"/>
+            <!--block type="core/template" name="top.search" as="topSearch" template="catalogsearch/form.mini.phtml"/-->
+            <block type="core/template" name="top.search" as="topSearch" template="catalogsearch/custom/form.mini.phtml"/>
             <block type="catalogsearch/top" name="popular.search" as="popularSearch" template="catalogsearch/popular.phtml"/>
         </reference>
         <reference name="footer_links">
@@ -59,6 +60,23 @@
             </block>
         </reference>
     </catalogsearch_result_index>
+
+    <ekkitab_catalogsearch_custom_result>
+        <!-- Mage_Catalogsearch -->
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+        </reference>
+        <reference name="content">
+            <block type="catalogsearch/custom_result" name="catalogsearch_custom_result" template="catalogsearch/custom/result.phtml">
+                <block type="catalog/product_list" name="search_result_list" template="catalog/product/list.phtml">
+                    <action method="setColumnCount"><count>4</count></action>
+                </block>
+                <action method="setListOrders"/>
+                <action method="setListModes"/>
+                <action method="setListCollection"/>
+            </block>
+        </reference>
+    </ekkitab_catalogsearch_custom_result>
 
     <catalogsearch_advanced_index>
         <!-- Mage_Catalogsearch -->
