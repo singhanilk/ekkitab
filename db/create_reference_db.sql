@@ -11,14 +11,12 @@
 -- @author Arun Kuppuswamy       (arun@ekkitab.com)
 -- @version 1.0     Dec 01, 2009
 -- @version 1.1     Dec 02, 2009
+-- @version 1.2     Dec 09, 2009
+
+
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `reference`
@@ -32,7 +30,6 @@ DROP DATABASE IF EXISTS `reference`;
 CREATE DATABASE `reference` DEFAULT CHARACTER SET `utf8` COLLATE `utf8_general_ci`;
 
 USE `reference`;
-
 
 -- --------------------------------------------------------
 
@@ -79,6 +76,55 @@ CREATE TABLE IF NOT EXISTS `books` (
   `PRODUCT_STATUS` int(11) NOT NULL,
   PRIMARY KEY (`VALUE_ID`),
   UNIQUE KEY `ISBN` (`ISBN`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ek_category_list`
+--
+
+CREATE TABLE IF NOT EXISTS `ek_category_list` (
+  `VALUE_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `CATEGORY_NAME` varchar(255) NOT NULL,
+  `EK_CATEGORY_ID` int(11) NOT NULL,
+  PRIMARY KEY (`VALUE_ID`),
+  UNIQUE KEY `EK_CATEGORY_ID` (`EK_CATEGORY_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ek_category_map`
+--
+
+CREATE TABLE IF NOT EXISTS `ek_category_map` (
+  `VALUE_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `BISAC` varchar(255) NOT NULL,
+  `EK_CATEGORY_ID` int(11) NOT NULL,
+  PRIMARY KEY (`VALUE_ID`),
+  KEY `FK_CATEGORY_ID` (`EK_CATEGORY_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  AUTO_INCREMENT=1 ;
+
+
+
+-- --------------------------------------------------------
+
+
+--
+-- Constraints for tables
+--
+
+--
+-- Constraints for table `ek_category_map`
+--
+ALTER TABLE `ek_category_map`
+  ADD CONSTRAINT `FK_CATEGORY_ID` FOREIGN KEY (`EK_CATEGORY_ID`) REFERENCES `ek_category_list` (`EK_CATEGORY_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+
+-- --------------------------------------------------------
 

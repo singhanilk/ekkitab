@@ -15,7 +15,9 @@ ini_set("display_errors", 1);
 // @author Arun Kuppuswamy (arun@ekkitab.com)
 // @version 1.0     Nov 26, 2009
 // @version 1.1     Nov 28, 2009 (vijay@ekkitab.com)
-// @version 1.2	    Dec 07, 2009 (arun@ekkitab.com)
+// @version 1.2     Dec 07, 2009 (arun@ekkitab.com)
+// @version 1.3     Dec 10, 2009 (arun@ekkitab.com)
+
 
 // This script will load BookData from the Reference Database into Magento Production Database......
 
@@ -470,9 +472,14 @@ ini_set("display_errors", 1);
 
         $queries[] = createInsertQuery("catalog_product_website",
                                         array($entityIds[CPE],website_id));
-
-
-        return $queries;
+		
+		//Create the  dataindex for catalogsearch_fulltext 
+		$search_data_index="$book[TITLE] $books[AUTHOR] $book[ISBN]";
+		
+		$queries[] = createInsertQuery("catalogsearch_fulltext",
+                                        array($entityIds[CPE],catalogindex_eav_store_id,"'$search_data_index'"));
+		
+		return $queries;
     }
    /** 
     * Generates all the UPDATE sqls required to update a new book.  
@@ -703,7 +710,7 @@ ini_set("display_errors", 1);
         }
         //$logger->info("Books inserted: $insertedBooks. Books updated: $updatedBooks. Failed: $failedBooks");
     }
-
+	
     $logger->info("Process started at " . date("d-M-Y G:i:sa"));
     start();
     $logger->info("Process ended at " . date("d-M-Y G:i:sa"));
