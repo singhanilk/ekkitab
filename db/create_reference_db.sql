@@ -79,52 +79,20 @@ CREATE TABLE IF NOT EXISTS `books` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
--- --------------------------------------------------------
-
---
--- Table structure for table `ek_category_list`
---
-
-CREATE TABLE IF NOT EXISTS `ek_category_list` (
-  `VALUE_ID` int(11) NOT NULL AUTO_INCREMENT,
-  `CATEGORY_NAME` varchar(255) NOT NULL,
-  `EK_CATEGORY_ID` int(11) NOT NULL,
-  PRIMARY KEY (`VALUE_ID`),
-  UNIQUE KEY `EK_CATEGORY_ID` (`EK_CATEGORY_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-
-
--- --------------------------------------------------------
-
 --
 -- Table structure for table `ek_category_map`
 --
 
-CREATE TABLE IF NOT EXISTS `ek_category_map` (
+CREATE TABLE IF NOT EXISTS `ek_bisac_category_map` (
   `VALUE_ID` int(11) NOT NULL AUTO_INCREMENT,
-  `BISAC` varchar(255) NOT NULL,
-  `EK_CATEGORY_ID` int(11) NOT NULL,
-  PRIMARY KEY (`VALUE_ID`),
-  KEY `FK_CATEGORY_ID` (`EK_CATEGORY_ID`)
+  `BISAC_CODE` varchar(36) NOT NULL,
+  `LEVEL1` varchar(255) NOT NULL,
+  `LEVEL2` varchar(255) NOT NULL,
+  `LEVEL3` varchar(255) NOT NULL,
+  `LEVEL4` varchar(255) NOT NULL,
+  `CATEGORY_ID` int(11) NOT NULL,
+  PRIMARY KEY (`VALUE_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8  AUTO_INCREMENT=1 ;
 
 
-
--- --------------------------------------------------------
-
-
---
--- Constraints for tables
---
-
---
--- Constraints for table `ek_category_map`
---
-ALTER TABLE `ek_category_map`
-  ADD CONSTRAINT `FK_CATEGORY_ID` FOREIGN KEY (`EK_CATEGORY_ID`) REFERENCES `ek_category_list` (`EK_CATEGORY_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-
-
--- --------------------------------------------------------
 

@@ -82,7 +82,7 @@ ini_set("display_errors", 1);
         $db  = NULL;
  
         try  {
-	        $dbm	= mysqli_connect($database_serve,$database_user,$database_psw,$ekkitab_db);
+	        $dbm	= mysqli_connect($database_server,$database_user,$database_psw,$ekkitab_db);
 	        $db     = mysqli_connect($database_server,$database_user,$database_psw,$ref_db);
         }
         catch (exception $e) {
