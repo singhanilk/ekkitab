@@ -21,7 +21,17 @@ This document describes how to initialize and load books into a fresh database.
 4. Run data/ekkitab_popular_tables.sql to initialize the system with the tables
    that will hold the popular items information.
 
-5. Run the script db/importbooks.php to import books from a data source into the
+5. Transfer the images to their correct final destination. The correct location is
+   determined as follows:
+
+   The base directory for images is: <magento_dir>/media/catalog/product/.
+
+   In this base directory, images are stored under directory a/b where a is the first character
+   of the image file and b is the second character of the image file. So for example,
+   image file 1234567890.jpg should be saved into: <base_dir>/1/2, since 1 and 2 are the 
+   first two characters of the image file.  
+
+6. Run the script db/importbooks.php to import books from a data source into the
    reference database.
 
    Usage is: php importbooks.php <Source> <File> <Language> 
@@ -35,14 +45,20 @@ This document describes how to initialize and load books into a fresh database.
    source "Ingrams" will require the file Ingrams.php to be present in the 
    directory specified by IMPORTBOOKS_CLASSDIR in the confguration file importbooks_config.php.
 
+   Make sure that you verify the contents of the _config.php file and the corresponding
+   .ini file that it points to.
+
    In addition, there is a .ini file that describes the database connectivity. The location
    of this .ini file is also specified in the config file.
 
-6. Run the script db/loadbooks.php to transfer eligible book content from the 
+7. Run the script db/loadbooks.php to transfer eligible book content from the 
    reference database into the production database. This script also requires its associated
    config and .ini files.
 
-7. Start the Magento Admininistration application and issue the Catalog URL Rewrite request
+8. Start the Magento Admininistration application and issue the Catalog URL Rewrite request
    from the Cache Management section.
 
+ISSUES (so far):
 
+1. create_ekkitab_db.sql thows an error on some machines complaining about the "USING BTREE" syntax.
+2. we had to edit php.ini to set date.timezone = "Asia/Calcutta" to stop errors on use of default timezone.
