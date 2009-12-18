@@ -1,0 +1,12 @@
+MAGENTO_HOME=<directory in which you have insctalled magento; typically /var/www/magento>
+
+1. unzip the 104bocokcovers.zip in the directory MAGENTO_HOME/media/import.
+2. Create the import directory above if it does not already exist.
+3. Copy 104books.csv to /magento/var/import.
+4. Disable caching through magento admin. 
+5. Select import/export->profiles option from the system menu.
+6. Select import all products.
+7. Select upload file option and select test_data.csv
+8. Select Run Profilecc
+9. Select test_data.csv from the drop down menu.
+10. Click run in a popup and watch progress.

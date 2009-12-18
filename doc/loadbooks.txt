@@ -1,0 +1,48 @@
+This document describes how to initialize and load books into a fresh database.
+
+1. Run db/create_ekkitab_db.sql. This is a sql script that can be run as follows.
+   mysql -u <username> -p<password> < create_ekkitab_db.sql  
+   Alternatively, you can enter mysql in an interactive mode and issue the following
+   command: source create_ekkitab_db.sql
+
+   This command initializes a fresh ekkitab database with all the tables required
+   by Magento. There will not be any category information or book information.
+
+2. Run db/create_reference_db.sql. Run the script in the same manner as you did 
+   in step 1. 
+
+   This command initializes a fresh reference database with all the tables required
+   by the data loading scripts. 
+
+3. Run data/ekkitab_categories.sql to initialize the system with the categories 
+   we will have for the books. This is run in exactly the same way as we did 
+   steps 1 and 2.
+
+4. Run data/ekkitab_popular_tables.sql to initialize the system with the tables
+   that will hold the popular items information.
+
+5. Run the script db/importbooks.php to import books from a data source into the
+   reference database.
+
+   Usage is: php importbooks.php <Source> <File> <Language> 
+   where:
+
+   <Source> is the source from which the data is obtained. For example: "Ingrams".
+   <File> is the file that holds the book data in some pre specified format.
+   <Language> is the language of the books described by the content.
+
+   Each "Source" requires its own class file to parse the content. So, for example,
+   source "Ingrams" will require the file Ingrams.php to be present in the 
+   directory specified by IMPORTBOOKS_CLASSDIR in the confguration file importbooks_config.php.
+
+   In addition, there is a .ini file that describes the database connectivity. The location
+   of this .ini file is also specified in the config file.
+
+6. Run the script db/loadbooks.php to transfer eligible book content from the 
+   reference database into the production database. This script also requires its associated
+   config and .ini files.
+
+7. Start the Magento Admininistration application and issue the Catalog URL Rewrite request
+   from the Cache Management section.
+
+
