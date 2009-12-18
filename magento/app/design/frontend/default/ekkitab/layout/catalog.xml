@@ -110,6 +110,13 @@ Category default layout
         </reference>
     </catalog_category_default>
 
+    <ekkitab_catalog_category_viewall>
+        <reference name="content">
+            <block type="catalog/navigation" name="category.products" template="catalog/category/all_categories.phtml" />
+        </reference>
+    </ekkitab_catalog_category_viewall>
+
+
 <!--
 Category layered navigation layout
 -->
