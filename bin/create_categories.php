@@ -139,11 +139,11 @@ ini_set("display_errors", 1);
                          ", ".$level. ", " . count($tmpstatements) . "),\n" ;
 
         if (! array_key_exists($fullcatname, $mastercodes)) 
-            $mastercodes[$fullcatname] = array("Internal" => $id);
+            $mastercodes[$fullcatname] = array("Internal" => $path."/".$id);
         else {
             $keys = array_keys($mastercodes[$fullcatname]);
             if (count($keys) == 1) {
-                $mastercodes[$fullcatname][$keys[0]] = $id;
+                $mastercodes[$fullcatname][$keys[0]] = $path."/".$id;
             }
         }
 
@@ -236,6 +236,8 @@ ini_set("display_errors", 1);
             #    echo "Internal Error!\n";
 
             $catId = $val[$keys[0]]; 
+            $catId = str_replace("1/2/", "", $catId);
+            $catId = str_replace("/", ",", $catId);
             $catCode = $keys[0];
             #if (!strcmp($catCode, "Internal")) {
             #    $i++;
@@ -249,7 +251,7 @@ ini_set("display_errors", 1);
             for ($j = count($cats); $j<4; $j++) {
                 $line = $line . "'', ";
             }
-            $line = $line . $catId."),\n";  
+            $line = $line . "'$catId'" ."),\n";  
 
             if ($i%50 == 0) {
                 if($i == 0) {
@@ -384,7 +386,10 @@ ini_set("display_errors", 1);
             $keys = array_keys($val); 
             if (count($keys) != 1)
                 echo "Internal Error!\n";
-            $catId = $val[$keys[0]]; 
+            if (strrpos($val[$keys[0]], "/") > 0)
+                $catId = substr($val[$keys[0]], strrpos($val[$keys[0]], "/")+1);
+            else 
+                $catId = $val[$keys[0]]; 
             $cats = explode("/", $fullpath);
             $urlkey = "";
             $catname = ucwords(strtolower(trim($cats[count($cats) - 1]))); 

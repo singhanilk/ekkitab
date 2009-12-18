@@ -288,10 +288,12 @@ ini_set("display_errors", 1);
 		//create categories_id entry
 
 		$book_category_ids = $book[BISAC];
-		if(!empty($book[BISAC2]))
-		  $book_category_ids .= ",$book[BISAC2],";
+        /*
+		if(!empty($book[BISAC2])) 
+		  $book_category_ids .= ",$book[BISAC2]";
 		if(!empty($book[BISAC3]))
 		  $book_category_ids .= ",$book[BISAC3]";
+        */
 
         $imagepath = getImagePath($book[IMAGE]);
         $thumbnailpath = getImagePath($book[THUMB]);
@@ -469,6 +471,7 @@ ini_set("display_errors", 1);
         $queries[] = createInsertQuery("cataloginventory_stock_status",
                                         array($entityIds[CPE],website_id,stock_id,"'$book[QTY]'",stock_status));
 
+        /*
         if(!empty($books[BISAC3])){
 			$queries[] = createInsertQuery("catalog_category_product",
                                         array($book[BISAC3],$entityIds[CPE],position));
@@ -478,17 +481,25 @@ ini_set("display_errors", 1);
 		                       array($book[BISAC2],$entityIds[CPE],position));
 		}
 		else {
-		
-		$queries[] = createInsertQuery("catalog_category_product",
-                                        array($book[BISAC],$entityIds[CPE],position));
-		}
+	    */	
+        $category_ids = explode(",", $book[BISAC]); 
+
+        foreach($category_ids as $id_value) {
+		    $queries[] = createInsertQuery("catalog_category_product",
+                                            array($id_value,$entityIds[CPE],position));
+        }
+		/* } */
 
         $queries[] = createInsertQuery("catalog_category_product_index",
                                         array(root_category_value,$entityIds[CPE],position,is_parent_0,catalogindex_eav_store_id,
 										book_visibility_value));
 
-        $queries[] = createInsertQuery("catalog_category_product_index",
-                                        array($book[BISAC],$entityIds[CPE],position,is_parent_1,catalogindex_eav_store_id,book_visibility_value));
+        foreach($category_ids as $id_value) {
+            $queries[] = createInsertQuery("catalog_category_product_index",
+                                            array($id_value,$entityIds[CPE],position,is_parent_1,catalogindex_eav_store_id,book_visibility_value));
+        }
+
+        /*
 		if(!empty($book[BISAC2])){
 			$queries[] = createInsertQuery("catalog_category_product_index",
                                         array($book[BISAC2],$entityIds[CPE],position,is_parent_1,catalogindex_eav_store_id,book_visibility_value));
@@ -498,6 +509,7 @@ ini_set("display_errors", 1);
 			$queries[] = createInsertQuery("catalog_category_product_index",
                                         array($book[BISAC3],$entityIds[CPE],position,is_parent_1,catalogindex_eav_store_id,book_visibility_value));
 		}
+        */
 
         $queries[] = createInsertQuery("catalog_product_enabled_index",
                                         array($entityIds[CPE],catalogindex_eav_store_id,book_visibility_value));

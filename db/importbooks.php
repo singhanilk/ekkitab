@@ -92,20 +92,19 @@ ini_set("display_errors", 1);
     *  Convert BISAC codes to Magento Category Codes. 
     */
     function addCategoryCodes($book, $db) {
+      $book['catcode'] = "";
       if (! empty($book['bisac'])) {
         foreach($book['bisac'] as $value) {
             $lookup = "select category_id from ek_bisac_category_map where bisac_code = '". $value . "'";
             $result = mysqli_query($db, $lookup);
             if (($result) && (mysqli_num_rows($result) > 0)){
 	            $row = mysqli_fetch_array($result);
-                $book['catcode'][] = $row[0];
+                $book['catcode'] = $row[0] . ",";
             }
-            else 
-               $book['catcode'][] = "";
         }
       }
-      else
-        $book['catcode'][] = "";
+      if (strcmp($book['catcode'], "")) 
+        $book['catcode'] = substr($book['catcode'], 0, strrpos($book['catcode'], ","));
 
       return ($book);
     }
@@ -116,7 +115,7 @@ ini_set("display_errors", 1);
     function insertBook($book, $db, $language, $shipregion, $infosource) {
 
        $query = "insert into books (`isbn10`, `isbn`, `author`, `publisher`, `title`, `pages`, " .
-                "`language`, `bisac1`, `bisac2`, `bisac3`, `cover_thumb`, `image`, `weight`, " .
+                "`language`, `bisac1`, `cover_thumb`, `image`, `weight`, " .
                 "`dimension`, `edition`, `shipping_region`, `info_source`, `new`) values (";
 
        $query = $query . "'" . $book['isbn'] . "'".",";
@@ -126,9 +125,9 @@ ini_set("display_errors", 1);
        $query = $query . "'" . $book['title'] . "'".",";
        $query = $query . "'" . $book['pages'] . "'" . ",";
        $query = $query . "'$language'" . ",";
-       $query = $query . "'" . $book['catcode'][0] . "'" . ",";
-       $query = $query . "'" . $book['catcode'][1] . "'" . ",";
-       $query = $query . "'" . $book['catcode'][2] . "'" . ",";
+       $query = $query . "'" . $book['catcode'] . "'" . ",";
+       #$query = $query . "'" . $book['catcode'][1] . "'" . ",";
+       #$query = $query . "'" . $book['catcode'][2] . "'" . ",";
        $query = $query . "'" . $book['thumbnail'] . "'" . ",";
        $query = $query . "'" . $book['image'] . "'" . ",";
        $query = $query . "'" . $book['weight'] . "'" . ",";
@@ -194,7 +193,8 @@ ini_set("display_errors", 1);
             }
         
             if ($i++ % 10000 == 0) {
-                debug("Processed $i books. [$errorcount] errors. [$unresolved] unresolved. [$filenotfound] files not found.\n");
+                $inserted = $i - ($errorcount + $unresolved + $filenotfound + 1);
+                debug("Processed $i books. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$filenotfound] files not found.\n");
             }
         }
     
