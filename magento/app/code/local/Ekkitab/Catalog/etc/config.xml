@@ -53,15 +53,15 @@
 			</catalog>
 		</blocks>
 	</global>
-	<!--frontend>
+	<frontend>
 		<routers>
 			<ekkitab_catalog>
 				<use>standard</use>
 				<args>
-					<module>Ekkitab_Catalog_Author</module>
-					<frontName>author</frontName>
+					<module>Ekkitab_Catalog</module>
+					<frontName>ekkitab_catalog</frontName>
 				</args>
 			</ekkitab_catalog>
 		</routers>
-	</frontend-->       
+	</frontend>       
 </config>   

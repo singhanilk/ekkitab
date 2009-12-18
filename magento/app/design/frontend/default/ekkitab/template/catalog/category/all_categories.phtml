@@ -3,12 +3,31 @@
  * Magento
  *
  * @copyright  Copyright (c) 2009 Ekkitab Educational Services Pvt Ltd (http://www.ekkitab.com)
- */
-?>
-<?php
-/**
- * Most Popular Category List template
+ *
+ * All  Categories List template
  *
  */
 ?>
 <h4> All Categories </h4>
+
+<?php
+
+	$categories = Mage::helper('catalog/category')->getStoreCategories();
+
+?>
+<?php $_count = is_array($categories)?count($categories):$categories->count(); ?>
+
+<?php if($_count): ?>
+<div class="box layered-nav">
+	<dd class="no-padding no-border">
+		<ol>
+		<?php foreach ($categories as $category): ?>
+			<?php if($category->getIsActive()): ?>
+			 <li>
+				<a href="<?php echo $this->getCategoryUrl($category) ?>"<?php if ($this->isCategoryActive($category)): ?> class="active"<?php endif ?>><?php echo $this->htmlEscape($category->getName()) ?></a> </li>
+			<?php endif; ?>
+		<?php endforeach ?>
+		</ol>
+	</dd>
+</div>
+<?php endif; ?>
