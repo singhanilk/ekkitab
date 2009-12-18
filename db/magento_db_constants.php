@@ -16,7 +16,7 @@ define (TITLE,'TITLE');
 define (PRICE,'LIST_PRICE');
 define (BINDING,'BINDING');
 define (WEIGHT,'WEIGHT');
-define (PAGES,'NUMBER_OF_PAGES');
+define (PAGES,'PAGES');
 define (BISAC,'BISAC1');
 define (BISAC2,'BISAC2');
 define (BISAC3,'BISAC3');
@@ -26,7 +26,6 @@ define (DESCRIPTION,'DESCRIPTION');
 define (ISBN10,'ISBN10');
 define (LANGUAGE,'LANGUAGE');
 define (DISCOUNT,'DISCOUNT');
-define (LANGUAGE,'LANGUAGE');
 define (DELIVERY,'DELIVERY_PERIOD');
 define (IMAGE,'IMAGE');
 define (THUMB,'COVER_THUMB');
@@ -40,6 +39,7 @@ define (SHIPPING_REGION,'SHIPPING_REGION');
 define (RATING,'RATING');
 define (PRODUCT_STATUS,'PRODUCT_STATUS');
 define (INT_SHIPPING,'INT_SHIPPING');
+define (SOURCE,'INFO_SOURCE');
 
 // constants used in the script
 
