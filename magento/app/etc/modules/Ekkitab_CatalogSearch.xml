@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <config>
     <modules>
-		<Ekkitab_Catalogsearch>
+		<Ekkitab_CatalogSearch>
             <active>true</active>
             <codePool>local</codePool>
-        </Ekkitab_Catalogsearch>
+        </Ekkitab_CatalogSearch>
     </modules>
 </config>
