@@ -43,7 +43,7 @@ class Mage_CatalogSearch_Model_Layer extends Mage_Catalog_Model_Layer
             $this->prepareProductCollection($collection);
             $this->_productCollections[$this->getCurrentCategory()->getId()] = $collection;
         }
-
+        
         return $collection;
     }
 

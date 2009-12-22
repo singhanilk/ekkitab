@@ -775,16 +775,21 @@ class Mage_Eav_Model_Entity_Collection_Abstract extends Varien_Data_Collection_D
         if ($this->isLoaded()) {
             return $this;
         }
+        $logQuery = true;
         Varien_Profiler::start('__EAV_COLLECTION_BEFORE_LOAD__');
         Mage::dispatchEvent('eav_collection_abstract_load_before', array('collection' => $this));
         $this->_beforeLoad();
         Varien_Profiler::stop('__EAV_COLLECTION_BEFORE_LOAD__');
 
         Varien_Profiler::start('__EAV_COLLECTION_LOAD_ENT__');
+        Mage::log(">>>>  before load Entities");
         $this->_loadEntities($printQuery, $logQuery);
+        Mage::log(">>>>  after load Entities");
         Varien_Profiler::stop('__EAV_COLLECTION_LOAD_ENT__');
         Varien_Profiler::start('__EAV_COLLECTION_LOAD_ATTR__');
+        Mage::log(">>>>  before load Attributes");
         $this->_loadAttributes($printQuery, $logQuery);
+        Mage::log(">>>>  after load Attributes");
         Varien_Profiler::stop('__EAV_COLLECTION_LOAD_ATTR__');
 
         Varien_Profiler::start('__EAV_COLLECTION_ORIG_DATA__');
