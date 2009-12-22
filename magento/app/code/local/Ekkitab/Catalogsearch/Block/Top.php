@@ -15,7 +15,7 @@
  * 
  */
 
-class Ekkitab_CatalogSearch_Block_Top extends Mage_Core_Block_Template
+class Ekkitab_Catalogsearch_Block_Top extends Mage_Core_Block_Template
 {
 
     public function __construct()

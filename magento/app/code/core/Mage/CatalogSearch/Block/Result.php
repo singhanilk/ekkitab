@@ -154,6 +154,7 @@ class Mage_CatalogSearch_Block_Result extends Mage_Core_Block_Template
         if (is_null($this->_productCollection)) {
             $this->_productCollection = Mage::getSingleton('catalogsearch/layer')->getProductCollection();
         }
+
         return $this->_productCollection;
     }
 
