@@ -30,8 +30,8 @@
 
     <default>
         <reference name="root">
-            <block type="core/template" name="top.search" as="topSearch" template="catalogsearch/form.mini.phtml"/>
-            <!-- block type="core/template" name="top.search" as="topSearch" template="catalogsearch/custom/form.mini.phtml"/-->
+            <!--block type="core/template" name="top.search" as="topSearch" template="catalogsearch/form.mini.phtml"/-->
+            <block type="core/template" name="top.search" as="topSearch" template="catalogsearch/custom/form.mini.phtml"/>
             <block type="catalogsearch/top" name="popular.search" as="popularSearch" template="catalogsearch/popular.phtml"/>
         </reference>
         <reference name="footer_links">
