@@ -24,9 +24,10 @@
  */
 ?>
 <?php if (!Mage::registry('current_category')) return ?>
+<?php $_currcategory=$this->getCurrentCategory() ?>
 <?php $_categories=$this->getCurrentChildCategories() ?>
 <?php $_count = is_array($_categories)?count($_categories):$_categories->count(); ?>
-<h4><?php echo $this->__('Category') ?></h4>
+<h4><?php echo $this->htmlEscape($_currcategory->getName())?></h4>
 <?php if($_count): ?>
         <div class="content">
         <div class="narrow-by">

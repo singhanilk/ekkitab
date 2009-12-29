@@ -1372,7 +1372,7 @@ table.print .price-incl-tax .price { display:inline; }
 .promo-box table { border-top:1px solid #ccc; }
 .promo-box tr.odd { background:url(../images/best_selling_tr_odd_bg.gif) repeat-x 0 100% #eee; }
 .promo-box tr.even { background:url(../images/best_selling_tr_even_bg.gif) repeat-x 0 100% #fff; }
-.promo-box td { width:50%; border-bottom:1px solid #ccc; padding:8px 10px 8px 8px; font-size:.95em; }
+.promo-box td { width:25%; border-bottom:1px solid #ccc; padding:8px 10px 8px 8px; font-size:.95em; }
 .promo-box .product-img { float:left; border:2px solid #dcdcdc; }
-.promo-box .product-description { margin-left:107px; line-height:1.3em; }
+.promo-box .product-description { float:left; line-height:1.3em; }
 .promo-box a.product-name, .home-spot .promo-box a.product-name:hover { color:#203548; }
