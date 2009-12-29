@@ -27,9 +27,12 @@
 <div class="header">
 	<h1 id="logo"><a href="<?php echo $this->getUrl('') ?>"><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>"/></a></h1>
 	<div class="toplinks-bar">
-		<?php echo $this->getChildHtml('topLinks') ?>
+		<?php echo $this->getChildHtml('topLinks') ?><br>
+		<div class="search-bar">
+		<?php echo $this->getChildHtml('topSearch') ?>
+		<?php echo $this->getChildHtml('popularSearch') ?>
+		</div>
 	</div>
-	<div class="welcome-msg"><?php echo $this->getLayout()->getBlock('header')->getWelcome() ?></div>
 </div>
 
 

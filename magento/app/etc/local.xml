@@ -43,7 +43,7 @@
                     <host><![CDATA[localhost]]></host>
                     <username><![CDATA[ekkitabweb]]></username>
                     <password><![CDATA[eki22AbSt0re]]></password>
-                    <dbname><![CDATA[ekkitab_books]]></dbname>
+                    <dbname><![CDATA[ekkitab_books_new]]></dbname>
                     <active>1</active>
                 </connection>
             </default_setup>

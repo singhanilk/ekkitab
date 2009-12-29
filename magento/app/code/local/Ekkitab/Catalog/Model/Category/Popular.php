@@ -19,7 +19,6 @@
 {
     protected function _construct()
     {
-        $this->_init('ekkitab_catalog/category_popular');
+		$this->_init('ekkitab_catalog/category_popular');
     }   
 }
-?>

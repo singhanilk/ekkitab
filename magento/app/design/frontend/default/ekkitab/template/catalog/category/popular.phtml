@@ -17,18 +17,17 @@
 <?php 
 		$_categories= $this->getPopularCategories();
 		$_count = is_array($_categories)?count($_categories):$_categories->count(); 
-		$randNo =11;
 ?>
 <div class="popular-categories right" >
 	<div class="head" >
-		<h4> Popular Subjects <span class="right"><a href="ekkitab_catalog/category/viewAll">View All</a> </span></h4>
+		<h4> Popular Subjects </h4>
 	</div>	
 	<div class="content">
 		<ul>
 		<?php if($_count): ?>
 			<?php foreach ($_categories as $_category): ?>
 				<?php if($_category->getIsActive()): 
-						$randNo = 10 * rand(9, 15);
+						$randNo = 10 * $_category->getPopularity();
 					?>
 					<li>
 						<a style="font-size:<?php echo $randNo?>%;" href="<?php echo $_category->getUrlPath() ?>"><?php echo $this->htmlEscape($_category->getCategory()) ?></a>&nbsp;
@@ -37,6 +36,6 @@
 			<?php endforeach ?>
 		<?php endif; ?>
 		</ul>
-		
+		<span class="right"><a href="ekkitab_catalog/category/viewAll">View All</a> </span>
 	</div>	
 </div>

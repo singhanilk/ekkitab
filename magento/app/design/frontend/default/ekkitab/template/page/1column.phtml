@@ -45,25 +45,15 @@
     </div>
     <div class="container">
         <div class="outline-creator">
-        <?php echo $this->getChildHtml('header') ?>
-            <!--div class="toplinks-bar">
-                <?php  
-					//echo $this->getChildHtml('store_language')
-				?>
-                <?php
-					//echo $this->getChildHtml('topLinks') 
-				?>
-             </div-->
-			<?php echo $this->getChildHtml('quick_search') ?><br class="clear">
-			<div class="search-bar">
-                <?php echo $this->getChildHtml('breadcrumbs') ?>
-                <?php echo $this->getChildHtml('topSearch') ?><br class="clear">
-                <?php echo $this->getChildHtml('popularSearch') ?>
-            </div>
-            <div class="middle layout-1column" id="main">
-                <?php echo $this->getChildHtml('global_messages') ?>
-                <?php echo $this->getChildHtml('content') ?>
-            </div>
+			<?php echo $this->getChildHtml('header') ?>
+			<div class="breadcrumbs-bar">
+				<?php echo $this->getChildHtml('breadcrumbs') ?>
+				<?php echo $this->getLayout()->getBlock('header')->getWelcome() ?>
+			</div>
+			<div class="middle layout-1column" id="main">
+				<?php echo $this->getChildHtml('global_messages') ?>
+				<?php echo $this->getChildHtml('content') ?>
+			</div>
         </div>
         <div class="footer" id="footer">
             <?php echo $this->getChildHtml('footer') ?>

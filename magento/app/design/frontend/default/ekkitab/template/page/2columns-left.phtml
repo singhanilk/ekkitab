@@ -55,10 +55,10 @@
 					//echo $this->getChildHtml('topLinks') 
 				?>
              </div-->
-            <div class="clear search-bar">
-                <?php echo $this->getChildHtml('breadcrumbs') ?>
-                <?php echo $this->getChildHtml('topSearch') ?>
-            </div>
+			<div class="breadcrumbs-bar">
+				<?php echo $this->getChildHtml('breadcrumbs') ?>
+				<?php echo $this->getLayout()->getBlock('header')->getWelcome() ?>
+			</div>
             <div class="middle layout-2columns">
 				<div class="col-left sidebar" id="col-left">
                     <?php echo $this->getChildHtml('left')?>

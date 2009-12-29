@@ -17,7 +17,6 @@
 <?php 
 		$authors= $this->getTopAuthors();
 		$_count = is_array($authors)?count($authors):$authors->count(); 
-		$randNo =11;
 ?>
  <script language="JavaScript"  type="text/javascript">
     function searchAuthor(query){
@@ -38,7 +37,7 @@
 		</form>
 			<?php foreach ($authors as $author): ?>
 				<?php if($author->getIsActive()): 
-						$randNo = 10 * rand(9, 15);
+						$randNo = 10 * $author->getPopularity();
 					?>
 					<li>
 						<a style="font-size:<?php echo $randNo?>%;" href="javascript:searchAuthor('<?php echo $author->getAuthor()?>');"><?php echo $this->htmlEscape($author->getAuthor()) ?></a>&nbsp;
@@ -49,5 +48,6 @@
 			This section will be updated soon
 		<?php endif; ?>
 		</ul>
-	</div>	
+		<span class="right "><a href="#">View All</a> </span>
+	</div>
 </div>

@@ -14,6 +14,8 @@
 		$topSearches= $this->getTopSearches();
 		
 		$_count = is_array($topSearches)?count($topSearches):$topSearches->count(); 
+		$_count = ($_count > 10 ) ? 10 :$_count ; 
+		$i=0;
 ?>
  <script language="JavaScript"  type="text/javascript">
     function searchTitle(query){
@@ -22,14 +24,18 @@
 		searchForm.submit();
 	}
 </script>
+<div class="popular-search right">
 <span>Popular Searches: </span>	
 <?php if($_count): ?>
 <form name="search_popular" action="<?php echo $this->helper('catalogSearch')->getResultUrl() ?>" method="get">
 	<input type="hidden" name="<?php echo $this->helper('catalogSearch')->getQueryParamName() ?>" value="" />
 </form>
 	<?php foreach ($topSearches as $tag): ?>
-		<?php if($tag->getIsActive()): ?>
-			<a href="javascript:searchTitle('<?php echo $tag->getQueryText()?>');"><?php echo $this->htmlEscape($tag->getQueryText()) ?></a>&nbsp; &nbsp;
-		<?php endif; ?>
+		<?php if($i < $_count ): ?>
+			<?php if($tag->getIsActive()): ?>
+				<a href="javascript:searchTitle('<?php echo $tag->getQueryText()?>');"><?php echo $this->htmlEscape($tag->getQueryText()) ?></a>&nbsp; &nbsp;
+			<?php endif; ?>
+		<?php $i++; endif; ?>
 	<?php endforeach ?>
 <?php endif; ?>
+</div>

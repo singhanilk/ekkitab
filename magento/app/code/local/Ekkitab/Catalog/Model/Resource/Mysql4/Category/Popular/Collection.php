@@ -25,9 +25,6 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Category_Popular_Collection extends 
     protected function _construct()
     {
         $this->_init('ekkitab_catalog/category_popular');
-
     }
-
-	
 
 }

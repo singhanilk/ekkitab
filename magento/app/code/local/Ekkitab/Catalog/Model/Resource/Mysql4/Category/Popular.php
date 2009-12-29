@@ -19,9 +19,7 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Category_Popular extends Mage_Core_M
 {
     protected function _construct()
     {
-        $this->_init('ekkitab_catalog/category_popular','id');
+		$this->_init('ekkitab_catalog/category_popular','id');
     }
 
 }
-
-?>
