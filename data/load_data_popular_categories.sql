@@ -3,6 +3,8 @@ use `ekkitab_books`;
 -- Dumping data for table `ek_catalog_popular_categories`
 --
 
+Delete from `ek_catalog_popular_categories`;
+
 INSERT INTO `ek_catalog_popular_categories` (`id`, `category`, `url_path`,  `order_no`, `is_active`,  `popularity`, `date`, `timestamp`) VALUES
 (1, 'Fiction','fiction.html', 1, 1, 15,'2009-11-19 16:20:53', '2009-11-19 16:20:56'),
 (2, 'Comics & Graphic Novels', 'comics-graphic-novels.html', 2, 1, 11,'2009-11-19 14:18:57', '2009-11-19 14:18:57'),

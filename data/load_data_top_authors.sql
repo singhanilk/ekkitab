@@ -3,6 +3,8 @@ use `ekkitab_books`;
 -- Dumping data for table `ek_catalog_top_authors`
 --
 
+Delete from  `ek_catalog_top_authors`;
+
 INSERT INTO `ek_catalog_top_authors` (`id`, `author`, `order_no`, `is_active`, `popularity`, `date`, `timestamp`) VALUES
 (1, 'Agatha Christie', 1, 1, 14,'2009-11-12 16:19:28', '2009-11-12 16:19:46'),
 (2, 'Megan McDonald', 2, 1, 10, '2009-11-12 16:20:31', '2009-11-12 16:20:56'),
