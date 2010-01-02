@@ -21,12 +21,15 @@
             </ekkitab_catalogsearch>
         </helpers>
 		<blocks>
-			<catalogsearch>
+			<ekkitab_catalogsearch>
+				<class>Ekkitab_CatalogSearch_Block</class>
+			</ekkitab_catalogsearch>   
+			<!--catalogsearch>
 				<rewrite>
 						<custom_result>Ekkitab_CatalogSearch_Block_Custom_Result</custom_result>
 						<top>Ekkitab_CatalogSearch_Block_Top</top>
 				</rewrite>
-			</catalogsearch>
+			</catalogsearch-->
 		</blocks>
 	</global>
 	<frontend>

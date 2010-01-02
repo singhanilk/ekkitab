@@ -32,4 +32,33 @@ class Ekkitab_CatalogSearch_Helper_Data extends Mage_CatalogSearch_Helper_Data
         )));
     }
 
+    /**
+     * Schedule resize of the image
+     * $width *or* $height can be null - in this case, lacking dimension will be calculated.
+     *
+     * @see Mage_Catalog_Model_Product_Image
+     * @param int $width
+     * @param int $height
+     * @return Mage_Catalog_Helper_Image
+     */
+    public function resize($image, $attributeName,$width, $height = null)
+    {
+        $imageModel = Mage::getModel('catalog/product_image');
+        $imageModel->setDestinationSubdir($attributeName);
+        $imageModel->setBaseFile($image);
+        $imageModel->setWidth($width)->setHeight($height);
+		try {
+            if( $imageModel->isCached() ) {
+                return $imageModel->getUrl();
+            } else {
+                $imageModel->resize();
+                $url = $imageModel->saveFile()->getUrl();
+            }
+        } catch( Exception $e ) {
+            $url = Mage::getDesign()->getSkinUrl($this->getPlaceholder());
+        }
+        return $url;
+    }
+
+
 }
