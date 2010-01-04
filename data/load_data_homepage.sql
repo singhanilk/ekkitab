@@ -1,4 +1,4 @@
-use `ekkitab_books_new`;
+use `ekkitab_books`;
 --
 -- Dumping data for table `cms_page`
 --
