@@ -23,6 +23,15 @@
 						<category_popular>
 							<table>ek_catalog_popular_categories</table>
 						</category_popular>
+						<product_bestsellers>
+							<table>ek_catalog_product_bestsellers</table>
+						</product_bestsellers>
+						<product_newreleases>
+							<table>ek_catalog_product_newreleases</table>
+						</product_newreleases>
+						<product_bestboxedsets>
+							<table>ek_catalog_product_best_boxedsets</table>
+						</product_bestboxedsets>
 				 </entities>
 			</ekkitab_catalog_resource_mysql4>
 		</models>
@@ -45,12 +54,15 @@
 		Since we are overwriting the core's catalog module ..we need to rewrite the modules under the new catalog module.
 		-->
 		<blocks>
-			<catalog>
+			<ekkitab_catalog>
+				<class>Ekkitab_Catalog_Block</class>
+			</ekkitab_catalog>   
+			<!--catalog>
 				<rewrite>
 						<author_topAuthors>Ekkitab_Catalog_Block_Author_TopAuthors</author_topAuthors>
 						<category_popular>Ekkitab_Catalog_Block_Category_Popular</category_popular>
 				</rewrite>
-			</catalog>
+			</catalog-->
 		</blocks>
 	</global>
 	<frontend>
