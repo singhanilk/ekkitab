@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento ArtsOnIt Advanced Smtp
+ *
+ * @category   ArtsOnIt
+ * @package    Mage_AdvanceSmtp
+ * @copyright  Copyright (c) 2008 ArtsOn.IT(http://www.ArtsOn.it)
+ * @author     Calore Luca Erico (l.calore@ArtsOn.it)
+ */
+-->
+<config>
+    <modules>
+        <Mage_Advancesmtp>
+            <version>0.1.5</version>
+        </Mage_Advancesmtp>
+    </modules>
+    <global>
+	<models>
+<core>
+                <rewrite>
+                    <email_template>Mage_Advancedsmtp_Model_Email_Template</email_template>
+					<email>Mage_Advancedsmtp_Model_Email</email>
+                </rewrite>
+            </core>
+    </models>
+    </global>
+	<adminhtml>
+        <translate>
+            <modules>
+                <Mage_Advancedsmtp>
+                    <files>
+                        <default>Mage_AdvanceSmtp.csv</default>
+                    </files>
+                </Mage_Advancedsmtp>
+            </modules>
+        </translate>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <advancedsmtp>
+                                            <title>Advanced Smtp Settings</title>
+                                        </advancedsmtp>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+
+    <default>
+        <advancedsmtp>
+            <settings>
+                <enabled>0</enabled>
+				<auth>login</auth>
+				<username></username>
+				<password></password>
+				<ssl>0</ssl>
+				<host>localhost</host>
+				<port>25</port>
+				<ssltype></ssltype>
+            </settings>
+        </advancedsmtp>
+    </default>
+</config>
