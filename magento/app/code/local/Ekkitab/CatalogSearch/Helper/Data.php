@@ -41,12 +41,13 @@ class Ekkitab_CatalogSearch_Helper_Data extends Mage_CatalogSearch_Helper_Data
      * @param int $height
      * @return Mage_Catalog_Helper_Image
      */
-    public function resize($image, $attributeName,$width, $height = null)
+    public function resize($image, $attributeName,$keepFrame,$width, $height = null)
     {
         $imageModel = Mage::getModel('catalog/product_image');
         $imageModel->setDestinationSubdir($attributeName);
         $imageModel->setBaseFile($image);
         $imageModel->setWidth($width)->setHeight($height);
+        $imageModel->setKeepFrame($keepFrame);
 		try {
             if( $imageModel->isCached() ) {
                 return $imageModel->getUrl();
