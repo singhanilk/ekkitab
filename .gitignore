@@ -1,0 +1,5 @@
+tmp/
+magento/app/.buildpath
+magento/app/.project
+magento/app/.settings/
+magento/downloader/
