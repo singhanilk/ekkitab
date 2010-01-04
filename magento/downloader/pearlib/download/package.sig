@@ -1,7 +1,0 @@
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.9 (GNU/Linux)
-
-iEYEABECAAYFAkk8e2QACgkQcqMhusJF8XULZgCg0iwVLWueraJzK5s1AesDkVzv
-GucAn22sSv3QiTSUWG9BmakiW9hFsb4V
-=g2mr
------END PGP SIGNATURE-----
