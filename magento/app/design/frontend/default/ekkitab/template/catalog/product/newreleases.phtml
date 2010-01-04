@@ -26,7 +26,7 @@
 			<tr class="odd">
 				<?php foreach ($products as $product): ?>
 				<td><p class="product-image">
-					<a href="<?php echo $this->getUrl("catalog/product/view/id/")."id/".$product->getProductId() ?>"  title="<?php echo $product->getTitle() ?>"> <img class="product-img" src="<?php echo $this->helper('ekkitab_catalogsearch')->resize($product->getImageUrl(),'small_image',110,110); ?>" border="0" /></a></p>
+					<a href="<?php echo $this->getUrl("catalog/product/view/id/")."id/".$product->getProductId() ?>"  title="<?php echo $product->getTitle() ?>"> <img class="product-img" src="<?php echo $this->helper('ekkitab_catalogsearch')->resize($product->getImageUrl(),'small_image',false,null,170); ?>" border="0" /></a></p>
 					<div class="clear product-description"><p><a href="<?php echo $this->getUrl("catalog/product/view/id/")."id/".$product->getProductId() ?>"  title="<?php echo $product->getTitle() ?>"><?php echo $product->getTitle() ?></a></p><div>
 				</td>
 				<?php endforeach ?>

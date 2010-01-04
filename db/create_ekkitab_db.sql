@@ -464,7 +464,7 @@ CREATE TABLE IF NOT EXISTS `catalogsearch_fulltext` (
   `data_index` longtext NOT NULL,
   PRIMARY KEY (`product_id`,`store_id`),
   FULLTEXT KEY `data_index` (`data_index`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `catalogsearch_query`
@@ -4691,7 +4691,7 @@ CREATE TABLE IF NOT EXISTS `log_customer` (
   `store_id` smallint(5) unsigned NOT NULL,
   PRIMARY KEY (`log_id`),
   KEY `IDX_VISITOR` (`visitor_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Customers log information' AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Customers log information' AUTO_INCREMENT=1 ;
 
 --
 -- Table structure for table `log_quote`
@@ -4703,7 +4703,7 @@ CREATE TABLE IF NOT EXISTS `log_quote` (
   `created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`quote_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Quote log data';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Quote log data';
 
 --
 -- Table structure for table `log_summary`
@@ -4717,7 +4717,7 @@ CREATE TABLE IF NOT EXISTS `log_summary` (
   `customer_count` int(11) NOT NULL DEFAULT '0',
   `add_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`summary_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Summary log information' AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Summary log information' AUTO_INCREMENT=1 ;
 
 --
 -- Table structure for table `log_summary_type`
@@ -4729,7 +4729,7 @@ CREATE TABLE IF NOT EXISTS `log_summary_type` (
   `period` smallint(5) unsigned NOT NULL DEFAULT '0',
   `period_type` enum('MINUTE','HOUR','DAY','WEEK','MONTH') NOT NULL DEFAULT 'MINUTE',
   PRIMARY KEY (`type_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Type of summary information' AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Type of summary information' AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `log_summary_type`
@@ -4749,7 +4749,7 @@ CREATE TABLE IF NOT EXISTS `log_url` (
   `visit_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`url_id`),
   KEY `IDX_VISITOR` (`visitor_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='URL visiting history';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='URL visiting history';
 
 --
 -- Table structure for table `log_url_info`
@@ -4760,7 +4760,7 @@ CREATE TABLE IF NOT EXISTS `log_url_info` (
   `url` varchar(255) NOT NULL DEFAULT '',
   `referer` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`url_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Detale information about url visit' AUTO_INCREMENT=10 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Detale information about url visit' AUTO_INCREMENT=10 ;
 
 --
 -- Table structure for table `log_visitor`
@@ -4774,7 +4774,7 @@ CREATE TABLE IF NOT EXISTS `log_visitor` (
   `last_url_id` bigint(20) unsigned NOT NULL DEFAULT '0',
   `store_id` smallint(5) unsigned NOT NULL,
   PRIMARY KEY (`visitor_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='System visitors log' AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='System visitors log' AUTO_INCREMENT=3 ;
 
 --
 -- Table structure for table `log_visitor_info`
@@ -4789,7 +4789,7 @@ CREATE TABLE IF NOT EXISTS `log_visitor_info` (
   `server_addr` bigint(20) DEFAULT NULL,
   `remote_addr` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`visitor_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Additional information by visitor';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Additional information by visitor';
 
 --
 -- Table structure for table `log_visitor_online`
@@ -4807,7 +4807,7 @@ CREATE TABLE IF NOT EXISTS `log_visitor_online` (
   KEY `IDX_VISITOR_TYPE` (`visitor_type`),
   KEY `IDX_VISIT_TIME` (`first_visit_at`,`last_visit_at`),
   KEY `IDX_CUSTOMER` (`customer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Table structure for table `newsletter_problem`
