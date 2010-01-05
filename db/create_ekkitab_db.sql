@@ -604,7 +604,7 @@ CREATE TABLE IF NOT EXISTS `catalog_category_entity_varchar` (
   `entity_id` int(10) unsigned NOT NULL DEFAULT '0',
   `value` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`value_id`),
-  UNIQUE KEY `IDX_BASE` (`entity_type_id`,`entity_id`,`attribute_id`,`store_id`) USING BTREE,
+  UNIQUE KEY `IDX_BASE` (`entity_type_id`,`entity_id`,`attribute_id`,`store_id`),
   KEY `FK_ATTRIBUTE_VARCHAR_ENTITY` (`entity_id`),
   KEY `FK_CATALOG_CATEGORY_ENTITY_VARCHAR_ATTRIBUTE` (`attribute_id`),
   KEY `FK_CATALOG_CATEGORY_ENTITY_VARCHAR_STORE` (`store_id`)
