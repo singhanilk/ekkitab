@@ -67,6 +67,7 @@ Default layout, loads most of the pages
             <block type="page/html_header" name="header" as="header">
                 <block type="core/text_list" name="top.menu" as="topMenu"/>
 				<block type="page/template_links" name="top.links" as="topLinks"/>
+				<block type="page/html" name="build.version" as="buildVersion" template="page/html/build_version.phtml"/>
             </block>
 
 

@@ -328,6 +328,7 @@ h1#logo                 { float:left; }
 .toplinks-bar .top-links a:hover      { color:#000; }
 .toplinks-bar .top-links a            { padding:0 7px 0 0; background:url(../images/links_separator.gif) no-repeat 100% 50%; }
 .toplinks-bar .top-links .last a      { padding:0; background:none; }
+.toplinks-bar .version          { color:#ff0000; font-weight:bold; font-size:12px; }
 .search-bar             { padding:10px 12px 2px 12px; background:#efefef;line-height:1.25em; }
 .breadcrumbs-bar { padding:10px 12px 2px 12px; background:#ffffff; border-bottom:1px double #dedede;  }
 .breadcrumbs-bar .breadcrumbs            { float:left; width:580px; overflow:hidden; }
