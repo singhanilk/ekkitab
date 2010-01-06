@@ -23,7 +23,15 @@ class Ekkitab_Catalog_Block_Product_Newreleases extends Mage_Core_Block_Template
      */
     public function getNewreleases()
     {
-		return Mage::getModel('ekkitab_catalog/product_newreleases')->getCollection();
+		$newReleases= Mage::getModel('ekkitab_catalog/product_newreleases')->getCollection();
+		$i=0;
+		foreach($newReleases as  $product){
+			$productIds[$i++] = $product->getProductId();
+		}
+		$newReleasesCollection = Mage::getModel('catalog/product')->getCollection()
+				->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
+				->addIdFilter($productIds);
+		return $newReleasesCollection;
 	}
 	
 }

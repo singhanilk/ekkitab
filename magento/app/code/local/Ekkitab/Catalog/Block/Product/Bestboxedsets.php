@@ -23,7 +23,15 @@ class Ekkitab_Catalog_Block_Product_Bestboxedsets extends Mage_Core_Block_Templa
      */
     public function getBestBoxedSets()
     {
-		return Mage::getModel('ekkitab_catalog/product_bestboxedsets')->getCollection();
+		$boxedSets = Mage::getModel('ekkitab_catalog/product_bestboxedsets')->getCollection();
+		$i=0;
+		foreach($boxedSets as  $product){
+			$productIds[$i++] = $product->getProductId();
+		}
+		$boxedSetsCollection = Mage::getModel('catalog/product')->getCollection()
+				->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
+				->addIdFilter($productIds);
+		return $boxedSetsCollection;
 	}
 	
 }
