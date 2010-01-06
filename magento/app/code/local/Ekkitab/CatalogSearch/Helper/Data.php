@@ -33,6 +33,20 @@ class Ekkitab_CatalogSearch_Helper_Data extends Mage_CatalogSearch_Helper_Data
     }
 
     /**
+     * Retrieve result page url
+     *
+     * @param   string $query
+     * @return  string
+     */
+    public function getCustomSearchResultByIndexUrl($query = null)
+    {
+        return $this->_getUrl('ekkitab_catalogsearch/custom/resultByIndex', array('_query' => array(
+            self::QUERY_VAR_NAME => $query
+        )));
+    }
+
+
+	/**
      * Schedule resize of the image
      * $width *or* $height can be null - in this case, lacking dimension will be calculated.
      *
@@ -56,10 +70,34 @@ class Ekkitab_CatalogSearch_Helper_Data extends Mage_CatalogSearch_Helper_Data
                 $url = $imageModel->saveFile()->getUrl();
             }
         } catch( Exception $e ) {
-            $url = Mage::getDesign()->getSkinUrl($this->getPlaceholder());
+             $url = Mage::getDesign()->getSkinUrl($this->getPlaceholder($imageModel->getDestinationSubdir()));
         }
         return $url;
     }
 
+	/**
+     * Retrieve url for add product to cart
+     *
+     * @param   Mage_Catalog_Model_Product $product
+     * @return  string
+     */
+    public function getCartUrl($productId,$continueShoppingUrl)
+    {
+        $params = array(
+            Mage_Core_Controller_Front_Action::PARAM_NAME_URL_ENCODED => Mage::helper('core')->urlEncode($continueShoppingUrl),
+            'product' => $productId
+        );
 
+        if ($this->_getRequest()->getRouteName() == 'checkout'
+            && $this->_getRequest()->getControllerName() == 'cart') {
+            $params['in_cart'] = 1;
+        }
+
+       return $this->_getUrl('checkout/cart/add', $params);
+    }
+
+    public function getPlaceholder($attr)
+    {
+		return ('images/catalog/product/placeholder/'.$attr.'.jpg');
+	}
 }
