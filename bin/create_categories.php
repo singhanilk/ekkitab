@@ -452,9 +452,9 @@ ini_set("display_errors", 1);
         $i = 0;
 
         $pattern[0] = "/'/"; 
-        $pattern[1] = "/\W+/"; 
+        //$pattern[1] = "/\W+/"; 
         $replace[0] = "";
-        $replace[1] = "-";
+        //$replace[1] = "-";
 
         foreach($mastercodes as $fullpath => $val) {
 
