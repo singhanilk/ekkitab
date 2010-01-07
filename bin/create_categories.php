@@ -477,7 +477,7 @@ ini_set("display_errors", 1);
             $idpath = "category/".$catId;
             $targetpath = "catalog/category/view/id/".$catId;
 
-            $line = "(1, " . $catId . ", " . $idpath . ", " . $requestpath . ", " . $targetpath . ", ''),\n";  
+            $line = "(1, " . $catId . ", '" . $idpath . "', '" . $requestpath . "', '" . $targetpath . "', ''),\n";  
 
             if ($i%50 == 0) {
                 if($i == 0) {
