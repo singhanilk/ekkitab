@@ -522,6 +522,8 @@ ini_set("display_errors", 1);
 		
 		$queries[] = createInsertQuery("catalogsearch_fulltext",
                                         array($entityIds[CPE],catalogindex_eav_store_id,"'$search_data_index'"));
+
+        writeIndexInformation($entityIds[CPE], $bookauthor, $booktitle, $imagepath, $url_key.".html");
 		
 		return $queries;
     }
@@ -665,6 +667,27 @@ ini_set("display_errors", 1);
     }
 
     /**
+     * Writes out index information for each book to a file.
+     */
+     function writeIndexInformation($id, $author="", $title="", $image="", $url="") {
+        static $fh = null;
+
+        if ($fh == null) {
+           $fh = fopen("search_data.txt", "w"); 
+           if (!$fh) {
+                fatal("Could not open index file for write: search_index_text.csv");
+           }
+        }
+
+        if ($id < 0) {
+            fclose($fh);
+            return;
+        }
+
+        fprintf($fh, "%d\t%s\t%s\t%s\t%s\n", $id, $author, $title, $image, $url);
+     } 
+
+    /**
      * Main function
      */
     function start() {
@@ -709,6 +732,7 @@ ini_set("display_errors", 1);
                 else {
                     $queries = generateUpdateSQLs($id, $book);
 	            }
+                writeIndexInformation(-1);
 
                 try {
                     //$longQuery = "";

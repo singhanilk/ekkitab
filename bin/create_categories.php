@@ -24,7 +24,7 @@ ini_set("display_errors", 1);
     require_once(LOG4PHP_DIR . '/LoggerManager.php');
 
     // global logger
-    $logger =& LoggerManager::getLogger("loadbooks");
+    $logger =& LoggerManager::getLogger("create_categories");
 
    /** 
     * Log the error and terminate the program.
@@ -438,6 +438,74 @@ ini_set("display_errors", 1);
 
     }
 
+    function writeCoreUrlReWriteStatements($fh) {
+
+        global $mastercodes;
+
+        fputs($fh, "use `ekkitab_books` ;\n");
+
+        $header = "INSERT INTO `core_url_rewrite` " .
+                  "(`store_id`, `category_id`, " .
+                  "`id_path`, `request_path`, " .
+                  "`target_path`, `options`) VALUES\n";
+
+        $i = 0;
+
+        $pattern[0] = "/'/"; 
+        $pattern[1] = "/\W+/"; 
+        $replace[0] = "";
+        $replace[1] = "-";
+
+        foreach($mastercodes as $fullpath => $val) {
+
+            $keys = array_keys($val); 
+            if (count($keys) != 1)
+                echo "Internal Error!\n";
+            if (strrpos($val[$keys[0]], "/") > 0)
+                $catId = substr($val[$keys[0]], strrpos($val[$keys[0]], "/")+1);
+            else 
+                $catId = $val[$keys[0]]; 
+            $cats = explode("/", $fullpath);
+            $requestpath = "";
+            for ($z = 0; $z < count($cats); $z++) {
+                $tmppath = strtolower(trim($cats[$z]));
+                $tmppath = str_replace("'", "", $tmppath);
+                $tmppath = preg_replace($pattern, $replace, $tmppath);
+                $requestpath = $requestpath . ($z == 0 ? "" : "/") . $tmppath; 
+            }
+            $requestpath = $requestpath . ".html";
+            $idpath = "category/".$catId;
+            $targetpath = "catalog/category/view/id/".$catId;
+
+            $line = "(1, " . $catId . ", " . $idpath . ", " . $requestpath . ", " . $targetpath . ", ''),\n";  
+
+            if ($i%50 == 0) {
+                if($i == 0) {
+                    fputs($fh, $header);
+                    fputs($fh, $line);
+                } 
+                else {
+                    $line = substr($line, 0, strrpos($line, ","));
+                    $line = $line . ";\n";
+                    fputs($fh, $line);
+                    if ($i < (count($mastercodes) - 1))
+                        fputs($fh, $header);
+                }
+            }
+            elseif ($i == (count($mastercodes) - 1)) {
+                $line = substr($line, 0, strrpos($line, ","));
+                $line = $line . ";\n";
+                fputs($fh, $line);
+            }
+            else 
+                fputs($fh, $line);
+
+            $i++;
+
+        }
+
+    }
+
     $mastercodes = array();
     $mastercats = array();
 
@@ -460,6 +528,9 @@ ini_set("display_errors", 1);
     echo "done.\n";
     echo "Writing catalog category entity varchar attributes....";
     writeCatalogCategoryEntityVarcharStatements($fhandles['out']);
+    echo "done.\n";
+    echo "Writing core url rewrite statements....";
+    writeCoreUrlReWriteStatements($fhandles['out']);
     echo "done.\n";
     echo "Writing reference database statements....";
     writeRefDbStatements($fhandles['out']);
