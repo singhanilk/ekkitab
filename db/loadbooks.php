@@ -25,7 +25,7 @@ ini_set("display_errors", 1);
     include("magento_db_constants.php");
 	
 		
-	define("SELECT_LIMIT", 1000);
+	define("SELECT_LIMIT", 10000);
     $mysqlTime = 0;
     $mysqlTimeRefDb = 0;
     $failedBooks = 0;
@@ -732,7 +732,6 @@ ini_set("display_errors", 1);
                 else {
                     $queries = generateUpdateSQLs($id, $book);
 	            }
-                writeIndexInformation(-1);
 
                 try {
                     //$longQuery = "";
@@ -751,9 +750,9 @@ ini_set("display_errors", 1);
                     //$mysqlTime += ($endZ - $startZ);
                     //if (! $result) 
                        //throw new exception("Failed to commit book to ekkitab database. ");
-                    $result = mysqli_query($dbs[ekkitab_db], "commit");
-                    if (! $result) 
-                        throw new exception("Failed to commit on ekkitab database.");
+                    //$result = mysqli_query($dbs[ekkitab_db], "commit");
+                    //if (! $result) 
+                        //throw new exception("Failed to commit on ekkitab database.");
                     $endZ = (float) array_sum(explode(' ', microtime()));
                     $mysqlTime += ($endZ - $startZ);
                     $startY = (float) array_sum(explode(' ', microtime()));
@@ -777,9 +776,13 @@ ini_set("display_errors", 1);
                 }
                 //$logger->info("Finished: $book[ISBN] " . ($isInsert ? "inserted." : "updated."));
             }
+            $result = mysqli_query($dbs[ekkitab_db], "commit");
+            if (! $result) 
+                throw new exception("Failed to commit on ekkitab database.");
             $end = (float) array_sum(explode(' ', microtime()));
             $logger->info("Processed $totalBooks books (Inserted: $insertedBooks, Updated: $updatedBooks, Failed: $failedBooks) in " . sprintf("%.4f", ($end - $start)) . " seconds.");
         }
+        writeIndexInformation(-1);
         //$logger->info("Books inserted: $insertedBooks. Books updated: $updatedBooks. Failed: $failedBooks");
         mysqli_close($dbs[ekkitab_db]);
         mysqli_close($dbs[ref_db]);
