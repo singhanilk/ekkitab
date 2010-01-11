@@ -181,7 +181,7 @@ ini_set("display_errors", 1);
                 $unresolved++;
                 //debug("Unresolved: " . $book['bisac'][0]);
             }
-            elseif (!file_exists("/var/www/scm/magento/media/catalog/product/ingram/" . $book['thumbnail'])) {
+            elseif (!file_exists("../magento/media/catalog/product/9/7/" . $book['thumbnail'])) {
                 $filenotfound++;
                 //debug("File not found: " . $book['thumbnail']);
             }
