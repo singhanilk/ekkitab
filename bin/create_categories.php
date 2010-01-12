@@ -208,7 +208,7 @@ ini_set("display_errors", 1);
 
         $header = "INSERT INTO `ek_bisac_category_map` " .
                   "(`bisac_code`, `level1`, `level2`, `level3`, " .
-                  "`level4`, `category_id`) VALUES\n";
+                  "`level4`, `category_id`, `rewrite_url`) VALUES\n";
 
         $mastercodes_copy = array();
 
@@ -222,14 +222,26 @@ ini_set("display_errors", 1);
         }
 
         $i = 0;
+        $pattern[0] = "/'/"; 
+        $pattern[1] = "/#/"; 
+        $pattern[2] = "/\W+/"; 
+        $replace[0] = "";
+        $replace[1] = "h#";
+        $replace[2] = "-";
 
         foreach($mastercodes_copy as $fullpath => $val) {
 
             $cats = explode("/", $fullpath);
+            $requestpath = "";
             for ($j=0; $j<count($cats); $j++) {
+                $tmppath = strtolower(trim($cats[$j]));
+                $tmppath = str_replace("'", "", $tmppath);
+                $tmppath = preg_replace($pattern, $replace, $tmppath);
+                $requestpath = $requestpath . ($j == 0 ? "" : "/") . $tmppath; 
                 $cats[$j] = strtolower(trim($cats[$j])); 
                 $cats[$j] = str_replace("'", "\'", $cats[$j]);
             }
+            $requestpath = $requestpath . ".html";
 
             $keys = array_keys($val); 
             #if (count($keys) != 1)
@@ -251,7 +263,7 @@ ini_set("display_errors", 1);
             for ($j = count($cats); $j<4; $j++) {
                 $line = $line . "'', ";
             }
-            $line = $line . "'$catId'" ."),\n";  
+            $line = $line . "'$catId'" .","."'$requestpath'"."),\n";  
 
             if ($i%50 == 0) {
                 if($i == 0) {

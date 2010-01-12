@@ -95,11 +95,12 @@ ini_set("display_errors", 1);
       $book['catcode'] = "";
       if (! empty($book['bisac'])) {
         foreach($book['bisac'] as $value) {
-            $lookup = "select category_id from ek_bisac_category_map where bisac_code = '". $value . "'";
+            $lookup = "select category_id,rewrite_url from ek_bisac_category_map where bisac_code = '". $value . "'";
             $result = mysqli_query($db, $lookup);
             if (($result) && (mysqli_num_rows($result) > 0)){
 	            $row = mysqli_fetch_array($result);
                 $book['catcode'] = $row[0] . ",";
+                $book['rewrite_url'] = $row[1];
             }
         }
       }
@@ -116,7 +117,7 @@ ini_set("display_errors", 1);
 
        $query = "insert into books (`isbn10`, `isbn`, `author`, `publisher`, `title`, `pages`, " .
                 "`language`, `bisac1`, `cover_thumb`, `image`, `weight`, " .
-                "`dimension`, `edition`, `shipping_region`, `info_source`, `new`) values (";
+                "`dimension`, `edition`, `shipping_region`, `info_source`, `new`, `rewrite_url`) values (";
 
        $query = $query . "'" . $book['isbn'] . "'".",";
        $query = $query . "'" . $book['isbn13'] . "'".",";
@@ -135,7 +136,8 @@ ini_set("display_errors", 1);
        $query = $query . "'" . $book['edition'] . "'" . ",";
        $query = $query . "'" . $shipregion . "'" . ",";
        $query = $query . "'" . $infosource . "'" . ",";
-       $query = $query . "0" . ");";
+       $query = $query . "0" . ",";
+       $query = $query . "'" . $book['rewrite_url'] . "'". ");";
        if (! $result = mysqli_query($db, $query)) {
            warn("Failed to write to Books: ". mysqli_error($db), $query);
            return(0); 
