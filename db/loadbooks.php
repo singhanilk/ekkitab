@@ -109,6 +109,7 @@ ini_set("display_errors", 1);
 	    $queries[] = 'select max(value_id) from catalog_product_entity_text';
 	    $queries[] = 'select max(value_id) from catalog_product_entity_varchar';
 	    $queries[] = 'select max(item_id) from cataloginventory_stock_item';
+        $queries[] = 'select max(url_rewrite_id) from core_url_rewrite';
 
         $i = 0;
 
@@ -249,6 +250,7 @@ ini_set("display_errors", 1);
         $entityIds[CPEIN] += 4;
         $entityIds[CPETX] += 4;
         $entityIds[CPEVC] += 23;
+        $entityIds[URL]   += 4;
         return $entityIds;
     }
 
@@ -274,6 +276,26 @@ ini_set("display_errors", 1);
         return(preg_replace($pattern, $replace, $str));
     }
 
+   /**
+     * Obtains the full category path for url rewrite.
+     */
+
+     function getCategoryFullPath($book_path,$ids){
+         if(!empty($book_path)){
+             $pos = strlen($book_path);
+             while(!empty($pos)){
+                 $pos_id = strrpos($ids,",");
+                 $id = substr($ids,$pos_id+1);
+                 $ids = substr($ids,0,$pos_id);
+                 $book_path= substr($book_path, 0, $pos);
+                 $book_path_list[$id] =  $book_path;
+                 $pos = strrpos($book_path,"/");
+             }
+             return($book_path_list);
+         }
+     }
+
+
    /** 
     * Generates all the INSERT sqls required to insert a new book.  
     */
@@ -281,7 +303,7 @@ ini_set("display_errors", 1);
     function generateInsertSQLs($entityIds, $book) {
 
         $queries = array();
-	    $url_key = $book[TITLE];
+	    $url_key = $book[TITLE] . "-" . $book[ISBN];
 		$url_key = str_replace("'","",$url_key);
 		$url_key = str_replace(" ","-",$url_key);
 
@@ -518,12 +540,32 @@ ini_set("display_errors", 1);
                                         array($entityIds[CPE],website_id));
 		
 		//Create the  dataindex for catalogsearch_fulltext 
-		$search_data_index = escape($book[TITLE]) . " " . escape($books[AUTHOR]) . " " . $book[ISBN];
+		/* $search_data_index = escape($book[TITLE]) . " " . escape($books[AUTHOR]) . " " . $book[ISBN];
 		
 		$queries[] = createInsertQuery("catalogsearch_fulltext",
-                                        array($entityIds[CPE],catalogindex_eav_store_id,"'$search_data_index'"));
+                                        array($entityIds[CPE],catalogindex_eav_store_id,"'$search_data_index'")); */
 
-        writeIndexInformation($entityIds[CPE], $bookauthor, $booktitle, $imagepath, $url_key.".html");
+       //Create the url_rewrite
+        $queries[] = createInsertQuery("core_url_rewrite",
+                                         array($entityIds[URL],catalogindex_eav_store_id,"NULL",$entityIds[CPE],
+                                       "'product/".$entityIds[CPE]."'","'$url_key".".html'",
+                                       "'catalog/product/view/id/".$entityIds[CPE]."'",1,"'".value_empty."'","NULL"));
+
+        $seed_url = $book[REWRITE_URL];
+        $seed_url = substr($seed_url, 0, strrpos($seed_url, "."));
+        $categoryPath = getCategoryFullPath($seed_url,$book[BISAC]);
+        $i=1;
+        foreach($categoryPath as $id => $path) {
+
+               $queries[] = createInsertQuery("core_url_rewrite",
+                                         array($entityIds[URL] + $i,catalogindex_eav_store_id,$id_value,$entityIds[CPE],
+                                       "'product/".$entityIds[CPE]."/".$id."'","'".$path."/".$url_key.".html'",
+                                      "'catalog/product/view/id/".$entityIds[CPE]."/category/".$id."'",1,"'".value_empty."'","'".value_empty."'"));
+               $i++;
+        }
+ 
+
+        // writeIndexInformation($entityIds[CPE], $bookauthor, $booktitle, $imagepath, $url_key.".html");
 		
 		return $queries;
     }
@@ -534,7 +576,7 @@ ini_set("display_errors", 1);
 
         $queries = array();
 
-	    $url_key= $book[TITLE];
+	    $url_key = $book[TITLE] . "-" . $book[ISBN];
 		$url_key = str_replace("'","",$url_key);
 		$url_key = str_replace(" ","-",$url_key);
 
@@ -742,6 +784,9 @@ ini_set("display_errors", 1);
                             throw new exception("Failed to commit book to ekkitab database. [$query]");
                         //$longQuery .= "$query;";
 	                }
+                    $result = mysqli_query($dbs[ekkitab_db], "commit");
+                    if (! $result) 
+                        throw new exception("Failed to commit on ekkitab database.");
                     //$longQuery .= "commit; ";
                     //$logger->info("Query: $longQuery");
                     //$startZ = (float) array_sum(explode(' ', microtime()));
@@ -776,13 +821,10 @@ ini_set("display_errors", 1);
                 }
                 //$logger->info("Finished: $book[ISBN] " . ($isInsert ? "inserted." : "updated."));
             }
-            $result = mysqli_query($dbs[ekkitab_db], "commit");
-            if (! $result) 
-                throw new exception("Failed to commit on ekkitab database.");
             $end = (float) array_sum(explode(' ', microtime()));
-            $logger->info("Processed $totalBooks books (Inserted: $insertedBooks, Updated: $updatedBooks, Failed: $failedBooks) in " . sprintf("%.4f", ($end - $start)) . " seconds.");
+            $logger->info("Processed $totalBooks books (Inserted: $insertedBooks, Updated: $updatedBooks, Failed: $failedBooks) in " . sprintf("%.2f", ($end - $start)) . " seconds." . " [in ekkitab_books] = " . sprintf("%.2f", $mysqlTime) . " [in ref db] = " . sprintf("%.2f", $mysqlTimeRefDb));
         }
-        writeIndexInformation(-1);
+        // writeIndexInformation(-1);
         //$logger->info("Books inserted: $insertedBooks. Books updated: $updatedBooks. Failed: $failedBooks");
         mysqli_close($dbs[ekkitab_db]);
         mysqli_close($dbs[ref_db]);

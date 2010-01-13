@@ -9,6 +9,7 @@ define (CPEMG, 4);
 define (CPETX, 5);
 define (CPEVC, 6);
 define (CISI, 7);
+define (URL, 8);
 
 define (ISBN,'ISBN');
 define (AUTHOR,'AUTHOR');
@@ -40,6 +41,7 @@ define (RATING,'RATING');
 define (PRODUCT_STATUS,'PRODUCT_STATUS');
 define (INT_SHIPPING,'INT_SHIPPING');
 define (SOURCE,'INFO_SOURCE');
+define (REWRITE_URL,'REWRITE_URL');
 
 // constants used in the script
 
