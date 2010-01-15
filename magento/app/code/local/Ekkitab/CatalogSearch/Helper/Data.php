@@ -18,8 +18,29 @@
 class Ekkitab_CatalogSearch_Helper_Data extends Mage_CatalogSearch_Helper_Data
 {
 
+    const QUERY_PAGE_NO = 'p';
+    
+	
+	/**
+     * Page Number
+     *
+     * @var int
+     */
+    protected $_pageNo;
 
-    /**
+
+	
+	/**
+     * Retrieve search query parameter name
+     *
+     * @return string
+     */
+    public function getPageNoVarName()
+    {
+        return self::QUERY_PAGE_NO;
+    }
+	
+	/**
      * Retrieve result page url
      *
      * @param   string $query
@@ -45,6 +66,24 @@ class Ekkitab_CatalogSearch_Helper_Data extends Mage_CatalogSearch_Helper_Data
         )));
     }
 
+
+	/**
+     * Retrieve search query text
+     *
+     * @return string
+     */
+    public function getCurrentPageNumber()
+    {
+        if (is_null($this->_pageNo)) {
+            $this->_pageNo = $this->_getRequest()->getParam($this->getPageNoVarName());
+            if (isset($this->_pageNo)) {
+                $this->_pageNo = (int)trim($this->_pageNo);
+            } else {
+                $this->_pageNo = 1;
+            }
+        }
+        return $this->_pageNo;
+    }
 
 	/**
      * Schedule resize of the image

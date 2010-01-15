@@ -14,11 +14,13 @@ import java.io.*;
 public class BookSearch {
 
     private String indexDir;
-    private IndexSearcher searcher;
+    private static IndexSearcher searcher = null;
     
     public BookSearch(String indexDir) throws Exception {
-        this.indexDir = indexDir;
-        searcher = new IndexSearcher(FSDirectory.getDirectory(indexDir));
+        if (searcher == null) {
+            this.indexDir = indexDir;
+            searcher = new IndexSearcher(FSDirectory.getDirectory(indexDir));
+        }
     }
 
     private String getFieldValue(Field fd) {

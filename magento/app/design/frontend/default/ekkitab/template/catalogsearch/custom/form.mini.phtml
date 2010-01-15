@@ -5,11 +5,11 @@
  */
 ?>
 <div class="mini-search">
-<form id="custom_search_mini_form" action="<?php echo $this->helper('ekkitab_catalogsearch')->getCustomSearchResultUrl() ?>" method="get">
+<form id="custom_search_mini_form" action="<?php echo $this->helper('ekkitab_catalogsearch')->getCustomSearchResultByIndexUrl() ?>" method="get">
     <fieldset>
         <legend><?php echo $this->__('Search Site') ?></legend>
-            <input id="searchBy" type="radio" class="form-radio" name="searchBy" value="bo_author" /> Author
-            <input id="searchBy" type="radio" class="form-radio" name="searchBy" value="name" checked/> Title
+            <!--input id="searchBy" type="radio" class="form-radio" name="searchBy" value="bo_author" /> Author
+            <input id="searchBy" type="radio" class="form-radio" name="searchBy" value="name" checked/> Title-->
             <input id="search" type="text" class="input-text" name="<?php echo $this->helper('ekkitab_catalogsearch')->getQueryParamName() ?>" value="<?php echo $this->helper('ekkitab_catalogsearch')->getEscapedQueryText() ?>" />
             <input type="image" src="<?php echo $this->getSkinUrl('images/btn_go.gif') ?>" alt="<?php echo $this->__('Go') ?>" />
             <div id="search_autocomplete" class="search-autocomplete"></div>

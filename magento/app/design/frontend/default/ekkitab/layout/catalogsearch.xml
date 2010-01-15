@@ -30,8 +30,8 @@
 
     <default>
         <reference name="header">
-            <block type="core/template" name="top.search" as="topSearch" template="catalogsearch/form.mini.phtml"/>
-            <block type="core/template" name="top.search" as="topSearch1" template="catalogsearch/custom/form.mini.phtml"/>
+            <block type="core/template" name="top.search" as="topSearch1" template="catalogsearch/form.mini.phtml"/>
+            <block type="core/template" name="top.search" as="topSearch" template="catalogsearch/custom/form.mini.phtml"/>
             <block type="catalogsearch/top" name="popular.search" as="popularSearch" template="catalogsearch/popular.phtml"/>
         </reference>
         <reference name="footer_links">
@@ -78,7 +78,23 @@
         </reference>
     </ekkitab_catalogsearch_custom_result>
 
-    <catalogsearch_advanced_index>
+       <ekkitab_catalogsearch_custom_resultbyindex>
+        <!-- Mage_Catalogsearch -->
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+        </reference>
+        <reference name="left">
+			   <block type="catalog/navigation" name="catalog.leftnav" after="currency" template="catalog/navigation/left_child_categories.phtml"/>
+        </reference>
+		<reference name="content">
+            <block type="ekkitab_catalogsearch/custom_resultIndex" name="catalogsearch_custom_result" template="catalogsearch/custom/result_index.phtml">
+                <action method="setColumnCount"><count>4</count></action>
+                <action method="setPageSize"><count>20</count></action>
+            </block>
+        </reference>
+    </ekkitab_catalogsearch_custom_resultbyindex>
+
+	<catalogsearch_advanced_index>
         <!-- Mage_Catalogsearch -->
         <reference name="root">
             <action method="setTemplate"><template>page/2columns-left.phtml</template></action>

@@ -127,10 +127,10 @@ Category layered navigation layout
         </reference>
         <reference name="left">
 			<remove name="currency" />
-			<block type="catalog/layer_view" name="catalog.leftnav" template="catalog/layer/view.phtml">
+			<!--block type="catalog/layer_view" name="catalog.leftnav" template="catalog/layer/view.phtml"-->
 				<!--Added by anisha for displaying child categories in the product listing page. Once anchoring is in place, this can be removed  -->
 				<block type="catalog/navigation" name="catalog.leftnav.child.categories"  as="child_catagories" template="catalog/navigation/left_child_categories.phtml"/>
-			</block>
+			<!--/block-->
         </reference>
         <reference name="content">
             <block type="catalog/category_view" name="category.products" template="catalog/category/view.phtml">

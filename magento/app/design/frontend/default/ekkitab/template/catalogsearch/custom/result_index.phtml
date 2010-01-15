@@ -1,0 +1,131 @@
+<?php
+/**
+ * 
+ * Frontend Custom Catalogsearch reuslt template
+ * @category   design/ekkitab
+ * @author Anisha (anisha@ekkitab.com)
+ * @version 1.0 Dec 7, 2009
+ * 
+ * @copyright  COPYRIGHT (C) 2009 Ekkitab Educational Services India Pvt. Ltd.
+ * @license    All Rights Reserved. All material contained in this file (including, but not limited to, text, images, graphics, HTML, programming code and scripts) 
+ * constitute proprietary and  * confidential information protected by copyright laws, trade secret and other laws. No part of this software may be copied, reproduced, modified or 
+ * distributed in any form or by any means, or stored in a database or retrieval system without the prior written permission of Ekkitab Educational Services.
+ * 
+ * 
+ */
+?>
+<?php $results=$this->getProductCollection()?>
+<?php if($results): ?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml()  ?>
+	<div class="page-head">
+		<h3><?php echo ($this->getHeaderText() || $this->getHeaderText() === false) ? $this->getHeaderText() : $this->__("Search results for '%s'", $this->helper('ekkitab_catalogsearch')->getEscapedQueryText()) ?></h3>
+	</div>
+	<?php if ($messages = $this->getNoteMessages()):?>
+	<div class="note-msg">
+		<?php foreach ($messages as $message):?>
+		<?php echo $message?><br />
+		<?php endforeach;?>
+	</div>
+	<?php endif; ?>
+	<?php //echo $this->getToolbarHtml()
+		$titleHitCount = $results->get("hitcount-title");
+		$bookList = $results->get("books");
+		$count = java_values($bookList->size());
+	?>
+    <table class="pager" cellspacing="0">
+        <tr>
+            <td>
+            </td>
+            <?php if($this->getLastPageNumber()>1): ?>
+            <td class="pages">
+                <strong><?php echo $this->__('Page:') ?></strong>
+                <ol>
+                <?php if (!$this->isFirstPage()): ?>
+                    <li>
+                        <a href="<?php echo $this->getPreviousPageUrl() ?>"><img src="<?php echo $this->getSkinUrl('images/pager_arrow_left.gif') ?>" alt="<?php echo $this->__('Previous') ?>" /></a>
+                    </li>
+                <?php endif ?>
+                <?php foreach ($this->getPages() as $_page): ?>
+                    <?php if ($this->isPageCurrent($_page)): ?>
+                        <li><span class="on"><?php echo $_page ?></span></li>
+                    <?php else: ?>
+                        <li><a href="<?php echo $this->getPageUrl($_page) ?>"><?php echo $_page ?></a></li>
+                    <?php endif ?>
+                <?php endforeach;; ?>
+                <?php if (!$this->isLastPage()): ?>
+                    <li>
+                        <a href="<?php echo $this->getNextPageUrl() ?>"><img src="<?php echo $this->getSkinUrl('images/pager_arrow_right.gif') ?>" alt="<?php echo $this->__('Next') ?>" /></a>
+                    </li>
+                <?php endif ?>
+                </ol>
+            </td>
+            <?php endif; ?>
+            <td class="a-right">
+            </td>
+        </tr>
+    </table>
+	<!-- Grid Mode -->
+	<div class="listing-type-grid  catalog-listing padder"> <!-- the class name will change to .listing-type-cell if viewing in list mode -->
+		<table cellspacing="0" class="generic-product-grid" id="product-list-table">
+		<?php 
+			$_columnCount = $this->getColumnCount();
+			$i=0; 
+			$iter = $bookList->iterator();
+			for ($j=0; $j<$count; $j++) {
+				$book = $bookList->get($j);
+				$author = $book->get("author");
+				$title = $book->get("title");
+				$image = $book->get("image");
+				$url = $book->get("url");
+				$id = $book->get("entityId");
+		?>
+		<?php if ($i++%$_columnCount==0): ?>
+			<tr>
+		<?php endif ?>
+			<td>
+				<p class="product-image">
+					<a href="<?php echo $this->getUrl($url)?>" title="<?php  echo $title?>">
+					<img src="<?php echo $this->helper('ekkitab_catalogsearch')->resize($image,'small_image',false,null, 170); ?>" alt="<?php echo $title?>"></a>
+				</p>
+				<h5><a href="<?php echo $this->getUrl($url)?>" title="<?php echo $title ?>"><?php echo $title ?></a></h5><h4> by <?php echo $author ?> </h4>
+				<div class="price-box">
+					<span class="regular-price" id="product-price-<?php echo $id ?>"><span class="price">Rs 0.0</span></span>
+				</div>
+				<a href="#" onclick="setLocation('<?php echo $this->getAddToCartUrl($id)?>')"><img src="<?php echo $this->getSkinUrl('images/btn_add_to_cart.gif') ?>" alt="<?php echo $this->__('Add to Cart') ?>"></a>
+				<div class="clear"></div>
+				<ul class="add-to">
+					<li><a href="<?php echo $this->getAddToWishlistUrl($id)?>"><?php echo $this->__('Add to Wishlist') ?></a></li>
+					<li><a href="<?php echo $this->getAddToCompareUrl($id)?>"><?php echo $this->__('Add to Compare') ?></a></li>
+				</ul>
+			</td>
+		<?php if ($i%$_columnCount==0 && $i!=$count): ?>
+			</tr>
+		<?php endif ?>
+		<?php } ?>
+		<?php for($i;$i%$_columnCount!=0;$i++): ?>
+			 <td class="empty-product">&nbsp;</td>
+		<?php endfor ?>
+		<?php if ($i%$_columnCount==0): ?>
+			</tr>
+		<?php endif ?>
+		</table>
+		<script type="text/javascript">decorateTable('product-list-table')</script>
+	</div>
+<?php else: ?>
+    <div class="page-head">
+        <h3><?php echo ($this->getHeaderText() || $this->getHeaderText() === false) ? $this->getHeaderText() : $this->__("Search results for '%s'", $this->helper('ekkitab_catalogsearch')->getEscapedQueryText()) ?></h3>
+    </div>
+    <div class="note-msg">
+        <?php echo ($this->getNoResultText()) ? $this->getNoResultText() : $this->__('Your search returns no results.') ?>
+        <?php if ($messages = $this->getNoteMessages()):?>
+            <?php foreach ($messages as $message):?>
+            <br /><?php echo $message?>
+            <?php endforeach;?>
+        <?php endif; ?>
+    </div>
+	<div class="padder">
+	<div class="note-msg">
+		<?php echo $this->__('There are no products matching the selection.') ?>
+	</div>
+	</div>
+<?php endif; ?>
