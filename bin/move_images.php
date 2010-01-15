@@ -30,7 +30,7 @@ include("move_images_config.php");
     */
     function getConfig($file) {
 	    $config	= parse_ini_file($file, true);
-        if (! $config) {
+        if (!$config) {
             fatal("Configuration file missing or incorrect."); 
         }
         return $config;
@@ -49,14 +49,12 @@ include("move_images_config.php");
 	    $database_user   = $config[database][user];
 	    $database_psw    = $config[database][password];
 	    $ekkitab_db      = $config[database][ekkitab_db];
-	    $ref_db		     = $config[database][ref_db];
+	    $ref_db	     = $config[database][ref_db];
 
-        
-        $db  = NULL;
+            $db  = NULL;
 
-
-		$db     = mysqli_connect($database_server,$database_user,$database_psw,$ref_db);
-		return array( ref_db => $db);
+	    $db     = mysqli_connect($database_server,$database_user,$database_psw,$ref_db);
+	    return array( ref_db => $db);
 	}
 
    /** 
@@ -114,15 +112,18 @@ function start(){
 		//$dbs[ref_db] = mysqli_connect("localhost","root","","reference");
 		// get the books list from reference db
 		$from  = 0;
-		while ($books = getBooksFromRefDB($dbs[ref_db], SELECT_LIMIT,$from)) {
+		while ($books = getBooksFromRefDB($dbs['ref_db'], SELECT_LIMIT,$from)) {
 				while ($book = mysqli_fetch_array($books)) {
 						$imagefile = $book['IMAGE'];
 						$tgPath = getImagePath($imagefile);
-						createDir($tgPath);
+						if (!is_dir(tgdir . $tgPath)) 
+						   mkdir(tgdir . $tgPath, 755, true);
 						$tgPath  = tgdir.$tgPath."/".$imagefile;
 						$srcPath = srcdir."/".$imagefile;
-						copy($srcPath,$tgPath);
-						updateRefDb($dbs[ref_db], $book['ISBN']);
+						if(file_exists($srcPath)){
+							copy($srcPath,$tgPath);
+							updateRefDb($dbs['ref_db'], $book['ISBN']);
+						}
 	
 				}
 			 $from = $from + SELECT_LIMIT; 
