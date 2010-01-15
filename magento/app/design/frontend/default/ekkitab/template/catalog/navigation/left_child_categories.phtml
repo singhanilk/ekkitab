@@ -23,7 +23,7 @@
  * @see Mage_Catalog_Block_Navigation
  */
 ?>
-<?php if (!Mage::registry('current_category')) return ?>
+
 <?php $_currcategory=$this->getCurrentCategory() ?>
 <?php $_categories=$this->getCurrentChildCategories() ?>
 <?php $_count = is_array($_categories)?count($_categories):$_categories->count(); ?>
