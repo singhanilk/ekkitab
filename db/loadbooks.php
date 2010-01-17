@@ -29,6 +29,7 @@ ini_set("display_errors", 1);
     $mysqlTime = 0;
     $mysqlTimeRefDb = 0;
     $failedBooks = 0;
+    $dbs = array();
 
     require_once(LOG4PHP_DIR . '/LoggerManager.php');
 
@@ -41,6 +42,7 @@ ini_set("display_errors", 1);
     */
     function fatal($message, $query = "") {
         global $logger;
+        global $dbs;
 	    $logger->fatal("$message " . "[ $query ]" . "\n");
         mysqli_close($dbs[ekkitab_db]);
         mysqli_close($dbs[ref_db]);
@@ -709,6 +711,8 @@ ini_set("display_errors", 1);
         global $mysqlTime;
         global $mysqlTimeRefDb;
         global $failedBooks;
+        global $dbs;
+
         $config = getConfig(LOADBOOKS_INI);
         $dbs = initDatabases($config);
 

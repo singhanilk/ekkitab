@@ -19,17 +19,35 @@
 
 // This Script will copy the images of those books the are present ekkitab database to appropriate media folder.....
 
-define ("tgdir","../magento/media/catalog/product");
-define ("srcdir","../images");
-define ("SELECT_LIMIT", 5000);
+    define ("tgdir","../magento/media/catalog/product");
+    define ("srcdir","../images");
+    define ("SELECT_LIMIT", 5000);
 
-include("move_images_config.php");
+    include("move_images_config.php");
+    require_once(LOG4PHP_DIR . '/LoggerManager.php');
+
+    // global logger
+    $logger =& LoggerManager::getLogger("loadbooks");
+
+    $dbs = array();
+
+   /** 
+    * Log the error and terminate the program.
+    * Optionally, will accept the query that failed.
+    */
+    function fatal($message, $query = "") {
+        global $logger;
+        global $dbs;
+	    $logger->fatal("$message " . "[ $query ]" . "\n");
+        mysqli_close($dbs['ref_db']);
+        exit(1);
+    }
 
    /** 
     * Read and return the configuration data from file. 
     */
     function getConfig($file) {
-	    $config	= parse_ini_file($file, true);
+       $config   = parse_ini_file($file, true);
         if (!$config) {
             fatal("Configuration file missing or incorrect."); 
         }
@@ -37,7 +55,7 @@ include("move_images_config.php");
     }
 
 
-	/** 
+   /** 
     * Initialize ekkitab and reference databases.
     */
     function initDatabases($config) {
@@ -45,91 +63,93 @@ include("move_images_config.php");
         if (! $config) 
             return NULL;
 
-	    $database_server = $config[database][server];
-	    $database_user   = $config[database][user];
-	    $database_psw    = $config[database][password];
-	    $ekkitab_db      = $config[database][ekkitab_db];
-	    $ref_db	     = $config[database][ref_db];
+       $database_server = $config[database][server];
+       $database_user   = $config[database][user];
+       $database_psw    = $config[database][password];
+       $ekkitab_db      = $config[database][ekkitab_db];
+       $ref_db          = $config[database][ref_db];
 
-            $db  = NULL;
+       $db  = NULL;
 
-	    $db     = mysqli_connect($database_server,$database_user,$database_psw,$ref_db);
-	    return array( ref_db => $db);
-	}
+       $db     = mysqli_connect($database_server,$database_user,$database_psw,$ref_db);
+       return array( ref_db => $db);
+   }
 
    /** 
     * Return books from the reference database for which the update flag is set.  
     * Max books returned is determined by $limit.
     */
-	function getBooksFromRefDB($db, $limit, $from){
-		$query = "select * from books where books.new = 1 limit $from, $limit";
-		$result = mysqli_query($db,$query);
-		if (mysqli_num_rows($result) > 0)
-		        return $result;
-			else
-				return NULL;
+   function getBooksFromRefDB($db, $limit, $from){
+      $query = "select * from books where books.new = 1 limit $from, $limit";
+      $result = mysqli_query($db,$query);
+      if ($result && (mysqli_num_rows($result) > 0))
+         return $result;
+      else
+         return NULL;
     }
-	
-	/** 
-	* Generate correct image path for thumbnails and images. 
-	*/
-	function getImagePath($imagefile){
-		   $firstchar = substr($imagefile, 0, 1);
-		   $secondchar = substr($imagefile, 1, 1);
+   
+   /** 
+   * Generate correct image path for thumbnails and images. 
+   */
+   function getImagePath($imagefile){
+         $firstchar = substr($imagefile, 0, 1);
+         $secondchar = substr($imagefile, 1, 1);
            return ("/" . $firstchar . "/" . $secondchar);
     }
-
-  /**
-   * Create correct image directories at target destination
-   */
-	function createDir($target){
-		$tmp = tgdir.substr($target,0,2);
-		if(!is_dir($tmp)){
-			mkdir($tmp);
-		}	
-	
-		$tmp = $tmp.substr($target,2,2);
-		if(!is_dir($tmp)){
-			mkdir($tmp);
-		}
-	}
-
 
    /** 
     * Set the books update flag to 'updated' in the reference database.  
     */
    
-	function updateRefDb($db, $isbn) {
-		$query = "update books set books.new = 2 where books.isbn = '$isbn'";
-        $books = mysqli_query($db,$query);
+   function updateRefDb($db, $isbn) {
+      $query = "update books set books.new = 2 where books.isbn = '$isbn'";
+      $books = mysqli_query($db,$query);
+      if (!$books) {
+         fatal("Could not update reference database.", $query);
+      }
     }
-		
-// Main function
-function start(){
-        $config = getConfig(MOVE_IMAGES_INI);
-        $dbs = initDatabases($config);
-			
-		//$dbs[ref_db] = mysqli_connect("localhost","root","","reference");
-		// get the books list from reference db
-		$from  = 0;
-		while ($books = getBooksFromRefDB($dbs['ref_db'], SELECT_LIMIT,$from)) {
-				while ($book = mysqli_fetch_array($books)) {
-						$imagefile = $book['IMAGE'];
-						$tgPath = getImagePath($imagefile);
-						if (!is_dir(tgdir . $tgPath)) 
-						   mkdir(tgdir . $tgPath, 755, true);
-						$tgPath  = tgdir.$tgPath."/".$imagefile;
-						$srcPath = srcdir."/".$imagefile;
-						if(file_exists($srcPath)){
-							copy($srcPath,$tgPath);
-							updateRefDb($dbs['ref_db'], $book['ISBN']);
-						}
-	
-				}
-			 $from = $from + SELECT_LIMIT; 
-		}
-} 
+      
+   /** 
+    * Main function.  
+    */
+    function start(){
 
-start();
+      global $dbs;
+      global $logger;
+
+      $config = getConfig(MOVE_IMAGES_INI);
+      $dbs = initDatabases($config);
+         
+      $from  = 0;
+      $books_processed = 0;
+      $files_copied    = 0;
+      $timer = 0;
+      $start = (float) array_sum(explode(' ', microtime()));
+
+      while ($books = getBooksFromRefDB($dbs['ref_db'], SELECT_LIMIT, $from)) {
+         while ($book = mysqli_fetch_array($books)) {
+             $imagefile = $book['IMAGE'];
+             $tgPath = getImagePath($imagefile);
+             if (!is_dir(tgdir . $tgPath)) 
+                mkdir(tgdir . $tgPath, 755, true);
+             $tgPath  = tgdir.$tgPath."/".$imagefile;
+             $srcPath = srcdir."/".$imagefile;
+             if(file_exists($srcPath)){
+                copy($srcPath,$tgPath);
+                updateRefDb($dbs['ref_db'], $book['ISBN']);
+                $files_copied++;
+             }
+             $books_processed++;
+         }
+         $timer += (float)array_sum(explode(' ', microtime())) - $start;
+         $from = $from + SELECT_LIMIT; 
+         $logger->info("Processed $books_processed books. Copied $files_copied image files. In " . sprintf("%.2f", $timer/60) . "minutes.");
+      }
+      mysqli_close($dbs['ref_db']);
+    } 
+
+    $logger->info("Process started at " . date("d-M-Y G:i:sa"));
+    start();
+    $logger->info("Process ended at " . date("d-M-Y G:i:sa"));
 
 ?>
