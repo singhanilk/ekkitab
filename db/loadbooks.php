@@ -25,7 +25,7 @@ ini_set("display_errors", 1);
     include("magento_db_constants.php");
 	
 		
-	define("SELECT_LIMIT", 5000);
+	define("SELECT_LIMIT", 1000);
     $mysqlTime = 0;
     $mysqlTimeRefDb = 0;
     $failedBooks = 0;
@@ -42,6 +42,8 @@ ini_set("display_errors", 1);
     function fatal($message, $query = "") {
         global $logger;
 	    $logger->fatal("$message " . "[ $query ]" . "\n");
+        mysqli_close($dbs[ekkitab_db]);
+        mysqli_close($dbs[ref_db]);
         exit(1);
     }
 
@@ -223,17 +225,23 @@ ini_set("display_errors", 1);
    /** 
     * Set auto-commit mode for database.  
     */
-    function setAutoCommit($db, $mode = true) {
+    function prepareDb($db) {
         global $logger;
-        $query = "set autocommit = " . ($mode ? "1" : "0");
+        $queries[0] = "set autocommit = 0";
+        $queries[1] = "set foreign_key_checks = 0";
+        $queries[2] = "set unique_checks = 0";
+        
         try {
-	        $result = mysqli_query($db,$query);
-            if (!$result)
-                throw new exception("Failed to set requested autocommit mode. [$query]");
+            foreach ($queries as $query) {
+	            $result = mysqli_query($db,$query);
+                if (!$result)
+                    throw new exception("Failed to issue prepare db commands. [$query]");
+            }
         }
         catch(exception $e) {
             fatal($e->getmessage());
         }
+
     }
 
    /** 
@@ -707,7 +715,7 @@ ini_set("display_errors", 1);
         if ($dbs == NULL) 
             fatal("Failed to initialize databases");
 
-        setAutoCommit($dbs[ekkitab_db], false);
+        prepareDb($dbs[ekkitab_db]);
 
         $entityIds = getEntityIDs($dbs[ekkitab_db]);
 
@@ -716,11 +724,12 @@ ini_set("display_errors", 1);
         $failedBooks = 0;
         $totalBooks = 0;
         $start = (float) array_sum(explode(' ', microtime()));
+        $timer = array();
 
         $k = 0;
         while ($books = getBooksFromRefDB($dbs[ref_db], SELECT_LIMIT)) {
             while ($book = mysqli_fetch_array($books)) {
-        
+
 		        if(empty($book)) 
                     continue;
 
@@ -742,10 +751,14 @@ ini_set("display_errors", 1);
                 try {
                     //$longQuery = "";
                     $startZ = (float) array_sum(explode(' ', microtime()));
+                    $sqlCounter = 0;
 	                foreach ($queries as $query)  {
+                        $startTimer = (float) array_sum(explode(' ', microtime()));
 			            $result = mysqli_query($dbs[ekkitab_db], $query);
                         if (! $result) 
                             throw new exception("Failed to commit book to ekkitab database. [$query]");
+                        $endTimer = (float) array_sum(explode(' ', microtime()));
+                        $timer[$sqlCounter++] += ($endTimer - $startTimer);
                         //$longQuery .= "$query;";
                         $k++;
 	                }
@@ -787,8 +800,13 @@ ini_set("display_errors", 1);
                 //$logger->info("Finished: $book[ISBN] " . ($isInsert ? "inserted." : "updated."));
             }
             $end = (float) array_sum(explode(' ', microtime()));
-            $logger->info("Processed $totalBooks books (Inserted: $insertedBooks, Updated: $updatedBooks, Failed: $failedBooks) in " . sprintf("%.2f", ($end - $start)) . " seconds." . " [in ekkitab_books] = " . sprintf("%.2f", $mysqlTime) . " [in ref db] = " . sprintf("%.2f", $mysqlTimeRefDb));
+            $logger->info("Processed $totalBooks books (Inserted: $insertedBooks, Updated: $updatedBooks, Failed: $failedBooks) in " . sprintf("%.2f", ($end - $start)/60) . " minutes." . " [in ekkitab_books] = " . sprintf("%.2f sec.", $mysqlTime) . " [in ref db] = " . sprintf("%.2f sec.", $mysqlTimeRefDb));
             $logger->info("Processed $k statements.");
+            $dbgstr = "";
+            foreach($timer as $time) {
+                $dbgstr = $dbgstr . sprintf("%.1f", $time) . " ";
+            }
+            $logger->info("$dbgstr");
         }
         // writeIndexInformation(-1);
         //$logger->info("Books inserted: $insertedBooks. Books updated: $updatedBooks. Failed: $failedBooks");
@@ -799,8 +817,8 @@ ini_set("display_errors", 1);
     $logger->info("Process started at " . date("d-M-Y G:i:sa"));
     start();
     $logger->info("Process ended at " . date("d-M-Y G:i:sa"));
-    //$logger->info("Processing time: " . sprintf("%.4f", ($end - $start)) . " seconds.");
-    $logger->info("MySQL Processing time: " . sprintf("%.4f", $mysqlTime) . " seconds.");
-    $logger->info("MySQL Processing time in RefDb: " . sprintf("%.4f", $mysqlTimeRefDb) . " seconds.");
+    //$logger->info("Processing time: " . sprintf("%.2f", ($end - $start)/60) . " minutes.");
+    $logger->info("MySQL Processing time in Ekkitab Books: " . sprintf("%.2f", $mysqlTime/60) . " minutes.");
+    $logger->info("MySQL Processing time in RefDb: " . sprintf("%.2f", $mysqlTimeRefDb/60) . " minutes.");
 
 ?>

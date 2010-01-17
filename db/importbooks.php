@@ -21,6 +21,9 @@ ini_set("display_errors", 1);
     include("importbooks_config.php");
     require_once(LOG4PHP_DIR . '/LoggerManager.php');
 
+    define(UNCLASSIFIED, "ZZZ000000");
+    $unclassified = array();
+
     // global logger
     $logger =& LoggerManager::getLogger("loadbooks");
 
@@ -89,9 +92,47 @@ ini_set("display_errors", 1);
     }
 
    /** 
+    *  Write unclassified category codes to file. 
+    */
+    function writeUnclassifiedCodesToFile($infosource) {
+        global $unclassified;
+        $fh = fopen(IMPORTBOOKS_UNCLASSIFIED, "a"); 
+        if (!$fh) 
+           warn("Could not open unclassified file: ".IMPORTBOOKS_UNCLASSIFIED);
+        else {
+           foreach($unclassified as $key => $value) {
+               fprintf($fh, "%s - %s - %s\n", $infosource, date("d-M-Y H:i:s"), $key);
+           }
+           fclose($fh);
+        }
+    }
+
+   /** 
+    *  Get the unclassified category code. 
+    */
+    function getUnclassifiedCategoryCode($db) {
+       static $book = array(); 
+       if (empty($book)) {
+            $lookup = "select category_id,rewrite_url from ek_bisac_category_map where bisac_code = '".UNCLASSIFIED."'";
+            $result = mysqli_query($db, $lookup);
+            if (($result) && (mysqli_num_rows($result) > 0)){
+	            $row = mysqli_fetch_array($result);
+                $book['catcode'] = $row[0] . ",";
+                $book['rewrite_url'] = $row[1];
+            }
+            else {
+                fatal("Could not get unclassified code.");
+            }
+       }
+       return $book;
+    }
+
+   /** 
     *  Convert BISAC codes to Magento Category Codes. 
     */
     function addCategoryCodes($book, $db) {
+      global $unclassified;
+
       $book['catcode'] = "";
       if (! empty($book['bisac'])) {
         foreach($book['bisac'] as $value) {
@@ -106,7 +147,15 @@ ini_set("display_errors", 1);
       }
       if (strcmp($book['catcode'], "")) 
         $book['catcode'] = substr($book['catcode'], 0, strrpos($book['catcode'], ","));
-
+      else {
+        $tmp = getUnclassifiedCategoryCode($db);
+        $book['catcode'] = $tmp['catcode'];
+        $book['rewrite_url'] = $tmp['rewrite_url'];
+        if (!empty($book['bisac'])) {
+            foreach($book['bisac'] as $value) 
+                $unclassified[$value] = 0;
+        }
+      }
       return ($book);
     }
 
@@ -199,6 +248,7 @@ ini_set("display_errors", 1);
                 debug("Processed $i books. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$filenotfound] files not found.\n");
             }
         }
+        writeUnclassifiedCodesToFile($infosource);
     
         fclose($fh);
         mysqli_close($db);
