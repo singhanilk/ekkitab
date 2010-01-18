@@ -117,7 +117,7 @@ ini_set("display_errors", 1);
             $result = mysqli_query($db, $lookup);
             if (($result) && (mysqli_num_rows($result) > 0)){
 	            $row = mysqli_fetch_array($result);
-                $book['catcode'] = $row[0] . ",";
+                $book['catcode'] = $row[0];
                 $book['rewrite_url'] = $row[1];
             }
             else {
@@ -143,19 +143,17 @@ ini_set("display_errors", 1);
                 $book['catcode'] = $row[0] . ",";
                 $book['rewrite_url'] = $row[1];
             }
+            else {
+                $tmp = getUnclassifiedCategoryCode($db);
+                $book['catcode'] = $tmp['catcode'];
+                $book['rewrite_url'] = $tmp['rewrite_url'];
+                $unclassified[$value] = 0;
+            }
         }
       }
       if (strcmp($book['catcode'], "")) 
         $book['catcode'] = substr($book['catcode'], 0, strrpos($book['catcode'], ","));
-      else {
-        $tmp = getUnclassifiedCategoryCode($db);
-        $book['catcode'] = $tmp['catcode'];
-        $book['rewrite_url'] = $tmp['rewrite_url'];
-        if (!empty($book['bisac'])) {
-            foreach($book['bisac'] as $value) 
-                $unclassified[$value] = 0;
-        }
-      }
+
       return ($book);
     }
 
