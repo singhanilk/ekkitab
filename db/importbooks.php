@@ -124,6 +124,9 @@ ini_set("display_errors", 1);
                 fatal("Could not get unclassified code.");
             }
        }
+       if (strcmp($book['catcode'], "")) 
+         $book['catcode'] = substr($book['catcode'], 0, strrpos($book['catcode'], ","));
+
        return $book;
     }
 
