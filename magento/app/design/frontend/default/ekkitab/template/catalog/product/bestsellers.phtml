@@ -26,8 +26,8 @@
 			<tr class="odd">
 				<?php foreach ($products as $product): ?>
 				<td><p class="product-image">
-					 <a href="<?php echo $product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>"><img src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->keepFrame(false)->resize(null, 170); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" />
-					</a></p><p><a href="<?php echo $this->getUrl("catalog/product/view/id/")."id/".$product->getProductId() ?>"  title="<?php echo $product->getTitle() ?>"><?php echo $this->htmlEscape($product->getName())?></a></p>
+					 <a href="<?php echo $product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>"><img src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->keepFrame(false)->resize(null, 100); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" />
+					</a></p><p><a href="<?php echo $product->getProductUrl() ?>"  title="<?php echo $product->getTitle() ?>"><?php echo $this->htmlEscape($product->getName())?></a></p>
 				</td>
 				<?php endforeach ?>
 			</tr>
