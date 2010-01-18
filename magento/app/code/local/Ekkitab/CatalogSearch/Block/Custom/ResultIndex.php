@@ -100,6 +100,7 @@ class Ekkitab_CatalogSearch_Block_Custom_ResultIndex extends Mage_Core_Block_Tem
 		}else {
 			$indexFilePath = (string) $indexFilePathArray[0];
 		}
+		$indexFilePath =  Mage::getRoot().DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR.$indexFilePath;
 		if (!($javaIncFilePathArray = Mage::getConfig()->getNode(self::JAVA_BRIDGE_INC_FILE))) {
 			$javaIncFile = 'http://localhost:8080/JavaBridge/java/Java.inc';
 		}else {
