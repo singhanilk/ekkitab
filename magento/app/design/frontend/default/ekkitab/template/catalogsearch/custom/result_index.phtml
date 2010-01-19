@@ -14,8 +14,11 @@
  * 
  */
 ?>
-<?php $results=$this->getProductCollection()?>
-<?php if($results): ?>
+<?php $results=$this->getProductCollection();
+	  $bookList = $results->get("books");
+	  $count = java_values($bookList->size());
+	  if(!is_null($bookList) && $count >0 ):
+?>
 <?php echo $this->getMessagesBlock()->getGroupedHtml()  ?>
 	<div class="page-head">
 		<h3><?php echo ($this->getHeaderText() || $this->getHeaderText() === false) ? $this->getHeaderText() : $this->__("Search results for '%s'", $this->helper('ekkitab_catalogsearch')->getEscapedQueryText()) ?></h3>
@@ -29,8 +32,6 @@
 	<?php endif; ?>
 	<?php //echo $this->getToolbarHtml()
 		$titleHitCount = $results->get("hitcount-title");
-		$bookList = $results->get("books");
-		$count = java_values($bookList->size());
 	?>
     <table class="pager" cellspacing="0">
         <tr>
