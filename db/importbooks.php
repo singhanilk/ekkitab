@@ -20,6 +20,8 @@ ini_set("display_errors", 1);
 
     include("importbooks_config.php");
     require_once(LOG4PHP_DIR . '/LoggerManager.php');
+    ini_set(include_path, ${include_path}.":".EKKITAB_HOME."/"."bin");
+    include("imagehash.php");
 
     define(UNCLASSIFIED, "ZZZ000000");
     $unclassified = array();
@@ -161,6 +163,9 @@ ini_set("display_errors", 1);
     *  Convert BISAC codes to Magento Category Codes. 
     */
     function insertBook($book, $db, $language, $shipregion, $infosource) {
+
+       $book['thumbnail'] = getHash($book['thumbnail']);
+       $book['image'] = getHash($book['image']);
 
        $query = "insert into books (`isbn10`, `isbn`, `author`, `publisher`, `title`, `pages`, " .
                 "`language`, `bisac1`, `cover_thumb`, `image`, `weight`, " .
