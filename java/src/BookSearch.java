@@ -8,6 +8,8 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.analysis.SimpleAnalyzer;
+import org.apache.lucene.queryParser.QueryParser;
 import java.util.*;
 import java.io.*;
 
@@ -63,8 +65,25 @@ public class BookSearch {
        int startIndex = (page - 1) * pageSz;
        int endIndex   = startIndex + pageSz;
 
-       Query termQuery = new TermQuery(new Term("author",query));
-       Hits hits = searcher.search(termQuery);
+       QueryParser qpt = new QueryParser("title", new SimpleAnalyzer());
+       QueryParser qpa = new QueryParser("author", new SimpleAnalyzer());
+
+       //alter query to match lucene syntax.
+       /*
+       String[] terms = query.split(" ");
+       StringBuffer sb = new StringBuffer();
+       for (String term: terms) {
+          sb.append("author: ");
+          sb.append(term);
+          sb.append(" ");
+       }
+       String modquery = sb.toString();
+       System.out.println("DEBUG: "+query);
+       */
+       Query luceneQuery = qpa.parse(query);
+
+       //Query termQuery = new TermQuery(new Term("author",query));
+       Hits hits = searcher.search(luceneQuery);
        result.put("hitcount-author", new Integer(hits.length()));
 
        System.out.println("Start: "+startIndex+"  End: "+endIndex);
@@ -76,8 +95,9 @@ public class BookSearch {
             endIndex   = (pageSz - books.size());
        }
 
-       termQuery = new TermQuery(new Term("title",query));
-       hits = searcher.search(termQuery);
+       //termQuery = new TermQuery(new Term("title",query));
+       luceneQuery = qpt.parse(query);
+       hits = searcher.search(luceneQuery);
        result.put("hitcount-title", new Integer(hits.length()));
 
        if (books.size() < pageSz) {
@@ -105,7 +125,7 @@ public class BookSearch {
               String query = br.readLine();
               if ((query == null) || (query.equals("")))
                   break; 
-              Map<String, Object> results = booksearch.searchBook(query,10,5);
+              Map<String, Object> results = booksearch.searchBook(query,10,1);
               System.out.println((Integer)results.get("hitcount-author")+" hits in author");
               System.out.println((Integer)results.get("hitcount-title")+" hits in author");
               List<Map<String, String>> books = (List<Map<String, String>>)results.get("books");
