@@ -43,14 +43,17 @@ ini_set("display_errors", 1);
   if (! $dir) {
       echo "Failed to open source directory. $argv[1]\n";
   }
+  $sourcedir = $argv[1];
   $files_copied = 0;
   $files_failed = 0;
   while ($file = readdir($dir)) {
       if (($file == ".") || ($file == ".."))
           continue;
       $newfile = gethash($file);
-      $command = "cp $file $newfile\n";
-      $success = $copy($file, IMAGE_TARGET . getImagePath($newfile) . "/" . $newfile);
+      $imagePath = getImagePath($newfile);
+      if (!is_dir(IMAGE_TARGET . $imagePath))
+          mkdir(IMAGE_TARGET . $imagePath, 755, true); 
+      $success = copy($sourcedir . "/" . $file, IMAGE_TARGET . $imagePath . "/" . $newfile);
       if (! $success) {
         $files_failed++;
       }
