@@ -80,35 +80,46 @@ public class BookSearch {
        String modquery = sb.toString();
        System.out.println("DEBUG: "+query);
        */
+
        String[] words = query.split(" ");
        if (words.length > 1)
             query = "\"" + query + "\"";
 
-       Query luceneQuery = qpa.parse(query);
+       StringBuffer sb = new StringBuffer();
+       sb.append(query);
+       sb.append(" author:" + query+ " ");
+       for (String word: words) {
+          sb.append(" " + word);
+          sb.append(" author:" + word);
+       }
+       String modquery = sb.toString();
+
+       Query luceneQuery = qpt.parse(modquery);
 
        //Query termQuery = new TermQuery(new Term("author",query));
        Hits hits = searcher.search(luceneQuery);
        result.put("hitcount-author", new Integer(hits.length()));
+       result.put("hitcount-title", new Integer(hits.length()));
 
-       System.out.println("Start: "+startIndex+"  End: "+endIndex);
+       //System.out.println("Start: "+startIndex+"  End: "+endIndex);
        if (hits.length() > 0)
             getBooks(hits, books, startIndex, endIndex);
 
-       if ((books.size() > 0) && (books.size() < pageSz)) {
-            startIndex = 0;
-            endIndex   = (pageSz - books.size());
-       }
+       //if ((books.size() > 0) && (books.size() < pageSz)) {
+       //     startIndex = 0;
+       //     endIndex   = (pageSz - books.size());
+       //}
 
        //termQuery = new TermQuery(new Term("title",query));
-       luceneQuery = qpt.parse(query);
-       hits = searcher.search(luceneQuery);
-       result.put("hitcount-title", new Integer(hits.length()));
+       //luceneQuery = qpt.parse(query);
+       //hits = searcher.search(luceneQuery);
+       //result.put("hitcount-title", new Integer(hits.length()));
 
-       if (books.size() < pageSz) {
-            System.out.println("Again: Start: "+startIndex+"  End: "+endIndex);
-            if (hits.length() > 0)
-               getBooks(hits, books, startIndex, endIndex);
-       }
+       //if (books.size() < pageSz) {
+        //    System.out.println("Again: Start: "+startIndex+"  End: "+endIndex);
+        //    if (hits.length() > 0)
+        //       getBooks(hits, books, startIndex, endIndex);
+       //}
 
        result.put("books", books);
        return (result);
