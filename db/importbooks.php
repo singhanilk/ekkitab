@@ -147,7 +147,7 @@ ini_set("display_errors", 1);
             }
             else {
                 $tmp = getUnclassifiedCategoryCode($db);
-                $book['catcode'] = $tmp['catcode'];
+                $book['catcode'] = $tmp['catcode'] . ",";
                 $book['rewrite_url'] = $tmp['rewrite_url'];
                 $unclassified[$value] = 0;
             }
