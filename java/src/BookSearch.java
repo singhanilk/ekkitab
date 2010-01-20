@@ -82,7 +82,7 @@ public class BookSearch {
        */
        String[] words = query.split(" ");
        if (words.length > 1)
-            query = "\"" + query + "\"" + "  " + query;
+            query = "\"" + query + "\"";
 
        Query luceneQuery = qpa.parse(query);
 
