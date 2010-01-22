@@ -34,6 +34,9 @@ class Parser {
 
         function getBook($line) {
             $book = array();
+            $mediatype = substr($line, 412, 1);
+            if (($mediatype != 'B') && ($mediatype != 'N'))  // not a book.
+                return(null);
             $book['isbn10'] = trim(substr($line, 0, 10));
             $book['title']  = $this->escape(trim(substr($line, 11, 149)));
             $edition = trim(substr($line, 191, 4));
@@ -61,6 +64,18 @@ class Parser {
             $book['author'] = $this->escape($author);
             $book['publisher'] = $this->escape(trim(substr($line, 351, 45)));
             $book['isbn13'] = trim(substr($line, 442, 17));
+            $binding = substr($line, 410, 2);
+            if (substr($binding, 0, 1) == 'T')  {
+                $q = substr($binding, 1, 1) ;
+                if ($q == 'P') {
+                    $book['binding'] = "paperback";
+                }
+                elseif ($q == 'C') {
+                    $book['binding'] = "hardcover";
+                }
+                else 
+                    $book['binding'] = "unknown";
+            }
             $book['bisac'][0] = trim(substr($line, 463, 9));
             $book['bisac'][1] = trim(substr($line, 532, 9));
             $book['bisac'][2] = trim(substr($line, 601, 9));

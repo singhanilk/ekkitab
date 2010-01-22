@@ -101,17 +101,19 @@ ini_set("display_errors", 1);
             if (count($line_array) == 2) {
                 $code = strtok($line_array[0], "\"");
                 $fullcat = strtok($line_array[1], "\"");
-                if (! array_key_exists($fullcat, $mastercodes) ) 
-                    $mastercodes[$fullcat] = array($code => 0); 
                 $cats = explode("/", $fullcat);
+                $fullcat = "";
                 $tmp = &$mastercats;
                 for ($i = 0; $i < count($cats); $i++) {
-                    $level = $cats[$i];
+                    $level = trim($cats[$i]);
+                    $fullcat = $fullcat . ($i == 0 ? "" : "/") . $level;
                     if (! array_key_exists($level, $tmp)) {
                         $tmp[$level] = array();
                     }
                     $tmp = &$tmp[$level];
                 }
+                if (! array_key_exists($fullcat, $mastercodes) ) 
+                    $mastercodes[$fullcat] = array($code => 0); 
             }
         }
     }
@@ -208,7 +210,7 @@ ini_set("display_errors", 1);
 
         $header = "INSERT INTO `ek_bisac_category_map` " .
                   "(`bisac_code`, `level1`, `level2`, `level3`, " .
-                  "`level4`, `category_id`, `rewrite_url`) VALUES\n";
+                  "`level4`, `level5`, `level6`, `level7`, `category_id`, `rewrite_url`) VALUES\n";
 
         $mastercodes_copy = array();
 
@@ -260,7 +262,7 @@ ini_set("display_errors", 1);
             for ($j=0; $j<count($cats); $j++) {
                 $line = $line . "'". $cats[$j] . "', ";
             }
-            for ($j = count($cats); $j<4; $j++) {
+            for ($j = count($cats); $j<7; $j++) {
                 $line = $line . "'', ";
             }
             $line = $line . "'$catId'" .","."'$requestpath'"."),\n";  

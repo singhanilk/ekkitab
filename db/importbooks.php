@@ -167,13 +167,14 @@ ini_set("display_errors", 1);
        $book['thumbnail'] = getHash($book['thumbnail']);
        $book['image'] = getHash($book['image']);
 
-       $query = "insert into books (`isbn10`, `isbn`, `author`, `publisher`, `title`, `pages`, " .
+       $query = "insert into books (`isbn10`, `isbn`, `author`, `binding`, `publisher`, `title`, `pages`, " .
                 "`language`, `bisac1`, `cover_thumb`, `image`, `weight`, " .
                 "`dimension`, `edition`, `shipping_region`, `info_source`, `new`, `rewrite_url`) values (";
 
        $query = $query . "'" . $book['isbn'] . "'".",";
        $query = $query . "'" . $book['isbn13'] . "'".",";
        $query = $query . "'" . $book['author'] . "'".",";
+       $query = $query . "'" . $book['binding'] . "'".",";
        $query = $query . "'" . $book['publisher'] . "'".",";
        $query = $query . "'" . $book['title'] . "'".",";
        $query = $query . "'" . $book['pages'] . "'" . ",";
@@ -224,12 +225,18 @@ ini_set("display_errors", 1);
         $parser       = new Parser;
         $i            = 1;
         $unresolved   = 0;
+        $ignored      = 0;
         $errorcount   = 0;
         $filenotfound = 0;
         $shipregion   = 0; 
     
         while ($line = fgets($fh)) {
             $book = $parser->getBook($line);
+            if ($book == null) {
+                $i++;
+                $ignored++;
+                continue;
+            }
             $book = addCategoryCodes($book, $db);
             if (!strcmp($book['catcode'][0], "")) { 
                 $unresolved++;
@@ -247,11 +254,12 @@ ini_set("display_errors", 1);
             }
         
             if ($i++ % 10000 == 0) {
-                $inserted = $i - ($errorcount + $unresolved + $filenotfound + 1);
-                debug("Processed $i books. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$filenotfound] files not found.\n");
+                $inserted = $i - ($errorcount + $unresolved + $filenotfound + $ignored + 1);
+                debug("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored.\n");
             }
         }
         writeUnclassifiedCodesToFile($infosource);
+        debug("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored.\n");
     
         fclose($fh);
         mysqli_close($db);
@@ -260,5 +268,5 @@ ini_set("display_errors", 1);
     $start = (float) array_sum(explode(' ', microtime()));
     start($argc, $argv);
     $end = (float) array_sum(explode(' ', microtime()));
-    echo "Processing time: " . sprintf("%.2f", ($end - $start)) . " seconds.\n";
+    echo "Processing time: " . sprintf("%.2f", ($end - $start)/60) . " minutes.\n";
 ?>
