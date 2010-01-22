@@ -22,7 +22,7 @@
 		<?php foreach ($categories as $category): ?>
 			<?php if($category->getIsActive()):
 				$url = $this->helper('ekkitab_catalog')->getEncodedString($category->getName());
-				$url = $this->helper('ekkitab_catalog')->getCustomSearchResultByIndexUrl(null,array('category' => $url));
+				$url = $this->helper('ekkitab_catalog')->getSearchResultByIndexUrl(null,array('category' => $url));
 			?>
 			 <li>
 				<a href="<?php echo $url ?>"<?php if ($this->isCategoryActive($category)): ?> class="active"<?php endif ?>><?php echo $this->htmlEscape($category->getName()) ?></a> </li>

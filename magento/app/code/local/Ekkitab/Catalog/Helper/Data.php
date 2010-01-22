@@ -81,7 +81,7 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
      * @param   string $query
      * @return  string
      */
-    public function getCustomSearchResultByIndexUrl($query = null,$params=null)
+    public function getSearchResultByIndexUrl($query = null,$params=null)
     {
 		$urlprefix = 'ekkitab_catalog/search/index';
 		$url='';
@@ -102,13 +102,22 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
         $urlParams['_query']    = array(self::QUERY_VAR_NAME =>$query);
 		$url = $this->_getUrl($url,$urlParams);
         return $url;
-		//return $this->_getUrl('ekkitab_catalog/search/index', array('_query' => array(
-          //  self::QUERY_VAR_NAME => $query
-        //)));
     }
 
 
-
+    /**
+     * Retrieve result page url
+     *
+     * @param   string $query
+     * @return  string
+     */
+    public function getFormSearchResultByIndexUrl($query = null)
+    {
+		return $this->_getUrl('ekkitab_catalog/search/index', array('_query' => array(
+          self::QUERY_VAR_NAME => $query
+        )));
+    }
+	
 	/**
      * Retrieve search query text
      *

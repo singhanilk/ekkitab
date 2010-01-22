@@ -4,9 +4,10 @@
  *
  */
 ?>
+<!-- // this is testing -->
 <div class="topSearchArea">
 	<div class="searchText">Search for</div>
-	<form id="custom_search_mini_form" action="<?php echo $this->helper('ekkitab_catalog')->getCustomSearchResultByIndexUrl() ?>" method="get">
+	<form id="custom_search_mini_form" action="<?php echo $this->helper('ekkitab_catalog')->getFormSearchResultByIndexUrl() ?>" method="get">
 		<fieldset>
 			<legend><?php echo $this->__('Search Site') ?></legend>
 			   <input id="search" type="text" class="textField" name="<?php echo $this->helper('ekkitab_catalog')->getQueryParamName() ?>" value="<?php echo $this->helper('ekkitab_catalog')->getEscapedQueryText() ?>" />

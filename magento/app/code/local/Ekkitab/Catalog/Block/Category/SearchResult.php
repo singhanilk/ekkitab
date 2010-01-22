@@ -162,8 +162,6 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 		try{
 			require($javaIncFile);
 			$search = new java("BookSearch",$indexFilePath );
-			Mage::log("In SearchResult....before decoding....plain category path=> ". $this->getCurrentCategoryPath());
-			Mage::log("In SearchResult....after decoding.... :". $this->getDecodedString($this->getCurrentCategoryPath()));
 			$categoryPath = strtolower(str_replace('__', "/", $this->getCurrentCategoryPath())); // this is to parse the parents and child categories seperated by '__'
 			$results = $search->searchBook($this->getDecodedString($categoryPath),$this->helper('ekkitab_catalog')->getEscapedQueryText(), $this->getPageSize(), $this->getCurrentPageNumber());
 		}
