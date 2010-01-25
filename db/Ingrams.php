@@ -88,5 +88,29 @@ class Parser {
             $book['sourced_from'] = "US";
             return($book);
         }
+
+		function getPrice($line){
+			$listprice    = substr($line,150,6)/100;
+			$discount     = substr($line,163,3);
+			if ($discount = 'REG'){
+				$discount = 40;
+			}
+			elseif ($dicount = 'NET'){
+				$discount = 0;
+			}
+			elseif ($discount = 'LOW'){
+				$discount = 20;
+			}
+			else{
+				$discount = str_replace("%", "", $discount);
+			}
+			
+			$price = array();
+			$price['LIST_PRICE']		 = $listprice;
+			$price['SUPPLIERS_DISCOUNT'] = $discount;
+			$price['CURRENCY']           = 'USD';
+
+			return($price);
+		}
 }
 ?>
