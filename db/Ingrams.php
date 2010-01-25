@@ -85,6 +85,7 @@ class Parser {
             $book['pubcode'] = trim(substr($line, 827,  4));
             $book['thumbnail'] = $book['isbn13'].".jpg";
             $book['image'] = $book['thumbnail'];
+            $book['sourced_from'] = "US";
             return($book);
         }
 }

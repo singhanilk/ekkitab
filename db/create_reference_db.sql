@@ -71,6 +71,7 @@ CREATE TABLE `books` (
   `INT_SHIPPING` TINYINT UNSIGNED default '0',
   `RATING` TINYINT UNSIGNED,
   `INFO_SOURCE` varchar(40) NOT NULL,
+  `SOURCED_FROM` varchar(16) NOT NULL default 'India',
   `UPDATED_DATE` date NOT NULL,
   `NEW` TINYINT UNSIGNED NOT NULL default '0',
   `PRODUCT_STATUS` TINYINT UNSIGNED NOT NULL default '1',
@@ -100,5 +101,27 @@ CREATE TABLE IF NOT EXISTS `ek_bisac_category_map` (
   UNIQUE KEY `BISAC_CODE` (`BISAC_CODE`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8  AUTO_INCREMENT=1 ;
 
+--
+-- Table structure for `ek_currency_conversion`
+--
+
+CREATE TABLE IF NOT EXISTS `ek_currency_conversion` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `CURRENCY` varchar(16) NOT NULL,
+  `CONVERSION` decimal NOT NULL default 1.0,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `UNIQUE_CURRENCY` (`CURRENCY`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  AUTO_INCREMENT=1 ;
 
 
+--
+-- Table structure for `ek_discount_setting`
+--
+
+CREATE TABLE IF NOT EXISTS `ek_discount_setting` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `INFO_SOURCE` varchar(40) NOT NULL,
+  `DISCOUNT_PERCENT` smallint NOT NULL default 100,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `UNIQUE_INFO_SOURCE` (`INFO_SOURCE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  AUTO_INCREMENT=1 ;
