@@ -24,8 +24,13 @@ public class BookIndex {
     private static final int URL_ATTR_ID    = 83;
     private static final int IMAGE_ATTR_ID  = 71;
     private static final int TITLE_ATTR_ID  = 56;
-    private static final String QUERY_EACH_BOOK = "select value from catalog_product_entity_varchar where attribute_id in (" +
-                                 " ?, ?, ?, ?) and entity_id = ? order by attribute_id desc"; 
+    private static final int PRICE_ATTR_ID  = 60;
+    private static final int DISCOUNTED_PRICE_ATTR_ID  = 61;
+    private static final int SOURCED_FROM_ATTR_ID  = 512;
+    private static final String QUERY_EACH_BOOK_VARCHAR = "select value from catalog_product_entity_varchar where attribute_id in (" +
+                                 " ?, ?, ?, ?, ?) and entity_id = ? order by attribute_id desc"; 
+    private static final String QUERY_EACH_BOOK_DECIMAL = "select value from catalog_product_entity_decimal where attribute_id in (" +
+                                 " ?, ?) and entity_id = ? order by attribute_id desc"; 
 
     IndexWriter indexWriter = null;
 
@@ -53,15 +58,16 @@ public class BookIndex {
 	}
 
 	private String[] getBook(int bookId) throws Exception {
-        PreparedStatement stmt = connection.prepareStatement(QUERY_EACH_BOOK);
+        PreparedStatement stmt = connection.prepareStatement(QUERY_EACH_BOOK_VARCHAR);
         stmt.setInt(1, TITLE_ATTR_ID);
         stmt.setInt(2, IMAGE_ATTR_ID);
         stmt.setInt(3, URL_ATTR_ID);
         stmt.setInt(4, AUTHOR_ATTR_ID);
-        stmt.setInt(5, bookId);
+        stmt.setInt(5, SOURCED_FROM_ATTR_ID);
+        stmt.setInt(6, bookId);
 
         ResultSet result = stmt.executeQuery();
-        String[] book = new String[5];;
+        String[] book = new String[8];
         book[0] = Integer.toString(bookId);
         int i  = 1;
         while (result.next()) {
@@ -69,6 +75,20 @@ public class BookIndex {
         }
         result.close();
         stmt.close();
+
+        stmt = connection.prepareStatement(QUERY_EACH_BOOK_DECIMAL);
+        stmt.setInt(1, PRICE_ATTR_ID);
+        stmt.setInt(2, DISCOUNTED_PRICE_ATTR_ID);
+        stmt.setInt(3, bookId);
+
+        result = stmt.executeQuery();
+        i = 6;
+        while (result.next()) {
+            book[i++] = result.getString("value");
+        }
+        result.close();
+        stmt.close();
+
         return book;
     }
 
@@ -92,10 +112,13 @@ public class BookIndex {
     public void addDocument(String[] parts) throws Exception {
         Document doc = new Document();
         doc.add(new Field("entityId", parts[0], Field.Store.YES, Field.Index.NO));
-        doc.add(new Field("author", parts[1], Field.Store.YES, Field.Index.TOKENIZED));
-        doc.add(new Field("url", parts[2], Field.Store.YES, Field.Index.NO));
-        doc.add(new Field("image", parts[3], Field.Store.YES, Field.Index.NO));
-        doc.add(new Field("title", parts[4], Field.Store.YES, Field.Index.TOKENIZED));
+        doc.add(new Field("sourcedfrom", parts[1], Field.Store.NO, Field.Index.TOKENIZED));
+        doc.add(new Field("author", parts[2], Field.Store.YES, Field.Index.TOKENIZED));
+        doc.add(new Field("url", parts[3], Field.Store.YES, Field.Index.NO));
+        doc.add(new Field("image", parts[4], Field.Store.YES, Field.Index.NO));
+        doc.add(new Field("title", parts[5], Field.Store.YES, Field.Index.TOKENIZED));
+        doc.add(new Field("discountprice", parts[6], Field.Store.YES, Field.Index.NO));
+        doc.add(new Field("listprice", parts[7], Field.Store.YES, Field.Index.NO));
         indexWriter.addDocument(doc);
     }
 

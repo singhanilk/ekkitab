@@ -46,6 +46,8 @@ public class BookSearch {
                 book.put("title", getFieldValue(doc.getField("title")));
                 book.put("image", getFieldValue(doc.getField("image")));
                 book.put("url", getFieldValue(doc.getField("url")));
+                book.put("listprice", getFieldValue(doc.getField("listprice")));
+                book.put("discountprice", getFieldValue(doc.getField("discountprice")));
                 book.put("entityId", getFieldValue(doc.getField("entityId")));
                 books.add(book);
             }
@@ -66,7 +68,7 @@ public class BookSearch {
        int endIndex   = startIndex + pageSz;
 
        QueryParser qpt = new QueryParser("title", new SimpleAnalyzer());
-       QueryParser qpa = new QueryParser("author", new SimpleAnalyzer());
+       //QueryParser qpa = new QueryParser("author", new SimpleAnalyzer());
 
        //alter query to match lucene syntax.
        /*
@@ -86,6 +88,7 @@ public class BookSearch {
             query = "\"" + query + "\"";
 
        StringBuffer sb = new StringBuffer();
+       sb.append("sourcedfrom: India^5 ");
        sb.append(query);
        sb.append(" author:" + query+ " ");
        for (String word: words) {
@@ -151,6 +154,8 @@ public class BookSearch {
                   System.out.println("Title: "+book.get("title"));
                   System.out.println("Url: "+book.get("url"));
                   System.out.println("Image: "+book.get("image"));
+                  System.out.println("Price: "+book.get("listprice"));
+                  System.out.println("Discounted Price: "+book.get("discountprice"));
                   System.out.println("Id: "+book.get("entityId"));
                   System.out.println("--------------------------------------");
               }

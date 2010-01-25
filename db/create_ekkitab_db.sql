@@ -3571,7 +3571,8 @@ INSERT INTO `eav_attribute` (`attribute_id`, `entity_type_id`, `attribute_code`,
 (507, 4, 'bo_edition', NULL, NULL, 'varchar', NULL, NULL, 'text', NULL, 'Edition', '', NULL, 0, 1, 0, 1, '', 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, '', 0, '', 1),
 (508, 4, 'bo_int_shipping', NULL, NULL, 'int', NULL, NULL, 'boolean', NULL, 'International Shipping', '', NULL, 0, 1, 0, 1, '0', 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, '', 0, '', 1),
 (509, 4, 'bo_rating', NULL, NULL, 'varchar', NULL, NULL, 'text', NULL, 'Rating', '', NULL, 0, 1, 0, 1, '', 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, '', 0, '', 0),
-(511, 4, 'bo_shipping_region', NULL, NULL, 'varchar', NULL, NULL, 'text', NULL, 'Shipping Region', 'validate-digits', NULL, 0, 1, 1, 1, '', 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, '', 0, '', 0);
+(511, 4, 'bo_shipping_region', NULL, NULL, 'varchar', NULL, NULL, 'text', NULL, 'Shipping Region', 'validate-digits', NULL, 0, 1, 1, 1, '', 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, '', 0, '', 0),
+(512, 4, 'bo_sourced_from', NULL, NULL, 'varchar', NULL, NULL, 'text', NULL, 'Sourced From', '', NULL, 0, 1, 1, 1, '', 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, '', 0, '', 0);
 
 --
 -- Table structure for table `eav_attribute_group`

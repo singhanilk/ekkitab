@@ -42,6 +42,7 @@ define (PRODUCT_STATUS,'PRODUCT_STATUS');
 define (INT_SHIPPING,'INT_SHIPPING');
 define (SOURCE,'INFO_SOURCE');
 define (REWRITE_URL,'REWRITE_URL');
+define (SOURCED_FROM,'SOURCED_FROM');
 
 // constants used in the script
 
@@ -81,6 +82,7 @@ define (bo_illustrator_id,506);					 // book illustrator eav attribute code
 define (bo_edition_id,507);						 // book edition attribute code
 define (bo_rating_id,509);						 // book rating attribute code
 define (bo_shipping_region_id,511);				 // book shipping region attribute code
+define (bo_sourced_from,512);				     // India or International 
 define (options_container_value,"container2");   // value of the option_container
 
 

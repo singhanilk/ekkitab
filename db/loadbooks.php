@@ -434,6 +434,7 @@ ini_set("display_errors", 1);
         $val_array[] = array(entity_type_id,bo_small_image_id,store_id,$entityIds[CPE], "'$imagepath'");
         $val_array[] = array(entity_type_id,bo_thumb_image_id,store_id,$entityIds[CPE], "'$thumbnailpath'");
         $val_array[] = array(entity_type_id,bo_shipping_region_id,store_id,$entityIds[CPE], "'$book[SHIPPING_REGION]'");
+        $val_array[] = array(entity_type_id,bo_sourced_from,store_id,$entityIds[CPE], "'$book[SOURCED_FROM]'");
         $queries[] = createInsertQuery("catalog_product_entity_varchar", 
                                        "entity_type_id, attribute_id, store_id, entity_id, value",
                                        $val_array);
