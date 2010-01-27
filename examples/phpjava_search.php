@@ -5,7 +5,7 @@
 // This is very rough coding and has no proper exception handling. Beware!
 
 require_once("http://localhost:8080/JavaBridge/java/Java.inc");
-$search = new java("BookSearch", "/home/vijay/tmp/index");
+$search = new java("BookSearch", "/var/www/scm/magento/search_index_dir");
 while ($query = readline("What do you want to search for? ")) {
         $start = (float) array_sum(explode(' ', microtime()));
         $page_sz = 10;
@@ -27,10 +27,14 @@ while ($query = readline("What do you want to search for? ")) {
                 $image = $book->get("image");
                 $url = $book->get("url");
                 $id = $book->get("entityId");
+                $price = $book->get("listprice");
+                $discountprice = $book->get("discountprice");
                 echo "Author: $author\n";
                 echo "Title: $title\n";
                 echo "Url: $url\n";
                 echo "Image: $image\n";
+                echo "List Price: $price\n";
+                echo "Discounted Price: $discountprice\n";
                 echo "Id: $id\n";
                 echo "------------------------\n";
             } 
