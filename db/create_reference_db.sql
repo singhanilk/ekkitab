@@ -50,8 +50,8 @@ CREATE TABLE `books` (
   `PAGES` INT NOT NULL default '0',
   `LANGUAGE` varchar(20),
   `LIST_PRICE` decimal(6,2),
-  `DISCOUNT` decimal(4,2),
-  `SUPPLIERS_PRICE` decimal(6,2),
+  `DISCOUNT_PRICE` decimal(4,2),
+  `SUPPLIERS_PRICE` decimal(4,2),
   `SUPPLIERS_DISCOUNT` decimal(4,2),
   `CURRENCY` varchar(20),
   `BISAC1` varchar(255) NOT NULL,
@@ -60,7 +60,9 @@ CREATE TABLE `books` (
   `DELIVERY_PERIOD` TINYINT UNSIGNED,
   `COVER_THUMB` varchar(80),
   `IMAGE` varchar(80),
-  `IN_STOCK` BIT,
+  `IN_STOCK` tinyint(1) default 0,
+  `STOCK_UPDATED` tinyint(1) default 0,
+  `PRICE_UPDATED` tinyint(1) default 0,
   `QTY` INT UNSIGNED,
   `WEIGHT` decimal(6,2),
   `DIMENSION` varchar(80),
@@ -108,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `ek_bisac_category_map` (
 CREATE TABLE IF NOT EXISTS `ek_currency_conversion` (
   `ID` int NOT NULL AUTO_INCREMENT,
   `CURRENCY` varchar(16) NOT NULL,
-  `CONVERSION` decimal NOT NULL default 1.0,
+  `CONVERSION` decimal (4,2) NOT NULL default 1.0,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UNIQUE_CURRENCY` (`CURRENCY`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8  AUTO_INCREMENT=1 ;
