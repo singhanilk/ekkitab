@@ -5,4 +5,5 @@ define("IMPORTBOOKS_INI", "/var/www/scm/config/importbooks.ini");
 define("IMPORTBOOKS_CLASSDIR", ".");
 define("IMPORTBOOKS_UNCLASSIFIED", "./unclassified_codes");
 define("EKKITAB_HOME", "/var/www/scm");
+define("BISAC_CODE_EQUIVALENTS", EKKITAB_HOME . "/db/" . "bisac_equivalents.txt");
 ?>

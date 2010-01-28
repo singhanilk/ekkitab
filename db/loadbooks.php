@@ -345,15 +345,11 @@ ini_set("display_errors", 1);
         if (empty($book[PRICE])) {
             $book[PRICE] = 0.0;
         }
-        if (empty($book[DISCOUNT])) {
-            $book[DISCOUNT] = 0.0;
-        }
         if (empty($book[WEIGHT])) {
             $book[WEIGHT] = 0.0;
         }
 
-		$discount_price = 0.00;
-		$discount_price = $book[PRICE]-($book[PRICE]*($book[DISCOUNT]/100));
+		$discount_price = empty($book[DISCOUNT_PRICE]) ? 0.0 : $book[DISCOUNT_PRICE];
 
         $val_array   = array();
         $val_array[] = array(entity_type_id, price_id, store_id, $entityIds[CPE], $book[PRICE]);
@@ -463,7 +459,7 @@ ini_set("display_errors", 1);
             $book[QTY] = 0;
         } 
         $val_array = array();
-        $val_array[] = array($entityIds[CPE], stock_id,$book[QTY], use_config_backorders, is_in_stock);
+        $val_array[] = array($entityIds[CPE], stock_id, $book[QTY], use_config_backorders, $book[IN_STOCK]);
         $queries[] = createInsertQuery("cataloginventory_stock_item", 
                                        "product_id, stock_id, qty, use_config_backorders, is_in_stock",
                                        $val_array);
@@ -553,9 +549,7 @@ ini_set("display_errors", 1);
         $queries[] = createUpdateQuery("catalog_product_entity_decimal",
                                         $book[PRICE], array(entity_id => $id, attribute_id => price_id));
 		
-		//calculate the discounted Price
-		$discount_price = 0.00;
-		$discount_price = $book[PRICE]-($book[PRICE]*($book[DISCOUNT]/100));
+		$discount_price = empty($book[DISCOUNT_PRICE]) ? 0.0 : $book[DISCOUNT_PRICE];
 
         $queries[] = createUpdateQuery("catalog_product_entity_decimal", 
                                         $discount_price, array(entity_id => $id, attribute_id => special_price_id));
