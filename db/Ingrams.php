@@ -94,7 +94,7 @@ class Parser {
 			$listprice    = substr($line,150,6)/100;
 			$discount     = substr($line,163,3);
 			
-			//Extracting the Discount Info
+			//Extracting the Supplier Discount Info
 			if ($discount = 'REG'){
 				$discount = 40;
 			}
