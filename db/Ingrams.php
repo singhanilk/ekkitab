@@ -88,5 +88,55 @@ class Parser {
             $book['sourced_from'] = "US";
             return($book);
         }
+
+		function getStockPrice($line){
+			
+			$listprice    = substr($line,150,6)/100;
+			$discount     = substr($line,163,3);
+			
+			//Extracting the Supplier Discount Info
+			if ($discount = 'REG'){
+				$discount = 40;
+			}
+			elseif ($dicount = 'NET'){
+				$discount = 0;
+			}
+			elseif ($discount = 'LOW'){
+				$discount = 20;
+			}
+			else{
+				$discount = str_replace("%", "", $discount);
+			}
+			
+			//Extracting the Stock Info
+			$stock = 0;
+			$distCenterStk = array();
+			$pos = 38;
+
+			while($pos <= 60){
+				$distCenterStk[] = substr($line,38,7) ;
+				$pos = $pos + 7;
+			}
+			$distCenterStk[] = substr($line,87,7) ;
+
+			foreach($distCenterStk as $value){
+				if($value > 0){
+					$stock = 1;
+				}
+			}
+			
+			if($discount == 0){
+				$stock = 0;
+			}
+
+			$book = array();
+			$book['LIST_PRICE']		    = $listprice;
+			$book['SUPPLIERS_DISCOUNT'] = $discount;
+			$book['CURRENCY']           = "'USD'";
+			$book['IN_STOCK']           = $stock;
+			$book['DELIVERY_PERIOD']    = 14;
+
+			return($book);
+		}
 }
 ?>
