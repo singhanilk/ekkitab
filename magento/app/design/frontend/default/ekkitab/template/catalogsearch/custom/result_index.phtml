@@ -14,10 +14,15 @@
  * 
  */
 ?>
-<?php $results=$this->getProductCollection();
-	  $bookList = $results->get("books");
-	  $count = java_values($bookList->size());
-	  if(!is_null($bookList) && $count >0 ):
+<?php 
+	$results=$this->getProductCollection();
+	if(!is_null($results)){
+		$bookList = $results->get("books");
+		$count =0;
+		if(!is_null($bookList)){
+			$count = java_values($bookList->size());
+		}
+		if(!is_null($bookList) && $count >0 ):
 ?>
 <?php echo $this->getMessagesBlock()->getGroupedHtml()  ?>
 	<div class="page-head">
@@ -36,6 +41,12 @@
     <table class="pager" cellspacing="0">
         <tr>
             <td>
+			 <?php if($this->getLastPageNum()>1): ?>
+                <?php echo $this->__('Items %s to %s of %s total', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+            <?php else: ?>
+                <strong><?php echo $this->__('%s Item(s)', $this->getTotalNum()) ?></strong>
+            <?php endif; ?>
+
             </td>
             <?php if($this->getLastPageNumber()>1): ?>
             <td class="pages">
@@ -79,6 +90,9 @@
 				$image = $book->get("image");
 				$url = $book->get("url");
 				$id = $book->get("entityId");
+				$listPrice = java_values($book->get("listprice")) ;
+				$discPrice = java_values($book->get("discountprice"));
+				$savingsPerct= ($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 10;
 		?>
 		<?php if ($i++%$_columnCount==0): ?>
 			<tr>
@@ -90,7 +104,9 @@
 				</p>
 				<h5><a href="<?php echo $this->getUrl($url)?>" title="<?php echo $title ?>"><?php echo $title ?></a></h5><h4> by <?php echo $author ?> </h4>
 				<div class="price-box">
-					<span class="regular-price" id="product-price-<?php echo $id ?>"><span class="price">Rs 0.0</span></span>
+                    <p class="old-price"><span class="price" id="old-price-<?php echo $id ?>"><?php echo Mage::helper('core')->currency($listPrice,true,false) ?></span></p>
+					<p class="special-price"><span class="price" id="product-price-<?php echo $id ?>"><?php echo Mage::helper('core')->currency($discPrice,true,false) ?></span></p>
+					<?php if($savingsPerct >0) :?> <p class="savings-percentage">You Save : <?php echo number_format($savingsPerct,2,'.','') ?>%</span></p><?php endif; ?>
 				</div>
 				<a href="#" onclick="setLocation('<?php echo $this->getAddToCartUrl($id)?>')"><img src="<?php echo $this->getSkinUrl('images/btn_add_to_cart.gif') ?>" alt="<?php echo $this->__('Add to Cart') ?>"></a>
 				<div class="clear"></div>
@@ -129,4 +145,11 @@
 		<?php echo $this->__('There are no products matching the selection.') ?>
 	</div>
 	</div>
-<?php endif; ?>
+<?php endif;
+} else {
+?>
+    <div class="page-head">
+        <h3><?php echo ($this->getHeaderText() || $this->getHeaderText() === false) ? $this->getHeaderText() : $this->__("Search results for '%s'", $this->helper('ekkitab_catalogsearch')->getEscapedQueryText()) ?></h3>
+    </div>
+    <div class="note-msg"> Sorry, we are unable to process your request now. Please try again later or write to us if the problem persists.</div>
+<?php } ?>

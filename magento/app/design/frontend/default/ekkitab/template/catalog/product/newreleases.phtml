@@ -18,23 +18,27 @@
 		$products= $this->getNewreleases();
 		$_count = is_array($products)?count($products):$products->count(); 
 ?>
-<div class="promo-box" >
-    <h3>New Releases</h3>
-	<table border="0" cellspacing="0">
-		<tbody>
-		<?php if($_count): ?>
-			<tr class="odd">
-				<?php foreach ($products as $product): ?>
-				<td><p class="product-image">
-					 <a href="<?php echo $product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>"><img src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->keepFrame(false)->resize(null, 170); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" />
-					</a></p>
-					<p><a href="<?php echo $product->getProductUrl() ?>"  title="<?php echo $product->getTitle() ?>"><?php echo $this->htmlEscape($product->getName())?></a></p>
-				</td>
-				<?php endforeach ?>
-			</tr>
-			<?php else: ?>
-				<tr class="odd"><td style="width:100%">This section will be updated soon</td></tr>
-			<?php endif; ?>
-         </tbody>
-	</table>
-</div>
+<?php if($_count): ?>
+	<div class="hmScrollRow">
+		<div class="mainLeftHdr">New Releases</div>
+		<div class="hmInScrollRow">
+		<?php foreach ($products as $product): ?>
+			<div class="vColumns">
+				<a href="<?php echo $product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>"><img src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->keepFrame(false)->resize(null, 100); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" />
+				</a> 
+				<div class="titleEtc">
+					<div class="bkTitle"><a href="<?php echo $product->getProductUrl() ?>"  title="<?php echo $product->getTitle() ?>"><?php echo $this->htmlEscape($product->getName())?></a></div><!-- bkTitle -->
+					<div class="authorEtc">Steven D. Levitt</div>
+					<div class="authorEtc">Our Price: Rs. 340</div>
+					<div class="youSave">Save 19% off</div>
+				</div><!-- titleEtc -->
+			</div>
+		<?php endforeach ?>
+		<div class="clear"></div>
+		</div><!-- hmInScrollRow -->
+	</div><!-- hmScrollRow -->
+<?php else: ?>
+	<div class="hmMainRows">
+		<div class="mainLeftHdr">New Releases</div>This section will be updated soon.
+	</div><!-- hmMainRows -->
+<?php endif; ?>
