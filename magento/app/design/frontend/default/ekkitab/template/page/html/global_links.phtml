@@ -1,7 +1,7 @@
 <?php
 /**
  * 
- * Frontend Popular Categories Template
+ * Frontend Quick search Block
  * @category   design/ekkitab
  * @author Anisha (anisha@ekkitab.com)
  * @version 1.0 Nov 17, 2009
@@ -14,22 +14,6 @@
  * 
  */
 ?>
-<?php 
-		$_categories= $this->getPopularCategories();
-		$_count = is_array($_categories)?count($_categories):$_categories->count(); 
-?>
-<div class="linkHdr">Popular Categories</div><!-- linkHdr -->
-<ul>
-<?php if($_count): ?>
-	<?php foreach ($_categories as $_category): ?>
-		<?php if($_category->getIsActive()): 
-				$randNo = 10 * $_category->getPopularity();
-			?>
-			<li>
-				<a href="<?php echo $_category->getUrlPath() ?>"><?php echo $this->htmlEscape($_category->getCategory()) ?></a>&nbsp;
-			</li>
-		<?php endif; ?>
-	<?php endforeach ?>
-<?php endif; ?>
-</ul>
-<div class="seeAll"><a href="ekkitab_catalog/category/viewAll" >See all &raquo;</a></div><!-- seeAll -->
+<div class="globalLinks">
+<a href="#">Great Bargains</a> | <a href="#">Top Books of the Month</a> | <a href="#">Top Books of 2009</a> | <a href="#">Top Children's Books</a> | <a href="#">Top Authors</a> | <a href="#">Best Indian Books</a>
+</div>

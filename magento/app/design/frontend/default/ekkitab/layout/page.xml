@@ -59,9 +59,12 @@ Default layout, loads most of the pages
                 <action method="addItem"><type>js</type><name>varien/iehover-fix.js</name><params/><if>lt IE 7</if></action>
 
                 <action method="addCss"><stylesheet>css/print.css</stylesheet><params>media="print"</params></action>
+                <action method="addCss"><stylesheet>css/styles.css</stylesheet></action>
             </block>
 
             <block type="page/html_notices" name="global_notices" as="global_notices" template="page/html/notices.phtml" />
+
+            <block type="page/html" name="global_links" as="global_links" template="page/html/global_links.phtml" />
 
             <block type="page/switch" name="store_language" as="store_language" template="page/switch/languages.phtml"/>
             <block type="page/html_header" name="header" as="header">
