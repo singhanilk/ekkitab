@@ -97,6 +97,8 @@ ini_set("display_errors", 1);
             return;
 
         while ($line = fgets($fh)) {
+            if (substr($line,0,1) == '#')  //comment
+                continue;
             $line_array = explode ("%", rtrim($line));
             if (count($line_array) == 2) {
                 $code = strtok($line_array[0], "\"");

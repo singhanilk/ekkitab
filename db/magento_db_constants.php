@@ -15,6 +15,7 @@ define (ISBN,'ISBN');
 define (AUTHOR,'AUTHOR');
 define (TITLE,'TITLE');
 define (PRICE,'LIST_PRICE');
+define (DISCOUNT_PRICE,'DISCOUNT_PRICE');
 define (BINDING,'BINDING');
 define (WEIGHT,'WEIGHT');
 define (PAGES,'PAGES');
@@ -43,6 +44,7 @@ define (INT_SHIPPING,'INT_SHIPPING');
 define (SOURCE,'INFO_SOURCE');
 define (REWRITE_URL,'REWRITE_URL');
 define (SOURCED_FROM,'SOURCED_FROM');
+define (IN_STOCK,'IN_STOCK');
 
 // constants used in the script
 

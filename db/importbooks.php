@@ -25,6 +25,7 @@ ini_set("display_errors", 1);
 
     define(UNCLASSIFIED, "ZZZ000000");
     $unclassified = array();
+    $equivalents = array();
 
     // global logger
     $logger =& LoggerManager::getLogger("loadbooks");
@@ -103,10 +104,29 @@ ini_set("display_errors", 1);
            warn("Could not open unclassified file: ".IMPORTBOOKS_UNCLASSIFIED);
         else {
            foreach($unclassified as $key => $value) {
-               fprintf($fh, "%s - %s - %s\n", $infosource, date("d-M-Y H:i:s"), $key);
+               fprintf($fh, "%s - %s - %s[%s]\n", $infosource, date("d-M-Y H:i:s"), $key, $value);
            }
            fclose($fh);
         }
+    }
+
+   /** 
+    *  Read equivalents for BISAC codes. 
+    */
+    function readBisacEquivalents() {
+        global $equivalents;
+        $fh = fopen(BISAC_CODE_EQUIVALENTS, "r"); 
+        if (!$fh) 
+           warn("Could not open bisac equivalents file: ". BISAC_CODE_EQUIVALENTS);
+        else {
+           while ($line = fgets($fh)) {
+              $codes = explode("=", $line);
+              $equivalents[$codes[0]] = trim($codes[1]);
+           }
+           fclose($fh);
+        }
+        foreach($equivalents as $key => $value)
+              echo "Code $key is equivalent to $value\n";
     }
 
    /** 
@@ -134,27 +154,45 @@ ini_set("display_errors", 1);
     */
     function addCategoryCodes($book, $db) {
       global $unclassified;
+      global $equivalents;
+
+      $catIds = array();
 
       $book['catcode'] = "";
       if (! empty($book['bisac'])) {
         foreach($book['bisac'] as $value) {
-            $lookup = "select category_id,rewrite_url from ek_bisac_category_map where bisac_code = '". $value . "'";
-            $result = mysqli_query($db, $lookup);
-            if (($result) && (mysqli_num_rows($result) > 0)){
-	            $row = mysqli_fetch_array($result);
-                $book['catcode'] = $row[0] . ",";
-                $book['rewrite_url'] = $row[1];
-            }
-            else {
-                $tmp = getUnclassifiedCategoryCode($db);
-                $book['catcode'] = $tmp['catcode'] . ",";
-                $book['rewrite_url'] = $tmp['rewrite_url'];
-                $unclassified[$value] = 0;
+            if (strcmp($value, "")) {
+                if (!empty($equivalents[$value]))
+                    $value = $equivalents[$value];
+                $lookup = "select category_id,rewrite_url from ek_bisac_category_map where bisac_code = '". $value . "'";
+                $result = mysqli_query($db, $lookup);
+                if (($result) && (mysqli_num_rows($result) > 0)){
+	                $row = mysqli_fetch_array($result);
+                    $ids = explode(",", $row[0]);
+                    foreach($ids as $id) {
+                        $catIds[$id] = 1;
+                    }
+                    $book['rewrite_url'] = $row[1];
+                }
+                else {
+                    $unclassified[$value]++;
+                }
             }
         }
       }
-      if (strcmp($book['catcode'], "")) 
-        $book['catcode'] = substr($book['catcode'], 0, strrpos($book['catcode'], ","));
+      if (empty($catIds)) {
+         $book['unclassified'] = true;
+         $tmp = getUnclassifiedCategoryCode($db);
+         $ids = explode(",", $tmp['catcode']);
+         foreach($ids as $id) {
+             $catIds[$id] = 1;
+         }
+         $book['rewrite_url'] = $tmp['rewrite_url'];
+      }
+      else 
+         $book['unclassified'] = false;
+
+      $book['catcode'] = implode(",", array_keys($catIds));
 
       return ($book);
     }
@@ -217,6 +255,8 @@ ini_set("display_errors", 1);
         if (!$fh) {
             fatal("Could not open data file: $argv[2]");
         }
+
+        readBisacEquivalents();
         $infosource = $argv[1];
         $language   = $argv[3];
         require_once(IMPORTBOOKS_CLASSDIR . "/" . $infosource . ".php");
@@ -234,33 +274,28 @@ ini_set("display_errors", 1);
         while ($line = fgets($fh)) {
             $book = $parser->getBook($line);
             if ($book == null) {
-                $i++;
                 $ignored++;
-                continue;
-            }
-            $book = addCategoryCodes($book, $db);
-            if (!strcmp($book['catcode'][0], "")) { 
-                $unresolved++;
-                //debug("Unresolved: " . $book['bisac'][0]);
-            }
-            //elseif (!file_exists("../magento/media/catalog/product/9/7/" . $book['thumbnail'])) {
-                //$filenotfound++;
-                //debug("File not found: " . $book['thumbnail']);
-            //}
-            elseif (!insertBook($book, $db, $language, $shipregion, $infosource)){
-                $errorcount++;
             }
             else {
-                //debug("Updated book: " . $book['isbn13']);
+                $book = addCategoryCodes($book, $db);
+                if (empty($book['catcode'])) { 
+                    $unresolved++;
+                }
+                elseif (!insertBook($book, $db, $language, $shipregion, $infosource)){
+                    $errorcount++;
+                }
+                if ($book['unclassified'])
+                    $unclassified++;
             }
         
             if ($i++ % 10000 == 0) {
                 $inserted = $i - ($errorcount + $unresolved + $filenotfound + $ignored + 1);
-                debug("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored.\n");
+                debug("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.\n");
             }
         }
+        $inserted = $i - ($errorcount + $unresolved + $filenotfound + $ignored + 1);
         writeUnclassifiedCodesToFile($infosource);
-        debug("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored.\n");
+        debug("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.\n");
     
         fclose($fh);
         mysqli_close($db);
