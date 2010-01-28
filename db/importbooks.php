@@ -121,7 +121,7 @@ ini_set("display_errors", 1);
         else {
            while ($line = fgets($fh)) {
               $codes = explode("=", $line);
-              $equivalents[$codes[0]] = $codes[1];
+              $equivalents[$codes[0]] = trim($codes[1]);
            }
            fclose($fh);
         }
