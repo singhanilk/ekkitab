@@ -215,8 +215,8 @@ ini_set("display_errors", 1);
    /** 
     * Create and return an UPDATE mysql query from arguments.  
     */
-    function createUpdateQuery($table, $setvalue, $where) {
-        $query = "update $table set value = '$setvalue' where ";
+    function createUpdateQuery($table, $value, $setvalue, $where) {
+        $query = "update $table set $value = '$setvalue' where ";
         foreach ($where as $field => $value) {
             $query .= "$field = $value and ";
         }
@@ -536,133 +536,17 @@ ini_set("display_errors", 1);
 
         $queries = array();
 
-	    $url_key = $book[TITLE] . "-" . $book[ISBN];
-		$url_key = str_replace("'","",$url_key);
-		$url_key = str_replace(" ","-",$url_key);
-
-        $imagepath = getImagePath($book[IMAGE]);
-        $thumbnailpath = getImagePath($book[THUMB]);
-
-        $queries[] = createUpdateQuery("catalog_product_entity_datetime",
-                                        $book[PDATE], array(entity_id => $id, attribute_id => bo_publisher_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_decimal",
+        $queries[] = createUpdateQuery("catalog_product_entity_decimal", "value",
                                         $book[PRICE], array(entity_id => $id, attribute_id => price_id));
 		
 		$discount_price = empty($book[DISCOUNT_PRICE]) ? 0.0 : $book[DISCOUNT_PRICE];
 
-        $queries[] = createUpdateQuery("catalog_product_entity_decimal", 
+        $queries[] = createUpdateQuery("catalog_product_entity_decimal", "value", 
                                         $discount_price, array(entity_id => $id, attribute_id => special_price_id));
+
+        $queries[] = createUpdateQuery("cataloginventory_stock_item", "is_in_stock", 
+                                        $book[IN_STOCK], array(product_id => $id, stock_id => stock_id));
 		
-		$queries[] = createUpdateQuery("catalog_product_entity_decimal", 
-                                        $book[WEIGHT], array(entity_id => $id, attribute_id => weight_id));
-
-	    $queries[] = createUpdateQuery("catalog_product_entity_int",
-                                        option_enable, array(entity_id => $id, attribute_id => status_id));
-
-	    $queries[] = createUpdateQuery("catalog_product_entity_int",
-                                        tax_class_value, array(entity_id => $id, attribute_id => tax_class_id));
-
-	    $queries[] = createUpdateQuery("catalog_product_entity_int", 
-                                        book_visibility_value, array(entity_id => $id, attribute_id => visibility_id));
-
-	    $queries[] = createUpdateQuery("catalog_product_entity_int",
-                                        option_enable, array(entity_id => $id, attribute_id => enable_googlecheckout_id));
-
-	    $queries[] = createUpdateQuery("catalog_product_entity_int", 
-                                        option_enable, array(entity_id => $id, attribute_id => bo_int_shipping_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_media_gallery", 
-                                        "$imagepath", 
-                                        array(entity_id => $id, attribute_id => media_gallery_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_text", 
-                                        escape($book[PUBLISHER]), array(entity_id => $id, attribute_id => bo_publisher_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_text", 
-                                        "$book[DESCRIPTION]", array(entity_id => $id, attribute_id => descrption_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_text", 
-                                        "$book[DESCRIPTION]", array(entity_id => $id, attribute_id => short_descrption_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_text", 
-                                       value_empty, array(entity_id => $id, attribute_id => meta_keyword_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_text", 
-                                       value_empty, array(entity_id => $id, attribute_id => custom_layout_update_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar",
-                                        escape($book[TITLE]), array(entity_id => $id, attribute_id => name_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar",
-                                        value_empty, array(entity_id => $id, attribute_id => meta_title_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar",
-                                        value_empty, array(entity_id => $id, attribute_id => meta_description_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        $url_key, array(entity_id => $id, attribute_id => url_key_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        $url_key.".html", array(entity_id => $id, attribute_id => url_id));
-		
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        options_container_value, array(entity_id => $id, attribute_id => options_container));
-					
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        value_empty, array(entity_id => $id, attribute_id => image_label_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        value_empty, array(entity_id => $id, attribute_id => small_image_label_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        value_empty, array(entity_id => $id, attribute_id => thumb_label_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        gift_message_value, array(entity_id => $id, attribute_id => gift_message_avialable_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        escape($book[AUTHOR]), array(entity_id => $id, attribute_id => bo_author_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$book[ISBN]", array(entity_id => $id, attribute_id => bo_isbn_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$book[BINDING]", array(entity_id => $id, attribute_id => bo_binding_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$book[ISBN10]", array(entity_id => $id, attribute_id => bo_isbn10_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$book[LANGUAGE]", array(entity_id => $id, attribute_id => bo_language_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$book[PAGES]", array(entity_id => $id, attribute_id => bo_no_pg_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$book[DIMENSION]", array(entity_id => $id, attribute_id => bo_dimension_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$book[ILLUSTRATOR]", array(entity_id => $id, attribute_id => bo_illustrator_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        escape($book[EDITION]), array(entity_id => $id, attribute_id => bo_edition_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$book[RATING]", array(entity_id => $id, attribute_id => bo_rating_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$imagepath", 
-                                        array(entity_id => $id, attribute_id => bo_image_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$imagepath", 
-									    array(entity_id => $id,  attribute_id => bo_small_image_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$thumbnailpath", 
-                                        array(entity_id => $id, attribute_id => bo_thumb_image_id));
-
         return $queries;
     }
 

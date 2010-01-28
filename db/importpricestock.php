@@ -160,6 +160,7 @@
         $bookprocessed = 0;
         $failedBooks   = 0;
         $updatedBooks  = 0;
+        $ignored       = 0;
         $startTime = (float) array_sum(explode(' ', microtime()));
     
         $currency      = getCurrency($db);
@@ -169,6 +170,10 @@
         while ($line = fgets($fh)) {
 
             $bookprice = $parser->getStockPrice($line);
+            if ($bookprice == null) {
+                $ignored++;
+                continue;
+            }
             $bookprocessed++;
             $isbn = $bookprice['ISBN'];
             unset($bookprice['ISBN']);
@@ -208,7 +213,7 @@
              if ($bookprocessed % 1000 == 0){
                 $endTime = (float) array_sum(explode(' ', microtime()));
                 $endTime = ($endTime - $startTime)/60;
-                debug(" Processed: $bookprocessed, Updated: $updatedBooks, Failed: $failedBooks in time: ". sprintf("%.2f minutes.",$endTime) . "\n");
+                debug(" Processed: $bookprocessed, Updated: $updatedBooks, Ignored: $ignored, Failed: $failedBooks in time: ". sprintf("%.2f minutes.",$endTime) . "\n");
              }
          }
 
