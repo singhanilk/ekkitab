@@ -179,6 +179,9 @@
 
             // discount computation
             $tmpPrice = $bookprice['LIST_PRICE'] * ( $bookprice['SUPPLIERS_DISCOUNT'] / 100);
+            $bookprice['SUPPLIERS_PRICE'] = $bookprice['LIST_PRICE'] - $tmpPrice;
+
+            // Our discount to the customer.
             $tmpPrice = $tmpPrice * ( $discount_info / 100);
 
             $bookprice['DISCOUNT_PRICE'] = round($bookprice['LIST_PRICE'] - $tmpPrice);
