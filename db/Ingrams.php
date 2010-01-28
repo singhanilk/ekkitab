@@ -89,9 +89,12 @@ class Parser {
             return($book);
         }
 
-		function getPrice($line){
+		function getStockPrice($line){
+			
 			$listprice    = substr($line,150,6)/100;
 			$discount     = substr($line,163,3);
+			
+			//Extracting the Discount Info
 			if ($discount = 'REG'){
 				$discount = 40;
 			}
@@ -105,12 +108,35 @@ class Parser {
 				$discount = str_replace("%", "", $discount);
 			}
 			
-			$price = array();
-			$price['LIST_PRICE']		 = $listprice;
-			$price['SUPPLIERS_DISCOUNT'] = $discount;
-			$price['CURRENCY']           = 'USD';
+			//Extracting the Stock Info
+			$stock = 0;
+			$distCenterStk = array();
+			$pos = 38;
 
-			return($price);
+			while($pos <= 60){
+				$distCenterStk[] = substr($line,38,7) ;
+				$pos = $pos + 7;
+			}
+			$distCenterStk[] = substr($line,87,7) ;
+
+			foreach($distCenterStk as $value){
+				if($value > 0){
+					$stock = 1;
+				}
+			}
+			
+			if($discount == 0){
+				$stock = 0;
+			}
+
+			$book = array();
+			$book['LIST_PRICE']		    = $listprice;
+			$book['SUPPLIERS_DISCOUNT'] = $discount;
+			$book['CURRENCY']           = "'USD'";
+			$book['IN_STOCK']           = $stock;
+			$book['DELIVERY_PERIOD']    = 14;
+
+			return($book);
 		}
 }
 ?>
