@@ -13,6 +13,7 @@
 -- @version 1.1     Nov 11, 2009 (anisha@ekkitab.com)
 -- @version 1.2     Dec 03, 2009 (arun@ekkitab.com)
 -- @version 1.2     Dec 04, 2009 (arun@ekkitab.com)
+-- @version 2.0     Jan 28, 2010 (arun@ekkitab.com)
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -4517,12 +4518,9 @@ CREATE TABLE IF NOT EXISTS `ek_catalog_top_authors` (
 -- Table structure for table `ek_catalog_product_bestsellers`
 --
 
+
 CREATE TABLE IF NOT EXISTS `ek_catalog_product_bestsellers` (
   `product_id`  int(11) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `author` varchar(250) NOT NULL,
-  `image_url` varchar(250) NOT NULL,
-  `price` decimal(12,4) NOT NULL DEFAULT '0.0000',
   `is_active` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `order_no`  int(11) NOT NULL,
   `date` datetime DEFAULT NULL,
@@ -4536,10 +4534,6 @@ CREATE TABLE IF NOT EXISTS `ek_catalog_product_bestsellers` (
 
 CREATE TABLE IF NOT EXISTS `ek_catalog_product_newreleases` (
   `product_id`  int(11) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `author` varchar(250) NOT NULL,
-  `image_url` varchar(250) NOT NULL,
-  `price` decimal(12,4) NOT NULL DEFAULT '0.0000',
   `is_active` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `order_no`  int(11) NOT NULL,
   `date` datetime DEFAULT NULL,
@@ -4554,10 +4548,6 @@ CREATE TABLE IF NOT EXISTS `ek_catalog_product_newreleases` (
 
 CREATE TABLE IF NOT EXISTS `ek_catalog_product_best_boxedsets` (
   `product_id`  int(11) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `author` varchar(250) NOT NULL,
-  `image_url` varchar(250) NOT NULL,
-  `price` decimal(12,4) NOT NULL DEFAULT '0.0000',
   `is_active` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `order_no`  int(11) NOT NULL,
   `date` datetime DEFAULT NULL,
@@ -4565,8 +4555,8 @@ CREATE TABLE IF NOT EXISTS `ek_catalog_product_best_boxedsets` (
   PRIMARY KEY (`product_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
---
 
+--
 -- Table structure for table `ek_shipping_region`
 --
 
