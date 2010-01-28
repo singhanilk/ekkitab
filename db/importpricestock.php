@@ -85,7 +85,7 @@
 
        }
       $query  = $query = substr($query, 0, strrpos($query, ","));
-        $query .= " where ISBN = '$isbn'"; 
+      $query .= " where ISBN = '$isbn'"; 
       return ($query);
     }
 
@@ -127,19 +127,6 @@
            fatal($e->getmessage());
         }
         return ($currency);
-    }
-
-    /**
-     * Checks if the books exist
-     */
-    function checkBook($isbn, $db){
-        $flag = 0;
-        $query  = "select * from books where ISBN = '$isbn'";
-        $result = mysqli_query($db, $query);
-        if($row = mysqli_fetch_array($result)){
-            $flag = 1;
-        }
-        return($flag);
     }
 
     /**
@@ -187,18 +174,22 @@
             unset($bookprice['ISBN']);
 
             //convert the list price to INR
-            $bookprice['LIST_PRICE'] = $bookprice['LIST_PRICE'] * $b = $currency[str_replace("'", "", $bookprice['CURRENCY'])];
+            $b = $currency[str_replace("'", "", $bookprice['CURRENCY'])];
+            $bookprice['LIST_PRICE'] = $bookprice['LIST_PRICE'] * $b;
 
             // discount computation
-            $tmpPrice = $bookprice['LIST_PRICE'] * ( $book['SUPPLIERS_DISCOUNT'] / 100);
+            $tmpPrice = $bookprice['LIST_PRICE'] * ( $bookprice['SUPPLIERS_DISCOUNT'] / 100);
+            $bookprice['SUPPLIERS_PRICE'] = $bookprice['LIST_PRICE'] - $tmpPrice;
+
+            // Our discount to the customer.
             $tmpPrice = $tmpPrice * ( $discount_info / 100);
 
-            $bookprice['DISCOUNT_PRICE'] = $bookprice['LIST_PRICE'] - $tmpPrice;
+            $bookprice['DISCOUNT_PRICE'] = round($bookprice['LIST_PRICE'] - $tmpPrice);
 
             //createing Update fields
-            $bookPrice['STOCK_UPDATED'] = 1;
-            $bookPrice['PRICE_UPDATED'] = 1;
-            $bookPrice['UPDATED_DATE']   = "curdate()";
+            $bookprice['STOCK_UPDATED'] = 1;
+            $bookprice['PRICE_UPDATED'] = 1;
+            $bookprice['UPDATED_DATE']   = "curdate()";
             $query = createUpdateSql($bookprice, $isbn);
          
             try{
