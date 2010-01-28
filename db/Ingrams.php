@@ -90,6 +90,8 @@ class Parser {
         }
 
 		function getStockPrice($line){
+
+		    $isbn = substr($line,1,13);
 			
 			$listprice    = substr($line,150,6)/100;
 			$discount     = substr($line,163,3);
@@ -135,6 +137,7 @@ class Parser {
 			$book['CURRENCY']           = "'USD'";
 			$book['IN_STOCK']           = $stock;
 			$book['DELIVERY_PERIOD']    = 14;
+            $book['ISBN']               = $isbn;
 
 			return($book);
 		}
