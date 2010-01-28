@@ -90,8 +90,13 @@ class Parser {
         }
 
 		function getStockPrice($line){
-
-		    $isbn = substr($line,1,13);
+            
+			$type = substr($line,217,1);
+			if(($type != 'P') && ($type != 'Q') && ($type != 'R')){
+				return(null);
+			}
+		    
+			$isbn = substr($line,1,13);
 			
 			$listprice    = substr($line,150,6)/100;
 			$discount     = substr($line,163,3);
