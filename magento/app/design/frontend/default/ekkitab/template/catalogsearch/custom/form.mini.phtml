@@ -4,21 +4,21 @@
  *
  */
 ?>
-<div class="mini-search">
-<form id="custom_search_mini_form" action="<?php echo $this->helper('ekkitab_catalogsearch')->getCustomSearchResultByIndexUrl() ?>" method="get">
-    <fieldset>
-        <legend><?php echo $this->__('Search Site') ?></legend>
-            <!--input id="searchBy" type="radio" class="form-radio" name="searchBy" value="bo_author" /> Author
-            <input id="searchBy" type="radio" class="form-radio" name="searchBy" value="name" checked/> Title-->
-            <input id="search" type="text" class="input-text" name="<?php echo $this->helper('ekkitab_catalogsearch')->getQueryParamName() ?>" value="<?php echo $this->helper('ekkitab_catalogsearch')->getEscapedQueryText() ?>" />
-            <input type="image" src="<?php echo $this->getSkinUrl('images/btn_go.gif') ?>" alt="<?php echo $this->__('Go') ?>" />
-            <div id="search_autocomplete" class="search-autocomplete"></div>
-            <script type="text/javascript">
-            //<![CDATA[
-                var searchForm = new Varien.searchForm('custom_search_mini_form', 'search', '<?php echo $this->helper('ekkitab_catalogsearch')->__('Search entire store here...') ?>');
-                searchForm.initAutocomplete('<?php echo $this->helper('ekkitab_catalogsearch')->getSuggestUrl() ?>', 'search_autocomplete');
-            //]]>
-            </script>
-    </fieldset>
-</form>
+<div class="topSearchArea">
+	<div class="searchText">Search for</div>
+	<form id="custom_search_mini_form" action="<?php echo $this->helper('ekkitab_catalogsearch')->getCustomSearchResultByIndexUrl() ?>" method="get">
+		<fieldset>
+			<legend><?php echo $this->__('Search Site') ?></legend>
+			   <input id="search" type="text" class="textField" name="<?php echo $this->helper('ekkitab_catalogsearch')->getQueryParamName() ?>" value="<?php echo $this->helper('ekkitab_catalogsearch')->getEscapedQueryText() ?>" />
+			   <div class="searchBut"><input type="image" src="<?php echo $this->getSkinUrl('images/search_button.png') ?>"  width="21" height="21" alt="<?php echo $this->__('Go') ?>" border="0" /></div>
+				<div id="search_autocomplete" class="search-autocomplete"></div>
+				<script type="text/javascript">
+				//<![CDATA[
+					var searchForm = new Varien.searchForm('custom_search_mini_form', 'search', '');
+					searchForm.initAutocomplete('<?php echo $this->helper('ekkitab_catalogsearch')->getSuggestUrl() ?>', 'search_autocomplete');
+				//]]>
+				</script>
+		</fieldset>
+	</form>
+<div class="clear"></div>
 </div>

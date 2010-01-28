@@ -25,29 +25,23 @@
 		searchForm.submit();
 	}
 </script>
-<div class="popular-authors left" >
-	<div class="head" >
-			<h4>Top Authors </h4>
-	</div>	
-	<div class="content">
-		<ul>
-		<?php if($_count): ?>
-		<form name="search_author" action="<?php echo $this->helper('catalogSearch')->getResultUrl() ?>" method="get">
-			<input type="hidden" name="<?php echo $this->helper('catalogSearch')->getQueryParamName() ?>" value="" />
-		</form>
-			<?php foreach ($authors as $author): ?>
-				<?php if($author->getIsActive()): 
-						$randNo = 10 * $author->getPopularity();
-					?>
-					<li>
-						<a style="font-size:<?php echo $randNo?>%;" href="javascript:searchAuthor('<?php echo $author->getAuthor()?>');"><?php echo $this->htmlEscape($author->getAuthor()) ?></a>&nbsp;
-					</li>
-				<?php endif; ?>
-			<?php endforeach ?>
-		<?php else: ?>
-			This section will be updated soon
-		<?php endif; ?>
-		</ul>
-		<span class="right "><a href="#">View All</a> </span>
-	</div>
-</div>
+<div class="linkHdr">Popular Authors</div><!-- linkHdr -->
+<?php if($_count): ?>
+	<form name="search_author" action="<?php echo $this->helper('catalogSearch')->getResultUrl() ?>" method="get">
+		<input type="hidden" name="<?php echo $this->helper('catalogSearch')->getQueryParamName() ?>" value="" />
+	</form>
+	<ul>
+		<?php foreach ($authors as $author): ?>
+			<?php if($author->getIsActive()): 
+					$randNo = 10 * $author->getPopularity();
+				?>
+				<li>
+					<a href="javascript:searchAuthor('<?php echo $author->getAuthor()?>');"><?php echo $this->htmlEscape($author->getAuthor()) ?></a>&nbsp;
+				</li>
+			<?php endif; ?>
+		<?php endforeach ?>
+	</ul>
+	<div class="seeAll"><a href="#">See all &raquo;</a></div><!-- seeAll -->
+<?php else: ?>
+	<li>This section will be updated soon</li>
+<?php endif; ?>
