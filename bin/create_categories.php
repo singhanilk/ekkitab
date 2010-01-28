@@ -306,7 +306,7 @@ ini_set("display_errors", 1);
 
             if ($i >= 2) {
                 $line = "(3, 32, 0, " . $i . ", 1),\n";  
-                $line = $line . "(3, 41, 0, " . $i . ", 1),\n";  
+                $line = $line . "(3, 41, 0, " . $i . ", 0),\n";  
                 $line = $line . "(3, 49, 0, " . $i . ", 1),\n";  
             }
             else 
