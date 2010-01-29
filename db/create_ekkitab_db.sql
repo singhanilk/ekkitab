@@ -1362,7 +1362,7 @@ INSERT INTO `core_config_data` ( `scope`, `scope_id`, `path`, `value`) VALUES
 ( 'default', 0, 'paypal/wps/debug_flag', '1'),
 ( 'default', 0, 'dev/log/active', '1'),
 ( 'default', 0, 'dev/log/file', 'system.log'),
-( 'default', 0, 'dev/log/exception_file', 'exception.log'),
+( 'default', 0, 'dev/log/exception_file', 'exception.log');
 
 --
 -- Table structure for table `core_email_template`
