@@ -1239,7 +1239,7 @@ CREATE TABLE IF NOT EXISTS `cms_block` (
 --
 
 INSERT INTO `cms_block` (`block_id`, `title`, `identifier`, `content`, `creation_time`, `update_time`, `is_active`) VALUES
-(5, 'Footer Links', 'footer_links', '<ul>\r\n<li><a href="{{store url=""}}about-ekkitab">About Us</a></li>\r\n<li class="last"><a href="{{store url=""}}customer-service">Customer Service</a></li>\r\n</ul>', '2009-10-15 15:05:20', '2009-10-15 15:05:20', 1);
+(5, 'Footer Links', 'footer_links', '<a href="{{store url=""}}about-ekkitab">About Us</a> | <a href="{{store url=""}}customer-service">Customer Service</a> | ', '2009-10-15 15:05:20', '2009-10-15 15:05:20', 1);
 
 --
 -- Table structure for table `cms_block_store`
@@ -1334,20 +1334,35 @@ CREATE TABLE IF NOT EXISTS `core_config_data` (
 -- Dumping data for table `core_config_data`
 --
 
-INSERT INTO `core_config_data` (`config_id`, `scope`, `scope_id`, `path`, `value`) VALUES
-(1, 'default', 0, 'catalog/category/root_id', '2'),
-(2, 'default', 0, 'design/theme/default', 'ekkitab'),
-(3, 'default', 0, 'currency/options/base', 'INR'),
-(4, 'stores', 1, 'currency/options/default', 'INR'),
-(5, 'stores', 1, 'currency/options/allow', 'EUR,INR,USD'),
-(6, 'stores', 1, 'currency/options/trim_sign', '0'),
-(7, 'stores', 1, 'design/theme/default', 'ekkitab'),
-(8, 'stores', 1, 'design/head/default_title', 'Ekkitab Education Services Pvt Ltd'),
-(9, 'stores', 1, 'design/head/default_keywords', 'Ekkitab, online bookstore'),
-(10, 'stores', 1, 'design/header/logo_src', 'images/logo.png'),
-(11, 'stores', 1, 'design/header/logo_alt', 'Ekkitab Education Services Pvt Ltd'),
-(12, 'stores', 1, 'design/header/welcome', 'Welcome Guest!'),
-(13, 'stores', 1, 'design/footer/copyright', '&copy; 2009 Ekkitab Educational Services Pvt Ltd. All Rights Reserved.');
+INSERT INTO `core_config_data` ( `scope`, `scope_id`, `path`, `value`) VALUES
+( 'default', 0, 'catalog/category/root_id', '2'),
+('default', 0, 'design/theme/default', 'ekkitab'),
+( 'default', 0, 'currency/options/base', 'INR'),
+( 'stores', 1, 'currency/options/default', 'INR'),
+( 'stores', 1, 'currency/options/allow', 'EUR,INR,USD'),
+( 'stores', 1, 'currency/options/trim_sign', '0'),
+( 'stores', 1, 'design/theme/default', 'ekkitab'),
+( 'stores', 1, 'design/head/default_title', 'Ekkitab Education Services Pvt Ltd'),
+( 'stores', 1, 'design/head/default_keywords', 'Ekkitab, online bookstore'),
+( 'stores', 1, 'design/header/logo_src', 'images/logo.png'),
+( 'stores', 1, 'design/header/logo_alt', 'Ekkitab Education Services Pvt Ltd'),
+( 'stores', 1, 'design/header/welcome', ''),
+( 'stores', 1, 'design/footer/copyright', '&copy; 2009 Ekkitab Educational Services Pvt Ltd. All Rights Reserved.'),
+( 'default', 0, 'payment/paypal_standard/active', '1'),
+( 'default', 0, 'payment/paypal_standard/title', 'Paypal Standard'),
+( 'default', 0, 'payment/paypal_standard/payment_action', 'SALE'),
+( 'default', 0, 'payment/paypal_standard/types', 'IPN'),
+( 'default', 0, 'payment/paypal_standard/order_status', 'processing'),
+( 'default', 0, 'payment/paypal_standard/transaction_type', 'O'),
+( 'default', 0, 'payment/paypal_standard/allowspecific', '0'),
+( 'default', 0, 'payment/paypal_standard/sort_order', ''),
+( 'default', 0, 'paypal/wps/business_name', 'Ekkitab Educational Services Pvt Ltd'),
+( 'default', 0, 'paypal/wps/logo_url', ''),
+( 'default', 0, 'paypal/wps/sandbox_flag', '1'),
+( 'default', 0, 'paypal/wps/debug_flag', '1');
+( 'default', 0, 'dev/log/active', '1'),
+( 'default', 0, 'dev/log/file', 'system.log'),
+( 'default', 0, 'dev/log/exception_file', 'exception.log'),
 
 --
 -- Table structure for table `core_email_template`

@@ -40,28 +40,6 @@ class Ekkitab_CatalogSearch_Block_Custom_ResultIndex extends Mage_Core_Block_Tem
 	const JAVA_BRIDGE_INC_FILE = 'global/java_inc/path';
 
 
-	/*function __construct(){
-		Mage::log("In Ekkitab_CatalogSearch_Block_Custom_ResultIndex constructor ... socketConn ... ");
-		Mage::log($this->_socketConn);
-		if ($this->_socketConn == 0) {
-			$fp = @fsockopen("localhost", 8080, $errno, $errstr, .01);
-			if (!$fp) {
-				Mage::logException(new Exception("Exception in ResultIndex.php : requireOnce() $errstr ($errno)"));
-			} else {
-				if (!($javaIncFilePathArray = Mage::getConfig()->getNode(self::JAVA_BRIDGE_INC_FILE))) {
-					$javaIncFile = 'http://localhost:8080/JavaBridge/java/Java.inc';
-				}else {
-					$javaIncFile = (string) $javaIncFilePathArray[0];
-				}
-				require_once($javaIncFile) ;
-				$this->_socketConn = 1;
-			}
-			fclose($fp); 
-		}
-		Mage::log($this->_socketConn);
-
-	}*/
-   
    protected function _prepareLayout()
     {
         $title = $this->__("Search results for: '%s'", $this->helper('ekkitab_catalogsearch')->getEscapedQueryText());
@@ -129,13 +107,11 @@ class Ekkitab_CatalogSearch_Block_Custom_ResultIndex extends Mage_Core_Block_Tem
 		}else {
 			$javaIncFile = (string) $javaIncFilePathArray[0];
 		}
-		//if($this->requireOnce($javaIncFile)){
 		try{
 			require_once($javaIncFile);
 			$search = new java("BookSearch",$indexFilePath );
 			$results = $search->searchBook( $this->helper('ekkitab_catalogsearch')->getEscapedQueryText(), $this->getPageSize(), $this->getCurrentPageNumber());
 		}
-		//else
 		catch(Exception $e)
 		{
 			$results =NULL;
@@ -144,20 +120,7 @@ class Ekkitab_CatalogSearch_Block_Custom_ResultIndex extends Mage_Core_Block_Tem
 		return $results;
     }
  
-	protected function requireOnce($f) {
-
-		$fp = @fsockopen("localhost", 8080, $errno, $errstr, .001); // set 1 millisecond as timeout.... 
-		if (!$fp) {
-			Mage::logException(new Exception("Exception in ResultIndex.php : requireOnce() $errstr ($errno)"));
-			return 0;
-		} else {
-			require_once($f) ;
-			return 1;
-		}
-		fclose($fp); 
-	}
-
-	
+		
 	public function getProductCollection(){
 
 		//introduce the lucene search here.....

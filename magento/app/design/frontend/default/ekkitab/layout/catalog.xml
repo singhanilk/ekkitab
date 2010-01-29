@@ -130,7 +130,7 @@ Category layered navigation layout
 			<remove name="currency" />
 			<!--block type="catalog/layer_view" name="catalog.leftnav" template="catalog/layer/view.phtml"-->
 				<!--Added by anisha for displaying child categories in the product listing page. Once anchoring is in place, this can be removed  -->
-				<block type="catalog/navigation" name="catalog.leftnav.child.categories"  as="child_catagories" template="catalog/navigation/left_child_categories.phtml"/>
+				<block type="catalog/navigation" name="catalog.leftnav.child.categories"  as="child_catagories" before="popular_categories" template="catalog/navigation/left_child_categories.phtml"/>
 			<!--/block-->
         </reference>
         <reference name="content">

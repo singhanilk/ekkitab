@@ -36,8 +36,7 @@
 					$randNo = 10 * $author->getPopularity();
 				?>
 				<li>
-					<a href="javascript:searchAuthor('<?php echo $author->getAuthor()?>');"><?php echo $this->htmlEscape($author->getAuthor()) ?></a>&nbsp;
-				</li>
+					<a href="javascript:searchAuthor('<?php echo $author->getAuthor()?>');"><?php echo $this->htmlEscape($author->getAuthor()) ?></a></li>
 			<?php endif; ?>
 		<?php endforeach ?>
 	</ul>

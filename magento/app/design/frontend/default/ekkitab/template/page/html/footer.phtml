@@ -24,7 +24,17 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-    <?php echo $this->getChildHtml('cms_footer_links') ?>
+<div class="footerTop"></div><!-- footerTop -->
+<div class="footerMid">
+	<div class="footerHdr">Information & Services</div>
+	  <a href="#">Donate a library</a> | <a href="#">CSR fulfillment</a> | <a href="#">Bulk Orders</a>
+	<div class="dottedLine"></div>
+	<div class="footerHdr">Customer Help Desk</div>
+   
+	<?php echo $this->getChildHtml('cms_footer_links') ?>
     <?php echo $this->getChildHtml('footer_links') ?>
-    <?php echo $this->getChildHtml('newsletter') ?>
-<p><?php echo $this->getCopyright() ?></p>
+	
+	<?php echo $this->getChildHtml('newsletter') ?>
+	<p><?php echo $this->getCopyright() ?></p>
+</div><!-- footerMid -->
+<div class="footerBot"></div><!-- footerBot -->

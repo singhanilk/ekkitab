@@ -26,8 +26,7 @@
 				$randNo = 10 * $_category->getPopularity();
 			?>
 			<li>
-				<a href="<?php echo $_category->getUrlPath() ?>"><?php echo $this->htmlEscape($_category->getCategory()) ?></a>&nbsp;
-			</li>
+				<a href="<?php echo $_category->getUrlPath() ?>"><?php echo $this->htmlEscape($_category->getCategory()) ?></a></li>
 		<?php endif; ?>
 	<?php endforeach ?>
 <?php endif; ?>

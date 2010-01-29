@@ -51,7 +51,7 @@
 			</div>
 
             <div class="mainArea">
-				<div class="col-main">
+				<div class="mainLeft">
 					<?php echo $this->getChildHtml('global_messages') ?>
 					<?php echo $this->getChildHtml('content') ?>
 				</div>
@@ -59,18 +59,11 @@
 			<!-- end middle section  -->
 			
 			<div class="clear"></div>
-			<div class="footerTop"></div><!-- footerTop -->
-			<div class="footerMid">
-				<div class="footerHdr">Information & Services</div>
-				  <a href="#">Donate a library</a> | <a href="#">CSR fulfillment</a> | <a href="#">Bulk Orders</a>
-				<div class="dottedLine"></div>
-				<div class="footerHdr">Customer Help Desk</div>
-				  <a href="#">Contact Customer Service</a> | <a href="#">Secure Shopping</a> | <a href="#">FAQs</a> | <a href="#">Payment Options</a> | <a href="#">Donation Guide</a> | <a href="#">Privacy Policy</a> | <a href="#">Sitemap</a>
-				   <?php echo $this->getChildHtml('footer') ?>
-				  <?php echo $this->getChildHtml('before_body_end') ?>
-				  <?php echo $this->getAbsoluteFooter() ?>
-			</div><!-- footerMid -->
-			<div class="footerBot"></div><!-- footerBot -->
+			<!-- footer section  -->
+		    <?php echo $this->getChildHtml('footer') ?>
+			<?php echo $this->getChildHtml('before_body_end') ?>
+			<?php echo $this->getAbsoluteFooter() ?>
+			<!-- footer section ends  -->
 		</div><!-- wrapper -->
 	</div><!-- whiteBg -->
 </body>
