@@ -136,13 +136,17 @@ class Parser {
 				$stock = 0;
 			}
 
+			//Extracting the Pub-Date
+			$pubdate = substr($line,185,8) ;
+						
 			$book = array();
-			$book['LIST_PRICE']		    = $listprice;
-			$book['SUPPLIERS_DISCOUNT'] = $discount;
-			$book['CURRENCY']           = "'USD'";
-			$book['IN_STOCK']           = $stock;
-			$book['DELIVERY_PERIOD']    = 14;
-            $book['ISBN']               = $isbn;
+			$book['LIST_PRICE']		    = $listprice ;
+			$book['SUPPLIERS_DISCOUNT'] = $discount ;
+			$book['CURRENCY']           = "'USD'" ;
+			$book['IN_STOCK']           = $stock ;
+			$book['DELIVERY_PERIOD']    = 14 ;
+            $book['ISBN']               = $isbn ;
+			$book['PUBLISHING_DATE']    = $pubdate ;
 
 			return($book);
 		}
