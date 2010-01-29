@@ -330,7 +330,7 @@ h1#logo                 { float:left; }
 .toplinks-bar .top-links .last a      { padding:0; background:none; }
 .topLinksOut .version          { width:150px; color:#ff0000; font-weight:bold; font-size:12px; }
 .search-bar             { padding:10px 12px 2px 12px; background:#efefef;line-height:1.25em; }
-.breadcrumbs-bar { padding:5px 12px 10px 12px;}
+.breadcrumbs-bar { padding:2px 12px 2px 12px; margin: 5px 0px 15px 0px}
 .breadcrumbs-bar .breadcrumbs            { float:left; width:580px; overflow:hidden; }
 .breadcrumbs-bar .breadcrumbs li         { display:inline; line-height:18px; }
 .breadcrumbs-bar .breadcrumbs a,

@@ -45,13 +45,15 @@
 				<?php echo $this->getChildHtml('breadcrumbs') ?>
 				<?php echo $this->getLayout()->getBlock('header')->getWelcome() ?>
 			</div>
+			<div class="clear"></div>
 			
 			<div class="leftNavArea" id="col-left">
 				<?php echo $this->getChildHtml('left')?>
 			</div>
 
+			<!-- middle section  -->
             <div class="mainArea">
-				<div class="mainLeft">
+				<div class="middle">
 					<?php echo $this->getChildHtml('global_messages') ?>
 					<?php echo $this->getChildHtml('content') ?>
 				</div>

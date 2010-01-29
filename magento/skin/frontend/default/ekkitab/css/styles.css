@@ -125,6 +125,7 @@ a:hover {
 	width: 750px;
 	float: left;
 	font-size: 1.1em;
+
 }
 .inMainArea {
 	width: 728px;
@@ -548,3 +549,10 @@ a:hover {
 	text-decoration: underline;
 }
 
+.mainArea .middle {
+	width: 710px;
+	float: left;
+	border-left: 1px dotted #333;
+	padding: 0 15px 0px 15px;
+	margin: 0 15px 15px 15px;
+}
