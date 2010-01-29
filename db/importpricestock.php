@@ -135,7 +135,7 @@
     function start($argc, $argv) {
     
         if ($argc == 1) {
-           echo "Usage: $argv[0] <Data Source> <Data File> ";
+           echo "Usage: $argv[0] <Data Source> <Data File> \n";
            exit(0);
         }
         if ($argc != 3) {
@@ -210,7 +210,7 @@
                 $failedBooks++;
              }
 
-             if ($bookprocessed % 1000 == 0){
+             if ($bookprocessed % 10000 == 0){
                 $endTime = (float) array_sum(explode(' ', microtime()));
                 $endTime = ($endTime - $startTime)/60;
                 debug(" Processed: $bookprocessed, Updated: $updatedBooks, Ignored: $ignored, Failed: $failedBooks in time: ". sprintf("%.2f minutes.",$endTime) . "\n");

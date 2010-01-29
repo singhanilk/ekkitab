@@ -125,8 +125,6 @@ ini_set("display_errors", 1);
            }
            fclose($fh);
         }
-        foreach($equivalents as $key => $value)
-              echo "Code $key is equivalent to $value\n";
     }
 
    /** 
