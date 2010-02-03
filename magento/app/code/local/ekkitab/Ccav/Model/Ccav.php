@@ -735,12 +735,12 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
         
     }
 
-    public function sendsms($billing_cust_tel,$Order_Id)
+    public function sendsms($recepientno,$Order_Id)
     {
     $ch = curl_init();
     $user="anil@ekkitab.com:meritos1959";
     $senderID="mVaayoo";
-    $receipientno= "9845051066";
+ //   $receipientno= "9845051066";
     $msgtxt="Thank you for shopping with EkKitab. Your Order Id is $Order_Id";
     $state="4" ;
 //	curl_setopt($ch,CURLOPT_URL,  "http://api.mVaayoo.com/mvaayooapi/MessageCompose?user=anil@ekkitab.com:meritos1959&senderID=mVaayoo&receipientno=9845051066&msgtxt=This is a test from Ekkitab API&state=4");
