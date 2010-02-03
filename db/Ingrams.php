@@ -150,5 +150,24 @@ class Parser {
 
 			return($book);
 		}
+		
+		function getBookDescription($line,$type){
+			$isbn         = substr($line,0,13);
+			
+			if($type == 'long'){
+			   $description  = substr($line,15);
+			   $description = str_replace("'", "", $description);
+		       $bookinfo['DESCRIPTION'] = "'$description'";
+			 }
+			elseif($type == 'short'){
+			   $description  = substr($line,18);
+			   $description = str_replace("'", "", $description);
+		       $bookinfo['SHORT_DESCRIPTION'] = "'$description'";
+			}
+						
+			$bookinfo['ISBN']        = $isbn;
+			return($bookinfo);
+			  
+		}
 }
 ?>
