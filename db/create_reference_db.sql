@@ -12,6 +12,7 @@
 -- @version 1.0     Dec 01, 2009
 -- @version 1.1     Dec 02, 2009
 -- @version 1.2     Dec 09, 2009
+-- @version 2.0     Jan 28, 2010 (Vijay@ekkitab.com)
 
 
 
@@ -44,14 +45,15 @@ CREATE TABLE `books` (
   `ISBN` varchar(20),
   `ISBN10` varchar(20),
   `BINDING` varchar(20),
-  `DESCRIPTION` varchar(80),
+  `DESCRIPTION` text DEFAULT NULL,
+  `SHORT_DESCRIPTION` text DEFAULT NULL,
   `PUBLISHING_DATE` date,
   `PUBLISHER` varchar(100),
   `PAGES` INT NOT NULL default '0',
   `LANGUAGE` varchar(20),
-  `LIST_PRICE` decimal(6,2),
-  `DISCOUNT` decimal(4,2),
-  `SUPPLIERS_PRICE` decimal(6,2),
+  `LIST_PRICE` decimal(8,2),
+  `DISCOUNT_PRICE` decimal(8,2),
+  `SUPPLIERS_PRICE` decimal(8,2),
   `SUPPLIERS_DISCOUNT` decimal(4,2),
   `CURRENCY` varchar(20),
   `BISAC1` varchar(255) NOT NULL,
@@ -60,7 +62,9 @@ CREATE TABLE `books` (
   `DELIVERY_PERIOD` TINYINT UNSIGNED,
   `COVER_THUMB` varchar(80),
   `IMAGE` varchar(80),
-  `IN_STOCK` BIT,
+  `IN_STOCK` tinyint(1) default 0,
+  `STOCK_UPDATED` tinyint(1) default 0,
+  `PRICE_UPDATED` tinyint(1) default 0,
   `QTY` INT UNSIGNED,
   `WEIGHT` decimal(6,2),
   `DIMENSION` varchar(80),
@@ -71,9 +75,11 @@ CREATE TABLE `books` (
   `INT_SHIPPING` TINYINT UNSIGNED default '0',
   `RATING` TINYINT UNSIGNED,
   `INFO_SOURCE` varchar(40) NOT NULL,
+  `SOURCED_FROM` varchar(16) NOT NULL default 'India',
   `UPDATED_DATE` date NOT NULL,
   `NEW` TINYINT UNSIGNED NOT NULL default '0',
   `PRODUCT_STATUS` TINYINT UNSIGNED NOT NULL default '1',
+  `REWRITE_URL` varchar(255) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ISBN` (`ISBN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -90,10 +96,36 @@ CREATE TABLE IF NOT EXISTS `ek_bisac_category_map` (
   `LEVEL2` varchar(80) NOT NULL,
   `LEVEL3` varchar(80) NOT NULL,
   `LEVEL4` varchar(80) NOT NULL,
+  `LEVEL5` varchar(80) NOT NULL,
+  `LEVEL6` varchar(80) NOT NULL,
+  `LEVEL7` varchar(80) NOT NULL,
   `CATEGORY_ID` varchar(255) NOT NULL,
+  `REWRITE_URL` varchar(255) NOT NULL,
   PRIMARY KEY (`VALUE_ID`),
   UNIQUE KEY `BISAC_CODE` (`BISAC_CODE`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8  AUTO_INCREMENT=1 ;
 
+--
+-- Table structure for `ek_currency_conversion`
+--
+
+CREATE TABLE IF NOT EXISTS `ek_currency_conversion` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `CURRENCY` varchar(16) NOT NULL,
+  `CONVERSION` decimal (4,2) NOT NULL default 1.0,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `UNIQUE_CURRENCY` (`CURRENCY`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  AUTO_INCREMENT=1 ;
 
 
+--
+-- Table structure for `ek_discount_setting`
+--
+
+CREATE TABLE IF NOT EXISTS `ek_discount_setting` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `INFO_SOURCE` varchar(40) NOT NULL,
+  `DISCOUNT_PERCENT` smallint NOT NULL default 100,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `UNIQUE_INFO_SOURCE` (`INFO_SOURCE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  AUTO_INCREMENT=1 ;

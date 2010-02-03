@@ -14,6 +14,7 @@ ini_set("display_errors", 1);
 //
 // @author Vijaya Raghavan (vijay@ekkitab.com)
 // @version 1.0     Dec 17, 2009
+// @version 1.1     Feb 03, 2010 (arun@ekkitab.com)
 //
 
 // This script will import books into the reference database from a vendor file......
@@ -34,6 +35,9 @@ class Parser {
 
         function getBook($line) {
             $book = array();
+            $mediatype = substr($line, 412, 1);
+            if (($mediatype != 'B') && ($mediatype != 'N'))  // not a book.
+                return(null);
             $book['isbn10'] = trim(substr($line, 0, 10));
             $book['title']  = $this->escape(trim(substr($line, 11, 149)));
             $edition = trim(substr($line, 191, 4));
@@ -61,6 +65,18 @@ class Parser {
             $book['author'] = $this->escape($author);
             $book['publisher'] = $this->escape(trim(substr($line, 351, 45)));
             $book['isbn13'] = trim(substr($line, 442, 17));
+            $binding = substr($line, 410, 2);
+            if (substr($binding, 0, 1) == 'T')  {
+                $q = substr($binding, 1, 1) ;
+                if ($q == 'P') {
+                    $book['binding'] = "paperback";
+                }
+                elseif ($q == 'C') {
+                    $book['binding'] = "hardcover";
+                }
+                else 
+                    $book['binding'] = "unknown";
+            }
             $book['bisac'][0] = trim(substr($line, 463, 9));
             $book['bisac'][1] = trim(substr($line, 532, 9));
             $book['bisac'][2] = trim(substr($line, 601, 9));
@@ -70,7 +86,89 @@ class Parser {
             $book['pubcode'] = trim(substr($line, 827,  4));
             $book['thumbnail'] = $book['isbn13'].".jpg";
             $book['image'] = $book['thumbnail'];
+            $book['sourced_from'] = "US";
             return($book);
         }
+
+		function getStockPrice($line){
+            
+			$type = substr($line,217,1);
+			if(($type != 'P') && ($type != 'Q') && ($type != 'R')){
+				return(null);
+			}
+		    
+			$isbn = substr($line,1,13);
+			
+			$listprice    = substr($line,150,6)/100;
+			$discount     = substr($line,163,3);
+			
+			//Extracting the Supplier Discount Info
+			if ($discount = 'REG'){
+				$discount = 40;
+			}
+			elseif ($dicount = 'NET'){
+				$discount = 0;
+			}
+			elseif ($discount = 'LOW'){
+				$discount = 20;
+			}
+			else{
+				$discount = str_replace("%", "", $discount);
+			}
+			
+			//Extracting the Stock Info
+			$stock = 0;
+			$distCenterStk = array();
+			$pos = 38;
+
+			while($pos <= 60){
+				$distCenterStk[] = substr($line,38,7) ;
+				$pos = $pos + 7;
+			}
+			$distCenterStk[] = substr($line,87,7) ;
+
+			foreach($distCenterStk as $value){
+				if($value > 0){
+					$stock = 1;
+				}
+			}
+			
+			if($discount == 0){
+				$stock = 0;
+			}
+
+			//Extracting the Pub-Date
+			$pubdate = substr($line,185,8) ;
+						
+			$book = array();
+			$book['LIST_PRICE']		    = $listprice ;
+			$book['SUPPLIERS_DISCOUNT'] = $discount ;
+			$book['CURRENCY']           = "'USD'" ;
+			$book['IN_STOCK']           = $stock ;
+			$book['DELIVERY_PERIOD']    = 14 ;
+            $book['ISBN']               = $isbn ;
+			$book['PUBLISHING_DATE']    = $pubdate ;
+
+			return($book);
+		}
+		
+		function getBookDescription($line,$type){
+			$isbn         = substr($line,0,13);
+			
+			if($type == 'long'){
+			   $description  = substr($line,15);
+			   $description = str_replace("'", "", $description);
+		       $bookinfo['DESCRIPTION'] = "'$description'";
+			 }
+			elseif($type == 'short'){
+			   $description  = substr($line,18);
+			   $description = str_replace("'", "", $description);
+		       $bookinfo['SHORT_DESCRIPTION'] = "'$description'";
+			}
+						
+			$bookinfo['ISBN']        = $isbn;
+			return($bookinfo);
+			  
+		}
 }
 ?>

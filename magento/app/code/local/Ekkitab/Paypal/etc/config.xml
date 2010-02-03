@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Ekkitab_Paypal>
+            <version>0.1.0</version>
+        </Ekkitab_Paypal>
+    </modules>
+    <global>
+        <models>
+			<paypal>
+				<rewrite>
+					<standard>Ekkitab_Paypal_Model_Standard</standard>
+					<api_nvp>Ekkitab_Paypal_Model_Standard</api_nvp>
+				</rewrite>
+            </paypal>
+        </models>
+    </global>
+</config>

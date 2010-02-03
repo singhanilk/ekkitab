@@ -3152,7 +3152,7 @@
 				<displayName>Indian Rupee</displayName>
 				<displayName count="one">Indian rupee</displayName>
 				<displayName count="other">Indian rupees</displayName>
-				<symbol>₨</symbol>
+				<symbol>Rs</symbol>
 			</currency>
 			<currency type="IQD">
 				<displayName>Iraqi Dinar</displayName>

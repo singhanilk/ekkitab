@@ -319,18 +319,18 @@ h1#logo                 { float:left; }
 .language-switcher      { float:left; }
 .language-switcher label{ color:#fff; }
 .language-switcher .flag option { background-repeat:no-repeat; background-position:left center; padding-left:20px;margin-left:2px; }
-.toplinks-bar           { color:#000; padding:7px 1px 0px 0px; text-align:right; }
+.toplinks-bar           { color:#ccc; padding:7px 1px 0px 0px; text-align:right; }
 .toplinks-bar .top-links              { padding-left:10px; padding-right:10px; }
 .toplinks-bar .top-links,
 .toplinks-bar .top-links li           { display:inline; }
 .toplinks-bar .top-links li           { padding:0 4px 0 1px; }
 .toplinks-bar .top-links a,
-.toplinks-bar .top-links a:hover      { color:#000; }
+.toplinks-bar .top-links a:hover      { color:#000; font-size: 1.1em; }
 .toplinks-bar .top-links a            { padding:0 7px 0 0; background:url(../images/links_separator.gif) no-repeat 100% 50%; }
 .toplinks-bar .top-links .last a      { padding:0; background:none; }
-.toplinks-bar .version          { color:#ff0000; font-weight:bold; font-size:12px; }
+.topLinksOut .version          { width:150px; color:#ff0000; font-weight:bold; font-size:12px; }
 .search-bar             { padding:10px 12px 2px 12px; background:#efefef;line-height:1.25em; }
-.breadcrumbs-bar { padding:10px 12px 2px 12px; background:#ffffff; border-bottom:1px double #dedede;  }
+.breadcrumbs-bar { padding:2px 12px 2px 12px; margin: 5px 0px 15px 0px}
 .breadcrumbs-bar .breadcrumbs            { float:left; width:580px; overflow:hidden; }
 .breadcrumbs-bar .breadcrumbs li         { display:inline; line-height:18px; }
 .breadcrumbs-bar .breadcrumbs a,

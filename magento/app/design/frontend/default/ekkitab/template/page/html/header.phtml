@@ -25,16 +25,32 @@
  */
 ?>
 <div class="header">
-	<h1 id="logo"><a href="<?php echo $this->getUrl('') ?>"><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>"/></a></h1>
-	<div class="toplinks-bar"><?php echo $this->getChildHtml('buildVersion') ?>
-		<?php echo $this->getChildHtml('topLinks') ?><br>
-		<div class="search-bar">
+	<div class="logo"><a href="<?php echo $this->getUrl('/index.php') ?>" title="ekkitab homepage"></a></div>
+	<div class="headerRight">
+
+		<!-- topLinks -->
+		<div class="topLinksOut">
+			<?php echo $this->getChildHtml('buildVersion') ?>
+			<div class="topLinksArea">
+				<div class="linkAreaLeft"></div>
+				<div class="linkAreaMain">
+					<?php echo $this->getChildHtml('topLinks')?>
+				</div>
+				<div class="linkAreaRight"></div>
+				<div class="clear"></div>
+			</div>	<!-- topLinksArea -->
+		<div class="clear"></div>
+		</div>	<!-- topLinksOut -->
+
+
+		<!-- topSearchArea -->
 		<?php echo $this->getChildHtml('topSearch') ?>
-		<?php echo $this->getChildHtml('popularSearch') ?>
-		</div>
+		<!-- popularSearchArea -->
+		<?php //echo $this->getChildHtml('popularSearch')
+		?>
 	</div>
 </div>
-
+<!-- header-->
 
 
 

@@ -35,45 +35,38 @@
     <?php echo $this->getChildHtml('head') ?>
 </head>
 <body <?php echo $this->getBodyClass()?'class="'.$this->getBodyClass().'"':'' ?>>
-    <?php echo $this->getChildHtml('global_notices') ?>
-    <div class="no-display">
-        <h4>Skip to Store Area:</h4>
-        <ul>
-            <li><a href="#main"><?php echo $this->__('Skip to Main Content') ?></a></li>
-            <li><a href="#col-left"><?php echo $this->__('Skip to Left Column') ?></a></li>
-            <li><a href="#footer"><?php echo $this->__('Skip to Footer') ?></a></li>
-        </ul>
-    </div>
-    <div class="container">
-        <div class="outline-creator">
-        <?php echo $this->getChildHtml('header') ?>
-            <!--div class="toplinks-bar">
-                <?php 
-					// echo $this->getChildHtml('store_language')
-				?>
-                <?php
-					//echo $this->getChildHtml('topLinks') 
-				?>
-             </div-->
+	<?php echo $this->getChildHtml('header') ?>
+	<div class="whiteBg">
+		<div class="wrapper">
+			<!-- globalLinks -->
+			<?php echo $this->getChildHtml('global_links') ?>
+
 			<div class="breadcrumbs-bar">
 				<?php echo $this->getChildHtml('breadcrumbs') ?>
 				<?php echo $this->getLayout()->getBlock('header')->getWelcome() ?>
 			</div>
-            <div class="middle layout-2columns">
-				<div class="col-left sidebar" id="col-left">
-                    <?php echo $this->getChildHtml('left')?>
-                </div>
-                <div class="col-main" id="main">
+			<div class="clear"></div>
+			
+			<div class="leftNavArea" id="col-left">
+				<?php echo $this->getChildHtml('left')?>
+			</div>
+
+			<!-- middle section  -->
+            <div class="mainArea">
+				<div class="middle">
 					<?php echo $this->getChildHtml('global_messages') ?>
 					<?php echo $this->getChildHtml('content') ?>
-				 </div>
+				</div>
             </div>
-        </div>
-        <div class="footer" id="footer">
-            <?php echo $this->getChildHtml('footer') ?>
-        </div>
-    </div>
-    <?php echo $this->getChildHtml('before_body_end') ?>
-    <?php echo $this->getAbsoluteFooter() ?>
+			<!-- end middle section  -->
+			
+			<div class="clear"></div>
+			<!-- footer section  -->
+		    <?php echo $this->getChildHtml('footer') ?>
+			<?php echo $this->getChildHtml('before_body_end') ?>
+			<?php echo $this->getAbsoluteFooter() ?>
+			<!-- footer section ends  -->
+		</div><!-- wrapper -->
+	</div><!-- whiteBg -->
 </body>
 </html>

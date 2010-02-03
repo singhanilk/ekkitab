@@ -20,6 +20,12 @@ ini_set("display_errors", 1);
 
     include("importbooks_config.php");
     require_once(LOG4PHP_DIR . '/LoggerManager.php');
+    ini_set(include_path, ${include_path}.":".EKKITAB_HOME."/"."bin");
+    include("imagehash.php");
+
+    define(UNCLASSIFIED, "ZZZ000000");
+    $unclassified = array();
+    $equivalents = array();
 
     // global logger
     $logger =& LoggerManager::getLogger("loadbooks");
@@ -89,22 +95,102 @@ ini_set("display_errors", 1);
     }
 
    /** 
-    *  Convert BISAC codes to Magento Category Codes. 
+    *  Write unclassified category codes to file. 
     */
-    function addCategoryCodes($book, $db) {
-      $book['catcode'] = "";
-      if (! empty($book['bisac'])) {
-        foreach($book['bisac'] as $value) {
-            $lookup = "select category_id from ek_bisac_category_map where bisac_code = '". $value . "'";
+    function writeUnclassifiedCodesToFile($infosource) {
+        global $unclassified;
+        $fh = fopen(IMPORTBOOKS_UNCLASSIFIED, "a"); 
+        if (!$fh) 
+           warn("Could not open unclassified file: ".IMPORTBOOKS_UNCLASSIFIED);
+        else {
+           foreach($unclassified as $key => $value) {
+               fprintf($fh, "%s - %s - %s[%s]\n", $infosource, date("d-M-Y H:i:s"), $key, $value);
+           }
+           fclose($fh);
+        }
+    }
+
+   /** 
+    *  Read equivalents for BISAC codes. 
+    */
+    function readBisacEquivalents() {
+        global $equivalents;
+        $fh = fopen(BISAC_CODE_EQUIVALENTS, "r"); 
+        if (!$fh) 
+           warn("Could not open bisac equivalents file: ". BISAC_CODE_EQUIVALENTS);
+        else {
+           while ($line = fgets($fh)) {
+              $codes = explode("=", $line);
+              $equivalents[$codes[0]] = trim($codes[1]);
+           }
+           fclose($fh);
+        }
+    }
+
+   /** 
+    *  Get the unclassified category code. 
+    */
+    function getUnclassifiedCategoryCode($db) {
+       static $book = array(); 
+       if (empty($book)) {
+            $lookup = "select category_id,rewrite_url from ek_bisac_category_map where bisac_code = '".UNCLASSIFIED."'";
             $result = mysqli_query($db, $lookup);
             if (($result) && (mysqli_num_rows($result) > 0)){
 	            $row = mysqli_fetch_array($result);
-                $book['catcode'] = $row[0] . ",";
+                $book['catcode'] = $row[0];
+                $book['rewrite_url'] = $row[1];
+            }
+            else {
+                fatal("Could not get unclassified code.");
+            }
+       }
+       return $book;
+    }
+
+   /** 
+    *  Convert BISAC codes to Magento Category Codes. 
+    */
+    function addCategoryCodes($book, $db) {
+      global $unclassified;
+      global $equivalents;
+
+      $catIds = array();
+
+      $book['catcode'] = "";
+      if (! empty($book['bisac'])) {
+        foreach($book['bisac'] as $value) {
+            if (strcmp($value, "")) {
+                if (!empty($equivalents[$value]))
+                    $value = $equivalents[$value];
+                $lookup = "select category_id,rewrite_url from ek_bisac_category_map where bisac_code = '". $value . "'";
+                $result = mysqli_query($db, $lookup);
+                if (($result) && (mysqli_num_rows($result) > 0)){
+	                $row = mysqli_fetch_array($result);
+                    $ids = explode(",", $row[0]);
+                    foreach($ids as $id) {
+                        $catIds[$id] = 1;
+                    }
+                    $book['rewrite_url'] = $row[1];
+                }
+                else {
+                    $unclassified[$value]++;
+                }
             }
         }
       }
-      if (strcmp($book['catcode'], "")) 
-        $book['catcode'] = substr($book['catcode'], 0, strrpos($book['catcode'], ","));
+      if (empty($catIds)) {
+         $book['unclassified'] = true;
+         $tmp = getUnclassifiedCategoryCode($db);
+         $ids = explode(",", $tmp['catcode']);
+         foreach($ids as $id) {
+             $catIds[$id] = 1;
+         }
+         $book['rewrite_url'] = $tmp['rewrite_url'];
+      }
+      else 
+         $book['unclassified'] = false;
+
+      $book['catcode'] = implode(",", array_keys($catIds));
 
       return ($book);
     }
@@ -114,13 +200,17 @@ ini_set("display_errors", 1);
     */
     function insertBook($book, $db, $language, $shipregion, $infosource) {
 
-       $query = "insert into books (`isbn10`, `isbn`, `author`, `publisher`, `title`, `pages`, " .
+       $book['thumbnail'] = getHash($book['thumbnail']);
+       $book['image'] = getHash($book['image']);
+
+       $query = "insert into books (`isbn10`, `isbn`, `author`, `binding`, `publisher`, `title`, `pages`, " .
                 "`language`, `bisac1`, `cover_thumb`, `image`, `weight`, " .
-                "`dimension`, `edition`, `shipping_region`, `info_source`, `new`) values (";
+                "`dimension`, `edition`, `shipping_region`, `info_source`, `sourced_from`, `new`, `rewrite_url`) values (";
 
        $query = $query . "'" . $book['isbn'] . "'".",";
        $query = $query . "'" . $book['isbn13'] . "'".",";
        $query = $query . "'" . $book['author'] . "'".",";
+       $query = $query . "'" . $book['binding'] . "'".",";
        $query = $query . "'" . $book['publisher'] . "'".",";
        $query = $query . "'" . $book['title'] . "'".",";
        $query = $query . "'" . $book['pages'] . "'" . ",";
@@ -135,7 +225,9 @@ ini_set("display_errors", 1);
        $query = $query . "'" . $book['edition'] . "'" . ",";
        $query = $query . "'" . $shipregion . "'" . ",";
        $query = $query . "'" . $infosource . "'" . ",";
-       $query = $query . "0" . ");";
+       $query = $query . "'" . $book['sourced_from'] . "'" . ",";
+       $query = $query . "1" . ",";
+       $query = $query . "'" . $book['rewrite_url'] . "'". ");";
        if (! $result = mysqli_query($db, $query)) {
            warn("Failed to write to Books: ". mysqli_error($db), $query);
            return(0); 
@@ -161,6 +253,8 @@ ini_set("display_errors", 1);
         if (!$fh) {
             fatal("Could not open data file: $argv[2]");
         }
+
+        readBisacEquivalents();
         $infosource = $argv[1];
         $language   = $argv[3];
         require_once(IMPORTBOOKS_CLASSDIR . "/" . $infosource . ".php");
@@ -170,33 +264,36 @@ ini_set("display_errors", 1);
         $parser       = new Parser;
         $i            = 1;
         $unresolved   = 0;
+        $ignored      = 0;
         $errorcount   = 0;
         $filenotfound = 0;
         $shipregion   = 0; 
     
         while ($line = fgets($fh)) {
             $book = $parser->getBook($line);
-            $book = addCategoryCodes($book, $db);
-            if (!strcmp($book['catcode'][0], "")) { 
-                $unresolved++;
-                //debug("Unresolved: " . $book['bisac'][0]);
-            }
-            elseif (!file_exists("../magento/media/catalog/product/9/7/" . $book['thumbnail'])) {
-                $filenotfound++;
-                //debug("File not found: " . $book['thumbnail']);
-            }
-            elseif (!insertBook($book, $db, $language, $shipregion, $infosource)){
-                $errorcount++;
+            if ($book == null) {
+                $ignored++;
             }
             else {
-                //debug("Updated book: " . $book['isbn13']);
+                $book = addCategoryCodes($book, $db);
+                if (empty($book['catcode'])) { 
+                    $unresolved++;
+                }
+                elseif (!insertBook($book, $db, $language, $shipregion, $infosource)){
+                    $errorcount++;
+                }
+                if ($book['unclassified'])
+                    $unclassified++;
             }
         
             if ($i++ % 10000 == 0) {
-                $inserted = $i - ($errorcount + $unresolved + $filenotfound + 1);
-                debug("Processed $i books. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$filenotfound] files not found.\n");
+                $inserted = $i - ($errorcount + $unresolved + $filenotfound + $ignored + 1);
+                debug("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.\n");
             }
         }
+        $inserted = $i - ($errorcount + $unresolved + $filenotfound + $ignored + 1);
+        writeUnclassifiedCodesToFile($infosource);
+        debug("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.\n");
     
         fclose($fh);
         mysqli_close($db);
@@ -205,5 +302,5 @@ ini_set("display_errors", 1);
     $start = (float) array_sum(explode(' ', microtime()));
     start($argc, $argv);
     $end = (float) array_sum(explode(' ', microtime()));
-    echo "Processing time: " . sprintf("%.2f", ($end - $start)) . " seconds.\n";
+    echo "Processing time: " . sprintf("%.2f", ($end - $start)/60) . " minutes.\n";
 ?>

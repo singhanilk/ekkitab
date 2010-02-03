@@ -25,10 +25,11 @@ ini_set("display_errors", 1);
     include("magento_db_constants.php");
 	
 		
-	define("SELECT_LIMIT", 10000);
+	define("SELECT_LIMIT", 1000);
     $mysqlTime = 0;
     $mysqlTimeRefDb = 0;
     $failedBooks = 0;
+    $dbs = array();
 
     require_once(LOG4PHP_DIR . '/LoggerManager.php');
 
@@ -41,7 +42,10 @@ ini_set("display_errors", 1);
     */
     function fatal($message, $query = "") {
         global $logger;
+        global $dbs;
 	    $logger->fatal("$message " . "[ $query ]" . "\n");
+        mysqli_close($dbs[ekkitab_db]);
+        mysqli_close($dbs[ref_db]);
         exit(1);
     }
 
@@ -109,6 +113,7 @@ ini_set("display_errors", 1);
 	    $queries[] = 'select max(value_id) from catalog_product_entity_text';
 	    $queries[] = 'select max(value_id) from catalog_product_entity_varchar';
 	    $queries[] = 'select max(item_id) from cataloginventory_stock_item';
+        $queries[] = 'select max(url_rewrite_id) from core_url_rewrite';
 
         $i = 0;
 
@@ -191,21 +196,27 @@ ini_set("display_errors", 1);
    /** 
     * Create and return an INSERT mysql query from arguments.  
     */
-    function createInsertQuery($table, $values) {
-        $query = "insert into $table values( ";
+    function createInsertQuery($table, $columns, $values) {
+
+        $query = "insert into $table ( $columns ) values ";
         foreach ($values as $value) {
-            $query .= "$value, ";
+            $query .= "(";
+            foreach ($value as $item) {
+                $query .= "$item, ";
+            }
+            $query = substr($query, 0, strrpos($query, ","));
+            $query .= "),";
         }
         $query = substr($query, 0, strrpos($query, ","));
-        $query .= ")";
+        $query .= ";";
 		return $query;
     }
 
    /** 
     * Create and return an UPDATE mysql query from arguments.  
     */
-    function createUpdateQuery($table, $setvalue, $where) {
-        $query = "update $table set value = '$setvalue' where ";
+    function createUpdateQuery($table, $value, $setvalue, $where) {
+        $query = "update $table set $value = '$setvalue' where ";
         foreach ($where as $field => $value) {
             $query .= "$field = $value and ";
         }
@@ -216,18 +227,23 @@ ini_set("display_errors", 1);
    /** 
     * Set auto-commit mode for database.  
     */
-    function setAutoCommit($db, $mode = true) {
+    function prepareDb($db) {
         global $logger;
-        $query = "set autocommit = " . ($mode ? "1" : "0");
-        //$logger->info("Autocommit: $query");
+        $queries[0] = "set autocommit = 0";
+        $queries[1] = "set foreign_key_checks = 0";
+        $queries[2] = "set unique_checks = 0";
+        
         try {
-	        $result = mysqli_query($db,$query);
-            if (!$result)
-                throw new exception("Failed to set requested autocommit mode. [$query]");
+            foreach ($queries as $query) {
+	            $result = mysqli_query($db,$query);
+                if (!$result)
+                    throw new exception("Failed to issue prepare db commands. [$query]");
+            }
         }
         catch(exception $e) {
             fatal($e->getmessage());
         }
+
     }
 
    /** 
@@ -249,6 +265,7 @@ ini_set("display_errors", 1);
         $entityIds[CPEIN] += 4;
         $entityIds[CPETX] += 4;
         $entityIds[CPEVC] += 23;
+        $entityIds[URL]   += 4;
         return $entityIds;
     }
 
@@ -274,6 +291,23 @@ ini_set("display_errors", 1);
         return(preg_replace($pattern, $replace, $str));
     }
 
+   /**
+     * Obtains the full category path for url rewrite.
+     */
+     function getCategoryFullPath($book_path,$ids){
+         $paths = explode("/", $book_path);
+         $ids   = explode(",", $ids);
+         $ret   = array();
+
+         for ($i = count($ids) - 1; $i >= 0; $i--) {
+           $pathname = "";
+           for ($j = 0; $j <= $i; $j++)
+                $pathname = $pathname . ($j == 0 ? "" : "/") . $paths[$j];
+           $ret[$ids[$i]] = $pathname;
+         }
+         return ($ret);
+     }
+
    /** 
     * Generates all the INSERT sqls required to insert a new book.  
     */
@@ -281,250 +315,218 @@ ini_set("display_errors", 1);
     function generateInsertSQLs($entityIds, $book) {
 
         $queries = array();
-	    $url_key = $book[TITLE];
+	    $url_key = $book[TITLE] . "-" . $book[ISBN];
 		$url_key = str_replace("'","",$url_key);
 		$url_key = str_replace(" ","-",$url_key);
 
 		//create categories_id entry
 
 		$book_category_ids = $book[BISAC];
-        /*
-		if(!empty($book[BISAC2])) 
-		  $book_category_ids .= ",$book[BISAC2]";
-		if(!empty($book[BISAC3]))
-		  $book_category_ids .= ",$book[BISAC3]";
-        */
-
         $imagepath = getImagePath($book[IMAGE]);
         $thumbnailpath = getImagePath($book[THUMB]);
 		
-		$queries[] = createInsertQuery("catalog_product_entity",
-                                        array($entityIds[CPE], entity_type_id, attribute_set_id, 
-                                        "'simple'", "'$book[ISBN]'", "'$book_category_ids'",
-			                            "curdate()", "curdate()", has_options, required_option));
+        $val_array = array();
+        $val_array[] = array($entityIds[CPE], entity_type_id, attribute_set_id, "'$book[ISBN]'", "'$book_category_ids'",
+                             "curdate()", "curdate()");
+
+		$queries[] = createInsertQuery("catalog_product_entity", 
+                                       "entity_id, entity_type_id, attribute_set_id, sku, category_ids, created_at, updated_at", 
+                                       $val_array);
 
 		$book_pdate = $book[PDATE];
-	    $queries[] = createInsertQuery("catalog_product_entity_datetime",
-                                        array($entityIds[CPEDT], entity_type_id, bo_pu_date_id, store_id, $entityIds[CPE],"'$book_pdate'")); 
+
+        $val_array = array();
+        $val_array[] = array(entity_type_id, bo_pu_date_id, store_id, $entityIds[CPE]);
+
+	    $queries[] = createInsertQuery("catalog_product_entity_datetime", 
+                                       "entity_type_id, attribute_id, store_id, entity_id",
+                                       $val_array);
+
+        if (empty($book[PRICE])) {
+            $book[PRICE] = 0.0;
+        }
+        if (empty($book[WEIGHT])) {
+            $book[WEIGHT] = 0.0;
+        }
+
+		$discount_price = empty($book[DISCOUNT_PRICE]) ? 0.0 : $book[DISCOUNT_PRICE];
+
+        $val_array   = array();
+        $val_array[] = array(entity_type_id, price_id, store_id, $entityIds[CPE], $book[PRICE]);
+        $val_array[] = array(entity_type_id, special_price_id,store_id,$entityIds[CPE],$discount_price);
+        $val_array[] = array(entity_type_id, weight_id,store_id,$entityIds[CPE],$book[WEIGHT]);
+        $queries[] = createInsertQuery("catalog_product_entity_decimal", 
+                                       "entity_type_id, attribute_id, store_id, entity_id, value",
+                                       $val_array);
+
+        if (empty($book[PRODUCT_STATUS])) {
+            $book[PRODUCT_STATUS] = 0;
+        }
+        if (empty($book[INT_SHIPPING])) {
+            $book[INT_SHIPPING] = 0;
+        }
+
+        $val_array = array();
+        $val_array[] = array(entity_type_id, status_id,store_id,$entityIds[CPE],$book[PRODUCT_STATUS]);
+        $val_array[] = array(entity_type_id, tax_class_id,store_id,$entityIds[CPE],tax_class_value);    
+        $val_array[] = array(entity_type_id,visibility_id,store_id,$entityIds[CPE],book_visibility_value);
+        $val_array[] = array(entity_type_id, enable_googlecheckout_id,store_id,$entityIds[CPE],option_enable);
+        $val_array[] = array(entity_type_id, bo_int_shipping_id,store_id,$entityIds[CPE],$book[INT_SHIPPING]);
+        $queries[] = createInsertQuery("catalog_product_entity_int", 
+                                       "entity_type_id, attribute_id, store_id, entity_id, value",
+                                       $val_array);
 
 
-        $queries[] = createInsertQuery("catalog_product_entity_decimal",
-                                       array($entityIds[CPEDE], entity_type_id, price_id, store_id, $entityIds[CPE], "'$book[PRICE]'"));
+        $val_array = array();
+        $val_array[] = array(media_gallery_id, $entityIds[CPE],"'$imagepath'");
+        $queries[] = createInsertQuery("catalog_product_entity_media_gallery", 
+                                       "attribute_id, entity_id, value",
+                                       $val_array);
 
-		//calculate the discount
-		$discount_price = 0.00;
-		$discount_price = $book[PRICE]-($book[PRICE]*($book[DISCOUNT]/100));
-
-        $queries[] = createInsertQuery("catalog_product_entity_decimal",
-                                       array($entityIds[CPEDE]+1,entity_type_id, special_price_id,store_id,$entityIds[CPE],"'$discount_price'"));    
-
-		$queries[] = createInsertQuery("catalog_product_entity_decimal",
-                                       array($entityIds[CPEDE]+2,entity_type_id, weight_id,store_id,$entityIds[CPE],"'$book[WEIGHT]'"));    
-
-
-        $queries[] = createInsertQuery("catalog_product_entity_int",
-                                       array($entityIds[CPEIN],entity_type_id, status_id,store_id,$entityIds[CPE],"'$book[PRODUCT_STATUS]'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_int",
-                                       array($entityIds[CPEIN]+1,entity_type_id, tax_class_id,store_id,$entityIds[CPE],tax_class_value));    
-
-        $queries[] = createInsertQuery("catalog_product_entity_int",
-                                       array($entityIds[CPEIN]+2,entity_type_id,visibility_id,store_id,$entityIds[CPE],book_visibility_value));
-
-        $queries[] = createInsertQuery("catalog_product_entity_int",
-                                       array($entityIds[CPEIN]+3,entity_type_id, enable_googlecheckout_id,store_id,$entityIds[CPE],option_enable));
-
-        $queries[] = createInsertQuery("catalog_product_entity_int",
-                                       array($entityIds[CPEIN]+4,entity_type_id, bo_int_shipping_id,store_id,$entityIds[CPE],"'$book[INT_SHIPPING]'"));
-
-
-        $queries[] = createInsertQuery("catalog_product_entity_media_gallery",
-                                       array($entityIds[CPEMG], media_gallery_id, $entityIds[CPE],"'$imagepath'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_media_gallery_value",
-                                       array($entityIds[CPEMG],store_id,"''",media_position,option_disable));    
+        $val_array = array();
+        $val_array[] = array($entityIds[CPEMG],store_id,media_position);    
+        $queries[] = createInsertQuery("catalog_product_entity_media_gallery_value", 
+                                       "value_id, store_id, position",
+                                       $val_array);
 
 
         $bookpublisher = escape($book[PUBLISHER]);
-        $queries[] = createInsertQuery("catalog_product_entity_text",
-                                       array($entityIds[CPETX],entity_type_id,bo_publisher_id,store_id,$entityIds[CPE],"'$bookpublisher'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_text",
-                                       array($entityIds[CPETX]+1,entity_type_id, descrption_id,store_id,$entityIds[CPE],"'$book[DESCRIPTION]'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_text",
-                                       array($entityIds[CPETX]+2,entity_type_id, short_descrption_id,store_id, $entityIds[CPE],"'$book[DESCRIPTION]'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_text",
-                                       array($entityIds[CPETX]+3,entity_type_id,meta_keyword_id,store_id,$entityIds[CPE],"'".value_empty."'")); 
-
-        $queries[] = createInsertQuery("catalog_product_entity_text",
-                                       array($entityIds[CPETX]+4,entity_type_id,custom_layout_update_id,store_id,$entityIds[CPE],"'".value_empty."'"));
+        $val_array = array();
+        $val_array[] = array(entity_type_id,bo_publisher_id,store_id,$entityIds[CPE],"'$bookpublisher'");
+        $val_array[] = array(entity_type_id, descrption_id,store_id,$entityIds[CPE],"'$book[DESCRIPTION]'");
+        $val_array[] = array(entity_type_id, short_descrption_id,store_id, $entityIds[CPE],"'$book[DESCRIPTION]'");
+        $val_array[] = array(entity_type_id,meta_keyword_id,store_id,$entityIds[CPE],"''"); 
+        $val_array[] = array(entity_type_id,custom_layout_update_id,store_id,$entityIds[CPE],"''");
+        $queries[] = createInsertQuery("catalog_product_entity_text", 
+                                       "entity_type_id, attribute_id, store_id, entity_id, value",
+                                       $val_array);
 
         $booktitle = escape($book[TITLE]);
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                       array($entityIds[CPEVC],entity_type_id,name_id,store_id,$entityIds[CPE],"'$booktitle'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                       array($entityIds[CPEVC]+1,entity_type_id,meta_title_id,store_id,$entityIds[CPE],"'".value_empty."'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                       array($entityIds[CPEVC]+2,entity_type_id,meta_description_id,store_id,$entityIds[CPE],"'".value_empty."'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                        array($entityIds[CPEVC]+3,entity_type_id,url_key_id,store_id,$entityIds[CPE],"'$url_key'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                        array($entityIds[CPEVC]+4,entity_type_id,url_id,store_id,$entityIds[CPE],"'$url_key".".html'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_varchar", 
-                                        array($entityIds[CPEVC]+5,entity_type_id,options_container,store_id,$entityIds[CPE],
-			                            "'".options_container_value."'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                        array($entityIds[CPEVC]+6,entity_type_id,image_label_id,store_id,$entityIds[CPE],"'".value_empty."'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                        array($entityIds[CPEVC]+7,entity_type_id,small_image_label_id,store_id,$entityIds[CPE],"'".value_empty."'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                        array($entityIds[CPEVC]+8,entity_type_id,thumb_label_id,store_id,$entityIds[CPE],"'".value_empty."'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                        array($entityIds[CPEVC]+9,entity_type_id,gift_message_avialable_id,store_id,
-			                            $entityIds[CPE],gift_message_value));
-
         $bookauthor = escape($book[AUTHOR]);
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                        array($entityIds[CPEVC]+10,entity_type_id,bo_author_id,store_id,$entityIds[CPE],"'$bookauthor'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                       array($entityIds[CPEVC]+11,entity_type_id,bo_isbn_id,store_id,$entityIds[CPE],"'$book[ISBN]'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                       array($entityIds[CPEVC]+12,entity_type_id,bo_binding_id,store_id,$entityIds[CPE],"'$book[BINDING]'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                       array($entityIds[CPEVC]+13,entity_type_id,bo_isbn10_id,store_id,$entityIds[CPE],"'$book[ISBN10]'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                       array($entityIds[CPEVC]+14,entity_type_id,bo_language_id,store_id,$entityIds[CPE],"'$book[LANGUAGE]'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                       array($entityIds[CPEVC]+15,entity_type_id,bo_no_pg_id,store_id,$entityIds[CPE],"'$book[PAGES]'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                       array($entityIds[CPEVC]+16,entity_type_id,bo_dimension_id,store_id,$entityIds[CPE],"'$book[DIMENSION]'"));
-
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                       array($entityIds[CPEVC]+17,entity_type_id,bo_illustrator_id,store_id,$entityIds[CPE],"'$book[ILLUSTRATOR]'"));
-
         $bookedition = escape($book[EDITION]);
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                       array($entityIds[CPEVC]+18,entity_type_id,bo_edition_id,store_id,$entityIds[CPE],"'$bookedition'"));
 
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                       array($entityIds[CPEVC]+19,entity_type_id,bo_rating_id,store_id,$entityIds[CPE],"'$book[RATING]'"));
+        $val_array = array();
+        $val_array[] = array(entity_type_id,name_id,store_id,$entityIds[CPE],"'$booktitle'");
+        $val_array[] = array(entity_type_id,meta_title_id,store_id,$entityIds[CPE],"'".value_empty."'");
+        $val_array[] = array(entity_type_id,meta_description_id,store_id,$entityIds[CPE],"'".value_empty."'");
+        $val_array[] = array(entity_type_id,url_key_id,store_id,$entityIds[CPE],"'$url_key'");
+        $val_array[] = array(entity_type_id,url_id,store_id,$entityIds[CPE],"'$url_key".".html'");
+        $val_array[] = array(entity_type_id,options_container,store_id,$entityIds[CPE],"'".options_container_value."'");
+        $val_array[] = array(entity_type_id,image_label_id,store_id,$entityIds[CPE],"'".value_empty."'");
+        $val_array[] = array(entity_type_id,small_image_label_id,store_id,$entityIds[CPE],"'".value_empty."'");
+        $val_array[] = array(entity_type_id,thumb_label_id,store_id,$entityIds[CPE],"'".value_empty."'");
+        $val_array[] = array(entity_type_id,gift_message_avialable_id,store_id,$entityIds[CPE],"'".gift_message_value."'");
+        $val_array[] = array(entity_type_id,bo_author_id,store_id,$entityIds[CPE],"'$bookauthor'");
+        $val_array[] = array(entity_type_id,bo_isbn_id,store_id,$entityIds[CPE],"'$book[ISBN]'");
+        $val_array[] = array(entity_type_id,bo_binding_id,store_id,$entityIds[CPE],"'$book[BINDING]'");
+        $val_array[] = array(entity_type_id,bo_isbn10_id,store_id,$entityIds[CPE],"'$book[ISBN10]'");
+        $val_array[] = array(entity_type_id,bo_language_id,store_id,$entityIds[CPE],"'$book[LANGUAGE]'");
+        $val_array[] = array(entity_type_id,bo_no_pg_id,store_id,$entityIds[CPE],"'$book[PAGES]'");
+        $val_array[] = array(entity_type_id,bo_dimension_id,store_id,$entityIds[CPE],"'$book[DIMENSION]'");
+        $val_array[] = array(entity_type_id,bo_illustrator_id,store_id,$entityIds[CPE],"'$book[ILLUSTRATOR]'");
+        $val_array[] = array(entity_type_id,bo_edition_id,store_id,$entityIds[CPE],"'$bookedition'");
+        $val_array[] = array(entity_type_id,bo_rating_id,store_id,$entityIds[CPE],"'$book[RATING]'");
+        $val_array[] = array(entity_type_id,bo_image_id,store_id,$entityIds[CPE], "'$imagepath'");
+        $val_array[] = array(entity_type_id,bo_small_image_id,store_id,$entityIds[CPE], "'$imagepath'");
+        $val_array[] = array(entity_type_id,bo_thumb_image_id,store_id,$entityIds[CPE], "'$thumbnailpath'");
+        $val_array[] = array(entity_type_id,bo_shipping_region_id,store_id,$entityIds[CPE], "'$book[SHIPPING_REGION]'");
+        $val_array[] = array(entity_type_id,bo_sourced_from,store_id,$entityIds[CPE], "'$book[SOURCED_FROM]'");
+        $queries[] = createInsertQuery("catalog_product_entity_varchar", 
+                                       "entity_type_id, attribute_id, store_id, entity_id, value",
+                                       $val_array);
 
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                       array($entityIds[CPEVC]+20,entity_type_id,bo_image_id,store_id,$entityIds[CPE],
-                                       "'$imagepath'"));
+        $val_array = array();
+        $val_array[] = array(1,$entityIds[CPE],tax_class_id,tax_class_value);
+		$queries[] = createInsertQuery("catalogindex_eav", 
+                                       "store_id, entity_id, attribute_id, value",
+                                       $val_array);
 
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                        array($entityIds[CPEVC]+21,entity_type_id,bo_small_image_id,store_id,$entityIds[CPE],
-                                       "'$imagepath'"));
 
-        $queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                        array($entityIds[CPEVC]+22,entity_type_id,bo_thumb_image_id,store_id,$entityIds[CPE],
-                                       "'$thumbnailpath'"));
+        $val_array = array();
+        $val_array[] = array($entityIds[CPE],price_id,catalogindex_price_user_0, 
+                             catalogindex_price_qty_value,$book[PRICE],tax_class_value,website_id);
+        $val_array[] = array($entityIds[CPE],price_id,catalogindex_price_user_1,
+                             catalogindex_price_qty_value,$book[PRICE],tax_class_value,website_id);
+        $val_array[] = array($entityIds[CPE],price_id,catalogindex_price_user_2,
+                             catalogindex_price_qty_value,$book[PRICE],tax_class_value,website_id);
+        $val_array[] = array($entityIds[CPE],price_id,catalogindex_price_user_3,
+                             catalogindex_price_qty_value,$book[PRICE],tax_class_value,website_id);
+        $queries[] = createInsertQuery("catalogindex_price", 
+                                       "entity_id, attribute_id, customer_group_id, qty, value, tax_class_id, website_id",
+                                       $val_array);
+   
+        if (empty($book[QTY])) {
+            $book[QTY] = 0;
+        } 
+        $val_array = array();
+        $val_array[] = array($entityIds[CPE], stock_id, $book[QTY], use_config_backorders, $book[IN_STOCK]);
+        $queries[] = createInsertQuery("cataloginventory_stock_item", 
+                                       "product_id, stock_id, qty, use_config_backorders, is_in_stock",
+                                       $val_array);
 
-		$queries[] = createInsertQuery("catalog_product_entity_varchar",
-                                        array($entityIds[CPEVC]+23,entity_type_id,bo_shipping_region_id,store_id,$entityIds[CPE],
-                                       "'$book[SHIPPING_REGION]'"));
+        $val_array = array();
+        $val_array[] = array($entityIds[CPE],website_id,stock_id,$book[QTY],stock_status);
+        $queries[] = createInsertQuery("cataloginventory_stock_status", 
+                                       "product_id, website_id, stock_id, qty, stock_status",
+                                       $val_array);
 
-		$queries[] = createInsertQuery("catalogindex_eav",
-                                       array(1,$entityIds[CPE],tax_class_id,tax_class_value));
-
-        $queries[] = createInsertQuery("catalogindex_price",
-                                       array($entityIds[CPE],price_id,catalogindex_price_user_0,
-									   catalogindex_price_qty_value,"'$book[PRICE]'",tax_class_value,website_id));
-
-        $queries[] = createInsertQuery("catalogindex_price",
-									   array($entityIds[CPE],price_id,catalogindex_price_user_1,
-									   catalogindex_price_qty_value,"'$book[PRICE]'",tax_class_value,website_id));
-
-        $queries[] = createInsertQuery("catalogindex_price",
-									   array($entityIds[CPE],price_id,catalogindex_price_user_2,
-									   catalogindex_price_qty_value,"'$book[PRICE]'",tax_class_value,website_id));
-
-        $queries[] = createInsertQuery("catalogindex_price",
-										array($entityIds[CPE],price_id,catalogindex_price_user_3,
-										catalogindex_price_qty_value,"'$book[PRICE]'",tax_class_value,website_id));
-
-        $queries[] = createInsertQuery("cataloginventory_stock_item",
-                                        array($entityIds[CISI],$entityIds[CPE],
-                                        stock_id,"'$book[QTY]'",catalogindex_price_qty_value, use_config_min_qty,is_qty_decimal,
-										backorders,use_config_backorders,min_sale_qty,use_config_min_sale_qty,max_sale_qty,
-										use_config_max_sale_qty,is_in_stock,"'".value_default."'","'".value_default."'",use_config_notify_stock_qty,
-										manage_stock,use_config_manage_stock,stock_status_changed_automatically));
-
-        $queries[] = createInsertQuery("cataloginventory_stock_status",
-                                        array($entityIds[CPE],website_id,stock_id,"'$book[QTY]'",stock_status));
-
-        /*
-        if(!empty($books[BISAC3])){
-			$queries[] = createInsertQuery("catalog_category_product",
-                                        array($book[BISAC3],$entityIds[CPE],position));
-		}
-		else if (!empty($books[BISAC2])){
-				 $queries[] = createInsertQuery("catalog_category_product",
-		                       array($book[BISAC2],$entityIds[CPE],position));
-		}
-		else {
-	    */	
         $category_ids = explode(",", $book[BISAC]); 
 
+        $val_array = array();
         foreach($category_ids as $id_value) {
-		    $queries[] = createInsertQuery("catalog_category_product",
-                                            array($id_value,$entityIds[CPE],position));
+		    $val_array[] = array($id_value,$entityIds[CPE]);
         }
-		/* } */
+		$queries[] = createInsertQuery("catalog_category_product", 
+                                       "category_id, product_id",
+                                       $val_array);
 
-        $queries[] = createInsertQuery("catalog_category_product_index",
-                                        array(root_category_value,$entityIds[CPE],position,is_parent_0,catalogindex_eav_store_id,
-										book_visibility_value));
+        $val_array = array();
+        $val_array[] = array(root_category_value,$entityIds[CPE],0,catalogindex_eav_store_id, book_visibility_value);
 
         foreach($category_ids as $id_value) {
-            $queries[] = createInsertQuery("catalog_category_product_index",
-                                            array($id_value,$entityIds[CPE],position,is_parent_1,catalogindex_eav_store_id,book_visibility_value));
+            $val_array[] = array($id_value,$entityIds[CPE],1,catalogindex_eav_store_id,book_visibility_value);
         }
 
-        /*
-		if(!empty($book[BISAC2])){
-			$queries[] = createInsertQuery("catalog_category_product_index",
-                                        array($book[BISAC2],$entityIds[CPE],position,is_parent_1,catalogindex_eav_store_id,book_visibility_value));
-		}
+        $queries[] = createInsertQuery("catalog_category_product_index", 
+                                       "category_id, product_id, is_parent, store_id, visibility",
+                                       $val_array);
 
-		if(!empty($book[BISAC3])){
-			$queries[] = createInsertQuery("catalog_category_product_index",
-                                        array($book[BISAC3],$entityIds[CPE],position,is_parent_1,catalogindex_eav_store_id,book_visibility_value));
-		}
-        */
+        $val_array = array();
+        $val_array[] = array($entityIds[CPE],catalogindex_eav_store_id,book_visibility_value);
+        $queries[] = createInsertQuery("catalog_product_enabled_index", 
+                                       "product_id, store_id, visibility",
+                                       $val_array);
 
-        $queries[] = createInsertQuery("catalog_product_enabled_index",
-                                        array($entityIds[CPE],catalogindex_eav_store_id,book_visibility_value));
 
-        $queries[] = createInsertQuery("catalog_product_website",
-                                        array($entityIds[CPE],website_id));
-		
+        $val_array = array();
+        $val_array[] = array($entityIds[CPE],website_id);
+        $queries[] = createInsertQuery("catalog_product_website", "product_id, website_id", $val_array);
+
 		//Create the  dataindex for catalogsearch_fulltext 
-		$search_data_index = escape($book[TITLE]) . " " . escape($books[AUTHOR]) . " " . $book[ISBN];
+		/* $search_data_index = escape($book[TITLE]) . " " . escape($books[AUTHOR]) . " " . $book[ISBN];
 		
 		$queries[] = createInsertQuery("catalogsearch_fulltext",
-                                        array($entityIds[CPE],catalogindex_eav_store_id,"'$search_data_index'"));
+                                        array($entityIds[CPE],catalogindex_eav_store_id,"'$search_data_index'")); */
 
-        writeIndexInformation($entityIds[CPE], $bookauthor, $booktitle, $imagepath, $url_key.".html");
-		
+       //Create the url_rewrite
+        $seed_url = $book[REWRITE_URL];
+        $seed_url = substr($seed_url, 0, strrpos($seed_url, "."));
+        $categoryPath = getCategoryFullPath($seed_url,$book[BISAC]);
+
+        $val_array = array();
+        $val_array[] = array(catalogindex_eav_store_id,"NULL",$entityIds[CPE],
+                             "'product/".$entityIds[CPE]."'","'$url_key".".html'",
+                             "'catalog/product/view/id/".$entityIds[CPE]."'","''");
+
+        foreach($categoryPath as $id => $path) {
+               $val_array[] = array(catalogindex_eav_store_id,$id,$entityIds[CPE],
+                              "'product/".$entityIds[CPE]."/".$id."'","'".$path."/".$url_key.".html'",
+                              "'catalog/product/view/id/".$entityIds[CPE]."/category/".$id."'","''");
+        }
+        $queries[] = createInsertQuery("core_url_rewrite", 
+                                       "store_id, category_id, product_id, id_path, request_path, target_path, options",
+                                       $val_array);
+ 
 		return $queries;
     }
    /** 
@@ -534,135 +536,17 @@ ini_set("display_errors", 1);
 
         $queries = array();
 
-	    $url_key= $book[TITLE];
-		$url_key = str_replace("'","",$url_key);
-		$url_key = str_replace(" ","-",$url_key);
-
-        $imagepath = getImagePath($book[IMAGE]);
-        $thumbnailpath = getImagePath($book[THUMB]);
-
-        $queries[] = createUpdateQuery("catalog_product_entity_datetime",
-                                        $book[PDATE], array(entity_id => $id, attribute_id => bo_publisher_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_decimal",
+        $queries[] = createUpdateQuery("catalog_product_entity_decimal", "value",
                                         $book[PRICE], array(entity_id => $id, attribute_id => price_id));
 		
-		//calculate the discounted Price
-		$discount_price = 0.00;
-		$discount_price = $book[PRICE]-($book[PRICE]*($book[DISCOUNT]/100));
+		$discount_price = empty($book[DISCOUNT_PRICE]) ? 0.0 : $book[DISCOUNT_PRICE];
 
-        $queries[] = createUpdateQuery("catalog_product_entity_decimal", 
+        $queries[] = createUpdateQuery("catalog_product_entity_decimal", "value", 
                                         $discount_price, array(entity_id => $id, attribute_id => special_price_id));
+
+        $queries[] = createUpdateQuery("cataloginventory_stock_item", "is_in_stock", 
+                                        $book[IN_STOCK], array(product_id => $id, stock_id => stock_id));
 		
-		$queries[] = createUpdateQuery("catalog_product_entity_decimal", 
-                                        $book[WEIGHT], array(entity_id => $id, attribute_id => weight_id));
-
-	    $queries[] = createUpdateQuery("catalog_product_entity_int",
-                                        option_enable, array(entity_id => $id, attribute_id => status_id));
-
-	    $queries[] = createUpdateQuery("catalog_product_entity_int",
-                                        tax_class_value, array(entity_id => $id, attribute_id => tax_class_id));
-
-	    $queries[] = createUpdateQuery("catalog_product_entity_int", 
-                                        book_visibility_value, array(entity_id => $id, attribute_id => visibility_id));
-
-	    $queries[] = createUpdateQuery("catalog_product_entity_int",
-                                        option_enable, array(entity_id => $id, attribute_id => enable_googlecheckout_id));
-
-	    $queries[] = createUpdateQuery("catalog_product_entity_int", 
-                                        option_enable, array(entity_id => $id, attribute_id => bo_int_shipping_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_media_gallery", 
-                                        "$imagepath", 
-                                        array(entity_id => $id, attribute_id => media_gallery_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_text", 
-                                        escape($book[PUBLISHER]), array(entity_id => $id, attribute_id => bo_publisher_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_text", 
-                                        "$book[DESCRIPTION]", array(entity_id => $id, attribute_id => descrption_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_text", 
-                                        "$book[DESCRIPTION]", array(entity_id => $id, attribute_id => short_descrption_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_text", 
-                                       value_empty, array(entity_id => $id, attribute_id => meta_keyword_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_text", 
-                                       value_empty, array(entity_id => $id, attribute_id => custom_layout_update_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar",
-                                        escape($book[TITLE]), array(entity_id => $id, attribute_id => name_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar",
-                                        value_empty, array(entity_id => $id, attribute_id => meta_title_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar",
-                                        value_empty, array(entity_id => $id, attribute_id => meta_description_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        $url_key, array(entity_id => $id, attribute_id => url_key_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        $url_key.".html", array(entity_id => $id, attribute_id => url_id));
-		
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        options_container_value, array(entity_id => $id, attribute_id => options_container));
-					
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        value_empty, array(entity_id => $id, attribute_id => image_label_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        value_empty, array(entity_id => $id, attribute_id => small_image_label_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        value_empty, array(entity_id => $id, attribute_id => thumb_label_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        gift_message_value, array(entity_id => $id, attribute_id => gift_message_avialable_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        escape($book[AUTHOR]), array(entity_id => $id, attribute_id => bo_author_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$book[ISBN]", array(entity_id => $id, attribute_id => bo_isbn_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$book[BINDING]", array(entity_id => $id, attribute_id => bo_binding_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$book[ISBN10]", array(entity_id => $id, attribute_id => bo_isbn10_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$book[LANGUAGE]", array(entity_id => $id, attribute_id => bo_language_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$book[PAGES]", array(entity_id => $id, attribute_id => bo_no_pg_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$book[DIMENSION]", array(entity_id => $id, attribute_id => bo_dimension_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$book[ILLUSTRATOR]", array(entity_id => $id, attribute_id => bo_illustrator_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        escape($book[EDITION]), array(entity_id => $id, attribute_id => bo_edition_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$book[RATING]", array(entity_id => $id, attribute_id => bo_rating_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$imagepath", 
-                                        array(entity_id => $id, attribute_id => bo_image_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$imagepath", 
-									    array(entity_id => $id,  attribute_id => bo_small_image_id));
-
-        $queries[] = createUpdateQuery("catalog_product_entity_varchar", 
-                                        "$thumbnailpath", 
-                                        array(entity_id => $id, attribute_id => bo_thumb_image_id));
-
         return $queries;
     }
 
@@ -687,6 +571,16 @@ ini_set("display_errors", 1);
         fprintf($fh, "%d\t%s\t%s\t%s\t%s\n", $id, $author, $title, $image, $url);
      } 
 
+     function start1() {
+        $val_array = array();
+        $val_array[] = array(100,200, 300, 400,500,"'book name'");
+        $val_array[] = array(900,800, 700, 600,500,"'another book name'");
+        $queries[] = createInsertQuery("catalog_product_entity_varchar", $val_array);
+        foreach ($queries as $query) {
+            echo "$query\n";
+        }
+     }
+
     /**
      * Main function
      */
@@ -696,13 +590,15 @@ ini_set("display_errors", 1);
         global $mysqlTime;
         global $mysqlTimeRefDb;
         global $failedBooks;
+        global $dbs;
+
         $config = getConfig(LOADBOOKS_INI);
         $dbs = initDatabases($config);
 
         if ($dbs == NULL) 
             fatal("Failed to initialize databases");
 
-        setAutoCommit($dbs[ekkitab_db], false);
+        prepareDb($dbs[ekkitab_db]);
 
         $entityIds = getEntityIDs($dbs[ekkitab_db]);
 
@@ -711,10 +607,12 @@ ini_set("display_errors", 1);
         $failedBooks = 0;
         $totalBooks = 0;
         $start = (float) array_sum(explode(' ', microtime()));
+        $timer = array();
 
+        $k = 0;
         while ($books = getBooksFromRefDB($dbs[ref_db], SELECT_LIMIT)) {
             while ($book = mysqli_fetch_array($books)) {
-        
+
 		        if(empty($book)) 
                     continue;
 
@@ -736,12 +634,20 @@ ini_set("display_errors", 1);
                 try {
                     //$longQuery = "";
                     $startZ = (float) array_sum(explode(' ', microtime()));
+                    $sqlCounter = 0;
 	                foreach ($queries as $query)  {
+                        $startTimer = (float) array_sum(explode(' ', microtime()));
 			            $result = mysqli_query($dbs[ekkitab_db], $query);
                         if (! $result) 
                             throw new exception("Failed to commit book to ekkitab database. [$query]");
+                        $endTimer = (float) array_sum(explode(' ', microtime()));
+                        $timer[$sqlCounter++] += ($endTimer - $startTimer);
                         //$longQuery .= "$query;";
+                        $k++;
 	                }
+                    $result = mysqli_query($dbs[ekkitab_db], "commit");
+                    if (! $result) 
+                        throw new exception("Failed to commit on ekkitab database.");
                     //$longQuery .= "commit; ";
                     //$logger->info("Query: $longQuery");
                     //$startZ = (float) array_sum(explode(' ', microtime()));
@@ -776,13 +682,16 @@ ini_set("display_errors", 1);
                 }
                 //$logger->info("Finished: $book[ISBN] " . ($isInsert ? "inserted." : "updated."));
             }
-            $result = mysqli_query($dbs[ekkitab_db], "commit");
-            if (! $result) 
-                throw new exception("Failed to commit on ekkitab database.");
             $end = (float) array_sum(explode(' ', microtime()));
-            $logger->info("Processed $totalBooks books (Inserted: $insertedBooks, Updated: $updatedBooks, Failed: $failedBooks) in " . sprintf("%.4f", ($end - $start)) . " seconds.");
+            $logger->info("Processed $totalBooks books (Inserted: $insertedBooks, Updated: $updatedBooks, Failed: $failedBooks) in " . sprintf("%.2f", ($end - $start)/60) . " minutes." . " [in ekkitab_books] = " . sprintf("%.2f sec.", $mysqlTime) . " [in ref db] = " . sprintf("%.2f sec.", $mysqlTimeRefDb));
+            $logger->info("Processed $k statements.");
+            $dbgstr = "";
+            foreach($timer as $time) {
+                $dbgstr = $dbgstr . sprintf("%.1f", $time) . " ";
+            }
+            $logger->info("$dbgstr");
         }
-        writeIndexInformation(-1);
+        // writeIndexInformation(-1);
         //$logger->info("Books inserted: $insertedBooks. Books updated: $updatedBooks. Failed: $failedBooks");
         mysqli_close($dbs[ekkitab_db]);
         mysqli_close($dbs[ref_db]);
@@ -791,8 +700,8 @@ ini_set("display_errors", 1);
     $logger->info("Process started at " . date("d-M-Y G:i:sa"));
     start();
     $logger->info("Process ended at " . date("d-M-Y G:i:sa"));
-    //$logger->info("Processing time: " . sprintf("%.4f", ($end - $start)) . " seconds.");
-    $logger->info("MySQL Processing time: " . sprintf("%.4f", $mysqlTime) . " seconds.");
-    $logger->info("MySQL Processing time in RefDb: " . sprintf("%.4f", $mysqlTimeRefDb) . " seconds.");
+    //$logger->info("Processing time: " . sprintf("%.2f", ($end - $start)/60) . " minutes.");
+    $logger->info("MySQL Processing time in Ekkitab Books: " . sprintf("%.2f", $mysqlTime/60) . " minutes.");
+    $logger->info("MySQL Processing time in RefDb: " . sprintf("%.2f", $mysqlTimeRefDb/60) . " minutes.");
 
 ?>

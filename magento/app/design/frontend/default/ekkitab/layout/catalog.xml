@@ -47,20 +47,21 @@ Default layout, loads most of the pages
         <reference name="root">
                  <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
         </reference>
-		<reference name="quick.search">
-			<block type="ekkitab_catalog/category_popular" name="popular.categories" as="popular_categories" template="catalog/category/popular.phtml"/>
-            <block type="ekkitab_catalog/author_topAuthors" name="top.authors" as="top_authors" template="catalog/author/popular.phtml"/>
-		</reference>
+		<!--reference name="quick.search">
+		</reference-->
         <reference name="top.menu">
             <block type="catalog/navigation" name="catalog.topnav" template="catalog/navigation/top.phtml"/>
         </reference>
 		<reference name="left">
+			<block type="ekkitab_catalog/category_popular" name="popular.categories" as="popular_categories" template="catalog/category/popular.phtml"/>
+            <block type="ekkitab_catalog/author_topAuthors" name="top.authors" as="top_authors" template="catalog/author/popular.phtml"/>
             <!--<block type="core/template" name="left.permanent.callout" after="-" template="callouts/left_col.phtml">
                 <action method="setImgSrc"><src>images/media/col_left_callout.jpg</src></action>
                 <action method="setImgAlt" translate="alt" module="catalog"><alt>Did you know? Our customer service is available 24/7</alt></action>
-            </block>-->
+            </block>
             <block type="wishlist/customer_sidebar" name="wishlist_sidebar" as="wishlist" after="cart_sidebar" template="wishlist/sidebar.phtml"/>
             <block type="core/template" after="wishlist" name="catalog.compare.sidebar" template="catalog/product/compare/sidebar.phtml"/>
+            <block type="catalog/navigation" name="category.left.navigation" template="catalog/navigation/left_nav.phtml"/>-->
         </reference>
         <reference name="right">
             <!--<block type="core/template" name="right.permanent.callout" after="-" template="callouts/left_col.phtml">
@@ -127,10 +128,10 @@ Category layered navigation layout
         </reference>
         <reference name="left">
 			<remove name="currency" />
-			<block type="catalog/layer_view" name="catalog.leftnav" template="catalog/layer/view.phtml">
+			<!--block type="catalog/layer_view" name="catalog.leftnav" template="catalog/layer/view.phtml"-->
 				<!--Added by anisha for displaying child categories in the product listing page. Once anchoring is in place, this can be removed  -->
-				<block type="catalog/navigation" name="catalog.leftnav.child.categories"  as="child_catagories" template="catalog/navigation/left_child_categories.phtml"/>
-			</block>
+				<block type="catalog/navigation" name="catalog.leftnav.child.categories"  as="child_catagories" before="popular_categories" template="catalog/navigation/left_child_categories.phtml"/>
+			<!--/block-->
         </reference>
         <reference name="content">
             <block type="catalog/category_view" name="category.products" template="catalog/category/view.phtml">

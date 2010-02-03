@@ -97,21 +97,25 @@ ini_set("display_errors", 1);
             return;
 
         while ($line = fgets($fh)) {
+            if (substr($line,0,1) == '#')  //comment
+                continue;
             $line_array = explode ("%", rtrim($line));
             if (count($line_array) == 2) {
                 $code = strtok($line_array[0], "\"");
                 $fullcat = strtok($line_array[1], "\"");
-                if (! array_key_exists($fullcat, $mastercodes) ) 
-                    $mastercodes[$fullcat] = array($code => 0); 
                 $cats = explode("/", $fullcat);
+                $fullcat = "";
                 $tmp = &$mastercats;
                 for ($i = 0; $i < count($cats); $i++) {
-                    $level = $cats[$i];
+                    $level = trim($cats[$i]);
+                    $fullcat = $fullcat . ($i == 0 ? "" : "/") . $level;
                     if (! array_key_exists($level, $tmp)) {
                         $tmp[$level] = array();
                     }
                     $tmp = &$tmp[$level];
                 }
+                if (! array_key_exists($fullcat, $mastercodes) ) 
+                    $mastercodes[$fullcat] = array($code => 0); 
             }
         }
     }
@@ -208,7 +212,7 @@ ini_set("display_errors", 1);
 
         $header = "INSERT INTO `ek_bisac_category_map` " .
                   "(`bisac_code`, `level1`, `level2`, `level3`, " .
-                  "`level4`, `category_id`) VALUES\n";
+                  "`level4`, `level5`, `level6`, `level7`, `category_id`, `rewrite_url`) VALUES\n";
 
         $mastercodes_copy = array();
 
@@ -222,14 +226,26 @@ ini_set("display_errors", 1);
         }
 
         $i = 0;
+        $pattern[0] = "/'/"; 
+        $pattern[1] = "/#/"; 
+        $pattern[2] = "/\W+/"; 
+        $replace[0] = "";
+        $replace[1] = "h#";
+        $replace[2] = "-";
 
         foreach($mastercodes_copy as $fullpath => $val) {
 
             $cats = explode("/", $fullpath);
+            $requestpath = "";
             for ($j=0; $j<count($cats); $j++) {
+                $tmppath = strtolower(trim($cats[$j]));
+                $tmppath = str_replace("'", "", $tmppath);
+                $tmppath = preg_replace($pattern, $replace, $tmppath);
+                $requestpath = $requestpath . ($j == 0 ? "" : "/") . $tmppath; 
                 $cats[$j] = strtolower(trim($cats[$j])); 
                 $cats[$j] = str_replace("'", "\'", $cats[$j]);
             }
+            $requestpath = $requestpath . ".html";
 
             $keys = array_keys($val); 
             #if (count($keys) != 1)
@@ -248,10 +264,10 @@ ini_set("display_errors", 1);
             for ($j=0; $j<count($cats); $j++) {
                 $line = $line . "'". $cats[$j] . "', ";
             }
-            for ($j = count($cats); $j<4; $j++) {
+            for ($j = count($cats); $j<7; $j++) {
                 $line = $line . "'', ";
             }
-            $line = $line . "'$catId'" ."),\n";  
+            $line = $line . "'$catId'" .","."'$requestpath'"."),\n";  
 
             if ($i%50 == 0) {
                 if($i == 0) {
@@ -290,7 +306,7 @@ ini_set("display_errors", 1);
 
             if ($i >= 2) {
                 $line = "(3, 32, 0, " . $i . ", 1),\n";  
-                $line = $line . "(3, 41, 0, " . $i . ", 1),\n";  
+                $line = $line . "(3, 41, 0, " . $i . ", 0),\n";  
                 $line = $line . "(3, 49, 0, " . $i . ", 1),\n";  
             }
             else 
@@ -452,9 +468,11 @@ ini_set("display_errors", 1);
         $i = 0;
 
         $pattern[0] = "/'/"; 
-        //$pattern[1] = "/\W+/"; 
+        $pattern[1] = "/#/"; 
+        $pattern[2] = "/\W+/"; 
         $replace[0] = "";
-        //$replace[1] = "-";
+        $replace[1] = "h#";
+        $replace[2] = "-";
 
         foreach($mastercodes as $fullpath => $val) {
 

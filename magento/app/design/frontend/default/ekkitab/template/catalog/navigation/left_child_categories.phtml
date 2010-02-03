@@ -23,34 +23,23 @@
  * @see Mage_Catalog_Block_Navigation
  */
 ?>
-<?php if (!Mage::registry('current_category')) return ?>
+
 <?php $_currcategory=$this->getCurrentCategory() ?>
-<?php $_categories=$this->getCurrentChildCategories() ?>
+<?php $_categories=$this->getCurrentChildCategories()?>
 <?php $_count = is_array($_categories)?count($_categories):$_categories->count(); ?>
-<h4><?php echo $this->htmlEscape($_currcategory->getName())?></h4>
+<div class="linkHdr"><?php echo $this->htmlEscape($_currcategory->getName())?></div><!-- linkHdr -->
 <?php if($_count): ?>
-        <div class="content">
-        <div class="narrow-by">
-			<dl id="narrow-by-list">
-                <dd class="no-padding no-border">
-                    <ol>
-                    <?php foreach ($_categories as $_category): ?>
-                        <?php if($_category->getIsActive()): ?>
-                        <li>
-                            <a href="<?php echo $this->getCategoryUrl($_category) ?>"<?php if ($this->isCategoryActive($_category)): ?> class="active"<?php endif ?>><?php echo $this->htmlEscape($_category->getName()) ?></a> (<?php echo $_category->getProductCount() ?>)
-                        </li>
-                        <?php endif; ?>
-                    <?php endforeach ?>
-                    </ol>
-                </dd>
-			</dl><script type="text/javascript">decorateDataList('narrow-by-list')</script>
-		</div>
-	</div>
-<?php else: ?>
-	<div class="content">
-        <div class="narrow-by">
-		No Child Categories
-		</div>
-	</div>
+	<dl id="narrow-by-list">
+	<ul>
+	<?php foreach ($_categories as $_category): ?>
+		<?php if($_category->getIsActive()): ?>
+		<li>
+			<a href="<?php echo $this->getCategoryUrl($_category) ?>"<?php if ($this->isCategoryActive($_category)): ?> class="active"<?php endif ?>><?php echo $this->htmlEscape($_category->getName()) ?></a>
+		</li>
+		<?php endif; ?>
+	<?php endforeach ?>
+	</ul></dl>
+<script type="text/javascript">decorateDataList('narrow-by-list')</script>
 <?php endif; ?>
+<div class="seeAll">&nbsp;</div><!-- seeAll -->
 <!-- [ends] .browse-by // -->
