@@ -14,6 +14,7 @@ ini_set("display_errors", 1);
 //
 // @author Vijaya Raghavan (vijay@ekkitab.com)
 // @version 1.0     Dec 17, 2009
+// @version 1.1     Feb 03, 2010 (arun@ekkitab.com)
 //
 
 // This script will import books into the reference database from a vendor file......
