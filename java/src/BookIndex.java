@@ -22,6 +22,8 @@ public class BookIndex {
 	private String jdbcUrl = "jdbc:mysql://localhost:3306/reference";
     private static final int  LEVELS = 7;
     private IndexWriter indexWriter = null;
+    private int  testcount = 0;
+    private Map<String, Integer>  testcounthash = new HashMap<String, Integer>();
 
     private long timer[] = new long[3];
 
@@ -193,6 +195,14 @@ public class BookIndex {
                 String key = real_name.replaceAll("[& ]+", "");
                 doc.add(new Field(label, key, Field.Store.NO, Field.Index.UN_TOKENIZED));
                 doc.add(new Field(label+"_real", real_name, Field.Store.YES, Field.Index.NO));
+                if (label.equals("level1") && key.equals("antiquescollectibles")) {
+                    testcount++;
+                    String id = book.get("id");
+                    if (testcounthash.containsKey(id)) 
+                        testcounthash.put(id, new Integer((Integer)(testcounthash.get(id)) + 1));
+                    else 
+                        testcounthash.put(book.get("id"), new Integer(1));
+                }
             }
             indexWriter.addDocument(doc);
         }
@@ -226,6 +236,13 @@ public class BookIndex {
             }
             indexWriter.optimize();
             indexWriter.close();
+            System.out.println("Testcount: "+testcount);
+            Set keys = testcounthash.keySet();
+            Iterator iter = keys.iterator();
+            while (iter.hasNext()) {
+                String key = (String)iter.next();
+                System.out.println("Product Id: "+key+"  --  "+ testcounthash.get(key));
+            }
         }
         catch (Exception e) {
             e.printStackTrace();

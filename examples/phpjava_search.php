@@ -6,41 +6,55 @@
 
 require_once("http://localhost:8080/JavaBridge/java/Java.inc");
 $search = new java("BookSearch", "/var/www/scm/magento/search_index_dir");
-while ($query = readline("What do you want to search for? ")) {
-        $start = (float) array_sum(explode(' ', microtime()));
-        $page_sz = 10;
-        $page = 1;
-        $results = $search->searchBook($query, $page_sz, $page);
-        $end = (float) array_sum(explode(' ', microtime()));
-        $time = sprintf("%.1f", ($end - $start));
-        if ($results) {
-            $authors = $results->get("hitcount-author");
-            $titles = $results->get("hitcount-title");
-            echo "Returned: $authors hits in author field and $titles hits in titles field, in $time seconds.\n";
-            $books = $results->get("books");
-            $sz = java_values($books->size());
-            $iter = $books->iterator();
-            for ($i=0; $i<$sz; $i++) {
-                $book = $books->get($i);
-                $author = $book->get("author");
-                $title = $book->get("title");
-                $image = $book->get("image");
-                $url = $book->get("url");
-                $id = $book->get("entityId");
-                $price = $book->get("listprice");
-                $discountprice = $book->get("discountprice");
-                echo "Author: $author\n";
-                echo "Title: $title\n";
-                echo "Url: $url\n";
-                echo "Image: $image\n";
-                echo "List Price: $price\n";
-                echo "Discounted Price: $discountprice\n";
-                echo "Id: $id\n";
-                echo "------------------------\n";
-            } 
+do {
+   $query = readline("Search for? ");
+   $query = $query == null ? "" : $query;
+   $category = readline("Category? ");
+   $category = $category == null ? "" : $category;
+   $page = readline("Page? ");
+   $page = $page == null ? "1" : $page;
+   $pagenum = $page + 0;
+
+   $start = (float) array_sum(explode(' ', microtime()));
+   $page_sz = 10;
+   echo "Search query: '".$query."'  category: '".$category."'  Page: '".$pagenum."'\n";
+   $results = $search->searchBook($category, $query, $page_sz, $pagenum);
+   $end = (float) array_sum(explode(' ', microtime()));
+   $time = sprintf("%.1f", ($end - $start));
+    
+   if ($results) {
+      $hitcount = $results->get("hits");
+      $books = $results->get("books");
+      $sz = java_values($books->size());
+      $iter = $books->iterator();
+      for ($i=0; $i<$sz; $i++) {
+          $book = $books->get($i);
+          $author = $book->get("author");
+          $title = $book->get("title");
+          $image = $book->get("image");
+          $url = $book->get("url");
+          $id = $book->get("entityId");
+          $price = $book->get("listprice");
+          $discountprice = $book->get("discountprice");
+          echo "Author: $author\n";
+          echo "Title: $title\n";
+          echo "Id: $id\n";
+          echo "------------------------\n";
+      } 
+      $subcats = $results->get("counts");
+      if ($subcats != null) {
+        $retsize = $subcats->size();
+        echo "Size of Category List:[" . $retsize . "]\n"; 
+        $keys = $subcats->keySet();
+        foreach($keys as $key) { 
+            $val = $subcats->get($key);
+            echo "Category: $key [$val]\n";
         }
-        else 
-            echo "No results were returned. \n";
-}
+      }
+      echo "Returned: $hitcount hits in $time seconds.\n";
+   }
+   else 
+      echo "No results were returned. \n";
+} while ($query = readline("Continue? ")) 
 
 ?> 
