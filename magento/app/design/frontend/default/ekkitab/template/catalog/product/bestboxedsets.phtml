@@ -22,15 +22,17 @@
 	<div class="hmScrollRow">
 		<div class="mainLeftHdr">Best Boxed Sets</div>
 		<div class="hmInScrollRow">
-		<?php foreach ($products as $product): ?>
+		<?php foreach ($products as $product): 
+			$savingsPerct= ($product->getPrice() >0 )?	(($product->getPrice() - $product->getFinalPrice())/ $product->getPrice() ) * 100 : 10; 
+		?>
 			<div class="vColumns">
 				<a href="<?php echo $product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>"><img src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->keepFrame(false)->resize(null, 100); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" />
 				</a> 
 				<div class="titleEtc">
 					<div class="bkTitle"><a href="<?php echo $product->getProductUrl() ?>"  title="<?php echo $product->getTitle() ?>"><?php echo $this->htmlEscape($product->getName())?></a></div><!-- bkTitle -->
-					<div class="authorEtc">Steven D. Levitt</div>
-					<div class="authorEtc">Our Price: Rs. 340</div>
-					<div class="youSave">Save 19% off</div>
+					<div class="lineHeight14em"><?php echo $this->htmlEscape($product->getBoAuthor())?></div>
+					<div class="lineHeight14em">Our Price: <?php echo Mage::helper('core')->currency($product->getFinalPrice(),true,false) ?></div>
+					<div class="youSave">Save <?php echo number_format($savingsPerct,2,'.','') ?>%</div>
 				</div><!-- titleEtc -->
 			</div>
 		<?php endforeach ?>
