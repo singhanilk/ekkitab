@@ -25,11 +25,12 @@ ini_set("display_errors", 1);
     include("magento_db_constants.php");
 	
 		
-	define("SELECT_LIMIT", 1000);
     $mysqlTime = 0;
     $mysqlTimeRefDb = 0;
     $failedBooks = 0;
+    $targetdir = ".";
     $dbs = array();
+    $filesuffixes = array();
 
     require_once(LOG4PHP_DIR . '/LoggerManager.php');
 
@@ -109,6 +110,7 @@ ini_set("display_errors", 1);
 	    $queries[] = 'select max(value_id) from catalog_product_entity_datetime';
 	    $queries[] = 'select max(value_id) from catalog_product_entity_decimal';
 	    $queries[] = 'select max(value_id) from catalog_product_entity_int';
+	    $queries[] = 'select max(value_id) from catalog_product_entity_int';
 	    $queries[] = 'select max(value_id) from catalog_product_entity_media_gallery';
 	    $queries[] = 'select max(value_id) from catalog_product_entity_text';
 	    $queries[] = 'select max(value_id) from catalog_product_entity_varchar';
@@ -182,8 +184,8 @@ ini_set("display_errors", 1);
    /** 
     * Set the books update flag to 'updated' in the reference database.  
     */
-    function updateRefDb($db, $isbn) {
-		$query = "update books set books.new = 1 where books.isbn = '$isbn'";
+    function updateRefDb($db, $isbn, $id) {
+		$query = "update books set books.new = 1, books.product_id = $id where books.isbn = '$isbn'";
         try {
 		    $books = mysqli_query($db,$query);
             if (! $books) 
@@ -198,18 +200,47 @@ ini_set("display_errors", 1);
     */
     function createInsertQuery($table, $columns, $values) {
 
-        $query = "insert into $table ( $columns ) values ";
-        foreach ($values as $value) {
-            $query .= "(";
-            foreach ($value as $item) {
-                $query .= "$item, ";
+        global $targetdir;
+        global $filesuffixes;
+        static $fhs = array();
+        static $linecount = array();
+
+        if ($table == null) {
+            foreach($fhs as $key => $fh) {
+                fclose($fh);
             }
-            $query = substr($query, 0, strrpos($query, ","));
-            $query .= "),";
+            return;
         }
-        $query = substr($query, 0, strrpos($query, ","));
-        $query .= ";";
-		return $query;
+
+        if (empty($fhs[$table])) {
+            if (empty($filesuffixes[$table]))
+                $filesuffixes[$table] = 0;
+            $filename =  $targetdir . "/" . "loaddata-".$table."-".$filesuffixes[$table].".txt";
+            $fhs[$table] = fopen($filename, "w");
+            if (! $fhs[$table]) {
+                fatal("Could not open file: $filename");     
+            }
+            $filesuffixes[$table]++;
+        }
+
+        if (empty($linecount[$table]))
+            $linecount[$table] = 0;
+
+        $query = "";
+        foreach ($values as $value) {
+            foreach ($value as $item) {
+                $query .= "$item\t";
+            }
+            $query = substr($query, 0, strrpos($query, "\t"));
+            fprintf($fhs[$table], "%s\n", $query);
+            $query = "";
+            $linecount[$table]++;
+        }
+        if ($linecount[$table] > FILE_ROLLOVER_LIMIT) {
+            $linecount[$table] = 0;
+            fclose($fhs[$table]);
+            $fhs[$table] = null;
+        }
     }
 
    /** 
@@ -229,9 +260,9 @@ ini_set("display_errors", 1);
     */
     function prepareDb($db) {
         global $logger;
-        $queries[0] = "set autocommit = 0";
-        $queries[1] = "set foreign_key_checks = 0";
-        $queries[2] = "set unique_checks = 0";
+        //$queries[0] = "set autocommit = 0";
+        $queries[0] = "set foreign_key_checks = 0";
+        $queries[1] = "set unique_checks = 0";
         
         try {
             foreach ($queries as $query) {
@@ -294,9 +325,10 @@ ini_set("display_errors", 1);
    /**
      * Obtains the full category path for url rewrite.
      */
-     function getCategoryFullPath($book_path,$ids){
-         $paths = explode("/", $book_path);
-         $ids   = explode(",", $ids);
+     function getCategoryFullPath($book_path){
+         $parts = explode("\t", $book_path);
+         $paths = explode("/", $parts[1]);
+         $ids   = explode(",", $parts[0]);
          $ret   = array();
 
          for ($i = count($ids) - 1; $i >= 0; $i--) {
@@ -326,20 +358,19 @@ ini_set("display_errors", 1);
         $thumbnailpath = getImagePath($book[THUMB]);
 		
         $val_array = array();
-        $val_array[] = array($entityIds[CPE], entity_type_id, attribute_set_id, "'$book[ISBN]'", "'$book_category_ids'",
-                             "curdate()", "curdate()");
+        $val_array[] = array($entityIds[CPE], entity_type_id, attribute_set_id, $book[ISBN], $book_category_ids);
 
 		$queries[] = createInsertQuery("catalog_product_entity", 
-                                       "entity_id, entity_type_id, attribute_set_id, sku, category_ids, created_at, updated_at", 
+                                       "entity_id, entity_type_id, attribute_set_id, sku, category_ids", 
                                        $val_array);
 
 		$book_pdate = $book[PDATE];
 
         $val_array = array();
-        $val_array[] = array(entity_type_id, bo_pu_date_id, store_id, $entityIds[CPE]);
+        $val_array[] = array(entity_type_id, bo_pu_date_id, store_id, $entityIds[CPE], $book_pdate);
 
 	    $queries[] = createInsertQuery("catalog_product_entity_datetime", 
-                                       "entity_type_id, attribute_id, store_id, entity_id",
+                                       "entity_type_id, attribute_id, store_id, entity_id, value",
                                        $val_array);
 
         if (empty($book[PRICE])) {
@@ -378,7 +409,7 @@ ini_set("display_errors", 1);
 
 
         $val_array = array();
-        $val_array[] = array(media_gallery_id, $entityIds[CPE],"'$imagepath'");
+        $val_array[] = array(media_gallery_id, $entityIds[CPE],"$imagepath");
         $queries[] = createInsertQuery("catalog_product_entity_media_gallery", 
                                        "attribute_id, entity_id, value",
                                        $val_array);
@@ -392,9 +423,9 @@ ini_set("display_errors", 1);
 
         $bookpublisher = escape($book[PUBLISHER]);
         $val_array = array();
-        $val_array[] = array(entity_type_id,bo_publisher_id,store_id,$entityIds[CPE],"'$bookpublisher'");
-        $val_array[] = array(entity_type_id, descrption_id,store_id,$entityIds[CPE],"'$book[DESCRIPTION]'");
-        $val_array[] = array(entity_type_id, short_descrption_id,store_id, $entityIds[CPE],"'$book[DESCRIPTION]'");
+        $val_array[] = array(entity_type_id,bo_publisher_id,store_id,$entityIds[CPE],"$bookpublisher");
+        $val_array[] = array(entity_type_id, descrption_id,store_id,$entityIds[CPE],"$book[DESCRIPTION]");
+        $val_array[] = array(entity_type_id, short_descrption_id,store_id, $entityIds[CPE],"$book[DESCRIPTION]");
         $val_array[] = array(entity_type_id,meta_keyword_id,store_id,$entityIds[CPE],"''"); 
         $val_array[] = array(entity_type_id,custom_layout_update_id,store_id,$entityIds[CPE],"''");
         $queries[] = createInsertQuery("catalog_product_entity_text", 
@@ -406,31 +437,31 @@ ini_set("display_errors", 1);
         $bookedition = escape($book[EDITION]);
 
         $val_array = array();
-        $val_array[] = array(entity_type_id,name_id,store_id,$entityIds[CPE],"'$booktitle'");
-        $val_array[] = array(entity_type_id,meta_title_id,store_id,$entityIds[CPE],"'".value_empty."'");
-        $val_array[] = array(entity_type_id,meta_description_id,store_id,$entityIds[CPE],"'".value_empty."'");
-        $val_array[] = array(entity_type_id,url_key_id,store_id,$entityIds[CPE],"'$url_key'");
-        $val_array[] = array(entity_type_id,url_id,store_id,$entityIds[CPE],"'$url_key".".html'");
-        $val_array[] = array(entity_type_id,options_container,store_id,$entityIds[CPE],"'".options_container_value."'");
-        $val_array[] = array(entity_type_id,image_label_id,store_id,$entityIds[CPE],"'".value_empty."'");
-        $val_array[] = array(entity_type_id,small_image_label_id,store_id,$entityIds[CPE],"'".value_empty."'");
-        $val_array[] = array(entity_type_id,thumb_label_id,store_id,$entityIds[CPE],"'".value_empty."'");
-        $val_array[] = array(entity_type_id,gift_message_avialable_id,store_id,$entityIds[CPE],"'".gift_message_value."'");
-        $val_array[] = array(entity_type_id,bo_author_id,store_id,$entityIds[CPE],"'$bookauthor'");
-        $val_array[] = array(entity_type_id,bo_isbn_id,store_id,$entityIds[CPE],"'$book[ISBN]'");
-        $val_array[] = array(entity_type_id,bo_binding_id,store_id,$entityIds[CPE],"'$book[BINDING]'");
-        $val_array[] = array(entity_type_id,bo_isbn10_id,store_id,$entityIds[CPE],"'$book[ISBN10]'");
-        $val_array[] = array(entity_type_id,bo_language_id,store_id,$entityIds[CPE],"'$book[LANGUAGE]'");
-        $val_array[] = array(entity_type_id,bo_no_pg_id,store_id,$entityIds[CPE],"'$book[PAGES]'");
-        $val_array[] = array(entity_type_id,bo_dimension_id,store_id,$entityIds[CPE],"'$book[DIMENSION]'");
-        $val_array[] = array(entity_type_id,bo_illustrator_id,store_id,$entityIds[CPE],"'$book[ILLUSTRATOR]'");
-        $val_array[] = array(entity_type_id,bo_edition_id,store_id,$entityIds[CPE],"'$bookedition'");
-        $val_array[] = array(entity_type_id,bo_rating_id,store_id,$entityIds[CPE],"'$book[RATING]'");
-        $val_array[] = array(entity_type_id,bo_image_id,store_id,$entityIds[CPE], "'$imagepath'");
-        $val_array[] = array(entity_type_id,bo_small_image_id,store_id,$entityIds[CPE], "'$imagepath'");
-        $val_array[] = array(entity_type_id,bo_thumb_image_id,store_id,$entityIds[CPE], "'$thumbnailpath'");
-        $val_array[] = array(entity_type_id,bo_shipping_region_id,store_id,$entityIds[CPE], "'$book[SHIPPING_REGION]'");
-        $val_array[] = array(entity_type_id,bo_sourced_from,store_id,$entityIds[CPE], "'$book[SOURCED_FROM]'");
+        $val_array[] = array(entity_type_id,name_id,store_id,$entityIds[CPE],$booktitle);
+        $val_array[] = array(entity_type_id,meta_title_id,store_id,$entityIds[CPE],value_empty);
+        $val_array[] = array(entity_type_id,meta_description_id,store_id,$entityIds[CPE],value_empty);
+        $val_array[] = array(entity_type_id,url_key_id,store_id,$entityIds[CPE],$url_key);
+        $val_array[] = array(entity_type_id,url_id,store_id,$entityIds[CPE],$url_key.".html");
+        $val_array[] = array(entity_type_id,options_container,store_id,$entityIds[CPE],options_container_value);
+        $val_array[] = array(entity_type_id,image_label_id,store_id,$entityIds[CPE],value_empty);
+        $val_array[] = array(entity_type_id,small_image_label_id,store_id,$entityIds[CPE],value_empty);
+        $val_array[] = array(entity_type_id,thumb_label_id,store_id,$entityIds[CPE],value_empty);
+        $val_array[] = array(entity_type_id,gift_message_avialable_id,store_id,$entityIds[CPE],gift_message_value);
+        $val_array[] = array(entity_type_id,bo_author_id,store_id,$entityIds[CPE],$bookauthor);
+        $val_array[] = array(entity_type_id,bo_isbn_id,store_id,$entityIds[CPE],$book[ISBN]);
+        $val_array[] = array(entity_type_id,bo_binding_id,store_id,$entityIds[CPE],$book[BINDING]);
+        $val_array[] = array(entity_type_id,bo_isbn10_id,store_id,$entityIds[CPE],$book[ISBN10]);
+        $val_array[] = array(entity_type_id,bo_language_id,store_id,$entityIds[CPE],$book[LANGUAGE]);
+        $val_array[] = array(entity_type_id,bo_no_pg_id,store_id,$entityIds[CPE],$book[PAGES]);
+        $val_array[] = array(entity_type_id,bo_dimension_id,store_id,$entityIds[CPE],$book[DIMENSION]);
+        $val_array[] = array(entity_type_id,bo_illustrator_id,store_id,$entityIds[CPE],$book[ILLUSTRATOR]);
+        $val_array[] = array(entity_type_id,bo_edition_id,store_id,$entityIds[CPE],$bookedition);
+        $val_array[] = array(entity_type_id,bo_rating_id,store_id,$entityIds[CPE],$book[RATING]);
+        $val_array[] = array(entity_type_id,bo_image_id,store_id,$entityIds[CPE], $imagepath);
+        $val_array[] = array(entity_type_id,bo_small_image_id,store_id,$entityIds[CPE], $imagepath);
+        $val_array[] = array(entity_type_id,bo_thumb_image_id,store_id,$entityIds[CPE], $thumbnailpath);
+        $val_array[] = array(entity_type_id,bo_shipping_region_id,store_id,$entityIds[CPE], $book[SHIPPING_REGION]);
+        $val_array[] = array(entity_type_id,bo_sourced_from,store_id,$entityIds[CPE], $book[SOURCED_FROM]);
         $queries[] = createInsertQuery("catalog_product_entity_varchar", 
                                        "entity_type_id, attribute_id, store_id, entity_id, value",
                                        $val_array);
@@ -511,22 +542,21 @@ ini_set("display_errors", 1);
        //Create the url_rewrite
         $seed_url = $book[REWRITE_URL];
         $seed_url = substr($seed_url, 0, strrpos($seed_url, "."));
-        $categoryPath = getCategoryFullPath($seed_url,$book[BISAC]);
+        $categoryPath = getCategoryFullPath($seed_url);
 
         $val_array = array();
-        $val_array[] = array(catalogindex_eav_store_id,"NULL",$entityIds[CPE],
-                             "'product/".$entityIds[CPE]."'","'$url_key".".html'",
-                             "'catalog/product/view/id/".$entityIds[CPE]."'","''");
+        $val_array[] = array(catalogindex_eav_store_id,"\N",$entityIds[CPE],
+                             "product/".$entityIds[CPE],"$url_key".".html",
+                             "catalog/product/view/id/".$entityIds[CPE],"");
 
         foreach($categoryPath as $id => $path) {
                $val_array[] = array(catalogindex_eav_store_id,$id,$entityIds[CPE],
-                              "'product/".$entityIds[CPE]."/".$id."'","'".$path."/".$url_key.".html'",
-                              "'catalog/product/view/id/".$entityIds[CPE]."/category/".$id."'","''");
+                              "product/".$entityIds[CPE]."/".$id,$path."/".$url_key.".html",
+                              "catalog/product/view/id/".$entityIds[CPE]."/category/".$id,"");
         }
         $queries[] = createInsertQuery("core_url_rewrite", 
                                        "store_id, category_id, product_id, id_path, request_path, target_path, options",
                                        $val_array);
- 
 		return $queries;
     }
    /** 
@@ -571,6 +601,67 @@ ini_set("display_errors", 1);
         fprintf($fh, "%d\t%s\t%s\t%s\t%s\n", $id, $author, $title, $image, $url);
      } 
 
+    /**
+     *  Loads the written data files into the ekkitab db. 
+     */
+     function loadDataIntoEkkitabDb($db) {
+        global $targetdir;
+        global $logger;
+        global $filesuffixes;
+
+        prepareDb($db);
+        $tablenames[0] = "catalog_product_entity";
+        $logger->info("commencing data load...");
+        $ekkitab_table_names = array();
+        $ekkitab_table_names['catalog_product_entity'] = array('columns' => "entity_id, entity_type_id, attribute_set_id, sku, category_ids", 
+                                                               'set' => "created_at = curdate(), updated_at = curdate()");
+        $ekkitab_table_names['catalog_product_entity_datetime'] = array('columns' => "entity_type_id, attribute_id, store_id, entity_id, value");
+        $ekkitab_table_names['catalog_product_entity_decimal'] = array('columns' => "entity_type_id, attribute_id, store_id, entity_id, value");
+        $ekkitab_table_names['catalog_product_entity_int'] = array('columns' => "entity_type_id, attribute_id, store_id, entity_id, value");
+        $ekkitab_table_names['catalog_product_entity_media_gallery'] = array('columns' => "attribute_id, entity_id, value");
+        $ekkitab_table_names['catalog_product_entity_media_gallery_value'] = array('columns' => "value_id, store_id, position");
+        $ekkitab_table_names['catalog_product_entity_text'] = array('columns' => "entity_type_id, attribute_id, store_id, entity_id, value");
+        $ekkitab_table_names['catalog_product_entity_varchar'] = array('columns' => "entity_type_id, attribute_id, store_id, entity_id, value");
+        $ekkitab_table_names['catalogindex_eav'] = array('columns' => "store_id, entity_id, attribute_id, value");
+        $ekkitab_table_names['catalogindex_price'] = array('columns' => "entity_id, attribute_id, customer_group_id, qty, value, tax_class_id, website_id");
+        $ekkitab_table_names['cataloginventory_stock_item'] = array('columns' => "product_id, stock_id, qty, use_config_backorders, is_in_stock");
+        $ekkitab_table_names['cataloginventory_stock_status'] = array('columns' => "product_id, website_id, stock_id, qty, stock_status");
+        $ekkitab_table_names['catalog_category_product'] = array('columns' => "category_id, product_id");
+        $ekkitab_table_names['catalog_category_product_index'] = array('columns' => "category_id, product_id, is_parent, store_id, visibility");
+        $ekkitab_table_names['catalog_product_enabled_index'] = array('columns' => "product_id, store_id, visibility");
+        $ekkitab_table_names['catalog_product_website'] = array('columns' => "product_id, website_id");
+        $ekkitab_table_names['core_url_rewrite'] = array('columns' => "store_id, category_id, product_id, id_path, request_path, target_path, options");
+
+        $queries = array();
+        $tables = array();
+
+        foreach($ekkitab_table_names as $table => $value) {
+            $columns = "";
+            $set     = "";
+            if (!empty($value['columns']))
+                $columns = $value['columns'];
+            if (!empty($value['set']))
+                $set = $value['set'];
+            for ($i =0; $i < $filesuffixes[$table]; $i++) { 
+                $query = "load data local infile '" . $targetdir ."/loaddata-".$table."-".$i.".txt'" . " into table " . $table . " (" . $columns . ")";
+                if (!empty($set))
+                    $query = $query . " set ". $set. "";
+                $queries[] = $query;
+                $tables[]  = $table . "-" . $i;
+            }
+        }
+
+        for ($i = 0; $i < count($queries); $i++) {
+            $startTimer = (float) array_sum(explode(' ', microtime()));
+			$result = mysqli_query($db, $queries[$i]);
+            if (! $result) 
+                 fatal("Failed load data.", $queries[$i]);
+            $endTimer = (float) array_sum(explode(' ', microtime()));
+            $elapsedtime += ($endTimer - $startTimer)/60;
+            $logger->info("Loaded table: '".$tables[$i]."' in ".sprintf("%.2f", $elapsedtime)." minutes");
+        }
+     }
+
      function start1() {
         $val_array = array();
         $val_array[] = array(100,200, 300, 400,500,"'book name'");
@@ -584,21 +675,32 @@ ini_set("display_errors", 1);
     /**
      * Main function
      */
-    function start() {
+    function start($argc, $argv) {
 
         global $logger;
         global $mysqlTime;
         global $mysqlTimeRefDb;
         global $failedBooks;
         global $dbs;
+        global $targetdir;
+        $maxprocesscount = 5000000;
 
+        for ($i = 1; $i < $argc; $i++) {
+            if ($i == 1) {
+                $maxprocesscount = $argv[$i];
+                echo "Max books to process set to: $maxprocesscount\n";
+            }
+            if ($i == 2) {
+                $targetdir = $argv[$i];
+                echo "Target directory: $targetdir\n";
+            }
+        }
         $config = getConfig(LOADBOOKS_INI);
         $dbs = initDatabases($config);
 
         if ($dbs == NULL) 
             fatal("Failed to initialize databases");
 
-        prepareDb($dbs[ekkitab_db]);
 
         $entityIds = getEntityIDs($dbs[ekkitab_db]);
 
@@ -616,92 +718,37 @@ ini_set("display_errors", 1);
 		        if(empty($book)) 
                     continue;
 
-                $id = getBookId($book[ISBN], $dbs[ekkitab_db]);
+                //$id = getBookId($book[ISBN], $dbs[ekkitab_db]);
 	            $queries = array();
 
-                $isInsert = ($id == 0) ? true : false;
+                //$isInsert = ($id == 0) ? true : false;
 
-                // $logger->info(($isInsert ? "Inserting " : "Updating ") . " book " . ++$totalBooks . "...");
                 $totalBooks++;
+                if ($totalBooks > $maxprocesscount)
+                    break;
 
-		        if (($id == NULL) || ($id == 0)) {
-                    $queries = generateInsertSQLs($entityIds, $book);
-	            }
-                else {
-                    $queries = generateUpdateSQLs($id, $book);
-	            }
+                $queries = generateInsertSQLs($entityIds, $book);
 
-                try {
-                    //$longQuery = "";
-                    $startZ = (float) array_sum(explode(' ', microtime()));
-                    $sqlCounter = 0;
-	                foreach ($queries as $query)  {
-                        $startTimer = (float) array_sum(explode(' ', microtime()));
-			            $result = mysqli_query($dbs[ekkitab_db], $query);
-                        if (! $result) 
-                            throw new exception("Failed to commit book to ekkitab database. [$query]");
-                        $endTimer = (float) array_sum(explode(' ', microtime()));
-                        $timer[$sqlCounter++] += ($endTimer - $startTimer);
-                        //$longQuery .= "$query;";
-                        $k++;
-	                }
-                    $result = mysqli_query($dbs[ekkitab_db], "commit");
-                    if (! $result) 
-                        throw new exception("Failed to commit on ekkitab database.");
-                    //$longQuery .= "commit; ";
-                    //$logger->info("Query: $longQuery");
-                    //$startZ = (float) array_sum(explode(' ', microtime()));
-			        //$result = mysqli_multi_query($dbs[ekkitab_db], $longQuery);
-                    //$endZ = (float) array_sum(explode(' ', microtime()));
-                    //$mysqlTime += ($endZ - $startZ);
-                    //if (! $result) 
-                       //throw new exception("Failed to commit book to ekkitab database. ");
-                    //$result = mysqli_query($dbs[ekkitab_db], "commit");
-                    //if (! $result) 
-                        //throw new exception("Failed to commit on ekkitab database.");
-                    $endZ = (float) array_sum(explode(' ', microtime()));
-                    $mysqlTime += ($endZ - $startZ);
-                    $startY = (float) array_sum(explode(' ', microtime()));
-                    updateRefDb($dbs[ref_db], $book[ISBN]);
-                    $endY = (float) array_sum(explode(' ', microtime()));
-                    $mysqlTimeRefDb += ($endY - $startY);
-                    if ($isInsert) { 
-                        $insertedBooks++;
-                        $entityIds = setIdsForNextInsert($entityIds);
-                    }
-                    else 
-                        $updatedBooks++;
-                }
-                catch(exception $e) {
-                    warn($e->getmessage());
-                    warn("Book with ISBN number $book[ISBN] did not get saved in the Ekkitab database.");
-                    $failedBooks++;
-                    $result = mysqli_query($dbs[ekkitab_db], "rollback");
-                    if (! $result) 
-                        warn("Failed to rollback on ekkitab database.");
-                }
-                //$logger->info("Finished: $book[ISBN] " . ($isInsert ? "inserted." : "updated."));
+                updateRefDb($dbs[ref_db], $book[ISBN], $entityIds[CPE]);
+                $insertedBooks++;
+                $entityIds = setIdsForNextInsert($entityIds);
+
             }
-            $end = (float) array_sum(explode(' ', microtime()));
-            $logger->info("Processed $totalBooks books (Inserted: $insertedBooks, Updated: $updatedBooks, Failed: $failedBooks) in " . sprintf("%.2f", ($end - $start)/60) . " minutes." . " [in ekkitab_books] = " . sprintf("%.2f sec.", $mysqlTime) . " [in ref db] = " . sprintf("%.2f sec.", $mysqlTimeRefDb));
-            $logger->info("Processed $k statements.");
-            $dbgstr = "";
-            foreach($timer as $time) {
-                $dbgstr = $dbgstr . sprintf("%.1f", $time) . " ";
-            }
-            $logger->info("$dbgstr");
+            $logger->info("Processed $totalBooks books (Inserted: $insertedBooks)");
+            if ($totalBooks > $maxprocesscount)
+               break;
         }
-        // writeIndexInformation(-1);
-        //$logger->info("Books inserted: $insertedBooks. Books updated: $updatedBooks. Failed: $failedBooks");
+        createInsertQuery(null, null, null); // to close file handles.
+        loadDataIntoEkkitabDb($dbs[ekkitab_db]);
         mysqli_close($dbs[ekkitab_db]);
         mysqli_close($dbs[ref_db]);
     }
 	
     $logger->info("Process started at " . date("d-M-Y G:i:sa"));
-    start();
+    $timer = (float) array_sum(explode(' ', microtime()));
+    start($argc, $argv);
+    $timer = (float) array_sum(explode(' ', microtime())) - $timer;
+    $logger->info("Execute time: " . sprintf("%.2f", $timer/60) . " minutes.");
     $logger->info("Process ended at " . date("d-M-Y G:i:sa"));
-    //$logger->info("Processing time: " . sprintf("%.2f", ($end - $start)/60) . " minutes.");
-    $logger->info("MySQL Processing time in Ekkitab Books: " . sprintf("%.2f", $mysqlTime/60) . " minutes.");
-    $logger->info("MySQL Processing time in RefDb: " . sprintf("%.2f", $mysqlTimeRefDb/60) . " minutes.");
 
 ?>
