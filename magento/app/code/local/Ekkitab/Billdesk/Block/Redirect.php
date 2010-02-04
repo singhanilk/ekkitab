@@ -31,7 +31,9 @@ class Ekkitab_Billdesk_Block_Redirect extends Mage_Core_Block_Abstract
         $html.= '<script type="text/javascript">document.getElementById("billdesk_checkout").submit();</script>';
         $html.= '</body></html>';
 
-       Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
+       Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($html,true)) ;
+       
+       
         
         return $html;
     }
