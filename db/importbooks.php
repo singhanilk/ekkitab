@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL  & ~E_NOTICE);
 ini_set("display_errors", 1); 
-
+//hi everyone
 //  
 //
 // COPYRIGHT (C) 2009 Ekkitab Educational Services India Pvt. Ltd.  
@@ -20,7 +20,7 @@ ini_set("display_errors", 1);
 
     include("importbooks_config.php");
     require_once(LOG4PHP_DIR . '/LoggerManager.php');
-    ini_set(include_path, ${include_path}.":".EKKITAB_HOME."/"."bin");
+    ini_set(include_path, ${include_path}.EKKITAB_HOME."/"."bin");
     include("imagehash.php");
 
     define(UNCLASSIFIED, "ZZZ000000");
