@@ -157,6 +157,7 @@ ini_set("display_errors", 1);
       $catIds = array();
 
       $book['catcode'] = "";
+      $bisac_codes = "";
       if (! empty($book['bisac'])) {
         foreach($book['bisac'] as $value) {
             if (strcmp($value, "")) {
@@ -170,11 +171,12 @@ ini_set("display_errors", 1);
                     foreach($ids as $id) {
                         $catIds[$id] = 1;
                     }
-                    $book['rewrite_url'] = $row[1];
+                    $book['rewrite_url'] = $row[0] . "\t" . $row[1];
                 }
                 else {
                     $unclassified[$value]++;
                 }
+                $bisac_codes = $bisac_codes . (empty($bisac_codes) ? "" : ",") . $value;
             }
         }
       }
@@ -185,12 +187,14 @@ ini_set("display_errors", 1);
          foreach($ids as $id) {
              $catIds[$id] = 1;
          }
-         $book['rewrite_url'] = $tmp['rewrite_url'];
+         $book['rewrite_url'] = $tmp['catcode'] . "\t" . $tmp['rewrite_url'];
+         $bisac_codes = UNCLASSIFIED;
       }
       else 
          $book['unclassified'] = false;
 
       $book['catcode'] = implode(",", array_keys($catIds));
+      $book['bisac_codes'] = $bisac_codes;
 
       return ($book);
     }
@@ -205,7 +209,7 @@ ini_set("display_errors", 1);
 
        $query = "insert into books (`isbn10`, `isbn`, `author`, `binding`, `publisher`, `title`, `pages`, " .
                 "`language`, `bisac1`, `cover_thumb`, `image`, `weight`, " .
-                "`dimension`, `edition`, `shipping_region`, `info_source`, `sourced_from`, `new`, `rewrite_url`) values (";
+                "`dimension`, `edition`, `shipping_region`, `info_source`, `sourced_from`, `new`, `rewrite_url`, `bisac_codes`) values (";
 
        $query = $query . "'" . $book['isbn'] . "'".",";
        $query = $query . "'" . $book['isbn13'] . "'".",";
@@ -226,8 +230,9 @@ ini_set("display_errors", 1);
        $query = $query . "'" . $shipregion . "'" . ",";
        $query = $query . "'" . $infosource . "'" . ",";
        $query = $query . "'" . $book['sourced_from'] . "'" . ",";
-       $query = $query . "1" . ",";
-       $query = $query . "'" . $book['rewrite_url'] . "'". ");";
+       $query = $query . "0" . ",";
+       $query = $query . "'" . $book['rewrite_url'] . "'". ",";
+       $query = $query . "'" . $book['bisac_codes'] . "'". ");";
        if (! $result = mysqli_query($db, $query)) {
            warn("Failed to write to Books: ". mysqli_error($db), $query);
            return(0); 

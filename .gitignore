@@ -4,3 +4,4 @@ magento/app/.project
 magento/app/.settings/
 magento/downloader/
 magento/media/images.zip
+magento/search_index_dir/
