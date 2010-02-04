@@ -24,11 +24,4 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<fieldset class="form-list">
-    <?php $_code=$this->getMethodCode() ?>
-    <ul id="payment_form_<?php echo $_code ?>" style="display:none">
-        <li>
-            <?php echo $this->__('') ?>
-        </li>
-    </ul>
-</fieldset>
+<li><a href="<?php echo $this->getCheckoutUrl()?>"><img src="<?php echo $this->getImageUrl()?>" alt="<?php echo Mage::helper('ccav')->__('Ccavenue Checkout');?>" /></a></li>

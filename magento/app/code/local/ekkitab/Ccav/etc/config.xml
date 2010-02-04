@@ -1,0 +1,163 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Ekkitab
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category   Ekkitab
+ * @package    Ekkitab_Ccav
+ * @copyright  Copyright (c) 2008 Irubin Consulting Inc. DBA Varien (http://www.varien.com)
+ * 			   Copyright (c) 2009 Ekkitab Educational Services India Pvt. Ltd.  
+ * 
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config>
+    <modules>
+        <Ekkitab_Ccav>
+            <version>0.7.0</version>
+        </Ekkitab_Ccav>
+    </modules>
+    <global>
+        <models>
+            <ccav>
+                <class>Ekkitab_Ccav_Model</class>
+                <resourceModel>ccav_mysql4</resourceModel>
+            </ccav>
+            <ccav_mysql4>
+                <class>Ekkitab_Ccav_Model_Mysql4</class>
+                <entities>
+                    <api_debug><table>ccav_api_debug</table></api_debug>
+                </entities>
+            </ccav_mysql4>
+        </models>
+        <helpers>
+        	<ccav>
+        		<class>Ekkitab_Ccav_Helper</class>
+        	</ccav>
+        </helpers>
+        <resources>
+            <ccav_setup>
+                <setup>
+                    <module>Ekkitab_Ccav</module>
+                    <class>Ekkitab_Ccav_Model_Mysql4_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </ccav_setup>
+            <ccav_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </ccav_write>
+            <ccav_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </ccav_read>
+        </resources>
+        <blocks>
+            <ccav><class>Ekkitab_Ccav_Block</class></ccav>
+        </blocks>
+        <sales>
+            <order>
+                <statuses>
+                    <pending_ccav translate="label"><label>Pending Ccav</label></pending_ccav>
+                </statuses>
+                <states>
+                    <pending_payment>
+                        <statuses>
+                            <pending_ccav/>
+                        </statuses>
+                    </pending_payment>
+                </states>
+
+            </order>
+        </sales>
+    </global>
+    <frontend>
+        <routers>
+            <ccav>
+                <use>standard</use>
+                <args>
+                    <module>Ekkitab_Ccav</module>
+                    <frontName>ccav</frontName>
+                </args>
+            </ccav>
+        </routers>
+        <translate>
+            <modules>
+                <Ekkitab_Ccav>
+                    <files>
+                        <default>Ekkitab_Ccav.csv</default>
+                    </files>
+                </Ekkitab_Ccav>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <ccav>
+                    <file>Ccav.xml</file>
+                </ccav>
+            </updates>
+        </layout>
+    </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Ekkitab_Ccav>
+                    <files>
+                        <default>Ekkitab_Ccav.csv</default>
+                    </files>
+                </Ekkitab_Ccav>
+            </modules>
+        </translate>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <ccav>
+                                            <title>Ccav Section</title>
+                                        </ccav>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+
+    <default>
+        <payment>
+            <ccav>
+                  <model>Ekkitab_Ccav_Model_Ccav</model>
+                  <title>Ccav Standard</title>
+                  <allowspecific>0</allowspecific>
+                  <transaction_type>O</transaction_type>
+                  <order_status>pending_ccav</order_status>
+            </ccav>
+        </payment>
+    </default>
+</config>

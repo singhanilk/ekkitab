@@ -4,8 +4,8 @@
 // to execute a Java class and get and use the returned results in PHP.
 // This is very rough coding and has no proper exception handling. Beware!
 
-require_once("http://192.168.1.200:8080/JavaBridge/java/Java.inc");
-$search = new java("BookSearch", "/home/vijay/tmp/index");
+require_once("http://localhost:8080/JavaBridge/java/Java.inc");
+$search = new java("BookSearch", "search_index_dir");
 while ($query = readline("What do you want to search for? ")) {
         $start = (float) array_sum(explode(' ', microtime()));
         $page_sz = 10;
