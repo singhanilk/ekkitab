@@ -14,6 +14,7 @@ ini_set("display_errors", 1);
 //
 // @author Vijaya Raghavan (vijay@ekkitab.com)
 // @version 1.0     Dec 17, 2009
+// @version 1.1     Feb 03, 2010 (arun@ekkitab.com)
 //
 
 // This script will import books into the reference database from a vendor file......
@@ -149,6 +150,25 @@ class Parser {
 			$book['PUBLISHING_DATE']    = $pubdate ;
 
 			return($book);
+		}
+		
+		function getBookDescription($line,$type){
+			$isbn         = substr($line,0,13);
+			
+			if($type == 'long'){
+			   $description  = substr($line,15);
+			   $description = str_replace("'", "", $description);
+		       $bookinfo['DESCRIPTION'] = "'$description'";
+			 }
+			elseif($type == 'short'){
+			   $description  = substr($line,18);
+			   $description = str_replace("'", "", $description);
+		       $bookinfo['SHORT_DESCRIPTION'] = "'$description'";
+			}
+						
+			$bookinfo['ISBN']        = $isbn;
+			return($bookinfo);
+			  
 		}
 }
 ?>
