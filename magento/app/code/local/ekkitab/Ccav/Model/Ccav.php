@@ -739,7 +739,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     {
     $ch = curl_init();
     $user="anil@ekkitab.com:meritos1959";
-    $senderID="mVaayoo";
+    $senderID="EKKITAB1";
  //   $receipientno= "9845051066";
     $msgtxt="Thank you for shopping with EkKitab. Your Order Id is $Order_Id";
     $state="4" ;
@@ -748,7 +748,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_POST, 1);
 //	curl_setopt($ch, CURLOPT_POSTFIELDS, "user=$user&senderID=$senderID&receipientno=$receipientno&cid=$cid&msgtxt=$msgtxt");
-	curl_setopt($ch, CURLOPT_POSTFIELDS, "user=$user&senderID=$senderID&receipientno=$receipientno&msgtxt=$msgtxt&state=$state");
+	curl_setopt($ch, CURLOPT_POSTFIELDS, "user=$user&senderID=$senderID&receipientno=$recepientno&msgtxt=$msgtxt&state=$state");
 	
 	$buffer = curl_exec($ch);
 	if(empty ($buffer))
