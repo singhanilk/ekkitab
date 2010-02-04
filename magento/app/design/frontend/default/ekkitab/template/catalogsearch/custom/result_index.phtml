@@ -14,8 +14,41 @@
  * 
  */
 ?>
+<div class="leftNavArea">
+	<?php echo $this->getDonateBlurbHtml() ?>
 <?php 
 	$results=$this->getProductCollection();
+	if(!is_null($results)){
+?>
+	<div class="linkHdr">Narrow by Category</div><!-- linkHdr -->
+	<ul>
+	<li><a href="#">Arts & Photography</a></li>
+	<li><a href="#">Health, Mind & Body</a></li>
+	<li><a href="#">Law</a></li>
+	<li><a href="#">Medicine</a></li>
+	<li><a href="#">Literature & Fiction</a></li>
+	<li><a href="#">Professional & Technical</a></li>
+	<li><a href="#">Mystery & Thrillers</a></li>
+	<li><a href="#">Biographies & Memoirs</a></li>
+	<li><a href="#">Reference</a></li>
+	<li><a href="#">Religion & Spirituality</a></li>
+	<li><a href="#">Science Fiction & Fantasy</a></li>
+	<li><a href="#">Travel</a></li>
+	<li><a href="#">Outdoors & Nature</a></li>
+	<li><a href="#">Business & Investing</a></li>
+	<li><a href="#">Children's Books</a></li>
+	<li><a href="#">Computers & Internet</a></li>
+	<li><a href="#">Nonfiction</a></li>
+	<li><a href="#">Science</a></li>
+	<li><a href="#">Entertainment</a></li>
+	<li><a href="#">History</a></li>
+	</ul>
+	<div class="seeAll"><a href="#">See all &raquo;</a></div><!-- seeAll -->
+<?php }?>
+</div><!-- leftNavArea -->
+<div class="mainArea">
+<div class="inLeft">
+<?php 
 	if(!is_null($results)){
 		$bookList = $results->get("books");
 		$count =0;
@@ -25,9 +58,6 @@
 		if(!is_null($bookList) && $count >0 ):
 ?>
 <?php echo $this->getMessagesBlock()->getGroupedHtml()  ?>
-	<div class="page-head">
-		<h3><?php echo ($this->getHeaderText() || $this->getHeaderText() === false) ? $this->getHeaderText() : $this->__("Search results for '%s'", $this->helper('ekkitab_catalogsearch')->getEscapedQueryText()) ?></h3>
-	</div>
 	<?php if ($messages = $this->getNoteMessages()):?>
 	<div class="note-msg">
 		<?php foreach ($messages as $message):?>
@@ -36,98 +66,119 @@
 	</div>
 	<?php endif; ?>
 	<?php //echo $this->getToolbarHtml()
-		$titleHitCount = $results->get("hitcount-title");
 	?>
-    <table class="pager" cellspacing="0">
-        <tr>
-            <td>
-			 <?php if($this->getLastPageNum()>1): ?>
-                <?php echo $this->__('Items %s to %s of %s total', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
-            <?php else: ?>
-                <strong><?php echo $this->__('%s Item(s)', $this->getTotalNum()) ?></strong>
-            <?php endif; ?>
+<div class="searchResTop">
+	<div class="leftArea">
+		<?php if($this->getLastPageNumber()>1): ?>
+			<?php echo $this->__('Showing %s to %s of %s total', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+		<?php else: ?>
+			<strong><?php echo $this->__('%s Item(s)', $this->getTotalNum()) ?></strong>
+		<?php endif; ?>
+		<?php echo $this->__("results for '%s'", $this->helper('ekkitab_catalogsearch')->getEscapedQueryText()) ?>
+	</div><!-- leftArea -->
 
-            </td>
-            <?php if($this->getLastPageNumber()>1): ?>
-            <td class="pages">
-                <strong><?php echo $this->__('Page:') ?></strong>
-                <ol>
-                <?php if (!$this->isFirstPage()): ?>
-                    <li>
-                        <a href="<?php echo $this->getPreviousPageUrl() ?>"><img src="<?php echo $this->getSkinUrl('images/pager_arrow_left.gif') ?>" alt="<?php echo $this->__('Previous') ?>" /></a>
-                    </li>
-                <?php endif ?>
-                <?php foreach ($this->getPages() as $_page): ?>
-                    <?php if ($this->isPageCurrent($_page)): ?>
-                        <li><span class="on"><?php echo $_page ?></span></li>
-                    <?php else: ?>
-                        <li><a href="<?php echo $this->getPageUrl($_page) ?>"><?php echo $_page ?></a></li>
-                    <?php endif ?>
-                <?php endforeach;; ?>
-                <?php if (!$this->isLastPage()): ?>
-                    <li>
-                        <a href="<?php echo $this->getNextPageUrl() ?>"><img src="<?php echo $this->getSkinUrl('images/pager_arrow_right.gif') ?>" alt="<?php echo $this->__('Next') ?>" /></a>
-                    </li>
-                <?php endif ?>
-                </ol>
-            </td>
-            <?php endif; ?>
-            <td class="a-right">
-            </td>
-        </tr>
-    </table>
-	<!-- Grid Mode -->
-	<div class="listing-type-grid  catalog-listing padder"> <!-- the class name will change to .listing-type-cell if viewing in list mode -->
-		<table cellspacing="0" class="generic-product-grid" id="product-list-table">
-		<?php 
-			$_columnCount = $this->getColumnCount();
-			$i=0; 
-			$iter = $bookList->iterator();
-			for ($j=0; $j<$count; $j++) {
-				$book = $bookList->get($j);
-				$author = $book->get("author");
-				$title = $book->get("title");
-				$image = $book->get("image");
-				$url = $book->get("url");
-				$id = $book->get("entityId");
-				$listPrice = java_values($book->get("listprice")) ;
-				$discPrice = java_values($book->get("discountprice"));
-				$savingsPerct= ($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 10;
-		?>
-		<?php if ($i++%$_columnCount==0): ?>
-			<tr>
-		<?php endif ?>
-			<td>
-				<p class="product-image">
-					<a href="<?php echo $this->getUrl($url)?>" title="<?php  echo $title?>">
-					<img src="<?php echo $this->helper('ekkitab_catalogsearch')->resize($image,'small_image',false,null, 170); ?>" alt="<?php echo $title?>"></a>
-				</p>
-				<h5><a href="<?php echo $this->getUrl($url)?>" title="<?php echo $title ?>"><?php echo $title ?></a></h5><h4> by <?php echo $author ?> </h4>
-				<div class="price-box">
-                    <p class="old-price"><span class="price" id="old-price-<?php echo $id ?>"><?php echo Mage::helper('core')->currency($listPrice,true,false) ?></span></p>
-					<p class="special-price"><span class="price" id="product-price-<?php echo $id ?>"><?php echo Mage::helper('core')->currency($discPrice,true,false) ?></span></p>
-					<?php if($savingsPerct >0) :?> <p class="savings-percentage">You Save : <?php echo number_format($savingsPerct,2,'.','') ?>%</span></p><?php endif; ?>
-				</div>
-				<a href="#" onclick="setLocation('<?php echo $this->getAddToCartUrl($id)?>')"><img src="<?php echo $this->getSkinUrl('images/btn_add_to_cart.gif') ?>" alt="<?php echo $this->__('Add to Cart') ?>"></a>
-				<div class="clear"></div>
-				<ul class="add-to">
-					<li><a href="<?php echo $this->getAddToWishlistUrl($id)?>"><?php echo $this->__('Add to Wishlist') ?></a></li>
-					<li><a href="<?php echo $this->getAddToCompareUrl($id)?>"><?php echo $this->__('Add to Compare') ?></a></li>
-				</ul>
-			</td>
-		<?php if ($i%$_columnCount==0 && $i!=$count): ?>
-			</tr>
-		<?php endif ?>
+	<div class="rightArea">
+		<div class="topPaginationArea">
+			<?php if($this->getLastPageNumber()>1): ?>
+			<ul>
+				<?php if (!$this->isFirstPage()): ?>
+					<li><a href="<?php echo $this->getPreviousPageUrl() ?>" id="prev"><?php echo $this->__('Prev') ?></a></li>
+				<?php else: ?>
+					<li class="nolink"><?php echo $this->__('Prev') ?></li>
+				<?php endif; ?>
+				
+				<?php foreach ($this->getPages() as $_page): ?>
+					<?php if ($this->isPageCurrent($_page)): ?>
+						<li><span><?php echo $_page ?></span></li>
+					<?php else: ?>
+						<li><a href="<?php echo $this->getPageUrl($_page) ?>"><?php echo $_page ?></a></li>
+					<?php endif ?>
+				<?php endforeach; ?>
+
+				<?php if (!$this->isLastPage()): ?>
+					<li><a href="<?php echo $this->getNextPageUrl() ?>"><?php echo $this->__('Next') ?></a></li>
+				<?php else: ?>
+					<li><b id="sep"><?php echo $this->__('Next') ?></b></li>
+				<?php endif; ?>
+
+			</ul>
+			<?php endif; ?>
+		</div>
+	</div><!-- rightArea -->
+	<div class="clear"></div>
+</div><!-- searchResTop -->
+	<?php 
+		$iter = $bookList->iterator();
+		for ($j=0; $j<$count; $j++) {
+			$book = $bookList->get($j);
+			$author = $book->get("author");
+			$title = $book->get("title");
+			$image = $book->get("image");
+			$url = $book->get("url");
+			$id = $book->get("entityId");
+			$listPrice = java_values($book->get("listprice")) ;
+			$discPrice = java_values($book->get("discountprice"));
+			$savings= $listPrice - $discPrice;
+			$savingsPerct= ($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 10;
+	?>
+			<div class="searchRow">
+			<div class="skuImage"><div class="image"><a href="<?php echo $this->getUrl($url)?>" title="<?php  echo $title?>">
+				<img src="<?php echo $this->helper('ekkitab_catalogsearch')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $title?>"></a></div></div>
+			<!-- skuImage -->
+			<div class="detailsArea">
+			<div class="bkTitle"><a href="<?php echo $this->getUrl($url)?>" title="<?php echo $title ?>"><?php echo $title ?></a></div><!-- bkTitle -->
+			<div class="lineHeight14em">Author: <?php echo $author ?> </div>
+			<div class="lineHeight14em">ISBN: 0578008912</div>
+			<div class="lineHeight14em">Binding: Paperback</div>
+			<div class="lineHeight14em">Language : English </div>
+			<div class="synop">Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain... </div><!-- synop -->
+			</div><!-- detailsArea -->
+
+			<div class="priceArea">
+			<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($discPrice,true,false) ?></div>
+			<div class="lineHeight14em">MRP Price : <?php echo Mage::helper('core')->currency($listPrice,true,false) ?></div>
+			<div class="youSave">Save <?php echo Mage::helper('core')->currency($savings,true,false) ?> (<?php echo number_format($savingsPerct,2,'.','') ?>%)</div>
+			<div class="lineHeight14em">Normally Ships in 29 days</div>
+			<a href="<?php echo $this->getAddToWishlistUrl($id)?>"><?php echo $this->__('Add to Wishlist') ?></a><br/>
+			<a href="<?php echo $this->getUrl($url)?>" title="<?php echo $title ?>">More details</a>
+			<!--a href="#" onclick="setLocation('<?php echo $this->getAddToCartUrl($id)?>')"><img src="<?php echo $this->getSkinUrl('images/btn_add_to_cart.gif') ?>" alt="<?php echo $this->__('Add to Cart') ?>"></a-->
+			</div><!-- priceArea -->
+			<div class="clear"></div>
+			</div><!-- searchRow -->
+			<div class="clear"></div>
 		<?php } ?>
-		<?php for($i;$i%$_columnCount!=0;$i++): ?>
-			 <td class="empty-product">&nbsp;</td>
-		<?php endfor ?>
-		<?php if ($i%$_columnCount==0): ?>
-			</tr>
-		<?php endif ?>
-		</table>
-		<script type="text/javascript">decorateTable('product-list-table')</script>
-	</div>
+	</div><!-- inLeft-->
+<div class="clear"></div>
+	<div class="paginationAreaOut">
+		<div class="paginationArea">
+			<?php if($this->getLastPageNumber()>1): ?>
+			<ul>
+				<?php if (!$this->isFirstPage()): ?>
+					<li><a href="<?php echo $this->getPreviousPageUrl() ?>" id="prev"><?php echo $this->__('Prev') ?></a></li>
+				<?php else: ?>
+					<li class="nolink"><?php echo $this->__('Prev') ?></li>
+				<?php endif; ?>
+				
+				<?php foreach ($this->getPages() as $_page): ?>
+					<?php if ($this->isPageCurrent($_page)): ?>
+						<li><span><?php echo $_page ?></span></li>
+					<?php else: ?>
+						<li><a href="<?php echo $this->getPageUrl($_page) ?>"><?php echo $_page ?></a></li>
+					<?php endif ?>
+				<?php endforeach; ?>
+
+				<?php if (!$this->isLastPage()): ?>
+					<li><a href="<?php echo $this->getNextPageUrl() ?>"><?php echo $this->__('Next') ?></a></li>
+				<?php else: ?>
+					<li><b id="sep"><?php echo $this->__('Next') ?></b></li>
+				<?php endif; ?>
+			</ul>
+			<?php endif; ?>
+			<div class="clear"></div>
+		</div><!-- paginationArea-->
+	</div><!-- paginationAreaOut-->
+
+</div><!-- mainArea -->
 <?php else: ?>
     <div class="page-head">
         <h3><?php echo ($this->getHeaderText() || $this->getHeaderText() === false) ? $this->getHeaderText() : $this->__("Search results for '%s'", $this->helper('ekkitab_catalogsearch')->getEscapedQueryText()) ?></h3>

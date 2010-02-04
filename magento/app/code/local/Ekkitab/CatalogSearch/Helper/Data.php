@@ -137,6 +137,6 @@ class Ekkitab_CatalogSearch_Helper_Data extends Mage_CatalogSearch_Helper_Data
 
     public function getPlaceholder($attr)
     {
-		return ('images/catalog/product/placeholder/'.$attr.'.jpg');
+		return ('images/catalog/product/placeholder/'.$attr.'.png');
 	}
 }
