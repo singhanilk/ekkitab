@@ -240,8 +240,6 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     {
     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
     
-    // I have checked this SMS and it works
-  //   $this->sendsms() ; 
     /*
         if ($this->getQuote()->getIsVirtual()) {  // don't understand this "aksingh"
             $a = $this->getQuote()->getBillingAddress();
@@ -261,7 +259,6 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
         $currency_code = $this->getQuote()->getBaseCurrencyCode();
        
         
-            Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
             
             //copied from Checkout.php3
             
@@ -363,12 +360,6 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
         // After testing the interface, we should hardcode them, it may be too risky to keep them as parameters
         
           $merchanturl = Mage::getStoreConfig('ccav/wps/merchant_url') ;
-        
-
-        
-          
-                        
-                
         
         
         
@@ -740,14 +731,11 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     $ch = curl_init();
     $user="anil@ekkitab.com:meritos1959";
     $senderID="EKKITAB1";
- //   $receipientno= "9845051066";
     $msgtxt="Thank you for shopping with EkKitab. Your Order Id is $Order_Id";
     $state="4" ;
-//	curl_setopt($ch,CURLOPT_URL,  "http://api.mVaayoo.com/mvaayooapi/MessageCompose?user=anil@ekkitab.com:meritos1959&senderID=mVaayoo&receipientno=9845051066&msgtxt=This is a test from Ekkitab API&state=4");
   	curl_setopt($ch,CURLOPT_URL,  "http://api.mVaayoo.com/mvaayooapi/MessageCompose") ;
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_POST, 1);
-//	curl_setopt($ch, CURLOPT_POSTFIELDS, "user=$user&senderID=$senderID&receipientno=$receipientno&cid=$cid&msgtxt=$msgtxt");
 	curl_setopt($ch, CURLOPT_POSTFIELDS, "user=$user&senderID=$senderID&receipientno=$recepientno&msgtxt=$msgtxt&state=$state");
 	
 	$buffer = curl_exec($ch);
