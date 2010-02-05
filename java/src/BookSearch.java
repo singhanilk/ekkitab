@@ -24,6 +24,11 @@ public class BookSearch {
     private static IndexReader reader = null;
     private static Sort sorter = new Sort();
     private static BookHitCollector collector = null;
+    private static Set<String> discardwords = new HashSet<String>();
+    static {
+        discardwords.add("the");
+        discardwords.add("for");
+    }
     
     public BookSearch(String indexDir) throws Exception {
         if (searcher == null) {
@@ -41,30 +46,19 @@ public class BookSearch {
                         throws Exception {
 
         List<Map<String, String>> result = new ArrayList<Map<String, String>>();
-        Map<String, Integer> uniques = new HashMap<String, Integer>();
-        int i = 0;
-        int count = 0;
         try {
-            while (i < hits.length) {
+            for (int i = start; i<end; i++) {
                 Document doc = searcher.doc(hits[i].doc);
-                String id = getFieldValue(doc.getField("entityId"));
-                if ((id != null) && (!uniques.containsKey(id))) {
-                    uniques.put(id, 1);
-                    count++;
-                    if ((count >= (start+1)) && (count <= (end+1))) {
-                        Map<String,String> book = new HashMap<String, String>();
-                        book.put("author", getFieldValue(doc.getField("author")));
-                        book.put("title", getFieldValue(doc.getField("title")));
-                        book.put("image", getFieldValue(doc.getField("image")));
-                        book.put("url", getFieldValue(doc.getField("url")));
-                        book.put("listprice", getFieldValue(doc.getField("listprice")));
-                        book.put("discountprice", getFieldValue(doc.getField("discountprice")));
-                        book.put("entityId", id);
-                        result.add(book);
-                    }
-                }
-                i++;
-            }
+                Map<String,String> book = new HashMap<String, String>();
+                book.put("author", getFieldValue(doc.getField("author")));
+                book.put("title", getFieldValue(doc.getField("title")));
+                book.put("image", getFieldValue(doc.getField("image")));
+                book.put("url", getFieldValue(doc.getField("url")));
+                book.put("listprice", getFieldValue(doc.getField("listprice")));
+                book.put("discountprice", getFieldValue(doc.getField("discountprice")));
+                book.put("entityId", getFieldValue(doc.getField("entityId")));
+                result.add(book);
+             }
         }
         catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -77,7 +71,6 @@ public class BookSearch {
        Map<String, Object> result = new HashMap<String, Object>();
        List<Map<String, String>> books = new ArrayList<Map<String, String>>();
        Map<String, Integer> counts = null;
-
 
        int startIndex = (page - 1) * pageSz;
        int endIndex   = startIndex + pageSz;
@@ -99,16 +92,22 @@ public class BookSearch {
                 sb.append(phrase+"^3 ");
                 sb.append("author:"+phrase+"^3 ");
             }
-            sb.append("+( ");
             String conjunction = "";
+            StringBuffer sbtmp = new StringBuffer();
             for (String word: words) {
-                sb.append(conjunction);
-                conjunction = " OR ";
-                sb.append(word+" ");
-                sb.append(conjunction);
-                sb.append("author:"+word+" ");
+                if ((word.length() > 2) && (!discardwords.contains(word))) {
+                    sbtmp.append(conjunction);
+                    conjunction = " OR ";
+                    sbtmp.append(word+" ");
+                    sbtmp.append(conjunction);
+                    sbtmp.append("author:"+word+" ");
+                 }
             }
-            sb.append(") ");
+            if (sbtmp.length() > 0) {
+                sb.append("+( ");
+                sb.append(sbtmp.toString());
+                sb.append(") ");
+            }
             modquery = sb.toString();
        }
 
@@ -116,16 +115,12 @@ public class BookSearch {
             String[] levels = category.split("/");
             StringBuffer sb = new StringBuffer();
             String prelude = "";
-            //if (!modquery.equals(""))
-            //    sb.append("AND ");
-            //sb.append("( ");
             sb.append(" ");
             for (int i = 0; i<levels.length; i++) {
                 int j = i+1;
                 sb.append(prelude + "+level"+j+":"+levels[i].replaceAll("[& ]+", "")); 
                 prelude = " AND ";
             }
-            //sb.append(" )");
             modquery = modquery + " " + sb.toString();
        }
 
