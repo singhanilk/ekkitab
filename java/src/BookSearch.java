@@ -10,6 +10,10 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.ScoreDoc;
+
 import java.util.*;
 import java.io.*;
 
@@ -17,11 +21,15 @@ public class BookSearch {
 
     private String indexDir;
     private static IndexSearcher searcher = null;
+    private static IndexReader reader = null;
+    private static Sort sorter = new Sort();
+    private static BookHitCollector collector = null;
     
     public BookSearch(String indexDir) throws Exception {
         if (searcher == null) {
             this.indexDir = indexDir;
-            searcher = new IndexSearcher(FSDirectory.getDirectory(indexDir));
+            reader = IndexReader.open(FSDirectory.getDirectory(indexDir));
+            searcher = new IndexSearcher(reader);
         }
     }
 
@@ -29,102 +37,125 @@ public class BookSearch {
         return (fd == null ? null : fd.stringValue());
     }
 
-    private List<Map<String, String>> getBooks(Hits hits, List<Map<String,String>> books, int start, int end) 
+    private List<Map<String, String>> getBooks(ScoreDoc[] hits, int start, int end) 
                         throws Exception {
-        HitIterator iter = (HitIterator)hits.iterator(); 
+
+        List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+        Map<String, Integer> uniques = new HashMap<String, Integer>();
         int i = 0;
+        int count = 0;
         try {
-            while (iter.hasNext()) {
-			    Hit hit = (Hit)iter.next();
-                if (i++ < start) 
-                    continue;
-                if (i > end)
-                    break;
-			    Document doc = hit.getDocument();
-                Map<String,String> book = new HashMap<String, String>();
-                book.put("author", getFieldValue(doc.getField("author")));
-                book.put("title", getFieldValue(doc.getField("title")));
-                book.put("image", getFieldValue(doc.getField("image")));
-                book.put("url", getFieldValue(doc.getField("url")));
-                book.put("listprice", getFieldValue(doc.getField("listprice")));
-                book.put("discountprice", getFieldValue(doc.getField("discountprice")));
-                book.put("entityId", getFieldValue(doc.getField("entityId")));
-                books.add(book);
+            while (i < hits.length) {
+                Document doc = searcher.doc(hits[i].doc);
+                String id = getFieldValue(doc.getField("entityId"));
+                if ((id != null) && (!uniques.containsKey(id))) {
+                    uniques.put(id, 1);
+                    count++;
+                    if ((count >= (start+1)) && (count <= (end+1))) {
+                        Map<String,String> book = new HashMap<String, String>();
+                        book.put("author", getFieldValue(doc.getField("author")));
+                        book.put("title", getFieldValue(doc.getField("title")));
+                        book.put("image", getFieldValue(doc.getField("image")));
+                        book.put("url", getFieldValue(doc.getField("url")));
+                        book.put("listprice", getFieldValue(doc.getField("listprice")));
+                        book.put("discountprice", getFieldValue(doc.getField("discountprice")));
+                        book.put("entityId", id);
+                        result.add(book);
+                    }
+                }
+                i++;
             }
         }
         catch (Exception e) {
             throw new Exception(e.getMessage());
         }
-        System.out.println("Book Size: "+books.size());
-        return books;
+        return result;
     }
 
-    public Map<String, Object> searchBook(String query, int pageSz, int page) throws Exception {
+    public Map<String, Object> searchBook(String category, String query, int pageSz, int page) throws Exception {
 
        Map<String, Object> result = new HashMap<String, Object>();
        List<Map<String, String>> books = new ArrayList<Map<String, String>>();
+       Map<String, Integer> counts = null;
+
 
        int startIndex = (page - 1) * pageSz;
        int endIndex   = startIndex + pageSz;
 
        QueryParser qpt = new QueryParser("title", new SimpleAnalyzer());
-       //QueryParser qpa = new QueryParser("author", new SimpleAnalyzer());
 
-       //alter query to match lucene syntax.
-       /*
-       String[] terms = query.split(" ");
-       StringBuffer sb = new StringBuffer();
-       for (String term: terms) {
-          sb.append("author: ");
-          sb.append(term);
-          sb.append(" ");
+       String modquery = "";
+
+       if (!query.equals("")) {
+
+            String phrase = "";
+            String[] words = query.split(" ");
+            if (words.length > 1)
+                    phrase = "\"" + query + "\"";
+
+            StringBuffer sb = new StringBuffer();
+            sb.append("sourcedfrom:India^5 ");
+            if (!phrase.equals("")) {
+                sb.append(phrase+"^3 ");
+                sb.append("author:"+phrase+"^3 ");
+            }
+            sb.append("+( ");
+            String conjunction = "";
+            for (String word: words) {
+                sb.append(conjunction);
+                conjunction = " OR ";
+                sb.append(word+" ");
+                sb.append(conjunction);
+                sb.append("author:"+word+" ");
+            }
+            sb.append(") ");
+            modquery = sb.toString();
        }
-       String modquery = sb.toString();
-       System.out.println("DEBUG: "+query);
-       */
 
-       String[] words = query.split(" ");
-       if (words.length > 1)
-            query = "\"" + query + "\"";
-
-       StringBuffer sb = new StringBuffer();
-       sb.append("sourcedfrom: India^5 ");
-       sb.append(query);
-       sb.append(" author:" + query+ " ");
-       for (String word: words) {
-          sb.append(" " + word);
-          sb.append(" author:" + word);
+       if (!category.equals("")) {
+            String[] levels = category.split("/");
+            StringBuffer sb = new StringBuffer();
+            String prelude = "";
+            //if (!modquery.equals(""))
+            //    sb.append("AND ");
+            //sb.append("( ");
+            sb.append(" ");
+            for (int i = 0; i<levels.length; i++) {
+                int j = i+1;
+                sb.append(prelude + "+level"+j+":"+levels[i].replaceAll("[& ]+", "")); 
+                prelude = " AND ";
+            }
+            //sb.append(" )");
+            modquery = modquery + " " + sb.toString();
        }
-       String modquery = sb.toString();
 
-       Query luceneQuery = qpt.parse(modquery);
+       System.out.println("Query: "+modquery);
 
-       //Query termQuery = new TermQuery(new Term("author",query));
-       Hits hits = searcher.search(luceneQuery);
-       result.put("hitcount-author", new Integer(hits.length()));
-       result.put("hitcount-title", new Integer(hits.length()));
+       if (modquery.equals("")) {
+            result.put("books", null);
+            result.put("counts", null);
+            result.put("hits", new Integer(0));
+       }
+       else {
 
-       //System.out.println("Start: "+startIndex+"  End: "+endIndex);
-       if (hits.length() > 0)
-            getBooks(hits, books, startIndex, endIndex);
+            Query luceneQuery = qpt.parse(modquery);
+            System.out.println("Lucene Query: "+luceneQuery.toString());
 
-       //if ((books.size() > 0) && (books.size() < pageSz)) {
-       //     startIndex = 0;
-       //     endIndex   = (pageSz - books.size());
-       //}
+            collector = new BookHitCollector(searcher, reader, sorter, 5000, category);
 
-       //termQuery = new TermQuery(new Term("title",query));
-       //luceneQuery = qpt.parse(query);
-       //hits = searcher.search(luceneQuery);
-       //result.put("hitcount-title", new Integer(hits.length()));
+            searcher.search(luceneQuery, collector);
+            ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
-       //if (books.size() < pageSz) {
-        //    System.out.println("Again: Start: "+startIndex+"  End: "+endIndex);
-        //    if (hits.length() > 0)
-        //       getBooks(hits, books, startIndex, endIndex);
-       //}
 
-       result.put("books", books);
+            if (hits.length > 0) {
+                 books = getBooks(hits, startIndex, endIndex);
+                 counts = collector.getCounts();
+            }
+
+            result.put("books", books);
+            result.put("counts", counts);
+            result.put("hits", new Integer(hits.length));
+       }
        return (result);
     }
 
@@ -141,11 +172,15 @@ public class BookSearch {
           while (true) {
               System.out.print("Search for? ");
               String query = br.readLine();
-              if ((query == null) || (query.equals("")))
-                  break; 
-              Map<String, Object> results = booksearch.searchBook(query,10,1);
-              System.out.println((Integer)results.get("hitcount-author")+" hits in author");
-              System.out.println((Integer)results.get("hitcount-title")+" hits in author");
+              System.out.print("In category? ");
+              String category = br.readLine();
+              System.out.print("Page? ");
+              String page = br.readLine();
+              if ((page == null) || page.equals(""))
+                 page = "1";
+              Map<String, Object> results = booksearch.searchBook(category, query, 10, Integer.parseInt(page));
+              Integer numberofhits = (Integer)results.get("hits"); 
+              System.out.println(numberofhits +" hits overall.");
               List<Map<String, String>> books = (List<Map<String, String>>)results.get("books");
               Iterator iter = books.iterator();
               while (iter.hasNext()) {
@@ -160,6 +195,10 @@ public class BookSearch {
                   System.out.println("--------------------------------------");
               }
               System.out.println("The number of books returned is: "+books.size());
+              System.out.print("Finished? ");
+              String response = br.readLine();
+              if (response.equalsIgnoreCase("y")) 
+                   break;
           }
         
        } catch (Exception e) {
