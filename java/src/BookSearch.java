@@ -88,18 +88,27 @@ public class BookSearch {
 
        if (!query.equals("")) {
 
+            String phrase = "";
             String[] words = query.split(" ");
             if (words.length > 1)
-                    query = "\"" + query + "\"";
+                    phrase = "\"" + query + "\"";
 
             StringBuffer sb = new StringBuffer();
-            sb.append("sourcedfrom: India^5 ");
-            sb.append(query);
-            sb.append(" author:" + query+ " ");
-            for (String word: words) {
-                sb.append(" " + word);
-                sb.append(" author:" + word);
+            sb.append("sourcedfrom:India^5 ");
+            if (!phrase.equals("")) {
+                sb.append(phrase+"^3 ");
+                sb.append("author:"+phrase+"^3 ");
             }
+            sb.append("+( ");
+            String conjunction = "";
+            for (String word: words) {
+                sb.append(conjunction);
+                conjunction = " OR ";
+                sb.append(word+" ");
+                sb.append(conjunction);
+                sb.append("author:"+word+" ");
+            }
+            sb.append(") ");
             modquery = sb.toString();
        }
 
@@ -109,13 +118,14 @@ public class BookSearch {
             String prelude = "";
             //if (!modquery.equals(""))
             //    sb.append("AND ");
-            sb.append("( ");
+            //sb.append("( ");
+            sb.append(" ");
             for (int i = 0; i<levels.length; i++) {
                 int j = i+1;
                 sb.append(prelude + "+level"+j+":"+levels[i].replaceAll("[& ]+", "")); 
                 prelude = " AND ";
             }
-            sb.append(" )");
+            //sb.append(" )");
             modquery = modquery + " " + sb.toString();
        }
 

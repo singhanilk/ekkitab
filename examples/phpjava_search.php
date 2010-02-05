@@ -25,30 +25,32 @@ do {
    if ($results) {
       $hitcount = $results->get("hits");
       $books = $results->get("books");
-      $sz = java_values($books->size());
-      $iter = $books->iterator();
-      for ($i=0; $i<$sz; $i++) {
-          $book = $books->get($i);
-          $author = $book->get("author");
-          $title = $book->get("title");
-          $image = $book->get("image");
-          $url = $book->get("url");
-          $id = $book->get("entityId");
-          $price = $book->get("listprice");
-          $discountprice = $book->get("discountprice");
-          echo "Author: $author\n";
-          echo "Title: $title\n";
-          echo "Id: $id\n";
-          echo "------------------------\n";
-      } 
-      $subcats = $results->get("counts");
-      if ($subcats != null) {
-        $retsize = $subcats->size();
-        echo "Size of Category List:[" . $retsize . "]\n"; 
-        $keys = $subcats->keySet();
-        foreach($keys as $key) { 
-            $val = $subcats->get($key);
-            echo "Category: $key [$val]\n";
+      if (!java_is_null($books)) {
+        $sz = java_values($books->size());
+        $iter = $books->iterator();
+        for ($i=0; $i<$sz; $i++) {
+            $book = $books->get($i);
+            $author = $book->get("author");
+            $title = $book->get("title");
+            $image = $book->get("image");
+            $url = $book->get("url");
+            $id = $book->get("entityId");
+            $price = $book->get("listprice");
+            $discountprice = $book->get("discountprice");
+            echo "Author: $author\n";
+            echo "Title: $title\n";
+            echo "Id: $id\n";
+            echo "------------------------\n";
+        } 
+        $subcats = $results->get("counts");
+        if (!java_is_null($subcats)) {
+            $retsize = $subcats->size();
+            echo "Size of Category List:[" . $retsize . "]\n"; 
+            $keys = $subcats->keySet();
+            foreach($keys as $key) { 
+                $val = $subcats->get($key);
+                echo "Category: $key [$val]\n";
+            }
         }
       }
       echo "Returned: $hitcount hits in $time seconds.\n";
