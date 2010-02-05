@@ -93,6 +93,8 @@ class Ekkitab_Ccav_StandardController extends Mage_Core_Controller_Front_Action
     /**
      * When a customer cancel payment from paypal. WE WILL NOT USE IT SO, WE WILL REMOVE IT.
      */
+    
+  /*  
     public function cancelAction()
     {
         $session = Mage::getSingleton('checkout/session');
@@ -106,8 +108,8 @@ class Ekkitab_Ccav_StandardController extends Mage_Core_Controller_Front_Action
             }
         }
 
-        /*we are calling getPaypalStandardQuoteId with true parameter, the session object will reset the session if parameter is true.
-        so we don't need to manually unset the session*/
+        //we are calling getPaypalStandardQuoteId with true parameter, the session object will reset the session if parameter is true.
+        //so we don't need to manually unset the session
         //$session->unsPaypalStandardQuoteId();
 
         //need to save quote as active again if the user click on cacanl payment from paypal
@@ -115,6 +117,8 @@ class Ekkitab_Ccav_StandardController extends Mage_Core_Controller_Front_Action
         //and then redirect to checkout one page
         $this->_redirect('checkout/cart');
     }
+    
+   */ 
 
    
 
