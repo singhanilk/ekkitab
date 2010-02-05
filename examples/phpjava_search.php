@@ -16,7 +16,7 @@ do {
    $pagenum = $page + 0;
 
    $start = (float) array_sum(explode(' ', microtime()));
-   $page_sz = 10;
+   $page_sz = 15;
    echo "Search query: '".$query."'  category: '".$category."'  Page: '".$pagenum."'\n";
    $results = $search->searchBook($category, $query, $page_sz, $pagenum);
    $end = (float) array_sum(explode(' ', microtime()));
