@@ -31,6 +31,7 @@ class Ekkitab_CatalogSearch_Block_Custom_ResultIndex extends Mage_Core_Block_Tem
 	protected $_columnCount = 4;
 	protected $_pageSize = 15;
 	protected $_pageNo;
+	protected $_categoryPath;
 	protected $_lastPageNo;
 	protected $_displayPages = 7;
 
@@ -110,7 +111,10 @@ class Ekkitab_CatalogSearch_Block_Custom_ResultIndex extends Mage_Core_Block_Tem
 		try{
 			require_once($javaIncFile);
 			$search = new java("BookSearch",$indexFilePath );
-			$results = $search->searchBook( $this->helper('ekkitab_catalogsearch')->getEscapedQueryText(), $this->getPageSize(), $this->getCurrentPageNumber());
+			//Mage::log("In ResultIndex....before decoding....getEscapedQueryCategoryPath=> ".$this->helper('ekkitab_catalogsearch')->getEscapedQueryCategoryPath());
+			//Mage::log("In ResultIndex....before decoding....plain category path=> ". $this->helper('ekkitab_catalogsearch')->getCurrentCategoryPath());
+			//Mage::log("In ResultIndex....after decoding.... ". urldecode($this->helper('ekkitab_catalogsearch')->getEscapedQueryCategoryPath()));
+			$results = $search->searchBook(urldecode($this->helper('ekkitab_catalogsearch')->getCurrentCategoryPath()),$this->helper('ekkitab_catalogsearch')->getEscapedQueryText(), $this->getPageSize(), $this->getCurrentPageNumber());
 		}
 		catch(Exception $e)
 		{
@@ -142,7 +146,7 @@ class Ekkitab_CatalogSearch_Block_Custom_ResultIndex extends Mage_Core_Block_Tem
 			$results = $this->getProductCollection();
 			if(!is_null($results)){
 				$bookList = $results->get("books");
-				if(!is_null($bookList)){
+				if (!java_is_null($bookList)) {
 					$size = java_values($bookList->size());
 				}
 			}
@@ -163,9 +167,10 @@ class Ekkitab_CatalogSearch_Block_Custom_ResultIndex extends Mage_Core_Block_Tem
 	   if (!$this->getData('total_result_count')) {
             if($this->getProductCollection()){
 				$results = $this->_productCollection;
-				$authorCount=java_values($results->get("hitcount-author"));
-				$titleCount=java_values($results->get("hitcount-title"));
-				$size = max($authorCount,$titleCount);
+				//$authorCount=java_values($results->get("hitcount-author"));
+				//$titleCount=java_values($results->get("hitcount-title"));
+				//$size = max($authorCount,$titleCount);
+				$size = java_values($results->get("hits"));
 			}else{
 				$size = 0;
 			}
@@ -225,7 +230,12 @@ class Ekkitab_CatalogSearch_Block_Custom_ResultIndex extends Mage_Core_Block_Tem
 
     public function getPageUrl($page)
     {
-        return $this->getPagerUrl(array($this->helper('ekkitab_catalogsearch')->getPageNoVarName()=>$page));
+        return $this->getPagerUrl(array($this->helper('ekkitab_catalogsearch')->getCategoryPath()=>$this->helper('ekkitab_catalogsearch')->getEscapedQueryCategoryPath(),$this->helper('ekkitab_catalogsearch')->getPageNoVarName()=>$page));
+    }
+
+    public function getSubCategorySearchUrl($categoryPath,$page)
+    {
+        return $this->getPagerUrl(array($this->helper('ekkitab_catalogsearch')->getCategoryPath()=>$categoryPath,$this->helper('ekkitab_catalogsearch')->getPageNoVarName()=>$page));
     }
 
 	 public function getPagerUrl($params=array())
@@ -248,6 +258,19 @@ class Ekkitab_CatalogSearch_Block_Custom_ResultIndex extends Mage_Core_Block_Tem
 			$this->_pageNo = $this->helper('ekkitab_catalogsearch')->getCurrentPageNumber();
 		}
 		return $this->_pageNo;
+    }
+
+	/**
+     * Retrieve search result count
+     *
+     * @return string
+     */
+    public function getCurrentCategoryPath()
+    {
+		if(is_null($this->_categoryPath)){
+			$this->_categoryPath = $this->helper('ekkitab_catalogsearch')->getEscapedQueryCategoryPath();
+		}
+		return $this->_categoryPath;
     }
 
     public function getFirstNum()

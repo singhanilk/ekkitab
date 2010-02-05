@@ -14,49 +14,49 @@
  * 
  */
 ?>
+<?php
+$results=$this->getProductCollection();
+if(!is_null($results)){
+	$bookList = $results->get("books");
+	if (!java_is_null($bookList)) {
+		$count = java_values($bookList->size());
+?>
 <div class="leftNavArea">
 	<?php echo $this->getDonateBlurbHtml() ?>
 <?php 
-	$results=$this->getProductCollection();
-	if(!is_null($results)){
+		$subcats = $results->get("counts");
+		if (!java_is_null($subcats)) {
+			$retsize = java_values($subcats->size());
+			//echo "Size of Category List:[" . $retsize . "]\n"; 
+			$keys = $subcats->keySet();
+			if($retsize > 0){
 ?>
 	<div class="linkHdr">Narrow by Category</div><!-- linkHdr -->
-	<ul>
-	<li><a href="#">Arts & Photography</a></li>
-	<li><a href="#">Health, Mind & Body</a></li>
-	<li><a href="#">Law</a></li>
-	<li><a href="#">Medicine</a></li>
-	<li><a href="#">Literature & Fiction</a></li>
-	<li><a href="#">Professional & Technical</a></li>
-	<li><a href="#">Mystery & Thrillers</a></li>
-	<li><a href="#">Biographies & Memoirs</a></li>
-	<li><a href="#">Reference</a></li>
-	<li><a href="#">Religion & Spirituality</a></li>
-	<li><a href="#">Science Fiction & Fantasy</a></li>
-	<li><a href="#">Travel</a></li>
-	<li><a href="#">Outdoors & Nature</a></li>
-	<li><a href="#">Business & Investing</a></li>
-	<li><a href="#">Children's Books</a></li>
-	<li><a href="#">Computers & Internet</a></li>
-	<li><a href="#">Nonfiction</a></li>
-	<li><a href="#">Science</a></li>
-	<li><a href="#">Entertainment</a></li>
-	<li><a href="#">History</a></li>
-	</ul>
-	<div class="seeAll"><a href="#">See all &raquo;</a></div><!-- seeAll -->
-<?php }?>
+		<ul>
+<?php foreach($keys as $key): 
+			$val = java_values($subcats->get($key));
+			$key =  java_values($key);
+			$curr_cp = $this->getCurrentCategoryPath();
+			if(isset($curr_cp) && strlen($curr_cp) > 0 ){
+				$cp =  $this->getCurrentCategoryPath()."/". urlencode($key);
+			}else{
+				$cp =  urlencode($key);
+			}
+
+?>
+			<li><a href="<?php echo $this->getSubCategorySearchUrl($cp,1) ?>"><?php echo $key. "[". $val ."]"?></a></li>
+<?php endforeach;	?>
+			</ul>
+	<div class="seeAll"><!--a href="#">See all &raquo;</a-->&nbsp;</div><!-- seeAll -->
+
+<?php 	} //end of if(retsize > 0)
+	} //end of if(!java_is_null(subcats))
+?>
+
 </div><!-- leftNavArea -->
 <div class="mainArea">
 <div class="inLeft">
-<?php 
-	if(!is_null($results)){
-		$bookList = $results->get("books");
-		$count =0;
-		if(!is_null($bookList)){
-			$count = java_values($bookList->size());
-		}
-		if(!is_null($bookList) && $count >0 ):
-?>
+<?php if($count >0 ): ?>
 <?php echo $this->getMessagesBlock()->getGroupedHtml()  ?>
 	<?php if ($messages = $this->getNoteMessages()):?>
 	<div class="note-msg">
@@ -179,7 +179,8 @@
 	</div><!-- paginationAreaOut-->
 
 </div><!-- mainArea -->
-<?php else: ?>
+
+<?php else: //else of if(count >0 ) ?>
     <div class="page-head">
         <h3><?php echo ($this->getHeaderText() || $this->getHeaderText() === false) ? $this->getHeaderText() : $this->__("Search results for '%s'", $this->helper('ekkitab_catalogsearch')->getEscapedQueryText()) ?></h3>
     </div>
@@ -197,10 +198,13 @@
 	</div>
 	</div>
 <?php endif;
-} else {
+} else { // else of if (!java_is_null(bookList)) {
+
 ?>
     <div class="page-head">
         <h3><?php echo ($this->getHeaderText() || $this->getHeaderText() === false) ? $this->getHeaderText() : $this->__("Search results for '%s'", $this->helper('ekkitab_catalogsearch')->getEscapedQueryText()) ?></h3>
     </div>
     <div class="note-msg"> Sorry, we are unable to process your request now. Please try again later or write to us if the problem persists.</div>
-<?php } ?>
+<?php }
+} // ending if(!is_null(results)){ no else part right now.
+?>
