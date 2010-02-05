@@ -47,7 +47,7 @@ public class BookSearch {
 
         List<Map<String, String>> result = new ArrayList<Map<String, String>>();
         try {
-            for (int i = start; i<end; i++) {
+            for (int i = start; ((i<end) && (i < hits.length)); i++) {
                 Document doc = searcher.doc(hits[i].doc);
                 Map<String,String> book = new HashMap<String, String>();
                 book.put("author", getFieldValue(doc.getField("author")));
