@@ -192,7 +192,7 @@ public class BookIndex {
                 String label = "level" + index;
                 String category = book.get(label);
                 String real_name = category;
-                String key = real_name.replaceAll("[& ]+", "");
+                String key = real_name.replaceAll("\\W+", "");
                 doc.add(new Field(label, key, Field.Store.NO, Field.Index.UN_TOKENIZED));
                 doc.add(new Field(label+"_real", real_name, Field.Store.YES, Field.Index.NO));
                 if (label.equals("level1") && key.equals("antiquescollectibles")) {
