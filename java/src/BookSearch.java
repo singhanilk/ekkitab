@@ -116,12 +116,12 @@ public class BookSearch {
             sb.append(" ");
             for (int i = 0; i<levels.length; i++) {
                 int j = i+1;
-                sb.append(prelude + "+level"+j+":"+levels[i].replaceAll("\\W+", "")); 
+                sb.append(prelude + "+level"+j+":"+levels[i].replaceAll("\\W+", "")+" "); 
                 prelude = " AND ";
             }
        }
 
-       if (!sb.equals("")) 
+       if (sb.length() > 0) 
             sb.append("sourcedfrom:India^5 ");
 
        modquery = sb.toString();
