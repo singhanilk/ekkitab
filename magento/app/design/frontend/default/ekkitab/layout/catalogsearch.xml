@@ -64,7 +64,7 @@
     <ekkitab_catalogsearch_custom_result>
         <!-- Mage_Catalogsearch -->
         <reference name="root">
-            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
         </reference>
         <reference name="content">
             <block type="catalogsearch/custom_result" name="catalogsearch_custom_result" template="catalogsearch/custom/result.phtml">
@@ -81,7 +81,7 @@
        <ekkitab_catalogsearch_custom_resultbyindex>
         <!-- Mage_Catalogsearch -->
         <reference name="root">
-            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
         </reference>
         <reference name="left">
 			   <block type="catalog/navigation" name="catalog.leftnav" before="popular_categories" template="catalog/navigation/left_child_categories.phtml"/>
@@ -89,7 +89,7 @@
 		<reference name="content">
             <block type="ekkitab_catalogsearch/custom_resultIndex" name="catalogsearch_custom_result" template="catalogsearch/custom/result_index.phtml">
                 <action method="setColumnCount"><count>4</count></action>
-                <action method="setPageSize"><count>20</count></action>
+                <action method="setPageSize"><count>15</count></action>
             </block>
         </reference>
     </ekkitab_catalogsearch_custom_resultbyindex>
