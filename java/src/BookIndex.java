@@ -67,6 +67,8 @@ public class BookIndex {
         else 
            levels = null;
 
+        result.close();
+        stmt.close();
         return levels;
     }
 
