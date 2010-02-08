@@ -19,7 +19,8 @@ class Ekkitab_CatalogSearch_Helper_Data extends Mage_CatalogSearch_Helper_Data
 {
 
     const QUERY_PAGE_NO = 'p';
-    
+  
+    const QUERY_CATEGORY_PATH = 'cp';
 	
 	/**
      * Page Number
@@ -28,6 +29,13 @@ class Ekkitab_CatalogSearch_Helper_Data extends Mage_CatalogSearch_Helper_Data
      */
     protected $_pageNo;
 
+
+	/**
+     * Page Number
+     *
+     * @var int
+     */
+    protected $_categoryPath;
 
 	
 	/**
@@ -40,6 +48,17 @@ class Ekkitab_CatalogSearch_Helper_Data extends Mage_CatalogSearch_Helper_Data
         return self::QUERY_PAGE_NO;
     }
 	
+	
+	/**
+     * Retrieve search query parameter name
+     *
+     * @return string
+     */
+    public function getCategoryPath()
+    {
+        return self::QUERY_CATEGORY_PATH;
+    }
+
 	/**
      * Retrieve result page url
      *
@@ -83,6 +102,41 @@ class Ekkitab_CatalogSearch_Helper_Data extends Mage_CatalogSearch_Helper_Data
             }
         }
         return $this->_pageNo;
+    }
+
+
+    /**
+     * Retrieve HTML escaped search query
+     *
+     * @return string
+     */
+    public function getEscapedQueryCategoryPath()
+    {
+        return $this->htmlEscape($this->getCurrentCategoryPath());
+    }
+
+	
+	/**
+     * Retrieve search query text
+     *
+     * @return string
+     */
+    public function getCurrentCategoryPath()
+    {
+		if (is_null($this->_categoryPath)) {
+			$this->_categoryPath = $this->_getRequest()->getParam($this->getCategoryPath());
+			//Mage::log("In helper ....before decoding....=> ".$this->_categoryPath);
+			if ($this->_categoryPath === null) {
+                $this->_categoryPath = '';
+            } else {
+                $this->_categoryPath = trim($this->_categoryPath);
+               // $this->_categoryPath = urldecode(trim($this->_categoryPath));
+				//Mage::log("In helper ....after  decoding....=> ".$this->_categoryPath);
+				$this->_categoryPath = Mage::helper('core/string')->cleanString($this->_categoryPath);
+				//Mage::log("In helper ....after cleaning ....=> ".$this->_categoryPath);
+            }
+		}
+        return $this->_categoryPath;
     }
 
 	/**
@@ -137,6 +191,6 @@ class Ekkitab_CatalogSearch_Helper_Data extends Mage_CatalogSearch_Helper_Data
 
     public function getPlaceholder($attr)
     {
-		return ('images/catalog/product/placeholder/'.$attr.'.jpg');
+		return ('images/catalog/product/placeholder/'.$attr.'.png');
 	}
 }

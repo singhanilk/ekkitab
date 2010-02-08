@@ -28,6 +28,7 @@ public class BookSearch {
     static {
         discardwords.add("the");
         discardwords.add("for");
+        discardwords.add("and");
     }
     
     public BookSearch(String indexDir) throws Exception {
@@ -78,6 +79,7 @@ public class BookSearch {
        QueryParser qpt = new QueryParser("title", new SimpleAnalyzer());
 
        String modquery = "";
+       StringBuffer sb = new StringBuffer();
 
        if (!query.equals("")) {
 
@@ -86,8 +88,6 @@ public class BookSearch {
             if (words.length > 1)
                     phrase = "\"" + query + "\"";
 
-            StringBuffer sb = new StringBuffer();
-            sb.append("sourcedfrom:India^5 ");
             if (!phrase.equals("")) {
                 sb.append(phrase+"^3 ");
                 sb.append("author:"+phrase+"^3 ");
@@ -108,25 +108,28 @@ public class BookSearch {
                 sb.append(sbtmp.toString());
                 sb.append(") ");
             }
-            modquery = sb.toString();
        }
 
        if (!category.equals("")) {
             String[] levels = category.split("/");
-            StringBuffer sb = new StringBuffer();
             String prelude = "";
             sb.append(" ");
             for (int i = 0; i<levels.length; i++) {
                 int j = i+1;
-                sb.append(prelude + "+level"+j+":"+levels[i].replaceAll("[& ]+", "")); 
+                sb.append(prelude + "+level"+j+":"+levels[i].replaceAll("\\W+", "")+" "); 
                 prelude = " AND ";
             }
-            modquery = modquery + " " + sb.toString();
        }
+
+       if (sb.length() > 0) 
+            sb.append("sourcedfrom:India^5 ");
+
+       modquery = sb.toString();
 
        System.out.println("Query: "+modquery);
 
        if (modquery.equals("")) {
+            System.out.println("Query: is empty.");
             result.put("books", null);
             result.put("counts", null);
             result.put("hits", new Integer(0));
@@ -177,19 +180,21 @@ public class BookSearch {
               Integer numberofhits = (Integer)results.get("hits"); 
               System.out.println(numberofhits +" hits overall.");
               List<Map<String, String>> books = (List<Map<String, String>>)results.get("books");
-              Iterator iter = books.iterator();
-              while (iter.hasNext()) {
-                  Map<String, String> book = (Map<String, String>)iter.next();
-                  System.out.println("Author: "+book.get("author"));
-                  System.out.println("Title: "+book.get("title"));
-                  System.out.println("Url: "+book.get("url"));
-                  System.out.println("Image: "+book.get("image"));
-                  System.out.println("Price: "+book.get("listprice"));
-                  System.out.println("Discounted Price: "+book.get("discountprice"));
-                  System.out.println("Id: "+book.get("entityId"));
-                  System.out.println("--------------------------------------");
+              if (books != null) {
+                Iterator iter = books.iterator();
+                while (iter.hasNext()) {
+                    Map<String, String> book = (Map<String, String>)iter.next();
+                    System.out.println("Author: "+book.get("author"));
+                    System.out.println("Title: "+book.get("title"));
+                    System.out.println("Url: "+book.get("url"));
+                    System.out.println("Image: "+book.get("image"));
+                    System.out.println("Price: "+book.get("listprice"));
+                    System.out.println("Discounted Price: "+book.get("discountprice"));
+                    System.out.println("Id: "+book.get("entityId"));
+                    System.out.println("--------------------------------------");
+                }
+                System.out.println("The number of books returned is: "+books.size());
               }
-              System.out.println("The number of books returned is: "+books.size());
               System.out.print("Finished? ");
               String response = br.readLine();
               if (response.equalsIgnoreCase("y")) 
