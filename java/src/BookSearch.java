@@ -24,7 +24,6 @@ public class BookSearch {
     private static IndexSearcher searcher = null;
     private static IndexReader reader = null;
     private static Sort sorter = new Sort();
-    private static BookHitCollector collector = null;
     private static Set<String> discardwords = new HashSet<String>();
     static {
         discardwords.add("the");
@@ -84,6 +83,7 @@ public class BookSearch {
        Map<String, Object> result = new HashMap<String, Object>();
        List<Map<String, String>> books = new ArrayList<Map<String, String>>();
        Map<String, Integer> counts = null;
+       BookHitCollector collector = null;
 
        int startIndex = (page - 1) * pageSz;
        int endIndex   = startIndex + pageSz;
