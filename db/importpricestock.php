@@ -78,15 +78,22 @@
      */
     function createUpdateSql($bookprice,$isbn){
 
-       $query = "update books set ";
+       $updatequery = "update";
        foreach ($bookprice as $field => $value){
 
-          $query .= " $field = $value," ;
+          $updatequery  .= " $field = $value," ;
+		  $insertfield  .= "$field,";
+		  $insertvalues .= "$value,";
 
        }
-      $query  = $query = substr($query, 0, strrpos($query, ","));
-      $query .= " where ISBN = '$isbn'"; 
-      return ($query);
+
+      $updatequery   = substr($updatequery, 0, strrpos($updatequery, ","));
+	  $insertfield   = substr($insertfield, 0, strrpos($insertfield, ","));
+	  $insertvalues  = substr($insertvalues, 0, strrpos($insertvalues, ","));
+    
+	  $query = "insert into book_stock_and_prices (ISBN,$insertfield) values ('$isbn',$insertvalues) on duplicate key $updatequery";
+      
+	  return ($query);
     }
 
    /** 
@@ -192,9 +199,8 @@
             $bookprice['DISCOUNT_PRICE'] = round($bookprice['LIST_PRICE'] - $tmpPrice);
 
             //createing Update fields
-            $bookprice['STOCK_UPDATED'] = 1;
-            $bookprice['PRICE_UPDATED'] = 1;
-            $bookprice['UPDATED_DATE']   = "curdate()";
+            
+            $bookprice['UPDATED']   = 1;
             $query = createUpdateSql($bookprice, $isbn);
          
             try{
