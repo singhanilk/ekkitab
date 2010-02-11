@@ -87,6 +87,7 @@ class Parser {
             $book['thumbnail'] = $book['isbn13'].".jpg";
             $book['image'] = $book['thumbnail'];
             $book['sourced_from'] = "US";
+			$book['DELIVERY_PERIOD'] = 14 ;
             return($book);
         }
 
@@ -145,7 +146,6 @@ class Parser {
 			$book['SUPPLIERS_DISCOUNT'] = $discount ;
 			$book['CURRENCY']           = "'USD'" ;
 			$book['IN_STOCK']           = $stock ;
-			$book['DELIVERY_PERIOD']    = 14 ;
             $book['ISBN']               = $isbn ;
 			$book['PUBLISHING_DATE']    = $pubdate ;
 

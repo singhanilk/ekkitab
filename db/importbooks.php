@@ -209,7 +209,7 @@ ini_set("display_errors", 1);
 
        $query = "insert into books (`isbn10`, `isbn`, `author`, `binding`, `publisher`, `title`, `pages`, " .
                 "`language`, `bisac1`, `cover_thumb`, `image`, `weight`, " .
-                "`dimension`, `edition`, `shipping_region`, `info_source`, `sourced_from`, `new`, `rewrite_url`, `bisac_codes`) values (";
+                "`dimension`, `edition`, `shipping_region`, `info_source`, `sourced_from`, `new`, `rewrite_url`, `bisac_codes`, delivery_period) values (";
 
        $query = $query . "'" . $book['isbn'] . "'".",";
        $query = $query . "'" . $book['isbn13'] . "'".",";
@@ -232,7 +232,8 @@ ini_set("display_errors", 1);
        $query = $query . "'" . $book['sourced_from'] . "'" . ",";
        $query = $query . "0" . ",";
        $query = $query . "'" . $book['rewrite_url'] . "'". ",";
-       $query = $query . "'" . $book['bisac_codes'] . "'". ");";
+       $query = $query . "'" . $book['bisac_codes'] . "'". ",";
+       $query = $query . $book['delivery_period'] . ");";
        if (! $result = mysqli_query($db, $query)) {
            warn("Failed to write to Books: ". mysqli_error($db), $query);
            return(0); 
