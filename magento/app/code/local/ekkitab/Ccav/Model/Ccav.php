@@ -457,11 +457,12 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
  //            $url='https://www.sandbox.paypal.com/cgi-bin/webscr';
      //    } else {
  //            $url='https://www.paypal.com/cgi-bin/webscr';
-             $url='https://www.ccavenue.com/shopzone/cc_details.jsp';
+     //        $url='https://www.ccavenue.com/shopzone/cc_details.jsp';
              
   //       }
-         
-         return $url;
+             $url = Mage::getStoreConfig('ccav/wps/merchant_url') ;
+             
+        	 return $url;
     }
 
     public function getDebug()
