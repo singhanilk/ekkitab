@@ -69,9 +69,17 @@ class Parser {
     function getBookDescription($line,$type){
 			$book = array();
 		    $line = trim($line);
-		    $data = explode("~",$line);
-			$description = $this->escape(trim($data[4]));
-			$book['DESCRIPTION'] = "'$description'";
+			if($type == 'long'){
+		       $data = explode("~",$line);
+			   $description = $this->escape(trim($data[4]));
+			   $book['DESCRIPTION'] = "'$description'";
+			}
+			if($type == 'short'){
+				$data = explode("~",$line);
+			    $description = $this->escape(trim($data[4]));
+			    $book['SHORT_DESCRIPTION'] = "'$description'";
+			}
+
 			$book['ISBN']    	 = $data[2];
 
 			

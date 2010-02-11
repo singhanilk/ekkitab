@@ -95,15 +95,20 @@
      */
     function createUpdateSql($bookdescription,$isbn){
 
-       $query = "update books set ";
+       $updatequery = "update";
        foreach ($bookdescription as $field => $value){
 
-          $query .= " $field = $value," ;
-
+          $updatequery  .= " $field = $value," ;
+		  $insertfield  .= "$field,";
+		  $insertvalues .= "$value,";
+		  
        }
-      $query  = $query = substr($query, 0, strrpos($query, ","));
-      $query .= " where ISBN = '$isbn'"; 
-	  
+      $insertfield   = substr($insertfield, 0, strrpos($insertfield, ","));
+	  $insertvalues  = substr($insertvalues, 0, strrpos($insertvalues, ","));
+	  $updatequery   = substr($updatequery, 0, strrpos($updatequery, ","));
+      
+	  $query = "insert into book_description (ISBN,$insertfield) values ('$isbn',$insertvalues) on duplicate key $updatequery";
+	 
       return ($query);
     }
 
@@ -127,7 +132,7 @@
             $isbn = $bookinfo['ISBN'];
             unset($bookinfo['ISBN']);
 
-            $bookinfo['UPDATED_DATE']   = "curdate()";
+            $bookinfo['UPDATED']   = 1;
             $query = createUpdateSql($bookinfo, $isbn);
          
             try{
