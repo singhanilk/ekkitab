@@ -233,7 +233,7 @@ ini_set("display_errors", 1);
        $query = $query . "0" . ",";
        $query = $query . "'" . $book['rewrite_url'] . "'". ",";
        $query = $query . "'" . $book['bisac_codes'] . "'". ",";
-       $query = $query . $book['delivery_period'] . ");";
+       $query = $query . $book['DELIVERY_PERIOD'] . ");";
        if (! $result = mysqli_query($db, $query)) {
            warn("Failed to write to Books: ". mysqli_error($db), $query);
            return(0); 

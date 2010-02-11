@@ -47,6 +47,8 @@ class Parser {
 			$book['thumbnail']      = $this->escape(trim($data[2]));
 			$book['image']          = $this->escape(trim($data[2]));
 			$book['isbn']           = "";
+			$book['DELIVERY_PERIOD']    = 14;
+
 			return($book);
 	}
 
@@ -61,7 +63,6 @@ class Parser {
 			$book['PUBLISHING_DATE']    = "'$data[5]'";
 			$book['ISBN']			    = $data[2];
 			$book['IN_STOCK']           = 1;
-			$book['DELIVERY_PERIOD']    = 14;
 
 			return($book);
 	}
