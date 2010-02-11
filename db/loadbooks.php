@@ -554,9 +554,11 @@ ini_set("display_errors", 1);
                               "product/".$entityIds[CPE]."/".$id,$path."/".$url_key.".html",
                               "catalog/product/view/id/".$entityIds[CPE]."/category/".$id,"");
         }
+        /*
         $queries[] = createInsertQuery("core_url_rewrite", 
                                        "store_id, category_id, product_id, id_path, request_path, target_path, options",
                                        $val_array);
+        */
 		return $queries;
     }
    /** 
@@ -630,7 +632,7 @@ ini_set("display_errors", 1);
         $ekkitab_table_names['catalog_category_product_index'] = array('columns' => "category_id, product_id, is_parent, store_id, visibility");
         $ekkitab_table_names['catalog_product_enabled_index'] = array('columns' => "product_id, store_id, visibility");
         $ekkitab_table_names['catalog_product_website'] = array('columns' => "product_id, website_id");
-        $ekkitab_table_names['core_url_rewrite'] = array('columns' => "store_id, category_id, product_id, id_path, request_path, target_path, options");
+        //$ekkitab_table_names['core_url_rewrite'] = array('columns' => "store_id, category_id, product_id, id_path, request_path, target_path, options");
 
         $queries = array();
         $tables = array();

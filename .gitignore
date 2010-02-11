@@ -1,4 +1,6 @@
 tmp/
+publisherdata/
+bookimages/
 magento/app/.buildpath
 magento/app/.project
 magento/app/.settings/

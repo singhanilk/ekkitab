@@ -8,6 +8,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.Directory;
 import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.index.IndexReader;
@@ -23,7 +24,6 @@ public class BookSearch {
     private static IndexSearcher searcher = null;
     private static IndexReader reader = null;
     private static Sort sorter = new Sort();
-    private static BookHitCollector collector = null;
     private static Set<String> discardwords = new HashSet<String>();
     static {
         discardwords.add("the");
@@ -34,7 +34,12 @@ public class BookSearch {
     public BookSearch(String indexDir) throws Exception {
         if (searcher == null) {
             this.indexDir = indexDir;
-            reader = IndexReader.open(FSDirectory.getDirectory(indexDir));
+            Directory dir = FSDirectory.getDirectory(indexDir);
+            if (IndexReader.isLocked(dir)) {
+                IndexReader.unlock(dir);
+                System.out.println("Index Directory locked. Trying to unlock...");
+            }
+            reader = IndexReader.open(dir);
             searcher = new IndexSearcher(reader);
         }
     }
@@ -58,6 +63,12 @@ public class BookSearch {
                 book.put("listprice", getFieldValue(doc.getField("listprice")));
                 book.put("discountprice", getFieldValue(doc.getField("discountprice")));
                 book.put("entityId", getFieldValue(doc.getField("entityId")));
+                book.put("isbn", getFieldValue(doc.getField("isbn")));
+                book.put("language", getFieldValue(doc.getField("language")));
+                book.put("shortdesc", getFieldValue(doc.getField("shortdesc")));
+                book.put("binding", getFieldValue(doc.getField("binding")));
+                book.put("delivertime", getFieldValue(doc.getField("delivertime")));
+                book.put("instock", getFieldValue(doc.getField("instock")));
                 result.add(book);
              }
         }
@@ -72,6 +83,7 @@ public class BookSearch {
        Map<String, Object> result = new HashMap<String, Object>();
        List<Map<String, String>> books = new ArrayList<Map<String, String>>();
        Map<String, Integer> counts = null;
+       BookHitCollector collector = null;
 
        int startIndex = (page - 1) * pageSz;
        int endIndex   = startIndex + pageSz;
@@ -158,7 +170,7 @@ public class BookSearch {
     }
 
     public static void main (String[] args) {
-       BookSearch booksearch;
+       BookSearch booksearch = null;
        if (args.length < 1) {
            System.out.println("No index directory defined.");
            return;
@@ -191,6 +203,12 @@ public class BookSearch {
                     System.out.println("Price: "+book.get("listprice"));
                     System.out.println("Discounted Price: "+book.get("discountprice"));
                     System.out.println("Id: "+book.get("entityId"));
+                    System.out.println("ISBN: "+book.get("isbn"));
+                    System.out.println("Delivery Time: "+book.get("delivertime"));
+                    System.out.println("Binding: "+book.get("binding"));
+                    System.out.println("Language: "+book.get("language"));
+                    System.out.println("In Stock: "+book.get("instock"));
+                    System.out.println("Short Description: "+book.get("shortdesc"));
                     System.out.println("--------------------------------------");
                 }
                 System.out.println("The number of books returned is: "+books.size());
@@ -203,7 +221,13 @@ public class BookSearch {
         
        } catch (Exception e) {
          e.printStackTrace();
+       }
+       finally {
          System.exit(1);
        }
+    }
+
+    protected void finalize() throws Throwable {
+       super.finalize();
     }
 }
