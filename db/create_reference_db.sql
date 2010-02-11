@@ -165,5 +165,5 @@ CREATE TABLE if not exists `book_stock_and_prices` (
   `PUBLISHING_DATE` date,
   `UPDATED` tinyint(1) default 0,
   PRIMARY KEY (`ID`),
-  UNIQUE KEY `ISBN` (`ISBN`),
+  UNIQUE KEY `ISBN` (`ISBN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
