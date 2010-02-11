@@ -8,6 +8,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.Directory;
 import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.index.IndexReader;
@@ -34,7 +35,12 @@ public class BookSearch {
     public BookSearch(String indexDir) throws Exception {
         if (searcher == null) {
             this.indexDir = indexDir;
-            reader = IndexReader.open(FSDirectory.getDirectory(indexDir));
+            Directory dir = FSDirectory.getDirectory(indexDir);
+            if (IndexReader.isLocked(dir)) {
+                IndexReader.unlock(dir);
+                System.out.println("Index Directory locked. Trying to unlock...");
+            }
+            reader = IndexReader.open(dir);
             searcher = new IndexSearcher(reader);
         }
     }
@@ -158,7 +164,7 @@ public class BookSearch {
     }
 
     public static void main (String[] args) {
-       BookSearch booksearch;
+       BookSearch booksearch = null;
        if (args.length < 1) {
            System.out.println("No index directory defined.");
            return;
@@ -203,7 +209,21 @@ public class BookSearch {
         
        } catch (Exception e) {
          e.printStackTrace();
+       }
+       finally {
          System.exit(1);
        }
+    }
+
+    protected void finalize() throws Throwable {
+        try {
+            searcher.close();
+            reader.close();
+            searcher = null;
+            reader = null;
+        }
+        finally {
+            super.finalize();
+        }
     }
 }
