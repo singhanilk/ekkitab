@@ -76,7 +76,9 @@ public class BookIndex {
 
         List<Map<String, String>> books = new ArrayList<Map<String, String>>();
 
-	    String sql = "select title, author, bisac_codes, sourced_from, isbn, image, list_price, discount_price from books where product_id = " + bookId;
+	    String sql = "select title, author, bisac_codes, sourced_from, isbn, " +
+                     "image, list_price, discount_price, in_stock, binding, " +
+                     "language, short_description, description, delivery_period from books where product_id = " + bookId;
         Statement stmt = connection.createStatement();
         ResultSet result = stmt.executeQuery(sql);
 
@@ -89,6 +91,12 @@ public class BookIndex {
         String url;
         String sourcedfrom;
         String bisac_codes;
+        String instock; 
+        String binding; 
+        String language; 
+        String shortdesc; 
+        String delivertime; 
+        String isbn;
 
         long fstart, fstop;
 
@@ -110,11 +118,33 @@ public class BookIndex {
             discountprice = result.getString("discount_price");
             discountprice = discountprice == null ? "" : discountprice;
 
+            instock = result.getString("in_stock");
+            instock = instock == null ? "0" : instock;
+
+            binding = result.getString("binding");
+            binding = binding == null ? "unknown" : binding;
+
+            language = result.getString("language");
+            language = language == null ? "unknown" : language;
+
+            shortdesc = result.getString("short_description");
+            shortdesc = shortdesc == null ? "" : shortdesc;
+            if (shortdesc.equals("")) {
+                shortdesc = result.getString("description");
+                shortdesc = shortdesc == null ? "Not Available" : shortdesc;
+            }
+
+            delivertime = result.getString("delivery_period");
+            delivertime = delivertime == null ? "14" : delivertime;
+
+            isbn = result.getString("isbn");
+            isbn = isbn == null ? "" : isbn;
+
             image = result.getString("image");
             image = image == null ? "" : image;
             image = "/" + image.charAt(0) + "/" + image.charAt(1) + "/" + image;
 
-            url = result.getString("isbn");
+            url = isbn;
             url = url == null ? "" : url;
             url = title + "-" + url;
             url = url.replaceAll("'", "");
@@ -145,6 +175,12 @@ public class BookIndex {
                         book.put("url", url);
                         book.put("id", id);
                         book.put("sourcedfrom", sourcedfrom);
+                        book.put("isbn", isbn);
+                        book.put("delivertime", delivertime);
+                        book.put("shortdesc", shortdesc);
+                        book.put("language", language);
+                        book.put("binding", binding);
+                        book.put("instock", instock);
                         books.add(book);
                     }
                 }
@@ -188,6 +224,12 @@ public class BookIndex {
             doc.add(new Field("title", book.get("title"), Field.Store.YES, Field.Index.TOKENIZED));
             doc.add(new Field("discountprice", book.get("discountprice"), Field.Store.YES, Field.Index.NO));
             doc.add(new Field("listprice", book.get("listprice"), Field.Store.YES, Field.Index.NO));
+            doc.add(new Field("shortdesc", book.get("shortdesc"), Field.Store.YES, Field.Index.NO));
+            doc.add(new Field("instock", book.get("instock"), Field.Store.YES, Field.Index.NO));
+            doc.add(new Field("isbn", book.get("isbn"), Field.Store.YES, Field.Index.NO));
+            doc.add(new Field("binding", book.get("binding"), Field.Store.YES, Field.Index.NO));
+            doc.add(new Field("language", book.get("language"), Field.Store.YES, Field.Index.NO));
+            doc.add(new Field("delivertime", book.get("delivertime"), Field.Store.YES, Field.Index.NO));
 
             for (int i = 0; i < LEVELS; i++) {
                 int index = i + 1;

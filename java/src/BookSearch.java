@@ -64,6 +64,12 @@ public class BookSearch {
                 book.put("listprice", getFieldValue(doc.getField("listprice")));
                 book.put("discountprice", getFieldValue(doc.getField("discountprice")));
                 book.put("entityId", getFieldValue(doc.getField("entityId")));
+                book.put("isbn", getFieldValue(doc.getField("isbn")));
+                book.put("language", getFieldValue(doc.getField("language")));
+                book.put("shortdesc", getFieldValue(doc.getField("shortdesc")));
+                book.put("binding", getFieldValue(doc.getField("binding")));
+                book.put("delivertime", getFieldValue(doc.getField("delivertime")));
+                book.put("instock", getFieldValue(doc.getField("instock")));
                 result.add(book);
              }
         }
@@ -197,6 +203,12 @@ public class BookSearch {
                     System.out.println("Price: "+book.get("listprice"));
                     System.out.println("Discounted Price: "+book.get("discountprice"));
                     System.out.println("Id: "+book.get("entityId"));
+                    System.out.println("ISBN: "+book.get("isbn"));
+                    System.out.println("Delivery Time: "+book.get("delivertime"));
+                    System.out.println("Binding: "+book.get("binding"));
+                    System.out.println("Language: "+book.get("language"));
+                    System.out.println("In Stock: "+book.get("instock"));
+                    System.out.println("Short Description: "+book.get("shortdesc"));
                     System.out.println("--------------------------------------");
                 }
                 System.out.println("The number of books returned is: "+books.size());
@@ -216,14 +228,6 @@ public class BookSearch {
     }
 
     protected void finalize() throws Throwable {
-        try {
-            searcher.close();
-            reader.close();
-            searcher = null;
-            reader = null;
-        }
-        finally {
-            super.finalize();
-        }
+       super.finalize();
     }
 }

@@ -37,9 +37,16 @@ do {
             $id = $book->get("entityId");
             $price = $book->get("listprice");
             $discountprice = $book->get("discountprice");
+            $description = $book->get("shortdesc");
+            $isbn = $book->get("isbn");
+            $binding = $book->get("binding");
+            $language = $book->get("language");
+            $instock = $book->get("instock");
+            $delivertime = $book->get("delivertime");
             echo "Author: $author\n";
             echo "Title: $title\n";
             echo "Id: $id\n";
+            echo "ISBN: $isbn\n";
             echo "------------------------\n";
         } 
         $subcats = $results->get("counts");
