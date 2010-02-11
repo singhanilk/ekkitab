@@ -159,9 +159,11 @@ CREATE TABLE if not exists `book_stock_and_prices` (
   `IN_STOCK` tinyint(1) default 0,
   `LIST_PRICE` decimal(8,2),
   `DISCOUNT_PRICE` decimal(8,2),
-  `PRODUCT_ID` int(10) unsigned NOT NULL default '0',
+  `SUPPLIERS_PRICE` decimal(8,2),
+  `SUPPLIERS_DISCOUNT` decimal(4,2),
+  `CURRENCY` varchar(20),
+  `PUBLISHING_DATE` date,
   `UPDATED` tinyint(1) default 0,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ISBN` (`ISBN`),
-  KEY `PRODUCT_ID` (`PRODUCT_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
