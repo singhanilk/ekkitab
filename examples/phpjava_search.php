@@ -16,7 +16,7 @@ do {
    $pagenum = $page + 0;
 
    $start = (float) array_sum(explode(' ', microtime()));
-   $page_sz = 10;
+   $page_sz = 15;
    echo "Search query: '".$query."'  category: '".$category."'  Page: '".$pagenum."'\n";
    $results = $search->searchBook($category, $query, $page_sz, $pagenum);
    $end = (float) array_sum(explode(' ', microtime()));
@@ -37,9 +37,16 @@ do {
             $id = $book->get("entityId");
             $price = $book->get("listprice");
             $discountprice = $book->get("discountprice");
+            $description = $book->get("shortdesc");
+            $isbn = $book->get("isbn");
+            $binding = $book->get("binding");
+            $language = $book->get("language");
+            $instock = $book->get("instock");
+            $delivertime = $book->get("delivertime");
             echo "Author: $author\n";
             echo "Title: $title\n";
             echo "Id: $id\n";
+            echo "ISBN: $isbn\n";
             echo "------------------------\n";
         } 
         $subcats = $results->get("counts");

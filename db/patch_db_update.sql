@@ -162,3 +162,13 @@ INSERT INTO `core_config_data` (`config_id`, `scope`, `scope_id`, `path`, `value
 (516, 'default', 0, 'carriers/fedex/active', '0'),
 (615, 'default', 0, 'carriers/usps/active', '0');
 
+
+
+--
+-- Dumping data for table `core_config_data`
+--Note that the following inserts differ in syntax....
+
+
+INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
+( 'stores', 1, 'catalog/placeholder/image_placeholder', 'stores/1/image.png'),
+( 'stores', 1, 'catalog/placeholder/small_image_placeholder', 'stores/1/small_image.png');

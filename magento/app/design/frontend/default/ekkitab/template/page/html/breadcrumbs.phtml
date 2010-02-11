@@ -25,10 +25,8 @@
  */
 ?>
 <?php if($crumbs && is_array($crumbs)): ?>
-<h4 class="no-display"><?php echo $this->__("You're currently on:") ?></h4>
-<ul class="breadcrumbs">
+<div class="breadCrumbs"> 
     <?php foreach($crumbs as $_crumbName=>$_crumbInfo): ?>
-        <li class="<?php echo $_crumbName ?>">
         <?php if($_crumbInfo['link']): ?>
             <a href="<?php echo $_crumbInfo['link'] ?>" title="<?php echo $this->htmlEscape($_crumbInfo['title']) ?>"><?php echo $this->htmlEscape($_crumbInfo['label']) ?></a>
         <?php elseif($_crumbInfo['last']): ?>
@@ -36,10 +34,9 @@
         <?php else: ?>
             <?php echo $this->htmlEscape($_crumbInfo['label']) ?>
         <?php endif; ?>
-        </li>
         <?php if(!$_crumbInfo['last']): ?>
-        <li> / </li>
+        :
         <?php endif; ?>
     <?php endforeach; ?>
-</ul>
+</div>
 <?php endif; ?>

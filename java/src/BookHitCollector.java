@@ -20,6 +20,7 @@ public class BookHitCollector extends TopFieldDocCollector {
 
     private IndexSearcher searcher = null;
     private Map<String, Integer> countMap = new HashMap<String, Integer>();
+    private Set<String> uniques = new HashSet<String>(); 
     private String fieldname = "";
 
     public BookHitCollector(IndexSearcher searcher, IndexReader reader, Sort sorter, int maxSearchResults, String category) throws IOException {
@@ -34,12 +35,17 @@ public class BookHitCollector extends TopFieldDocCollector {
     }
 
     public void collect(int doc, float score) {
-        super.collect(doc, score);
-
+        //super.collect(doc, score);
         try {
             Document document = searcher.doc(doc);
             if (document != null) {
-               Field field = document.getField(fieldname);
+               Field field = document.getField("entityId");
+               String id = null;
+               if (field != null)
+                   id = field.stringValue();
+               if ((id != null) && (uniques.add(id)))
+                    super.collect(doc, score);
+               field = document.getField(fieldname);
                if (field != null) {
                    String key = field.stringValue();
                    if (key.length() > 0) {

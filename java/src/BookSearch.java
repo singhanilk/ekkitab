@@ -8,6 +8,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.Directory;
 import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.index.IndexReader;
@@ -24,11 +25,22 @@ public class BookSearch {
     private static IndexReader reader = null;
     private static Sort sorter = new Sort();
     private static BookHitCollector collector = null;
+    private static Set<String> discardwords = new HashSet<String>();
+    static {
+        discardwords.add("the");
+        discardwords.add("for");
+        discardwords.add("and");
+    }
     
     public BookSearch(String indexDir) throws Exception {
         if (searcher == null) {
             this.indexDir = indexDir;
-            reader = IndexReader.open(FSDirectory.getDirectory(indexDir));
+            Directory dir = FSDirectory.getDirectory(indexDir);
+            if (IndexReader.isLocked(dir)) {
+                IndexReader.unlock(dir);
+                System.out.println("Index Directory locked. Trying to unlock...");
+            }
+            reader = IndexReader.open(dir);
             searcher = new IndexSearcher(reader);
         }
     }
@@ -41,30 +53,25 @@ public class BookSearch {
                         throws Exception {
 
         List<Map<String, String>> result = new ArrayList<Map<String, String>>();
-        Map<String, Integer> uniques = new HashMap<String, Integer>();
-        int i = 0;
-        int count = 0;
         try {
-            while (i < hits.length) {
+            for (int i = start; ((i<end) && (i < hits.length)); i++) {
                 Document doc = searcher.doc(hits[i].doc);
-                String id = getFieldValue(doc.getField("entityId"));
-                if ((id != null) && (!uniques.containsKey(id))) {
-                    uniques.put(id, 1);
-                    count++;
-                    if ((count >= (start+1)) && (count <= (end+1))) {
-                        Map<String,String> book = new HashMap<String, String>();
-                        book.put("author", getFieldValue(doc.getField("author")));
-                        book.put("title", getFieldValue(doc.getField("title")));
-                        book.put("image", getFieldValue(doc.getField("image")));
-                        book.put("url", getFieldValue(doc.getField("url")));
-                        book.put("listprice", getFieldValue(doc.getField("listprice")));
-                        book.put("discountprice", getFieldValue(doc.getField("discountprice")));
-                        book.put("entityId", id);
-                        result.add(book);
-                    }
-                }
-                i++;
-            }
+                Map<String,String> book = new HashMap<String, String>();
+                book.put("author", getFieldValue(doc.getField("author")));
+                book.put("title", getFieldValue(doc.getField("title")));
+                book.put("image", getFieldValue(doc.getField("image")));
+                book.put("url", getFieldValue(doc.getField("url")));
+                book.put("listprice", getFieldValue(doc.getField("listprice")));
+                book.put("discountprice", getFieldValue(doc.getField("discountprice")));
+                book.put("entityId", getFieldValue(doc.getField("entityId")));
+                book.put("isbn", getFieldValue(doc.getField("isbn")));
+                book.put("language", getFieldValue(doc.getField("language")));
+                book.put("shortdesc", getFieldValue(doc.getField("shortdesc")));
+                book.put("binding", getFieldValue(doc.getField("binding")));
+                book.put("delivertime", getFieldValue(doc.getField("delivertime")));
+                book.put("instock", getFieldValue(doc.getField("instock")));
+                result.add(book);
+             }
         }
         catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -78,13 +85,13 @@ public class BookSearch {
        List<Map<String, String>> books = new ArrayList<Map<String, String>>();
        Map<String, Integer> counts = null;
 
-
        int startIndex = (page - 1) * pageSz;
        int endIndex   = startIndex + pageSz;
 
        QueryParser qpt = new QueryParser("title", new SimpleAnalyzer());
 
        String modquery = "";
+       StringBuffer sb = new StringBuffer();
 
        if (!query.equals("")) {
 
@@ -93,45 +100,48 @@ public class BookSearch {
             if (words.length > 1)
                     phrase = "\"" + query + "\"";
 
-            StringBuffer sb = new StringBuffer();
-            sb.append("sourcedfrom:India^5 ");
             if (!phrase.equals("")) {
                 sb.append(phrase+"^3 ");
                 sb.append("author:"+phrase+"^3 ");
             }
-            sb.append("+( ");
             String conjunction = "";
+            StringBuffer sbtmp = new StringBuffer();
             for (String word: words) {
-                sb.append(conjunction);
-                conjunction = " OR ";
-                sb.append(word+" ");
-                sb.append(conjunction);
-                sb.append("author:"+word+" ");
+                if ((word.length() > 2) && (!discardwords.contains(word))) {
+                    sbtmp.append(conjunction);
+                    conjunction = " OR ";
+                    sbtmp.append(word+" ");
+                    sbtmp.append(conjunction);
+                    sbtmp.append("author:"+word+" ");
+                 }
             }
-            sb.append(") ");
-            modquery = sb.toString();
+            if (sbtmp.length() > 0) {
+                sb.append("+( ");
+                sb.append(sbtmp.toString());
+                sb.append(") ");
+            }
        }
 
        if (!category.equals("")) {
             String[] levels = category.split("/");
-            StringBuffer sb = new StringBuffer();
             String prelude = "";
-            //if (!modquery.equals(""))
-            //    sb.append("AND ");
-            //sb.append("( ");
             sb.append(" ");
             for (int i = 0; i<levels.length; i++) {
                 int j = i+1;
-                sb.append(prelude + "+level"+j+":"+levels[i].replaceAll("[& ]+", "")); 
+                sb.append(prelude + "+level"+j+":"+levels[i].replaceAll("\\W+", "")+" "); 
                 prelude = " AND ";
             }
-            //sb.append(" )");
-            modquery = modquery + " " + sb.toString();
        }
+
+       if (sb.length() > 0) 
+            sb.append("sourcedfrom:India^5 ");
+
+       modquery = sb.toString();
 
        System.out.println("Query: "+modquery);
 
        if (modquery.equals("")) {
+            System.out.println("Query: is empty.");
             result.put("books", null);
             result.put("counts", null);
             result.put("hits", new Integer(0));
@@ -160,7 +170,7 @@ public class BookSearch {
     }
 
     public static void main (String[] args) {
-       BookSearch booksearch;
+       BookSearch booksearch = null;
        if (args.length < 1) {
            System.out.println("No index directory defined.");
            return;
@@ -182,19 +192,27 @@ public class BookSearch {
               Integer numberofhits = (Integer)results.get("hits"); 
               System.out.println(numberofhits +" hits overall.");
               List<Map<String, String>> books = (List<Map<String, String>>)results.get("books");
-              Iterator iter = books.iterator();
-              while (iter.hasNext()) {
-                  Map<String, String> book = (Map<String, String>)iter.next();
-                  System.out.println("Author: "+book.get("author"));
-                  System.out.println("Title: "+book.get("title"));
-                  System.out.println("Url: "+book.get("url"));
-                  System.out.println("Image: "+book.get("image"));
-                  System.out.println("Price: "+book.get("listprice"));
-                  System.out.println("Discounted Price: "+book.get("discountprice"));
-                  System.out.println("Id: "+book.get("entityId"));
-                  System.out.println("--------------------------------------");
+              if (books != null) {
+                Iterator iter = books.iterator();
+                while (iter.hasNext()) {
+                    Map<String, String> book = (Map<String, String>)iter.next();
+                    System.out.println("Author: "+book.get("author"));
+                    System.out.println("Title: "+book.get("title"));
+                    System.out.println("Url: "+book.get("url"));
+                    System.out.println("Image: "+book.get("image"));
+                    System.out.println("Price: "+book.get("listprice"));
+                    System.out.println("Discounted Price: "+book.get("discountprice"));
+                    System.out.println("Id: "+book.get("entityId"));
+                    System.out.println("ISBN: "+book.get("isbn"));
+                    System.out.println("Delivery Time: "+book.get("delivertime"));
+                    System.out.println("Binding: "+book.get("binding"));
+                    System.out.println("Language: "+book.get("language"));
+                    System.out.println("In Stock: "+book.get("instock"));
+                    System.out.println("Short Description: "+book.get("shortdesc"));
+                    System.out.println("--------------------------------------");
+                }
+                System.out.println("The number of books returned is: "+books.size());
               }
-              System.out.println("The number of books returned is: "+books.size());
               System.out.print("Finished? ");
               String response = br.readLine();
               if (response.equalsIgnoreCase("y")) 
@@ -203,7 +221,13 @@ public class BookSearch {
         
        } catch (Exception e) {
          e.printStackTrace();
+       }
+       finally {
          System.exit(1);
        }
+    }
+
+    protected void finalize() throws Throwable {
+       super.finalize();
     }
 }

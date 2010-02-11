@@ -40,16 +40,13 @@
    
     <?php echo $this->getChildHtml('header') ?>
 	<div class="whiteBg">
+		<!-- globalLinks -->
+		<?php echo $this->getChildHtml('global_links') ?>
+
+
 		<div class="wrapper">
-			<!-- globalLinks -->
-			<?php echo $this->getChildHtml('global_links') ?>
-
 			<!-- breadcrumbs -->
-			<div class="breadcrumbs-bar">
-				<?php echo $this->getChildHtml('breadcrumbs') ?>
-				<?php echo $this->getLayout()->getBlock('header')->getWelcome() ?>
-			</div>
-
+			<?php echo $this->getChildHtml('breadcrumbs') ?>
 			<div class="middle layout-2columns">
                 <div class="col-right sidebar" id="col-right">
                     <?php echo $this->getChildHtml('right') ?>&nbsp;
@@ -60,14 +57,15 @@
                 </div>
             </div>
 			<!-- end middle section  -->
-			
 			<div class="clear"></div>
-			<!-- footer section  -->
-		    <?php echo $this->getChildHtml('footer') ?>
-			<?php echo $this->getChildHtml('before_body_end') ?>
-			<?php echo $this->getAbsoluteFooter() ?>
-			<!-- footer section ends  -->
 		</div><!-- wrapper -->
+			
+		<!-- footer section  -->
+		<?php echo $this->getChildHtml('footer') ?>
+		<?php echo $this->getChildHtml('before_body_end') ?>
+		<?php echo $this->getAbsoluteFooter() ?>
+		<!-- footer section ends  -->
+
 	</div><!-- whiteBg -->
 </body>
 </html>
