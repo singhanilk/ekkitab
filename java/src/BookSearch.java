@@ -155,6 +155,7 @@ public class BookSearch {
        else {
 
             try {
+                long fstart = System.currentTimeMillis();
                 Query luceneQuery = qpt.parse(modquery);
                 System.out.println("Lucene Query: "+luceneQuery.toString());
 
@@ -172,6 +173,8 @@ public class BookSearch {
                 result.put("books", books);
                 result.put("counts", counts);
                 result.put("hits", new Integer(hits.length));
+                long fstop = System.currentTimeMillis();
+                System.out.println("Returned "+hits.length+" hits in "+(fstop - fstart)/1000+" sec.");
             }
             catch(Exception e) {
                 System.out.println(e.getMessage());
