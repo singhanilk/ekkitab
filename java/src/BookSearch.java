@@ -21,9 +21,9 @@ import java.io.*;
 public class BookSearch {
 
     private String indexDir;
-    private static IndexSearcher searcher = null;
-    private static IndexReader reader = null;
-    private static Sort sorter = new Sort();
+    private IndexSearcher searcher = null;
+    private IndexReader reader = null;
+    private Sort sorter = new Sort();
     private static Set<String> discardwords = new HashSet<String>();
     static {
         discardwords.add("the");
@@ -33,14 +33,19 @@ public class BookSearch {
     
     public BookSearch(String indexDir) throws Exception {
         if (searcher == null) {
-            this.indexDir = indexDir;
-            Directory dir = FSDirectory.getDirectory(indexDir);
-            if (IndexReader.isLocked(dir)) {
-                IndexReader.unlock(dir);
-                System.out.println("Index Directory locked. Trying to unlock...");
+            try {
+                this.indexDir = indexDir;
+                Directory dir = FSDirectory.getDirectory(indexDir);
+                if (IndexReader.isLocked(dir)) {
+                    IndexReader.unlock(dir);
+                    System.out.println("Index Directory locked. Trying to unlock...");
+                }
+                reader = IndexReader.open(dir);
+                searcher = new IndexSearcher(reader);
             }
-            reader = IndexReader.open(dir);
-            searcher = new IndexSearcher(reader);
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
@@ -73,6 +78,7 @@ public class BookSearch {
              }
         }
         catch (Exception e) {
+            System.out.println(e.getMessage());
             throw new Exception(e.getMessage());
         }
         return result;
@@ -148,23 +154,29 @@ public class BookSearch {
        }
        else {
 
-            Query luceneQuery = qpt.parse(modquery);
-            System.out.println("Lucene Query: "+luceneQuery.toString());
+            try {
+                Query luceneQuery = qpt.parse(modquery);
+                System.out.println("Lucene Query: "+luceneQuery.toString());
 
-            collector = new BookHitCollector(searcher, reader, sorter, 5000, category);
+                collector = new BookHitCollector(searcher, reader, sorter, 5000, category);
 
-            searcher.search(luceneQuery, collector);
-            ScoreDoc[] hits = collector.topDocs().scoreDocs;
+                searcher.search(luceneQuery, collector);
+                ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
 
-            if (hits.length > 0) {
-                 books = getBooks(hits, startIndex, endIndex);
-                 counts = collector.getCounts();
+                if (hits.length > 0) {
+                    books = getBooks(hits, startIndex, endIndex);
+                    counts = collector.getCounts();
+                }
+
+                result.put("books", books);
+                result.put("counts", counts);
+                result.put("hits", new Integer(hits.length));
             }
-
-            result.put("books", books);
-            result.put("counts", counts);
-            result.put("hits", new Integer(hits.length));
+            catch(Exception e) {
+                System.out.println(e.getMessage());
+                throw new Exception(e.getMessage());
+            }
        }
        return (result);
     }
