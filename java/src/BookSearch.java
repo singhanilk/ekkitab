@@ -240,6 +240,12 @@ public class BookSearch {
     }
 
     protected void finalize() throws Throwable {
-       super.finalize();
+       try {
+            searcher.close();
+            reader.close();
+       }
+       finally {
+            super.finalize();
+       }
     }
 }
