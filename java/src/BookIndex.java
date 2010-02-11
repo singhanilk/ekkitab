@@ -122,20 +122,20 @@ public class BookIndex {
             instock = instock == null ? "0" : instock;
 
             binding = result.getString("binding");
-            binding = binding == null ? "unknown" : binding;
+            binding = binding == null ? "" : binding;
 
             language = result.getString("language");
-            language = language == null ? "unknown" : language;
+            language = language == null ? "" : language;
 
             shortdesc = result.getString("short_description");
             shortdesc = shortdesc == null ? "" : shortdesc;
             if (shortdesc.equals("")) {
                 shortdesc = result.getString("description");
-                shortdesc = shortdesc == null ? "Not Available" : shortdesc;
+                shortdesc = shortdesc == null ? "" : shortdesc;
             }
 
             delivertime = result.getString("delivery_period");
-            delivertime = delivertime == null ? "14" : delivertime;
+            delivertime = delivertime == null ? "0" : delivertime;
 
             isbn = result.getString("isbn");
             isbn = isbn == null ? "" : isbn;

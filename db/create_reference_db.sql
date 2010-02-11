@@ -45,8 +45,8 @@ CREATE TABLE `books` (
   `ISBN` varchar(20),
   `ISBN10` varchar(20),
   `BINDING` varchar(20),
-  `DESCRIPTION` text DEFAULT NULL,
-  `SHORT_DESCRIPTION` text DEFAULT NULL,
+  `DESCRIPTION` varchar(2048) DEFAULT NULL,
+  `SHORT_DESCRIPTION` varchar(2048) DEFAULT NULL,
   `PUBLISHING_DATE` date,
   `PUBLISHER` varchar(100),
   `PAGES` INT NOT NULL default '0',
@@ -132,3 +132,36 @@ CREATE TABLE IF NOT EXISTS `ek_discount_setting` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UNIQUE_INFO_SOURCE` (`INFO_SOURCE`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8  AUTO_INCREMENT=1 ;
+
+--
+-- Table structure for `book_description.`
+-- This is a temp table to hold data from text files.
+--
+
+CREATE TABLE if not exists `book_description` (
+  `ID` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `ISBN` varchar(20) NOT NULL,
+  `DESCRIPTION` varchar(2048) DEFAULT NULL,
+  `SHORT_DESCRIPTION` varchar(2048) DEFAULT NULL,
+  `UPDATED` tinyint(1) default 0,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ISBN` (`ISBN`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Table structure for `book_stock_and_prices.`
+-- This is a temp table to hold data from text files.
+--
+
+CREATE TABLE if not exists `book_stock_and_prices` (
+  `ID` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `ISBN` varchar(20) NOT NULL,
+  `IN_STOCK` tinyint(1) default 0,
+  `LIST_PRICE` decimal(8,2),
+  `DISCOUNT_PRICE` decimal(8,2),
+  `PRODUCT_ID` int(10) unsigned NOT NULL default '0',
+  `UPDATED` tinyint(1) default 0,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ISBN` (`ISBN`),
+  KEY `PRODUCT_ID` (`PRODUCT_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
