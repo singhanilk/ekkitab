@@ -32,7 +32,7 @@
         <reference name="header">
             <block type="core/template" name="top.search" as="topSearch1" template="catalogsearch/form.mini.phtml"/>
             <block type="core/template" name="top.search" as="topSearch" template="catalogsearch/custom/form.mini.phtml"/>
-            <block type="catalogsearch/top" name="popular.search" as="popularSearch" template="catalogsearch/popular.phtml"/>
+            <block type="ekkitab_catalogsearch/top" name="popular.search" as="popularSearch" template="catalogsearch/popular.phtml"/>
         </reference>
         <reference name="footer_links">
             <action method="addLink" translate="label title" module="catalogsearch" ifconfig="catalog/seo/search_terms"><label>Search Terms</label><url helper="catalogsearch/getSearchTermUrl" /><title>Search Terms</title></action>
@@ -77,9 +77,10 @@
             </block>
         </reference>
     </ekkitab_catalogsearch_custom_result>
+	
+	<!-- Mage_Catalogsearch -->
 
-       <ekkitab_catalogsearch_custom_resultbyindex>
-        <!-- Mage_Catalogsearch -->
+       <!--ekkitab_catalogsearch_custom_resultbyindex>
         <reference name="root">
             <action method="setTemplate"><template>page/1column.phtml</template></action>
         </reference>
@@ -92,7 +93,7 @@
                 <action method="setPageSize"><count>15</count></action>
             </block>
         </reference>
-    </ekkitab_catalogsearch_custom_resultbyindex>
+    </ekkitab_catalogsearch_custom_resultbyindex-->
 
 	<catalogsearch_advanced_index>
         <!-- Mage_Catalogsearch -->

@@ -6,8 +6,6 @@
         </Ekkitab_CatalogSearch>
     </modules>
 	<global>
-		<search_index><path>search_index_dir</path></search_index>
-		<java_inc><path>http://localhost:8080/JavaBridge/java/Java.inc</path></java_inc>
 		<models>
 			<ekkitab_catalogsearch>
 				<class>Ekkitab_CatalogSearch_Model</class>
