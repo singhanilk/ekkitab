@@ -14,6 +14,9 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.log4j.Logger;
+import org.apache.log4j.RollingFileAppender;
+import org.apache.log4j.LogManager;
 
 import java.util.*;
 import java.io.*;
@@ -24,28 +27,51 @@ public class BookSearch {
     private IndexSearcher searcher = null;
     private IndexReader reader = null;
     private Sort sorter = new Sort();
-    private static Set<String> discardwords = new HashSet<String>();
+    private int instanceId = 0; 
+
+    private static Set<String> discardwords = null;
+    //private static Properties properties = null; 
+    private static int allInstances = 0;
+    private static Logger logger = null; 
+
     static {
+        logger = LogManager.getLogger("BookSearch.class");
+        discardwords = new HashSet<String>();
+        //properties = new Properties(); 
+        //InputStream is = null;
+        //try { 
+        //    is = BookSearch.class.getClassLoader().getResourceAsStream("search.properties");
+        //    properties.load(is); 
+        //} 
+        //catch (IOException e) { 
+        //} 
+        //RollingFileAppender appndr=(RollingFileAppender)logger.getAppender("EKK");
+        //appndr.setFile(properties.getProperty("logfile", "search.log"));
+        //appndr.activateOptions();
+
         discardwords.add("the");
         discardwords.add("for");
         discardwords.add("and");
     }
     
     public BookSearch(String indexDir) throws Exception {
-        if (searcher == null) {
-            try {
-                this.indexDir = indexDir;
-                Directory dir = FSDirectory.getDirectory(indexDir);
-                if (IndexReader.isLocked(dir)) {
-                    IndexReader.unlock(dir);
-                    System.out.println("Index Directory locked. Trying to unlock...");
-                }
-                reader = IndexReader.open(dir);
-                searcher = new IndexSearcher(reader);
+        try {
+            this.indexDir = indexDir;
+            Directory dir = FSDirectory.getDirectory(indexDir);
+            if (IndexReader.isLocked(dir)) {
+                IndexReader.unlock(dir);
+                logger.debug("["+instanceId+"] Index Directory locked. Trying to unlock...");
             }
-            catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+            reader = IndexReader.open(dir);
+            searcher = new IndexSearcher(reader);
+        }
+        catch (Exception e) {
+            logger.debug("["+instanceId+"] "+e.getMessage());
+        }
+        synchronized (BookSearch.class) {
+            instanceId = ++allInstances;
+            if (allInstances >= 1000000)
+                allInstances = 0;
         }
     }
 
@@ -78,7 +104,7 @@ public class BookSearch {
              }
         }
         catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.debug("["+instanceId+"] "+e.getMessage());
             throw new Exception(e.getMessage());
         }
         return result;
@@ -144,10 +170,10 @@ public class BookSearch {
 
        modquery = sb.toString();
 
-       System.out.println("Query: "+modquery);
+       logger.debug("["+instanceId+"] Query: "+modquery);
 
        if (modquery.equals("")) {
-            System.out.println("Query: is empty.");
+            logger.debug("["+instanceId+"] Query: is empty.");
             result.put("books", null);
             result.put("counts", null);
             result.put("hits", new Integer(0));
@@ -157,7 +183,7 @@ public class BookSearch {
             try {
                 long fstart = System.currentTimeMillis();
                 Query luceneQuery = qpt.parse(modquery);
-                System.out.println("Lucene Query: "+luceneQuery.toString());
+                logger.debug("["+instanceId+"] Lucene Query: "+luceneQuery.toString());
 
                 collector = new BookHitCollector(searcher, reader, sorter, 5000, category);
 
@@ -174,10 +200,10 @@ public class BookSearch {
                 result.put("counts", counts);
                 result.put("hits", new Integer(hits.length));
                 long fstop = System.currentTimeMillis();
-                System.out.println("Returned "+hits.length+" hits in "+(fstop - fstart)/1000+" sec.");
+                logger.debug("["+instanceId+"] Returned "+hits.length+" hits in "+(fstop - fstart)/1000+" sec.");
             }
             catch(Exception e) {
-                System.out.println(e.getMessage());
+                logger.debug(e.getMessage());
                 throw new Exception(e.getMessage());
             }
        }
@@ -187,7 +213,7 @@ public class BookSearch {
     public static void main (String[] args) {
        BookSearch booksearch = null;
        if (args.length < 1) {
-           System.out.println("No index directory defined.");
+           logger.debug("No index directory defined.");
            return;
        }
        try {
@@ -244,6 +270,7 @@ public class BookSearch {
 
     protected void finalize() throws Throwable {
        try {
+            logger.debug("["+instanceId+"] Exiting...");
             searcher.close();
             reader.close();
        }

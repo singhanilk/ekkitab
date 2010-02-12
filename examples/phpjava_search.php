@@ -5,8 +5,8 @@
 // This is very rough coding and has no proper exception handling. Beware!
 
 require_once("http://localhost:8080/JavaBridge/java/Java.inc");
-$search = new java("BookSearch", "/var/www/scm/magento/search_index_dir");
 do {
+   $search = new java("BookSearch", "/var/www/scm/magento/search_index_dir");
    $query = readline("Search for? ");
    $query = $query == null ? "" : $query;
    $category = readline("Category? ");

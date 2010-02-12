@@ -8,3 +8,4 @@ magento/downloader/
 magento/media/images.zip
 magento/search_index_dir/
 db/data/
+logs/
