@@ -6,6 +6,8 @@
         </Ekkitab_Catalog>
     </modules>
 	<global>
+		<search_index><path>search_index_dir</path></search_index>
+		<java_inc><path>http://localhost:8080/JavaBridge/java/Java.inc</path></java_inc>
 		<models>
 			<ekkitab_catalog>
 				<class>Ekkitab_Catalog_Model</class>
@@ -50,6 +52,11 @@
 				</connection>
 			</ekkitab_catalog_read>      
 		</resources> 	
+		<helpers>
+            <ekkitab_catalog>
+                <class>Ekkitab_Catalog_Helper</class>
+            </ekkitab_catalog>
+        </helpers>
 		<!-- 
 		Since we are overwriting the core's catalog module ..we need to rewrite the modules under the new catalog module.
 		-->
