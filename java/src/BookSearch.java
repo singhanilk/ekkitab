@@ -127,7 +127,7 @@ public class BookSearch {
 
        if (query != null) {
             String[] tmp = query.split(":", 2);
-            if (tmp.length == 2) {
+            if (tmp.length >= 2) {
                 tmp[0] = tmp[0].toLowerCase();
                 if (searchfields.contains(tmp[0])) {
                     query = tmp[1];
