@@ -111,6 +111,28 @@ Category default layout
         </reference>
     </catalog_category_default>
 
+<!--
+Category Lecene search layout
+-->
+
+<ekkitab_catalog_search_index>
+        <!-- Mage_Catalogsearch -->
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+        <!--reference name="left">
+			   <block type="catalog/navigation" name="catalog.leftnav" before="popular_categories" template="catalog/navigation/left_child_categories.phtml"/>
+        </reference-->
+		<reference name="content">
+            <block type="ekkitab_catalog/category_searchResult" name="catalog_category_searchresult" template="catalog/category/search_result.phtml">
+                <block type="page/html" name="donate_book_blurb" template="page/html/donate_blurb.phtml" />
+				 <action method="setColumnCount"><count>4</count></action>
+                <action method="setPageSize"><count>15</count></action>
+            </block>
+        </reference>
+</ekkitab_catalog_search_index>
+
+
     <ekkitab_catalog_category_viewall>
         <reference name="content">
             <block type="catalog/navigation" name="category.products" template="catalog/category/all_categories.phtml" />
@@ -194,9 +216,10 @@ Compare products page
 Product view
 -->
 
-    <catalog_product_view>
+    <ekkitab_catalog_product_view>
         <!-- Mage_Catalog -->
         <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
         </reference>
         <reference name="head">
             <action method="addJs"><script>varien/product.js</script></action>
@@ -207,21 +230,23 @@ Product view
         </reference>
         <reference name="content">
             <block type="catalog/product_view" name="product.info" template="catalog/product/view.phtml">
-                <block type="catalog/product_view_media" name="product.info.media" as="media" template="catalog/product/view/media.phtml"/>
-                <block type="core/text_list" name="alert.urls" as="alert_urls" />
-                <block type="catalog/product_view" name="product.tierprices" as="tierprices" template="catalog/product/view/tierprices.phtml"/>
+                <block type="page/html" name="donate_book_blurb" template="page/html/donate_blurb.phtml" />
+				<block type="catalog/product_view_media" name="product.info.media" as="media" template="catalog/product/view/media.phtml"/>
+               
+				<block type="catalog/product_view" name="product.info.addto" as="addto" template="catalog/product/view/addto.phtml" />
+                <block type="catalog/product_view" name="product.info.addtocart" as="addtocart" template="catalog/product/view/addtocart.phtml" />
 
-                <block type="catalog/product_view_tabs" name="product.info.tabs" as="info_tabs" template="catalog/product/view/tabs.phtml" >
+                <!--block type="core/text_list" name="alert.urls" as="alert_urls" />
+                <block type="catalog/product_view" name="product.tierprices" as="tierprices" template="catalog/product/view/tierprices.phtml"/-->
+                <!--block type="catalog/product_view_tabs" name="product.info.tabs" as="info_tabs" template="catalog/product/view/tabs.phtml" >
                     <action method="addTab" translate="title" module="catalog"><alias>description</alias><title>Product Description</title><block>catalog/product_view_description</block><template>catalog/product/view/description.phtml</template></action>
                     <action method="addTab" translate="title" module="catalog"><alias>upsell_products</alias><title>We Also Recommend</title><block>catalog/product_list_upsell</block><template>catalog/product/list/upsell.phtml</template></action>
                     <action method="addTab" translate="title" module="catalog"><alias>additional</alias><title>Additional Information</title><block>catalog/product_view_attributes</block><template>catalog/product/view/attributes.phtml</template></action>
-                </block>
+                </block-->
 
-                <block type="catalog/product_view_additional" name="product.info.additional" as="product_additional_data" />
-                <block type="catalog/product_view" name="product.info.addto" as="addto" template="catalog/product/view/addto.phtml" />
-                <block type="catalog/product_view" name="product.info.addtocart" as="addtocart" template="catalog/product/view/addtocart.phtml" />
+                <!--block type="catalog/product_view_additional" name="product.info.additional" as="product_additional_data" /-->
 
-                <block type="catalog/product_view" name="product.info.options.wrapper" as="product_options_wrapper" template="catalog/product/view/options/wrapper.phtml">
+                <!--block type="catalog/product_view" name="product.info.options.wrapper" as="product_options_wrapper" template="catalog/product/view/options/wrapper.phtml">
                     <block type="core/template" name="options_js" template="catalog/product/view/options/js.phtml"/>
                     <block type="catalog/product_view_options" name="product.info.options" as="product_options" template="catalog/product/view/options.phtml">
                         <action method="addOptionRenderer"><type>text</type><block>catalog/product_view_options_type_text</block><template>catalog/product/view/options/type/text.phtml</template></action>
@@ -250,7 +275,7 @@ Product view
                     <action method="append"><block>product.info.options.wrapper.bottom</block></action>
                 </block>
                 <action method="unsetCallChild"><child>container1</child><call>ifEquals</call><if>0</if><key>alias_in_layout</key><key>options_container</key></action>
-                <action method="unsetCallChild"><child>container2</child><call>ifEquals</call><if>0</if><key>alias_in_layout</key><key>options_container</key></action>
+                <action method="unsetCallChild"><child>container2</child><call>ifEquals</call><if>0</if><key>alias_in_layout</key><key>options_container</key></action-->
             </block>
         </reference>
         <reference name="upsell_products">
@@ -260,7 +285,7 @@ Product view
         <reference name="left">
             <block type="catalog/product_list_related" name="catalog.product.related" before="-" template="catalog/product/list/related.phtml"/>
         </reference>
-    </catalog_product_view>
+    </ekkitab_catalog_product_view>
 
 <!--
 Additional block dependant on product type

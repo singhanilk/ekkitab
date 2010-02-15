@@ -34,60 +34,68 @@
 <?php
     $_helper = $this->helper('catalog/output');
     $_product = $this->getProduct();
+	$author = $_product->getBoAuthor();
+	$author = strlen($author) > 0 ? "by ".$author : "";
+	
+	$savingsPerct= ($_product->getPrice() >0 )?	(($_product->getPrice() - $_product->getFinalPrice())/ $_product->getPrice() ) * 100 : 10; 
+	$shippingTime= $_product->getId();
+	$shippingTime= $shippingTime  > 0 ? "Normally Ships in ".$shippingTime. ($shippingTime  == 1 ? " day":" days"): "";
+
 ?>
-<div class="padder">
+<div class="searchArea">
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
 <script type="text/javascript">
     var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
 </script>
-<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
 <form action="<?php echo $this->getAddToCartUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
-        <div class="product-img-box">
-            <?php echo $this->getChildHtml('media') ?>
+		<div class="bigImage">
+            <img src="<?php echo $this->helper('catalog/image')->init($_product,'image')->keepFrame(false,array('top', 'left'))->resize(135); ?>">
         </div>
+		<div class="midArea">
+		<div class="finDetBkTitle"><?php echo $_helper->productAttribute($_product, $this->htmlEscape($_product->getName()), 'name') ?><span class="lineHeight14em"> <?php echo $author?></span></div><!-- authorEtc -->
+		<div class="lineHeight14em"><span class="boldFont">ISBN:  <?php echo $_product->getSku() ?></span></div>
+		<div class="lineHeight14em"><span class="boldFont">Binding: <?php echo ucwords($_product->getBoBinding()) ?></span></div>
+		<div class="lineHeight14em"><span class="boldFont">Language : <?php echo ucwords($_product->getBoLanguage()) ?></span></div>
+		<div class="finDetSynop">
+			Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves.
+		</div>
+		<!-- finDetSynop -->
+		
+		<div class="finDetUserReview">
+		 <?php echo $this->getReviewsSummaryHtml($_product, false, true)?>
+		</div><!-- finDetUserReview -->
+			<div class="reviews">Be the first to review this product.</div>
+			<br class="clear"/>
+		</div><!-- midArea -->
+		<div class="buyArea">
 
-        <div class="product-info-box">
-            <h3 class="product-name"><?php echo $_helper->productAttribute($_product, $this->htmlEscape($_product->getName()), 'name') ?></h3>
 
-            <?php if ($this->canEmailToFriend()): ?>
-                <a href="<?php echo $this->helper('catalog/product')->getEmailToFriendUrl($_product) ?>"><?php echo $this->__('Email to a Friend') ?></a><br />
-            <?php endif; ?>
+		<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($_product->getFinalPrice(),true,false) ?></div>
+		<div class="authorEtc">MRP : <?php echo Mage::helper('core')->currency($_product->getPrice(),true,false) ?></div>
+		<div class="youSave">Save : <?php echo Mage::helper('core')->currency(($_product->getPrice()-$_product->getFinalPrice()),true,false) ?> (<?php echo number_format($savingsPerct,2,'.','') ?>%)</div>
+		<div class="authorEtc"><?php echo $shippingTime ?></div>
 
-            <?php echo $this->getReviewsSummaryHtml($_product, false, true)?>
-
-            <fieldset class="no-display">
-              <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
-              <input type="hidden" name="related_product" id="related-products-field" value="" />
-            </fieldset>
-            <?php echo $this->getChildHtml('alert_urls') ?>
-            <?php echo $this->getChildHtml('product_type_data') ?>
-            <?php echo $this->getChildHtml('tierprices') ?>
-
-            <?php if (!$this->hasOptions()):?>
-                <div class="add-to-boxes">
+		 <?php if (!$this->hasOptions()):?>
                 <?php if($_product->isSaleable()): ?>
                     <?php echo $this->getChildHtml('addtocart') ?>
                 <?php endif; ?>
                 <?php echo $this->getChildHtml('addto') ?>
-                </div>
             <?php else:?>
                 <?php echo $this->getChildHtml('addto') ?>
             <?php endif; ?>
+			
+		<!-- otherBut -->
+		<div class="dottedLineBig"></div>
+			<?php echo $this->getChildHtml('donate_book_blurb') ?>
+		</div>
+		<!-- buyArea -->
+		<div class="clear"></div>
+		</div><!-- searchArea -->
+		<fieldset class="no-display">
+		  <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+		  <input type="hidden" name="related_product" id="related-products-field" value="" />
+		</fieldset>
 
-            <?php if ($_product->getShortDescription()):?>
-                <h4 class="border-head"><?php echo $this->__('Quick Overview') ?></h4>
-                <div class="short-description"><?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?></div>
-            <?php endif;?>
-
-            <?php echo $this->getChildHtml('other');?>
-
-            <?php if ($_product->isSaleable() && $this->hasOptions()):?>
-                <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
-            <?php endif; ?>
-        </div>
-        <div class="clear"></div>
-        <?php if ($_product->isSaleable() && $this->hasOptions()):?>
-            <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
-        <?php endif; ?>
 </form>
 <script type="text/javascript">
 //<![CDATA[

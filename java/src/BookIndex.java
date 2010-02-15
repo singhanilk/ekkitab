@@ -1,6 +1,6 @@
 import java.io.*;
 import java.util.*;
-import org.apache.lucene.analysis.SimpleAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.Directory;
@@ -31,7 +31,7 @@ public class BookIndex {
         this.user = user;
         this.password = password;
         Directory d  = FSDirectory.getDirectory(indexDir);
-        indexWriter = new IndexWriter(d,new SimpleAnalyzer(),true);
+        indexWriter = new IndexWriter(d,new StandardAnalyzer(),true);
         indexWriter.setUseCompoundFile(true);
         jdbcUrl = "jdbc:mysql://"+db+":3306/reference";
         open();
@@ -226,7 +226,7 @@ public class BookIndex {
             doc.add(new Field("listprice", book.get("listprice"), Field.Store.YES, Field.Index.NO));
             doc.add(new Field("shortdesc", book.get("shortdesc"), Field.Store.YES, Field.Index.NO));
             doc.add(new Field("instock", book.get("instock"), Field.Store.YES, Field.Index.NO));
-            doc.add(new Field("isbn", book.get("isbn"), Field.Store.YES, Field.Index.NO));
+            doc.add(new Field("isbn", book.get("isbn"), Field.Store.YES, Field.Index.UN_TOKENIZED));
             doc.add(new Field("binding", book.get("binding"), Field.Store.YES, Field.Index.NO));
             doc.add(new Field("language", book.get("language"), Field.Store.YES, Field.Index.NO));
             doc.add(new Field("delivertime", book.get("delivertime"), Field.Store.YES, Field.Index.NO));

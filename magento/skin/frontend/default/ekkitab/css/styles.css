@@ -411,6 +411,7 @@ a:hover {
 	line-height: 1.6em;
 }
 .lineHeight14em {
+	font-size: 11px;
 	line-height: 1.4em;
 }
 .youSave {
@@ -567,16 +568,18 @@ a:hover {
 
 .donateAreaIn {
 	width: 180px;
-	background-image: url(../images/donate_bks_small.jpg);
+	/*background-image: url(../images/donate_bks_small.jpg);
 	background-position: right bottom;
-	background-repeat: no-repeat;
+	background-repeat: no-repeat;*/
 	margin-bottom: 8px;
 }
 .donateAreaIn .text {
 	font-size: 11px;
 	line-height: 16px;
-	width: 130px;
-
+}
+.donateAreaIn img {
+	margin-top: 10px;
+	float:right;
 }
 .mainArea .inLeft {
 	border-left:1px dotted #333333;
@@ -611,7 +614,7 @@ a:hover {
 }
 .searchRow .priceArea {
 	width: 154px;
-	margin: 20px 0 0 10px;
+	margin: 15px 0 0 10px;
 	font-size: 11px;
 	float: left;
 }
@@ -624,6 +627,9 @@ a:hover {
 	float: left;
 	text-align: center;
 }
+.searchArea .bigImage img {
+	border:1px solid #333;
+}
 .searchArea .midArea {
 	width: 512px;
 	padding: 0 9px 0 9px;
@@ -633,6 +639,10 @@ a:hover {
 }
 .finDetBkTitle {
 	font-size: 18px;
+	margin-bottom: 10px;
+	line-height:1.4em;
+	border-bottom: 1px dotted #333;
+
 }
 .starRating {
 	padding: 5px 0;
@@ -868,4 +878,7 @@ a:hover {
 	padding: 0px 5px;
 	margin: 0 0px;
 	color: #ccc;
+} 
+.padder10px{
+	margin-top: 10px;
 } 

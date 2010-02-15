@@ -17,6 +17,9 @@
 <?php 
 		$_categories= $this->getPopularCategories();
 		$_count = is_array($_categories)?count($_categories):$_categories->count(); 
+		$repArr1= array(" & ",
+						"&");
+
 ?>
 <div class="linkHdr">Popular Categories</div><!-- linkHdr -->
 <ul>
@@ -24,9 +27,16 @@
 	<?php foreach ($_categories as $_category): ?>
 		<?php if($_category->getIsActive()): 
 				$randNo = 10 * $_category->getPopularity();
+				$url =  $_category->getCategory();
+				$url = str_replace($repArr1, "_", $url);
+				//	$url = str_replace($repArr2, "-", $url);
+				$url = preg_replace('#[^A-Za-z0-9\_]+#', '-', $url);
+				$url ="ekkitab_catalog/search/index/category/".$url;
+
 			?>
 			<li>
-				<a href="<?php echo $_category->getUrlPath() ?>"><?php echo $this->htmlEscape($_category->getCategory()) ?></a></li>
+				<!--a href="<?php echo $_category->getUrlPath() ?>"><?php echo $this->htmlEscape($_category->getCategory()) ?></a></li-->
+				<a href="<?php echo $this->getUrl($url) ?>"><?php echo $this->htmlEscape($_category->getCategory()) ?></a></li>
 		<?php endif; ?>
 	<?php endforeach ?>
 <?php endif; ?>

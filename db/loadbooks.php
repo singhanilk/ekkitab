@@ -539,6 +539,7 @@ ini_set("display_errors", 1);
 		$queries[] = createInsertQuery("catalogsearch_fulltext",
                                         array($entityIds[CPE],catalogindex_eav_store_id,"'$search_data_index'")); */
 
+        /*
        //Create the url_rewrite
         $seed_url = $book[REWRITE_URL];
         $seed_url = substr($seed_url, 0, strrpos($seed_url, "."));
@@ -554,7 +555,6 @@ ini_set("display_errors", 1);
                               "product/".$entityIds[CPE]."/".$id,$path."/".$url_key.".html",
                               "catalog/product/view/id/".$entityIds[CPE]."/category/".$id,"");
         }
-        /*
         $queries[] = createInsertQuery("core_url_rewrite", 
                                        "store_id, category_id, product_id, id_path, request_path, target_path, options",
                                        $val_array);
@@ -686,6 +686,12 @@ ini_set("display_errors", 1);
         global $dbs;
         global $targetdir;
         $maxprocesscount = 5000000;
+
+        if ($argc <= 1) {
+            echo "No arguments.\n";
+            echo "Usage: ".$argv[0]." <books count> <target data directory>\n";
+            exit(1);
+        }
 
         for ($i = 1; $i < $argc; $i++) {
             if ($i == 1) {

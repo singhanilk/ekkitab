@@ -9,7 +9,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.analysis.SimpleAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.Sort;
@@ -30,6 +30,7 @@ public class BookSearch {
     private int instanceId = 0; 
 
     private static Set<String> discardwords = null;
+    private static Set<String> searchfields = null;
     //private static Properties properties = null; 
     private static int allInstances = 0;
     private static Logger logger = null; 
@@ -37,6 +38,7 @@ public class BookSearch {
     static {
         logger = LogManager.getLogger("BookSearch.class");
         discardwords = new HashSet<String>();
+        searchfields = new HashSet<String>();
         //properties = new Properties(); 
         //InputStream is = null;
         //try { 
@@ -52,6 +54,10 @@ public class BookSearch {
         discardwords.add("the");
         discardwords.add("for");
         discardwords.add("and");
+
+        searchfields.add("title");
+        searchfields.add("author");
+        searchfields.add("isbn");
     }
     
     public BookSearch(String indexDir) throws Exception {
@@ -117,10 +123,23 @@ public class BookSearch {
        Map<String, Integer> counts = null;
        BookHitCollector collector = null;
 
+       String usesearchfield = null;
+
+       if (query != null) {
+            String[] tmp = query.split(":", 2);
+            if (tmp.length >= 2) {
+                tmp[0] = tmp[0].toLowerCase();
+                if (searchfields.contains(tmp[0])) {
+                    query = tmp[1];
+                    usesearchfield = tmp[0];
+                }
+            }    
+       }
+
        int startIndex = (page - 1) * pageSz;
        int endIndex   = startIndex + pageSz;
 
-       QueryParser qpt = new QueryParser("title", new SimpleAnalyzer());
+       QueryParser qpt = new QueryParser("title", new StandardAnalyzer());
 
        String modquery = "";
        StringBuffer sb = new StringBuffer();
@@ -133,8 +152,13 @@ public class BookSearch {
                     phrase = "\"" + query + "\"";
 
             if (!phrase.equals("")) {
-                sb.append(phrase+"^3 ");
-                sb.append("author:"+phrase+"^3 ");
+                if (usesearchfield != null) {
+                    sb.append(usesearchfield+":"+phrase+"^3 ");
+                }
+                else {
+                    sb.append(phrase+"^3 ");
+                    sb.append("author:"+phrase+"^3 ");
+                }
             }
             String conjunction = "";
             StringBuffer sbtmp = new StringBuffer();
@@ -142,10 +166,15 @@ public class BookSearch {
                 if ((word.length() > 2) && (!discardwords.contains(word))) {
                     sbtmp.append(conjunction);
                     conjunction = " OR ";
-                    sbtmp.append(word+" ");
-                    sbtmp.append(conjunction);
-                    sbtmp.append("author:"+word+" ");
-                 }
+                    if (usesearchfield != null) {
+                        sbtmp.append(usesearchfield+":"+word+" ");
+                    }
+                    else {
+                        sbtmp.append(word+" ");
+                        sbtmp.append(conjunction);
+                        sbtmp.append("author:"+word+" ");
+                    }
+                }
             }
             if (sbtmp.length() > 0) {
                 sb.append("+( ");
