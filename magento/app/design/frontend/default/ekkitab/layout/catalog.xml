@@ -229,12 +229,12 @@ Product view
             <action method="addItem"><type>js</type><name>calendar/calendar-setup.js</name><!--<params/><if/><condition>can_load_calendar_js</condition>--></action>
         </reference>
         <reference name="content">
-            <block type="catalog/product_view" name="product.info" template="catalog/product/view.phtml">
+            <block type="ekkitab_catalog/product_view" name="product.info" template="catalog/product/view.phtml">
                 <block type="page/html" name="donate_book_blurb" template="page/html/donate_blurb.phtml" />
-				<block type="catalog/product_view_media" name="product.info.media" as="media" template="catalog/product/view/media.phtml"/>
+				<!--block type="catalog/product_view_media" name="product.info.media" as="media" template="catalog/product/view/media.phtml"/-->
                
-				<block type="catalog/product_view" name="product.info.addto" as="addto" template="catalog/product/view/addto.phtml" />
-                <block type="catalog/product_view" name="product.info.addtocart" as="addtocart" template="catalog/product/view/addtocart.phtml" />
+				<block type="ekkitab_catalog/product_view" name="product.info.addto" as="addto" template="catalog/product/view/addto.phtml" />
+                <block type="ekkitab_catalog/product_view" name="product.info.addtocart" as="addtocart" template="catalog/product/view/addtocart.phtml" />
 
                 <!--block type="core/text_list" name="alert.urls" as="alert_urls" />
                 <block type="catalog/product_view" name="product.tierprices" as="tierprices" template="catalog/product/view/tierprices.phtml"/-->

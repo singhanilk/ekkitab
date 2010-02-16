@@ -16,7 +16,18 @@
 ?>
 <div class="leftNavArea">
 <?php
-	$results=$this->getProductCollection();
+	function getShortenedString($str,$count){
+		$resStr = '';
+		//$str = eregi_replace(" +", " ", $str);
+		$array = explode(" ", $str);
+		for($i=0;$i < $count ;$i++)
+ 		{
+			$resStr=$resStr." ".$array[$i];
+		}
+     return $resStr;
+	}
+ 
+ $results=$this->getProductCollection();
 	$repArr1= array(" & ",
 					"&");
 	$repArr2= array(" (",
@@ -62,7 +73,7 @@ if(!is_null($results)){
 			}else{
 				$cp =  urlencode($urlKey);
 			}
-?>		<li><a href="<?php echo $this->getSubCategorySearchUrl($cp,1) ?>"><?php echo $key. "[". $val ."]"?></a></li>
+?>		<li><a href="<?php echo $this->getSubCategorySearchUrl($cp,1) ?>"><?php echo ucwords($key). "[". $val ."]"?></a></li>
 <?php	endforeach;	?>
 	</ul>
 	<div class="seeAll"><!--a href="#">See all &raquo;</a-->&nbsp;</div><!-- seeAll -->
@@ -141,7 +152,9 @@ if(!is_null($results)){
 			$binding=strlen($book->get("binding")) > 0 ? ucfirst($book->get("binding")) : "Not Available" ;
 			$language=strlen($book->get("language")) > 0 ? $book->get("language") : "Unknown";
 			$stock=java_values($book->get("instock"));
-			$shortDesc=java_values($book->get("shortdesc"));
+//			$shortDesc=java_values($book->get("shortdesc"));
+			$shortDesc='Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves.';
+			
 			//$url = $book->get("url");
 			//$url="catalog/product/view/id/".$id;
 
@@ -151,6 +164,7 @@ if(!is_null($results)){
 			$shippingTime= $shippingTime  > 0 ? "Normally Ships in ".$shippingTime. ($shippingTime  == 1 ? " day":" days"): "";
 			$shortDesc= ($shortDesc =="Not Available") ? "" : $shortDesc;
 			
+			$shortDesc = getShortenedString($shortDesc,30);
 			if(isset($author) && strlen(trim($author)) > 0)
 			{
 				$bookName=$author."__";
@@ -165,7 +179,7 @@ if(!is_null($results)){
 			<!-- searchRowBegins -->
 			<div class="searchRow">
 			<div class="skuImage"><div class="image"><a href="<?php echo $this->getUrl($url)?>" title="<?php  echo $title?>">
-				<img src="<?php echo $this->helper('ekkitab_catalogsearch')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $title?>"></a></div></div>
+				<img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $title?>"></a></div></div>
 			<!-- skuImage -->
 			<div class="detailsArea">
 			<div class="bkTitle"><a href="<?php echo $this->getUrl($url)?>" title="<?php echo $title ?>"><?php echo $title ?></a></div><!-- bkTitle -->

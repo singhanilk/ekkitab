@@ -27,37 +27,35 @@
 /**
  * Product view template
  *
- * @see Mage_Catalog_Block_Product_View
- * @see Mage_Review_Block_Product_View
+ * @see Ekkitab_Catalog_Block_Product_View
  */
 ?>
 <?php
     $_helper = $this->helper('catalog/output');
     $_product = $this->getProduct();
-	$author = $_product->getBoAuthor();
-	$author = strlen($author) > 0 ? "by ".$author : "";
-	
-	$savingsPerct= ($_product->getPrice() >0 )?	(($_product->getPrice() - $_product->getFinalPrice())/ $_product->getPrice() ) * 100 : 10; 
-	$shippingTime= $_product->getId();
-	$shippingTime= $shippingTime  > 0 ? "Normally Ships in ".$shippingTime. ($shippingTime  == 1 ? " day":" days"): "";
-
+	if(!is_null($_product)){
+		$author = $_product->getAuthor();
+		$author = strlen($author) > 0 ? "by ".$author : "";
+		
+		$savingsPerct= ($_product->getListPrice() >0 )?	(($_product->getListPrice() - $_product->getDiscountPrice())/ $_product->getListPrice() ) * 100 : 10; 
+		$shippingTime= $_product->getDeliveryPeriod();
+		$shippingTime= $shippingTime  > 0 ? "Normally Ships in ".$shippingTime. ($shippingTime  == 1 ? " day":" days"): "";
+		$image = $_product->getImage();
 ?>
 <div class="searchArea">
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
-<script type="text/javascript">
-    var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
-</script>
-<form action="<?php echo $this->getAddToCartUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+
+<form action="<?php echo $this->helper('ekkitab_catalog')->getCartUrl($_product->getId(),$this->helper('core/url')->getCurrentUrl()) ?>" method="post" id="product_addtocart_form">
 		<div class="bigImage">
-            <img src="<?php echo $this->helper('catalog/image')->init($_product,'image')->keepFrame(false,array('top', 'left'))->resize(135); ?>">
+            <img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'image',false,null, 135); ?>">
         </div>
 		<div class="midArea">
-		<div class="finDetBkTitle"><?php echo $_helper->productAttribute($_product, $this->htmlEscape($_product->getName()), 'name') ?><span class="lineHeight14em"> <?php echo $author?></span></div><!-- authorEtc -->
-		<div class="lineHeight14em"><span class="boldFont">ISBN:  <?php echo $_product->getSku() ?></span></div>
-		<div class="lineHeight14em"><span class="boldFont">Binding: <?php echo ucwords($_product->getBoBinding()) ?></span></div>
-		<div class="lineHeight14em"><span class="boldFont">Language : <?php echo ucwords($_product->getBoLanguage()) ?></span></div>
+		<div class="finDetBkTitle"><?php echo $this->htmlEscape($_product->getTitle()) ?><span class="lineHeight14em"> <?php echo $author?></span></div><!-- authorEtc -->
+		<div class="lineHeight14em"><span class="boldFont">ISBN:  <?php echo $_product->getIsbn() ?></span></div>
+		<div class="lineHeight14em"><span class="boldFont">Binding: <?php echo ucwords($_product->getBinding()) ?></span></div>
+		<div class="lineHeight14em"><span class="boldFont">Language : <?php echo ucwords($_product->getLanguage()) ?></span></div>
 		<div class="finDetSynop">
-			Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves.
+			<?php echo $_product->getShortDescription() ?>
 		</div>
 		<!-- finDetSynop -->
 		
@@ -70,20 +68,14 @@
 		<div class="buyArea">
 
 
-		<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($_product->getFinalPrice(),true,false) ?></div>
-		<div class="authorEtc">MRP : <?php echo Mage::helper('core')->currency($_product->getPrice(),true,false) ?></div>
-		<div class="youSave">Save : <?php echo Mage::helper('core')->currency(($_product->getPrice()-$_product->getFinalPrice()),true,false) ?> (<?php echo number_format($savingsPerct,2,'.','') ?>%)</div>
+		<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($_product->getDiscountPrice(),true,false) ?></div>
+		<div class="authorEtc">MRP : <?php echo Mage::helper('core')->currency($_product->getListPrice(),true,false) ?></div>
+		<div class="youSave">Save : <?php echo Mage::helper('core')->currency(($_product->getListPrice()-$_product->getDiscountPrice()),true,false) ?> (<?php echo number_format($savingsPerct,2,'.','') ?>%)</div>
 		<div class="authorEtc"><?php echo $shippingTime ?></div>
 
-		 <?php if (!$this->hasOptions()):?>
-                <?php if($_product->isSaleable()): ?>
-                    <?php echo $this->getChildHtml('addtocart') ?>
-                <?php endif; ?>
-                <?php echo $this->getChildHtml('addto') ?>
-            <?php else:?>
-                <?php echo $this->getChildHtml('addto') ?>
-            <?php endif; ?>
-			
+		<?php echo $this->getChildHtml('addtocart') ?>
+		<?php echo $this->getChildHtml('addto') ?>
+
 		<!-- otherBut -->
 		<div class="dottedLineBig"></div>
 			<?php echo $this->getChildHtml('donate_book_blurb') ?>
@@ -110,3 +102,4 @@
 </div>
 <br /><br />
 <?php echo $this->getChildHtml('info_tabs') ?>
+<?php }  ?>

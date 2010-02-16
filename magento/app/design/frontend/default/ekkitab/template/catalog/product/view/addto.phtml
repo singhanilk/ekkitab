@@ -27,9 +27,7 @@
 
 <?php $_product = $this->getProduct() ?>
 
-<?php if ($this->helper('wishlist')->isAllow() || $_compareUrl=$this->helper('catalog/product_compare')->getAddUrl($_product) ) : ?>
-    <?php if ($this->helper('wishlist')->isAllow()) : ?>
-		<div class="otherBut"><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>"><img src="<?php echo $this->getSkinUrl('images/wish_list_but.png') ?>" width="125" height="22" border="0" /></a></div>
-    <?php endif; ?>
-     <!--Compare feature is not required in books store... hence removing this section off..-->
+<?php if ($this->helper('wishlist')->isAllow()) : ?>
+	<div class="otherBut"><a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($_product->getId()) ?>"><img src="<?php echo $this->getSkinUrl('images/wish_list_but.png') ?>" width="125" height="22" border="0" /></a></div>
 <?php endif; ?>
+     <!--Compare feature is not required in books store... hence removing this section off..-->
