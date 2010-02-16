@@ -39,52 +39,52 @@ USE `reference`;
 --
 
 CREATE TABLE `books` (
-  `ID` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `TITLE` varchar(255),
-  `AUTHOR` varchar(120),
-  `ISBN` varchar(20),
-  `ISBN10` varchar(20),
-  `BINDING` varchar(20),
-  `DESCRIPTION` varchar(2048) DEFAULT NULL,
-  `SHORT_DESCRIPTION` varchar(2048) DEFAULT NULL,
-  `PUBLISHING_DATE` date,
-  `PUBLISHER` varchar(100),
-  `PAGES` INT NOT NULL default '0',
-  `LANGUAGE` varchar(20),
-  `LIST_PRICE` decimal(8,2),
-  `DISCOUNT_PRICE` decimal(8,2),
-  `SUPPLIERS_PRICE` decimal(8,2),
-  `SUPPLIERS_DISCOUNT` decimal(4,2),
-  `CURRENCY` varchar(20),
-  `BISAC1` varchar(255) NOT NULL,
-  `BISAC2` SMALLINT UNSIGNED DEFAULT NULL,
-  `BISAC3` SMALLINT UNSIGNED DEFAULT NULL,
-  `DELIVERY_PERIOD` TINYINT UNSIGNED,
-  `COVER_THUMB` varchar(80),
-  `IMAGE` varchar(80),
-  `IN_STOCK` tinyint(1) default 0,
-  `STOCK_UPDATED` tinyint(1) default 0,
-  `PRICE_UPDATED` tinyint(1) default 0,
-  `QTY` INT UNSIGNED,
-  `WEIGHT` decimal(6,2),
-  `DIMENSION` varchar(80),
-  `ILLUSTRATOR` varchar(120),
-  `EDITORIAL_REVIEW` varchar(80),
-  `EDITION` varchar(80),
-  `SHIPPING_REGION` TINYINT UNSIGNED default '0',
-  `INT_SHIPPING` TINYINT UNSIGNED default '0',
-  `RATING` TINYINT UNSIGNED,
-  `INFO_SOURCE` varchar(40) NOT NULL,
-  `SOURCED_FROM` varchar(16) NOT NULL default 'India',
-  `UPDATED_DATE` date NOT NULL,
-  `NEW` TINYINT UNSIGNED NOT NULL default '0',
-  `PRODUCT_STATUS` TINYINT UNSIGNED NOT NULL default '1',
-  `REWRITE_URL` varchar(255) NOT NULL,
-  `BISAC_CODES` varchar(255) NOT NULL,
-  `PRODUCT_ID` int(10) unsigned NOT NULL default '0',
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `ISBN` (`ISBN`),
-  KEY `PRODUCT_ID` (`PRODUCT_ID`)
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` varchar(255),
+  `author` varchar(120),
+  `isbn` varchar(20),
+  `isbn10` varchar(20),
+  `binding` varchar(20),
+  `description` varchar(2048) DEFAULT NULL,
+  `short_description` varchar(2048) DEFAULT NULL,
+  `publishing_date` date,
+  `publisher` varchar(100),
+  `pages` INT NOT NULL default '0',
+  `language` varchar(20),
+  `list_price` decimal(8,2),
+  `discount_price` decimal(8,2),
+  `suppliers_price` decimal(8,2),
+  `suppliers_discount` decimal(4,2),
+  `currency` varchar(20),
+  `bisac1` varchar(255) NOT NULL,
+  `bisac2` SMALLINT UNSIGNED DEFAULT NULL,
+  `bisac3` SMALLINT UNSIGNED DEFAULT NULL,
+  `delivery_period` TINYINT UNSIGNED,
+  `cover_thumb` varchar(80),
+  `image` varchar(80),
+  `in_stock` tinyint(1) default 0,
+  `stock_updated` tinyint(1) default 0,
+  `price_updated` tinyint(1) default 0,
+  `qty` INT UNSIGNED,
+  `weight` decimal(6,2),
+  `dimension` varchar(80),
+  `illustrator` varchar(120),
+  `editorial_review` varchar(80),
+  `edition` varchar(80),
+  `shipping_region` TINYINT UNSIGNED default '0',
+  `int_shipping` TINYINT UNSIGNED default '0',
+  `rating` TINYINT UNSIGNED,
+  `info_source` varchar(40) NOT NULL,
+  `sourced_from` varchar(16) NOT NULL default 'India',
+  `updated_date` date NOT NULL,
+  `new` TINYINT UNSIGNED NOT NULL default '0',
+  `product_status` TINYINT UNSIGNED NOT NULL default '1',
+  `rewrite_url` varchar(255) NOT NULL,
+  `bisac_codes` varchar(255) NOT NULL,
+  `product_id` int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ISBN` (`isbn`),
+  KEY `PRODUCT_ID` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
@@ -93,19 +93,19 @@ CREATE TABLE `books` (
 --
 
 CREATE TABLE IF NOT EXISTS `ek_bisac_category_map` (
-  `VALUE_ID` int(11) NOT NULL AUTO_INCREMENT,
-  `BISAC_CODE` varchar(36) NOT NULL,
-  `LEVEL1` varchar(80) NOT NULL,
-  `LEVEL2` varchar(80) NOT NULL,
-  `LEVEL3` varchar(80) NOT NULL,
-  `LEVEL4` varchar(80) NOT NULL,
-  `LEVEL5` varchar(80) NOT NULL,
-  `LEVEL6` varchar(80) NOT NULL,
-  `LEVEL7` varchar(80) NOT NULL,
-  `CATEGORY_ID` varchar(255) NOT NULL,
-  `REWRITE_URL` varchar(255) NOT NULL,
-  PRIMARY KEY (`VALUE_ID`),
-  UNIQUE KEY `BISAC_CODE` (`BISAC_CODE`)
+  `value_id` int(11) NOT NULL AUTO_INCREMENT,
+  `bisac_code` varchar(36) NOT NULL,
+  `level1` varchar(80) NOT NULL,
+  `level2` varchar(80) NOT NULL,
+  `level3` varchar(80) NOT NULL,
+  `level4` varchar(80) NOT NULL,
+  `level5` varchar(80) NOT NULL,
+  `level6` varchar(80) NOT NULL,
+  `level7` varchar(80) NOT NULL,
+  `category_id` varchar(255) NOT NULL,
+  `rewrite_url` varchar(255) NOT NULL,
+  PRIMARY KEY (`value_id`),
+  UNIQUE KEY `BISAC_CODE` (`bisac_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8  AUTO_INCREMENT=1 ;
 
 --
@@ -113,11 +113,11 @@ CREATE TABLE IF NOT EXISTS `ek_bisac_category_map` (
 --
 
 CREATE TABLE IF NOT EXISTS `ek_currency_conversion` (
-  `ID` int NOT NULL AUTO_INCREMENT,
-  `CURRENCY` varchar(16) NOT NULL,
-  `CONVERSION` decimal (4,2) NOT NULL default 1.0,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `UNIQUE_CURRENCY` (`CURRENCY`)
+  `id` int NOT NULL AUTO_INCREMENT,
+  `currency` varchar(16) NOT NULL,
+  `conversion` decimal (4,2) NOT NULL default 1.0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQUE_CURRENCY` (`currency`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8  AUTO_INCREMENT=1 ;
 
 
@@ -126,11 +126,11 @@ CREATE TABLE IF NOT EXISTS `ek_currency_conversion` (
 --
 
 CREATE TABLE IF NOT EXISTS `ek_discount_setting` (
-  `ID` int NOT NULL AUTO_INCREMENT,
-  `INFO_SOURCE` varchar(40) NOT NULL,
-  `DISCOUNT_PERCENT` smallint NOT NULL default 100,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `UNIQUE_INFO_SOURCE` (`INFO_SOURCE`)
+  `id` int NOT NULL AUTO_INCREMENT,
+  `info_source` varchar(40) NOT NULL,
+  `discount_percent` smallint NOT NULL default 100,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQUE_INFO_SOURCE` (`info_source`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8  AUTO_INCREMENT=1 ;
 
 --
@@ -139,13 +139,13 @@ CREATE TABLE IF NOT EXISTS `ek_discount_setting` (
 --
 
 CREATE TABLE if not exists `book_description` (
-  `ID` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `ISBN` varchar(20) NOT NULL,
-  `DESCRIPTION` varchar(2048) DEFAULT NULL,
-  `SHORT_DESCRIPTION` varchar(2048) DEFAULT NULL,
-  `UPDATED` tinyint(1) default 0,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `ISBN` (`ISBN`)
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `isbn` varchar(20) NOT NULL,
+  `description` varchar(2048) DEFAULT NULL,
+  `short_description` varchar(2048) DEFAULT NULL,
+  `updated` tinyint(1) default 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ISBN` (`isbn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -154,16 +154,16 @@ CREATE TABLE if not exists `book_description` (
 --
 
 CREATE TABLE if not exists `book_stock_and_prices` (
-  `ID` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `ISBN` varchar(20) NOT NULL,
-  `IN_STOCK` tinyint(1) default 0,
-  `LIST_PRICE` decimal(8,2),
-  `DISCOUNT_PRICE` decimal(8,2),
-  `SUPPLIERS_PRICE` decimal(8,2),
-  `SUPPLIERS_DISCOUNT` decimal(4,2),
-  `CURRENCY` varchar(20),
-  `PUBLISHING_DATE` date,
-  `UPDATED` tinyint(1) default 0,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `ISBN` (`ISBN`)
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `isbn` varchar(20) NOT NULL,
+  `in_stock` tinyint(1) default 0,
+  `list_price` decimal(8,2),
+  `discount_price` decimal(8,2),
+  `suppliers_price` decimal(8,2),
+  `suppliers_discount` decimal(4,2),
+  `currency` varchar(20),
+  `publishing_date` date,
+  `updated` tinyint(1) default 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ISBN` (`isbn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
