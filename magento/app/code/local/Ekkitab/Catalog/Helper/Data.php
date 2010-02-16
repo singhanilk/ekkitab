@@ -171,6 +171,17 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
     }
 
 	/**
+     * Retrieve url for adding product to wishlist
+     *
+     * @param   mixed $product
+     * @return  string
+     */
+    public function getWishListAddUrl($productId)
+    {
+        return $this->_getUrl('wishlist/index/add', array('product'=>$productId));
+    }
+	
+	/**
      * Retrieve url for add product to cart
      *
      * @param   Mage_Catalog_Model_Product $product
@@ -188,7 +199,7 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
             $params['in_cart'] = 1;
         }
 
-       return $this->_getUrl('checkout/cart/add', $params);
+       return $this->_getUrl('ekkitab_checkout/cart/add', $params);
     }
 
     public function getPlaceholder($attr)

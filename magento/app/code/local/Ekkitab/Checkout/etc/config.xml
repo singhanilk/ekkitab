@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Ekkitab_Checkout>
+            <version>0.1</version>
+        </Ekkitab_Checkout>
+    </modules>
+    <frontend>
+        <routers>
+            <ekkitab_checkout>
+                <use>standard</use>
+                <args>
+                    <module>Ekkitab_Checkout</module>
+                    <frontName>ekkitab_checkout</frontName>
+                </args>
+            </ekkitab_checkout>
+        </routers>
+    </frontend>
+</config>

@@ -14,18 +14,16 @@
  * distributed in any form or by any means, or stored in a database or retrieval system without the prior written permission of Ekkitab Educational Services.
  */
 
-require_once 'Mage/Catalog/controllers/ProductController.php';
-
-class Ekkitab_Catalog_ProductController extends Mage_Catalog_ProductController
+class Ekkitab_Catalog_ProductController extends Mage_Core_Controller_Front_Action
 {
     /**
      * Initialize requested product object
      *
      * @return Mage_Catalog_Model_Product
      */
-    protected function _initProduct()
+    public function viewAction()
     {
-		Mage::dispatchEvent('catalog_controller_product_init_before', array('controller_action'=>$this));
+		//Mage::dispatchEvent('catalog_controller_product_init_before', array('controller_action'=>$this));
 		$productUrl  = (String) $this->getRequest()->getParam('book');
 
 		// insert the split function here.....and get the product Id
@@ -35,42 +33,12 @@ class Ekkitab_Catalog_ProductController extends Mage_Catalog_ProductController
 		$productId = (int) substr($productUrl,$productIdStartIndex,$productIdEndIndex);
 
 	   if (is_int($productId) && $productId > 0 ) {
+			Mage::register('productId', $productId);
+			$this->loadLayout();
+			$this->renderLayout();
 
-			$product = Mage::getModel('catalog/product')
-				->setStoreId(Mage::app()->getStore()->getId())
-				->load($productId);
-
-			if (!Mage::helper('catalog/product')->canShow($product)) {
-				return false;
-			}
-			if (!in_array(Mage::app()->getStore()->getWebsiteId(), $product->getWebsiteIds())) {
-				return false;
-			}
-
-			$category = null;
-			if ($categoryId = Mage::getSingleton('catalog/session')->getLastVisitedCategoryId()) {
-				if ($product->canBeShowInCategory($categoryId)) {
-					$category = Mage::getModel('catalog/category')->load($categoryId);
-					$product->setCategory($category);
-					Mage::register('current_category', $category);
-				}
-			}
-
-
-			Mage::register('current_product', $product);
-			Mage::register('product', $product);
-
-			try {
-				Mage::dispatchEvent('catalog_controller_product_init', array('product'=>$product));
-				Mage::dispatchEvent('catalog_controller_product_init_after', array('product'=>$product, 'controller_action' => $this));
-			} catch (Mage_Core_Exception $e) {
-				Mage::logException($e);
-				return false;
-			}
-
-			return $product;
-	   }else{
-		   return false;
+		}else{
+           $this->_forward('noRoute');
 	   }
     }
 

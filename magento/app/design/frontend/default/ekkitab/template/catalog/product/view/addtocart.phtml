@@ -27,9 +27,11 @@
 
 <?php $_product = $this->getProduct() ?>
 
-<?php if($_product->isSaleable()): ?>
+<?php //if($_product->isSaleable()):
+?>
     <fieldset>
         <legend><?php echo $this->__('Add Items to Cart') ?></legend>
 		<div class="buyBut"><a href="#" onclick="productAddToCartForm.submit(); return false;"><img src="<?php echo $this->getSkinUrl('images/buy_now_but.png') ?>" width="84" height="25" border="0" /></a></div><!-- buyBut -->
     </fieldset>
-<?php endif; ?>
+<?php //endif;
+?>

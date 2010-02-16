@@ -19,6 +19,9 @@
 			<ekkitab_catalog_resource_mysql4>
 				<class>Ekkitab_Catalog_Model_Resource_Mysql4</class>  
 				 <entities>
+						<product>
+							<table>books</table>
+						</product>
 						<author_topAuthors>
 							<table>ek_catalog_top_authors</table>
 						</author_topAuthors>
@@ -57,13 +60,16 @@
                 <class>Ekkitab_Catalog_Helper</class>
             </ekkitab_catalog>
         </helpers>
-		<!-- 
-		Since we are overwriting the core's catalog module ..we need to rewrite the modules under the new catalog module.
-		-->
 		<blocks>
 			<ekkitab_catalog>
 				<class>Ekkitab_Catalog_Block</class>
 			</ekkitab_catalog>   
+			<!-- 
+			Since we are not overwriting the core's catalog module ..I am commenting this section off .
+			-->
+			<!-- 
+			Since we are overwriting the core's catalog module ..we need to rewrite the modules under the new catalog module.
+			-->
 			<!--catalog>
 				<rewrite>
 						<author_topAuthors>Ekkitab_Catalog_Block_Author_TopAuthors</author_topAuthors>
