@@ -5,13 +5,6 @@
             <version>0.1</version>
         </Ekkitab_Checkout>
     </modules>
-	<global>
-		<models>
-			<ekkitab_checkout>
-				<class>Ekkitab_Checkout_Model</class>
-			</ekkitab_checkout>   
-		</models>
-	</global>
     <frontend>
         <routers>
             <ekkitab_checkout>
