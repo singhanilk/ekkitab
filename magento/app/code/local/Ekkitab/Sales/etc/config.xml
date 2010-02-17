@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Ekkitab_Sales>
+            <version>0.1</version>
+        </Ekkitab_Sales>
+    </modules>
+	<global>
+		<models>
+			<ekkitab_sales>
+				<class>Ekkitab_Sales_Model</class>
+			</ekkitab_sales>   
+		</models>
+	</global>
+</config>

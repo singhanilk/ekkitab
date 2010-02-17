@@ -194,7 +194,7 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
      */
     public function getStatus()
     {
-        return $this->_getData('status');
+        return 1;//$this->_getData('status');
     }
 
     /**
@@ -562,7 +562,7 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
      */
     public function getTierPrice($qty=null)
     {
-        return $this->getPriceModel()->getTierPrice($qty, $this);
+        return 0.0;//$this->getPriceModel()->getTierPrice($qty, $this);
     }
 
     /**
@@ -1123,7 +1123,7 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
 
     public function isVisibleInCatalog()
     {
-        return in_array($this->getStatus(), $this->getVisibleInCatalogStatuses());
+        return true;
     }
 
     public function getVisibleInSiteVisibilities()
