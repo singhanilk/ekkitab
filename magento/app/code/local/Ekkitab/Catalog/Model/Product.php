@@ -1272,6 +1272,11 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
         $data = parent::toArray($arrAttributes);
         return $data;
     }
+    
+    public function getStockItem() {
+    	$stockitem = Mage::getModel("ekkitab_cataloginventory/stock_item");
+    	return ($stockitem);
+    }
 
     public function fromArray($data)
     {

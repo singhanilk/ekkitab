@@ -162,7 +162,7 @@ class Mage_Sales_Model_Mysql4_Quote_Item_Collection extends Mage_Core_Model_Mysq
         }
         $this->_productIds = array_merge($this->_productIds, $productIds);
 
-        $productCollection = Mage::getModel('catalog/product')->getCollection()
+        $productCollection = Mage::getModel('ekkitab_catalog/product')->getCollection()
             ->setStoreId($this->getStoreId())
             ->addIdFilter($this->_productIds)
             ->addAttributeToSelect(Mage::getSingleton('sales/quote_config')->getProductAttributes())
