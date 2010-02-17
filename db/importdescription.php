@@ -30,9 +30,9 @@
     * Log the error and terminate the program.
     * Optionally, will accept the query that failed.
     */
-    function fatal($message, $query = "") {
+    function  fatal($message, $query = "") {
         global $logger;
-       $logger->fatal("$message " . "[ $query ]" . "\n");
+        $logger->fatal("$message " . "[ $query ]" . "\n");
         exit(1);
     }
 
@@ -40,9 +40,10 @@
     * This function will log the error.
     * Optionally, will accept the query that failed.
     */
+
     function warn($message, $query = "") {
         global $logger;
-       $logger->error("$message " . "[ $query ]" . "\n");
+        $logger->error("$message " . "[ $query ]" . "\n");
     }
 
     /** 
@@ -51,7 +52,7 @@
     */
     function debug($message, $query = "") {
         global $logger;
-       $logger->debug("$message " . "[ $query ]" . "\n");
+        $logger->debug("$message " . "[ $query ]" . "\n");
     }
 
    /** 
@@ -168,24 +169,38 @@
     function start($argc, $argv) {
     
         if ($argc == 1) {
-           echo "Usage: $argv[0] <Data Source> <Annotation Data File> <Pub Marketing Data File> \n";
+           echo "Usage: $argv[0]  <Data Source> <Option> <Data File>\n";
            exit(0);
         }
-        if ($argc != 4) {
-            fatal("No supplier name or import files.");
-        }
-        $fh = array();
-		
-        $fh['anno'] = fopen($argv[2], "r"); 
-        if (!$fh) {
-           fatal("Could not open data file: $argv[2]");
-        }
-		$fh['pub'] = fopen($argv[3], "r"); 
-        if (!$fh) {
-           fatal("Could not open data file: $argv[3]");
-        }
-		   
-        $infosource = $argv[1];
+
+		for($i = 1; $i < $argc; $i++) {
+			if ($i == 1)
+				$infosource = $argv[$i];
+			elseif (($i == 2) || ($i == 4)) {
+				if (($argv[$i] != "-s") && ($argv[$i] != "-l")) {
+					fatal("Unknown parameter: " . $argv[$i]);
+				}
+				else {
+					if ($i+1 >= $argc) {
+						fatal ("insufficient arguments.\n");
+					}
+					if ($argv[$i] == "-s") {
+						$fh['pub'] = fopen($argv[$i+1], "r");
+						if(!$fh['pub']){
+							fatal("Could not open data file: ".$argv[$i+1]);
+						}
+					}
+					else {
+						$fh['anno'] = fopen($argv[$i+1], "r");
+						if(!$fh['anno']){
+							fatal("Could not open data file:".$argv[$i+1]);
+						}
+					}
+					$i++;
+				}
+			}
+		}
+           
         require_once(IMPORTBOOKS_CLASSDIR . "/" . $infosource . ".php");
         $config = getConfig(IMPORTBOOKS_INI);
         $db = initDatabases($config);
@@ -194,9 +209,17 @@
             fatal("Failed to initialize databases");
         }
 
-		updateDescription($db,$fh['anno'],'long');
-		debug("Updating the Short Description");
-		updateDescription($db,$fh['pub'],'short');
+		foreach($fh as $type => $file){
+
+				if($type == 'anno'){
+					debug("Updating Description");
+					updateDescription($db,$file,'long');
+				}
+				else {
+					debug("Updating Short Description");
+					updateDescription($db,$file,'short');
+				}
+		}
 		
 		foreach($fh as $file){
 			fclose($file);
