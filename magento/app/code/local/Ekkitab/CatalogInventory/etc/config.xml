@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Ekkitab_CatalogInventory>
+            <version>0.1</version>
+        </Ekkitab_CatalogInventory>
+    </modules>
+	<global>
+		<models>
+			<ekkitab_cataloginventory>
+				<class>Ekkitab_CatalogInventory_Model</class>
+			</ekkitab_cataloginventory>   
+		</models>
+	</global>
+</config>

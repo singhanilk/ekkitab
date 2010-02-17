@@ -35,16 +35,6 @@ class Ekkitab_Checkout_CartController extends Mage_Checkout_CartController
    
 
     /**
-     * Retrieve shopping cart model object
-     *
-     * @return Mage_Checkout_Model_Cart
-     */
-    protected function _getCart()
-    {
-        return Mage::getSingleton('ekkitab_checkout/cart');
-    }
-
-    /**
      * Initialize product instance from request data
      *
      * @return Mage_Catalog_Model_Product || false

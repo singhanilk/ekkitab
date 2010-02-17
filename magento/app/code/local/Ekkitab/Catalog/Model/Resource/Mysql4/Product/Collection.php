@@ -27,7 +27,46 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Product_Collection extends Mage_Core
         $this->_init('ekkitab_catalog/product');
     }
 
-
+	public function setStoreId($id){
+		//Mage::log("Called setStoreId");
+		return $this;
+	}
+	
+	public function addIdFilter($ids){
+		//Mage::log("Called addIdFilter");
+		$this->addFieldToFilter('main_table.id', array('in'=>$ids));
+		return $this;
+	}
+	
+	public function addAttributeToSelect($id){
+		//Mage::log("Called addAttributeToSelect");
+		return $this;
+	}
+	
+	public function addOptionsToResult($id = null){
+		//Mage::log("Called addOptionsToResult");
+		return $this;
+	}
+	
+	public function addStoreFilter($id = null){
+		//Mage::log("Called addStoreFilter");
+		return $this;
+	}
+	
+	public function addUrlRewrite($id = null){
+		//Mage::log("Called addUrlRewrite");
+		return $this;
+	}
+	
+	public function getStoreId(){
+		//Mage::log("Called getStoreId");
+		return 1;
+	}
+		
+	public function setCustomOptions($data) {
+		return $this;
+	}
+	
        /**
      * Set/Get attribute wrapper
      *
@@ -41,96 +80,5 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Product_Collection extends Mage_Core
         throw new Exception("Invalid method ".get_class($this)."::".$method."(".print_r($args,1).")");
     }
 
-
-   /**
-     * Catalog Product Flat is enabled cache per store
-     *
-     * @var array
-     */
-    protected $_flatEnabled = array();
-
-    /**
-     * Product websites table name
-     *
-     * @var string
-     */
-    protected $_productWebsiteTable;
-
-    /**
-     * Product categories table name
-     *
-     * @var string
-     */
-    protected $_productCategoryTable;
-
-    /**
-     * Is add URL rewrites to collection flag
-     *
-     * @var bool
-     */
-    protected $_addUrlRewrite = false;
-
-    /**
-     * Add URL rewrite for category
-     *
-     * @var int
-     */
-    protected $_urlRewriteCategory = '';
-
-    /**
-     * Is add minimal price to product collection flag
-     *
-     * @var bool
-     */
-    protected $_addMinimalPrice = false;
-
-    /**
-     * Is add final price to product collection flag
-     *
-     * @var unknown_type
-     */
-    protected $_addFinalPrice = false;
-
-    /**
-     * Cache for all ids
-     *
-     * @var array
-     */
-    protected $_allIdsCache = null;
-
-    /**
-     * Is add tax percents to product collection flag
-     *
-     * @var bool
-     */
-    protected $_addTaxPercents = false;
-
-    /**
-     * Product limitation filters
-     *
-     * Allowed filters
-     *  store_id
-     *  category_id
-     *  category_is_anchor
-     *  visibility
-     *  website_ids
-     *
-     * @var array
-     */
-    protected $_productLimitationFilters    = array();
-
-    /**
-     * Category product count select
-     *
-     * @var Zend_Db_Select
-     */
-    protected $_productCountSelect = null;
-
-    /**
-     * @var bool
-     */
-    protected $_isWebsiteFilter = false;
-
-    
-
 }
+   

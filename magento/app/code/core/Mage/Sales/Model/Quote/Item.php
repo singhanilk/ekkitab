@@ -258,7 +258,7 @@ class Mage_Sales_Model_Quote_Item extends Mage_Sales_Model_Quote_Item_Abstract
     {
         $product = $this->_getData('product');
         if (($product === null) && $this->getProductId()) {
-            $product = Mage::getModel('catalog/product')
+            $product = Mage::getModel('ekkitab_catalog/product')
                 ->setStoreId($this->getQuote()->getStoreId())
                 ->load($this->getProductId());
             $this->setProduct($product);
