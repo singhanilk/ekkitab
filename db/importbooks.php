@@ -204,12 +204,12 @@ ini_set("display_errors", 1);
     */
     function insertBook($book, $db, $language, $shipregion, $infosource) {
 
-       $book['thumbnail'] = getHash($book['thumbnail']);
+       //$book['thumbnail'] = getHash($book['thumbnail']);
        $book['image'] = getHash($book['image']);
 
        $query = "insert into books (`isbn10`, `isbn`, `author`, `binding`, `publisher`, `title`, `pages`, " .
-                "`language`, `bisac1`, `cover_thumb`, `image`, `weight`, " .
-                "`dimension`, `edition`, `shipping_region`, `info_source`, `sourced_from`, `new`, `rewrite_url`, `bisac_codes`, delivery_period) values (";
+                "`language`, `bisac1`, `image`, `weight`, " .
+                "`dimension`, `edition`, `shipping_region`, `info_source`, `sourced_from`, `bisac_codes`, delivery_period) values (";
 
        $query = $query . "'" . $book['isbn'] . "'".",";
        $query = $query . "'" . $book['isbn13'] . "'".",";
@@ -222,7 +222,6 @@ ini_set("display_errors", 1);
        $query = $query . "'" . $book['catcode'] . "'" . ",";
        #$query = $query . "'" . $book['catcode'][1] . "'" . ",";
        #$query = $query . "'" . $book['catcode'][2] . "'" . ",";
-       $query = $query . "'" . $book['thumbnail'] . "'" . ",";
        $query = $query . "'" . $book['image'] . "'" . ",";
        $query = $query . "'" . $book['weight'] . "'" . ",";
        $query = $query . "'" . $book['dimension'] . "'".",";
@@ -230,8 +229,6 @@ ini_set("display_errors", 1);
        $query = $query . "'" . $shipregion . "'" . ",";
        $query = $query . "'" . $infosource . "'" . ",";
        $query = $query . "'" . $book['sourced_from'] . "'" . ",";
-       $query = $query . "0" . ",";
-       $query = $query . "'" . $book['rewrite_url'] . "'". ",";
        $query = $query . "'" . $book['bisac_codes'] . "'". ",";
        $query = $query . $book['DELIVERY_PERIOD'] . ");";
        if (! $result = mysqli_query($db, $query)) {

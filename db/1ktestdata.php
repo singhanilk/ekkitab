@@ -44,7 +44,6 @@ class Parser {
 			$book['edition']        = $data[13];
 			$book['sourced_from']   = $data[12];
 			$book['bisac'][0]       = $data[14];
-			$book['thumbnail']      = $this->escape(trim($data[2]));
 			$book['image']          = $this->escape(trim($data[2]));
 			$book['isbn']           = "";
 			$book['DELIVERY_PERIOD']    = 14;
