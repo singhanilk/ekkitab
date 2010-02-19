@@ -84,8 +84,7 @@ class Parser {
             $book['weight'] = trim(substr($line, 797,  7)) / 1.6;
             $book['dimension'] = (trim(substr($line, 804, 5)) / 100)*2.54 . "x" . (trim(substr($line, 809, 5))/100)*2.54 . "x" . (trim(substr($line, 814, 5))/100)*2.54;
             $book['pubcode'] = trim(substr($line, 827,  4));
-            $book['thumbnail'] = $book['isbn13'].".jpg";
-            $book['image'] = $book['thumbnail'];
+            $book['image'] = $book['isbn13'].".jpg";
             $book['sourced_from'] = "US";
 			$book['DELIVERY_PERIOD'] = 14 ;
             return($book);

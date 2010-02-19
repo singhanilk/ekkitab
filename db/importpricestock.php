@@ -187,7 +187,8 @@
 
             //convert the list price to INR
             $b = $currency[str_replace("'", "", $bookprice['CURRENCY'])];
-            $bookprice['LIST_PRICE'] = $bookprice['LIST_PRICE'] * $b;
+			$bookprice['LIST_PRICE'] = $bookprice['LIST_PRICE'] * $b;
+			
 
             // discount computation
             $tmpPrice = $bookprice['LIST_PRICE'] * ( $bookprice['SUPPLIERS_DISCOUNT'] / 100);

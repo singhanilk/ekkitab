@@ -78,7 +78,7 @@ public class BookIndex {
 
 	    String sql = "select title, author, bisac_codes, sourced_from, isbn, " +
                      "image, list_price, discount_price, in_stock, binding, " +
-                     "language, short_description, description, delivery_period from books where product_id = " + bookId;
+                     "language, short_description, description, delivery_period from books where id = " + bookId;
         Statement stmt = connection.createStatement();
         ResultSet result = stmt.executeQuery(sql);
 
@@ -194,7 +194,7 @@ public class BookIndex {
     }
 
 	private int[] getRange() throws Exception {
-	    String sql = "select min(product_id), max(product_id) from books";
+	    String sql = "select min(id), max(id) from books";
         Statement stmt = connection.createStatement();
         ResultSet result = stmt.executeQuery(sql);
         int range[] = new int[2];

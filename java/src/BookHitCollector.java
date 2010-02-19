@@ -22,6 +22,9 @@ public class BookHitCollector extends TopFieldDocCollector {
     private Map<String, Integer> countMap = new HashMap<String, Integer>();
     private Set<String> uniques = new HashSet<String>(); 
     private String fieldname = "";
+    private long calls = 0;
+    private long fstop = 0;
+    private long fcheck = 0;
 
     public BookHitCollector(IndexSearcher searcher, IndexReader reader, Sort sorter, int maxSearchResults, String category) throws IOException {
         super(reader, sorter, maxSearchResults);
@@ -35,9 +38,14 @@ public class BookHitCollector extends TopFieldDocCollector {
     }
 
     public void collect(int doc, float score) {
-        //super.collect(doc, score);
+        calls++;
+        long fstart = System.currentTimeMillis();
+        
+        super.collect(doc, score);
         try {
+            long ftmp = System.currentTimeMillis(); 
             Document document = searcher.doc(doc);
+            fcheck += (System.currentTimeMillis() - ftmp); 
             if (document != null) {
                Field field = document.getField("entityId");
                String id = null;
@@ -60,10 +68,23 @@ public class BookHitCollector extends TopFieldDocCollector {
         catch (Exception e) {
             System.err.println("ERROR: " + e.getMessage());
         }
+        fstop += (System.currentTimeMillis() - fstart);
     }
 
     public Map<String, Integer> getCounts() {
         return countMap;
+    }
+
+    public long getTime() {
+        return (fstop/1000);
+    }
+
+    public long getCheckTime() {
+        return (fcheck/1000);
+    }
+
+    public long getCalls() {
+        return (calls);
     }
 }
 
