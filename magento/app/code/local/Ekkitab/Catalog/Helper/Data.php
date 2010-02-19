@@ -145,22 +145,22 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
 		$url='';
 		if(isset($author) && strlen(trim($author)) > 0)
 		{
+			$author = urlencode(preg_replace('#[^A-Za-z0-9\_]+#', '-', $author));
+			//this is to remove '-' from end of string if any
+			if(substr($author,-1,1)=='-'){
+				$author = substr($author,0,-1);
+			}
 			$url=$author."__";
-		}
-		//this is to remove - from end of string
-		if(substr($url,-1,1)=='-'){
-			$url = substr($url,0,-1);
 		}
 
 		$url=$url.$title;
-		//this is to remove - from end of string
+		$url = urlencode(preg_replace('#[^A-Za-z0-9\_]+#', '-', $url));
+		//this is to remove '-' from end of title string if any
 		if(substr($url,-1,1)=='-'){
 			$url = substr($url,0,-1);
 		}
 		
-		$url=$url."__".$id;
-		$url = urlencode(preg_replace('#[^A-Za-z0-9\_]+#', '-', $url));
-		$url = $url.".html";
+		$url=$url."__".$id.".html";
 		return $url;
 	}
 

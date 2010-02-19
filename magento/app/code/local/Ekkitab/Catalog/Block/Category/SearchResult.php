@@ -459,7 +459,7 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
      */
     public function getAddToWishlistUrl($productId)
     {
-        return $this->getUrl('wishlist/index/add',array('product'=>$productId));
+        return $this->getUrl('ekkitab_wishlist/index/add',array('product'=>$productId));
     }
 
     /**
