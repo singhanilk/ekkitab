@@ -295,24 +295,28 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 
     public function getPageUrl($page)
     {
-        return $this->getPagerUrl(array($this->helper('ekkitab_catalog')->getCategoryVarName()=>$this->helper('ekkitab_catalog')->getEscapedQueryCategoryPath(),$this->helper('ekkitab_catalog')->getPageNoVarName()=>$page,$this->helper('ekkitab_catalog')->getQueryParamName()=>$this->helper('ekkitab_catalog')->getEscapedQueryText()));
+        return $this->getPagerUrl(array($this->helper('ekkitab_catalog')->getCategoryVarName()=>$this->helper('ekkitab_catalog')->getEscapedQueryCategoryPath(),$this->helper('ekkitab_catalog')->getPageNoVarName()=>$page));
     }
 
     public function getSubCategorySearchUrl($categoryPath,$page)
     {
-        return $this->getPagerUrl(array($this->helper('ekkitab_catalog')->getCategoryVarName()=>$categoryPath,$this->helper('ekkitab_catalog')->getPageNoVarName()=>$page,$this->helper('ekkitab_catalog')->getQueryParamName()=>$this->helper('ekkitab_catalog')->getEscapedQueryText()));
+        return $this->getPagerUrl(array($this->helper('ekkitab_catalog')->getCategoryVarName()=>$categoryPath,$this->helper('ekkitab_catalog')->getPageNoVarName()=>$page));
     }
 
-	 public function getPagerUrl($params=array())
+	 public function getPagerUrl($params=array(),$queryParams=array())
     {
-		$url = $this->getUrl('*/*/*');
+		$url = '*/*/*/';
 		if(is_array($params)){
 			foreach ($params as $param => $value) {
                if(isset($value) && strlen($value) > 0){
-				   $url  = $url.$param."/".$value."/";
+				  $url  = $url.$param."/".$value."/";
 			   }
             }
         }
+        $urlParams = array();
+        $urlParams['_current']  = true;
+        $urlParams['_query']    = $queryParams;
+		$url = $this->getUrl($url,$urlParams);
         return $url;
     }
 

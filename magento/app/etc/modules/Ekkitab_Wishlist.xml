@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+		<Ekkitab_Wishlist>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Ekkitab_Wishlist>
+    </modules>
+</config>
