@@ -34,11 +34,13 @@ public class BookIndex {
     private CategoryLevel rootcategory = new CategoryLevel();
 
     private long timer[] = new long[3];
-    private static final int MAXDESC_SIZE = 100;
+    private static final int MAXDESC_SIZE = 40;
+    private String xmlfile = null;
 
-    public BookIndex(String indexDir, String db, String user, String password) throws Exception {
+    public BookIndex(String indexDir, String xmlfile, String db, String user, String password) throws Exception {
         this.user = user;
         this.password = password;
+        this.xmlfile = xmlfile;
         Directory d  = FSDirectory.getDirectory(indexDir);
         indexWriter = new IndexWriter(d,new StandardAnalyzer(),true);
         indexWriter.setUseCompoundFile(true);
@@ -356,7 +358,7 @@ public class BookIndex {
         trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         trans.setOutputProperty(OutputKeys.INDENT, "yes");
 
-        FileWriter fw = new FileWriter(new File("categories.xml"));
+        FileWriter fw = new FileWriter(new File(xmlfile));
         StreamResult result = new StreamResult(fw);
         DOMSource source = new DOMSource(dom);
 
@@ -406,14 +408,14 @@ public class BookIndex {
     }
 
     public static void main(String[] args) {
-        if (args.length < 4) {
+        if (args.length < 5) {
             System.out.println("Insufficient arguments.");
-            System.out.println("Usage: BookIndex <index_dir> <db_host> <user> <password>");
+            System.out.println("Usage: BookIndex <index_dir> <categories.xml file> <db_host> <user> <password>");
             return;
         }
         else {
             try {
-                BookIndex bookIndex = new BookIndex(args[0], args[1], args[2], args[3]);
+                BookIndex bookIndex = new BookIndex(args[0], args[1], args[2], args[3], args[4]);
                 bookIndex.runIndex();
             }
             catch(Exception e) {
