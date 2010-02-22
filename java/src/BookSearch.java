@@ -339,6 +339,7 @@ public class BookSearch {
        }
 
        if (!category.equals("")) {
+            category = category.toLowerCase();
             String[] levels = category.split("/");
             searchcats = getSearchCategories(levels);
             searchlevel = levels.length+1;
