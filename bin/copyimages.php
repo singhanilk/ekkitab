@@ -52,7 +52,7 @@ ini_set("display_errors", 1);
       $newfile = gethash($file);
       $imagePath = getImagePath($newfile);
       if (!is_dir(IMAGE_TARGET . $imagePath))
-          mkdir(IMAGE_TARGET . $imagePath, 755, true); 
+          mkdir(IMAGE_TARGET . $imagePath, 0755, true); 
       $success = copy($sourcedir . "/" . $file, IMAGE_TARGET . $imagePath . "/" . $newfile);
       if (! $success) {
         $files_failed++;
