@@ -26,6 +26,7 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
 
 	/**
      * Page Number
+
      *
      * @var int
      */
@@ -80,14 +81,43 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
      * @param   string $query
      * @return  string
      */
-    public function getCustomSearchResultByIndexUrl($query = null)
+    public function getSearchResultByIndexUrl($query = null,$params=null)
     {
-        return $this->_getUrl('ekkitab_catalog/search/index', array('_query' => array(
-            self::QUERY_VAR_NAME => $query
-        )));
+		$urlprefix = 'ekkitab_catalog/search/index';
+		$url='';
+		if(!is_null($params) && is_array($params)){
+			foreach ($params as $param => $value) {
+               if(isset($value) && strlen($value) > 0){
+				  $url  = $url.$param."/".$value."/";
+			   }
+            }
+        }  
+		if(isset($url) && strlen($url) > 0){
+			$url= $urlprefix."/".$url;
+		}else{
+			$url= $urlprefix;
+		}
+        $urlParams = array();
+        $urlParams['_current']  = true;
+        $urlParams['_query']    = array(self::QUERY_VAR_NAME =>$query);
+		$url = $this->_getUrl($url,$urlParams);
+        return $url;
     }
 
 
+    /**
+     * Retrieve result page url
+     *
+     * @param   string $query
+     * @return  string
+     */
+    public function getFormSearchResultByIndexUrl($query = null)
+    {
+		return $this->_getUrl('ekkitab_catalog/search/index', array('_query' => array(
+          self::QUERY_VAR_NAME => $query
+        )));
+    }
+	
 	/**
      * Retrieve search query text
      *
@@ -125,13 +155,14 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
      */
     public function getEncodedString($url)
     {
-		$url  = str_replace($this->_repArr, "_", $url);
-		$url = preg_replace('#[^A-Za-z0-9\_]+#', '-', $url);
+		//this code was to remove special characters and replace it with url compatible characters... now not neccessary. taken care in lucene search itself
+		//$url  = str_replace($this->_repArr, "_", $url);
+		//$url = preg_replace('#[^A-Za-z0-9\_]+#', '-', $url);
 		
 		//this is to remove - from end of string
-		if(substr($url,-1,1)=='-'){
-			$url = substr($url,0,-1);
-		}
+		//if(substr($url,-1,1)=='-'){
+		//	$url = substr($url,0,-1);
+		//}
 		return(urlencode($url));
 	}
 
@@ -142,6 +173,7 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
      */
     public function getProductUrl($author,$title,$id)
     {
+		$urlPrefix='ekkitab_catalog/product/view/book/';
 		$url='';
 		if(isset($author) && strlen(trim($author)) > 0)
 		{
@@ -160,7 +192,7 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
 			$url = substr($url,0,-1);
 		}
 		
-		$url=$url."__".$id.".html";
+		$url=$urlPrefix.$url."__".$id.".html";
 		return $url;
 	}
 
@@ -174,17 +206,10 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
     {
 		if (is_null($this->_categoryPath)) {
 			$this->_categoryPath = $this->_getRequest()->getParam($this->getCategoryVarName());
-			//Mage::log("In helper ....before decoding....=> ".$this->_categoryPath);
 			if ($this->_categoryPath === null) {
                 $this->_categoryPath = '';
             } else {
-                $this->_categoryPath = trim($this->_categoryPath);
-				// implement the new encrypting function here... replace all '-' with '' and '__' with /
-
-               // $this->_categoryPath = urldecode(trim($this->_categoryPath));
-				//Mage::log("In helper ....after  decoding....=> ".$this->_categoryPath);
-				$this->_categoryPath = Mage::helper('core/string')->cleanString($this->_categoryPath);
-				//Mage::log("In helper ....after cleaning ....=> ".$this->_categoryPath);
+				$this->_categoryPath = Mage::helper('core/string')->cleanString(trim($this->_categoryPath));
             }
 		}
         return $this->_categoryPath;
