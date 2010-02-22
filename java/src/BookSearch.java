@@ -21,38 +21,125 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.log4j.Logger;
 import org.apache.log4j.RollingFileAppender;
 import org.apache.log4j.LogManager;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.dom.DOMSource;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 import java.util.*;
 import java.io.*;
 
 public class BookSearch {
 
+    private static Set<String> discardwords = null;
+    private static Set<String> searchfields = null;
+    private static int allInstances = 0;
+    private static Logger logger = null; 
+    private static final int MAXHITS = 1000;
+    private static CategoryLevel rootcategory = null;
+    private static Properties properties = null;
+
     private String indexDir;
     private IndexSearcher searcher = null;
     private IndexReader reader = null;
     private Sort sorter = new Sort();
     private int instanceId = 0; 
-
-    private static Set<String> discardwords = null;
-    private static Set<String> searchfields = null;
-    private static int allInstances = 0;
-    private static Logger logger = null; 
     private Map<String, Integer> catMap = null;
 
-    private static final int MAXHITS = 1000;
+    private class CategoryLevel {
+       private Map<String, CategoryLevel> map = null;
+       public CategoryLevel() {
+           map = new HashMap<String, CategoryLevel>(); 
+       }
+       public CategoryLevel put(String key, String value) {
+           if ((value == null) || (value.length() == 0)) {
+              putKey(key);
+              return null;
+           }
+           if (map.containsKey(key)) {
+                CategoryLevel nextvalue = map.get(key);
+                nextvalue.putKey(value);
+                return nextvalue;
+           }                        
+           else {
+               CategoryLevel nextvalue = new CategoryLevel(); 
+               nextvalue.putKey(value); 
+               map.put(key, nextvalue);
+               return nextvalue;
+           }
+       }                
+       private void putKey(String key) {
+           if (!map.containsKey(key)) {
+              CategoryLevel nextvalue = new CategoryLevel(); 
+              map.put(key, nextvalue);
+           }
+       }        
+
+       public Set<String> getKeys() {
+           return map.keySet();
+       }
+
+       public CategoryLevel get(String key) {
+           if (map.containsKey(key))
+               return map.get(key);
+           else
+               return null;
+       }
+    }
+
+    private void saveCategory(Element node, CategoryLevel cat, int level) {
+        String name = node.getAttribute("name");
+        NodeList nodelist = node.getElementsByTagName("Level"+(level+1));
+        for (int i = 0; i < nodelist.getLength(); i++) {
+            Node nextnode = nodelist.item(i);
+            if (nextnode.getNodeType() == Node.ELEMENT_NODE) {
+                CategoryLevel nextcat = cat.put(name, ((Element)nextnode).getAttribute("name")); 
+                saveCategory((Element)nextnode, nextcat, level+1);
+            }
+        }
+    }
+
+    private CategoryLevel initCategories() throws Exception {
+        String categoryinfofile = properties.getProperty("categoriesfile.path");
+        if (categoryinfofile == null) {
+            System.out.println("Category Info file is NULL");
+            throw new Exception("Missing property: category information file.");
+        }
+        
+        File file = new File(categoryinfofile);
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        org.w3c.dom.Document dom = db.parse(file);
+        dom.getDocumentElement().normalize();
+        NodeList nodelist = dom.getElementsByTagName("Level1");
+        CategoryLevel rootcategory = new CategoryLevel();
+        for (int i = 0; i < nodelist.getLength(); i++) {
+            Node node = nodelist.item(i);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                saveCategory((Element)node, rootcategory, 1);
+            }
+       }
+       return rootcategory;
+    }
 
     static {
         logger = LogManager.getLogger("BookSearch.class");
         discardwords = new HashSet<String>();
         searchfields = new HashSet<String>();
-        //properties = new Properties(); 
-        //InputStream is = null;
-        //try { 
-        //    is = BookSearch.class.getClassLoader().getResourceAsStream("search.properties");
-        //    properties.load(is); 
-        //} 
-        //catch (IOException e) { 
-        //} 
+        properties = new Properties(); 
+        try { 
+            InputStream is = BookSearch.class.getClassLoader().getResourceAsStream("search.properties");
+            properties.load(is); 
+        } 
+        catch (IOException e) { 
+            System.out.println("Caught Exception during load of properties...");
+        } 
         //RollingFileAppender appndr=(RollingFileAppender)logger.getAppender("EKK");
         //appndr.setFile(properties.getProperty("logfile", "search.log"));
         //appndr.activateOptions();
@@ -64,12 +151,24 @@ public class BookSearch {
         searchfields.add("title");
         searchfields.add("author");
         searchfields.add("isbn");
+        try {
+            rootcategory = new BookSearch().initCategories();
+        }
+        catch (Exception e) {
+            logger.fatal("Failed category initialization. "+e.getMessage());
+            rootcategory = null;
+        }
     }
     
     public BookSearch(String indexDir) throws Exception {
+        if (rootcategory == null)
+            throw new Exception("Initialization Failed in first check.");
         try {
-            this.indexDir = indexDir;
-            Directory dir = FSDirectory.getDirectory(indexDir);
+            if (indexDir != null) 
+                this.indexDir = indexDir;
+            else
+                this.indexDir = properties.getProperty("searchdir.path");
+            Directory dir = FSDirectory.getDirectory(this.indexDir);
             if (IndexReader.isLocked(dir)) {
                 IndexReader.unlock(dir);
                 logger.debug("["+instanceId+"] Index Directory locked. Trying to unlock...");
@@ -79,12 +178,17 @@ public class BookSearch {
         }
         catch (Exception e) {
             logger.debug("["+instanceId+"] "+e.getMessage());
+            throw new Exception("Initialization failed in second check.");
         }
         synchronized (BookSearch.class) {
             instanceId = ++allInstances;
             if (allInstances >= 1000000)
                 allInstances = 0;
         }
+    }
+
+    private BookSearch() {
+        System.out.println("In the initialization....");
     }
 
     private String getFieldValue(Field fd) {
@@ -118,7 +222,7 @@ public class BookSearch {
         return book;
     }
 
-    private List<Map<String, String>> getBooks(ScoreDoc[] hits, String nextcategorylabel, int start, int end) 
+    private List<Map<String, String>> getBooks(ScoreDoc[] hits, int start, int end) 
                         throws Exception {
 
         int index = 0;
@@ -135,15 +239,15 @@ public class BookSearch {
                         result.add(getBook(doc));
                       }
                   }
-                  String key = getFieldValue(doc.getField(nextcategorylabel));
-                  if (key != null) {
-                      if (key.length() > 0) {
-                          if (catMap.containsKey(key))
-                              catMap.put(key, new Integer(((Integer)catMap.get(key)).intValue() + 1));
-                          else 
-                              catMap.put(key, new Integer("1"));
-                      }
-                  }
+                  //String key = getFieldValue(doc.getField(nextcategorylabel));
+                  //if (key != null) {
+                   //   if (key.length() > 0) {
+                    //      if (catMap.containsKey(key))
+                     //         catMap.put(key, new Integer(((Integer)catMap.get(key)).intValue() + 1));
+                      //    else 
+                       //       catMap.put(key, new Integer("1"));
+                     // }
+                 // }
                }
             }
         }
@@ -154,11 +258,23 @@ public class BookSearch {
         return result;
     }
 
+    private CategoryLevel getSearchCategories(String[] categories) {
+        CategoryLevel node = rootcategory;
+        if (categories != null) {
+            for(int i = 0; (i < categories.length) && (node != null); i++) {
+                node = node.get(categories[i]);
+            }
+        }
+        return node;
+    }
+
     public Map<String, Object> searchBook(String category, String query, int pageSz, int page) throws Exception {
 
        Map<String, Object> result = new HashMap<String, Object>();
        List<Map<String, String>> books = new ArrayList<Map<String, String>>();
        Map<String, Integer> counts = null;
+       CategoryLevel searchcats = rootcategory;
+       int searchlevel = 1;
 
 
        String usesearchfield = null;
@@ -176,10 +292,9 @@ public class BookSearch {
 
        int startIndex = (page - 1) * pageSz;
        int endIndex   = startIndex + pageSz;
-       String nextcategorylabel = null;
 
-       //QueryParser qpt = new QueryParser("title", new StandardAnalyzer());
-       QueryParser qpt = new QueryParser("title", new SimpleAnalyzer());
+       QueryParser qpt = new QueryParser("title", new StandardAnalyzer());
+       //QueryParser qpt = new QueryParser("title", new SimpleAnalyzer());
 
        String modquery = "";
        StringBuffer sb = new StringBuffer();
@@ -223,12 +338,10 @@ public class BookSearch {
             }
        }
 
-       nextcategorylabel = "level1_real";
-
        if (!category.equals("")) {
             String[] levels = category.split("/");
-            int depth = levels.length + 1;
-            nextcategorylabel = "level"+depth+"_real";
+            searchcats = getSearchCategories(levels);
+            searchlevel = levels.length+1;
             String prelude = "";
             sb.append(" ");
             for (int i = 0; i<levels.length; i++) {
@@ -271,10 +384,36 @@ public class BookSearch {
                 }
 
                 if ((docs != null) && (docs.length > 0)) {
-                    books = getBooks(docs, nextcategorylabel, startIndex, endIndex);
+                    books = getBooks(docs, startIndex, endIndex);
                 }
                 fstop = System.currentTimeMillis();
                 logger.debug("["+instanceId+"] Books collected in: "+(fstop - fstart)/1000+" sec.");
+
+                final BitSet hits = new BitSet(reader.maxDoc());
+                int catsize = 0;
+
+                fstart = System.currentTimeMillis();
+                if (searchcats != null) {
+                    Set<String> cats = searchcats.getKeys();
+                    catsize = cats.size();
+                    for (String catname: cats) {
+                        hits.clear();
+                        //logger.debug("["+instanceId+"] Hit count is: "+hits.cardinality());
+                        String newquery = modquery + " +level"+searchlevel+":"+catname.replaceAll("\\W+", "");
+                        //logger.debug("["+instanceId+"] New Query: "+newquery);
+                        Query newLuceneQuery = qpt.parse(newquery);
+                        //logger.debug("["+instanceId+"] New Lucene Query: "+newLuceneQuery.toString());
+                        searcher.search(newLuceneQuery, new HitCollector() { 
+                                                               public void collect(int doc, float score) {
+                                                                   hits.set(doc);
+                                                               }
+                                                            });
+                        if (hits.cardinality() > 0)
+                            catMap.put(catname, hits.cardinality()); 
+                    }
+                }
+                fstop = System.currentTimeMillis();
+                logger.debug("["+instanceId+"] Hits counted in "+catsize+" categories in: "+(fstop - fstart)+" millisec.");
 
                 result.put("books", books);
                 result.put("counts", catMap);
@@ -315,22 +454,30 @@ public class BookSearch {
                 Iterator iter = books.iterator();
                 while (iter.hasNext()) {
                     Map<String, String> book = (Map<String, String>)iter.next();
+                    System.out.println("--------------------------------------");
                     System.out.println("Author: "+book.get("author"));
                     System.out.println("Title: "+book.get("title"));
-                    System.out.println("Url: "+book.get("url"));
-                    System.out.println("Image: "+book.get("image"));
-                    System.out.println("Price: "+book.get("listprice"));
-                    System.out.println("Discounted Price: "+book.get("discountprice"));
-                    System.out.println("Id: "+book.get("entityId"));
-                    System.out.println("ISBN: "+book.get("isbn"));
-                    System.out.println("Delivery Time: "+book.get("delivertime"));
-                    System.out.println("Binding: "+book.get("binding"));
-                    System.out.println("Language: "+book.get("language"));
-                    System.out.println("In Stock: "+book.get("instock"));
-                    System.out.println("Short Description: "+book.get("shortdesc"));
+                    //System.out.println("Url: "+book.get("url"));
+                    //System.out.println("Image: "+book.get("image"));
+                    //System.out.println("Price: "+book.get("listprice"));
+                    //System.out.println("Discounted Price: "+book.get("discountprice"));
+                    //System.out.println("Id: "+book.get("entityId"));
+                    //System.out.println("ISBN: "+book.get("isbn"));
+                    //System.out.println("Delivery Time: "+book.get("delivertime"));
+                    //System.out.println("Binding: "+book.get("binding"));
+                    //System.out.println("Language: "+book.get("language"));
+                    //System.out.println("In Stock: "+book.get("instock"));
+                    //System.out.println("Short Description: "+book.get("shortdesc"));
                     System.out.println("--------------------------------------");
                 }
                 System.out.println("The number of books returned is: "+books.size());
+              }
+              Map<String, Integer> catcount = (Map<String, Integer>)results.get("counts");
+              if (catcount != null) {
+                Set<String> keys = catcount.keySet();
+                for (String key: keys) {
+                    System.out.println("["+key+"] --> ["+catcount.get(key)+"]");
+                } 
               }
               System.out.print("Finished? ");
               String response = br.readLine();
