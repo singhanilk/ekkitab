@@ -22,6 +22,8 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
   
     const QUERY_CATEGORY_PATH = 'category';
 	
+	protected $_repArr= array(" & ", "&");
+
 	/**
      * Page Number
      *
@@ -115,6 +117,53 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
         return $this->htmlEscape($this->getCurrentCategoryPath());
     }
 
+
+    /**
+     * Retrieve HTML escaped search query
+     * @param string
+     * @return string
+     */
+    public function getEncodedString($url)
+    {
+		$url  = str_replace($this->_repArr, "_", $url);
+		$url = preg_replace('#[^A-Za-z0-9\_]+#', '-', $url);
+		
+		//this is to remove - from end of string
+		if(substr($url,-1,1)=='-'){
+			$url = substr($url,0,-1);
+		}
+		return(urlencode($url));
+	}
+
+    /**
+     * Retrieve HTML escaped search query
+     * @param string ,string ,int
+     * @return string
+     */
+    public function getProductUrl($author,$title,$id)
+    {
+		$url='';
+		if(isset($author) && strlen(trim($author)) > 0)
+		{
+			$author = urlencode(preg_replace('#[^A-Za-z0-9\_]+#', '-', $author));
+			//this is to remove '-' from end of string if any
+			if(substr($author,-1,1)=='-'){
+				$author = substr($author,0,-1);
+			}
+			$url=$author."__";
+		}
+
+		$url=$url.$title;
+		$url = urlencode(preg_replace('#[^A-Za-z0-9\_]+#', '-', $url));
+		//this is to remove '-' from end of title string if any
+		if(substr($url,-1,1)=='-'){
+			$url = substr($url,0,-1);
+		}
+		
+		$url=$url."__".$id.".html";
+		return $url;
+	}
+
 	
 	/**
      * Retrieve search query text
@@ -178,7 +227,7 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
      */
     public function getWishListAddUrl($productId)
     {
-        return $this->_getUrl('wishlist/index/add', array('product'=>$productId));
+        return $this->_getUrl('ekkitab_wishlist/index/add', array('product'=>$productId));
     }
 	
 	/**

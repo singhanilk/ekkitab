@@ -35,7 +35,7 @@ Default layout, loads most of the pages
     <default>
 
         <reference name="top.links">
-            <block type="wishlist/links" name="wishlist_link">
+            <block type="ekkitab_wishlist/links" name="wishlist_link">
                 <action method="addWishlistLink"></action>
             </block>
         </reference>
@@ -50,7 +50,7 @@ Customer account pages, rendered for all tabs in dashboard
     <customer_account>
         <!-- Mage_Wishlist -->
         <reference name="customer_account_navigation">
-            <action method="addLink" translate="label" module="wishlist" ifconfig="wishlist/general/active"><name>wishlist</name><path>wishlist/</path><label>My Wishlist</label></action>
+            <action method="addLink" translate="label" module="wishlist" ifconfig="wishlist/general/active"><name>wishlist</name><path>ekkitab_wishlist/</path><label>My Wishlist</label></action>
         </reference>
     </customer_account>
 
@@ -69,18 +69,18 @@ Customer account home dashboard layout
 Wishlist pages
 -->
 
-    <wishlist_index_index>
+    <ekkitab_wishlist_index_index>
         <!-- Mage_Wishlist -->
         <update handle="customer_account"/>
         <reference name="content">
-            <block type="wishlist/customer_wishlist" name="customer.wishlist" template="wishlist/view.phtml"/>
+            <block type="ekkitab_wishlist/customer_wishlist" name="customer.wishlist" template="wishlist/view.phtml"/>
         </reference>
         <reference name="left">
             <action method="unsetChild"><name>wishlist_sidebar</name></action>
         </reference>
-    </wishlist_index_index>
+    </ekkitab_wishlist_index_index>
 
-    <wishlist_index_share>
+    <ekkitab_wishlist_index_share>
         <!-- Mage_Wishlist -->
         <update handle="customer_account"/>
         <reference name="content">
@@ -89,12 +89,12 @@ Wishlist pages
         <reference name="left">
             <action method="unsetChild"><name>wishlist_customer_sidebar</name></action>
         </reference>
-    </wishlist_index_share>
+    </ekkitab_wishlist_index_share>
 
-    <wishlist_shared_index>
+    <ekkitab_wishlist_shared_index>
         <!-- Mage_Wishlist -->
         <reference name="content">
-            <block type="wishlist/share_wishlist" name="customer.wishlist" template="wishlist/shared.phtml"/>
+            <block type="ekkitab_wishlist/share_wishlist" name="customer.wishlist" template="wishlist/shared.phtml"/>
         </reference>
-    </wishlist_shared_index>
+    </ekkitab_wishlist_shared_index>
 </layout>

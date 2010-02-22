@@ -20,26 +20,18 @@
 		$resStr = '';
 		//$str = eregi_replace(" +", " ", $str);
 		$array = explode(" ", $str);
-		for($i=0;$i < $count ;$i++)
- 		{
-			$resStr=$resStr." ".$array[$i];
+		$arrCount = count($array); 
+		if($arrCount >0){
+			$count = $count > $arrCount ? $arrCount : $count;
+			for($i=0;$i < $count ;$i++)
+ 			{
+				$resStr=$resStr." ".$array[$i];
+			}
 		}
      return $resStr;
 	}
  
  $results=$this->getProductCollection();
-	$repArr1= array(" & ",
-					"&");
-	$repArr2= array(" (",
-					"(",
-					") ",
-					")",
-					": ",
-					":",
-					", ",
-					",",
-					";",
-					" ");
 if(!is_null($results)){
   $bookList = $results->get("books");
   if (!java_is_null($bookList)) {
@@ -60,18 +52,13 @@ if(!is_null($results)){
 			$val = java_values($subcats->get($key));
 			$key =  java_values($key);
 			$urlKey = $key;
-			$urlKey = str_replace($repArr1, "_", $urlKey);
-			$urlKey = preg_replace('#[^A-Za-z0-9\_]+#', '-', $urlKey);//($repArr2, "-", $urlKey);
+			$urlKey = $this->helper('ekkitab_catalog')->getEncodedString($key);
 			
-			//this is to remove - from end of string
-			if(substr($urlKey,-1,1)=='-'){
-				$urlKey = substr($urlKey,0,-1);
-			}
 			// this is to append the child categories to the link.
 			if(isset($curr_cp) && strlen($curr_cp) > 0 ){
-				$cp =  $curr_cp."__". urlencode($urlKey);
+				$cp =  $curr_cp."__". $urlKey;
 			}else{
-				$cp =  urlencode($urlKey);
+				$cp =  $urlKey;
 			}
 ?>		<li><a href="<?php echo $this->getSubCategorySearchUrl($cp,1) ?>"><?php echo ucwords($key). "[". $val ."]"?></a></li>
 <?php	endforeach;	?>
@@ -144,7 +131,7 @@ if(!is_null($results)){
 			$author = strlen($book->get("author")) > 0 ? $book->get("author") : "Unknown";
 			$title = $book->get("title");
 			$image = $book->get("image");
-			$id = $book->get("entityId");
+			$id = java_values($book->get("entityId"));
 			$listPrice = java_values($book->get("listprice")) ;
 			$discPrice = java_values($book->get("discountprice"));
 			$isbn = java_values($book->get("isbn"));
@@ -152,8 +139,8 @@ if(!is_null($results)){
 			$binding=strlen($book->get("binding")) > 0 ? ucfirst($book->get("binding")) : "Not Available" ;
 			$language=strlen($book->get("language")) > 0 ? $book->get("language") : "Unknown";
 			$stock=java_values($book->get("instock"));
-//			$shortDesc=java_values($book->get("shortdesc"));
-			$shortDesc='Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves.';
+			$shortDesc=java_values($book->get("shortdesc"));
+			//$shortDesc='Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves.';
 			
 			//$url = $book->get("url");
 			//$url="catalog/product/view/id/".$id;
@@ -165,15 +152,8 @@ if(!is_null($results)){
 			$shortDesc= ($shortDesc =="Not Available") ? "" : $shortDesc;
 			
 			$shortDesc = getShortenedString($shortDesc,30);
-			if(isset($author) && strlen(trim($author)) > 0)
-			{
-				$bookName=$author."__";
-			}else{
-				$bookName="";
-			}
-			$bookName=$bookName.$title."__".$id;
-			$bookName = preg_replace('#[^A-Za-z0-9\_]+#', '-', $bookName);//($repArr2, "-", $urlKey);
-			$url="ekkitab_catalog/product/view/book/".$bookName.".html";
+
+			$url="ekkitab_catalog/product/view/book/".$this->helper('ekkitab_catalog')->getProductUrl($author,$title,$id);
 			
 	?>
 			<!-- searchRowBegins -->
@@ -196,7 +176,7 @@ if(!is_null($results)){
 			<div class="youSave">Save <?php echo Mage::helper('core')->currency($savings,true,false) ?> (<?php echo number_format($savingsPerct,2,'.','') ?>%)</div>
 			<div class="lineHeight14em"><?php echo $shippingTime ?></div>
 			<div class="youSave"><?php if($stock) { ?>In Stock<?php } else{?>Out of Stock<?php }?></div>
-			<a href="<?php echo $this->getAddToWishlistUrl($id)?>"><?php echo $this->__('Add to Wishlist') ?></a><br/>
+			<a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($id)?>"><?php echo $this->__('Add to Wishlist') ?></a><br/>
 			
 			<!--a href="#" onclick="setLocation('<?php echo $this->getAddToCartUrl($id)?>')"><img src="<?php echo $this->getSkinUrl('images/btn_add_to_cart.gif') ?>" alt="<?php echo $this->__('Add to Cart') ?>"></a-->
 			</div><!-- priceArea -->
