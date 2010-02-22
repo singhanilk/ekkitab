@@ -235,7 +235,7 @@ public class BookSearch {
                if (doc != null) {
                   String id = getFieldValue(doc.getField("entityId"));
                   if ((id != null) && (uniques.add(id))) {
-                      if ((index++ >= start) && (index < end)) {
+                      if (index++ >= start) {
                         result.add(getBook(doc));
                       }
                   }
