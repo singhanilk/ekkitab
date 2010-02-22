@@ -28,17 +28,18 @@
 		<?php if($_category->getIsActive()): 
 				$randNo = 10 * $_category->getPopularity();
 				$url =  $_category->getCategory();
-				$url = str_replace($repArr1, "_", $url);
+				$url =  $this->helper('ekkitab_catalog')->getEncodedString($url);
+				//$url = str_replace($repArr1, "_", $url);
 				//	$url = str_replace($repArr2, "-", $url);
-				$url = preg_replace('#[^A-Za-z0-9\_]+#', '-', $url);
-				$url ="ekkitab_catalog/search/index/category/".$url;
+				//$url = preg_replace('#[^A-Za-z0-9\_]+#', '-', $url);
+				$url =$this->helper('ekkitab_catalog')->getCustomSearchResultByIndexUrl(null,array('category' => $url));
 
 			?>
 			<li>
 				<!--a href="<?php echo $_category->getUrlPath() ?>"><?php echo $this->htmlEscape($_category->getCategory()) ?></a></li-->
-				<a href="<?php echo $this->getUrl($url) ?>"><?php echo $this->htmlEscape($_category->getCategory()) ?></a></li>
+				<a href="<?php echo $url ?>"><?php echo $this->htmlEscape($_category->getCategory()) ?></a></li>
 		<?php endif; ?>
 	<?php endforeach ?>
 <?php endif; ?>
 </ul>
-<div class="seeAll"><a href="ekkitab_catalog/category/viewAll" >See all &raquo;</a></div><!-- seeAll -->
+<div class="seeAll"><a href="<?php echo $this->getUrl('ekkitab_catalog/category/viewAll') ?>" >See all &raquo;</a></div><!-- seeAll -->

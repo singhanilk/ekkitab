@@ -56,7 +56,7 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 			));
    
 			$queryText =$this->helper('ekkitab_catalog')->getEscapedQueryText();
-			$curr_cp =$this->helper('ekkitab_catalog')->getCurrentCategoryPath();
+			$curr_cp =$this->getCurrentCategoryPath();
 			$parentCatArr = array();
 			if(isset($curr_cp) && strlen($curr_cp) > 0 ){
 				$parentCatArr = explode("__",$curr_cp);
@@ -77,6 +77,7 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 				
 			}
 
+			// This code is to break the category path inot a parent child hierarchy... for breadcrumb display.
 			if(!is_null($parentCatArr) && sizeof($parentCatArr) > 0){
 				$parentCatPath = ''; // The parent category of the current Category
 				$arrSize = sizeof($parentCatArr);
@@ -94,14 +95,7 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 						$parentCatUrl = '';
 					}
 
-					$cat = ucwords(str_replace("-"," ",str_replace("_"," & ",$cat)));
-					$cat = ucwords(str_replace("-"," ",$cat));
-					//substr($curr_cp,0,$parentCatUrlEndIndex);
-
-					//$currCat = $parentCatArr[$arrSize-1];
-					//if($arrSize > 1){
-					//	$parentCat = $parentCatArr[$arrSize-2];	
-					
+					$cat = ucwords($this->getDecodedString($cat));
 					$breadcrumbs->addCrumb($cat, array(
 						'label'=>$cat,
 						'title'=>$cat,
@@ -168,18 +162,10 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 		try{
 			require($javaIncFile);
 			$search = new java("BookSearch",$indexFilePath );
-			//Mage::log("In SearchResult....getEscapedQueryCategoryPath from helper => ".$this->helper('ekkitab_catalog')->getCurrentCategoryPath());
-			//Mage::log("In SearchResult....getEscapedQueryCategoryPath from block => ".$this->getCurrentCategoryPath());
-			//Mage::log("In SearchResult....getEscapedQueryText from helper => ".$this->helper('ekkitab_catalog')->getEscapedQueryText());
-			//Mage::log("In SearchResult....getEscapedQueryText from block => ".$this->getQueryText());
-			//Mage::log("In SearchResult....before decoding....plain category path=> ". $this->helper('ekkitab_catalog')->getCurrentCategoryPath());
-			//Mage::log("In SearchResult....after decoding.... :". urldecode($this->helper('ekkitab_catalog')->getEscapedQueryCategoryPath()).":");
-			$categoryPath = $this->getCurrentCategoryPath();
-			$categoryPath = str_replace('__', "/", $categoryPath);
-			$categoryPath = str_replace('-', "", $categoryPath);
-			$categoryPath = str_replace('_', "", $categoryPath);
-
-			$results = $search->searchBook(urldecode($categoryPath),$this->helper('ekkitab_catalog')->getEscapedQueryText(), $this->getPageSize(), $this->getCurrentPageNumber());
+			Mage::log("In SearchResult....before decoding....plain category path=> ". $this->getCurrentCategoryPath());
+			Mage::log("In SearchResult....after decoding.... :". $this->getDecodedString($this->getCurrentCategoryPath()));
+			$categoryPath = strtolower(str_replace('__', "/", $this->getCurrentCategoryPath())); // this is to parse the parents and child categories seperated by '__'
+			$results = $search->searchBook($this->getDecodedString($categoryPath),$this->helper('ekkitab_catalog')->getEscapedQueryText(), $this->getPageSize(), $this->getCurrentPageNumber());
 		}
 		catch(Exception $e)
 		{
@@ -232,9 +218,6 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 	   if (!$this->getData('total_result_count')) {
             if($this->getProductCollection()){
 				$results = $this->_productCollection;
-				//$authorCount=java_values($results->get("hitcount-author"));
-				//$titleCount=java_values($results->get("hitcount-title"));
-				//$size = max($authorCount,$titleCount);
 				$size = java_values($results->get("hits"));
 			}else{
 				$size = 0;
@@ -295,7 +278,7 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 
     public function getPageUrl($page)
     {
-        return $this->getPagerUrl(array($this->helper('ekkitab_catalog')->getCategoryVarName()=>$this->helper('ekkitab_catalog')->getEscapedQueryCategoryPath(),$this->helper('ekkitab_catalog')->getPageNoVarName()=>$page));
+        return $this->getPagerUrl(array($this->helper('ekkitab_catalog')->getCategoryVarName()=>$this->getCurrentCategoryPath(),$this->helper('ekkitab_catalog')->getPageNoVarName()=>$page));
     }
 
     public function getSubCategorySearchUrl($categoryPath,$page)
@@ -354,6 +337,16 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 			$this->_categoryPath = $this->helper('ekkitab_catalog')->getEscapedQueryCategoryPath();
 		}
 		return $this->_categoryPath;
+    }
+
+	/**
+     * Retrieve search result count
+     *
+     * @return string
+     */
+    public function getDecodedString($str)
+    {
+		return urldecode($str);
     }
 
 	/**

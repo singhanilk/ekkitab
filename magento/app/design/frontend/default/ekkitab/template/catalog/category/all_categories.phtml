@@ -11,9 +11,7 @@
 <h4> All Categories </h4>
 
 <?php
-
 	$categories = Mage::helper('catalog/category')->getStoreCategories();
-
 ?>
 <?php $_count = is_array($categories)?count($categories):$categories->count(); ?>
 
@@ -22,9 +20,12 @@
 	<dd class="no-padding no-border">
 		<ol>
 		<?php foreach ($categories as $category): ?>
-			<?php if($category->getIsActive()): ?>
+			<?php if($category->getIsActive()):
+				$url = $this->helper('ekkitab_catalog')->getEncodedString($category->getName());
+				$url = $this->helper('ekkitab_catalog')->getCustomSearchResultByIndexUrl(null,array('category' => $url));
+			?>
 			 <li>
-				<a href="<?php echo $this->getCategoryUrl($category) ?>"<?php if ($this->isCategoryActive($category)): ?> class="active"<?php endif ?>><?php echo $this->htmlEscape($category->getName()) ?></a> </li>
+				<a href="<?php echo $url ?>"<?php if ($this->isCategoryActive($category)): ?> class="active"<?php endif ?>><?php echo $this->htmlEscape($category->getName()) ?></a> </li>
 			<?php endif; ?>
 		<?php endforeach ?>
 		</ol>

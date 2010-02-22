@@ -153,7 +153,7 @@ if(!is_null($results)){
 			
 			$shortDesc = getShortenedString($shortDesc,30);
 
-			$url="ekkitab_catalog/product/view/book/".$this->helper('ekkitab_catalog')->getProductUrl($author,$title,$id);
+			$url=$this->helper('ekkitab_catalog')->getProductUrl($author,$title,$id);
 			
 	?>
 			<!-- searchRowBegins -->
@@ -175,8 +175,7 @@ if(!is_null($results)){
 			<div class="lineHeight14em">MRP Price : <?php echo Mage::helper('core')->currency($listPrice,true,false) ?></div>
 			<div class="youSave">Save <?php echo Mage::helper('core')->currency($savings,true,false) ?> (<?php echo number_format($savingsPerct,2,'.','') ?>%)</div>
 			<div class="lineHeight14em"><?php echo $shippingTime ?></div>
-			<div class="youSave"><?php if($stock) { ?>In Stock<?php } else{?>Out of Stock<?php }?></div>
-			<a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($id)?>"><?php echo $this->__('Add to Wishlist') ?></a><br/>
+			<div class="youSave"><?php if($stock) { ?>In Stock</div><?php } else{?>Out of Stock </div><a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($id)?>"><?php echo $this->__('Add to Wishlist') ?></a><br/><?php }?>		
 			
 			<!--a href="#" onclick="setLocation('<?php echo $this->getAddToCartUrl($id)?>')"><img src="<?php echo $this->getSkinUrl('images/btn_add_to_cart.gif') ?>" alt="<?php echo $this->__('Add to Cart') ?>"></a-->
 			</div><!-- priceArea -->
