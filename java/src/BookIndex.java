@@ -34,7 +34,7 @@ public class BookIndex {
     private CategoryLevel rootcategory = new CategoryLevel();
 
     private long timer[] = new long[3];
-    private static final int MAXDESC_SIZE = 40;
+    private static final int MAXDESC_SIZE = 100;
     private String xmlfile = null;
 
     public BookIndex(String indexDir, String xmlfile, String db, String user, String password) throws Exception {
@@ -199,7 +199,8 @@ public class BookIndex {
             }
 
             if (shortdesc.length() > MAXDESC_SIZE) {
-                shortdesc = shortdesc.substring(0, shortdesc.lastIndexOf(' ', MAXDESC_SIZE));
+                int index = shortdesc.lastIndexOf(' ', MAXDESC_SIZE);
+                shortdesc = shortdesc.substring(0, (index > 0 ? index : MAXDESC_SIZE));
                 shortdesc = shortdesc + " ...";
             }
 
