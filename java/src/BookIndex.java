@@ -22,6 +22,8 @@ import javax.xml.transform.OutputKeys;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.dom.DOMSource;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 public class BookIndex {
     private Document d = null;
@@ -36,13 +38,18 @@ public class BookIndex {
     private long timer[] = new long[3];
     private static final int MAXDESC_SIZE = 100;
     private String xmlfile = null;
+    private int startId = 0;
+    private boolean newIndex;
 
-    public BookIndex(String indexDir, String xmlfile, String db, String user, String password) throws Exception {
+    public BookIndex(String indexDir, String xmlfile, boolean newIndex, String db, String user, String password, int startId) throws Exception {
         this.user = user;
         this.password = password;
         this.xmlfile = xmlfile;
+        this.newIndex = newIndex;
+        if (startId > 0)
+            this.startId = startId;
         Directory d  = FSDirectory.getDirectory(indexDir);
-        indexWriter = new IndexWriter(d,new StandardAnalyzer(),true);
+        indexWriter = new IndexWriter(d,new StandardAnalyzer(),newIndex);
         indexWriter.setUseCompoundFile(true);
         jdbcUrl = "jdbc:mysql://"+db+":3306/reference";
         open();
@@ -134,6 +141,40 @@ public class BookIndex {
                 node = node.put(parent, child);
             } 
         }
+    }
+
+    private void saveFileCategory(Element node, CategoryLevel cat, int level) {
+        String name = node.getAttribute("name");
+        NodeList nodelist = node.getElementsByTagName("Level"+(level+1));
+        for (int i = 0; i < nodelist.getLength(); i++) {
+            Node nextnode = nodelist.item(i);
+            if (nextnode.getNodeType() == Node.ELEMENT_NODE) {
+                CategoryLevel nextcat = cat.put(name, ((Element)nextnode).getAttribute("name")); 
+                saveFileCategory((Element)nextnode, nextcat, level+1);
+            }
+        }
+    }
+
+    private CategoryLevel initCategories() throws Exception {
+
+        CategoryLevel rootcategory = new CategoryLevel();
+
+        if (xmlfile != null) {
+            File file = new File(xmlfile);
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            org.w3c.dom.Document dom = db.parse(file);
+            dom.getDocumentElement().normalize();
+            NodeList nodelist = dom.getElementsByTagName("Level1");
+            for (int i = 0; i < nodelist.getLength(); i++) {
+                Node node = nodelist.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    saveFileCategory((Element)node, rootcategory, 1);
+                }
+            }
+        }
+        
+        return rootcategory;
     }
 
 	private List<Map<String, String>> getBook(int bookId) throws Exception {
@@ -376,6 +417,15 @@ public class BookIndex {
         try {
             int range[] = getRange();
 
+            if (startId > 0) { 
+                range[0] = startId;
+                System.out.println("Starting index from id: " + startId);
+            }
+
+            if (!newIndex) {
+                rootcategory = initCategories();
+            }
+
             for (int i = (range[0] == 0 ? 1 : range[0]); i <= range[1]; i++) {
                 
                 fstart = System.currentTimeMillis();
@@ -409,14 +459,16 @@ public class BookIndex {
     }
 
     public static void main(String[] args) {
-        if (args.length < 5) {
+        if (args.length < 7) {
             System.out.println("Insufficient arguments.");
-            System.out.println("Usage: BookIndex <index_dir> <categories.xml file> <db_host> <user> <password>");
+            System.out.println("Usage: BookIndex <index_dir> <categories.xml file> <newindex> <db_host> <user> <password> <startvalue>");
             return;
         }
         else {
             try {
-                BookIndex bookIndex = new BookIndex(args[0], args[1], args[2], args[3], args[4]);
+                boolean newindex = args[2].equalsIgnoreCase("true") ? true : false;
+                int startcount = Integer.parseInt(args[6]);
+                BookIndex bookIndex = new BookIndex(args[0], args[1], newindex, args[3], args[4], args[5], startcount);
                 bookIndex.runIndex();
             }
             catch(Exception e) {

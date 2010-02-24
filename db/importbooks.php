@@ -240,6 +240,19 @@ ini_set("display_errors", 1);
        }
     }
 
+    function getStartId($db) {
+        $query = "select max(id) from books";
+        if (! $result = mysqli_query($db, $query)) {
+           fatal("Failed to get maximum count: ". mysqli_error($db), $query);
+           return(0); 
+        }
+	    $row = mysqli_fetch_array($result);
+        if ($row[0] == null)
+            return 1;
+        else
+            return $row[0] + 1;
+    }
+
    /** 
     * The main program. 
     */
@@ -271,6 +284,9 @@ ini_set("display_errors", 1);
         $errorcount   = 0;
         $filenotfound = 0;
         $shipregion   = 0; 
+    
+        $startid = getStartId($db);
+        debug("Start Id: $startid");
     
         while ($line = fgets($fh)) {
             $book = $parser->getBook($line);
@@ -305,5 +321,5 @@ ini_set("display_errors", 1);
     $start = (float) array_sum(explode(' ', microtime()));
     start($argc, $argv);
     $end = (float) array_sum(explode(' ', microtime()));
-    echo "Processing time: " . sprintf("%.2f", ($end - $start)/60) . " minutes.\n";
+    debug("Processing time: " . sprintf("%.2f", ($end - $start)/60) . " minutes.\n");
 ?>

@@ -41,7 +41,7 @@ ini_set("display_errors", 1);
   
   if ($argc < 5) {
      echo "No arguments.\n";
-     echo "Usage: ".$argv[0]." <host> <user> <password> <imagebasedir>\n";
+     echo "Usage: ".$argv[0]." <host> <user> <password> <magento directory>\n";
      exit(1);
   }
 
@@ -63,14 +63,12 @@ ini_set("display_errors", 1);
   for ($i = $min; $i <= $max; $i++) {
        $image = getImagePath($i);
        $fullimagepath = $argv[4] . "/media/catalog/product/" . $image;
-       //echo "Image path is: $fullimagepath\n";
        if (file_exists($fullimagepath)) 
             $imagecount['present']++;
        else 
             $imagecount['missing']++;
-       break;
        if (($i % 10000) == 0)
-           echo "Processed $i books.\n";
+           echo "Processed $i books. Present [" . $imagecount['present'] . "] Missing [" . $imagecount['missing'] . "]\n";
   }
 
   echo "Images present: ".$imagecount['present']."\n";
