@@ -205,7 +205,7 @@ ini_set("display_errors", 1);
     function insertBook($book, $db, $language, $shipregion, $infosource) {
 
        //$book['thumbnail'] = getHash($book['thumbnail']);
-       $book['image'] = getHash($book['image']);
+       $book['image'] = getHashedPath($book['image']);
 
        $query = "insert into books (`isbn10`, `isbn`, `author`, `binding`, `publisher`, `title`, `pages`, " .
                 "`language`, `bisac1`, `image`, `weight`, " .

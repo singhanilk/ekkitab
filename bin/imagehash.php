@@ -24,13 +24,13 @@ ini_set("display_errors", 1);
 // most ISBNs have the same first two characters ie. 9 and 7, they all end up in
 // the same directory if not rehashed using this function.
 
-function gethash($file) {
+function getHashedPath($file) {
     $sum = 0;
     $name = substr($file, 0, strrpos($file, "."));
     for ($i = 0; $i<(strlen($name)); $i++)  {
         $sum += substr($name,$i,$i+1) + 0;
     }
-    return (chr(65 + $sum%26)) . substr($name,strlen($name)-1,1) . $file;
+    return ("I" . $sum%100 . "/" . "J" . substr($name,strlen($name)-2,2) . "/" . $file);
 }
 ?>
 

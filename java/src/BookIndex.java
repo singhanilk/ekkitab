@@ -212,7 +212,7 @@ public class BookIndex {
 
             image = result.getString("image");
             image = image == null ? "" : image;
-            image = "/" + image.charAt(0) + "/" + image.charAt(1) + "/" + image;
+            //image = "/" + image.charAt(0) + "/" + image.charAt(1) + "/" + image;
 
             url = isbn;
             url = url == null ? "" : url;

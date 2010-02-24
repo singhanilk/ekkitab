@@ -34,34 +34,59 @@ ini_set("display_errors", 1);
          return ("/" . $firstchar . "/" . $secondchar);
    }
 
+   function copyfiles($directory) {
+        global $files_copied;
+        global $files_failed;
+        global $files_ignored;
+
+        if (!is_dir($directory))
+            return;
+
+        echo "Copying files in directory: $directory\n";
+        $count = 0;
+
+        $dir = opendir($directory);
+        if (! $dir) {
+            echo "Failed to open source directory. $directory\n";
+            return;
+        }
+        while ($file = readdir($dir)) {
+            if (($file == ".") || ($file == ".."))
+                continue;
+            if (is_dir($file)) {
+                copyfiles($directory/$file); 
+            }
+            else {
+                $newfile = str_replace(".JPG", ".jpg", $file);
+                if ((strlen($newfile) > 4) && (substr($newfile, strlen($newfile) - 4, 4) == ".jpg")) {
+                    $imagePath = getHashedPath($newfile);
+                    if (!is_dir(dirname(IMAGE_TARGET . "/" . $imagePath)))
+                        mkdir(dirname(IMAGE_TARGET . "/" . $imagePath), 0755, true); 
+                    $success = copy($directory . "/" . $file, IMAGE_TARGET . "/" . $imagePath);
+                    if (! $success) {
+                        $files_failed++;
+                    }
+                    else {
+                        $files_copied++;
+                    }
+                }
+                else 
+                    $files_ignored++;
+            }
+        }
+        echo "Copied: $files_copied  Failed: $files_failed  Ignored: $files_ignored.\n";
+   }
+
   if ($argc < 2) {
       echo "Insufficient arguments. Exiting...\n";
       echo "Usage: $argv[0] <source image directory>\n";
       exit (1);
   }
-  $dir = opendir($argv[1]);
-  if (! $dir) {
-      echo "Failed to open source directory. $argv[1]\n";
-  }
-  $sourcedir = $argv[1];
   $files_copied = 0;
   $files_failed = 0;
-  while ($file = readdir($dir)) {
-      if (($file == ".") || ($file == ".."))
-          continue;
-      $newfile = gethash($file);
-      $imagePath = getImagePath($newfile);
-      if (!is_dir(IMAGE_TARGET . $imagePath))
-          mkdir(IMAGE_TARGET . $imagePath, 0755, true); 
-      $success = copy($sourcedir . "/" . $file, IMAGE_TARGET . $imagePath . "/" . $newfile);
-      if (! $success) {
-        $files_failed++;
-      }
-      else {
-        $files_copied++;
-      }
-      if (($files_copied%1000) == 0)
-         echo "Copied $files_copied files to the target location. [$files_failed] failed.\n";
-  }
+  $files_ignored = 0;
+
+  copyfiles($argv[1]);
+
 ?>
 
