@@ -14,6 +14,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.dom.DOMSource;
+import org.w3c.dom.Element;
+
 public class BookIndex {
     private Document d = null;
     private Connection connection = null; 
@@ -22,14 +31,16 @@ public class BookIndex {
 	private String jdbcUrl = "jdbc:mysql://localhost:3306/reference";
     private static final int  LEVELS = 7;
     private IndexWriter indexWriter = null;
-    private int  testcount = 0;
-    private Map<String, Integer>  testcounthash = new HashMap<String, Integer>();
+    private CategoryLevel rootcategory = new CategoryLevel();
 
     private long timer[] = new long[3];
+    private static final int MAXDESC_SIZE = 100;
+    private String xmlfile = null;
 
-    public BookIndex(String indexDir, String db, String user, String password) throws Exception {
+    public BookIndex(String indexDir, String xmlfile, String db, String user, String password) throws Exception {
         this.user = user;
         this.password = password;
+        this.xmlfile = xmlfile;
         Directory d  = FSDirectory.getDirectory(indexDir);
         indexWriter = new IndexWriter(d,new StandardAnalyzer(),true);
         indexWriter.setUseCompoundFile(true);
@@ -72,13 +83,66 @@ public class BookIndex {
         return levels;
     }
 
+    private class CategoryLevel {
+       private Map<String, CategoryLevel> map = null;
+       public CategoryLevel() {
+           map = new HashMap<String, CategoryLevel>(); 
+       }
+       public CategoryLevel put(String key, String value) {
+           if ((value == null) || (value.length() == 0)) {
+              putKey(key);
+              return null;
+           }
+           if (map.containsKey(key)) {
+                CategoryLevel nextvalue = map.get(key);
+                nextvalue.putKey(value);
+                return nextvalue;
+           }                        
+           else {
+               CategoryLevel nextvalue = new CategoryLevel(); 
+               nextvalue.putKey(value); 
+               map.put(key, nextvalue);
+               return nextvalue;
+           }
+       }                
+       private void putKey(String key) {
+           if (!map.containsKey(key)) {
+              CategoryLevel nextvalue = new CategoryLevel(); 
+              map.put(key, nextvalue);
+           }
+       }        
+
+       public Set<String> getKeys() {
+           return map.keySet();
+       }
+
+       public CategoryLevel get(String key) {
+           if (map.containsKey(key))
+               return map.get(key);
+           else
+               return null;
+       }
+    }
+
+    private void saveCategories(String[] categories) {
+
+        if (categories != null) {
+            CategoryLevel node = rootcategory;
+            for (int i = 0; (i < categories.length) && (node != null); i++) {
+                String parent = categories[i];
+                String child = ((i + 1) >= categories.length ? null : categories[i+1]);
+                node = node.put(parent, child);
+            } 
+        }
+    }
+
 	private List<Map<String, String>> getBook(int bookId) throws Exception {
 
         List<Map<String, String>> books = new ArrayList<Map<String, String>>();
 
 	    String sql = "select title, author, bisac_codes, sourced_from, isbn, " +
                      "image, list_price, discount_price, in_stock, binding, " +
-                     "language, short_description, description, delivery_period from books where product_id = " + bookId;
+                     "language, short_description, description, delivery_period from books where id = " + bookId;
         Statement stmt = connection.createStatement();
         ResultSet result = stmt.executeQuery(sql);
 
@@ -134,6 +198,12 @@ public class BookIndex {
                 shortdesc = shortdesc == null ? "" : shortdesc;
             }
 
+            if (shortdesc.length() > MAXDESC_SIZE) {
+                int index = shortdesc.lastIndexOf(' ', MAXDESC_SIZE);
+                shortdesc = shortdesc.substring(0, (index > 0 ? index : MAXDESC_SIZE));
+                shortdesc = shortdesc + " ...";
+            }
+
             delivertime = result.getString("delivery_period");
             delivertime = delivertime == null ? "0" : delivertime;
 
@@ -142,7 +212,7 @@ public class BookIndex {
 
             image = result.getString("image");
             image = image == null ? "" : image;
-            image = "/" + image.charAt(0) + "/" + image.charAt(1) + "/" + image;
+            //image = "/" + image.charAt(0) + "/" + image.charAt(1) + "/" + image;
 
             url = isbn;
             url = url == null ? "" : url;
@@ -161,6 +231,8 @@ public class BookIndex {
                     String[] categories = getFullCategoryForCode(codes[i]);
                     fstop = System.currentTimeMillis();
                     timer[0] += fstop - fstart;
+                    if (categories.length > 0)
+                        saveCategories(categories);
                     if (categories != null) {
                         for (int j=0; j<categories.length; j++) {
                             int index = j+1;
@@ -194,7 +266,7 @@ public class BookIndex {
     }
 
 	private int[] getRange() throws Exception {
-	    String sql = "select min(product_id), max(product_id) from books";
+	    String sql = "select min(id), max(id) from books";
         Statement stmt = connection.createStatement();
         ResultSet result = stmt.executeQuery(sql);
         int range[] = new int[2];
@@ -244,6 +316,57 @@ public class BookIndex {
         }
     }
 
+    private Element[] buildDOM(CategoryLevel node, int level, org.w3c.dom.Document dom) {
+        List<Element> result = new ArrayList<Element>();
+        if (node == null)
+           return null;
+        Set<String> categories = node.getKeys();
+        Iterator it = categories.iterator();
+        while (it.hasNext()) {
+              String name = (String)it.next();
+              Element e = dom.createElement("Level"+level);
+              e.setAttribute("name", name);
+              Element[] newelements = buildDOM(node.get(name), level+1, dom);
+              if (newelements != null) {
+                for (Element element: newelements) {    
+                    e.appendChild(element);
+                }
+              }
+              result.add(e);
+        }
+        return result.toArray(new Element[0]); 
+    }
+
+    public void addReferenceDocument() throws Exception {
+
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        org.w3c.dom.Document dom = db.newDocument();
+
+        Element root = dom.createElement("Categories");
+        dom.appendChild(root);
+
+        Element[] elements = buildDOM(rootcategory, 1, dom); 
+
+        if (elements != null) {
+            for (Element element: elements) {    
+                root.appendChild(element);
+            }
+        }
+
+        TransformerFactory transfac = TransformerFactory.newInstance();
+        Transformer trans = transfac.newTransformer();
+        trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        trans.setOutputProperty(OutputKeys.INDENT, "yes");
+
+        FileWriter fw = new FileWriter(new File(xmlfile));
+        StreamResult result = new StreamResult(fw);
+        DOMSource source = new DOMSource(dom);
+
+        trans.transform(source, result);
+        fw.close();
+    }
+
     public void runIndex() throws Exception {
 
         long timer10kstart, timer10kend, fstart, fstop;
@@ -270,15 +393,12 @@ public class BookIndex {
                     System.out.println("Indexed: "+i+" books in "+(timer10kend - timer10kstart)/1000+" sec. ["+timer[0]/1000+"] ["+timer[1]/1000+"] ["+timer[2]/1000+"]");
                 }
             }
+            System.out.println("Indexing Completed. Adding reference document.");
+            addReferenceDocument();
+            System.out.println("Completed adding reference document.");
+            System.out.println("Optimizing Index. Will take a few minutes....");
             indexWriter.optimize();
             indexWriter.close();
-            System.out.println("Testcount: "+testcount);
-            Set keys = testcounthash.keySet();
-            Iterator iter = keys.iterator();
-            while (iter.hasNext()) {
-                String key = (String)iter.next();
-                System.out.println("Product Id: "+key+"  --  "+ testcounthash.get(key));
-            }
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -289,14 +409,14 @@ public class BookIndex {
     }
 
     public static void main(String[] args) {
-        if (args.length < 4) {
+        if (args.length < 5) {
             System.out.println("Insufficient arguments.");
-            System.out.println("Usage: BookIndex <index_dir> <db_host> <user> <password>");
+            System.out.println("Usage: BookIndex <index_dir> <categories.xml file> <db_host> <user> <password>");
             return;
         }
         else {
             try {
-                BookIndex bookIndex = new BookIndex(args[0], args[1], args[2], args[3]);
+                BookIndex bookIndex = new BookIndex(args[0], args[1], args[2], args[3], args[4]);
                 bookIndex.runIndex();
             }
             catch(Exception e) {

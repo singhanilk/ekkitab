@@ -174,7 +174,7 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
      */
     public function getPrice()
     {
-        return $this->getListPrice();
+        return $this->_getData('list_price');
     }
 
     /**
@@ -1182,7 +1182,7 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
         ));*/
 
 		// TODO: check if in stock... and then return true.
-        return true;
+        return $this->isInStock();
     }
 
     /**
@@ -1204,7 +1204,8 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
     public function isInStock()
     {
 		// TODO: check if in stock... and then return true.
-		return true; //$this->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED;
+		//$this->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED;
+        return $this->_getData('in_stock');
     }
 
     public function getAttributeText($attributeCode)
@@ -1233,9 +1234,30 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
      */
     public function getProductUrl($useSid = true)
     {
-        // construct the url here using <authorname>__<title>__<id>
+		$urlPrefix='ekkitab_catalog/product/view/book/';
+		$url='';
+		$author=$this->_getData('author');
+		$title=$this->getName();
+		$id=$this->_getData('id');
+		if(isset($author) && strlen(trim($author)) > 0)
+		{
+			$author = urlencode(preg_replace('#[^A-Za-z0-9\_]+#', '-', $author));
+			//this is to remove '-' from end of string if any
+			if(substr($author,-1,1)=='-'){
+				$author = substr($author,0,-1);
+			}
+			$url=$url.$author."__";
+		}
 
-		return '';
+		$url=$url.$title;
+		$url = urlencode(preg_replace('#[^A-Za-z0-9\_]+#', '-', $url));
+		//this is to remove '-' from end of title string if any
+		if(substr($url,-1,1)=='-'){
+			$url = substr($url,0,-1);
+		}
+		
+		$url=$urlPrefix.$url."__".$id.".html";
+		return $url;
     }
 
     public function formatUrlKey($str)

@@ -37,6 +37,9 @@
 						<product_bestboxedsets>
 							<table>ek_catalog_product_best_boxedsets</table>
 						</product_bestboxedsets>
+						<wishlist_item>
+							<table>wishlist_item</table>
+						</wishlist_item>
 				 </entities>
 			</ekkitab_catalog_resource_mysql4>
 		</models>

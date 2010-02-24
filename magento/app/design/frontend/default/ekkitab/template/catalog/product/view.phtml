@@ -35,6 +35,7 @@
     $_product = $this->getProduct();
 	if(!is_null($_product)){
 		$author = $_product->getAuthor();
+		$productUrl = $_product->getProductUrl();
 		$author = strlen($author) > 0 ? "by ".$author : "";
 		
 		$savingsPerct= ($_product->getListPrice() >0 )?	(($_product->getListPrice() - $_product->getDiscountPrice())/ $_product->getListPrice() ) * 100 : 10; 
@@ -47,7 +48,7 @@
 
 <form action="<?php echo $this->helper('ekkitab_catalog')->getCartUrl($_product->getId(),$this->helper('core/url')->getCurrentUrl()) ?>" method="post" id="product_addtocart_form">
 		<div class="bigImage">
-            <img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'image',false,null, 135); ?>">
+           <img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'image',false,null, 135); ?>">
         </div>
 		<div class="midArea">
 		<div class="finDetBkTitle"><?php echo $this->htmlEscape($_product->getTitle()) ?><span class="lineHeight14em"> <?php echo $author?></span></div><!-- authorEtc -->
