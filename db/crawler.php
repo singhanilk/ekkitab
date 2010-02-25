@@ -74,6 +74,10 @@ ini_set("display_errors", 1);
 	*/
 	function CrawlDir($path){
 		$TrackDir = opendir($path);
+		if(!$path){
+			debug("Failure to open $path");
+			return;
+		}
 		$filelist = array();
 	
 		while ($file = readdir($TrackDir)) {
@@ -107,10 +111,12 @@ ini_set("display_errors", 1);
 		 $list = getManifest($path);
 		if(!empty($list)){
 			 $commands = gencommands($path, $list);
+			 $error_commands = array();
 			 foreach($commands as $command){
 				  $output = array();
 				  exec($command, $output, $result);
 				  if($result > 0){
+					  $error_commands[] = $command; 
 					  debug("Failed to execute [$command]");
 					  debug("Error Message :-");
 					  foreach($output as $message){
@@ -123,6 +129,9 @@ ini_set("display_errors", 1);
 					  
 			}
 			$fh = fopen($path."/.processed","w");
+			foreach($error_commands as $command){
+				fputs($fh,$command."\n");
+			}
 			fclose($fh);
 		}
 	}
