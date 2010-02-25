@@ -24,41 +24,27 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-
+<script language="javascript">
+function showReviewBox(){
+	var reviewFormdiv =document.getElementById("reviewForm");
+	if(reviewFormdiv){
+		reviewFormdiv.style.display="block";
+		location.href="#review-form";
+	}
+}
+</script>
+<div class="finDetUserReview">
 <?php $_items = $this->getReviewsCollection()->getItems();?>
+<div class="userRevText"><?php if (count($_items)): ?><?php echo $this->__('%d', count($_items)) ?> <?php endif;?>User Review<?php if (count($_items)>1): ?>s<?php endif;?></div><!--userRevText -->
+<div class="writeRevLink"><a href="javascript:showReviewBox()">Write a Review</a></div>
+</div><!-- finDetUserReview -->
+<?php echo $this->getChildHtml('review_list_count') ?>
 <?php if (count($_items)):?>
-<div class="padder">
-    <div class="head head-alt2" id="customer-reviews">
-        <h4 class="title"><?php echo $this->__('Customer Reviews') ?></h4>
-    </div>
-
-    <ol>
-        <?php foreach ($_items as $_review):?>
-            <li>
-                <a href="<?php echo $this->getReviewUrl($_review->getId()) ?>"><strong><?php echo $this->htmlEscape($_review->getTitle()) ?></strong></a> <?php echo $this->__('Review by %s', $this->htmlEscape($_review->getNickname())) ?>
-                <table class="ratings-list" cellspacing="0">
-                    <tbody>
-                        <?php foreach ($_review->getRatingVotes() as $_vote): ?>
-                        <tr>
-                            <td class="label"><strong><?php echo $_vote->getRatingCode() ?></strong></td>
-                            <td>
-                                <div class="rating-box">
-                                    <div class="rating" style="width: <?php echo $_vote->getPercent() ?>%;"></div>
-                                </div>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <p><?php echo nl2br($this->htmlEscape($_review->getDetail())) ?> <?php echo $this->__('(Posted on %s)', $this->formatDate($_review->getCreatedAt()), 'long') ?></p>
-            </li>
-        <?php endforeach; ?>
-    </ol>
-
+	<?php foreach ($_items as $_review):?>
+		<div class="reviews"><?php echo nl2br($this->htmlEscape($_review->getDetail())) ?></div><!-- reviews -->
+		<div class="reviewee"><?php echo $this->htmlEscape($_review->getNickname()) ?> <?php echo $this->__('(Posted on %s)', $this->formatDate($_review->getCreatedAt()), 'long') ?></div><!-- reviewee -->
+	<?php endforeach; ?>
     <?php echo $this->getChildHtml('toolbar') ?>
-</div>
-<?php endif;?>
-
+<?php endif;?><a name="review-form"></a>
 <br/>
-
 <?php echo $this->getChildHtml('review_form') ?>

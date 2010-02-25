@@ -1133,7 +1133,9 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
 
     public function isVisibleInSiteVisibility()
     {
-        return in_array($this->getVisibility(), $this->getVisibleInSiteVisibilities());
+        //return in_array($this->getVisibility(), $this->getVisibleInSiteVisibilities());
+		return true;
+
     }
 
     /**

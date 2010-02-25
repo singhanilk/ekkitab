@@ -33,6 +33,7 @@
 <?php
     $_helper = $this->helper('catalog/output');
     $_product = $this->getProduct();
+	Mage::log("In view.phtml");
 	if(!is_null($_product)){
 		$author = $_product->getAuthor();
 		$productUrl = $_product->getProductUrl();
@@ -44,52 +45,47 @@
 		$image = $_product->getImage();
 ?>
 <div class="searchArea">
-<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
-
-<form action="<?php echo $this->helper('ekkitab_catalog')->getCartUrl($_product->getId(),$this->helper('core/url')->getCurrentUrl()) ?>" method="post" id="product_addtocart_form">
+	<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
 		<div class="bigImage">
            <img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'image',false,null, 135); ?>">
         </div>
 		<div class="midArea">
-		<div class="finDetBkTitle"><?php echo $this->htmlEscape($_product->getTitle()) ?><span class="lineHeight14em"> <?php echo $author?></span></div><!-- authorEtc -->
-		<div class="lineHeight14em"><span class="boldFont">ISBN:  <?php echo $_product->getIsbn() ?></span></div>
-		<div class="lineHeight14em"><span class="boldFont">Binding: <?php echo ucwords($_product->getBinding()) ?></span></div>
-		<div class="lineHeight14em"><span class="boldFont">Language : <?php echo ucwords($_product->getLanguage()) ?></span></div>
-		<div class="finDetSynop">
-			<?php echo $_product->getShortDescription() ?>
-		</div>
-		<!-- finDetSynop -->
-		
-		<div class="finDetUserReview">
-		 <?php echo $this->getReviewsSummaryHtml($_product, false, true)?>
-		</div><!-- finDetUserReview -->
-			<div class="reviews">Be the first to review this product.</div>
+			<div class="finDetBkTitle"><?php echo $this->htmlEscape($_product->getTitle()) ?><span class="lineHeight14em"> <?php echo $author?></span></div><!-- authorEtc -->
+			<div class="lineHeight14em"><span class="boldFont">ISBN:  <?php echo $_product->getIsbn() ?></span></div>
+			<div class="lineHeight14em"><span class="boldFont">Binding: <?php echo ucwords($_product->getBinding()) ?></span></div>
+			<div class="lineHeight14em"><span class="boldFont">Language : <?php echo ucwords($_product->getLanguage()) ?></span></div>
+			<div class="finDetSynop">
+				<?php echo $_product->getDescription() ?>
+			</div><!-- finDetSynop -->
+			
+			 <?php echo $this->getChildHtml('review_list')?>
 			<br class="clear"/>
 		</div><!-- midArea -->
+		
+		
+	<form action="<?php echo $this->helper('ekkitab_catalog')->getCartUrl($_product->getId(),$this->helper('core/url')->getCurrentUrl()) ?>" method="post" id="product_addtocart_form">
 		<div class="buyArea">
+			<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($_product->getDiscountPrice(),true,false) ?></div>
+			<div class="authorEtc">MRP : <?php echo Mage::helper('core')->currency($_product->getListPrice(),true,false) ?></div>
+			<div class="youSave">Save : <?php echo Mage::helper('core')->currency(($_product->getListPrice()-$_product->getDiscountPrice()),true,false) ?> (<?php echo number_format($savingsPerct,2,'.','') ?>%)</div>
+			<div class="authorEtc"><?php echo $shippingTime ?></div>
 
+			<?php echo $this->getChildHtml('addtocart') ?>
+			<?php echo $this->getChildHtml('addto') ?>
 
-		<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($_product->getDiscountPrice(),true,false) ?></div>
-		<div class="authorEtc">MRP : <?php echo Mage::helper('core')->currency($_product->getListPrice(),true,false) ?></div>
-		<div class="youSave">Save : <?php echo Mage::helper('core')->currency(($_product->getListPrice()-$_product->getDiscountPrice()),true,false) ?> (<?php echo number_format($savingsPerct,2,'.','') ?>%)</div>
-		<div class="authorEtc"><?php echo $shippingTime ?></div>
-
-		<?php echo $this->getChildHtml('addtocart') ?>
-		<?php echo $this->getChildHtml('addto') ?>
-
-		<!-- otherBut -->
-		<div class="dottedLineBig"></div>
-			<?php echo $this->getChildHtml('donate_book_blurb') ?>
-		</div>
-		<!-- buyArea -->
+			<!-- otherBut -->
+			<div class="dottedLineBig"></div>
+				<?php echo $this->getChildHtml('donate_book_blurb') ?>
+			</div>
 		<div class="clear"></div>
-		</div><!-- searchArea -->
 		<fieldset class="no-display">
 		  <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
 		  <input type="hidden" name="related_product" id="related-products-field" value="" />
 		</fieldset>
 
-</form>
+		</form>
+		<!-- buyArea -->
+		</div><!-- searchArea -->
 <script type="text/javascript">
 //<![CDATA[
     var productAddToCartForm = new VarienForm('product_addtocart_form');

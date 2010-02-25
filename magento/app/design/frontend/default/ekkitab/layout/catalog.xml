@@ -276,6 +276,12 @@ Product view
                 </block>
                 <action method="unsetCallChild"><child>container1</child><call>ifEquals</call><if>0</if><key>alias_in_layout</key><key>options_container</key></action>
                 <action method="unsetCallChild"><child>container2</child><call>ifEquals</call><if>0</if><key>alias_in_layout</key><key>options_container</key></action-->
+                <block type="ekkitab_review/product_view_list" name="product_review_list" as="review_list" template="review/product/view/list.phtml">
+					<block type="page/html_pager" name="product_review_list.toolbar" />
+					<block type="core/template" name="product_review_list.count" as="review_list_count" template="review/product/view/count.phtml" />
+					<block type="ekkitab_review/form" name="product.review.form" as="review_form"/>
+                </block>
+ 
             </block>
         </reference>
         <reference name="upsell_products">

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Ekkitab_Review>
+            <version>0.1</version>
+        </Ekkitab_Review>
+    </modules>
+	<global>
+		 <models>
+            <ekkitab_review>
+                <class>Ekkitab_Review_Model</class>
+                <resourceModel>ekkitab_review_mysql4</resourceModel>
+            </ekkitab_review>
+            <ekkitab_review_mysql4>
+                <class>Ekkitab_Review_Model_Mysql4</class>
+            </ekkitab_review_mysql4>
+        </models>
+		<blocks>
+			<ekkitab_review>
+				<class>Ekkitab_Review_Block</class>
+			</ekkitab_review>   
+		</blocks>
+	</global>
+	<frontend>
+        <routers>
+            <ekkitab_review>
+                <use>standard</use>
+                <args>
+                    <module>Ekkitab_Review</module>
+                    <frontName>ekkitab_review</frontName>
+                </args>
+            </ekkitab_review>
+        </routers>
+    </frontend>
+</config>

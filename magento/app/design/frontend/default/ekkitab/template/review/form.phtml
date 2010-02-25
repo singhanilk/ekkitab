@@ -24,12 +24,12 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="padder">
+<form action="<?php echo $this->getAction() ?>" method="post" id="review-form">
+<div id="reviewForm" class="padder hideReviewForm" >
 <div class="page-head">
     <h3><?php echo $this->__('Write Your Own Review') ?></h3>
 </div>
 <h4><?php echo $this->__("You're reviewing: %s", $this->htmlEscape($this->getProductInfo()->getName())) ?></h4>
-<form action="<?php echo $this->getAction() ?>" method="post" id="review-form">
 <fieldset>
     <?php if( $this->getRatings() && $this->getRatings()->getSize()): ?>
     <strong><?php echo $this->__('How do you rate this product?') ?><span class="required">*</span></strong><br/>
@@ -77,7 +77,9 @@
         <input type="image" src="<?php echo $this->getSkinUrl('images/btn_submit.gif');?>" alt="<?php echo $this->__('Submit Review') ?>"/>
     </div>
 </fieldset>
+</div>
 </form>
+
 <script type="text/javascript">
 //<![CDATA[
     var dataForm = new VarienForm('review-form');
@@ -113,4 +115,3 @@
     );
 //]]>
 </script>
-</div>

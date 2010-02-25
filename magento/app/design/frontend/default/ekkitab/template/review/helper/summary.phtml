@@ -27,4 +27,19 @@
 
 <div class="userRevText"><?php if ($this->getReviewsCount()): ?><?php echo $this->__('%d', $this->getReviewsCount()) ?><?php elseif ($this->getDisplayIfEmpty()): ?><?php endif; ?> User Reviews</div><!--userRevText -->
 <div class="writeRevLink"><a href="<?php echo $this->getReviewsUrl() ?>#review-form">Write a Review</a></div>
+<?php if ($this->getReviewsCount()): ?>
+    <div class="ratings">
+        <?php if ($this->getRatingSummary()):?>
+            <div class="rating-box">
+                <div class="rating" style="width:<?php echo $this->getRatingSummary() ?>%"></div>
+            </div>
+        <?php endif;?>
+        <a href="<?php echo $this->getReviewsUrl() ?>"><?php echo $this->__('%d Review(s)', $this->getReviewsCount()) ?></a>
+        <span class="pipe">|</span>
+        <a href="<?php echo $this->getReviewsUrl() ?>#review-form"><?php echo $this->__('Add Your Review') ?></a>
+    </div>
+<?php elseif ($this->getDisplayIfEmpty()): ?>
+    <p><a href="<?php echo $this->getReviewsUrl() ?>#review-form"><?php echo $this->__('Be the first to review this product') ?></a></p>
+<?php endif; ?>
+
 <!--writeRevLink -->
