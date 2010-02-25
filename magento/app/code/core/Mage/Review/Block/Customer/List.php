@@ -93,8 +93,8 @@ class Mage_Review_Block_Customer_List extends Mage_Customer_Block_Account_Dashbo
     protected function _beforeToHtml()
     {
         $this->_getCollection()
-            ->load()
-            ->addReviewSummary();
+            ->load();
+            //->addReviewSummary();
         return parent::_beforeToHtml();
     }
 

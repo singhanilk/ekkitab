@@ -45,6 +45,10 @@ function showReviewBox(){
 		<div class="reviewee"><?php echo $this->htmlEscape($_review->getNickname()) ?> <?php echo $this->__('(Posted on %s)', $this->formatDate($_review->getCreatedAt()), 'long') ?></div><!-- reviewee -->
 	<?php endforeach; ?>
     <?php echo $this->getChildHtml('toolbar') ?>
-<?php endif;?><a name="review-form"></a>
+<?php else:?>
+		<div class="reviews">Be the first to review this book</div><!-- reviews -->	
+		<div class="reviewee">&nbsp;</div><!-- reviewee -->
+
+<?php endif;?>
 <br/>
-<?php echo $this->getChildHtml('review_form') ?>
+<a name="review-form"></a><?php echo $this->getChildHtml('review_form') ?>

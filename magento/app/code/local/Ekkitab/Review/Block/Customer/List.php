@@ -11,8 +11,7 @@ class Ekkitab_Review_Block_Customer_List extends Mage_Review_Block_Customer_List
 
     protected function _construct()
     {
-        Mage::log("in the construct of customer review list....");
-		$this->_collection = Mage::getModel('ekkitab_review/review')->getProductCollection();
+		$this->_collection = Mage::getModel('ekkitab_review/review')->getCollection();
         $this->_collection
             ->addStoreFilter(Mage::app()->getStore()->getId())
             ->addCustomerFilter(Mage::getSingleton('customer/session')->getCustomerId())
