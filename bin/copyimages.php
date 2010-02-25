@@ -50,31 +50,40 @@ ini_set("display_errors", 1);
             echo "Failed to open source directory. $directory\n";
             return;
         }
-        while ($file = readdir($dir)) {
-            if (($file == ".") || ($file == ".."))
-                continue;
-            if (is_dir($file)) {
-                copyfiles($directory/$file); 
-            }
-            else {
-                $newfile = str_replace(".JPG", ".jpg", $file);
-                if ((strlen($newfile) > 4) && (substr($newfile, strlen($newfile) - 4, 4) == ".jpg")) {
-                    $imagePath = getHashedPath($newfile);
-                    if (!is_dir(dirname(IMAGE_TARGET . "/" . $imagePath)))
-                        mkdir(dirname(IMAGE_TARGET . "/" . $imagePath), 0755, true); 
-                    $success = copy($directory . "/" . $file, IMAGE_TARGET . "/" . $imagePath);
-                    if (! $success) {
-                        $files_failed++;
-                    }
-                    else {
-                        $files_copied++;
-                    }
-                }
-                else 
-                    $files_ignored++;
-            }
-        }
-        echo "Copied: $files_copied  Failed: $files_failed  Ignored: $files_ignored.\n";
+		
+		if(file_exists($directory/$file){
+			return;
+		}
+		else{
+			while ($file = readdir($dir)) {
+				if (($file == ".") || ($file == ".."))
+					continue;
+				if (is_dir($file)) {
+					copyfiles($directory/$file); 
+				}
+				else {
+					$newfile = str_replace(".JPG", ".jpg", $file);
+					if ((strlen($newfile) > 4) && (substr($newfile, strlen($newfile) - 4, 4) == ".jpg")) {
+						$imagePath = getHashedPath($newfile);
+						if (!is_dir(dirname(IMAGE_TARGET . "/" . $imagePath)))
+							mkdir(dirname(IMAGE_TARGET . "/" . $imagePath), 0755, true); 
+						$success = copy($directory . "/" . $file, IMAGE_TARGET . "/" . $imagePath);
+						if (! $success) {
+							$files_failed++;
+						}
+						else {
+							$files_copied++;
+						}
+					}
+					else 
+						$files_ignored++;
+				}
+				$pfile = $directory."/.processed";
+				$fh = fopen($pfile);
+				fclose($fh);
+			}
+		}
+			echo "Copied: $files_copied  Failed: $files_failed  Ignored: $files_ignored.\n";
    }
 
   if ($argc < 2) {
