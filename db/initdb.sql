@@ -318,7 +318,7 @@ INSERT INTO `core_config_data` (`config_id`, `scope`, `scope_id`, `path`, `value
 (449, 'default', 0, 'carriers/flatrate/active', '0'),
 (469, 'default', 0, 'carriers/ups/active', '0'),
 (516, 'default', 0, 'carriers/fedex/active', '0'),
-(615, 'default', 0, 'carriers/usps/active', '0');
+(615, 'default', 0, 'carriers/usps/active', '0'),
 (686, 'default', 0, 'payment/ccav/active', '1'),
 (687, 'default', 0, 'payment/ccav/title', 'Master / Visa Card'),
 (688, 'default', 0, 'payment/ccav/payment_action', 'AUTHORIZATION'),
@@ -337,7 +337,7 @@ INSERT INTO `core_config_data` (`config_id`, `scope`, `scope_id`, `path`, `value
 
 --
 -- Dumping data for table `core_config_data`
---Note that the following inserts differ in syntax....
+-- Note that the following inserts differ in syntax....
 
 
 INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
