@@ -32,14 +32,21 @@ class Ekkitab_Catalog_ProductController extends Mage_Core_Controller_Front_Actio
 		$productIdEndIndex = $productIdEndIndex - $productIdStartIndex;  //.html/	
 		$productId = (int) substr($productUrl,$productIdStartIndex,$productIdEndIndex);
 
-	   if (is_int($productId) && $productId > 0 ) {
+	    if (is_int($productId) && $productId > 0 ) {
 			Mage::register('productId', $productId);
 			$this->loadLayout();
 			$this->renderLayout();
 
-		}else{
-           $this->_forward('noRoute');
-	   }
+		}else {
+			$productId  = (int) $this->getRequest()->getParam('id');
+			if (is_int($productId) && $productId > 0 ) {
+				Mage::register('productId', $productId);
+				$this->loadLayout();
+				$this->renderLayout();
+			}else {
+				$this->_forward('noRoute');
+			}
+		}
     }
 
 }

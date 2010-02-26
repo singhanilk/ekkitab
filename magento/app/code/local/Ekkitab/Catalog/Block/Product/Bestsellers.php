@@ -28,8 +28,7 @@ class Ekkitab_Catalog_Block_Product_Bestsellers extends Mage_Core_Block_Template
 		foreach($bestSellers as  $product){
 			$productIds[$i++] = $product->getProductId();
 		}
-		$bestSellersColelction = Mage::getModel('catalog/product')->getCollection()
-				->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
+		$bestSellersColelction = Mage::getModel('ekkitab_catalog/product')->getCollection()
 				->addIdFilter($productIds);
 		return $bestSellersColelction;
 	}

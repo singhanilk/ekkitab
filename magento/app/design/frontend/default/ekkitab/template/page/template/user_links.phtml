@@ -24,35 +24,14 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="header">
-	<div class="logo"><a href="<?php echo $this->getUrl('/index.php') ?>" title="ekkitab homepage"></a></div>
-	<div class="headerRight">
-
-		<!-- topLinks -->
-		<div class="topLinksOut">
-			<?php echo $this->getChildHtml('buildVersion') ?>
-			<div class="welcomeMsgArea"> <?php echo $this->getWelcome() ?></div>
-			<div class="topLinksArea">
-				<div class="linkAreaLeft"></div>
-				<div class="linkAreaMain">
-					<?php echo $this->getChildHtml('topLinks')?>
-				</div>
-				<div class="linkAreaRight"></div>
-				<div class="clear"></div>
-			</div>	<!-- topLinksArea -->
-		<div class="clear"></div>
-		</div>	<!-- topLinksOut -->
-
-
-		<!-- topSearchArea -->
-		<?php echo $this->getChildHtml('topSearch') ?>
-		<!-- popularSearchArea -->
-		<?php //echo $this->getChildHtml('popularSearch')
-		?>
-	</div>
-</div>
-<!-- header-->
-
-
-
-
+<?php
+/**
+ * @see Mage_Page_Block_Template_Links
+ */
+?>
+<?php $_links = $this->getLinks(); ?>
+<?php if(count($_links)>0): ?>
+	<?php foreach($_links as $_link): ?>
+		 | <?php echo $_link->getBeforeText() ?><a <?php if($this->getName()): ?> id="<?php echo $this->getName() ?>"<?php endif;?> href="<?php echo $_link->getUrl() ?>" title="<?php echo $_link->getTitle() ?>" <?php echo $_link->getAParams() ?>><?php echo $_link->getLabel() ?></a><?php echo $_link->getAfterText() ?>
+	<?php endforeach; ?>
+<?php endif; ?>

@@ -25,56 +25,23 @@
  */
 ?>
 <form action="<?php echo $this->getAction() ?>" method="post" id="review-form">
-<div id="reviewForm" class="padder hideReviewForm" >
-<div class="page-head">
-    <h3><?php echo $this->__('Write Your Own Review') ?></h3>
-</div>
-<h4><?php echo $this->__("You're reviewing: %s", $this->htmlEscape($this->getProductInfo()->getName())) ?></h4>
+<div class="reviewArea hideReviewForm" id="reviewForm" >
+<div class="pageHeader"><?php echo $this->__("You're reviewing: %s", $this->htmlEscape($this->getProductInfo()->getName())) ?></div>
 <fieldset>
-    <?php if( $this->getRatings() && $this->getRatings()->getSize()): ?>
-    <strong><?php echo $this->__('How do you rate this product?') ?><span class="required">*</span></strong><br/>
-    <span id="input-message-box"></span>
-    <table class="data-table product-review-box field-row" id="product-review-table" cellspacing="0">
-        <thead>
-            <tr>
-                <th>&nbsp;</th>
-                <th><?php echo $this->__('1 star') ?></th>
-                <th><?php echo $this->__('2 stars') ?></th>
-                <th><?php echo $this->__('3 stars') ?></th>
-                <th><?php echo $this->__('4 stars') ?></th>
-                <th><?php echo $this->__('5 stars') ?></th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php $_oddIterator = 1; ?>
-        <?php foreach ($this->getRatings() as $_rating): ?>
-            <tr class="odd<?php if($_oddIterator == $this->getRatings()->getSize()): $_oddIterator = 0; ?> last<?php endif; ?>">
-                <td class="label"><?php echo $_rating->getRatingCode() ?></td>
-            <?php $_iterator = 1; ?>
-            <?php foreach ($_rating->getOptions() as $_option): ?>
-                <!--<td <?php if($_iterator == 5): ?>class="last"<?php endif; ?> style="width:60px;"><input type="radio" <?php if($_iterator == 5): $_iterator=0; ?>class="validate-one-required-by-name"<?php endif; ?> name="ratings[<?php echo $_rating->getId() ?>]" id="<?php echo $_rating->getRatingCode() ?>_<?php echo $_option->getValue() ?>" value="<?php echo $_option->getId() ?>"/></td>-->
-                <td<?php if($_iterator == 5): ?> class="last"<?php endif; ?> style="width:60px;"><input type="radio" name="ratings[<?php echo $_rating->getId() ?>]" id="<?php echo $_rating->getRatingCode() ?>_<?php echo $_option->getValue() ?>" value="<?php echo $_option->getId() ?>"/></td>
-            <?php $_iterator++ ?>
-            <?php endforeach; ?>
-            </tr>
-        <?php $_oddIterator ++; ?>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
-    <input type="hidden" name="validate_rating" class="validate-rating" value="" />
-    <script type="text/javascript">decorateTable('product-review-table')</script>
-    <?php endif; ?>
-    <ul class="form-list">
-        <li><label for="nickname_field"><?php echo $this->__('Nickname') ?><span class="required">*</span></label><br/>
-            <input class="input-text required-entry" name="nickname" id="nickname_field" style="width: 450px;" type="text" value="<?php echo $this->htmlEscape($data->getNickname()) ?>"/></li>
-        <li><label for="summary_field"><?php echo $this->__('Summary of Your Review') ?><span class="required">*</span></label><br/>
-            <input name="title" class="input-text  required-entry" id="summary_field" style="width: 450px;" type="text" value="<?php echo $this->htmlEscape($data->getTitle()) ?>"/></li>
-        <li><label for="review_field"><?php echo $this->__('Review') ?><span class="required">*</span></label><br/>
-            <textarea class="required-entry" name="detail" id="review_field" cols="53" rows="10" style="width: 450px;"><?php echo $this->htmlEscape($data->getDetail()) ?></textarea></li>
-    </ul>
+	<div class="labelArea">
+		<div class="labelText"><label for="nickname_field"><?php echo $this->__('Nickname') ?><span class="required">*</span></label></div>
+	</div>
+	<div class="valueArea"><input class="textField input-text required-entry" name="nickname" id="nickname_field" type="text" style="width: 250px;" value="<?php echo $this->htmlEscape($data->getNickname()) ?>"/></div>
+	<div class="clear"></div>
 
-    <div class="button-set">
-        <input type="image" src="<?php echo $this->getSkinUrl('images/btn_submit.gif');?>" alt="<?php echo $this->__('Submit Review') ?>"/>
+	<div class="labelText"><label for="summary_field"><?php echo $this->__('Please enter a title for your review') ?><span class="required">*</span></label></div>
+    <div class="valueArea"><input name="title" class="input-text  required-entry" id="summary_field" style="width: 450px;" type="text" value="<?php echo $this->htmlEscape($data->getTitle()) ?>"/></div>
+	<div class="clear"></div>
+     
+	<div class="labelText"><label for="review_field"><?php echo $this->__('Write your review') ?><span class="required">*</span></label></div>
+	<textarea class="required-entry revTextField" name="detail" id="review_field" rows="12"><?php echo $this->htmlEscape($data->getDetail()) ?></textarea>
+    <div class="buttonArea">
+        <input type="image" src="<?php echo $this->getSkinUrl('images/review_save_button.png');?>" alt="<?php echo $this->__('Submit Review') ?>"/>
     </div>
 </fieldset>
 </div>

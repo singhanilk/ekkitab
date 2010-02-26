@@ -30,8 +30,12 @@
 
     <default>
         <reference name="header">
-            <block type="core/template" name="top.search" as="topSearch1" template="catalogsearch/form.mini.phtml"/>
-            <block type="core/template" name="top.search" as="topSearch" template="catalogsearch/custom/form.mini.phtml"/>
+            <block type="core/template" name="top.search" as="topSearch1" template="catalogsearch/form.mini.phtml">
+				<block type="page/template_links" name="top.user.links" as="topUserLinks" template="page/template/user_links.phtml" />
+			</block>
+            <block type="core/template" name="top.search" as="topSearch" template="catalogsearch/custom/form.mini.phtml">
+				<block type="page/template_links" name="top.user.links" as="topUserLinks" template="page/template/user_links.phtml" />
+			</block>
             <block type="ekkitab_catalogsearch/top" name="popular.search" as="popularSearch" template="catalogsearch/popular.phtml"/>
         </reference>
         <reference name="footer_links">
