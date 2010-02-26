@@ -33,6 +33,18 @@ class Parser {
             return(preg_replace($pattern, $replace, $str));
         }
 
+        function correctName($name) {
+           $tmp = explode(",", $name);
+           switch (count($tmp)) {
+               case 1: $name = trim($name);
+                       break;
+               case 2: $name = trim($tmp[1]) . " " . trim($tmp[0]);
+                       break;
+               default: break;
+           }
+           return $name;
+        }
+
         function getBook($line) {
             $book = array();
             $mediatype = substr($line, 412, 1);
@@ -46,23 +58,41 @@ class Parser {
             $author = "";
             $illustrator = "";
             $role = trim(substr($line, 265,2));
-            if ((!strcmp($role, "A")) || (!strcmp($role, "JA")) || (!strcmp($role, "AA")))
-                $author = trim(substr($line, 225, 40));
-            if (!strcmp($role, "I"))
-                $illustrator = trim(substr($line, 225, 40));
+            if ((!strcmp($role, "A")) || (!strcmp($role, "JA")) || (!strcmp($role, "AA")) || (!strcmp($role, "E"))) {
+                $author = substr($line, 225, 40);
+                $author = $this->correctName($author);
+            }
+            if (!strcmp($role, "I")) {
+                $illustrator = substr($line, 225, 40);
+                $illustrator = $this->correctName($illustrator);
+            }
             $role = trim(substr($line, 307,2));
-            if ((!strcmp($role, "A")) || (!strcmp($role, "JA")) || (!strcmp($role, "AA")))
-                $author = $author . " & ". trim(substr($line, 267, 40));
-            if (!strcmp($role, "I"))
-                $illustrator = $illustrator . " & " . trim(substr($line, 225, 40));
+            if ((!strcmp($role, "A")) || (!strcmp($role, "JA")) || (!strcmp($role, "AA")) || (!strcmp($role, "E"))) {
+                $tmp = substr($line, 267, 40);
+                $tmp = $this->correctName($tmp);
+                $author = $author . " & ". $tmp;
+            }
+            if (!strcmp($role, "I")) {
+                $tmp = substr($line, 267, 40);
+                $tmp = $this->correctName($tmp);
+                $illustrator = $illustrator . " & " . $tmp;
+            }
             $role = trim(substr($line, 349,2));
-            if ((!strcmp($role, "A")) || (!strcmp($role, "JA")) || (!strcmp($role, "AA")))
-                $author = $author . " & ". trim(substr($line, 309, 40));
-            if (!strcmp($role, "I"))
-                $illustrator = $illustrator . " & " . trim(substr($line, 225, 40));
+            if ((!strcmp($role, "A")) || (!strcmp($role, "JA")) || (!strcmp($role, "AA")) || (!strcmp($role, "E"))) {
+                $tmp = substr($line, 309, 40);
+                $tmp = $this->correctName($tmp);
+                $author = $author . " & ". $tmp;
+            }
+            if (!strcmp($role, "I")) {
+                $tmp = substr($line, 309, 40);
+                $tmp = $this->correctName($tmp);
+                $illustrator = $illustrator . " & " . $tmp;
+            }
             $illustrator = preg_replace("/^ & /", "", $illustrator);
+            $author = preg_replace("/^ & /", "", $author);
             $book['illustrator'] = $illustrator;
             $book['author'] = $this->escape($author);
+            echo "Author: '" . $book['author'] . "'\n";
             $book['publisher'] = $this->escape(trim(substr($line, 351, 45)));
             $book['isbn13'] = trim(substr($line, 442, 17));
             $binding = substr($line, 410, 2);
