@@ -666,13 +666,13 @@ a:hover {
 	padding: 0 10px;
 }
 .userRevText {
-	width: 92px;
+	width: 192px;
 	float: left;
 	font-size: 12px;
 	font-weight: bold;
 }
 .writeRevLink {
-	width: 370px;
+	width: 270px;
 	float: right;
 	text-align: right;
 }
@@ -684,6 +684,12 @@ a:hover {
 	color: #666;
 	line-height: 18px;
 	margin-top: 10px;
+}
+.hideReviewForm {
+	display:none;
+}
+.showReviewForm {
+	display:block;
 }
 .reviewee {
 	text-align: right;

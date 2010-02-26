@@ -17,7 +17,8 @@
 class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
 {
 
-	
+    private $_reviewsHelperBlock;
+
 	/**
      * Get popular of current store
      *
@@ -28,8 +29,46 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
 			Mage::register('productId', Mage::helper('ekkitab_catalog/product')->getProductId());
         }
 		$product = Mage::getModel('ekkitab_catalog/product')->load(Mage::registry('productId'));
-		//Mage::log(" In Ekkitab_Catalog_Block_Product_View ....product Object is ... " .$product);
 		return $product;
 	}
+
+	    /**
+     * Get product reviews summary
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @param bool $templateType
+     * @param bool $displayIfNoReviews
+     * @return string
+     */
+    public function getReviewsSummaryHtml(Ekkitab_Catalog_Model_Product $product, $templateType = false, $displayIfNoReviews = false)
+    {
+        $this->_initReviewsHelperBlock();
+        return $this->_reviewsHelperBlock->getSummaryHtml($product, $templateType, $displayIfNoReviews);
+    }
+
+    /**
+     * Add/replace reviews summary template by type
+     *
+     * @param string $type
+     * @param string $template
+     */
+    public function addReviewSummaryTemplate($type, $template)
+    {
+        $this->_initReviewsHelperBlock();
+        $this->_reviewsHelperBlock->addTemplate($type, $template);
+    }
+
+    /**
+     * Create reviews summary helper block once
+     *
+     */
+    protected function _initReviewsHelperBlock()
+    {
+        if (!$this->_reviewsHelperBlock) {
+            $this->_reviewsHelperBlock = $this->getLayout()->createBlock('review/helper');
+        }
+    }
+
+
 	
 }

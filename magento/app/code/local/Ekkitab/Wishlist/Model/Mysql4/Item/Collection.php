@@ -26,7 +26,6 @@ class Ekkitab_Wishlist_Model_Mysql4_Item_Collection extends Ekkitab_Catalog_Mode
 
    public function addWishlistFilter(Mage_Wishlist_Model_Wishlist    $wishlist)
     {
-		Mage::log(" IN collection ....wishlist is....$wishlist");
 		$wishListId= $wishlist->getId();
 		$this->join("wishlist_item","main_table.id=wishlist_item.product_id AND wishlist_id ='{$wishListId}'");
         return $this;

@@ -55,7 +55,7 @@
         <?php foreach($this->getWishlist() as $item): ?>
             <tr>
                 <td>
-                    <div><a href="<?php echo $item->getProductUrl() ?>"><img src="<?php echo $this->helper('catalog/image')->init($item, 'small_image')->resize(113, 113); ?>" alt="<?php echo $this->htmlEscape($item->getName()) ?>" width="113"/></a></div>
+                    <div><a href="<?php echo $item->getProductUrl() ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($item->getImage(), 'small_image',false,null,109); ?>" alt="<?php echo $this->htmlEscape($item->getName()) ?>" /></a></div>
                     <div><a href="<?php echo $item->getProductUrl() ?>" title="<?php echo $this->htmlEscape($item->getName()) ?>"><?php echo $this->htmlEscape($item->getName()) ?></a></div>
                     <?php echo $this->getPriceHtml($item) ?>
                 </td>

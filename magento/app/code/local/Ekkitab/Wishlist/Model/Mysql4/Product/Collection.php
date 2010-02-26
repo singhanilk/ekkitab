@@ -17,7 +17,6 @@ class Ekkitab_Wishlist_Model_Mysql4_Product_Collection  extends Ekkitab_Catalog_
     {
         $wishListId= $wishlist->getId();
        // $storeIds= $wishlist->getSharedStoreIds();
-	   Mage::log(" IN collection ....wishlist is....$wishlist");
 		$this->join("wishlist_item","main_table.id=wishlist_item.product_id AND wishlist_id ='{$wishListId}'");
         return $this;
     }
