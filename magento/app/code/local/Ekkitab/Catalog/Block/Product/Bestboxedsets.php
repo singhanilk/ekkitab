@@ -28,8 +28,7 @@ class Ekkitab_Catalog_Block_Product_Bestboxedsets extends Mage_Core_Block_Templa
 		foreach($boxedSets as  $product){
 			$productIds[$i++] = $product->getProductId();
 		}
-		$boxedSetsCollection = Mage::getModel('catalog/product')->getCollection()
-				->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
+		$boxedSetsCollection = Mage::getModel('ekkitab_catalog/product')->getCollection()
 				->addIdFilter($productIds);
 		return $boxedSetsCollection;
 	}

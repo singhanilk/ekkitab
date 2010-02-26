@@ -228,7 +228,7 @@ a:hover {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	color: #000;
-	width: 150px;
+	width: 180px;
 	margin-right: 8px;
 }
 
@@ -271,8 +271,8 @@ a:hover {
 	margin-bottom: 5px;
 }
 .topSearchArea {
-	width: 610px;
-	margin-left: 50px;
+	width: 630px;
+	margin-left: 30px;
 	line-height: 22px;
 	text-align: right;
 	padding-top: 40px;
@@ -291,8 +291,9 @@ a:hover {
 	color: #000;
 }
 .topSearchArea .textField {
-	width: 316px;
+	width: 300px;
 	float: left;
+	height:20px;
 }
 .topSearchArea .searchBut {
 	width: 21px;
@@ -396,6 +397,10 @@ a:hover {
 	float: left;
 	text-align: center;
 	margin-top: 8px;
+}
+.vColumns img {
+	width: 68px;
+	border:1px solid #cacaca;
 }
 .vMidColumn {
 	margin: 8px 12px 0;
@@ -758,7 +763,7 @@ a:hover {
 }
 
 .welcomeMsgArea {
-	width: 460px;
+	width: 300px;
 	float: left;
 	text-align: right;
 	line-height: 25px;
@@ -888,3 +893,50 @@ a:hover {
 .padder10px{
 	margin-top: 10px;
 } 
+.reviewArea {
+	width: 500px;
+	margin: 0 auto 10px;
+	padding-bottom: 10px;
+	border-bottom: 1px dotted #333;
+}
+.reviewArea .labelArea {
+	width: 30%;
+	float: left;
+}
+.reviewArea .valueArea {
+	width: 68%;
+	float: left;
+	height: 30px;
+}
+.reviewArea .valueArea .textField {
+	width: 200px;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 12px;
+	margin-top: 8px;
+}
+.revTextField {
+	width: 480px;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 12px;
+}
+
+.reviewArea .pageHeader {
+	color:#CC6600;
+	line-height:1.1em;
+	float:none;
+	font-size:20px;
+	margin-bottom: 8px;
+	border-bottom: 1px dotted #333;
+	width:100%;
+}
+.reviewArea .labelText {
+	font-size: 14px;
+	padding: 8px 0;
+}
+.reviewArea .buttonArea {
+	margin: 5px auto 0;
+	text-align: center;
+}
+.reviewArea .buttonArea img {
+	margin: 0 5px;
+}

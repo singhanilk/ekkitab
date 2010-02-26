@@ -21,6 +21,8 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
     const QUERY_PAGE_NO = 'p';
   
     const QUERY_CATEGORY_PATH = 'category';
+
+    const QUERY_FILTER_NAME = 'filterby';
 	
 	protected $_repArr= array(" & ", "&");
 
@@ -40,6 +42,25 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
      */
     protected $_categoryPath;
 
+	
+	/**
+     * Page Number
+     *
+     * @var int
+     */
+    protected $_filterBy;
+
+	
+	/**
+     * Retrieve search query parameter name
+     *
+     * @return string
+     */
+    public function getQueryFilterName()
+    {
+        return self::QUERY_FILTER_NAME;
+    }
+	
 	
 	/**
      * Retrieve search query parameter name
@@ -145,6 +166,24 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
     public function getEscapedQueryCategoryPath()
     {
         return $this->htmlEscape($this->getCurrentCategoryPath());
+    }
+
+    /**
+     * Retrieve HTML escaped search query
+     *
+     * @return string
+     */
+    public function getQueryFilterByText()
+    {
+		if (is_null($this->_filterBy)) {
+			$this->_filterBy = $this->_getRequest()->getParam($this->getQueryFilterName());
+			if ($this->_filterBy === null) {
+                $this->_filterBy = '';
+            } else {
+				$this->_filterBy = Mage::helper('core/string')->cleanString(trim($this->_filterBy));
+            }
+		}
+        return $this->htmlEscape($this->_filterBy);
     }
 
 

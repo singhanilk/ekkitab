@@ -22,13 +22,15 @@
     function searchAuthor(query){
 		var searchForm = document.forms.search_author;
 		searchForm.<?php echo $this->helper('catalogSearch')->getQueryParamName() ?>.value=query;
+		searchForm.<?php echo $this->helper('ekkitab_catalog')->getQueryFilterName() ?>.value="author";
 		searchForm.submit();
 	}
 </script>
 <div class="linkHdr">Popular Authors</div><!-- linkHdr -->
 <?php if($_count): ?>
-	<form name="search_author" action="<?php echo $this->helper('catalogSearch')->getResultUrl() ?>" method="get">
+	<form name="search_author" action="<?php echo $this->helper('ekkitab_catalog')->getFormSearchResultByIndexUrl() ?>" method="get">
 		<input type="hidden" name="<?php echo $this->helper('catalogSearch')->getQueryParamName() ?>" value="" />
+		<input type="hidden" name="<?php echo $this->helper('ekkitab_catalog')->getQueryFilterName() ?>" value="" />
 	</form>
 	<ul>
 		<?php foreach ($authors as $author): ?>

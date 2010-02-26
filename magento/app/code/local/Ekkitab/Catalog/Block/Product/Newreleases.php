@@ -28,8 +28,7 @@ class Ekkitab_Catalog_Block_Product_Newreleases extends Mage_Core_Block_Template
 		foreach($newReleases as  $product){
 			$productIds[$i++] = $product->getProductId();
 		}
-		$newReleasesCollection = Mage::getModel('catalog/product')->getCollection()
-				->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
+		$newReleasesCollection = Mage::getModel('ekkitab_catalog/product')->getCollection()
 				->addIdFilter($productIds);
 		return $newReleasesCollection;
 	}

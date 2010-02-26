@@ -32,6 +32,7 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 	protected $_pageSize = 15;
 	protected $_pageNo;
 	protected $_categoryPath;
+	protected $_filterBy;
 	protected $_queryText;
 	protected $_lastPageNo;
 	protected $_displayPages = 7;
@@ -163,7 +164,10 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 			require($javaIncFile);
 			$search = new java("BookSearch",$indexFilePath );
 			$categoryPath = strtolower(str_replace('__', "/", $this->getCurrentCategoryPath())); // this is to parse the parents and child categories seperated by '__'
-			$results = $search->searchBook($this->getDecodedString($categoryPath),$this->helper('ekkitab_catalog')->getEscapedQueryText(), $this->getPageSize(), $this->getCurrentPageNumber());
+			// this is to filter the search by title / author / or both
+			$filterBy = strlen($this->getFilterByText()) > 0 ?($this->getFilterByText().":"):""; 
+			Mage::log(" In search Results block.....filterByTxt is $filterBy");
+			$results = $search->searchBook($this->getDecodedString($categoryPath),$filterBy.$this->helper('ekkitab_catalog')->getEscapedQueryText(), $this->getPageSize(), $this->getCurrentPageNumber());
 		}
 		catch(Exception $e)
 		{
@@ -335,6 +339,19 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 			$this->_categoryPath = $this->helper('ekkitab_catalog')->getEscapedQueryCategoryPath();
 		}
 		return $this->_categoryPath;
+    }
+
+	/**
+     * Retrieve search result count
+     *
+     * @return string
+     */
+    public function getFilterByText()
+    {
+		if(is_null($this->_filterBy)){
+			$this->_filterBy = $this->helper('ekkitab_catalog')->getQueryFilterByText();
+		}
+		return $this->_filterBy;
     }
 
 	/**
