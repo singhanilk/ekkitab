@@ -92,7 +92,6 @@ class Parser {
             $author = preg_replace("/^ & /", "", $author);
             $book['illustrator'] = $illustrator;
             $book['author'] = $this->escape($author);
-            echo "Author: '" . $book['author'] . "'\n";
             $book['publisher'] = $this->escape(trim(substr($line, 351, 45)));
             $book['isbn13'] = trim(substr($line, 442, 17));
             $binding = substr($line, 410, 2);
