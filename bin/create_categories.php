@@ -64,19 +64,24 @@ ini_set("display_errors", 1);
             return NULL;
 
 	    $input  = $config[files][categorydata];
-	    $output = $config[files][categoryscript];
+	    $output_ekkitab = $config[files][categoryscript_ekkitab];
+	    $output_reference = $config[files][categoryscript_reference];
 
         echo "Input file is: $input\n";
-        echo "Output file is: $output\n";
+        echo "Output file is: $output_ekkitab\n";
+        echo "Output file is: $output_reference\n";
 
         $fh_in = fopen($input, "r"); 
         if (! $fh_in )
             fatal("Could not open input file: $input\n"); 
-        $fh_out = fopen($output, "w"); 
-        if (! $fh_out )
-            fatal("Could not open output file: $output\n"); 
+        $fh_out_ekkitab = fopen($output_ekkitab, "w"); 
+        if (! $fh_out_ekkitab )
+            fatal("Could not open output file: $output_ekkitab\n"); 
+        $fh_out_reference = fopen($output_reference, "w"); 
+        if (! $fh_out_reference )
+            fatal("Could not open output file: $output_reference\n"); 
 
-        return (array('in' => $fh_in, 'out' => $fh_out));
+        return (array('in' => $fh_in, 'ekkitab' => $fh_out_ekkitab, 'reference' => $fh_out_reference));
     }
 
    /** 
@@ -84,7 +89,8 @@ ini_set("display_errors", 1);
     */
     function closeFiles($fhandles) {
         fclose($fhandles['in']);
-        fclose($fhandles['out']);
+        fclose($fhandles['ekkitab']);
+        fclose($fhandles['reference']);
     }
 
 
@@ -536,22 +542,22 @@ ini_set("display_errors", 1);
     build_category_db($fhandles['in']);
     echo "done.\n";
     echo "Writing catalog category entity statements....";
-    $maxId = writeCatalogCategoryEntityStatements($fhandles['out']);
+    $maxId = writeCatalogCategoryEntityStatements($fhandles['ekkitab']);
     echo "done. Maximum id = $maxId\n";
     echo "Writing catalog category entity int attributes....";
-    writeCatalogCategoryEntityIntStatements($fhandles['out'], $maxId);
+    writeCatalogCategoryEntityIntStatements($fhandles['ekkitab'], $maxId);
     echo "done.\n";
     echo "Writing catalog category entity text attributes....";
-    writeCatalogCategoryEntityTextStatements($fhandles['out'], $maxId);
+    writeCatalogCategoryEntityTextStatements($fhandles['ekkitab'], $maxId);
     echo "done.\n";
     echo "Writing catalog category entity varchar attributes....";
-    writeCatalogCategoryEntityVarcharStatements($fhandles['out']);
+    writeCatalogCategoryEntityVarcharStatements($fhandles['ekkitab']);
     echo "done.\n";
     echo "Writing core url rewrite statements....";
-    writeCoreUrlReWriteStatements($fhandles['out']);
+    writeCoreUrlReWriteStatements($fhandles['ekkitab']);
     echo "done.\n";
     echo "Writing reference database statements....";
-    writeRefDbStatements($fhandles['out']);
+    writeRefDbStatements($fhandles['reference']);
     echo "done.\n";
 
     closeFiles($fhandles);    
