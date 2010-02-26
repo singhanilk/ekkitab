@@ -23,9 +23,8 @@ ini_set("display_errors", 1);
    require_once(LOG4PHP_DIR . '/LoggerManager.php');
    ini_set(include_path, ${include_path}.EKKITAB_HOME."/"."bin");
 
-    //global db_user and db_password;
-	$db_user     = '';
-	$db_password = '';
+    //global $run_updateScripts;
+	$run_updateScripts = 0;
 
 	// global logger
     $logger =& LoggerManager::getLogger("crawler");
@@ -108,6 +107,7 @@ ini_set("display_errors", 1);
     * This function excutes the commands and creates the .processed file
 	*/
 	function startscripts($path){
+		 global $run_updateScripts;
 		 $list = getManifest($path);
 		if(!empty($list)){
 			 $commands = gencommands($path, $list);
@@ -133,6 +133,7 @@ ini_set("display_errors", 1);
 				fputs($fh,$command."\n");
 			}
 			fclose($fh);
+			$run_updateScripts = 1;
 		}
 	}
 
@@ -168,7 +169,6 @@ ini_set("display_errors", 1);
     * Generates the commands to excute the required scripts
 	*/
 	function gencommands($path, $list){
-		global $db_user, $db_password;
 		$commands = array();
 	
 		if(!empty($list['catalog'])){
@@ -179,23 +179,12 @@ ini_set("display_errors", 1);
 		if(!empty($list['description'])){
 			$file = $path."/".$list['description'];
 			$commands[] = "php importdescription.php ".$list['infosource']." -l $file";
-			if($db_password==''){
-				$commands[] = "mysql -u$db_user <update_descriptions.sql";
-			}
-			else{
-				$commands[] = "mysql -u$db_user -p$db_password <update_descriptions.sql";
-			}
 		}
 
 		if(!empty($list['pricestock'])){
 			$file = $path."/".$list['pricestock'];
 			$commands[] = "php importpricestock.php ".$list['infosource']." $file";
-			if($db_password==''){
-				$commands[] = "mysql -u $db_user <update_prices_and_stock.sql";
-			}
-			else{
-				$commands[] = "mysql -u $db_user -p $db_password <update_prices_and_stock.sql";
-			}
+			
 		}
 
 		return($commands);
@@ -203,14 +192,52 @@ ini_set("display_errors", 1);
 	}
 
    /**
+    * This function excutes the mysql update scripts
+    */
+	function updateScripts($db_user, $db_password){
+		 
+	
+		if($db_password==''){
+			$commands[] = "mysql -u$db_user <update_descriptions.sql";
+		}
+		else{
+			$commands[] = "mysql -u$db_user -p$db_password <update_descriptions.sql";
+		}
+		if($db_password==''){
+				$commands[] = "mysql -u $db_user <update_prices_and_stock.sql";
+		}
+		else{
+			$commands[] = "mysql -u $db_user -p $db_password <update_prices_and_stock.sql";
+		}
+		$output = array();
+		foreach($commands as $command){
+			exec($command, $output, $result);
+			if($result > 0){
+				debug("Failed to execute [$command]");
+				debug("Error Message :-");
+				foreach($output as $message){
+				debug("$message");
+				}
+			}
+			else{
+				debug("Successfuly executed [$command]");
+			}
+		}
+	}
+
+   /**
     * Main Function
     */
 	 function start(){
-		 global $db_user, $db_password;
+		 global $run_updateScripts;
+
 		 $db_config     = getConfig(CRAWLER_INI);
 		 $db_user       = $db_config[database][user];
 		 $db_password   = $db_config[database][password];
 		 CrawlDir(CRAWLER_PATH);
+		 if($run_updateScripts){
+			updateScripts($db_user, $db_password);
+		 }
 	 }
 
     $logger->info("Process started at " . date("d-M-Y G:i:sa"));
