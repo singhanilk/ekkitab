@@ -50,16 +50,16 @@ ini_set("display_errors", 1);
             echo "Failed to open source directory. $directory\n";
             return;
         }
-		
-		if(file_exists($directory/$file){
+		$pfile = $directory."/.processed";
+		if(file_exists($pfile)){
 			return;
 		}
 		else{
 			while ($file = readdir($dir)) {
 				if (($file == ".") || ($file == ".."))
 					continue;
-				if (is_dir($file)) {
-					copyfiles($directory/$file); 
+				if (is_dir($directory."/".$file)) {
+					copyfiles($directory."/".$file); 
 				}
 				else {
 					$newfile = str_replace(".JPG", ".jpg", $file);
@@ -77,10 +77,13 @@ ini_set("display_errors", 1);
 					}
 					else 
 						$files_ignored++;
+					
+					$pfile = $directory."/.processed";
+				    $fh = fopen($pfile,"w");
+				    fclose($fh);
+				
 				}
-				$pfile = $directory."/.processed";
-				$fh = fopen($pfile);
-				fclose($fh);
+				
 			}
 		}
 			echo "Copied: $files_copied  Failed: $files_failed  Ignored: $files_ignored.\n";
