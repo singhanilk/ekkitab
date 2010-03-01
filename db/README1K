@@ -1,0 +1,29 @@
+To load 1k test Data:
+
+1. mysql -u root -proot < reset_ekkitab_books.sql
+
+2. mysql -u uid -ppswd < init_ekkitab_books_db.sql
+
+3. mysql -u uid -ppswd < reset_refdb.sql
+
+4. mysql -u uid -ppswd < init_refdb.sql
+
+5. php importbooks.php 1ktestdata   ../data/1ktestdata.txt english
+
+6. php importdescription.php 1ktestdata -l  ../data/1ktestdata.txt 
+
+7. php importpricesstock.php 1ktestdata ../data/1ktestdata.txt
+
+9. php importbooks.php 1ktestdata   ../data/50lowcostbooks.txt 
+   php importdesription.php 1ktestdata -l   ../data/50lowcostbooks.txt
+   php importpricesstock.php 1ktestdata   ../data/50lowcostbooks.txt 
+
+10. mysql -u uid -ppswd < update_prices_and_stock.sql
+
+11. mysql -u uid -ppswd < update_descriptions.sql
+
+12. mysql -u uid -ppswd < loadbooks.sql
+
+
+
+

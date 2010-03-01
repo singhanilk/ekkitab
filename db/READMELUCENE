@@ -1,0 +1,21 @@
+On Ubuntu:
+
+1. Install Tomcat6: sudo apt-get -install tomcat6
+
+  1.1 cp var/www/scmextern/JavaBridge.war /var/lib/tomcat6/webapps
+
+2. In /var/lib/tomcat6/webapps/Javabridge/WEB-INF:
+
+ 2.1 sudo mkdir classes
+ 2.2 sudo cp /var/www/scm/java/bin/* .
+
+3. In /var/lib/tomcat6/webapps/Javabridge/WEB-INF/lib:
+
+ 3.1 sudo rm lucene*
+ 3.2 sudo cp /var/www/scm/java/lib/* .
+
+4. sudo  service tomcat6 restart
+
+On Windows:
+
+1. To start up tomcat6: startup.bat
