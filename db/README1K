@@ -24,6 +24,8 @@ To load 1k test Data set EKKITAB_HOME =
 
 12. mysql -u uid -ppswd < loadbooks.sql
 
+13. cd EKKITAB_HOME/scm/bin; ./create_index.sh <db host> <db user> <db password>;
+
 
 
 
