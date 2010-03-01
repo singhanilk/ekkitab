@@ -28,6 +28,8 @@ check config/importbooks.ini for mysql user id / password
 
 12. mysql -u uid -ppswd < loadbooks.sql
 
+13. cd EKKITAB_HOME/scm/bin; ./create_index.sh <db host> <db user> <db password>;
+
 
 
 
