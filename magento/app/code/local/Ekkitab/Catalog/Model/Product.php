@@ -109,10 +109,11 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
     public function getStoreId()
     {
        //always return 1
-	   //if ($this->hasData('store_id')) {
-      //      return $this->getData('store_id');
-      //  }
-        return 1;
+	  if ($this->hasData('store_id')) {
+            return $this->getData('store_id');
+      }else{
+		  return 1;
+	  }
     }
 
     /**
@@ -126,7 +127,7 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
             Mage::throwException(Mage::helper('core')->__('Model collection resource name is not defined'));
         }
         $collection = Mage::getResourceModel($this->_resourceCollectionName);
-        $collection->setStoreId(1);
+        $collection->setStoreId($this->getStoreId());
         return $collection;
     }
 
@@ -194,7 +195,7 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
      */
     public function getStatus()
     {
-        return 1;//$this->_getData('status');
+        return $this->_getData('product_status');
     }
 
     /**
@@ -604,11 +605,11 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
      */
     public function getFinalPrice($qty=null)
     {
-        $price = $this->_getData('final_price');
+        $price = $this->_getData('discount_price');
         if ($price !== null) {
             return $price;
         }
-        return $this->getPriceModel()->getFinalPrice($qty, $this);
+        return $this->getPrice();
     }
 
     public function getCalculatedFinalPrice()
@@ -623,7 +624,7 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
 
     public function getSpecialPrice()
     {
-        return $this->_getData('special_price');
+        return $this->_getData('discount_price');
     }
 
     public function getSpecialFromDate()
@@ -663,7 +664,7 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
      */
     public function getCost()
     {
-        return '0.0';//$this->_getData('discount_price');
+        return $this->_getData('suppliers_price');
     }
 	
     /**

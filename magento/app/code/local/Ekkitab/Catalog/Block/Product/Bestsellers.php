@@ -17,6 +17,25 @@
 class Ekkitab_Catalog_Block_Product_Bestsellers extends Mage_Core_Block_Template
 {
 
+    /**
+     * Bestseller Product Ids
+     *
+     * @var array
+     */
+    protected $_bestSellersIds;
+
+
+    /**
+     * Set productIds to variable
+     *
+     * @param Varien_Data_Collection $collection
+     * 
+     */
+    public function setBestSellerProductIds($productIds = array())
+    {
+		$this->_bestSellersIds = $productIds;
+    }
+
 	/**
      * Get popular catagories of current store
      *
@@ -25,12 +44,33 @@ class Ekkitab_Catalog_Block_Product_Bestsellers extends Mage_Core_Block_Template
     {
 		$bestSellers = Mage::getModel('ekkitab_catalog/product_bestsellers')->getCollection();
 		$i=0;
+		$productIds=array();
 		foreach($bestSellers as  $product){
 			$productIds[$i++] = $product->getProductId();
 		}
+		$this->setBestSellerProductIds($productIds);
+
 		$bestSellersColelction = Mage::getModel('ekkitab_catalog/product')->getCollection()
 				->addIdFilter($productIds);
 		return $bestSellersColelction;
 	}
 	
+	/**
+     * Get popular catagories of current store
+     *
+     */
+    public function getBestSellerProductIds()
+    {
+		if(is_null($this->_bestSellersIds)){
+			$bestSellers = Mage::getModel('ekkitab_catalog/product_bestsellers')->getCollection();
+			$i=0;
+			$productIds=array();
+			foreach($bestSellers as  $product){
+				$productIds[$i++] = $product->getProductId();
+			}
+			$this->setBestSellerProductIds($productIds);
+		}
+		return $this->_bestSellersIds;
+		
+	}
 }

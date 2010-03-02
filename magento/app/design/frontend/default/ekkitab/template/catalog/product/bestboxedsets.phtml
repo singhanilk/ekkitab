@@ -15,45 +15,64 @@
  */
 ?>
 <?php 
-		$products= $this->getBestBoxedSets();
+		$products= $this->getBestBoxedSets()->getItems();
+		$productIds= $this->getBestBoxedSetsProductIds();
 		$_count = is_array($products)?count($products):$products->count(); 
-		$repArr1= array(" & ",
-						"&");
+		$_columnSize=4;
 ?>
-<?php if($_count): ?>
-	<div class="hmScrollRow">
-		<div class="mainLeftHdr">Best Boxed Sets</div>
-		<div class="hmInScrollRow">
-		<?php foreach ($products as $product): 
-			$savingsPerct= ($product->getPrice() >0 )?	(($product->getPrice() - $product->getFinalPrice())/ $product->getPrice() ) * 100 : 10; 
-			$author = $product->getBoAuthor();
-			$title= $this->htmlEscape($product->getName());
-			if(isset($author) && strlen(trim($author)) > 0)
-			{
-				$bookName=$author."__";
-			}else{
-				$bookName="";
-			}
-			$bookName=$bookName.$title."__".$product->getId();
-			$bookName = preg_replace('#[^A-Za-z0-9\_]+#', '-', $bookName);//($repArr2, "-", $urlKey);
-			$bookName="ekkitab_catalog/product/view/book/".$bookName.".html";
-		
+<?php if($_count):
+	$_totalRows= intval($_count/ $_columnSize) ;
+	$_totalRows= ($_count % $_columnSize) > 0 ? $_totalRows +1 : $_totalRows  ;
+	//Mage::log("count size is :$_count ; rowsize is ; $_totalRows");
+?>
+<script language="javascript">
+	var totalDivCount=<?php echo $_totalRows ?>;
+</script>
+<div class="hmScrollRow">
+	<div class="mainLeftHdr">Best Boxed Sets</div>
+		<?php for($i=0 ; $i < $_totalRows ; $i++){ 
+				$start = $i * $_columnSize ;
+				$end= $start + $_columnSize ;
+				$end = $end > $_count ? $_count : $end;
+
 		?>
+		<div class="hmInScrollRow<?php echo ($i==0)?  "" : " hideReviewForm" ?>" id="bestboxedsets_scroll_<?php echo $i+1 ?>" >
+			<div class="hmLeftScroll"><a href="javascript:showRequest('bestboxedsets',<?php echo $i+1 ?>,<?php echo $i ?>)"><img src="<?php echo $this->getSkinUrl('/images/hm_left_scroll.jpg') ?>" width="17" height="41" border="0" /></a></div>
+			<?php for($j=$start ; $j < $end ; $j++){ 
+				$productId = $productIds[$j];
+				$product = $products[$productId];
+				$savingsPerct= ($product->getPrice() >0 )?	(($product->getPrice() - $product->getFinalPrice())/ $product->getPrice() ) * 100 : 0; 
+				$author = $product->getBoAuthor();
+				$title= $this->htmlEscape($product->getName());
+				if(isset($author) && strlen(trim($author)) > 0)
+				{
+					$bookName=$author."__";
+				}else{
+					$bookName="";
+				}
+				$bookName=$bookName.$title."__".$product->getId();
+				$bookName = preg_replace('#[^A-Za-z0-9\_]+#', '-', $bookName);//($repArr2, "-", $urlKey);
+				$bookName="ekkitab_catalog/product/view/book/".$bookName.".html";
+			
+			?>
 			<div class="vColumns">
 				<a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>"><img src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->keepFrame(false)->resize(null, 100); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" /></a>
 				<div class="titleEtc">
 					<div class="bkTitle"><a href="<?php echo $this->getUrl($bookName)?>"  title="<?php echo $product->getTitle() ?>"><?php echo $title ?></a></div><!-- bkTitle -->
 					<div class="lineHeight14em"><?php echo $this->htmlEscape($product->getBoAuthor())?></div>
 					<div class="lineHeight14em">Our Price: <?php echo Mage::helper('core')->currency($product->getFinalPrice(),true,false) ?></div>
-					<div class="youSave">Save <?php echo number_format($savingsPerct,2,'.','') ?>%</div>
+					<?php if($savingsPerct > 0):?><div class="youSave">Save <?php echo number_format($savingsPerct,2,'.','') ?>%</div><?php endif; ?>
 				</div><!-- titleEtc -->
 			</div>
-		<?php endforeach ?>
-		<div class="clear"></div>
+			<?php } ?>
+			<div class="hmRightScroll"><a href="javascript:showRequest('bestboxedsets',<?php echo $i+1 ?>,<?php echo $i+2 ?>)"><img src="<?php echo $this->getSkinUrl('/images/hm_right_scroll.jpg') ?>" width="17" height="41" border="0" /></a></div>
 		</div><!-- hmInScrollRow -->
+		<div class="clear"></div>
+		<?php } ?>
 	</div><!-- hmScrollRow -->
 <?php else: ?>
 	<div class="hmMainRows">
-		<div class="mainLeftHdr">Best Boxed Sets</div>This section will be updated soon.
+		<div class="mainLeftHdr">Best Sellers</div>This section will be updated soon.
 	</div><!-- hmMainRows -->
 <?php endif; ?>
+

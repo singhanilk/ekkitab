@@ -291,9 +291,11 @@ a:hover {
 	color: #000;
 }
 .topSearchArea .textField {
+	padding: 3px 0px 0px 2px;
+	font-size: 12px;
 	width: 300px;
 	float: left;
-	height:20px;
+	height:17px;
 }
 .topSearchArea .searchBut {
 	width: 21px;
@@ -393,7 +395,7 @@ a:hover {
 	margin-bottom: 8px;
 }
 .vColumns, .vMidColumn {
-	width: 25%;
+	width: 23%;
 	float: left;
 	text-align: center;
 	margin-top: 8px;
@@ -411,7 +413,7 @@ a:hover {
 	margin: 0 auto;
 }
 .bkTitle {
-	font-size: 12px;
+	font-size: 11px;
 	font-weight: bold;
 	line-height: 1.6em;
 }
@@ -426,19 +428,24 @@ a:hover {
 }
 .hmScrollRow {
 	width: 550px;
-	background-image: url(../images/hm_left_scroll.jpg);
-	background-position: left center;
-	background-repeat: no-repeat;
 	padding-bottom: 8px;
 	border-bottom: 1px dotted #666;
 	margin-bottom: 8px;
+	background-color: #fff;
+}
+.hmLeftScroll, .hmRightScroll {
+	width: 17px;
+	float: left;
+	padding-top: 50px;
+	padding-right: 4px;
+}
+.hmRightScroll {
+	padding-right: 0;
+	padding-left: 4px;
+	float:right;
 }
 .hmInScrollRow {
-	width: 517px;
-	background-image: url(../images/hm_right_scroll.jpg);
-	background-position: right center;
-	background-repeat: no-repeat;
-	padding: 0 17px;
+	width: 550px;
 }
 .leftNavArea .linkHdr {
 	font-size: 1.2em;
