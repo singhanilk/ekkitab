@@ -24,15 +24,19 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php $_item = $this->getItem()?>
+<?php $_item = $this->getItem();
+
+	$image = $_item->getProduct()->getImage();
+
+?>
 <tr>
     <td>
-        <a href="<?php echo $this->getProductUrl() ?>">
-            <img src="<?php echo $this->getProductThumbnail()->resize(75); ?>" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" width="75" />
+        <a href="<?php echo $this->getUrl($this->getProductUrl()) ?>">
+            <img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'thumbnail',false,null, 74); ?>" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" width="75" />
         </a>
     </td>
     <td class="attributes-col">
-        <h4 class="title"><a href="<?php echo $this->getProductUrl() ?>"><?php echo $this->getProductName() ?></a></h4>
+        <h4 class="title"><a href="<?php echo $this->getUrl($this->getProductUrl()) ?>"><?php echo $this->getProductName() ?></a></h4>
 
        <!-- item custom options -->
         <?php if ($_options = $this->getOptionList()):?>
