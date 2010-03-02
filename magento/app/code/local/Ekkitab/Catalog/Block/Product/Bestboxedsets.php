@@ -17,6 +17,25 @@
 class Ekkitab_Catalog_Block_Product_Bestboxedsets extends Mage_Core_Block_Template
 {
 
+    /**
+     * Bestseller Product Ids
+     *
+     * @var array
+     */
+    protected $_bestSetIds;
+
+
+    /**
+     * Set productIds to variable
+     *
+     * @param Varien_Data_Collection $collection
+     * 
+     */
+    public function setBestBoxedSetsProductIds($productIds = array())
+    {
+		$this->_bestSetIds = $productIds;
+    }
+	
 	/**
      * Get popular catagories of current store
      *
@@ -33,4 +52,23 @@ class Ekkitab_Catalog_Block_Product_Bestboxedsets extends Mage_Core_Block_Templa
 		return $boxedSetsCollection;
 	}
 	
+		/**
+     * Get popular catagories of current store
+     *
+     */
+    public function getBestBoxedSetsProductIds()
+    {
+		if(is_null($this->_bestSetIds)){
+			$bestSellers = Mage::getModel('ekkitab_catalog/product_bestboxedsets')->getCollection();
+			$i=0;
+			$productIds=array();
+			foreach($bestSellers as  $product){
+				$productIds[$i++] = $product->getProductId();
+			}
+			$this->setBestBoxedSetsProductIds($productIds);
+		}
+		return $this->_bestSetIds;
+		
+	}
+
 }
