@@ -164,7 +164,7 @@ insert into ek_discount_setting (`info_source`, `discount_percent`) values ('1kt
 use ekkitab_books;
 --
 -- Dumping data for table `core_config_data`
---
+--	
 
 INSERT INTO `core_config_data` (`config_id`, `scope`, `scope_id`, `path`, `value`) VALUES
 (43, 'default', 0, 'general/country/default', 'IN'),
@@ -318,13 +318,26 @@ INSERT INTO `core_config_data` (`config_id`, `scope`, `scope_id`, `path`, `value
 (449, 'default', 0, 'carriers/flatrate/active', '0'),
 (469, 'default', 0, 'carriers/ups/active', '0'),
 (516, 'default', 0, 'carriers/fedex/active', '0'),
-(615, 'default', 0, 'carriers/usps/active', '0');
+(615, 'default', 0, 'carriers/usps/active', '0'),
+(686, 'default', 0, 'payment/ccav/active', '1'),
+(687, 'default', 0, 'payment/ccav/title', 'Master / Visa Card'),
+(688, 'default', 0, 'payment/ccav/payment_action', 'AUTHORIZATION'),
+(689, 'default', 0, 'payment/ccav/order_status', 'processing'),
+(690, 'default', 0, 'payment/ccav/transaction_type', 'O'),
+(691, 'default', 0, 'payment/ccav/sort_order', ''),
+(740, 'default', 0, 'ccav/wps/checksum_key', 'kvppt13q4lwbo4g90y'),
+(741, 'default', 0, 'ccav/wps/merchant_url', 'https://www.ccavenue.com/shopzone/cc_details.jsp'),
+(742, 'default', 0, 'ccav/wps/return_url', 'http://localhost/scm/magento/ccav/standard/ccavresponse'),
+(743, 'default', 0, 'ccav/wps/merchant_id', 'M_singhak_11811'),
+(744, 'default', 0, 'ccav/wps/logo_url', ''),
+(745, 'default', 0, 'ccav/wps/sandbox_flag', '0'),
+(746, 'default', 0, 'ccav/wps/debug_flag', '0');
 
 
 
 --
 -- Dumping data for table `core_config_data`
---Note that the following inserts differ in syntax....
+-- Note that the following inserts differ in syntax....
 
 
 INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
