@@ -606,7 +606,7 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
     public function getFinalPrice($qty=null)
     {
         $price = $this->_getData('discount_price');
-        if ($price !== null) {
+        if ($price !== null && $price > 0.0 ) {
             return $price;
         }
         return $this->getPrice();
