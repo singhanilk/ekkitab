@@ -17,6 +17,25 @@
 class Ekkitab_Catalog_Block_Product_Newreleases extends Mage_Core_Block_Template
 {
 
+    /**
+     * Bestseller Product Ids
+     *
+     * @var array
+     */
+    protected $_newReleaseIds;
+
+
+    /**
+     * Set productIds to variable
+     *
+     * @param Varien_Data_Collection $collection
+     * 
+     */
+    public function setNewReleaseProductIds($productIds = array())
+    {
+		$this->_newReleaseIds = $productIds;
+    }
+	
 	/**
      * Get popular catagories of current store
      *
@@ -32,5 +51,25 @@ class Ekkitab_Catalog_Block_Product_Newreleases extends Mage_Core_Block_Template
 				->addIdFilter($productIds);
 		return $newReleasesCollection;
 	}
+
+		/**
+     * Get popular catagories of current store
+     *
+     */
+    public function getNewReleaseProductIds()
+    {
+		if(is_null($this->_newReleaseIds)){
+			$bestSellers = Mage::getModel('ekkitab_catalog/product_newreleases')->getCollection();
+			$i=0;
+			$productIds=array();
+			foreach($bestSellers as  $product){
+				$productIds[$i++] = $product->getProductId();
+			}
+			$this->setNewReleaseProductIds($productIds);
+		}
+		return $this->_newReleaseIds;
+		
+	}
+
 	
 }

@@ -4,31 +4,41 @@ set EKKITAB_HOME =
 
 check config/importbooks.ini for mysql user id / password
 
-1. mysql -u root -proot < reset_ekkitab_books.sql
+##########################################################
+### Reset Ekkitab_Books and Reference Databases.
+##########################################################
+1. mysql -u uid -ppswd < reset_ekkitab_books.sql
+2. mysql -u uid -ppswd < reset_refdb.sql
 
-2. mysql -u uid -ppswd < init_ekkitab_books_db.sql
+##########################################################
+###  import the 1k test data
+##########################################################
+3. php importbooks.php 1ktestdata   ../data/1ktestdata.txt english
+4. php importdescription.php 1ktestdata -l  ../data/1ktestdata.txt 
+5. php importpricesstock.php 1ktestdata ../data/1ktestdata.txt
 
-3. mysql -u uid -ppswd < reset_refdb.sql
+##########################################################
+###  import the 50 low-cost books.
+##########################################################
+6. php importbooks.php 1ktestdata   ../data/50lowcostbooks.txt english 
+7. php importdesription.php 1ktestdata -l   ../data/50lowcostbooks.txt
+8. php importpricesstock.php 1ktestdata   ../data/50lowcostbooks.txt 
 
-4. mysql -u uid -ppswd < init_refdb.sql
+##########################################################
+### Update the reference db with descriptions and price
+##########################################################
+9. mysql -u uid -ppswd < update_prices_and_stock.sql
+10. mysql -u uid -ppswd < update_descriptions.sql
 
-5. php importbooks.php 1ktestdata   ../data/1ktestdata.txt english
+##########################################################
+### Copy the books table to ekkitab_books database. 
+##########################################################
+11. mysql -u uid -ppswd < loadbooks.sql
 
-6. php importdescription.php 1ktestdata -l  ../data/1ktestdata.txt 
-
-7. php importpricesstock.php 1ktestdata ../data/1ktestdata.txt
-
-9. php importbooks.php 1ktestdata   ../data/50lowcostbooks.txt english 
-   php importdesription.php 1ktestdata -l   ../data/50lowcostbooks.txt
-   php importpricestock.php 1ktestdata   ../data/50lowcostbooks.txt 
-
-10. mysql -u uid -ppswd < update_prices_and_stock.sql
-
-11. mysql -u uid -ppswd < update_descriptions.sql
-
-12. mysql -u uid -ppswd < loadbooks.sql
-
-13. cd EKKITAB_HOME/scm/bin; ./create_index.sh <db host> <db user> <db password>;
+##########################################################
+### Create the search index. 
+##########################################################
+12. (cd EKKITAB_HOME/scm/bin; ./create_index.sh <db host> <db user> <db password>;)
 
 
 

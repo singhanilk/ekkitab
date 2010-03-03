@@ -52,6 +52,19 @@
 	</div>
 </div>
 <!-- header-->
+<script language="javascript">
+	function showRequest(divLabel,parentDivNo,divNo){
+		var divName = divLabel+"_scroll_"+divNo;
+		var parentDivName = divLabel+"_scroll_"+parentDivNo;
+		var obj = document.getElementById(divName);
+		var parentObj = document.getElementById(parentDivName);
+		var ua = navigator.userAgent.toLowerCase();
+		if(obj){
+			parentObj.style.display="none";
+			obj.style.display ="block";
+		}
+	}
+</script>
 
 
 
