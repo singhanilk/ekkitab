@@ -69,7 +69,7 @@ CREATE TABLE `books` (
   `int_shipping` TINYINT UNSIGNED default '0',
   `info_source` varchar(40) NOT NULL,
   `sourced_from` varchar(16) NOT NULL default 'India',
-  `updated_date` date NOT NULL,
+  `update_time` timestamp default current_timestamp,
   `product_status` TINYINT UNSIGNED NOT NULL default '1',
   `bisac_codes` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
