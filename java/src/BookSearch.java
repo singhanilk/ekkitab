@@ -222,13 +222,13 @@ public class BookSearch {
         return book;
     }
 
-    private List<Map<String, String>> getBooks(ScoreDoc[] hits, int start, int end) 
+    private List<String> getBooks(ScoreDoc[] hits, int start, int end) 
                         throws Exception {
 
         int index = 0;
         Set<String> uniques = new HashSet<String>(); 
         catMap = new HashMap<String, Integer>();
-        List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+        List<String> result = new ArrayList<String>();
         try {
            for (int i = 0; (i < hits.length) && (index < end); i++) {
                Document doc = searcher.doc(hits[i].doc);
@@ -236,7 +236,7 @@ public class BookSearch {
                   String id = getFieldValue(doc.getField("entityId"));
                   if ((id != null) && (uniques.add(id))) {
                       if (index++ >= start) {
-                        result.add(getBook(doc));
+                        result.add(getFieldValue(doc.getField("entityId")));
                       }
                   }
                   //String key = getFieldValue(doc.getField(nextcategorylabel));
@@ -271,7 +271,7 @@ public class BookSearch {
     public Map<String, Object> searchBook(String category, String query, int pageSz, int page) throws Exception {
 
        Map<String, Object> result = new HashMap<String, Object>();
-       List<Map<String, String>> books = new ArrayList<Map<String, String>>();
+       List<String> books = null;
        Map<String, Integer> counts = null;
        CategoryLevel searchcats = rootcategory;
        int searchlevel = 1;
@@ -361,7 +361,7 @@ public class BookSearch {
 
        if (modquery.equals("")) {
             logger.debug("["+instanceId+"] Query: is empty.");
-            result.put("books", null);
+            result.put("books", new ArrayList<String>());
             result.put("counts", null);
             result.put("hits", new Integer(0));
        }
@@ -450,14 +450,13 @@ public class BookSearch {
               Map<String, Object> results = booksearch.searchBook(category, query, 10, Integer.parseInt(page));
               Integer numberofhits = (Integer)results.get("hits"); 
               System.out.println(numberofhits +" hits overall.");
-              List<Map<String, String>> books = (List<Map<String, String>>)results.get("books");
+              List<String> books = (List<String>)results.get("books");
               if (books != null) {
                 Iterator iter = books.iterator();
                 while (iter.hasNext()) {
-                    Map<String, String> book = (Map<String, String>)iter.next();
+                    String bookId = (String)iter.next();
                     System.out.println("--------------------------------------");
-                    System.out.println("Author: "+book.get("author"));
-                    System.out.println("Title: "+book.get("title"));
+                    System.out.println("Book Id: "+bookId);
                     //System.out.println("Url: "+book.get("url"));
                     //System.out.println("Image: "+book.get("image"));
                     //System.out.println("Price: "+book.get("listprice"));
