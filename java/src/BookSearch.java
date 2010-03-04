@@ -95,6 +95,7 @@ public class BookSearch {
 
     private void saveCategory(Element node, CategoryLevel cat, int level) {
         String name = node.getAttribute("name");
+        cat.putKey(name);
         NodeList nodelist = node.getElementsByTagName("Level"+(level+1));
         for (int i = 0; i < nodelist.getLength(); i++) {
             Node nextnode = nodelist.item(i);
