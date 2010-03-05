@@ -233,15 +233,11 @@ public class BookSearch {
                         if((ct != null) && (ct.field()== t.field())) {
                             if (te.docFreq() > 1) {
                                 TermDocs td = reader.termDocs(ct);
-                                int lastdoc = -1;
                                 while (td.next()) {    
-                                   lastdoc = td.doc();
-                                   hits.set(lastdoc,false);
+                                   hits.set(td.doc(),false);
                                 } 
-                                if (lastdoc > 0) {
-                                    hits.set(lastdoc);
-                                }
                             }
+                            hits.set(i);
                         }
                     }
                }
