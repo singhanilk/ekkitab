@@ -48,7 +48,7 @@ public class BookIndex {
         if (startId > 0)
             this.startId = startId;
         Directory d  = FSDirectory.getDirectory(indexDir);
-        indexWriter = new IndexWriter(d,new StandardAnalyzer(),newIndex);
+        indexWriter = new IndexWriter(d,new StandardAnalyzer(),newIndex, IndexWriter.MaxFieldLength.LIMITED);
         indexWriter.setUseCompoundFile(true);
         jdbcUrl = "jdbc:mysql://"+db+":3306/reference";
         open();
@@ -264,18 +264,18 @@ public class BookIndex {
         while (iter.hasNext()) {
             Map<String, String> book = (Map<String, String>)iter.next();
             Document doc = new Document();
-            doc.add(new Field("entityId", book.get("id"), Field.Store.YES, Field.Index.NO));
-            doc.add(new Field("sourcedfrom", book.get("sourcedfrom"), Field.Store.NO, Field.Index.TOKENIZED));
-            doc.add(new Field("author", book.get("author"), Field.Store.NO, Field.Index.TOKENIZED));
-            doc.add(new Field("title", book.get("title"), Field.Store.NO, Field.Index.TOKENIZED));
-            doc.add(new Field("isbn", book.get("isbn"), Field.Store.YES, Field.Index.UN_TOKENIZED));
+            doc.add(new Field("entityId", book.get("id"), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.add(new Field("sourcedfrom", book.get("sourcedfrom"), Field.Store.NO, Field.Index.ANALYZED));
+            doc.add(new Field("author", book.get("author"), Field.Store.NO, Field.Index.ANALYZED));
+            doc.add(new Field("title", book.get("title"), Field.Store.NO, Field.Index.ANALYZED));
+            doc.add(new Field("isbn", book.get("isbn"), Field.Store.YES, Field.Index.NOT_ANALYZED));
             for (int i = 0; i < LEVELS; i++) {
                 int index = i + 1;
                 String label = "level" + index;
                 String category = book.get(label);
                 String real_name = category;
                 String key = real_name.replaceAll("\\W+", "");
-                doc.add(new Field(label, key, Field.Store.NO, Field.Index.UN_TOKENIZED));
+                doc.add(new Field(label, key, Field.Store.NO, Field.Index.NOT_ANALYZED));
                 doc.add(new Field(label+"_real", real_name, Field.Store.YES, Field.Index.NO));
             }
             indexWriter.addDocument(doc);
