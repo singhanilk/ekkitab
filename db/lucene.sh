@@ -1,19 +1,41 @@
 #
 #  sudo apt-get install tomcat6
 
+service tomcat6 stop
+
+if [ -n $EKKITAB_HOME ]
+then
+  export EKKITAB_HOME=/var/www/scm
+fi
+
+echo "EKKITAB_HOME: $EKKITAB_HOME "
+echo ""
+
+echo "PRESS RETURN TO CONTINUE"
+read response
+
+
+
+
 EKKITAB_HOME=/var/www/scm
 TOMCAT6=/var/lib/tomcat6
 TOM_WEBINF=$TOMCAT6/webapps/JavaBridge/WEB-INF
 
-sudo cp $EKKITAB_HOME/extern/JavaBridge.war $TOMCAT6/webapps
+rm -rf $TOMCAT6/webapps/JavaBridge
+rm -rf $TOMCAT6/webapps/JavaBridge.war
 
-sudo mkdir -p $TOM_WEBINF/classes
-sudo cp $EKKITAB_HOME/java/bin/* $TOM_WEBINF/classes
+cp $EKKITAB_HOME/extern/JavaBridge.war $TOMCAT6/webapps
 
-sudo rm -f $TOM_WEBINF/lib/lucene*
+service tomcat6 start
+sleep 15
 
-sudo cp $EKKITAB_HOME/java/lib/* $TOM_WEBINF/lib
+mkdir -p $TOM_WEBINF/classes
+cp $EKKITAB_HOME/java/bin/* $TOM_WEBINF/classes
 
-sudo service tomcat6 restart
+rm -f $TOM_WEBINF/lib/lucene*
+
+cp $EKKITAB_HOME/java/lib/* $TOM_WEBINF/lib
+
+service tomcat6 restart
 
 
