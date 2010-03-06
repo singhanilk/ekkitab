@@ -1,0 +1,54 @@
+This is a checklist of everything that is required to be done to get
+Ekkitab running on a brand new Ubuntu/RedHat installation.
+
+Open Source software components required:
+1. Java 6
+2. Apache 2.2
+3. Tomcat 6
+4. PHP5
+3. GIT 
+
+export EKKITAB_HOME=/var/www/scm
+export EKKITAB_USER=<name>
+
+################################# 
+## Setting up the GIT repository.
+################################# 
+
+cd /var/www;
+sudo mkdir tmp;
+sudo chown -R $EKKITAB_USER:$EKKITAB_USER tmp
+
+## you will require to have set up ssh access to github prior to executing the next step.
+
+cd tmp;
+git clone git@github.com:singhanilk/ekkitab.git scm
+sudo mv scm ..
+cd ..
+sudo rm -rf tmp
+
+####################
+## Setting up Apache
+####################
+
+sudo su -
+cd /etc/php5/apache2
+cp php.ini php.ini.saved
+cat php.ini.saved |  sed 's/^allow_url_include.*/allow_url_include = On/g' >  php.ini
+
+cd /etc/apache2/sites-enabled;
+cp 000-default 000-default.saved
+cat 000-default.saved | sed 's/\([ \t]*DocumentRoot \).*$/\1 \/var\/www\/scm\/magento/g' > 000-default
+
+exit;
+
+####################
+## Setting up Tomcat
+####################
+
+sudo su -
+cd /etc/init.d
+cp tomcat6 tomcat6.saved
+chmod a-x tomcat6.saved
+cat tomcat6.saved | sed 's/\([^$]*TOMCAT[0-9]_SECURITY=\).*$/\1no/g' > tomcat6
+
