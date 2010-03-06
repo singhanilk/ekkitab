@@ -19,7 +19,7 @@ then
    echo "The command will be run as :$0  $uid $pswd $dbhost "
    echo ""
    echo "PRESS RETURN TO CONTINUE"
-   read 
+   read response
 else
    uid=$1
    pwd=$2
@@ -27,8 +27,10 @@ else
    echo "The command will be run as :$0  $uid $pswd $dbhost "
    echo ""
    echo "PRESS RETURN TO CONTINUE"
-   read
+   read response
 fi
+
+echo "Continuing....."
 
 ##########################################################
 ### Reset Ekkitab_Books and Reference Databases.
