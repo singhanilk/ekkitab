@@ -35,7 +35,7 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 	protected $_filterBy;
 	protected $_queryText;
 	protected $_lastPageNo;
-	protected $_displayPages = 7;
+	protected $_displayPages = 5;
 
 	private static $_socketConn = 0;
 
@@ -104,7 +104,6 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 					));
 				}
 			}
-
 			$this->getLayout()->getBlock('head')->setTitle($title);
 		}
 		
@@ -166,7 +165,6 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 			$categoryPath = strtolower(str_replace('__', "/", $this->getCurrentCategoryPath())); // this is to parse the parents and child categories seperated by '__'
 			// this is to filter the search by title / author / or both
 			$filterBy = strlen($this->getFilterByText()) > 0 ?($this->getFilterByText().":"):""; 
-			Mage::log(" In search Results block.....filterByTxt is $filterBy");
 			$results = $search->searchBook($this->getDecodedString($categoryPath),$filterBy.$this->helper('ekkitab_catalog')->getEscapedQueryText(), $this->getPageSize(), $this->getCurrentPageNumber());
 		}
 		catch(Exception $e)
@@ -178,11 +176,67 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
     }
  
 		
+	protected function getSearchResultsNew() 
+    {
+		$indexFilePathArray;
+		$javaIncFilePathArray;
+		$indexFilePath;
+		$javaIncFile;
+		if (!($indexFilePathArray = Mage::getConfig()->getNode(self::XML_PATH_SEARCH_INDEX_FILE))) {
+			$indexFilePath = 'search_index_dir';
+		}else {
+			$indexFilePath = (string) $indexFilePathArray[0];
+		}
+		$indexFilePath =  Mage::getRoot().DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR.$indexFilePath;
+		if (!($javaIncFilePathArray = Mage::getConfig()->getNode(self::JAVA_BRIDGE_INC_FILE))) {
+			$javaIncFile = 'http://localhost:8080/JavaBridge/java/Java.inc';
+		}else {
+			$javaIncFile = (string) $javaIncFilePathArray[0];
+		}
+		try{
+			require($javaIncFile);
+			$search = new java("BookSearch",$indexFilePath );
+			$categoryPath = strtolower(str_replace('__', "/", $this->getCurrentCategoryPath())); // this is to parse the parents and child categories seperated by '__'
+			// this is to filter the search by title / author / or both
+			$filterBy = strlen($this->getFilterByText()) > 0 ?($this->getFilterByText().":"):""; 
+			$results = $search->searchBook($this->getDecodedString($categoryPath),$filterBy.$this->helper('ekkitab_catalog')->getEscapedQueryText(), $this->getPageSize(), $this->getCurrentPageNumber());
+			$books;
+			if(!is_null($results)){
+				Mage::log("In Searchresults.php... results is not null...getting productIds array");
+				$productIds = java_values($results->get("books"));
+				/*if (!is_null($bookList)) {
+					foreach($bookList as  $book){
+						$productIds[] = $book->get("entityId");
+					}*/
+					if(!is_null($productIds) && is_array($productIds) && count($productIds) > 0 ){
+						Mage::log("In Searchresults.php...productIds is not null....");
+						$books = Mage::getModel('ekkitab_catalog/product')->getCollection()
+						->addIdFilter($productIds);
+						Mage::log("In Searchresults.php...size of books from our DB is :".$books->count());
+					}
+				//}
+			}
+			Mage::log("In Searchresults.php...setting the books, categories and totalhitcount into array ");
+			$booksResult = array("books"=>$books,"counts"=>$results->get("counts"),"hits"=>java_values($results->get("hits")));
+			$this->_productCollection = $booksResult;
+
+		}
+		catch(Exception $e)
+		{
+			$booksResult =NULL;
+			Mage::logException($e);
+			Mage::log($e->getMessage());
+			Mage::log("OR Exception in SearchResult.php : Could not include Java.inc file @ http://localhost:8080/JavaBridge/java/Java.inc");
+		}
+		return $booksResult;
+    }
+ 
+		
 	public function getProductCollection(){
 
 		//introduce the lucene search here.....
 		if (is_null($this->_productCollection)) { 
-			$this->_productCollection = $this->getSearchResults();
+			$this->_productCollection = $this->getSearchResultsNew();
 		}
 		return $this->_productCollection;
     }
@@ -198,9 +252,12 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 	   if (!$this->getData('result_count')) {
 			$results = $this->getProductCollection();
 			if(!is_null($results)){
-				$bookList = $results->get("books");
-				if (!java_is_null($bookList)) {
-					$size = java_values($bookList->size());
+				//$bookList = $results->get("books");
+				//if (!java_is_null($bookList)) {
+				//	$size = java_values($bookList->size());
+				$bookList = $results["books"];
+				if (!is_null($bookList)) {
+					$size = $bookList->count();
 				}
 			}
 			$this->setResultCount($size);
@@ -218,9 +275,12 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
     public function getTotalResultCount()
     {
 	   if (!$this->getData('total_result_count')) {
-            if($this->getProductCollection()){
-				$results = $this->_productCollection;
-				$size = java_values($results->get("hits"));
+		//if($this->getProductCollection()){
+			//	$results = $this->_productCollection;
+			//	$size = java_values($results->get("hits"));
+			$results = $this->getProductCollection();
+			if(!is_null($results)){
+				$size = $results["hits"];
 			}else{
 				$size = 0;
 			}

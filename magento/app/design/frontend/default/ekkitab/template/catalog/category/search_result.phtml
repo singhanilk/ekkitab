@@ -32,11 +32,11 @@
 	}
  
  $results=$this->getProductCollection();
-if(!is_null($results)){
-  $bookList = $results->get("books");
-  if (!java_is_null($bookList)) {
-	$count = java_values($bookList->size());
-	$subcats = $results->get("counts");
+if(!is_null($results) && is_array($results)){
+  $bookList = $results["books"];
+  $subcats = $results["counts"];
+  if (!is_null($bookList)) {
+	$count = $bookList->count();
 	$curr_cp = $this->getCurrentCategoryPath();
 	if (!java_is_null($subcats)) {
 	  $retsize = java_values($subcats->size());
@@ -125,21 +125,19 @@ if(!is_null($results)){
 	<div class="clear"></div>
 </div><!-- searchResTop -->
 	<?php 
-		$iter = $bookList->iterator();
-		for ($j=0; $j<$count; $j++) {
-			$book = $bookList->get($j);
-			$author = strlen($book->get("author")) > 0 ? $book->get("author") : "Unknown";
-			$title = $book->get("title");
-			$image = $book->get("image");
-			$id = java_values($book->get("entityId"));
-			$listPrice = java_values($book->get("listprice")) ;
-			$discPrice = java_values($book->get("discountprice"));
-			$isbn = java_values($book->get("isbn"));
-			$shippingTime=java_values($book->get("delivertime"));
-			$binding=strlen($book->get("binding")) > 0 ? ucfirst($book->get("binding")) : "Not Available" ;
-			$language=strlen($book->get("language")) > 0 ? $book->get("language") : "Unknown";
-			$stock=java_values($book->get("instock"));
-			$shortDesc=java_values($book->get("shortdesc"));
+		foreach($bookList as $book):	
+			$author = strlen($book->getAuthor()) > 0 ? $book->getAuthor() : "Unknown";
+			$title = $book->getTitle();
+			$image = $book->getImage();
+			$id = $book->getId();
+			$listPrice = $book->getListPrice() ;
+			$discPrice = $book->getDiscountPrice();
+			$isbn = $book->getIsbn();
+			$shippingTime=$book->getDeliveryPeriod();
+			$binding=strlen($book->getBinding()) > 0 ? ucfirst($book->getBinding()) : "Not Available" ;
+			$language=strlen($book->getLanguage()) > 0 ? $book->getLanguage() : "Unknown";
+			$stock=$book->getInStock();
+			$shortDesc=$book->getShortDescription();
 			//$shortDesc='Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves.';
 			
 			//$url = $book->get("url");
@@ -182,7 +180,7 @@ if(!is_null($results)){
 			<div class="clear"></div>
 			</div><!-- searchRowEnds -->
 			<div class="clear"></div>
-		<?php } ?>
+		<?php endforeach; ?>
 	</div><!-- inLeft-->
 <div class="clear"></div>
 	<div class="paginationAreaOut">

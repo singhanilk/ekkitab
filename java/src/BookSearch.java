@@ -1,10 +1,7 @@
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.Hit;
 import org.apache.lucene.search.HitCollector;
-import org.apache.lucene.search.Hits;
-import org.apache.lucene.search.HitIterator;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
@@ -15,9 +12,13 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.index.TermEnum;
+import org.apache.lucene.index.TermDocs;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.DuplicateFilter;
 import org.apache.log4j.Logger;
 import org.apache.log4j.RollingFileAppender;
 import org.apache.log4j.LogManager;
@@ -95,6 +96,7 @@ public class BookSearch {
 
     private void saveCategory(Element node, CategoryLevel cat, int level) {
         String name = node.getAttribute("name");
+        cat.putKey(name);
         NodeList nodelist = node.getElementsByTagName("Level"+(level+1));
         for (int i = 0; i < nodelist.getLength(); i++) {
             Node nextnode = nodelist.item(i);
@@ -169,10 +171,6 @@ public class BookSearch {
             else
                 this.indexDir = properties.getProperty("searchdir.path");
             Directory dir = FSDirectory.getDirectory(this.indexDir);
-            if (IndexReader.isLocked(dir)) {
-                IndexReader.unlock(dir);
-                logger.debug("["+instanceId+"] Index Directory locked. Trying to unlock...");
-            }
             reader = IndexReader.open(dir);
             searcher = new IndexSearcher(reader);
         }
@@ -188,74 +186,64 @@ public class BookSearch {
     }
 
     private BookSearch() {
-        System.out.println("In the initialization....");
+        //System.out.println("In the initialization....");
     }
 
     private String getFieldValue(Field fd) {
         return (fd == null ? null : fd.stringValue());
     }
 
-    private Map<String, String> getBook(Document doc) 
-                        throws Exception {
-
-        List<Map<String, String>> result = new ArrayList<Map<String, String>>();
-        Map<String, String> book = new HashMap<String, String>();
-        try {
-           book.put("author", getFieldValue(doc.getField("author")));
-           book.put("title", getFieldValue(doc.getField("title")));
-           book.put("image", getFieldValue(doc.getField("image")));
-           book.put("url", getFieldValue(doc.getField("url")));
-           book.put("listprice", getFieldValue(doc.getField("listprice")));
-           book.put("discountprice", getFieldValue(doc.getField("discountprice")));
-           book.put("entityId", getFieldValue(doc.getField("entityId")));
-           book.put("isbn", getFieldValue(doc.getField("isbn")));
-           book.put("language", getFieldValue(doc.getField("language")));
-           book.put("shortdesc", getFieldValue(doc.getField("shortdesc")));
-           book.put("binding", getFieldValue(doc.getField("binding")));
-           book.put("delivertime", getFieldValue(doc.getField("delivertime")));
-           book.put("instock", getFieldValue(doc.getField("instock")));
-        }
-        catch (Exception e) {
-            logger.debug("["+instanceId+"] "+e.getMessage());
-            throw new Exception(e.getMessage());
-        }
-        return book;
-    }
-
-    private List<Map<String, String>> getBooks(ScoreDoc[] hits, int start, int end) 
+    private List<String> getBooks(ScoreDoc[] hits, BitSet uniques, int start, int end) 
                         throws Exception {
 
         int index = 0;
-        Set<String> uniques = new HashSet<String>(); 
-        catMap = new HashMap<String, Integer>();
-        List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+        List<String> result = new ArrayList<String>();
         try {
            for (int i = 0; (i < hits.length) && (index < end); i++) {
-               Document doc = searcher.doc(hits[i].doc);
-               if (doc != null) {
-                  String id = getFieldValue(doc.getField("entityId"));
-                  if ((id != null) && (uniques.add(id))) {
-                      if (index++ >= start) {
-                        result.add(getBook(doc));
-                      }
-                  }
-                  //String key = getFieldValue(doc.getField(nextcategorylabel));
-                  //if (key != null) {
-                   //   if (key.length() > 0) {
-                    //      if (catMap.containsKey(key))
-                     //         catMap.put(key, new Integer(((Integer)catMap.get(key)).intValue() + 1));
-                      //    else 
-                       //       catMap.put(key, new Integer("1"));
-                     // }
-                 // }
+               if (uniques.nextSetBit(hits[i].doc) == hits[i].doc) {
+                    Document doc = searcher.doc(hits[i].doc);
+                    if (doc != null) {
+                        String id = getFieldValue(doc.getField("entityId"));
+                        if (id != null) {
+                            if (index++ >= start) {
+                                result.add(getFieldValue(doc.getField("entityId")));
+                            }
+                        }
+                    }
                }
-            }
+           }
         }
         catch (Exception e) {
             logger.debug("["+instanceId+"] "+e.getMessage());
             throw new Exception(e.getMessage());
         }
         return result;
+    }
+
+    private BitSet dedup(BitSet hits) throws Exception {
+        for (int i = hits.nextSetBit(0); (i >= 0); i = hits.nextSetBit(i+1)) {
+            Document doc = reader.document(i);
+            if (doc != null) {
+               String id = doc.get("entityId");
+               if (id != null) {
+                    Term t = new Term("entityId", id);
+                    TermEnum te = reader.terms(t);
+                    if (te != null) {
+                        Term ct = te.term();
+                        if((ct != null) && (ct.field()== t.field())) {
+                            if (te.docFreq() > 1) {
+                                TermDocs td = reader.termDocs(ct);
+                                while (td.next()) {    
+                                   hits.set(td.doc(),false);
+                                } 
+                            }
+                            hits.set(i);
+                        }
+                    }
+               }
+            }
+        }
+        return hits;
     }
 
     private CategoryLevel getSearchCategories(String[] categories) {
@@ -271,7 +259,7 @@ public class BookSearch {
     public Map<String, Object> searchBook(String category, String query, int pageSz, int page) throws Exception {
 
        Map<String, Object> result = new HashMap<String, Object>();
-       List<Map<String, String>> books = new ArrayList<Map<String, String>>();
+       List<String> books = null;
        Map<String, Integer> counts = null;
        CategoryLevel searchcats = rootcategory;
        int searchlevel = 1;
@@ -361,37 +349,48 @@ public class BookSearch {
 
        if (modquery.equals("")) {
             logger.debug("["+instanceId+"] Query: is empty.");
-            result.put("books", null);
+            result.put("books", new ArrayList<String>());
             result.put("counts", null);
             result.put("hits", new Integer(0));
        }
        else {
 
             try {
-                long fstart = System.currentTimeMillis();
                 Query luceneQuery = qpt.parse(modquery);
                 logger.debug("["+instanceId+"] Lucene Query: "+luceneQuery.toString());
         
                 TopFieldDocCollector collector = new TopFieldDocCollector(reader, sorter, MAXHITS);
+
+                long fstart = System.currentTimeMillis();
                 searcher.search(luceneQuery, collector);
-                
                 long fstop = System.currentTimeMillis();
+
                 logger.debug("["+instanceId+"] Search returned in: "+(fstop - fstart)/1000+" sec. with "+collector.getTotalHits()+" hits.");
-                fstart = System.currentTimeMillis();
 
                 ScoreDoc[] docs = null;
                 if (collector.getTotalHits() > 0) {
                     docs = collector.topDocs().scoreDocs;
                 }
 
-                if ((docs != null) && (docs.length > 0)) {
-                    books = getBooks(docs, startIndex, endIndex);
+                BitSet allhits = new BitSet(reader.maxDoc());
+                if (docs != null) {
+                    for (int i = 0; (i < docs.length); i++) {
+                        allhits.set(docs[i].doc);
+                    }
+                }
+        
+                fstart = System.currentTimeMillis();
+                if (allhits.cardinality() > 0) {
+                    allhits = dedup(allhits);
+                    books = getBooks(docs, allhits, startIndex, endIndex);
                 }
                 fstop = System.currentTimeMillis();
-                logger.debug("["+instanceId+"] Books collected in: "+(fstop - fstart)/1000+" sec.");
+
+                logger.debug("["+instanceId+"] Books collected in "+(fstop - fstart)+" millisec.");
 
                 final BitSet hits = new BitSet(reader.maxDoc());
                 int catsize = 0;
+                catMap = new HashMap<String, Integer>();
 
                 fstart = System.currentTimeMillis();
                 if (searchcats != null) {
@@ -399,26 +398,26 @@ public class BookSearch {
                     catsize = cats.size();
                     for (String catname: cats) {
                         hits.clear();
-                        //logger.debug("["+instanceId+"] Hit count is: "+hits.cardinality());
                         String newquery = modquery + " +level"+searchlevel+":"+catname.replaceAll("\\W+", "");
-                        //logger.debug("["+instanceId+"] New Query: "+newquery);
                         Query newLuceneQuery = qpt.parse(newquery);
-                        //logger.debug("["+instanceId+"] New Lucene Query: "+newLuceneQuery.toString());
                         searcher.search(newLuceneQuery, new HitCollector() { 
                                                                public void collect(int doc, float score) {
                                                                    hits.set(doc);
                                                                }
                                                             });
-                        if (hits.cardinality() > 0)
+                        if (hits.cardinality() > 0) {
                             catMap.put(catname, hits.cardinality()); 
+                        }
                     }
                 }
                 fstop = System.currentTimeMillis();
+
                 logger.debug("["+instanceId+"] Hits counted in "+catsize+" categories in: "+(fstop - fstart)+" millisec.");
+
 
                 result.put("books", books);
                 result.put("counts", catMap);
-                result.put("hits", new Integer(collector.getTotalHits()));
+                result.put("hits", new Integer(allhits.cardinality()));
             }
             catch(Exception e) {
                 logger.debug(e.getMessage());
@@ -450,14 +449,13 @@ public class BookSearch {
               Map<String, Object> results = booksearch.searchBook(category, query, 10, Integer.parseInt(page));
               Integer numberofhits = (Integer)results.get("hits"); 
               System.out.println(numberofhits +" hits overall.");
-              List<Map<String, String>> books = (List<Map<String, String>>)results.get("books");
+              List<String> books = (List<String>)results.get("books");
               if (books != null) {
                 Iterator iter = books.iterator();
                 while (iter.hasNext()) {
-                    Map<String, String> book = (Map<String, String>)iter.next();
+                    String bookId = (String)iter.next();
                     System.out.println("--------------------------------------");
-                    System.out.println("Author: "+book.get("author"));
-                    System.out.println("Title: "+book.get("title"));
+                    System.out.println("Book Id: "+bookId);
                     //System.out.println("Url: "+book.get("url"));
                     //System.out.println("Image: "+book.get("image"));
                     //System.out.println("Price: "+book.get("listprice"));

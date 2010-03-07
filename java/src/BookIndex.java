@@ -35,7 +35,6 @@ public class BookIndex {
     private IndexWriter indexWriter = null;
     private CategoryLevel rootcategory = new CategoryLevel();
 
-    private long timer[] = new long[3];
     private static final int MAXDESC_SIZE = 100;
     private String xmlfile = null;
     private int startId = 0;
@@ -49,7 +48,7 @@ public class BookIndex {
         if (startId > 0)
             this.startId = startId;
         Directory d  = FSDirectory.getDirectory(indexDir);
-        indexWriter = new IndexWriter(d,new StandardAnalyzer(),newIndex);
+        indexWriter = new IndexWriter(d,new StandardAnalyzer(),newIndex, IndexWriter.MaxFieldLength.LIMITED);
         indexWriter.setUseCompoundFile(true);
         jdbcUrl = "jdbc:mysql://"+db+":3306/reference";
         open();
@@ -181,26 +180,15 @@ public class BookIndex {
 
         List<Map<String, String>> books = new ArrayList<Map<String, String>>();
 
-	    String sql = "select title, author, bisac_codes, sourced_from, isbn, " +
-                     "image, list_price, discount_price, in_stock, binding, " +
-                     "language, short_description, description, delivery_period from books where id = " + bookId;
+	    String sql = "select title, author, bisac_codes, sourced_from, isbn from books where id = " + bookId;
         Statement stmt = connection.createStatement();
         ResultSet result = stmt.executeQuery(sql);
 
         String id;
         String title;
         String author;
-        String discountprice;
-        String listprice;
-        String image;
-        String url;
         String sourcedfrom;
         String bisac_codes;
-        String instock; 
-        String binding; 
-        String language; 
-        String shortdesc; 
-        String delivertime; 
         String isbn;
 
         long fstart, fstop;
@@ -217,50 +205,9 @@ public class BookIndex {
             sourcedfrom = result.getString("sourced_from");
             sourcedfrom = sourcedfrom == null ? "" : sourcedfrom;
 
-            listprice = result.getString("list_price");
-            listprice = listprice == null ? "" : listprice;
-
-            discountprice = result.getString("discount_price");
-            discountprice = discountprice == null ? "" : discountprice;
-
-            instock = result.getString("in_stock");
-            instock = instock == null ? "0" : instock;
-
-            binding = result.getString("binding");
-            binding = binding == null ? "" : binding;
-
-            language = result.getString("language");
-            language = language == null ? "" : language;
-
-            shortdesc = result.getString("short_description");
-            shortdesc = shortdesc == null ? "" : shortdesc;
-            if (shortdesc.equals("")) {
-                shortdesc = result.getString("description");
-                shortdesc = shortdesc == null ? "" : shortdesc;
-            }
-
-            if (shortdesc.length() > MAXDESC_SIZE) {
-                int index = shortdesc.lastIndexOf(' ', MAXDESC_SIZE);
-                shortdesc = shortdesc.substring(0, (index > 0 ? index : MAXDESC_SIZE));
-                shortdesc = shortdesc + " ...";
-            }
-
-            delivertime = result.getString("delivery_period");
-            delivertime = delivertime == null ? "0" : delivertime;
-
             isbn = result.getString("isbn");
             isbn = isbn == null ? "" : isbn;
 
-            image = result.getString("image");
-            image = image == null ? "" : image;
-            //image = "/" + image.charAt(0) + "/" + image.charAt(1) + "/" + image;
-
-            url = isbn;
-            url = url == null ? "" : url;
-            url = title + "-" + url;
-            url = url.replaceAll("'", "");
-            url = url.replaceAll(" ", "-");
-        
             bisac_codes = result.getString("bisac_codes");
             bisac_codes = bisac_codes == null ? "" : bisac_codes;
             String[] codes = bisac_codes.split(",");
@@ -268,10 +215,7 @@ public class BookIndex {
             if (!title.equals("")) {
                 for (int i=0; i< codes.length; i++) {
                     Map<String, String> book = new HashMap<String, String>();
-                    fstart = System.currentTimeMillis();
                     String[] categories = getFullCategoryForCode(codes[i]);
-                    fstop = System.currentTimeMillis();
-                    timer[0] += fstop - fstart;
                     if (categories.length > 0)
                         saveCategories(categories);
                     if (categories != null) {
@@ -282,18 +226,9 @@ public class BookIndex {
                         }
                         book.put("title", title);
                         book.put("author", author);
-                        book.put("discountprice", discountprice);
-                        book.put("listprice", listprice);
-                        book.put("image", image);
-                        book.put("url", url);
                         book.put("id", id);
                         book.put("sourcedfrom", sourcedfrom);
                         book.put("isbn", isbn);
-                        book.put("delivertime", delivertime);
-                        book.put("shortdesc", shortdesc);
-                        book.put("language", language);
-                        book.put("binding", binding);
-                        book.put("instock", instock);
                         books.add(book);
                     }
                 }
@@ -329,28 +264,18 @@ public class BookIndex {
         while (iter.hasNext()) {
             Map<String, String> book = (Map<String, String>)iter.next();
             Document doc = new Document();
-            doc.add(new Field("entityId", book.get("id"), Field.Store.YES, Field.Index.NO));
-            doc.add(new Field("sourcedfrom", book.get("sourcedfrom"), Field.Store.NO, Field.Index.TOKENIZED));
-            doc.add(new Field("author", book.get("author"), Field.Store.YES, Field.Index.TOKENIZED));
-            doc.add(new Field("url", book.get("url"), Field.Store.YES, Field.Index.NO));
-            doc.add(new Field("image", book.get("image"), Field.Store.YES, Field.Index.NO));
-            doc.add(new Field("title", book.get("title"), Field.Store.YES, Field.Index.TOKENIZED));
-            doc.add(new Field("discountprice", book.get("discountprice"), Field.Store.YES, Field.Index.NO));
-            doc.add(new Field("listprice", book.get("listprice"), Field.Store.YES, Field.Index.NO));
-            doc.add(new Field("shortdesc", book.get("shortdesc"), Field.Store.YES, Field.Index.NO));
-            doc.add(new Field("instock", book.get("instock"), Field.Store.YES, Field.Index.NO));
-            doc.add(new Field("isbn", book.get("isbn"), Field.Store.YES, Field.Index.UN_TOKENIZED));
-            doc.add(new Field("binding", book.get("binding"), Field.Store.YES, Field.Index.NO));
-            doc.add(new Field("language", book.get("language"), Field.Store.YES, Field.Index.NO));
-            doc.add(new Field("delivertime", book.get("delivertime"), Field.Store.YES, Field.Index.NO));
-
+            doc.add(new Field("entityId", book.get("id"), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.add(new Field("sourcedfrom", book.get("sourcedfrom"), Field.Store.NO, Field.Index.ANALYZED));
+            doc.add(new Field("author", book.get("author"), Field.Store.NO, Field.Index.ANALYZED));
+            doc.add(new Field("title", book.get("title"), Field.Store.NO, Field.Index.ANALYZED));
+            doc.add(new Field("isbn", book.get("isbn"), Field.Store.YES, Field.Index.NOT_ANALYZED));
             for (int i = 0; i < LEVELS; i++) {
                 int index = i + 1;
                 String label = "level" + index;
                 String category = book.get(label);
                 String real_name = category;
                 String key = real_name.replaceAll("\\W+", "");
-                doc.add(new Field(label, key, Field.Store.NO, Field.Index.UN_TOKENIZED));
+                doc.add(new Field(label, key, Field.Store.NO, Field.Index.NOT_ANALYZED));
                 doc.add(new Field(label+"_real", real_name, Field.Store.YES, Field.Index.NO));
             }
             indexWriter.addDocument(doc);
@@ -410,9 +335,8 @@ public class BookIndex {
 
     public void runIndex() throws Exception {
 
-        long timer10kstart, timer10kend, fstart, fstop;
+        long timer10kstart, timer10kend;
 
-        timer[0] = timer[1] = timer[2] = 0;
         timer10kstart = System.currentTimeMillis();
         try {
             int range[] = getRange();
@@ -428,19 +352,13 @@ public class BookIndex {
 
             for (int i = (range[0] == 0 ? 1 : range[0]); i <= range[1]; i++) {
                 
-                fstart = System.currentTimeMillis();
                 List<Map<String, String>> books = getBook(i);
-                fstop = System.currentTimeMillis();
-                timer[1] += fstop - fstart;
                 if (books != null) { 
-                    fstart = System.currentTimeMillis();
                     addDocument(books);
-                    fstop = System.currentTimeMillis();
-                    timer[2] += fstop - fstart;
                 }
                 if ((i % 10000) == 0) {
                     timer10kend = System.currentTimeMillis();
-                    System.out.println("Indexed: "+i+" books in "+(timer10kend - timer10kstart)/1000+" sec. ["+timer[0]/1000+"] ["+timer[1]/1000+"] ["+timer[2]/1000+"]");
+                    System.out.println("Indexed: "+i+" books in "+(timer10kend - timer10kstart)/1000+" sec. ");
                 }
             }
             System.out.println("Indexing Completed. Adding reference document.");
