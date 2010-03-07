@@ -209,16 +209,26 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
  	$sArr = array(
             
             'RU'                => Mage::getUrl('billdesk/standard/success',array('_secure' => true)), 
-            'txtAdditionalInfo1'  => $this->getCheckout()->getLastRealOrderId(),  // Invoice
-            'txtCustomerId'		=> $a->getCustomerId(),
-            'txtAdditionalInfo2'        => $a->getFirstname(),
-            'txtAdditionalInfo3'         => $a->getLastname(),
-            'txtAdditionalInfo4'          => $a->getStreet(1),
-           'txtAdditionalInfo5'          => $a->getStreet(2),
+  //          'txtAdditionalInfo1'  => $this->getCheckout()->getLastRealOrderId(),  // Invoice
+  //          'txtCustomerId'		=> $a->getCustomerId(),
+ //           'txtCustomerId'		=> $a->getCustomerId(),
+ 	          'txtCustomerId'  => $this->getCheckout()->getLastRealOrderId(),  // Invoice
+ //            'txtAdditionalInfo1'  => $this->getCheckout()->getLastRealOrderId(),  // Invoice
+ 	
+ 	
+ 	
+            'txtAdditionalInfo1'        => $a->getFirstname().$a->getLastname(),
+ //           'txtAdditionalInfo3'         => $a->getLastname(),
+            'txtAdditionalInfo2'          => $a->getStreet(1).$a->getstreet(2),
+ //          'txtAdditionalInfo5'          => $a->getStreet(2),
  //           'txtAdditionalInfo5'              => $a->getCity(),
- //           'txtAdditionalInfo2'             => $a->getRegionCode(),
-            'txtAdditionalInfo6'           => $a->getCountry(),
-            'txtAdditionalInfo7'               => $a->getPostcode()
+           'txtAdditionalInfo3'             => $a->getRegionCode(),
+            'txtAdditionalInfo4'           => $a->getCountry(),
+            'txtAdditionalInfo5'               => $a->getPostcode(),
+            'txtAdditionalInfo6'               => $a->getTelephone(),
+ 	        'txtAdditionalInfo7'               => "singhanilk1959@yahoo.com"
+ 	
+ 	
  
         );
         
@@ -279,7 +289,9 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
         $grand_total = $amount + $shipping + $tax ;
         
         $sArr = array_merge($sArr, array(
-                    'txtTxnAmount' => $grand_total
+   //                 'txtTxnAmount' => $grand_total
+                            'txtTxnAmount' => "2"
+        
                 ));
         
         $sReq = '';
@@ -320,7 +332,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
          if (Mage::getStoreConfig('billdesk/wps/sandbox_flag')==1) {
              $url='https://www.sandbox.paypal.com/cgi-bin/webscr';
          } else {
-             $url='https://www.paypal.com/cgi-bin/webscr';
+ 				$url = Mage::getStoreConfig('billdesk/wps/merchant_url') ; 
          }
          return $url;
     }
