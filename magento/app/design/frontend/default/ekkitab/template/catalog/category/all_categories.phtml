@@ -8,18 +8,35 @@
  *
  */
 ?>
-<h4> All Categories </h4>
-
+<div class="allCategoriesArea">
+<div class="pageHeader">Book categories on ekkitab</div>
+<br class="clear" />
 <?php
 	$categories = Mage::helper('catalog/category')->getStoreCategories();
-?>
-<?php $_count = is_array($categories)?count($categories):$categories->count(); ?>
+	$_count = is_array($categories)?count($categories):$categories->count(); 
+	$_columns =3;
+	$_totalRows= intval($_count/ $_columns) ;
+	$_totalRows= ($_count % $_columns) > 0 ? $_totalRows +1 : $_totalRows  ;
+	$_counter=0;
+	$_firstColumn=1;
+	if($_count): 
+		foreach ($categories as $category): 
+?>			
+<?php if($_counter==$_totalRows):
+		$_counter =0; ?>
+		</ul></div>
+<?php endif; ?>
 
-<?php if($_count): ?>
-<div class="box layered-nav">
-	<dd class="no-padding no-border">
-		<ol>
-		<?php foreach ($categories as $category): ?>
+<?php if($_counter==0):
+		if($_firstColumn):
+			$_firstColumn =0; ?>
+			<div class="allCategoriesListsFirst">
+<?php	else: ?>
+			<div class="allCategoriesLists">
+<?php	endif; ?>
+			<ul>
+<?php endif; ?>
+
 			<?php if($category->getIsActive()):
 				$url = $this->helper('ekkitab_catalog')->getEncodedString($category->getName());
 				$url = $this->helper('ekkitab_catalog')->getSearchResultByIndexUrl(null,array('category' => $url));
@@ -27,8 +44,10 @@
 			 <li>
 				<a href="<?php echo $url ?>"<?php if ($this->isCategoryActive($category)): ?> class="active"<?php endif ?>><?php echo $this->htmlEscape($category->getName()) ?></a> </li>
 			<?php endif; ?>
-		<?php endforeach ?>
-		</ol>
-	</dd>
-</div>
+<?php	$_counter= $_counter +1;
+		endforeach; ?>
+	</ul></div>
 <?php endif; ?>
+<div class="clear"></div>
+</div><!-- allCategoriesArea -->
+

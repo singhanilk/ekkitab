@@ -41,7 +41,8 @@ if(!is_null($results) && is_array($results)){
 	if (!java_is_null($subcats)) {
 	  $retsize = java_values($subcats->size());
 	  //echo "Size of Category List:[" . $retsize . "]\n"; 
-	  $keys = $subcats->keySet();
+	  $keys = java_values($subcats->keySet());
+	  sort($keys);
 	  if($retsize > 0){
 ?>
 	<!-- linkHdr -->
@@ -137,7 +138,7 @@ if(!is_null($results) && is_array($results)){
 			$binding=strlen($book->getBinding()) > 0 ? ucfirst($book->getBinding()) : "Not Available" ;
 			$language=strlen($book->getLanguage()) > 0 ? $book->getLanguage() : "Unknown";
 			$stock=$book->getInStock();
-			$shortDesc=$book->getShortDescription();
+			$shortDesc=$book->getDescription();
 			//$shortDesc='Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves.';
 			
 			//$url = $book->get("url");

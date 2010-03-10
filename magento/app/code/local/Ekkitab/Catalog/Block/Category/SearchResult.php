@@ -182,6 +182,8 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 		$javaIncFilePathArray;
 		$indexFilePath;
 		$javaIncFile;
+		$books=null;
+		$booksResult =NULL;
 		if (!($indexFilePathArray = Mage::getConfig()->getNode(self::XML_PATH_SEARCH_INDEX_FILE))) {
 			$indexFilePath = 'search_index_dir';
 		}else {
@@ -200,30 +202,24 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 			// this is to filter the search by title / author / or both
 			$filterBy = strlen($this->getFilterByText()) > 0 ?($this->getFilterByText().":"):""; 
 			$results = $search->searchBook($this->getDecodedString($categoryPath),$filterBy.$this->helper('ekkitab_catalog')->getEscapedQueryText(), $this->getPageSize(), $this->getCurrentPageNumber());
-			$books;
 			if(!is_null($results)){
-				Mage::log("In Searchresults.php... results is not null...getting productIds array");
 				$productIds = java_values($results->get("books"));
 				/*if (!is_null($bookList)) {
 					foreach($bookList as  $book){
 						$productIds[] = $book->get("entityId");
 					}*/
 					if(!is_null($productIds) && is_array($productIds) && count($productIds) > 0 ){
-						Mage::log("In Searchresults.php...productIds is not null....");
 						$books = Mage::getModel('ekkitab_catalog/product')->getCollection()
 						->addIdFilter($productIds);
-						Mage::log("In Searchresults.php...size of books from our DB is :".$books->count());
 					}
 				//}
+				$booksResult = array("books"=>$books,"counts"=>$results->get("counts"),"hits"=>java_values($results->get("hits")));
+				$this->_productCollection = $booksResult;
 			}
-			Mage::log("In Searchresults.php...setting the books, categories and totalhitcount into array ");
-			$booksResult = array("books"=>$books,"counts"=>$results->get("counts"),"hits"=>java_values($results->get("hits")));
-			$this->_productCollection = $booksResult;
 
 		}
 		catch(Exception $e)
 		{
-			$booksResult =NULL;
 			Mage::logException($e);
 			Mage::log($e->getMessage());
 			Mage::log("OR Exception in SearchResult.php : Could not include Java.inc file @ http://localhost:8080/JavaBridge/java/Java.inc");

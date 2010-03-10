@@ -947,3 +947,168 @@ a:hover {
 .reviewArea .buttonArea img {
 	margin: 0 5px;
 }
+
+.allCategoriesArea {
+	width: 700px;
+	margin: 0 auto 10px;
+	padding-bottom: 10px;
+	border-bottom: 1px dotted #333;
+}
+.allCategoriesArea .pageHeader {
+	color:#CC6600;
+	float:none;
+	font-size:20px;
+	width:74%;
+}
+.allCategoriesLists, .allCategoriesListsFirst {
+	width: 30%;
+	border-left: 1px solid #ccc;
+	font-size: 11px;
+	line-height: 18px;
+	float: left;
+	padding-left: 5px;
+}
+.allCategoriesListsFirst {
+	padding-left: 0;
+	border-left: 0px solid #ccc;
+
+}
+.allCategoriesLists ul, .allCategoriesListsFirst ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	padding-left: 10px;
+}
+.allCategoriesLists li a, .allCategoriesLists li a:visited, .allCategoriesListsFirst li a, .allCategoriesListsFirst li a:visited {
+	color: #666;
+	text-decoration: none;
+}
+.allCategoriesLists li a:hover, .allCategoriesListsFirst li a:hover {
+	text-decoration: underline;
+	color: #03c;
+}
+
+.authorSep {
+	width: 130px;
+	height: 48px;
+	background-image: url(../images/author_sep_bg.jpg);
+	background-position: left top;
+	background-repeat: no-repeat;
+	margin: 0 auto;
+	color: #fff;
+	font-size: 20px;
+	text-align: center;
+	line-height: 48px;
+	font-weight: bold;
+	
+}
+
+.authorsArea {
+	width: 780px;
+	margin: 0 auto 10px;
+	padding-bottom: 10px;
+	border-bottom: 1px dotted #333;
+}
+.authorsArea .pageHeader {
+	color:#CC6600;
+	float:none;
+	font-size:20px;
+	width:74%;
+}
+.authorsButArea {
+	margin: 10px auto;
+	padding: 0 0 6px;
+	border-bottom: 2px solid #c60;
+}
+.authorBut {
+	width: 25px;
+	height: 24px;
+	background-image: url(../images/author_but_bg.png);
+	background-position: left top;
+	background-repeat: no-repeat;
+	text-align: center;
+	line-height: 24px;
+	font-size: 18px;
+	margin-right: 5px;
+	float: left;
+}
+.authorBut a, .authorBut a:visited {
+	color: #666;
+	text-decoration: none;
+	width: 25px;
+	display: block;
+}
+.authorBut a:hover {
+	color: #000;
+}
+.authorLists, .authorListsFirst {
+	width: 189px;
+	border-left: 1px solid #ccc;
+	font-size: 11px;
+	line-height: 18px;
+	float: left;
+	padding-left: 5px;
+}
+.authorListsFirst {
+	padding-left: 0;
+	border-left: 0px solid #ccc;
+
+}
+.authorLists ul, .authorListsFirst ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	padding-left: 10px;
+}
+.authorLists li a, .authorLists li a:visited, .authorListsFirst li a, .authorListsFirst li a:visited {
+	color: #666;
+	text-decoration: none;
+}
+.authorLists li a:hover, .authorListsFirst li a:hover {
+	text-decoration: underline;
+	color: #03c;
+}
+.authorSep {
+	width: 130px;
+	height: 48px;
+	background-image: url(../images/author_sep_bg.jpg);
+	background-position: left top;
+	background-repeat: no-repeat;
+	margin: 0 auto;
+	color: #fff;
+	font-size: 20px;
+	text-align: center;
+	line-height: 48px;
+	font-weight: bold;
+	
+}
+.authPaginationArea {
+	clear:both;
+	font-size:11px;
+	line-height:24px;
+	text-align:right;
+	width:170px;
+	margin-left: 700px;
+	margin-bottom: 10px;
+}
+.authPaginationArea ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+.authPaginationArea ul li {
+	float: left;
+	font-weight: bold;
+}
+.authPaginationArea ul li a {
+	border-left:1px solid #333333;
+	margin:0 0;
+	padding:0 5px;
+}
+.authPaginationArea ul li span {
+	border-left:1px solid #333333;
+	color:#CC6600;
+	font-weight:bold;
+	margin:0;
+	padding:0 4px;
+}

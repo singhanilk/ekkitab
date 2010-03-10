@@ -11,4 +11,50 @@
  *
  */
 ?>
-<h4>Top Authors </h4>
+<h4>All Authors </h4>
+
+<?php 
+		$authors= $this->getAllAuthors();
+		$_count = is_array($authors)?count($authors):$authors->count(); 
+		$_columns =3;
+		$_totalRows= intval($_count/ $_columns) ;
+		$_totalRows= ($_count % $_columns) > 0 ? $_totalRows +1 : $_totalRows  ;
+		$_counter=0;
+		$_firstColumn=1;
+?>
+ <script language="JavaScript"  type="text/javascript">
+    function searchAuthor(query){
+		var searchForm = document.forms.search_author;
+		searchForm.<?php echo $this->helper('catalogSearch')->getQueryParamName() ?>.value=query;
+		searchForm.<?php echo $this->helper('ekkitab_catalog')->getQueryFilterName() ?>.value="author";
+		searchForm.submit();
+	}
+</script>
+<form name="search_author" action="<?php echo $this->helper('ekkitab_catalog')->getFormSearchResultByIndexUrl() ?>" method="get">
+	<input type="hidden" name="<?php echo $this->helper('catalogSearch')->getQueryParamName() ?>" value="" />
+	<input type="hidden" name="<?php echo $this->helper('ekkitab_catalog')->getQueryFilterName() ?>" value="" />
+</form>
+<?php if($_count):
+		foreach ($authors as $author): ?>
+<?php if($_counter==$_totalRows):
+		$_counter =0; ?>
+		</ul></div>
+<?php endif; ?>
+
+<?php if($_counter==0):
+		if($_firstColumn):
+			$_firstColumn =0; ?>
+			<div class="allCategoriesListsFirst">
+<?php	else: ?>
+			<div class="allCategoriesLists">
+<?php	endif; ?>
+			<ul>
+<?php endif; ?>
+
+				<li><a href="javascript:searchAuthor('<?php echo $author ?>');"><?php echo $this->htmlEscape($author) ?></a></li>
+<?php	$_counter= $_counter +1;
+		endforeach; ?>
+	</ul></div>
+<?php endif; ?>
+<div class="clear"></div>
+</div><!-- allCategoriesArea -->
