@@ -1640,4 +1640,12 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
 
         return $this;
     }
+
+	public function getAllDistinctAuthors()
+    {
+        Mage::getResourceSingleton('ekkitab_catalog/product')->getAllDistinctAuthors();
+        return $this;
+    }
+
+
 }

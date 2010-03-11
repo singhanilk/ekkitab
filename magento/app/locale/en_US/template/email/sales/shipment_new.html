@@ -11,7 +11,7 @@
         <!-- [ header starts here] -->
         <table cellspacing="0" cellpadding="0" border="0" width="650">
             <tr>
-                <td valign="top"><a href="{{store url=""}}"><img src="{{skin url="images/logo_email.gif" _area='frontend'}}" alt="Magento"  style="margin-bottom:10px;" border="0"/></a></td>
+                <td valign="top"><a href="{{store url=""}}"><img src="{{skin url="images/logo_email.png" _area='frontend'}}" alt="Ekkitab Educational Services"  style="margin-bottom:10px;" border="0"/></a></td>
             </tr>
         </table>
         <!-- [ middle starts here] -->
@@ -22,10 +22,10 @@
                         <strong>Hello {{htmlescape var=$order.getCustomerName()}}</strong>,<br/>
                         Thank you for your order from {{var order.getStoreGroupName()}}.
                         You can check the status of your order by <a href="{{store url="customer/account/"}}" style="color:#1E7EC8;">logging into your account</a>.
-                        If you have any questions about your order please contact us at <a href="mailto:dummyemail@magentocommerce.com" style="color:#1E7EC8;">dummyemail@magentocommerce.com</a> or call us at <span class="nobr">(555) 555-0123</span> Monday - Friday, 8am - 5pm PST.
+                        If you have any questions about your order please contact us at <a href="mailto:support@ekkitab.com" style="color:#1E7EC8;">support@ekkitab.com</a>.
                     </p>
                     <p>
-                        Your shipping confirmation is below. Thank you again for your business.
+                        Your shipping confirmation is below. Thank you for your business.
                     </p>
 
                     <h3 style="border-bottom:2px solid #eee; font-size:1.05em; padding-bottom:1px; ">
@@ -82,7 +82,7 @@
                     {{block type='core/template' area='frontend' template='email/order/shipment/track.phtml' shipment=$shipment order=$order}}
                     <p>{{var comment}}</p>
                     <p>
-                        Thank you again,<br/><strong>{{var order.getStoreGroupName()}}</strong>
+                        Thank you,<br/><strong>{{var order.getStoreGroupName()}} Team</strong>
                     </p>
                 </td>
             </tr>

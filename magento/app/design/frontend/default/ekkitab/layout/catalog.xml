@@ -137,7 +137,22 @@ Category Lecene search layout
         <reference name="content">
             <block type="catalog/navigation" name="category.products" template="catalog/category/all_categories.phtml" />
         </reference>
+        <reference name="left">
+   			<remove name="popular.categories" />
+                <block type="page/html" name="donate_book_blurb" template="page/html/donate_blurb.phtml" />
+        </reference>
     </ekkitab_catalog_category_viewall>
+
+
+    <ekkitab_catalog_author_viewall>
+        <reference name="content">
+            <block type="ekkitab_catalog/author_topAuthors" name="all.authors" template="catalog/author/popular_all.phtml" />
+        </reference>
+        <reference name="left">
+			<remove name="top.authors" />
+			<block type="page/html" name="donate_book_blurb" template="page/html/donate_blurb.phtml" />
+        </reference>
+    </ekkitab_catalog_author_viewall>
 
 
 <!--

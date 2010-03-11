@@ -1533,7 +1533,7 @@ CREATE TABLE IF NOT EXISTS `core_store` (
 
 INSERT INTO `core_store` (`store_id`, `code`, `website_id`, `group_id`, `name`, `sort_order`, `is_active`) VALUES
 (0, 'admin', 0, 0, 'Admin', 0, 1),
-(1, 'default', 1, 1, 'Default Store View', 0, 1);
+(1, 'default', 1, 1, 'Ekkitab', 0, 1);
 
 --
 -- Table structure for table `core_store_group`
@@ -1556,7 +1556,7 @@ CREATE TABLE IF NOT EXISTS `core_store_group` (
 
 INSERT INTO `core_store_group` (`group_id`, `website_id`, `name`, `root_category_id`, `default_store_id`) VALUES
 (0, 0, 'Default', 0, 0),
-(1, 1, 'Main Website Store', 2, 1);
+(1, 1, 'Ekkitab', 2, 1);
 
 --
 -- Table structure for table `core_translate`
@@ -1621,7 +1621,7 @@ CREATE TABLE IF NOT EXISTS `core_website` (
 
 INSERT INTO `core_website` (`website_id`, `code`, `name`, `sort_order`, `default_group_id`, `is_default`) VALUES
 (0, 'admin', 'Admin', 0, 0, 0),
-(1, 'base', 'Main Website', 0, 1, 1);
+(1, 'base', 'Ekkitab', 0, 1, 1);
 
 --
 -- Table structure for table `cron_schedule`

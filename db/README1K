@@ -1,4 +1,8 @@
-To load 1k test Data set EKKITAB_HOME = 
+To load 1k test Data ;
+
+set EKKITAB_HOME = 
+
+check config/importbooks.ini for mysql user id / password
 
 ##########################################################
 ### Reset Ekkitab_Books and Reference Databases.
