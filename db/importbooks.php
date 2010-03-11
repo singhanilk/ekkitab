@@ -397,7 +397,7 @@ ini_set("display_errors", 1);
             }
         
             if (++$i % 10000 == 0) {
-                $inserted = $i - ($errorcount + $unresolved + $filenotfound + $ignored + 1);
+                $inserted = $i - ($errorcount + $unresolved + $filenotfound + $ignored);
                 debug("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.\n");
             }
         }
