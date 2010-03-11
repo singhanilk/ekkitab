@@ -267,8 +267,8 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 	$Merchant_Id =Mage::getStoreConfig('ccav/wps/merchant_id');	
     $Amount = "" ;//your script should substitute the amount in the quotes provided here
 	$Order_Id = "" ;//your script should substitute the order description in the quotes provided here
-//	$Redirect_Url = "http://www.xyz.com/xyz.asp" ;//your redirect URL where your customer will be redirected after authorisation from CCAvenue
     $Redirect_Url = Mage::getStoreConfig('ccav/wps/return_url') ;
+    
 //put in the 32 bit alphanumeric key in the quotes provided here.Please note that get this key ,login to your CCAvenue merchant account and visit the "Generate Working Key" section at the "Settings & Options" page. 
 	$WorkingKey = Mage::getStoreConfig('ccav/wps/checksum_key') ;
     
@@ -307,7 +307,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 	$delivery_cust_tel= $b->getTelephone();
 	$delivery_cust_tel=str_replace(" ","",$delivery_cust_tel);
 	
-	$delivery_cust_notes="hello";  // this is optional,
+	$delivery_cust_notes="";  // this is optional,
 	$Merchant_Param="" ;     // this is optional, you can fill up with any value
 	$billing_city = $a->getCity();
 	$billing_zip = $a->getPostcode();
@@ -401,13 +401,13 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
         $grand_total = $amount + $shipping + $tax ;
         
         $Checksum = $this->getcheckSum($Merchant_Id,$grand_total,$Order_Id ,$Redirect_Url,$WorkingKey);
-        
+  /*      
         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Order Id\n".print_r($Order_Id,true)) ;
         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."WorkingKey\n".print_r($WorkingKey,true)) ;
     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Redirect_Url\n".print_r($Redirect_Url,true)) ;
     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Amount\n".print_r($grand_total,true)) ;
     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."CheckSum\n".print_r($Checksum,true)) ;
-    
+    */
     
         
         $sArr = array_merge($sArr, array(
@@ -590,7 +590,9 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
                      //We have to differentiate here between Order declined or an American Express Order
                      
                     $order->addStatusToHistory(
-                        $order->getStatus(),//continue setting current order status
+   //                     $order->getStatus(),//continue setting current order status
+                         "declined_ccav",//continue setting current order status
+                    
                          Mage::helper('ccav')->__('Order Declined')
                         
                     );
@@ -616,7 +618,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
                 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
                 
                     
-                       
+                   /*     // Commented it as I don't want to create an Invoice Now, it should be created at backend after capturing the order
                            //need to convert from order into invoice
                     $invoice = $order->prepareInvoice();
                     $invoice->register()->pay();
@@ -625,10 +627,14 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
                             ->addObject($invoice)
                             ->addObject($invoice->getOrder())
                             ->save();
-                            
+                     */
+                       
                            $order->setState(
                                Mage_Sales_Model_Order::STATE_PROCESSING, true,
-                               Mage::helper('ccav')->__('Invoice #%s created', $invoice->getIncrementId()),
+       //                        Mage::helper('ccav')->__('Invoice #%s created', $invoice->getIncrementId()),
+                             Mage::helper('ccav')->__('Order #%s is created', $Order_Id ),
+                               
+       
                                $notified = true
                            );
                        
@@ -715,8 +721,8 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     
     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
     
-    	$paymGateway = Mage::getStoreConfig('payment/ccav/title') ;   
-  	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($paymGateway,true)) ;
+    //	$paymGateway = Mage::getStoreConfig('payment/ccav/title') ;   
+  	//    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($paymGateway,true)) ;
   	    
         $state = Mage_Sales_Model_Order::STATE_PENDING_PAYMENT;
         $stateObject->setState($state);
@@ -754,6 +760,8 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     }
  
 }
+
+
 /*
 <form method="post" action="https://www.ccavenue.com/shopzone/cc_details.jsp">
 	<input type=hidden name=Merchant_Id value="<?php echo $Merchant_Id; ?>">
