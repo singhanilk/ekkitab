@@ -13,32 +13,22 @@ check config/importbooks.ini for mysql user id / password
 ##########################################################
 ###  import the 1k test data
 ##########################################################
-3. php importbooks.php 1ktestdata   ../data/1ktestdata.txt english
-4. php importdescription.php 1ktestdata -l  ../data/1ktestdata.txt 
-5. php importpricesstock.php 1ktestdata ../data/1ktestdata.txt
+3. php importbooks.php -a 1ktestdata   ../data/1ktestdata.txt
 
 ##########################################################
 ###  import the 50 low-cost books.
 ##########################################################
-6. php importbooks.php 1ktestdata   ../data/50lowcostbooks.txt english 
-7. php importdesription.php 1ktestdata -l   ../data/50lowcostbooks.txt
-8. php importpricesstock.php 1ktestdata   ../data/50lowcostbooks.txt 
-
-##########################################################
-### Update the reference db with descriptions and price
-##########################################################
-9. mysql -u uid -ppswd < update_prices_and_stock.sql
-10. mysql -u uid -ppswd < update_descriptions.sql
+4. php importbooks.php -a 1ktestdata   ../data/50lowcostbooks.txt
 
 ##########################################################
 ### Copy the books table to ekkitab_books database. 
 ##########################################################
-11. mysql -u uid -ppswd < loadbooks.sql
+5. mysql -u uid -ppswd < loadbooks.sql
 
 ##########################################################
 ### Create the search index. 
 ##########################################################
-12. (cd EKKITAB_HOME/scm/bin; ./create_index.sh <db host> <db user> <db password>;)
+6. (cd EKKITAB_HOME/scm/bin; ./create_index.sh <db host> <db user> <db password>;)
 
 
 
