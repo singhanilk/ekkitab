@@ -1,6 +1,7 @@
 <?php
 error_reporting(E_ALL  & ~E_NOTICE);
 ini_set("display_errors", 1); 
+include(EKKITAB_HOME . "/" . "db" . "/" . "importbooks_config.php");
 
 //  
 //
@@ -20,6 +21,36 @@ ini_set("display_errors", 1);
 // This script will import books into the reference database from a vendor file......
 
 class Parser {
+
+        private $mode;
+
+        function __construct($mode) {
+            $this->mode = $mode;
+        }
+
+        function isBook($line) {
+
+            if ($this->mode & MODE_BASIC) {
+                switch(substr($line, 412, 1)) {
+                   case 'B':
+                   case 'N':  return true;
+                   default:   return false;
+                }
+            }
+            if ($this->mode & MODE_PRICE) {
+                switch(substr($line,217,1)) {
+                   case 'P':
+                   case 'Q':
+                   case 'R':  return true;
+                   default:   return false;
+                }
+            }
+            if ($this->mode & MODE_DESC) {
+                return true;
+            }
+            return false;
+        }
+
         /** 
           * Ensure that characters in a string are SQL safe. 
           */
@@ -45,11 +76,29 @@ class Parser {
            return $name;
         }
 
-        function getBook($line) {
-            $book = array();
-            $mediatype = substr($line, 412, 1);
-            if (($mediatype != 'B') && ($mediatype != 'N'))  // not a book.
-                return(null);
+        function getBook($line, $book, $db, $logger) {
+            if (!$this->isBook($line)) { 
+                return null;
+            }
+            if ($this->mode & MODE_BASIC) { 
+               $book = $this->getBasic($line, $book, $db, $logger);
+               if ($book == null)
+                  return null;
+            }
+            if ($this->mode & MODE_DESC) {
+               $book = $this->getDesc($line, $book, $db, $logger);
+               if ($book == null)
+                  return null;
+            }
+            if ($this->mode & MODE_PRICE) {
+               $book = $this->getPrice($line, $book, $db, $logger);
+               if ($book == null)
+                  return null;
+            }
+            return $book;
+        }
+
+        function getBasic($line, $book, $db, $logger) {
             $book['isbn10'] = trim(substr($line, 0, 10));
             $book['title']  = $this->escape(trim(substr($line, 11, 149)));
             $edition = trim(substr($line, 191, 4));
@@ -90,10 +139,10 @@ class Parser {
             }
             $illustrator = preg_replace("/^ & /", "", $illustrator);
             $author = preg_replace("/^ & /", "", $author);
-            $book['illustrator'] = $illustrator;
+            $book['illustrator'] = $this->escape($illustrator);
             $book['author'] = $this->escape($author);
             $book['publisher'] = $this->escape(trim(substr($line, 351, 45)));
-            $book['isbn13'] = trim(substr($line, 442, 17));
+            $book['isbn'] = trim(substr($line, 442, 17));
             $binding = substr($line, 410, 2);
             if (substr($binding, 0, 1) == 'T')  {
                 $q = substr($binding, 1, 1) ;
@@ -112,20 +161,18 @@ class Parser {
             $book['pages'] = trim(substr($line, 787, 5));
             $book['weight'] = trim(substr($line, 797,  7)) / 1.6;
             $book['dimension'] = (trim(substr($line, 804, 5)) / 100)*2.54 . "x" . (trim(substr($line, 809, 5))/100)*2.54 . "x" . (trim(substr($line, 814, 5))/100)*2.54;
-            $book['pubcode'] = trim(substr($line, 827,  4));
-            $book['image'] = $book['isbn13'].".jpg";
+            //$book['pubcode'] = trim(substr($line, 827,  4));
+            $book['image'] = $book['isbn'].".jpg";
             $book['sourced_from'] = "US";
-			$book['DELIVERY_PERIOD'] = 14 ;
+			$book['delivery_period'] = 14 ;
+            $book['info_source'] = "Ingrams";	
+            $book['language'] = "English";	
+            $book['shipping_region'] = 0;	
             return($book);
         }
 
-		function getStockPrice($line){
+		function getPrice($line, $book, $db, $logger){
             
-			$type = substr($line,217,1);
-			if(($type != 'P') && ($type != 'Q') && ($type != 'R')){
-				return(null);
-			}
-		    
 			$isbn = substr($line,1,13);
 			
 			$listprice    = substr($line,150,6)/100;
@@ -169,34 +216,26 @@ class Parser {
 			//Extracting the Pub-Date
 			$pubdate = substr($line,185,8) ;
 						
-			$book = array();
-			$book['LIST_PRICE']		    = $listprice ;
-			$book['SUPPLIERS_DISCOUNT'] = $discount ;
-			$book['CURRENCY']           = "'USD'" ;
-			$book['IN_STOCK']           = $stock ;
-            $book['ISBN']               = $isbn ;
-			$book['PUBLISHING_DATE']    = $pubdate ;
-
+			$book['list_price']		    = $listprice;
+			$book['suppliers_discount'] = $discount;
+			$book['currency']           = "USD" ;
+			$book['in_stock']           = $stock ;
+            $book['isbn']               = $isbn ;
+			$book['publishing_date']    = $pubdate ;
+            $book['info_source']        = "Ingrams";	
 			return($book);
 		}
 		
-		function getBookDescription($line,$type){
-			$isbn         = substr($line,0,13);
-			
-			if($type == 'long'){
-			   $description  = substr($line,15);
-			   $description = str_replace("'", "", $description);
-		       $bookinfo['DESCRIPTION'] = "'$description'";
-			 }
-			elseif($type == 'short'){
-			   $description  = substr($line,18);
-			   $description = str_replace("'", "", $description);
-		       $bookinfo['SHORT_DESCRIPTION'] = "'$description'";
-			}
-						
-			$bookinfo['ISBN']        = $isbn;
-			return($bookinfo);
-			  
+		function getDesc($line, $book, $db, $logger) {
+			$book['isbn']  = substr($line,0,13);
+			$description  = substr($line,18);
+			$description = str_replace("'", "", $description);
+            if (strlen($description) > MAX_DESCRIPTION_LENGTH) {
+                $description = substr($description, 0, MAX_DESCRIPTION_LENGTH - 4);
+                $description .= " ...";
+            }
+		    $book['description'] = $description;
+            return($book);
 		}
 }
 ?>
