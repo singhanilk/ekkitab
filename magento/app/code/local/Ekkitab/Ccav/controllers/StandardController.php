@@ -82,7 +82,7 @@ class Ekkitab_Ccav_StandardController extends Mage_Core_Controller_Front_Action
        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;  
     
         $session = Mage::getSingleton('checkout/session');
-        $session->setPaypalStandardQuoteId($session->getQuoteId());  // How does this work ?
+ //       $session->setPaypalStandardQuoteId($session->getQuoteId());  // How does this work ?
         $this->getResponse()->setBody($this->getLayout()->createBlock('ccav/redirect')->toHtml());
         $session->unsQuoteId();
         
