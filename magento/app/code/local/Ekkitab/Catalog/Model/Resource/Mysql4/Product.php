@@ -29,15 +29,19 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Product extends Mage_Core_Model_Mysq
      */
     public function getAllDistinctAuthors()
     {
-		$query= $this->_getReadAdapter()->query("(SELECT DISTINCT(SUBSTRING_INDEX(SUBSTRING_INDEX(author,'&',1),'*',1)) as author FROM "
-		.$this->getTable('product')
-		//." where author<>'') UNION (SELECT DISTINCT(SUBSTRING_INDEX(author,'&',-1)) as author FROM "
-		//.$this->getTable('product')
-		." where author<>'') order by author ASC");
-
+		//CREATE OR REPLACE View ek_catalog_authors as SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(author,'&',-1),'*',1),'.',1) as author FROM books UNION SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(author,'&',1),'*',1),'.',1) as author FROM books
+		//$query= $this->_getReadAdapter()->query(" SELECT DISTINCT(author) FROM ek_catalog_authors where author<>'' order by lower(trim(author))");
+		//$query= $this->_getReadAdapter()->query("SELECT DISTINCT(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(author,'&',-1),'*',1),'.',1)) as author FROM books UNION SELECT DISTINCT(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(author,'&',1),'*',1),'.',1)) as author FROM books order by lower(trim(author)) ");
+		$query= $this->_getReadAdapter()->query("SELECT DISTINCT(trim(author)) as author FROM books order by lower(trim(author)) ");
 		while ($row = $query->fetch()) {
-            $data[] = $row['author'];
+			//$data[] = $row['author'];
+			$authArray = explode('&',$row['author']);
+			foreach($authArray as $auth){
+				$data[] = trim(preg_replace('#[^A-Za-z0-9\,\ \.]+#', ' ', $auth));
+			}
         }
-        return $data;
+		$result = array_unique($data);
+		sort($result);
+        return $result;
     }
 }

@@ -28,14 +28,14 @@
 /**
  * Shopping cart totals template
  *
- * @see Mage_Checkout_Block_Cart
+ * @see Mage_Checkout_Block_Cart_Totals
  */
 ?>
-<table cellspacing="0" id="shopping-cart-totals-table">
-    <tfoot>
-        <?php echo $this->renderTotals('footer'); ?>
-    </tfoot>
-    <tbody>
+<div class="grandTotalArea">
+    <div class="grandTotalLeft">Grand Total:</div><!-- grandTotalLeft -->
+	<?php echo $this->renderTotals('footer'); ?>
+    <!--tbody>
         <?php echo $this->renderTotals(); ?>
-    </tbody>
-</table>
+    </tbody-->
+	<div class="clear"></div>
+</div><!--grandTotalArea -->

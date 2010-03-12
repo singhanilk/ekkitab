@@ -69,7 +69,9 @@ Default layout, loads most of the pages
             <block type="page/switch" name="store_language" as="store_language" template="page/switch/languages.phtml"/>
             <block type="page/html_header" name="header" as="header">
                 <block type="core/text_list" name="top.menu" as="topMenu"/>
-				<block type="page/template_links" name="top.links" as="topLinks"/>
+				<block type="page/template_links" name="top.links" as="topLinks">
+					<action method="addLink" translate="label title" ><label>Home</label><url>home</url><title>Home</title><prepare>true</prepare><urlParams/></action>
+				</block>
 				<block type="page/html" name="build.version" as="buildVersion" template="page/html/build_version.phtml"/>
             </block>
 
