@@ -31,91 +31,49 @@
  * @see Mage_Checkout_Block_Cart
  */
 ?>
-<div class="page-head">
-    <h3><?php echo $this->__('Shopping Cart') ?></h3>
-</div>
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post">
-<table cellspacing="0" id="shopping-cart-table" class="data-table box-table shopping-cart">
-    <col width="75" />
-    <col />
-<?php if ($this->helper('wishlist')->isAllowInCart()) : ?>
-	<col width="1" />
-<?php endif ?>
-<?php if ($this->helper('tax')->displayCartPriceExclTax() || $this->helper('tax')->displayCartBothPrices()): ?>
-    <col width="80" />
-<?php endif; ?>
-<?php if ($this->helper('tax')->displayCartPriceInclTax() || $this->helper('tax')->displayCartBothPrices()): ?>
-    <col width="80" />
-<?php endif; ?>
-    <col width="1" />
-<?php if ($this->helper('tax')->displayCartPriceExclTax() || $this->helper('tax')->displayCartBothPrices()): ?>
-    <col width="80" />
-<?php endif; ?>
-<?php if ($this->helper('tax')->displayCartPriceInclTax() || $this->helper('tax')->displayCartBothPrices()): ?>
-    <col width="80" />
-<?php endif; ?>
-    <col width="40" />
-
-<?php $mergedCells = ($this->helper('tax')->displayCartBothPrices() ? 2 : 1); ?>
-    <thead>
-        <tr>
-            <th rowspan="<?php echo $mergedCells; ?>">&nbsp;</th>
-            <th rowspan="<?php echo $mergedCells; ?>"><?php echo $this->__('Product Name') ?></th>
-            <?php if ($this->helper('wishlist')->isAllowInCart()) : ?>
-            <th rowspan="<?php echo $mergedCells; ?>" class="a-center"><?php echo $this->__('Move to Wishlist') ?></th>
-            <?php endif ?>
-            <th class="a-center" colspan="<?php echo $mergedCells; ?>"><?php echo $this->__('Unit Price') ?></th>
-            <th rowspan="<?php echo $mergedCells; ?>" class="a-center"><?php echo $this->__('Qty') ?></th>
-            <th colspan="<?php echo $mergedCells; ?>" class="a-center"><?php echo $this->__('Subtotal') ?></th>
-            <th rowspan="<?php echo $mergedCells; ?>" class="a-center"><?php echo $this->__('Remove') ?></th>
-        </tr>
-        <?php if ($this->helper('tax')->displayCartBothPrices()): ?>
-        <tr>
-            <th class="a-right"><?php echo $this->helper('tax')->getIncExcTaxLabel(false) ?></th>
-            <th class="a-right"><?php echo $this->helper('tax')->getIncExcTaxLabel(true) ?></th>
-            <th class="a-right"><?php echo $this->helper('tax')->getIncExcTaxLabel(false) ?></th>
-            <th class="a-right"><?php echo $this->helper('tax')->getIncExcTaxLabel(true) ?></th>
-        </tr>
-        <?php endif; ?>
-    </thead>
-    <tfoot>
-        <tr>
-            <td colspan="100" class="a-right">
-                <?php if($this->getContinueShoppingUrl()): ?>
-                    <a href="<?php echo $this->getContinueShoppingUrl() ?>" class="f-left"><?php echo $this->__('Continue Shopping') ?></a>
-                <?php endif; ?>
-                <input type="image" src="<?php echo $this->getSkinUrl('images/btn_update_qty.gif') ?>" alt="<?php echo $this->__('Update Shopping Cart') ?>"/>
-            </td>
-        </tr>
-    </tfoot>
-    <tbody>
+<div class="scartArea">
+	<div class="pageHeader"><?php echo $this->__('Shopping Cart') ?></div>
+	<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+	<form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post">
+	<div id="titleText">
+		<div class="skuScartRow">
+			<div class="checkBoxColHdr">
+				<!--label>
+					<div class="chkBox"><input type="checkbox" name="checkbox" value="checkbox" /></div>
+				</label-->
+			</div>
+			<div class="skuImageHdr">&nbsp;</div>
+			<div class="itemColHdr">Item</div>
+			<div class="unitPriceColHdr">Unit Price</div>
+			<div class="qtyColHdr">Qty.</div>
+			<div class="subTotalColHdr">Sub Total</div>
+			<div class="trashBoxColHdr"></div>
+			<div class="clear"></div>
+		</div><!--skuScartRow -->
+	</div>
     <?php foreach($this->getItems() as $_item): ?>
         <?php echo $this->getItemHtml($_item) ?>
     <?php endforeach ?>
-    </tbody>
-</table>
-<script type="text/javascript">decorateTable('shopping-cart-table')</script>
-</form>
+
+	<div class="skuScartRow">
+		<div class="modifiedText">Click on the checkbox to</div>
+		<div class="updateBut"><a href="#"><img src="<?php echo $this->getSkinUrl('images/move_wishlist_but.png') ?>" alt="<?php echo $this->__('Move to Wishlist') ?>" width="103" height="22" border="0" /></a></div> 
+		<!-- updateBut --> 
+		<div class="modifiedText1">OR</div> 
+		<!-- updateBut -->
+		<div class="modifiedText">Modified any quantities</div>
+		<div class="updateBut"><input type="image" src="<?php echo $this->getSkinUrl('images/update_cart_but.png') ?>" alt="<?php echo $this->__('Update Shopping Cart') ?>" width="103" height="22" border="0" /></div><!-- updateBut -->
+		<div class="clear"></div>
+	</div>
+	</form>
+	
+	<?php echo $this->getChildHtml('totals'); ?>
+
+	<div class="skuScartRow">
+	<div class="bkHomePage">Click here to go to <a href="<?php if($this->getContinueShoppingUrl()): echo $this->getContinueShoppingUrl(); endif; ?>" class="boldFont">ekkitab's Homepage</a> and add more to your cart <?php if(!$this->hasError()): ?><span class="boldFont">OR</span></div><?php echo $this->getChildHtml('methods') ?><?php endif; ?>
+	<!-- proceedCheckout -->
+	<div class="clear"></div>
+	</div><!-- skuScartRow -->
 <br/>
-    <?php echo $this->getChildHtml('crosssell') ?>
-
-<div class="cart-collateral-block">
-    <div class="cart-collateral">
-    <?php echo $this->getChildHtml('coupon') ?>
-    <div class="divider"></div>
-    <?php if (!$this->getIsVirtual()): echo $this->getChildHtml('shipping'); endif; ?>
-    </div>
-    <div class="cart-totals">
-		<?php echo $this->getChildHtml('totals'); ?>
-        
-        <div class="clear"></div>
-        <?php if(!$this->hasError()): ?>
-        <ul class="checkout-types">
-            <?php echo $this->getChildHtml('methods') ?>
-        </ul>
-        <?php endif; ?>
-    </div>
-</div>
-
 <div class="clear"></div>
+</div><!--scartArea -->

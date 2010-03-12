@@ -24,12 +24,11 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<div class="proceedCheckout">
 <?php if ($this->isPossibleOnepageCheckout()):?>
-<li>
-<?php if ($this->isDisabled()):?>
-<img src="<?php echo $this->getSkinUrl('images/btn_proceed_to_checkout_dis.gif');?>" alt="<?php echo Mage::helper('checkout')->__('Proceed to Checkout');?>" />
-<?php else: ?>
-<a href="<?php echo $this->getCheckoutUrl()?>"><img src="<?php echo $this->getSkinUrl('images/btn_proceed_to_checkout.gif');?>" alt="<?php echo Mage::helper('checkout')->__('Proceed to Checkout');?>" /></a>
-<?php endif?>
-</li>
-<?php endif?>
+	<?php if ($this->isDisabled()):?>
+	<img src="<?php echo $this->getSkinUrl('images/checkout_but.png');?>" alt="<?php echo Mage::helper('checkout')->__('Proceed to Checkout');?>" />
+	<?php else: ?>
+	<a href="<?php echo $this->getCheckoutUrl()?>"><img src="<?php echo $this->getSkinUrl('images/checkout_but.png');?>" alt="<?php echo Mage::helper('checkout')->__('Proceed to Buy');?>" /></a>
+	<?php endif?>
+<?php endif?></div>
