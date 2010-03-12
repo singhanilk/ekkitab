@@ -91,6 +91,18 @@ ini_set("display_errors", 1);
            fatal($e->getmessage());
         }
 
+        $query = "set autocommit = 0";
+        
+        try {
+	        $result = mysqli_query($db,$query);
+            if (!$result) {
+               fatal("Failed to set autocommit mode.");
+            }
+        }
+        catch(exception $e) {
+            fatal($e->getmessage());
+        }
+
         return $db;
     }
 
@@ -246,7 +258,7 @@ ini_set("display_errors", 1);
     }
 
    /** 
-    *  Convert BISAC codes to Magento Category Codes. 
+    * Insert or Update the book in the database. 
     */
     function insertBook($book, $db, $mode) {
 
@@ -277,6 +289,14 @@ ini_set("display_errors", 1);
        }
        else {
            return(1);
+       }
+    }
+
+    function doCommit($db) {
+       $query = "commit"; 
+
+       if (! $result = mysqli_query($db, $query)) {
+           fatal("Failed to commit: ". mysqli_error($db));
        }
     }
 
@@ -397,10 +417,12 @@ ini_set("display_errors", 1);
             }
         
             if (++$i % 10000 == 0) {
+                doCommit($db);
                 $inserted = $i - ($errorcount + $unresolved + $filenotfound + $ignored);
                 debug("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.\n");
             }
         }
+        doCommit($db);
         $inserted = $i - ($errorcount + $unresolved + $filenotfound + $ignored);
         writeUnclassifiedCodesToFile($infosource);
         debug("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.\n");
