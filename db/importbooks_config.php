@@ -11,4 +11,5 @@ define (MODE_BASIC, 0x01);
 define (MODE_PRICE, 0x02);
 define (MODE_DESC, 0x04);
 define (MAX_DESCRIPTION_LENGTH, 1024);
+define (UNKNOWN_INFO_SOURCE, "Unknown");
 ?>

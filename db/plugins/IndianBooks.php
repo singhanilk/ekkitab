@@ -1,6 +1,7 @@
 <?php
 error_reporting(E_ALL  & ~E_NOTICE);
 ini_set("display_errors", 1); 
+include(EKKITAB_HOME . "/" . "db" . "/" . "importbooks_config.php");
 define (REQUIRED_FIELDS, 15);
 
 //  
@@ -85,6 +86,11 @@ class Parser {
                 }
             }
             if (empty($bisac_codes)) {
+                echo "No subjects found: ";
+                foreach($subjects as $subject) {
+                    echo "( $subject ) ";
+                }
+                echo "\n";
                 $bisac_codes[] = "ZZZ000000";
             }
             return $bisac_codes;
@@ -94,13 +100,24 @@ class Parser {
             if (empty($this->supplierparams)) {
                 $this->supplierparams = $this->initSupplierParams($db);
             }
-            if (!empty($this->supplierparams[$supplier])) {
-                foreach($this->supplierparams[$supplier] as $pub => $val) {
-                    if (stripos("!".$publisher, $pub) == 1) {
-                       return $this->supplierparams[$supplier][$pub]['days'];
+            if (!strcmp($supplier, strtolower(UNKNOWN_INFO_SOURCE))) {
+                foreach($this->supplierparams as $supplier => $pubs) {
+                    foreach($pubs as $pub => $val) {
+                        if (stripos("!".$publisher, $pub) == 1) {
+                            return $this->supplierparams[$supplier][$pub]['days'];
+                        }
                     }
                 }
-            } 
+            }
+            else {
+                if (!empty($this->supplierparams[$supplier])) {
+                    foreach($this->supplierparams[$supplier] as $pub => $val) {
+                        if (stripos("!".$publisher, $pub) == 1) {
+                            return $this->supplierparams[$supplier][$pub]['days'];
+                        }
+                    }
+                } 
+            }
             return null;
             /*
             if ((!empty($this->supplierparams[$supplier])) &&
@@ -131,13 +148,24 @@ class Parser {
             if (empty($this->supplierparams)) {
                 $this->supplierparams = $this->initSupplierParams($db);
             }
-            if (!empty($this->supplierparams[$supplier])) {
-                foreach($this->supplierparams[$supplier] as $pub => $val) {
-                    if (stripos("!".$publisher, $pub) == 1) {
-                       return $this->supplierparams[$supplier][$pub]['discount'];
+            if (!strcmp($supplier, strtolower(UNKNOWN_INFO_SOURCE))) {
+                foreach($this->supplierparams as $supplier => $pubs) {
+                    foreach($pubs as $pub => $val) {
+                        if (stripos("!".$publisher, $pub) == 1) {
+                            return $this->supplierparams[$supplier][$pub]['discount'];
+                        }
                     }
                 }
-            } 
+            }
+            else {
+                if (!empty($this->supplierparams[$supplier])) {
+                    foreach($this->supplierparams[$supplier] as $pub => $val) {
+                        if (stripos("!".$publisher, $pub) == 1) {
+                            return $this->supplierparams[$supplier][$pub]['discount'];
+                        }
+                    }
+                } 
+            }
             return null;
             /*
             if ((!empty($this->supplierparams[$supplier])) &&
@@ -204,6 +232,9 @@ class Parser {
             }
 		
             $book['info_source'] = str_replace("\"", "", trim($fields[13]));	
+            if (!strcmp($book['info_source'], "--")) {
+                $book['info_source'] = UNKNOWN_INFO_SOURCE;
+            }
             $book['sourced_from'] = "India";
             $book['image'] = $book['isbn'].".jpg";
             $subjects = explode(":", trim($fields[8]));
@@ -230,6 +261,9 @@ class Parser {
                             break;
             }
             $book['info_source']  = str_replace("\"", "", trim($fields[13]));	
+            if (!strcmp($book['info_source'], "--")) {
+                $book['info_source'] = UNKNOWN_INFO_SOURCE;
+            }
 			$book['list_price'] = trim($fields[10]);
             $indianpub = str_replace("\"", "", trim($fields[14]));
 			$book['suppliers_discount'] = $this->getSuppliersDiscount($db, strtolower($book['info_source']), strtolower($indianpub));

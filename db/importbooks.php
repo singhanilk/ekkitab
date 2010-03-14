@@ -313,6 +313,38 @@ ini_set("display_errors", 1);
             return $row[0] + 1;
     }
 
+    function writeOops($line) {
+        static $fh  = null;
+        if ($line == null) {
+            fclose($fh);
+            $fh = null;
+            return;
+        }
+        if ($fh == null) {
+            $fh = fopen("lines.oops", "a");
+            if (!$fh) {
+                fatal("Could not open data file: lines.oops");
+            }
+        }
+        fprintf($fh, "%s", $line);
+    }
+
+    function writeOk($line) {
+        static $fh  = null;
+        if ($line == null) {
+            fclose($fh);
+            $fh = null;
+            return;
+        }
+        if ($fh == null) {
+            $fh = fopen("lines.ok", "a");
+            if (!$fh) {
+                fatal("Could not open data file: lines.ok");
+            }
+        }
+        fprintf($fh, "%s", $line);
+    }
+
    /** 
     * The main program. 
     */
@@ -412,7 +444,11 @@ ini_set("display_errors", 1);
                     $book['discount_price'] = round($book['list_price'] - $discount);
                 }
                 if (!insertBook($book, $db, $pgm_mode)){
+                    writeOops($line); 
                     $errorcount++;
+                }
+                else {
+                    writeOk($line); 
                 }
             }
         
