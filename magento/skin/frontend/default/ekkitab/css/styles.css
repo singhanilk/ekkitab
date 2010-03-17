@@ -22,8 +22,7 @@ a:hover {
 	background-repeat: no-repeat;
 	width: 1000px;
 	margin: 0 auto;
-	padding: 0 0 20px 0;
-	min-height: 800px;
+	padding: 0 0 0px 0;
 }
 .header {
 	width: 960px;
@@ -597,7 +596,7 @@ a:hover {
 	border-left:1px dotted #333333;
 	padding:0 0 0 12px;
 	margin: 0 0 0 13px;
-	min-height: 250px;
+	min-height: 200px;
 }
 .searchRow {
 	border-bottom: 1px dotted #333333;
@@ -605,7 +604,7 @@ a:hover {
 	margin-bottom: 10px;
 }
 .searchRow .skuImage {
-	width: 110px;
+	width: 15%;
 	float: left;
 }
 .searchRow .skuImage .image {
@@ -614,7 +613,7 @@ a:hover {
 	border:1px solid #cacaca;
 }
 .searchRow .detailsArea {
-	width: 449px;
+	width: 61%;
 	float: left;
 	font-size: 11px;
 	border-right:1px dotted #333333;
@@ -635,7 +634,7 @@ a:hover {
 	font-size: 11px;
 }
 .searchArea .bigImage {
-	width: 210px;
+	width: 20%;
 	float: left;
 	text-align: center;
 
@@ -644,7 +643,7 @@ a:hover {
 	border:1px solid #333;
 }
 .searchArea .midArea {
-	width: 512px;
+	width: 56.5%;
 	padding: 0 9px 0 9px;
 	float: left;
 	border-left: 1px dotted #333; 
@@ -713,7 +712,7 @@ a:hover {
 
 }
 .searchArea .buyArea {
-	width: 188px;
+	width: 19.5%;
 	float: left;
 	margin:0px 0 0 10px;
 }
@@ -1431,10 +1430,27 @@ a:hover {
 	float: left;
 	padding-top: 10px; 
 }
-.notFoundArea .excerptArea {
-	width: 155px;
-	float: right;
-	margin: 0 0 10px 10px;
-	padding-left: 10px;
-	border-left: 1px solid #c60;
+
+
+.contentArea {
+	margin:16px auto 10px;
+	padding-bottom:10px;
+	width:880px;
+	font-size: 11px;
+	line-height: 22px;
+	min-height:140px;
+}
+.contentArea .pageHeader {
+	border-bottom:1px dotted #333333;
+	color:#CC6600;
+	float:none;
+	font-size:20px;
+	width:100%;
+	margin-bottom:20px;
+}
+.contentArea p {
+	margin: 0;
+	padding: 0;
+	margin-left: 20px;
+	list-style-type:circle;
 }
