@@ -68,7 +68,7 @@
 		
 		
 	<div class="buyArea">
-		<?php if($savingsPerct > 0):?><div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($_product->getFinalPrice(),true,false) ?></div><?php endif; ?>
+		<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($_product->getFinalPrice(),true,false) ?></div>
 		<?php if($_product->getListPrice() > 0):?><div class="authorEtc">MRP : <?php echo Mage::helper('core')->currency($_product->getListPrice(),true,false) ?></div><?php endif; ?>
 		<?php if($savingsPerct > 0):?><div class="youSave">Save : <?php echo Mage::helper('core')->currency(($_product->getListPrice()-$_product->getFinalPrice()),true,false) ?> (<?php echo number_format($savingsPerct,2,'.','') ?>%)</div><?php endif; ?>
 		<div class="authorEtc"><?php echo $shippingTime ?></div>
@@ -81,10 +81,9 @@
 			  <input type="hidden" name="related_product" id="related-products-field" value="" />
 			</fieldset>
 			</form>
-			<div class="dottedLineBig"></div>
-			<?php endif;?>
-
-			<!-- otherBut -->
+		<?php endif;?>
+		<div class="dottedLineBig"></div>
+		<!-- otherBut -->
 			<?php echo $this->getChildHtml('donate_book_blurb') ?>
 			</div>
 		<div class="clear"></div>
