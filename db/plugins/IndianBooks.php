@@ -204,7 +204,7 @@ class Parser {
             $book['isbn10'] = trim($fields[1]);
             $book['title']  = $this->escape(trim($fields[2]));
             $book['edition'] = trim($fields[5]);
-            $authors = explode("&", trim($fields[3]));
+            $authors = explode("&", str_replace("\"", "", trim($fields[3])));
             foreach ($authors as $author) {
                 $author = $this->escape($this->correctName($author));
                 $book['author'] = $book['author'] . " & " . $author;
