@@ -119,7 +119,21 @@ CREATE TABLE IF NOT EXISTS `ek_discount_setting` (
   `info_source` varchar(40) NOT NULL,
   `discount_percent` smallint NOT NULL default 100,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQUE_INFO_SOURCE` (`info_source`)
+  UNIQUE KEY (`info_source`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  AUTO_INCREMENT=1 ;
+
+--
+-- Table structure for `ek_supplier_params`
+--
+
+CREATE TABLE IF NOT EXISTS `ek_supplier_params` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `info_source` varchar(40) NOT NULL,
+  `publisher` varchar(80) NOT NULL,
+  `supplier_discount` smallint NOT NULL default 20,
+  `delivery_period` smallint NOT NULL default 5,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`info_source`, `publisher`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8  AUTO_INCREMENT=1 ;
 
 --

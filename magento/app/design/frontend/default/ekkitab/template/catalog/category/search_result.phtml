@@ -170,11 +170,11 @@ if(!is_null($results) && is_array($results)){
 			</div><!-- detailsArea -->
 
 			<div class="priceArea">
-			<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($discPrice,true,false) ?></div>
-			<div class="lineHeight14em">MRP Price : <?php echo Mage::helper('core')->currency($listPrice,true,false) ?></div>
-			<?php if($savingsPerct > 0):?><div class="youSave">Save <?php echo Mage::helper('core')->currency($savings,true,false) ?> (<?php echo number_format($savingsPerct,2,'.','') ?>%)</div><?php endif; ?>
+			<?php if($savings > 0):?><div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($discPrice,true,false) ?></div><?php endif; ?>
+			<?php if($listPrice > 0):?><div class="lineHeight14em">MRP Price : <?php echo Mage::helper('core')->currency($listPrice,true,false) ?></div><?php endif; ?>
+			<?php if($savings > 0):?><div class="youSave">Save <?php echo Mage::helper('core')->currency($savings,true,false) ?> (<?php echo number_format($savingsPerct,2,'.','') ?>%)</div><?php endif; ?>
 			<div class="lineHeight14em"><?php echo $shippingTime ?></div>
-			<div class="youSave"><?php if($stock) { ?>In Stock</div><?php } else{?>Out of Stock </div><a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($id)?>"><?php echo $this->__('Add to Wishlist') ?></a><br/><?php }?>		
+			<div class="youSave"><?php if($stock && $listPrice >0) : ?>In Stock</div><?php else:?>Out of Stock </div><a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($id)?>"><?php echo $this->__('Add to Wishlist') ?></a><br/><?php endif;?>		
 			
 			<!--a href="#" onclick="setLocation('<?php echo $this->getAddToCartUrl($id)?>')"><img src="<?php echo $this->getSkinUrl('images/btn_add_to_cart.gif') ?>" alt="<?php echo $this->__('Add to Cart') ?>"></a-->
 			</div><!-- priceArea -->

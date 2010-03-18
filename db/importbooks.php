@@ -1,7 +1,6 @@
 <?php
 error_reporting(E_ALL  & ~E_NOTICE);
 ini_set("display_errors", 1); 
-//hi everyone
 //  
 //
 // COPYRIGHT (C) 2009 Ekkitab Educational Services India Pvt. Ltd.  
@@ -24,6 +23,7 @@ ini_set("display_errors", 1);
     include("imagehash.php");
 
     define(UNCLASSIFIED, "ZZZ000000");
+
     $unclassified = array();
     $equivalents = array();
 
@@ -36,7 +36,7 @@ ini_set("display_errors", 1);
     */
     function fatal($message, $query = "") {
         global $logger;
-	    $logger->fatal("$message " . "[ $query ]" . "\n");
+	    $logger->fatal("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
         exit(1);
     }
 
@@ -46,7 +46,7 @@ ini_set("display_errors", 1);
     */
     function warn($message, $query = "") {
         global $logger;
-	    $logger->error("$message " . "[ $query ]" . "\n");
+	    $logger->error("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
     }
 
    /** 
@@ -55,7 +55,7 @@ ini_set("display_errors", 1);
     */
     function debug($message, $query = "") {
         global $logger;
-	    $logger->debug("$message " . "[ $query ]" . "\n");
+	    $logger->debug("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
     }
 
    /** 
@@ -89,6 +89,18 @@ ini_set("display_errors", 1);
         }
         catch (exception $e) {
            fatal($e->getmessage());
+        }
+
+        $query = "set autocommit = 0";
+        
+        try {
+	        $result = mysqli_query($db,$query);
+            if (!$result) {
+               fatal("Failed to set autocommit mode.");
+            }
+        }
+        catch(exception $e) {
+            fatal($e->getmessage());
         }
 
         return $db;
@@ -133,12 +145,11 @@ ini_set("display_errors", 1);
     function getUnclassifiedCategoryCode($db) {
        static $book = array(); 
        if (empty($book)) {
-            $lookup = "select category_id,rewrite_url from ek_bisac_category_map where bisac_code = '".UNCLASSIFIED."'";
+            $lookup = "select category_id from ek_bisac_category_map where bisac_code = '".UNCLASSIFIED."'";
             $result = mysqli_query($db, $lookup);
             if (($result) && (mysqli_num_rows($result) > 0)){
 	            $row = mysqli_fetch_array($result);
                 $book['catcode'] = $row[0];
-                $book['rewrite_url'] = $row[1];
             }
             else {
                 fatal("Could not get unclassified code.");
@@ -163,7 +174,7 @@ ini_set("display_errors", 1);
             if (strcmp($value, "")) {
                 if (!empty($equivalents[$value]))
                     $value = $equivalents[$value];
-                $lookup = "select category_id,rewrite_url from ek_bisac_category_map where bisac_code = '". $value . "'";
+                $lookup = "select category_id from ek_bisac_category_map where bisac_code = '". $value . "'";
                 $result = mysqli_query($db, $lookup);
                 if (($result) && (mysqli_num_rows($result) > 0)){
 	                $row = mysqli_fetch_array($result);
@@ -171,7 +182,6 @@ ini_set("display_errors", 1);
                     foreach($ids as $id) {
                         $catIds[$id] = 1;
                     }
-                    $book['rewrite_url'] = $row[0] . "\t" . $row[1];
                 }
                 else {
                     $unclassified[$value]++;
@@ -187,56 +197,106 @@ ini_set("display_errors", 1);
          foreach($ids as $id) {
              $catIds[$id] = 1;
          }
-         $book['rewrite_url'] = $tmp['catcode'] . "\t" . $tmp['rewrite_url'];
          $bisac_codes = UNCLASSIFIED;
       }
       else 
          $book['unclassified'] = false;
 
-      $book['catcode'] = implode(",", array_keys($catIds));
+      $book['bisac1'] = implode(",", array_keys($catIds));
       $book['bisac_codes'] = $bisac_codes;
 
+      unset($book['catcode']);
       return ($book);
     }
 
+    /**
+     * This function will return all the currency conversion rates. 
+     */
+    function getCurrencyConversionRates($db) {
+        $currencyrates = array();
+        $query    = "select * from ek_currency_conversion"; 
+        try {
+            $result = mysqli_query($db, $query);
+            if (($result) && (mysqli_num_rows($result) > 0)) {
+                while($row = mysqli_fetch_array($result)) {
+                    $type = strtoupper($row[1]);
+                    $currencyrates[$type] = $row[2];
+                }
+            }
+            else {
+                throw new exception("Failed to get currency data from database");
+            }
+        }
+        catch(exception $e) {
+           fatal($e->getmessage());
+        }
+        return ($currencyrates);
+    }
+
    /** 
-    *  Convert BISAC codes to Magento Category Codes. 
+    *  Get the discount computation value from the reference database.  
     */
-    function insertBook($book, $db, $language, $shipregion, $infosource) {
+    function getDiscountSettings($db) {
+       $discountrates = array();   
+       $query = "select * from ek_discount_setting";
+       try {
+            $result = mysqli_query($db, $query);
+            if (($result) && (mysqli_num_rows($result) > 0)) {
+                while ($row = mysqli_fetch_array($result)) {
+                    $type = strtolower($row[1]);
+                    $discountrates[$type] = $row[2];
+                }
+            }
+            else {
+                throw new exception("Failed to get discount data from database");
+            }
+       }
+       catch(exception $e) {
+           fatal($e->getmessage());
+       }
+       return($discountrates);
+    }
 
-       //$book['thumbnail'] = getHash($book['thumbnail']);
-       $book['image'] = getHashedPath($book['image']);
+   /** 
+    * Insert or Update the book in the database. 
+    */
+    function insertBook($book, $db, $mode) {
 
-       $query = "insert into books (`isbn10`, `isbn`, `author`, `binding`, `publisher`, `title`, `pages`, " .
-                "`language`, `bisac1`, `image`, `weight`, " .
-                "`dimension`, `edition`, `shipping_region`, `info_source`, `sourced_from`, `bisac_codes`, delivery_period) values (";
+       if (!empty($book['image'])) {
+            $book['image'] = getHashedPath($book['image']);
+       }
 
-       $query = $query . "'" . $book['isbn'] . "'".",";
-       $query = $query . "'" . $book['isbn13'] . "'".",";
-       $query = $query . "'" . $book['author'] . "'".",";
-       $query = $query . "'" . $book['binding'] . "'".",";
-       $query = $query . "'" . $book['publisher'] . "'".",";
-       $query = $query . "'" . $book['title'] . "'".",";
-       $query = $query . "'" . $book['pages'] . "'" . ",";
-       $query = $query . "'$language'" . ",";
-       $query = $query . "'" . $book['catcode'] . "'" . ",";
-       #$query = $query . "'" . $book['catcode'][1] . "'" . ",";
-       #$query = $query . "'" . $book['catcode'][2] . "'" . ",";
-       $query = $query . "'" . $book['image'] . "'" . ",";
-       $query = $query . "'" . $book['weight'] . "'" . ",";
-       $query = $query . "'" . $book['dimension'] . "'".",";
-       $query = $query . "'" . $book['edition'] . "'" . ",";
-       $query = $query . "'" . $shipregion . "'" . ",";
-       $query = $query . "'" . $infosource . "'" . ",";
-       $query = $query . "'" . $book['sourced_from'] . "'" . ",";
-       $query = $query . "'" . $book['bisac_codes'] . "'". ",";
-       $query = $query . $book['DELIVERY_PERIOD'] . ");";
+       $updatestatement = "update ";
+       $insertfields = "";
+       $insertvalues = "";
+       $conjunct = "";
+       foreach($book as $key => $value) {
+          $updatestatement  .= $conjunct . $key . " = " . "'" . $value . "'" ;
+          $insertfields .= $conjunct . $key;
+          $insertvalues .= $conjunct . "'" . $value . "'";
+          $conjunct = ",";
+       }
+
+       $query = "insert into books ( $insertfields ) values ( $insertvalues )"; 
+
+       if (!($mode & MODE_BASIC)) {
+            $query .= " on duplicate key " . $updatestatement;
+       }
+
        if (! $result = mysqli_query($db, $query)) {
            warn("Failed to write to Books: ". mysqli_error($db), $query);
            return(0); 
        }
        else {
            return(1);
+       }
+    }
+
+    function doCommit($db) {
+       $query = "commit"; 
+
+       if (! $result = mysqli_query($db, $query)) {
+           fatal("Failed to commit: ". mysqli_error($db));
        }
     }
 
@@ -259,58 +319,111 @@ ini_set("display_errors", 1);
     function start($argc, $argv) {
 
         if ($argc == 1) {
-           echo "Usage: $argv[0] <Data Source> <Data File> <Language>\n";
+           echo "Usage: $argv[0] [-abpd] <Data Source> <Data File>\n";
            exit(0);
         }
-        if ($argc != 4) 
-            fatal("No supplier name or import file."); 
+        $pgm_mode = 0;
+        if ($argv[1][0] == '-') {
+           for ($i = 1; $i < strlen($argv[1]) ; $i++) {
+             switch ($argv[1][$i]) {
+                case 'a':  $pgm_mode |= (MODE_BASIC | MODE_PRICE | MODE_DESC);
+                           break;
+                case 'b':  $pgm_mode |= MODE_BASIC;
+                           break;
+                case 'p':  $pgm_mode |= MODE_PRICE;
+                           break;
+                case 'd':  $pgm_mode |= MODE_DESC;
+                           break;
+                default:   fatal("Unknown option: " . $argv[1][$i]);
+                           break;
+             }
+           }
+        }
+        if ($argc != 4) {
+            echo "Usage: $argv[0] [-abpd] <Data Source> <Data File>\n";
+            fatal("Not enough arguments."); 
+        }
 
-        $fh = fopen($argv[2], "r"); 
+        $fh = fopen($argv[3], "r"); 
         if (!$fh) {
-            fatal("Could not open data file: $argv[2]");
+            fatal("Could not open data file: $argv[3]");
         }
 
         readBisacEquivalents();
-        $infosource = $argv[1];
-        $language   = $argv[3];
-        require_once(IMPORTBOOKS_CLASSDIR . "/" . $infosource . ".php");
+        require_once(IMPORTBOOKS_PLUGINS_DIR . "/" . $argv[2] . ".php");
         $config = getConfig(IMPORTBOOKS_INI);
         $db = initDatabases($config);
 
-        $parser       = new Parser;
-        $i            = 1;
+        $parser       = new Parser($pgm_mode);
+        $i            = 0;
         $unresolved   = 0;
         $ignored      = 0;
         $errorcount   = 0;
+        $unclassified = 0;
         $filenotfound = 0;
-        $shipregion   = 0; 
     
         $startid = getStartId($db);
         debug("Start Id: $startid");
     
         while ($line = fgets($fh)) {
-            $book = $parser->getBook($line);
-            if ($book == null) {
+            $book = array();
+            try {
+                $book = $parser->getBook($line, $book, $db, $logger);
+            }
+            catch(exception $e) {
+                //fatal($e->getmessage());
+                warn($e->getmessage());
+                $book = null;
+            }
+            if (!$book) {
                 $ignored++;
             }
             else {
-                $book = addCategoryCodes($book, $db);
-                if (empty($book['catcode'])) { 
-                    $unresolved++;
+                if ($pgm_mode & MODE_BASIC) {
+                    $book = addCategoryCodes($book, $db);
+                    unset($book['bisac']);
+                    if (empty($book['bisac1'])) { 
+                        $unresolved++;
+                    }
+                    if ($book['unclassified']) {
+                        $unclassified++;
+                    }
+                    unset($book['unclassified']);
                 }
-                elseif (!insertBook($book, $db, $language, $shipregion, $infosource)){
+                if ($pgm_mode & MODE_PRICE) {
+                    if (empty($currencyrates)) {
+                        $currencyrates = getCurrencyConversionRates($db);
+                    }
+                    if (empty($discountrates)) {
+                        $discountrates = getDiscountSettings($db);
+                    }
+
+                    $conv_rate = $currencyrates[strtoupper($book['currency'])];
+                    if (empty($conv_rate)) {
+                        fatal("No currency conversion rate available for " . $book['currency']);
+                    }
+                    $book['list_price'] = $book['list_price'] * $conv_rate;
+                    $book['suppliers_price'] = $book['list_price'] * ((100 - $book['suppliers_discount'])/100);
+                    $disc_rate = $discountrates[strtolower($book['info_source'])];
+                    if (empty($disc_rate)) {
+                        fatal("No discount rate available for supplier " . $book['info_source']);
+                    }
+                    $discount =  ($book['list_price'] - $book['suppliers_price']) * $disc_rate / 100 ;
+                    $book['discount_price'] = round($book['list_price'] - $discount);
+                }
+                if (!insertBook($book, $db, $pgm_mode)){
                     $errorcount++;
                 }
-                if ($book['unclassified'])
-                    $unclassified++;
             }
         
-            if ($i++ % 10000 == 0) {
-                $inserted = $i - ($errorcount + $unresolved + $filenotfound + $ignored + 1);
+            if (++$i % 10000 == 0) {
+                doCommit($db);
+                $inserted = $i - ($errorcount + $unresolved + $filenotfound + $ignored);
                 debug("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.\n");
             }
         }
-        $inserted = $i - ($errorcount + $unresolved + $filenotfound + $ignored + 1);
+        doCommit($db);
+        $inserted = $i - ($errorcount + $unresolved + $filenotfound + $ignored);
         writeUnclassifiedCodesToFile($infosource);
         debug("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.\n");
     

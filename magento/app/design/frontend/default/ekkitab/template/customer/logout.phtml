@@ -24,10 +24,13 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="page-head">
-    <h3><?php echo Mage::helper('customer')->__("You're now Logged Out") ?></h3>
+<div class="contentArea">
+	<div class="pageHeader"><?php echo Mage::helper('customer')->__("You're now Logged Out") ?></div>
+	<p>
+		<?php echo Mage::helper('customer')->__('You have been successfully logged out and will be redirected to our homepage in 5 seconds.') ?>
+		<br class=clear"/>
+	</p>
 </div>
-<p><?php echo Mage::helper('customer')->__('You have been successfully logged out and will be redirected to our homepage in 5 seconds.') ?></p>
 <script type="text/javascript">
-setTimeout(function(){ location.href = '<?php echo $this->getUrl() ?>'},5000);
+//setTimeout(function(){ location.href = '<?php echo $this->getUrl() ?>'},5000);
 </script>

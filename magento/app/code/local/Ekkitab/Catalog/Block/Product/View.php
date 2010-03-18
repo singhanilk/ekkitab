@@ -94,7 +94,8 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
 			));
 
 		}
-		
+		Mage::getSingleton('core/session')->setCurrentQueryText('');
+		Mage::getSingleton('core/session')->setCurrentCategoryPath('');
         return parent::_prepareLayout();
 		
     }

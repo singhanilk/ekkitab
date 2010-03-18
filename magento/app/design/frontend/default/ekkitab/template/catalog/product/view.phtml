@@ -36,6 +36,7 @@
 	if(!is_null($_product)){
 		$author = $_product->getAuthor();
 		$productUrl = $_product->getProductUrl();
+		$inStock = $_product->getInStock();
 		$author = strlen($author) > 0 ? "by ".$author : "";
 		
 		$savingsPerct= ($_product->getListPrice() >0 )?	(($_product->getListPrice() - $_product->getFinalPrice())/ $_product->getListPrice() ) * 100 : 0; 
@@ -53,6 +54,10 @@
 			<div class="lineHeight14em"><span class="boldFont">ISBN:  <?php echo $_product->getIsbn() ?></span></div>
 			<div class="lineHeight14em"><span class="boldFont">Binding: <?php echo ucwords($_product->getBinding()) ?></span></div>
 			<div class="lineHeight14em"><span class="boldFont">Language : <?php echo ucwords($_product->getLanguage()) ?></span></div>
+			<?php if(!$inStock || $_product->getListPrice() <= 0):?>
+			  <div class="marginTop5px"><img src="<?php echo $this->getSkinUrl('images/out_of_stock_image.png')?>" align="absmiddle"> &nbsp; <a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($_product->getId()) ?>">Add to Wishlist</a> </div>
+
+			<?php endif;?>
 			<div class="finDetSynop">
 				<?php echo $_product->getDescription() ?>
 			</div><!-- finDetSynop -->
@@ -62,27 +67,26 @@
 		</div><!-- midArea -->
 		
 		
-	<form action="<?php echo $this->helper('ekkitab_catalog')->getCartUrl($_product->getId(),$this->helper('core/url')->getCurrentUrl()) ?>" method="post" id="product_addtocart_form">
-		<div class="buyArea">
-			<?php if($savingsPerct > 0):?><div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($_product->getFinalPrice(),true,false) ?></div><?php endif; ?>
-			<div class="authorEtc">MRP : <?php echo Mage::helper('core')->currency($_product->getListPrice(),true,false) ?></div>
-			<?php if($savingsPerct > 0):?><div class="youSave">Save : <?php echo Mage::helper('core')->currency(($_product->getListPrice()-$_product->getFinalPrice()),true,false) ?> (<?php echo number_format($savingsPerct,2,'.','') ?>%)</div><?php endif; ?>
-			<div class="authorEtc"><?php echo $shippingTime ?></div>
+	<div class="buyArea">
+		<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($_product->getFinalPrice(),true,false) ?></div>
+		<?php if($_product->getListPrice() > 0):?><div class="authorEtc">MRP : <?php echo Mage::helper('core')->currency($_product->getListPrice(),true,false) ?></div><?php endif; ?>
+		<?php if($savingsPerct > 0):?><div class="youSave">Save : <?php echo Mage::helper('core')->currency(($_product->getListPrice()-$_product->getFinalPrice()),true,false) ?> (<?php echo number_format($savingsPerct,2,'.','') ?>%)</div><?php endif; ?>
+		<div class="authorEtc"><?php echo $shippingTime ?></div>
+		<?php if($inStock && $_product->getListPrice() > 0):?>
+			<form action="<?php echo $this->helper('ekkitab_catalog')->getCartUrl($_product->getId(),$this->helper('core/url')->getCurrentUrl()) ?>" method="post" id="product_addtocart_form">
 
 			<?php echo $this->getChildHtml('addtocart') ?>
-			<?php echo $this->getChildHtml('addto') ?>
-
-			<!-- otherBut -->
-			<div class="dottedLineBig"></div>
-				<?php echo $this->getChildHtml('donate_book_blurb') ?>
+			<fieldset class="no-display">
+			  <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+			  <input type="hidden" name="related_product" id="related-products-field" value="" />
+			</fieldset>
+			</form>
+		<?php endif;?>
+		<div class="dottedLineBig"></div>
+		<!-- otherBut -->
+			<?php echo $this->getChildHtml('donate_book_blurb') ?>
 			</div>
 		<div class="clear"></div>
-		<fieldset class="no-display">
-		  <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
-		  <input type="hidden" name="related_product" id="related-products-field" value="" />
-		</fieldset>
-
-		</form>
 		<!-- buyArea -->
 		</div><!-- searchArea -->
 <script type="text/javascript">
