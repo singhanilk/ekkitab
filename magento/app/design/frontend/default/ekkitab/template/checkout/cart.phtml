@@ -70,7 +70,7 @@
 	<?php echo $this->getChildHtml('totals'); ?>
 
 	<div class="skuScartRow">
-	<div class="bkHomePage">Click here to go to <a href="<?php if($this->getContinueShoppingUrl()): echo $this->getContinueShoppingUrl(); endif; ?>" class="boldFont">ekkitab's Homepage</a> and add more to your cart <?php if(!$this->hasError()): ?><span class="boldFont">OR</span></div><?php echo $this->getChildHtml('methods') ?><?php endif; ?>
+	<div class="bkHomePage">Click here to go to <a href="<?php if($this->getContinueShoppingUrl()): echo $this->getContinueShoppingUrl(); endif; ?>" class="boldFont">ekkitab's Homepage</a> and add more to your cart <?php if(!$this->hasError()): ?><span class="boldFont">OR</span><?php echo $this->getChildHtml('methods') ?><?php endif; ?></div>
 	<!-- proceedCheckout -->
 	<div class="clear"></div>
 	</div><!-- skuScartRow -->
