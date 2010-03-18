@@ -173,13 +173,28 @@ class Ekkitab_Ccav_StandardController extends Mage_Core_Controller_Front_Action
   
         $this->getStandard()->setBillFormData($this->getRequest()->getPost());  // what this does ??
         
-  			if  ( $this->getStandard()->ccavPostResponse()) { //
+  		  $flag = $this->getStandard()->ccavPostResponse() ;//
+  		  
+  		       if ($flag == 1) {
+  		       	   	$this->_redirect('checkout/multishipping/success'); // 
+  		       
+  		       }
+  		       else if ($flag == 2 ){
+  		              //return false ;
+  		                     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;  
+  		       
+  		                	$this->_redirect('checkout/multishipping/failure'); // 
+  		       
+  	//does not work	           Mage::throwException(Mage::helper('checkout')->__('Order issue : Transaction Declined')) ;
+  		       }  
+  		        else if  ( $flag == 3 ){
+  			
   					$this->_redirect('checkout/onepage/success', array('_secure'=>true));
-  			}
-  			else {
+  				}
+  					else {
   			 		$this->_redirect('checkout/onepage/failure', array('_secure'=>true));
   			
-  			};
+  				};
     }
     
 }

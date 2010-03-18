@@ -36,15 +36,12 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     //changing the payment to different from cc payment type and paypal payment type
     const PAYMENT_TYPE_AUTH = 'AUTHORIZATION';
     const PAYMENT_TYPE_SALE = 'SALE';
-
     const DATA_CHARSET = 'utf-8';
-
-  //aks  protected $_code  = 'paypal_standard';
-  //aks protected $_formBlockType = 'paypal/standard_form';
-  //aks   protected $_allowCurrencyCode = array('AUD', 'CAD', 'CZK', 'DKK', 'EUR', 'HKD', 'HUF', 'ILS', 'JPY', 'MXN', 'NOK', 'NZD', 'PLN', 'GBP', 'SGD', 'SEK', 'CHF', 'USD');
     protected $_code  = 'ccav';
     protected $_formBlockType = 'ccav/form';
     protected $_allowCurrencyCode = array('INR');  // Allowed currency code for charging the credit card
+    
+
     
        //copied from CCAvenue libfuncs.php3
     
@@ -236,27 +233,112 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
         return Mage::getUrl('ccav/standard/redirect', array('_secure' => true));
     }
 
+ /*
+	//Now, HERE IS THE STORY. IF the user comes thru single shipment order, getLastTealOrderId works. But for Multishipment, getOrderIds works,
+	// That is the way I am differentiating between Multiple and Single orders. If I get higher Order no from multiple shipment order, than the user
+	// is chosen multiple orders. If the higher order number is by getLastRealOrderId, that it is single checkout order.
+	// We have to figure out whether is there a simpler way to figure out whether it is single or Multishipping orders
+
+	$Order_Id =  $this->getCheckout()->getLastRealOrderId();  // for single shipment order 
+	
+	Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($Order_Id,true)) ;
+                        
+	$Order_Ids    =  Mage::getSingleton('core/session')->getOrderIds();   // for mltiple shipment orders
+	  	
+	$total_amount = 0 ;
+	  	
+	if (isset($Order_Ids)){	 
+	  	
+	  		Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Count of Orders in Multishipment\n".print_r(count($Order_Ids),true)) ;
+
+	  	  if ($Order_Id < end($Order_Ids)) { 
+	  	  		$Order_Id = end($Order_Ids);
+	  	        $Merchant_Param="M" ;     // It was Multiple Shipping
+	  	     	 foreach( $Order_Ids as $key => $orid) {
+	  	 				  $order = Mage::getModel('sales/order');
+     			 		  $order->loadByIncrementId($orid);  
+     					  $total_amount = $total_amount + $order->getGrandTotal() ;
+      	  
+	  	         }
+	  	          Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Multiple Address Checkout\n".print_r($total_amount,true)) ;
+	  	         
+     	          
+
+	  	 }
+	 }
+	 
+	 // In case even if it may find multiple Order_ids, but it may be the last transaction from this login session. So, it may not be flagged by
+	 // Multipleshipment by above logi.
+	 
+	  if ($Merchant_Param !="M") {
+	  	      $Merchant_Param="S" ;
+	  	      $order = Mage::getModel('sales/order');
+     	      $order->loadByIncrementId($Order_Id);  
+             $total_amount = $order->getGrandTotal();
+
+             Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Single Address Checkout\n".print_r($total_amount,true)) ;
+             
+             
+                  
+	  	}
+	  	
+	  	*/
+	  	 
+    
+	  	
     public function getStandardCheckoutFormFields()
     {
-    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
+    	  Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
     
-    /*
-        if ($this->getQuote()->getIsVirtual()) {  // don't understand this "aksingh"
-            $a = $this->getQuote()->getBillingAddress();
-            $b = $this->getQuote()->getShippingAddress();
-        } else {
-            $a = $this->getQuote()->getShippingAddress();
-            $b = $this->getQuote()->getBillingAddress();
-        }
-        
-        */
+//	$Merchant_Param="" ;     // this is optional, you can fill up with any value, we are using it for checkout type
+    
+          if ($this->getQuote()->getIsMultiShipping()){
+                     $Merchant_Param="M" ; 
+                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Multishipping\n") ;
+          }
+          else {
+                      $Merchant_Param="S" ; 
+                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Onepage\n") ;
+       	 }
+       
+       	$total_amount = 0 ;
+	
+        if ($Merchant_Param=="S") { // OnestepCheckout Order
+     		 $Order_Id =  $this->getCheckout()->getLastRealOrderId();  // for single shipment order 
+	  	   	 $order = Mage::getModel('sales/order');
+     	     $order->loadByIncrementId($Order_Id);  
+             $total_amount = $order->getGrandTotal();
+
+             Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Single Address Checkout\n".print_r($total_amount,true)) ;
+                  
+	  	} else {  // it is "M" : Multishipping order
+	  		$Order_Ids    =  Mage::getSingleton('core/session')->getOrderIds();   // for mltiple shipment orders
+	  		$Order_Id = end($Order_Ids);
+	  	     	 
+	  		foreach( $Order_Ids as $key => $orid) {
+	  	 				  $order = Mage::getModel('sales/order');
+     			 		  $order->loadByIncrementId($orid);  
+     					  $total_amount = $total_amount + $order->getGrandTotal() ;
+      	  
+	  	         }
+
+	  	     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($Order_Ids,true)) ;
+	  	     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Multiple Address Checkout\n".print_r($total_amount,true)) ;
+	  	
+	  	}
+	
+    
     
    		    $a = $this->getQuote()->getBillingAddress();
             $b = $this->getQuote()->getShippingAddress();
             
             
+ //           $reserved_ord_id = $this->getQuote()->getReservedOrderId() ;
+ //           Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($reserved_ord_id,true)) ;
+       
+            
         //getQuoteCurrencyCode
-        $currency_code = $this->getQuote()->getBaseCurrencyCode();
+ //  $currency_code = $this->getQuote()->getBaseCurrencyCode();
        
         
             
@@ -266,12 +348,10 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 //	Merchant_Id  available at "Generate Working Key" of "Settings & Options" 
 	$Merchant_Id =Mage::getStoreConfig('ccav/wps/merchant_id');	
     $Amount = "" ;//your script should substitute the amount in the quotes provided here
-	$Order_Id = "" ;//your script should substitute the order description in the quotes provided here
     $Redirect_Url = Mage::getStoreConfig('ccav/wps/return_url') ;
     
 //put in the 32 bit alphanumeric key in the quotes provided here.Please note that get this key ,login to your CCAvenue merchant account and visit the "Generate Working Key" section at the "Settings & Options" page. 
 	$WorkingKey = Mage::getStoreConfig('ccav/wps/checksum_key') ;
-    
     $a_first_name = $a->getFirstname() ;
     $a_last_name  = $a->getLastname();
     $a_address1  = $a->getStreet(1);
@@ -288,46 +368,31 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 	$billing_cust_name=$a_first_name." ".$a_last_name;
 	$billing_cust_address=$a_address1." ".$a_address2;
 	$billing_cust_state=$a->getRegion();
-//  $billing_cust_country=$a->getCountry();
     $billing_cust_country = Mage::getModel('directory/country')->load($a->getCountry())->getName();
-    
-    
-	
 	$billing_cust_tel=$a->getTelephone();
     $billing_cust_tel=str_replace(" ","",$billing_cust_tel);
-	
 	$billing_cust_email=$a->getEmail();
+	
 	$delivery_cust_name=$b_first_name." ".$b_last_name;
 	$delivery_cust_address=$b_address1." ".$b_address2;
 	$delivery_cust_state = $b->getRegion();
-//	$delivery_cust_country = $b->getCountry();
 	$delivery_cust_country = Mage::getModel('directory/country')->load($b->getCountry())->getName();
-
-	
 	$delivery_cust_tel= $b->getTelephone();
 	$delivery_cust_tel=str_replace(" ","",$delivery_cust_tel);
 	
 	$delivery_cust_notes="";  // this is optional,
-	$Merchant_Param="" ;     // this is optional, you can fill up with any value
 	$billing_city = $a->getCity();
 	$billing_zip = $a->getPostcode();
 	$delivery_city = $b->getCity();
 	$delivery_zip = $b->getPostcode();
-
-	$Order_Id =  $this->getCheckout()->getLastRealOrderId();
 	
+	  	
+	 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($total_amount,true)) ;
+	 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($Order_Id,true)) ;
+
 	//upto here from checkuot.php3
 
         $sArr = array(
-     //       'charset'           => self::DATA_CHARSET,
-     //       'business'          => Mage::getStoreConfig('paypal/wps/business_account'),
-     //         'Checksum'			=> $Checksum,
-     //       'merchant_url'		=> Mage::getStoreConfig('ccav/wps/merchant_url'),
-     //      'return'            => Mage::getUrl('ccav/standard/success',array('_secure' => true)), 
-      //      'cancel_return'     => Mage::getUrl('ccav/standard/cancel',array('_secure' => false)),  //??
-      //      'notify_url'        => Mage::getUrl('ccav/standard/ipn'),  //??
-      //           'currency_code'     => $currency_code,
- 	//           'address_override'  => 1,
       
                'Redirect_Url'		   => $Redirect_Url,  
           	   'Merchant_Id'           => $Merchant_Id,             
@@ -359,56 +424,13 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
         
         // After testing the interface, we should hardcode them, it may be too risky to keep them as parameters
         
-          $merchanturl = Mage::getStoreConfig('ccav/wps/merchant_url') ;
+        $merchanturl = Mage::getStoreConfig('ccav/wps/merchant_url') ;
         
+         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($total_amount,true)) ;
         
-        
-        /*
-
-        $logoUrl = Mage::getStoreConfig('ccav/wps/logo_url');
-        if($logoUrl){
-             $sArr = array_merge($sArr, array(
-                  'cpp_header_image' => $logoUrl
-             ));
-        }
-
-        if($this->getConfigData('payment_action')==self::PAYMENT_TYPE_AUTH){
-             $sArr = array_merge($sArr, array(
-                  'paymentaction' => 'authorization'
-             ));
-        }
-        */
-        
-    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
-        
- //      	     $transaciton_type = $this->getConfigData('transaction_type');
-       
- 
-            $businessName = Mage::getStoreConfig('ccav/wps/business_name');
-            $storeName = Mage::getStoreConfig('store/system/name');
-            $amount = ($a->getBaseSubtotal()+$b->getBaseSubtotal())-($a->getBaseDiscountAmount()+$b->getBaseDiscountAmount());
-
-  
-            $_shippingTax = $this->getQuote()->getShippingAddress()->getBaseTaxAmount();
-            $_billingTax = $this->getQuote()->getBillingAddress()->getBaseTaxAmount();
-            $tax = sprintf('%.2f', $_shippingTax + $_billingTax);
-    
-
-        $totalArr = $a->getTotals();
-        $shipping = sprintf('%.2f', $this->getQuote()->getShippingAddress()->getBaseShippingAmount());
-
-        
-        $grand_total = $amount + $shipping + $tax ;
-        
+        $grand_total = $total_amount ;
         $Checksum = $this->getcheckSum($Merchant_Id,$grand_total,$Order_Id ,$Redirect_Url,$WorkingKey);
-  /*      
-        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Order Id\n".print_r($Order_Id,true)) ;
-        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."WorkingKey\n".print_r($WorkingKey,true)) ;
-    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Redirect_Url\n".print_r($Redirect_Url,true)) ;
-    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Amount\n".print_r($grand_total,true)) ;
-    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."CheckSum\n".print_r($Checksum,true)) ;
-    */
-    
+  
         
         $sArr = array_merge($sArr, array(
                     'Amount' => $grand_total,
@@ -453,13 +475,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     public function getCcavUrl()
     {
     
- //        if (Mage::getStoreConfig('ccav/wps/sandbox_flag')==1) {
- //            $url='https://www.sandbox.paypal.com/cgi-bin/webscr';
-     //    } else {
- //            $url='https://www.paypal.com/cgi-bin/webscr';
-     //        $url='https://www.ccavenue.com/shopzone/cc_details.jsp';
-             
-  //       }
+ 
              $url = Mage::getStoreConfig('ccav/wps/merchant_url') ;
              
         	 return $url;
@@ -479,6 +495,21 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     
     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
     
+     if ($this->getQuote()->getIsMultiShipping()){
+                     $Merchant_Param="M" ; 
+                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Multishipping\n") ;
+          }
+          else {
+                      $Merchant_Param="S" ; 
+                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Onepage\n") ;
+     					 
+                      // I have done this to chceck whether we can get Order id this way so that we don't have to depend
+                      // upon stored data in message
+                      $x =  $this->getCheckout()->getLastRealOrderId();  // for single shipment order 
+                                           
+                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Order Id from LastRealOrderId\n".print_r($x,true)) ;
+       	 }
+    
 
     
  //   $WorkingKey = "" ; //put in the 32 bit working key in the quotes provided here
@@ -496,14 +527,35 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 	
 	$billing_cust_tel=$_REQUEST['billing_cust_tel'];
 	
-	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."billing_cust_tel\n".print_r($billing_cust_tel,true)) ;
+	 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."billing_cust_tel\n".print_r($billing_cust_tel,true)) ;
+	 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Order_Id from CCav\n".print_r($Order_Id,true)) ;
+	    
 	
- 
-	
-		
     $Checksumcalc = $this->verifychecksum($Merchant_Id,$Order_Id,$Amount,$AuthDesc,$Checksum,$WorkingKey);
     
-    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."CheckSumCalc\n".print_r($Checksumcalc,true)) ;
+    
+    if ($Merchant_Param == "M") {
+    
+    		$Order_Ids    =  Mage::getSingleton('core/session')->getOrderIds();
+    
+	         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Multiship Returned from CCav\n".print_r($Order_Ids,true)) ;
+	                
+    }
+    else {
+          $Order_Ids[] = $Order_Id ;
+          	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Order_Id from CCav\n".print_r($Order_Id,true)) ;
+          	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Order_Id from LasetRealOredrId \n".print_r($x,true)) ;
+          	    
+          	    // we have to find out if these values are same, than use $x
+          	    
+    }
+          
+   /*       foreach($Order_Ids as $key => $orid ) {
+          	                Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($orid,true)) ;
+          
+          }
+          
+          */
     
 
 
@@ -551,24 +603,23 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 		//to perform any operation in this condition
 	}
    
- 
-
-       
+    foreach($Order_Ids as $key => $orid ) {
+          	                Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($orid,true)) ;
+          
+          $Order_Id = $orid ;
       	  $order = Mage::getModel('sales/order');
       	  $order->loadByIncrementId($Order_Id);  // we  the order with this id
 
       	  $msg = "$Merchant_Id|$Order_Id|$Amount|$AuthDesc|$WorkingKey|$Merchant_Param";
       	  
- 
             if (!$order->getId()) {     //  If the above load of order does not happen i.e wrong order id from ccav
                 /*
                 * need to have logic when there is no order with the order id from CCav
                 */
-            
                 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
-                return false ;
+               // return false ;
+                 $flag = false ; 
             
-
             } else {
 
           	  if ($this->getDebug() && $msg) {
@@ -578,27 +629,23 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
             	        ->setResponseBody($msg)
              	       ->save();
       		  }
- //       		  if ($Amount !=$order->getBaseGrandTotal()) {
       		  
       		  if ($Checksumcalc == true && $AuthDesc == "N") {
                     //It is an an error in paymemt
                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
 
-//                   Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($Order->getStatus(),true)) ;
-                     
-                  
                      //We have to differentiate here between Order declined or an American Express Order
                      
                     $order->addStatusToHistory(
    //                     $order->getStatus(),//continue setting current order status
                          "declined_ccav",//continue setting current order status
-                    
                          Mage::helper('ccav')->__('Order Declined')
                         
                     );
                     
                     $order->save();
-                    return false ;
+                    $flag = false ;
+                     
                   
                 } elseif (($Checksumcalc == true) && ($AuthDesc == "Y"))  {
                 
@@ -637,15 +684,13 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
        
                                $notified = true
                            );
-                       
            
                        
                     $order->save();
-
                     $order->sendNewOrderEmail();  // should we send an email now ?
+                    
                     $this->sendsms($billing_cust_tel,$Order_Id);
-                 
-					return true ;
+                    $flag = true ;
                }//
                 // it may be a JCB Card or rare american expresss charges that is autorized after a delay
                 // 
@@ -680,12 +725,11 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
         
                  $order->addStatusToHistory(
                         $order->getStatus(),//continue setting current order status
-  //                      Mage::helper('paypal')->__('Order total amount does not match paypal gross total amount')
                          Mage::helper('ccav')->__('Order JCB or American Express Delayed')
                         
                     );
                     $order->save();
-                    return true ;
+                    $flag = true ;
                    
 
                } else { // sercurity error
@@ -700,11 +744,38 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
                         
                     );
                     $order->save();
-                    return false ;
+                   // return false ;
+                     $flag = false ;
                  }
             
                
             }
+            
+    } // end of for
+    
+    
+              Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($flag,true)) ;
+                      	                
+                      	                
+               if ($Merchant_Param == "M") {
+                    if ($flag)  {
+                      	  $flag = 1 ;  // Multishipment success
+                      	    
+                     } else {
+                      	   $flag = 2 ; // Multishipment failure
+                     }
+               } else {
+                      if ($flag) {
+              			  $flag = 3 ;   // slingle checkout success
+  						} else{
+  					      $flag = 4 ;  // single checkout failure
+                      	                                                	      
+                       }
+               }
+    
+            Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($flag,true)) ;
+               
+            return $flag ;
     }
     
  
@@ -763,6 +834,9 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 
 
 /*
+ * 
+ * This is what CCavenue is looking for
+ * 
 <form method="post" action="https://www.ccavenue.com/shopzone/cc_details.jsp">
 	<input type=hidden name=Merchant_Id value="<?php echo $Merchant_Id; ?>">
 	<input type=hidden name=Amount value="<?php echo $Amount; ?>">

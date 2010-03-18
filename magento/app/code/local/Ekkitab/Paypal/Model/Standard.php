@@ -24,13 +24,22 @@ class Ekkitab_Paypal_Model_Standard extends Mage_Paypal_Model_Standard
 
 public function getStandardCheckoutFormFields()
     {
-        if ($this->getQuote()->getIsVirtual()) {
+    
+//**********Ekkitab******
+// Commented these lines and added the next two lines
+       /* if ($this->getQuote()->getIsVirtual()) {
             $a = $this->getQuote()->getBillingAddress();
             $b = $this->getQuote()->getShippingAddress();
         } else {
             $a = $this->getQuote()->getShippingAddress();
             $b = $this->getQuote()->getBillingAddress();
-        }
+        }*/
+    
+    		$a = $this->getQuote()->getBillingAddress();
+            $b = $this->getQuote()->getShippingAddress();
+            
+//****Ekkitab*****************
+    
         /*tweak version
           init currency conversion
           if currency is not the same as base currency, set convert boolean to true 
@@ -60,7 +69,7 @@ public function getStandardCheckoutFormFields()
             'return'            => Mage::getUrl('paypal/standard/success',array('_secure' => true)),
             'cancel_return'     => Mage::getUrl('paypal/standard/cancel',array('_secure' => false)),
             'notify_url'        => Mage::getUrl('paypal/standard/ipn'),
-            'invoice'           => $this->getCheckout()->getLastRealOrderId(),
+ //           'invoice'           => $this->getCheckout()->getLastRealOrderId(),
             'currency_code'     => $currency_code,
             'address_override'  => 0, // overriding this property to 0 from 1 
             'first_name'        => $a->getFirstname(),
@@ -92,21 +101,67 @@ public function getStandardCheckoutFormFields()
         O=aggregate cart amount to paypal
         I=individual items to paypal
         */
+       
+			//Mage::log("In getStandardCheckoutFormFields... amount >> $amount");
+        
         if ($transaciton_type=='O') {
             $businessName = Mage::getStoreConfig('paypal/wps/business_name');
             $storeName = Mage::getStoreConfig('store/system/name');
-            $amount = ($a->getBaseSubtotal()+$b->getBaseSubtotal())-($a->getBaseDiscountAmount()+$b->getBaseDiscountAmount());
-            //convert the amount to the current currency
+            
+  //************Ekkitab*******************************
+  //        $amount = ($a->getBaseSubtotal()+$b->getBaseSubtotal())-($a->getBaseDiscountAmount()+$b->getBaseDiscountAmount());
+  
+             if ($this->getQuote()->getIsMultiShipping()){
+                     $Merchant_Param="M" ; 
+                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Multishipping\n") ;
+        	  }
+          	else {
+                      $Merchant_Param="S" ; 
+                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Onepage\n") ;
+       		 }
+       
+       		$total_amount = 0 ;
+	
+        if ($Merchant_Param=="S") { // OnestepCheckout Order
+     		 $Order_Id =  $this->getCheckout()->getLastRealOrderId();  // for single shipment order 
+	  	   	 $order = Mage::getModel('sales/order');
+     	     $order->loadByIncrementId($Order_Id);  
+             $total_amount = $order->getGrandTotal();
+
+             Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Single Address Checkout\n".print_r($total_amount,true)) ;
+                  
+	  	} else {  // it is "M" : Multishipping order
+	  		$Order_Ids    =  Mage::getSingleton('core/session')->getOrderIds();   // for mltiple shipment orders
+	  		$Order_Id = end($Order_Ids);
+	  	     	 
+	  		foreach( $Order_Ids as $key => $orid) {
+	  	 				  $order = Mage::getModel('sales/order');
+     			 		  $order->loadByIncrementId($orid);  
+     					  $total_amount = $total_amount + $order->getGrandTotal() ;
+      	  
+	  	         }
+
+	  	     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($Order_Ids,true)) ;
+	  	     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Multiple Address Checkout\n".print_r($total_amount,true)) ;
+	  	
+	  	}
+
+	  	$amount = $total_amount ;
+	  	
+//***********Ekkitab************************
+	  	
+        //convert the amount to the current currency
             if ($bConvert) {
-                $amount = $storeCurrency->convert($amount, $currency_code);
+                 $amount = $storeCurrency->convert($amount, $currency_code);
             }
-			//Mage::log("In getStandardCheckoutFormFields... amount >> $amount");
+	  	
 
             $sArr = array_merge($sArr, array(
                     'cmd'           => '_ext-enter',
                     'redirect_cmd'  => '_xclick',
                     'item_name'     => $businessName ? $businessName : $storeName,
                     'amount'        => sprintf('%.2f', $amount),
+                    'invoice'      => $Order_Id,
                 ));
             $_shippingTax = $this->getQuote()->getShippingAddress()->getBaseTaxAmount();
             $_billingTax = $this->getQuote()->getBillingAddress()->getBaseTaxAmount();
