@@ -122,7 +122,7 @@ class Ekkitab_Billdesk_StandardController extends Mage_Core_Controller_Front_Act
      * validate IPN data
      * if data is valid need to update the database that the user has
      */
-    public function successAction()
+    public function responseAction()
     
     {
        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;  
