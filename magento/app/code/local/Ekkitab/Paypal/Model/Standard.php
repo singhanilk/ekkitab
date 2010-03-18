@@ -19,6 +19,17 @@
 
 class Ekkitab_Paypal_Model_Standard extends Mage_Paypal_Model_Standard
 {
+
+/**
+     * Using for multiple shipping address
+     *
+     * @return bool
+     */
+    public function canUseForMultishipping()
+    {
+        return true;
+    }
+    
     //added INR so that Paypal comes as an option in the payment methods..... 
 	protected $_allowCurrencyCode = array('AUD', 'CAD', 'CZK', 'DKK', 'EUR', 'HKD', 'HUF', 'ILS', 'JPY', 'MXN', 'NOK', 'NZD', 'PLN', 'GBP', 'SGD', 'SEK', 'CHF', 'USD','INR');
 
