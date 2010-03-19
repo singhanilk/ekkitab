@@ -457,9 +457,30 @@ class Mage_Checkout_MultishippingController extends Mage_Checkout_Controller_Act
             $this->_getState()->setCompleteStep(
                 Mage_Checkout_Model_Type_Multishipping_State::STEP_OVERVIEW
             );
-            $this->_getCheckout()->getCheckoutSession()->clear();
-            $this->_getCheckout()->getCheckoutSession()->setDisplaySuccess(true);
-            $this->_redirect('*/*/success');
+
+ //******************Ekkitab************************************
+ 
+            //Changes made to work with Multishipping by aks
+            // following two lines were in original code, disabled so that it does not clear session before payment
+   //         $this->_getCheckout()->getCheckoutSession()->clear();
+   //         $this->_getCheckout()->getCheckoutSession()->setDisplaySuccess(true);
+   // 
+   
+           $redirectUrl = $paymentInstance->getOrderPlaceRedirectUrl();  //added by aks
+
+    
+           if (isset($redirectUrl)) {
+               if (strpos($redirectUrl,"ccav"))
+                      $this->_redirect('ccav/standard/redirect'); //added by aks
+               else if (strpos($redirectUrl,"billdesk"))
+               	      $this->_redirect('billdesk/standard/redirect'); //added by aks
+               else if (strpos($redirectUrl,"paypal")) 
+                      $this->_redirect('paypal/standard/redirect'); //added by aks
+           }else {
+           
+            	$this->_redirect('*/*/success'); // this was original line in the code
+            }
+//***************************Ekkitab***********************************************
         }
         catch (Mage_Core_Exception $e){
             Mage::helper('checkout')->sendPaymentFailedEmail($this->_getCheckout()->getQuote(), $e->getMessage(), 'multi-shipping');
@@ -482,10 +503,22 @@ class Mage_Checkout_MultishippingController extends Mage_Checkout_Controller_Act
             $this->_redirect('*/*/addresses');
             return $this;
         }
-
+               $this->_getCheckout()->getCheckoutSession()->clear();
+               $this->_getCheckout()->getCheckoutSession()->setDisplaySuccess(true);
         $this->loadLayout();
         $this->_initLayoutMessages('checkout/session');
         $this->renderLayout();
     }
 
+    
+//***************Ekkitab : this function was added to say that there is an error in order processing
+    public function failureAction()
+    
+    {
+        Mage::getSingleton('checkout/session')->addError('Order place error in Payment.');
+         $this->_redirect('*/*/billing');
+
+        
+    }
+    
 }

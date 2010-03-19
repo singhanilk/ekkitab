@@ -2,7 +2,7 @@
 error_reporting(E_ALL  & ~E_NOTICE);
 ini_set("display_errors", 1); 
 include(EKKITAB_HOME . "/" . "db" . "/" . "importbooks_config.php");
-define (REQUIRED_FIELDS, 15);
+define (REQUIRED_FIELDS, 16);
 
 //  
 //
@@ -86,11 +86,12 @@ class Parser {
                 }
             }
             if (empty($bisac_codes)) {
-                echo "No subjects found: ";
-                foreach($subjects as $subject) {
-                    echo "( $subject ) ";
+                if (strcmp($subjects[0], "--")) {
+                    foreach($subjects as $subject) {
+                      echo "( $subject ) ";
+                    }
+                    echo "\n";
                 }
-                echo "\n";
                 $bisac_codes[] = "ZZZ000000";
             }
             return $bisac_codes;
@@ -199,12 +200,19 @@ class Parser {
         }
 
         function getBasic($line, $book, $db, $logger) {
+            $preloaded = false;
             $fields = explode("\t", $line);
+            $preloaded_field = 15;
+            if (count($fields) == (REQUIRED_FIELDS + 1)) {
+               if (!strcmp($fields[$preloaded_field], "PRELOADED")) {
+                    $preloaded = true;
+               }
+            }
             $book['isbn'] = trim($fields[0]);
             $book['isbn10'] = trim($fields[1]);
             $book['title']  = $this->escape(trim($fields[2]));
             $book['edition'] = trim($fields[5]);
-            $authors = explode("&", trim($fields[3]));
+            $authors = explode("&", str_replace("\"", "", trim($fields[3])));
             foreach ($authors as $author) {
                 $author = $this->escape($this->correctName($author));
                 $book['author'] = $book['author'] . " & " . $author;
@@ -225,9 +233,11 @@ class Parser {
             $book['language'] = $fields[9];
             switch (strtoupper(trim($fields[9]))) {
                 case 'EN' : 
+                case 'ENGLISH':
                             $book['language'] = "English";
                             break;
                 default:    $book['language'] = strtoupper(trim($fields[9]));;
+                            echo "Language not defined - " . $book['language'] . "\n";
                             break; 
             }
 		
@@ -237,12 +247,20 @@ class Parser {
             }
             $book['sourced_from'] = "India";
             $book['image'] = $book['isbn'].".jpg";
-            $subjects = explode(":", trim($fields[8]));
-            $book['bisac'] = $this->getBisacCodes($db, $subjects);
+            if (!$preloaded) {
+                $subjects = explode(":", trim($fields[8]));
+                $book['bisac'] = $this->getBisacCodes($db, $subjects);
+            }
+            else {
+                $bisaccodes = explode(",", trim($fields[8]));
+                foreach($bisaccodes as $bisac) {
+                    $book['bisac'][] = trim($bisac);
+                }
+            }
             $indianpub = str_replace("\"", "", trim($fields[14]));
-            $book['delivery_period'] = $this->getDeliveryPeriod($db, strtolower($book['info_source']), strtolower($indianpub));
+            $book['delivery_period'] = $this->getDeliveryPeriod($db, strtolower($book['info_source']), "Any");
             if ($book['delivery_period'] == null) {
-                throw new exception("No delivery period data for " . $book['info_source'] . " - " . $indianpub);
+                throw new exception("No delivery period data for " . $book['info_source']);
             }
 
             return($book);
@@ -253,11 +271,14 @@ class Parser {
             switch (str_replace("\"", "", strtoupper(trim($fields[11])))) {
                 case 'I'  : $book['currency'] = "INR";
                             break;
-                case 'P'  : $book['currency'] = "BPS";
+                case 'P'  : $book['currency'] = "BRI";
                             break;
                 case 'U'  : $book['currency'] = "USD";
                             break;
+                case 'C'  : $book['currency'] = "CAN";
+                            break;
                 default:    $book['currency'] = "XXX";
+                            echo "Unknown currency: " . str_replace("\"", "", strtoupper(trim($fields[11]))) . "\n";
                             break;
             }
             $book['info_source']  = str_replace("\"", "", trim($fields[13]));	
@@ -266,11 +287,17 @@ class Parser {
             }
 			$book['list_price'] = trim($fields[10]);
             $indianpub = str_replace("\"", "", trim($fields[14]));
-			$book['suppliers_discount'] = $this->getSuppliersDiscount($db, strtolower($book['info_source']), strtolower($indianpub));
+			$book['suppliers_discount'] = $this->getSuppliersDiscount($db, strtolower($book['info_source']), "Any");
             if ($book['suppliers_discount'] == null) {
-                throw new exception("No supplier discount data for " . $book['info_source'] . " - " . $book['publisher']);
+                throw new exception("No supplier discount data for " . $book['info_source']);
             }
-			$book['in_stock'] = 1;
+            $availability = trim(str_replace("\"", "", $fields[count($fields) - 1]));
+            if (!strcmp(strtoupper($availability), "AVAILABLE")) {
+			    $book['in_stock'] = 1;
+            }
+            else {
+			    $book['in_stock'] = 0;
+            }
             $book['isbn'] = trim($fields[0]);
             return $book;
         }

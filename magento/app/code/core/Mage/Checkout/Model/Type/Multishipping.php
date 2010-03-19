@@ -381,11 +381,11 @@ class Mage_Checkout_Model_Type_Multishipping extends Mage_Checkout_Model_Type_Ab
         $this->_validate();
         $shippingAddresses = $this->getQuote()->getAllShippingAddresses();
         $orders = array();
-
+        
         if ($this->getQuote()->hasVirtualItems()) {
             $shippingAddresses[] = $this->getQuote()->getBillingAddress();
         }
-
+        
         foreach ($shippingAddresses as $address) {
             $order = $this->_prepareOrder($address);
 
@@ -395,17 +395,30 @@ class Mage_Checkout_Model_Type_Multishipping extends Mage_Checkout_Model_Type_Ab
                 array('order'=>$order, 'address'=>$address)
             );
         }
+ 
+ /*********************Ekkitab**************************************/
+        
+        $redirectUrl = $this->getQuote()->getPayment()->getOrderPlaceRedirectUrl();  //Ekkitab
 
-        foreach ($orders as $order) {
+        
+        foreach ($orders as $order) { //Ekkitab
             #$order->save();
+        
             $order->place();
             $order->save();
 
-            $order->sendNewOrderEmail();
-            $orderIds[$order->getId()] = $order->getIncrementId();
-        }
+            if (!isset($redirectUrl)) { // if thre is no redirection send the email, this line is original
+                  $order->sendNewOrderEmail();
+            }
 
+            $orderIds[$order->getId()] = $order->getIncrementId();
+     	                
+            
+        }// Ekkitab
+ /**********************************Ekkitab******************************/
+        
         Mage::getSingleton('core/session')->setOrderIds($orderIds);
+        
         $this->getQuote()
             ->setIsActive(false)
             ->save();

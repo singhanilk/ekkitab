@@ -6,7 +6,13 @@
         </Ekkitab_Paypal>
     </modules>
     <global>
-        <models>
+        <rewrite>  
+            <ekkitab_paypal_standard>  
+                <from><![CDATA[#^/paypal/standard/#]]></from>  
+               <to>/ekkitab_paypal/standard/</to>
+           </ekkitab_paypal_standard>  
+		</rewrite>  
+		<models>
 			<paypal>
 				<rewrite>
 					<standard>Ekkitab_Paypal_Model_Standard</standard>
@@ -15,4 +21,15 @@
             </paypal>
         </models>
     </global>
+    <frontend>
+ 		<routers>
+   			<ekkitab_paypal>
+    			<use>standard</use>
+    			<args>
+     				<module>Ekkitab_Paypal</module>
+     				<frontName>ekkitab_paypal</frontName>
+    			</args>
+   			</ekkitab_paypal>
+  		</routers>
+ 	</frontend>
 </config>
