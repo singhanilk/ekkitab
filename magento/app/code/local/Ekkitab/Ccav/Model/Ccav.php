@@ -502,12 +502,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
           else {
                       $Merchant_Param="S" ; 
                       Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Onepage\n") ;
-     					 
-                      // I have done this to chceck whether we can get Order id this way so that we don't have to depend
-                      // upon stored data in message
-                      $x =  $this->getCheckout()->getLastRealOrderId();  // for single shipment order 
                                            
-                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Order Id from LastRealOrderId\n".print_r($x,true)) ;
        	 }
     
 
@@ -520,7 +515,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
  	$Amount= $_REQUEST['Amount'];
 	$Merchant_Id= $_REQUEST['Merchant_Id'];
 	
-	$Order_Id= $_REQUEST['Order_Id'];
+	$Order_Id = $_REQUEST['Order_Id'];
 	$Merchant_Param= $_REQUEST['Merchant_Param'];
 	$Checksum= $_REQUEST['Checksum'];
 	$AuthDesc=$_REQUEST['AuthDesc'];
@@ -542,11 +537,14 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 	                
     }
     else {
-          $Order_Ids[] = $Order_Id ;
+  //        $Order_Ids[] = $Order_Id ;  // will not use the Order Id from CCav but from LastOrder_ID
+            $x = $this->getCheckout()->getLastRealOrderId(); 
+            $Order_Ids[] = $x ;
+          
           	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Order_Id from CCav\n".print_r($Order_Id,true)) ;
-          	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Order_Id from LasetRealOredrId \n".print_r($x,true)) ;
+          	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Order_Id from LastRealOredrId \n".print_r($x,true)) ;
           	    
-          	    // we have to find out if these values are same, than use $x
+          	    // we have to find out if these values are same, than use one of them or continue using both of them
           	    
     }
           
