@@ -80,7 +80,7 @@ class Ekkitab_Paypal_StandardController extends Mage_Paypal_StandardController
 
         //Mage::getSingleton('checkout/session')->unsQuoteId();
         
-      if ($Merchant_PARAM="S")
+      if ($Merchant_Param="S")
         	$this->_redirect('checkout/onepage/success', array('_secure'=>true));
       else
        		$this->_redirect('checkout/multishipping/success');
