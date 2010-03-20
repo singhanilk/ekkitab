@@ -154,12 +154,10 @@ public function getStandardCheckoutFormFields()
      					  $total_amount = $total_amount + $order->getGrandTotal() ;
      					  $mOrderList = $mOrderList."|".$orid ;
       	  
-	  	         }
+	  	    }
 
 	  	     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($Order_Ids,true)) ;
-	  	     
-	  	     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Multiple Address Checkout\n".print_r($total_amount,true)) ;
-	  	     
+	  	     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Multiple Address Checkout\n".print_r($total_amount,true)) ;
 	  	
 	  	}
 	  		  	     
@@ -331,25 +329,24 @@ public function getStandardCheckoutFormFields()
         }
 
          //when verified need to convert order into invoice
-        $id = $this->getIpnFormData('invoice');
+        $id = $this->getIpnFormData('invoice');   
         $mOrderList = $this->getIpnFormData('custom');
         
+        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Invoice: was used in single order situation \n".print_r($mOrderList,true)) ;
  	  	Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." mOrderList: \n".print_r($mOrderList,true)) ;
 
  	 
         $mordids = array() ;
-//       $msg_arr1 = $this->strgetcsv($msg,"|") ; did not work for me
+//       $msg_arr1 = $this->strgetcsv($msg,"|") ; did not work for me, that is why this loop
         
         $i = 0 ; 
     	$tok = strtok($mOrderList,"|");
     	while ($tok != false) {
     	   $mordids[$i++] = $tok ; 
     	   $tok = strtok("|"); 
-    	}
+    	}   
         
-        
-        
-    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."mordids\n".print_r($mordids,true)) ;
+        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." PayPal returned Order Ids\n".print_r($mordids,true)) ;
         
         
         
