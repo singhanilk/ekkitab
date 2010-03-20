@@ -144,15 +144,18 @@ public function getStandardCheckoutFormFields()
 	  	} else {  // it is "M" : Multishipping order
 	  		$Order_Ids    =  Mage::getSingleton('core/session')->getOrderIds();   // for mltiple shipment orders
 	  		$Order_Id = end($Order_Ids);
-	  	     	 
+	  	     	     $mOrderList = "" ;
 	  		foreach( $Order_Ids as $key => $orid) {
 	  	 				  $order = Mage::getModel('sales/order');
      			 		  $order->loadByIncrementId($orid);  
      					  $total_amount = $total_amount + $order->getGrandTotal() ;
+     					  $mOrderList = $mOrderList."|".$orid ;
       	  
 	  	         }
 
 	  	     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($Order_Ids,true)) ;
+	  	     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." mOrderList \n".print_r($mOrderList,true)) ;
+	  	     
 	  	     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Multiple Address Checkout\n".print_r($total_amount,true)) ;
 	  	
 	  	}
@@ -173,6 +176,7 @@ public function getStandardCheckoutFormFields()
                     'item_name'     => $businessName ? $businessName : $storeName,
                     'amount'        => sprintf('%.2f', $amount),
                     'invoice'      => $Order_Id,
+                    'custom'       => $OrderList,  // added by aks
                 ));
             $_shippingTax = $this->getQuote()->getShippingAddress()->getBaseTaxAmount();
             $_billingTax = $this->getQuote()->getBillingAddress()->getBaseTaxAmount();
@@ -292,6 +296,8 @@ public function getStandardCheckoutFormFields()
     
      public function ipnPostSubmit()
     {
+    
+                
         $sReq = '';
         $sReqDebug = '';
         foreach($this->getIpnFormData() as $k=>$v) {
@@ -320,6 +326,12 @@ public function getStandardCheckoutFormFields()
 
          //when verified need to convert order into invoice
         $id = $this->getIpnFormData('invoice');
+        $mOrderList = $this->getIpnFormData('custom');
+        
+ 	  	Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." mOrderList: \n".print_r($mOrderList,true)) ;
+        
+        
+        
         $order = Mage::getModel('sales/order');
         $order->loadByIncrementId($id);
 
@@ -444,8 +456,7 @@ public function getStandardCheckoutFormFields()
             }
         }
     }
-    
-	
+
 	/*public function getStandardCheckoutFormFields()
     {
         if ($this->getQuote()->getIsVirtual()) {
