@@ -176,7 +176,7 @@ public function getStandardCheckoutFormFields()
                     'item_name'     => $businessName ? $businessName : $storeName,
                     'amount'        => sprintf('%.2f', $amount),
                     'invoice'      => $Order_Id,
-                    'custom'       => $OrderList,  // added by aks
+                    'custom'       => $mOrderList,  // added by aks
                 ));
             $_shippingTax = $this->getQuote()->getShippingAddress()->getBaseTaxAmount();
             $_billingTax = $this->getQuote()->getBillingAddress()->getBaseTaxAmount();
