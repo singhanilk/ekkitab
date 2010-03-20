@@ -132,19 +132,22 @@ public function getStandardCheckoutFormFields()
        		 }
        
        		$total_amount = 0 ;
-	
+
+       		
+       		$mOrderList = "" ;
+       		
         if ($Merchant_Param=="S") { // OnestepCheckout Order
      		 $Order_Id =  $this->getCheckout()->getLastRealOrderId();  // for single shipment order 
 	  	   	 $order = Mage::getModel('sales/order');
      	     $order->loadByIncrementId($Order_Id);  
              $total_amount = $order->getGrandTotal();
+             $mOrderList = $Order_Id ;
 
              Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Single Address Checkout\n".print_r($total_amount,true)) ;
                   
 	  	} else {  // it is "M" : Multishipping order
 	  		$Order_Ids    =  Mage::getSingleton('core/session')->getOrderIds();   // for mltiple shipment orders
 	  		$Order_Id = end($Order_Ids);
-	  	     	     $mOrderList = "" ;
 	  		foreach( $Order_Ids as $key => $orid) {
 	  	 				  $order = Mage::getModel('sales/order');
      			 		  $order->loadByIncrementId($orid);  
@@ -154,11 +157,14 @@ public function getStandardCheckoutFormFields()
 	  	         }
 
 	  	     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($Order_Ids,true)) ;
-	  	     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." mOrderList \n".print_r($mOrderList,true)) ;
 	  	     
 	  	     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Multiple Address Checkout\n".print_r($total_amount,true)) ;
+	  	     
 	  	
 	  	}
+	  		  	     
+	  	Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." mOrderList \n".print_r($mOrderList,true)) ;
+	  	
 
 	  	$amount = $total_amount ;
 	  	
@@ -329,8 +335,28 @@ public function getStandardCheckoutFormFields()
         $mOrderList = $this->getIpnFormData('custom');
         
  	  	Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." mOrderList: \n".print_r($mOrderList,true)) ;
+
+ 	 
+        $mordids = array() ;
+//       $msg_arr1 = $this->strgetcsv($msg,"|") ; did not work for me
+        
+        $i = 0 ; 
+    	$tok = strtok($mOrderList,"|");
+    	while ($tok != false) {
+    	   $mordids[$i++] = $tok ; 
+    	   $tok = strtok("|"); 
+    	}
         
         
+        
+    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."mordids\n".print_r($mordids,true)) ;
+        
+        
+        
+      foreach($mordids as $key => $id ) {
+          	                Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($id,true)) ;
+            
+          	                
         
         $order = Mage::getModel('sales/order');
         $order->loadByIncrementId($id);
@@ -455,6 +481,7 @@ public function getStandardCheckoutFormFields()
                 $order->save();
             }
         }
+      } // end of for
     }
 
 	/*public function getStandardCheckoutFormFields()
