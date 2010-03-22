@@ -460,6 +460,8 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
         
         
         $r_authstatus = $msg_arr[14] ;
+        $AuthDesc=="" ;
+        
         
         if ($r_authstatus != "0300") {
             Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($r_authstatus,true)) ;
