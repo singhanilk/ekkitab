@@ -452,13 +452,13 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
         
     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($msg_arr,true)) ;
     
-        $msgwochecksum = substr($msg,0,stristr($msg,"|")) ;
+        $msgwochecksum = substr($msg,0,strrpos($msg,"|")) ;
 
         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Msgwithout checksum \n".print_r($msgwochecksum,true)) ;
         
     
      $Checksumcalc = $this->billChecksum($msgwochecksum,$checksumkey);
-      $r_checkcum = $msg_arr[25]  ;
+      $r_checksum = $msg_arr[25]  ;
       
           if (($Checksumcalc != $r_checksum)) { 
         
