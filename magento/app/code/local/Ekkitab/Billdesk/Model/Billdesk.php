@@ -460,27 +460,26 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
         
         
         $r_authstatus = $msg_arr[14] ;
-        $AuthDesc=="" ;
         
         
         if ($r_authstatus != "0300") {
             Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($r_authstatus,true)) ;
-              $AuthDesc=="Y" ;
+              $AuthDesc="Y" ;
         
   //      	return false ;
         }
         elseif  ($r_authstatus != "0399") {
-               $AuthDesc=="N" ; //The transaction has been declined, cancel the transaction
+               $AuthDesc="N" ; //The transaction has been declined, cancel the transaction
         }
         elseif  ($r_authstatus != "NA") {
-               $AuthDesc=="N" ; // Invalid Input at Billdesk, Cancel the transaction
+               $AuthDesc="N" ; // Invalid Input at Billdesk, Cancel the transaction
         }elseif  ($r_authstatus != "0002") {
-               $AuthDesc=="N" ; //Billdesk is waiting for response from the Bank, cancel the transaction
+               $AuthDesc="N" ; //Billdesk is waiting for response from the Bank, cancel the transaction
         }elseif  ($r_authstatus != "0001") {
-               $AuthDesc=="N" ; //Error at billdesk, cancel the transaction
+               $AuthDesc="N" ; //Error at billdesk, cancel the transaction
         }
         else {
-                 $AuthDesc=="N" ; //Assume Error at billdesk, cancel the transaction
+                 $AuthDesc="N" ; //Assume Error at billdesk, cancel the transaction
         
         }
         
