@@ -176,6 +176,15 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
         
         */
     
+     	if ($this->getQuote()->getIsMultiShipping()){
+                     $Merchant_Param="M" ; 
+                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Multishipping\n") ;
+          }
+          else {
+                      $Merchant_Param="S" ; 
+                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Onepage\n") ;
+       	 }
+       	 
     	$total_amount = 0 ;
 	
         if ($Merchant_Param=="S") { // OnestepCheckout Order
