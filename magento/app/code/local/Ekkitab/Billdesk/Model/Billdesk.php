@@ -762,7 +762,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." MesgWithoutChecksum\n".print_r($msgWithoutChkSum,true)) ;
         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($msgWithChkSumkey,true)) ;
         
-        $calChksum = crc32($msgWithoutChkSumkey) ;
+        $calChksum = crc32($msgWithChkSumkey) ;
         
         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Calculated Checksum \n".print_r($calChksum,true)) ;
         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Checksum from Billdesk \n".print_r($rchksum,true)) ;
