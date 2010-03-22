@@ -428,13 +428,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
 
         $checksumkey = Mage::getStoreConfig('billdesk/wps/checksum_key') ;
         
-        $Checksumcalc = $this->billChecksum($msg,$checksumkey);
-        
-      
-          if ((!$Checksumcalc)) { 
-        
-			    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Checksum Security Error. Illegal access detected\n");
-            }
+       
         
         
  //       $msg_arr = str_getcsv($msg,"|") ; in php 3.0
@@ -457,6 +451,19 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
         
         
     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($msg_arr,true)) ;
+    
+        $msgwochecksum = substr($msg,0,stristr($msg,"|")) ;
+
+        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Msgwithout checksum \n".print_r($msgwochecksum,true)) ;
+        
+    
+     $Checksumcalc = $this->billChecksum($msgwochecksum,$checksumkey);
+      $r_checkcum = $msg_arr[25]  ;
+      
+          if (($Checksumcalc != $r_checksum)) { 
+        
+			    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Checksum Security Error. Illegal access detected\n");
+            }
         
         
         $r_authstatus = $msg_arr[14] ;
@@ -588,8 +595,10 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
                 
                     $order->addStatusToHistory(
-                        $order->getStatus(),//continue setting current order status
-  //                      Mage::helper('paypal')->__('Order total amount does not match paypal gross total amount')
+   //                     $order->getStatus(),//continue setting current order status
+   //                    Mage::helper('paypal')->__('Order total amount does not match paypal gross total amount')
+                           "declined_billdesk",//continue setting current order status
+                        
                          Mage::helper('billdesk')->__('Order declined by gateway')
                         
                     );
@@ -684,7 +693,9 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
                    //we have to figure out how to say in Order that it is declined
                      
                     $order->addStatusToHistory(
-                        $order->getStatus(),//continue setting current order status
+     //                   $order->getStatus(),//continue setting current order status
+                                "declined_billdesk",//continue setting current order status
+                    
                          Mage::helper('billdesk')->__('Security Error')
                         
                     );
