@@ -557,7 +557,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
     
      foreach($Order_Ids as $key => $orid ) {
           	                Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($orid,true)) ;
-          $r_orderid = orid ;
+          $r_orderid = $orid ;
        
       	  $order = Mage::getModel('sales/order');
       	  $order->loadByIncrementId($r_orderid);  // we  the order with this id
