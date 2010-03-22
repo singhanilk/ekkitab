@@ -149,7 +149,7 @@ class Ekkitab_Billdesk_StandardController extends Mage_Core_Controller_Front_Act
        
      
         
-        $this->_redirect('checkout/onepage/success', array('_secure'=>true));
+//        $this->_redirect('checkout/onepage/success', array('_secure'=>true));
         
   
         $this->getStandard()->setBillFormData($this->getRequest()->getPost());

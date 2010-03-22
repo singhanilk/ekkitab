@@ -401,7 +401,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
     
     {
     
-     	$Amount= $_REQUEST['msg'];
+     	$msg = $_REQUEST['msg'];
     
           Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($msg,true)) ;
      	
@@ -430,8 +430,8 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
         
         $Checksumcalc = $this->billChecksum($msg,$checksumkey);
         
-      //      if (!($this->billChecksum($msg))) {
-          if ((!$Checksumcalc)) { //change it back to above one
+      
+          if ((!$Checksumcalc)) { 
         
 			    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Checksum Security Error. Illegal access detected\n");
             }
