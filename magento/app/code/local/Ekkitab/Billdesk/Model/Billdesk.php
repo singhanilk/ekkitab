@@ -452,18 +452,29 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
         
     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($msg_arr,true)) ;
     
-        $msgwochecksum = substr($msg,0,strrpos($msg,"|")) ;
+    //    $msgwochecksum = substr($msg,0,strrpos($msg,"|")) ;
 
-        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Msgwithout checksum \n".print_r($msgwochecksum,true)) ;
+  //      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Msgwithout checksum \n".print_r($msgwochecksum,true)) ;
         
+          $r_checksum = $msg_arr[25]  ;
     
-     $Checksumcalc = $this->billChecksum($msgwochecksum,$checksumkey);
+    
+     $Checksumcalc = $this->billChecksum($msg,$checksumkey,$r_checksum); // this takes care of checking the message without checksum
+
+     /*
       $r_checksum = $msg_arr[25]  ;
       
           if (($Checksumcalc != $r_checksum)) { 
+          
+                  Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." checksum as in msg\n".print_r($msgwochecksum,true)) ;
+                  Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." checksum as in msg\n".print_r($r_checksum,true)) ;
+                  
+          
         
 			    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Checksum Security Error. Illegal access detected\n");
             }
+            
+     */
         
         
         $r_authstatus = $msg_arr[14] ;
@@ -737,7 +748,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
   //  }
     
     
-    public function billChecksum($msg,$checksumkey)
+    public function billChecksum($msg,$checksumkey, $rchksum)
     {
     
         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($msg,true)) ;
@@ -745,19 +756,19 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
         $lastbar = strrpos($msg,"|");
         
         $msgWithoutChkSum = substr($msg,0,$lastbar) ;
-        $msgWithChkSum = $msgWithoutChkSum."|".$checksumkey ;
-        $chksumFromBilldesk = substr($msg, $lastbar+1,strlen($msg)) ;
+         $msgWithChkSumkey = $msgWithoutChkSum."|".$checksumkey ;
+//      $chksumFromBilldesk = substr($msg, $lastbar+1,strlen($msg)) ;
         
-        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($msgWithoutChkSum,true)) ;
-        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($msgWithChkSum,true)) ;
+        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." MesgWithoutChecksum\n".print_r($msgWithoutChkSum,true)) ;
+        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($msgWithChkSumkey,true)) ;
         
-        $calChksum = crc32($msgWithChkSum) ;
+        $calChksum = crc32($msgWithoutChkSumkey) ;
         
-        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($calChksum,true)) ;
-        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($chksumFromBilldesk,true)) ;
+        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Calculated Checksum \n".print_r($calChksum,true)) ;
+        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Checksum from Billdesk \n".print_r($rchksum,true)) ;
         
         
-        if ($calChksum != $chksumFromBilldesk) {
+        if ($calChksum != $rchksum) {
         	return false ;
         }
 
