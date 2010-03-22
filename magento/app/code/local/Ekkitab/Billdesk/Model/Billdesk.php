@@ -541,7 +541,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
     
     		$Order_Ids    =  Mage::getSingleton('core/session')->getOrderIds();
     
-	         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Multiship Returned from CCav\n".print_r($Order_Ids,true)) ;
+	         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Multiship Returned from Billdesk\n".print_r($Order_Ids,true)) ;
 	                
     }
     else {
@@ -549,7 +549,6 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
             $x = $this->getCheckout()->getLastRealOrderId(); 
             $Order_Ids[] = $x ;
           
-          	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Order_Id from CCav\n".print_r($Order_Id,true)) ;
           	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Order_Id from LastRealOredrId \n".print_r($x,true)) ;
           	    
           	    // we have to find out if these values are same, than use one of them or continue using both of them
@@ -686,7 +685,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
                      
                     $order->addStatusToHistory(
                         $order->getStatus(),//continue setting current order status
-                         Mage::helper('ccav')->__('Security Error')
+                         Mage::helper('billdesk')->__('Security Error')
                         
                     );
                     $order->save();
