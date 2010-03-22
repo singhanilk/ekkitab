@@ -575,10 +575,9 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
     
      foreach($Order_Ids as $key => $orid ) {
           	                Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($orid,true)) ;
-          $r_orderid = $orid ;
        
       	  $order = Mage::getModel('sales/order');
-      	  $order->loadByIncrementId($r_orderid);  // we  the order with this id
+      	  $order->loadByIncrementId($orid);  // we  the order with this id
 
  
             if (!$order->getId()) {     //  If the above load of order does not happen i.e wrong order id from Billdesk
@@ -663,7 +662,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
                             
                            $order->setState(
                                Mage_Sales_Model_Order::STATE_PROCESSING, true,
-                               Mage::helper('billdesk')->__('Order #%s created', $r_orderid),
+                               Mage::helper('billdesk')->__('Order #%s created', $orid),
                                $notified = true
                            );
                        
@@ -690,7 +689,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
                 /*    if (!$ipnCustomerNotified) { */
                       $order->sendNewOrderEmail();  // should we send an email now ?
                       
-                      $this->sendsms($r_telno,$Order_Id);
+                      $this->sendsms($r_telno,$orid);
                   //  }
 
                //else amount the same and there is order obj
