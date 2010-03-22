@@ -609,7 +609,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
    //                    Mage::helper('paypal')->__('Order total amount does not match paypal gross total amount')
                            "declined_billdesk",//continue setting current order status
                         
-                         Mage::helper('billdesk')->__('Order declined by gateway')
+                         Mage::helper('billdesk')->__('Order declined ')
                         
                     );
                     $order->save();
