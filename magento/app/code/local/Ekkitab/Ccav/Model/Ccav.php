@@ -233,56 +233,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
         return Mage::getUrl('ccav/standard/redirect', array('_secure' => true));
     }
 
- /*
-	//Now, HERE IS THE STORY. IF the user comes thru single shipment order, getLastTealOrderId works. But for Multishipment, getOrderIds works,
-	// That is the way I am differentiating between Multiple and Single orders. If I get higher Order no from multiple shipment order, than the user
-	// is chosen multiple orders. If the higher order number is by getLastRealOrderId, that it is single checkout order.
-	// We have to figure out whether is there a simpler way to figure out whether it is single or Multishipping orders
-
-	$Order_Id =  $this->getCheckout()->getLastRealOrderId();  // for single shipment order 
-	
-	Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($Order_Id,true)) ;
-                        
-	$Order_Ids    =  Mage::getSingleton('core/session')->getOrderIds();   // for mltiple shipment orders
-	  	
-	$total_amount = 0 ;
-	  	
-	if (isset($Order_Ids)){	 
-	  	
-	  		Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Count of Orders in Multishipment\n".print_r(count($Order_Ids),true)) ;
-
-	  	  if ($Order_Id < end($Order_Ids)) { 
-	  	  		$Order_Id = end($Order_Ids);
-	  	        $Merchant_Param="M" ;     // It was Multiple Shipping
-	  	     	 foreach( $Order_Ids as $key => $orid) {
-	  	 				  $order = Mage::getModel('sales/order');
-     			 		  $order->loadByIncrementId($orid);  
-     					  $total_amount = $total_amount + $order->getGrandTotal() ;
-      	  
-	  	         }
-	  	          Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Multiple Address Checkout\n".print_r($total_amount,true)) ;
-	  	         
-     	          
-
-	  	 }
-	 }
-	 
-	 // In case even if it may find multiple Order_ids, but it may be the last transaction from this login session. So, it may not be flagged by
-	 // Multipleshipment by above logi.
-	 
-	  if ($Merchant_Param !="M") {
-	  	      $Merchant_Param="S" ;
-	  	      $order = Mage::getModel('sales/order');
-     	      $order->loadByIncrementId($Order_Id);  
-             $total_amount = $order->getGrandTotal();
-
-             Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Single Address Checkout\n".print_r($total_amount,true)) ;
-             
-             
-                  
-	  	}
-	  	
-	  	*/
+ 
 	  	 
     
 	  	
@@ -327,22 +278,17 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 	  	
 	  	}
 	
-    
-    
    		    $a = $this->getQuote()->getBillingAddress();
             $b = $this->getQuote()->getShippingAddress();
             
-            
- //           $reserved_ord_id = $this->getQuote()->getReservedOrderId() ;
- //           Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($reserved_ord_id,true)) ;
-       
+  
             
         //getQuoteCurrencyCode
  //  $currency_code = $this->getQuote()->getBaseCurrencyCode();
        
         
             
-            //copied from Checkout.php3
+ //copied from Checkout.php3
             
             
 //	Merchant_Id  available at "Generate Working Key" of "Settings & Options" 
@@ -390,7 +336,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 	 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($total_amount,true)) ;
 	 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($Order_Id,true)) ;
 
-	//upto here from checkuot.php3
+	//upto here from checkuot.php, we are paasing delivery address, but it will not be used by CCav in the mode that we will use CCAv
 
         $sArr = array(
       
@@ -547,15 +493,8 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
           	    // we have to find out if these values are same, than use one of them or continue using both of them
           	    
     }
-          
-   /*       foreach($Order_Ids as $key => $orid ) {
-          	                Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($orid,true)) ;
-          
-          }
-          
-          */
-    
-
+  
+// copied this logic from CCavenue sample
 
 	if($Checksumcalc=="true" && $AuthDesc=="Y")
 	{
