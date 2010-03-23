@@ -88,7 +88,7 @@ class Parser {
 		    $line = trim($line);
 		    $data = explode("~",$line);
 			$book['list_price']         = $data[8];
-			$book['suppliers_discount'] = 30;
+			$book['suppliers_discount'] = 0;
 			$book['suppliers_price']    = $data[10];
 			$book['currency']           = $data[11];
 			$book['publishing_date']    = $data[5];
