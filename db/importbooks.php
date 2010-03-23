@@ -402,8 +402,8 @@ ini_set("display_errors", 1);
                     if (empty($conv_rate)) {
                         fatal("No currency conversion rate available for " . $book['currency']);
                     }
-                    $book['list_price'] = $book['list_price'] * $conv_rate;
-                    $book['suppliers_price'] = $book['list_price'] * ((100 - $book['suppliers_discount'])/100);
+                    $book['list_price'] = round($book['list_price'] * $conv_rate);
+                    $book['suppliers_price'] = round($book['list_price'] * ((100 - $book['suppliers_discount'])/100));
                     $disc_rate = $discountrates[strtolower($book['info_source'])];
                     if (empty($disc_rate)) {
                         fatal("No discount rate available for supplier " . $book['info_source']);
