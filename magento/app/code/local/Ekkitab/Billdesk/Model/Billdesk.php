@@ -601,6 +601,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
       		  	 if ($Checksumcalc == true && $AuthDesc == "N") {
       		  
                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
+                     
                 
                     $order->addStatusToHistory(
    //                     $order->getStatus(),//continue setting current order status
