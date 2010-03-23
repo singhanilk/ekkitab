@@ -50,7 +50,6 @@ echo "Continuing....."
 ### Copy the books table to ekkitab_books database. 
 ##########################################################
 ./loadbooks.sh $dbhost $uid $pswd
-
 ##########################################################
 ### Create the search index. 
 ##########################################################
