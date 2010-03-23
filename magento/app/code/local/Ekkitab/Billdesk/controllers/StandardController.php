@@ -129,7 +129,7 @@ class Ekkitab_Billdesk_StandardController extends Mage_Core_Controller_Front_Act
     
     // to do testing, we will remove the next line
     
-      $this->getStandard()->billdeskPostResponse() ;   //delete it later
+    //  $this->getStandard()->billdeskPostResponse() ;   //delete it later
        
        
     if (!$this->getRequest()->isPost()) {
@@ -149,18 +149,26 @@ class Ekkitab_Billdesk_StandardController extends Mage_Core_Controller_Front_Act
        
      
         
-        $this->_redirect('checkout/onepage/success', array('_secure'=>true));
+//        $this->_redirect('checkout/onepage/success', array('_secure'=>true));
         
   
         $this->getStandard()->setBillFormData($this->getRequest()->getPost());
         
-  			if  ( $this->getStandard()->billdeskPostResponse()) { //
+        $flag = $this->getStandard()->billdeskPostResponse();
+        
+  			
+  			   if ($flag == 1) {
+  		       	   	$this->_redirect('checkout/multishipping/success'); // 
+  		       }
+  		       else if ($flag == 2 ){
+  		            $this->_redirect('checkout/multishipping/failure'); // 
+  		       }  
+  		       else if  ( $flag == 3 ){
   					$this->_redirect('checkout/onepage/success', array('_secure'=>true));
-  			}
-  			else {
+  			   } else {
   			 		$this->_redirect('checkout/onepage/failure', array('_secure'=>true));
   			
-  			};
+  				};
     }
     
 }

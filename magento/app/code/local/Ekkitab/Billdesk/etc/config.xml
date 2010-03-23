@@ -85,7 +85,18 @@
                         </statuses>
                     </pending_payment>
                 </states>
-
+            </order>
+             <order>
+                <statuses>
+                    <declined_billdesk translate="label"><label>Declined Billdesk</label></declined_billdesk>
+                </statuses>
+                <states>
+                    <pending_payment>
+                        <statuses>
+                            <declined_billdesk/>
+                        </statuses>
+                    </pending_payment>
+                </states>
             </order>
         </sales>
     </global>

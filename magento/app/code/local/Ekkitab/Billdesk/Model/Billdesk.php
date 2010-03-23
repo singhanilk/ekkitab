@@ -43,7 +43,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
   //aks   protected $_allowCurrencyCode = array('AUD', 'CAD', 'CZK', 'DKK', 'EUR', 'HKD', 'HUF', 'ILS', 'JPY', 'MXN', 'NOK', 'NZD', 'PLN', 'GBP', 'SGD', 'SEK', 'CHF', 'USD');
     protected $_code  = 'billdesk';
     protected $_formBlockType = 'billdesk/form';
-    protected $_allowCurrencyCode = array('INR','USD');
+    protected $_allowCurrencyCode = array('INR');
     
     /**
      * Check method for processing with base currency
@@ -113,7 +113,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
      */
     public function canUseForMultishipping()
     {
-        return false;
+        return true;
     }
 
     public function createFormBlock($name)
@@ -165,7 +165,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
     public function getStandardCheckoutFormFields()
     {
     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
-    
+    /*
         if ($this->getQuote()->getIsVirtual()) {
             $a = $this->getQuote()->getBillingAddress();
             $b = $this->getQuote()->getShippingAddress();
@@ -173,6 +173,50 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
             $a = $this->getQuote()->getShippingAddress();
             $b = $this->getQuote()->getBillingAddress();
         }
+        
+        */
+    
+     	if ($this->getQuote()->getIsMultiShipping()){
+                     $Merchant_Param="M" ; 
+                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Multishipping\n") ;
+          }
+          else {
+                      $Merchant_Param="S" ; 
+                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Onepage\n") ;
+       	 }
+       	 
+    	$total_amount = 0 ;
+	
+        if ($Merchant_Param=="S") { // OnestepCheckout Order
+     		 $Order_Id =  $this->getCheckout()->getLastRealOrderId();  // for single shipment order 
+	  	   	 $order = Mage::getModel('sales/order');
+     	     $order->loadByIncrementId($Order_Id);  
+             $total_amount = $order->getGrandTotal();
+
+             Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Single Address Checkout\n".print_r($total_amount,true)) ;
+                  
+	  	} else {  // it is "M" : Multishipping order
+	  		$Order_Ids    =  Mage::getSingleton('core/session')->getOrderIds();   // for mltiple shipment orders
+	  		$Order_Id = end($Order_Ids);
+	  	     	 
+	  		foreach( $Order_Ids as $key => $orid) {
+	  	 				  $order = Mage::getModel('sales/order');
+     			 		  $order->loadByIncrementId($orid);  
+     					  $total_amount = $total_amount + $order->getGrandTotal() ;
+      	  
+	  	         }
+
+	  	     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($Order_Ids,true)) ;
+	  	     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Multiple Address Checkout\n".print_r($total_amount,true)) ;
+	  	
+	  	}
+	
+    
+    
+        
+        $a = $this->getQuote()->getBillingAddress();
+        $b = $this->getQuote()->getShippingAddress();
+            
         //getQuoteCurrencyCode
         $currency_code = $this->getQuote()->getBaseCurrencyCode();
        
@@ -206,34 +250,8 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
         );
         
     */
- 	$sArr = array(
             
-            'RU'                => Mage::getUrl('billdesk/standard/success',array('_secure' => true)), 
-  //          'txtAdditionalInfo1'  => $this->getCheckout()->getLastRealOrderId(),  // Invoice
-  //          'txtCustomerId'		=> $a->getCustomerId(),
- //           'txtCustomerId'		=> $a->getCustomerId(),
- 	          'txtCustomerId'  => $this->getCheckout()->getLastRealOrderId(),  // Invoice
- //            'txtAdditionalInfo1'  => $this->getCheckout()->getLastRealOrderId(),  // Invoice
- 	
- 	
- 	
-            'txtAdditionalInfo1'        => $a->getFirstname().$a->getLastname(),
- //           'txtAdditionalInfo3'         => $a->getLastname(),
-            'txtAdditionalInfo2'          => $a->getStreet(1).$a->getstreet(2),
- //          'txtAdditionalInfo5'          => $a->getStreet(2),
- //           'txtAdditionalInfo5'              => $a->getCity(),
-           'txtAdditionalInfo3'             => $a->getRegionCode(),
-            'txtAdditionalInfo4'           => $a->getCountry(),
-            'txtAdditionalInfo5'               => $a->getPostcode(),
-            'txtAdditionalInfo6'               => $a->getTelephone(),
- 	        'txtAdditionalInfo7'               => "singhanilk1959@yahoo.com"
- 	
- 	
- 
-        );
-        
-        
-        // After testing the interface, we should hardcode them, it may be too risky to keep them as parameters
+            // After testing the interface, we should hardcode them, it may be too risky to keep them as parameters
         
         $checksumkey = Mage::getStoreConfig('billdesk/wps/checksum_key') ;
         $merchanturl = Mage::getStoreConfig('billdesk/wps/merchant_url') ;
@@ -242,6 +260,38 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
                 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($checksumkey,true)) ;
                 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($merchanturl,true)) ;
                 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($returnurl,true)) ;
+                
+                
+ 	$sArr = array(
+            
+   //         'RU'                => Mage::getUrl('billdesk/standard/success',array('_secure' => true)), 
+  //          'txtAdditionalInfo1'  => $this->getCheckout()->getLastRealOrderId(),  // Invoice
+  //          'txtCustomerId'		=> $a->getCustomerId(),
+ //           'txtCustomerId'		=> $a->getCustomerId(),
+             'RU'                => $returnurl, 
+ 	
+ 	          'txtCustomerID'  => $this->getCheckout()->getLastRealOrderId(),  // Invoice
+ //            'txtAdditionalInfo1'  => $this->getCheckout()->getLastRealOrderId(),  // Invoice
+ 	
+ 	
+ 	
+            'txtAdditionalInfo1'        => $a->getFirstname()." ".$a->getLastname(),
+ //           'txtAdditionalInfo3'         => $a->getLastname(),
+            'txtAdditionalInfo2'          => $a->getStreet(1)." ".$a->getstreet(2),
+ //          'txtAdditionalInfo5'          => $a->getStreet(2),
+ //           'txtAdditionalInfo5'              => $a->getCity(),
+           'txtAdditionalInfo3'             => $a->getRegionCode(),
+            'txtAdditionalInfo4'           => $a->getCountry(),
+            'txtAdditionalInfo5'               => $a->getPostcode(),
+            'txtAdditionalInfo6'               => $a->getTelephone(),
+ 	        'txtAdditionalInfo7'               => $a->getEmail()
+ 	
+ 	
+ 
+        );
+        
+        
+        
                 
         
           
@@ -283,6 +333,8 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
 
         $totalArr = $a->getTotals();
         $shipping = sprintf('%.2f', $this->getQuote()->getShippingAddress()->getBaseShippingAmount());
+        
+        $amount = $total_amount ;
 
  
         
@@ -349,20 +401,34 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
     
     {
     
+     	$msg = $_REQUEST['msg'];
+    
+          Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($msg,true)) ;
+     	
     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
+    
+    
+          if ($this->getQuote()->getIsMultiShipping()){
+                     $Merchant_Param="M" ; 
+                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Billdesk_Model_Type_Multishipping\n") ;
+          }
+          else {
+                      $Merchant_Param="S" ; 
+                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Billdesk_Model_Type_Onepage\n") ;
+       	 }
+       
    
  
     //UNCOMMENT the next line
-   //     $msg = $this->getBillFormData('msg') ; 
-        
-    $msg = "M123456|00002|123456788|bankrefno|21.00|SBI|22270726|NA|INR|NA|NA|NANA|12-12-06  |0300|NA|AXPIY|100000003|NA|NA|NA|NA|NA|NA|NA|NA|NA|123456789" ;
+  //    $msg = $this->getBillFormData('msg') ; 
+
+   //   Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($msg,true)) ;
+      
+   // $msg = "M123456|00002|123456788|bankrefno|21.00|SBI|22270726|NA|INR|NA|NA|NA|NA|12-12-06  |0300|NA|AXPIY|100000003|NA|NA|NA|NA|NA|NA|NA|NA|NA|123456789" ;
 
         $checksumkey = Mage::getStoreConfig('billdesk/wps/checksum_key') ;
-      //      if (!($this->billChecksum($msg))) {
-          if (($this->billChecksum($msg,$checksumkey))) { //change it back to above one
         
-               return false ; 
-        }
+       
         
         
  //       $msg_arr = str_getcsv($msg,"|") ; in php 3.0
@@ -385,34 +451,131 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
         
         
     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($msg_arr,true)) ;
+    
+    //    $msgwochecksum = substr($msg,0,strrpos($msg,"|")) ;
+
+  //      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Msgwithout checksum \n".print_r($msgwochecksum,true)) ;
+        
+          $r_checksum = $msg_arr[25]  ;
+    
+    
+     $Checksumcalc = $this->billChecksum($msg,$checksumkey,$r_checksum); // this takes care of checking the message without checksum
+
+     /*
+      $r_checksum = $msg_arr[25]  ;
+      
+          if (($Checksumcalc != $r_checksum)) { 
+          
+                  Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." checksum as in msg\n".print_r($msgwochecksum,true)) ;
+                  Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." checksum as in msg\n".print_r($r_checksum,true)) ;
+                  
+          
+        
+			    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Checksum Security Error. Illegal access detected\n");
+            }
+            
+     */
         
         
-        $r_authstatus = $msg_arr[13] ;
+        $r_authstatus = $msg_arr[14] ;
         
-        if ($r_authstatus != "0300") {
+        
+        if ($r_authstatus == "0300") {
             Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($r_authstatus,true)) ;
-        
-        
-        	return false ;
+              $AuthDesc="Y" ;
         }
+        elseif  ($r_authstatus == "0399") {
+               $AuthDesc="N" ; //The transaction has been declined, cancel the transaction
+        }
+        elseif  ($r_authstatus == "NA") {
+               $AuthDesc="N" ; // Invalid Input at Billdesk, Cancel the transaction
+        }elseif  ($r_authstatus == "0002") {
+               $AuthDesc="N" ; //Billdesk is waiting for response from the Bank, cancel the transaction
+        }elseif  ($r_authstatus == "0001") {
+               $AuthDesc="N" ; //Error at billdesk, cancel the transaction
+        }
+        else {
+                 $AuthDesc="N" ; //Assume Error at billdesk, cancel the transaction
+        
+        }
+        
+        
     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($r_authstatus,true)) ;
         
         $r_merchantid = $msg_arr[0] ;
-        $r_customerid = $msg_arr[1] ;
+        $r_orderid    = $msg_arr[1] ;
         $r_txnrefid   = $msg_arr[2] ;
         $r_txnamount  = $msg_arr[4];
-        $r_id    = $msg_arr[16] ;    // some id which order.php uses, stored in txtAdditionalInfo1
+        $r_cname = $msg_arr[16] ;
+        $r_telno = $msg_arr[21] ;
         
        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($r_txnamount,true)) ;
-       Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($r_id,true)) ;
+       Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($r_orderid,true)) ;
+       Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($r_cname,true)) ;
+       Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($r_telno,true)) ;
+       
   
-        
+	if($Checksumcalc=="true" && $AuthDesc=="Y")
+	{
+	//	echo "<br>Thank you for shopping with us. Your credit card has been charged and your transaction is successful. We will be shipping your order to you soon.";
+        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Thank you for shopping with us. Your credit card has been charged and your transaction is successful. We will be shipping your order to you soon.\n") ;
+		
+		//Here you need to put in the routines for a successful 
+		//transaction such as sending an email to customer,
+		//setting database status, informing logistics etc etc
+	}
+	
+	else if($Checksumcalc=="true" && $AuthDesc=="N")
+	{
+	//	echo "<br>Thank you for shopping with us.However,the transaction has been declined.";
+	//	return false ;
+		
+				    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Thank you for shopping with us.However,the transaction has been declined.\n") ;
+		
+		
+		//Here you need to put in the routines for a failed
+		//transaction such as sending an email to customer
+		//setting database status etc etc
+	}
+	else
+	{
+	//	echo "<br>Security Error. Illegal access detected";
+	//	return false;
+	
+			    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Security Error. Illegal access detected\n");
+	
+		
+		//Here you need to simply ignore this and dont need
+		//to perform any operation in this condition
+	}
+         
           
                
  //      return false ;
+ 
+      if ($Merchant_Param == "M") {
+    
+    		$Order_Ids    =  Mage::getSingleton('core/session')->getOrderIds();
+    
+	         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Multiship Returned from Billdesk\n".print_r($Order_Ids,true)) ;
+	                
+    }
+    else {
+  //        $Order_Ids[] = $Order_Id ;  // will not use the Order Id from CCav but from LastOrder_ID
+            $x = $this->getCheckout()->getLastRealOrderId(); 
+            $Order_Ids[] = $x ;
+          
+          	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Order_Id from LastRealOredrId \n".print_r($x,true)) ;
+          	    
+          	    // we have to find out if these values are same, than use one of them or continue using both of them
+          	    
+    }
+    
+     foreach($Order_Ids as $key => $orid ) {
+          	                Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($orid,true)) ;
        
       	  $order = Mage::getModel('sales/order');
-      	  $order->loadByIncrementId($r_id);  // we  the order with this id
+      	  $order->loadByIncrementId($orid);  // we  the order with this id
 
  
             if (!$order->getId()) {     //  If the above load of order does not happen i.e wrong order id from Billdesk
@@ -421,31 +584,39 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
                 */
             
                 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
-                return false ;
+ //               return false ;
+                $flag = false ;
             
 
             } else {
 
-          	  if ($this->getDebug() && $msg) {
+          	 	 if ($this->getDebug() && $msg) {
           		//	  $sReq = substr($sReq, 1);
          			   $debug = Mage::getModel('billdesk/api_debug')
             	        ->setApiEndpoint($this->getBilldeskUrl())
             	        ->setResponseBody($msg)
              	       ->save();
-      		  }
-                if ($r_txnamount!=$order->getBaseGrandTotal()) {
-                    //when grand total does not equal, need to have some logic to take care
+      		 	 }
+      		  
+      		  	 if ($Checksumcalc == true && $AuthDesc == "N") {
+      		  
                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
+                     
                 
                     $order->addStatusToHistory(
-                        $order->getStatus(),//continue setting current order status
-  //                      Mage::helper('paypal')->__('Order total amount does not match paypal gross total amount')
-                         Mage::helper('billdesk')->__('Order total amount does not match billdesk gross total amount')
+   //                     $order->getStatus(),//continue setting current order status
+   //                    Mage::helper('paypal')->__('Order total amount does not match paypal gross total amount')
+                           "declined_billdesk",//continue setting current order status
+                        
+                         Mage::helper('billdesk')->__('Order declined')
                         
                     );
                     $order->save();
-                } else {
+                    $flag = false ;
+                    
                 
+                } elseif (($Checksumcalc == true) && ($AuthDesc == "Y"))  {
+                                
                     /*
                     //quote id
                     $quote_id = $order->getQuoteId();
@@ -480,17 +651,17 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
                     
                        
                            //need to convert from order into invoice
-                    $invoice = $order->prepareInvoice();
-                    $invoice->register()->pay();
+  //                  $invoice = $order->prepareInvoice();
+  //                  $invoice->register()->pay();
                     
-                    Mage::getModel('core/resource_transaction')
-                            ->addObject($invoice)
-                            ->addObject($invoice->getOrder())
-                            ->save();
+   //                 Mage::getModel('core/resource_transaction')
+   //                         ->addObject($invoice)
+  //                          ->addObject($invoice->getOrder())
+ //                           ->save();
                             
                            $order->setState(
                                Mage_Sales_Model_Order::STATE_PROCESSING, true,
-                               Mage::helper('billdesk')->__('Invoice #%s created', $invoice->getIncrementId()),
+                               Mage::helper('billdesk')->__('Order #%s created', $orid),
                                $notified = true
                            );
                        
@@ -516,11 +687,57 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
 
                 /*    if (!$ipnCustomerNotified) { */
                       $order->sendNewOrderEmail();  // should we send an email now ?
+                      
+                      $this->sendsms($r_telno,$orid);
                   //  }
 
-               }//else amount the same and there is order obj
+               //else amount the same and there is order obj
                 //there are status added to order
+                                     $flag = true ;
+                      
+            } else { // sercurity error
+               
+                 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
+                  
+                   //we have to figure out how to say in Order that it is declined
+                     
+                    $order->addStatusToHistory(
+     //                   $order->getStatus(),//continue setting current order status
+                                "declined_billdesk",//continue setting current order status
+                    
+                         Mage::helper('billdesk')->__('Security Error')
+                        
+                    );
+                    $order->save();
+                   // return false ;
+                     $flag = false ;
+                 }
             }
+     }// end of For
+     
+     
+              Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($flag,true)) ;
+                      	                
+                      	                
+               if ($Merchant_Param == "M") {
+                    if ($flag)  {
+                      	  $flag = 1 ;  // Multishipment success
+                      	    
+                     } else {
+                      	   $flag = 2 ; // Multishipment failure
+                     }
+               } else {
+                      if ($flag) {
+              			  $flag = 3 ;   // slingle checkout success
+  						} else{
+  					      $flag = 4 ;  // single checkout failure
+                      	                                                	      
+                       }
+               }
+    
+            Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($flag,true)) ;
+               
+            return $flag ;
     }
     
  
@@ -529,7 +746,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
   //  }
     
     
-    public function billChecksum($msg,$checksumkey)
+    public function billChecksum($msg,$checksumkey, $rchksum)
     {
     
         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($msg,true)) ;
@@ -537,19 +754,19 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
         $lastbar = strrpos($msg,"|");
         
         $msgWithoutChkSum = substr($msg,0,$lastbar) ;
-        $msgWithChkSum = $msgWithoutChkSum."|".$checksumkey ;
-        $chksumFromBilldesk = substr($msg, $lastbar+1,strlen($msg)) ;
+         $msgWithChkSumkey = $msgWithoutChkSum."|".$checksumkey ;
+//      $chksumFromBilldesk = substr($msg, $lastbar+1,strlen($msg)) ;
         
-        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($msgWithoutChkSum,true)) ;
-        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($msgWithChkSum,true)) ;
+        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." MesgWithoutChecksum\n".print_r($msgWithoutChkSum,true)) ;
+        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($msgWithChkSumkey,true)) ;
         
-        $calChksum = crc32($msgWithChkSum) ;
+        $calChksum = crc32($msgWithChkSumkey) ;
         
-        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($calChksum,true)) ;
-        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($chksumFromBilldesk,true)) ;
+        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Calculated Checksum \n".print_r($calChksum,true)) ;
+        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Checksum from Billdesk \n".print_r($rchksum,true)) ;
         
         
-        if ($calChksum != $chksumFromBilldesk) {
+        if ($calChksum != $rchksum) {
         	return false ;
         }
 
@@ -572,6 +789,33 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
     
     
     }
+    
+     public function sendsms($recepientno,$Order_Id)
+    {
+    $ch = curl_init();
+    $user="anil@ekkitab.com:meritos1959";
+    $senderID="EKKITAB1";
+    $msgtxt="Thank you for shopping with EkKitab. Your Order Id is $Order_Id";
+    $state="4" ;
+  	curl_setopt($ch,CURLOPT_URL,  "http://api.mVaayoo.com/mvaayooapi/MessageCompose") ;
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_POST, 1);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, "user=$user&senderID=$senderID&receipientno=$recepientno&msgtxt=$msgtxt&state=$state");
+	
+	$buffer = curl_exec($ch);
+	if(empty ($buffer))
+	{ 
+	  	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Buffer is empty\n".print_r($buffer,true)) ;
+	
+    }
+	else
+	{ 
+		     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($buffer,true)) ;
+	}
+	
+	curl_close($ch);
+    }
+ 
     
 
     public function isInitializeNeeded()

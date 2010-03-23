@@ -19,18 +19,38 @@
 
 class Ekkitab_Paypal_Model_Standard extends Mage_Paypal_Model_Standard
 {
+
+/**
+     * Using for multiple shipping address
+     *
+     * @return bool
+     */
+    public function canUseForMultishipping()
+    {
+        return true;
+    }
+    
     //added INR so that Paypal comes as an option in the payment methods..... 
 	protected $_allowCurrencyCode = array('AUD', 'CAD', 'CZK', 'DKK', 'EUR', 'HKD', 'HUF', 'ILS', 'JPY', 'MXN', 'NOK', 'NZD', 'PLN', 'GBP', 'SGD', 'SEK', 'CHF', 'USD','INR');
 
 public function getStandardCheckoutFormFields()
     {
-        if ($this->getQuote()->getIsVirtual()) {
+    
+//**********Ekkitab******
+// Commented these lines and added the next two lines
+       /* if ($this->getQuote()->getIsVirtual()) {
             $a = $this->getQuote()->getBillingAddress();
             $b = $this->getQuote()->getShippingAddress();
         } else {
             $a = $this->getQuote()->getShippingAddress();
             $b = $this->getQuote()->getBillingAddress();
-        }
+        }*/
+    
+    		$a = $this->getQuote()->getBillingAddress();
+            $b = $this->getQuote()->getShippingAddress();
+            
+//****Ekkitab*****************
+    
         /*tweak version
           init currency conversion
           if currency is not the same as base currency, set convert boolean to true 
@@ -60,7 +80,7 @@ public function getStandardCheckoutFormFields()
             'return'            => Mage::getUrl('paypal/standard/success',array('_secure' => true)),
             'cancel_return'     => Mage::getUrl('paypal/standard/cancel',array('_secure' => false)),
             'notify_url'        => Mage::getUrl('paypal/standard/ipn'),
-            'invoice'           => $this->getCheckout()->getLastRealOrderId(),
+ //           'invoice'           => $this->getCheckout()->getLastRealOrderId(),
             'currency_code'     => $currency_code,
             'address_override'  => 0, // overriding this property to 0 from 1 
             'first_name'        => $a->getFirstname(),
@@ -92,21 +112,75 @@ public function getStandardCheckoutFormFields()
         O=aggregate cart amount to paypal
         I=individual items to paypal
         */
+       
+			//Mage::log("In getStandardCheckoutFormFields... amount >> $amount");
+        
         if ($transaciton_type=='O') {
             $businessName = Mage::getStoreConfig('paypal/wps/business_name');
             $storeName = Mage::getStoreConfig('store/system/name');
-            $amount = ($a->getBaseSubtotal()+$b->getBaseSubtotal())-($a->getBaseDiscountAmount()+$b->getBaseDiscountAmount());
-            //convert the amount to the current currency
+            
+  //************Ekkitab*******************************
+  //        $amount = ($a->getBaseSubtotal()+$b->getBaseSubtotal())-($a->getBaseDiscountAmount()+$b->getBaseDiscountAmount());
+  
+             if ($this->getQuote()->getIsMultiShipping()){
+                     $Merchant_Param="M" ; 
+                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Multishipping\n") ;
+        	  }
+          	else {
+                      $Merchant_Param="S" ; 
+                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Onepage\n") ;
+       		 }
+       
+       		$total_amount = 0 ;
+
+       		
+       		$mOrderList = "" ;
+       		
+        if ($Merchant_Param=="S") { // OnestepCheckout Order
+     		 $Order_Id =  $this->getCheckout()->getLastRealOrderId();  // for single shipment order 
+	  	   	 $order = Mage::getModel('sales/order');
+     	     $order->loadByIncrementId($Order_Id);  
+             $total_amount = $order->getGrandTotal();
+             $mOrderList = $Order_Id ;
+
+             Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Single Address Checkout\n".print_r($total_amount,true)) ;
+                  
+	  	} else {  // it is "M" : Multishipping order
+	  		$Order_Ids    =  Mage::getSingleton('core/session')->getOrderIds();   // for mltiple shipment orders
+	  		$Order_Id = end($Order_Ids);
+	  		foreach( $Order_Ids as $key => $orid) {
+	  	 				  $order = Mage::getModel('sales/order');
+     			 		  $order->loadByIncrementId($orid);  
+     					  $total_amount = $total_amount + $order->getGrandTotal() ;
+     					  $mOrderList = $mOrderList."|".$orid ;
+      	  
+	  	    }
+
+	  	     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($Order_Ids,true)) ;
+	  	     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Multiple Address Checkout\n".print_r($total_amount,true)) ;
+	  	
+	  	}
+	  		  	     
+	  	Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." mOrderList \n".print_r($mOrderList,true)) ;
+	  	
+
+	  	$amount = $total_amount ;
+	  	
+//***********Ekkitab************************
+	  	
+        //convert the amount to the current currency
             if ($bConvert) {
-                $amount = $storeCurrency->convert($amount, $currency_code);
+                 $amount = $storeCurrency->convert($amount, $currency_code);
             }
-			//Mage::log("In getStandardCheckoutFormFields... amount >> $amount");
+	  	
 
             $sArr = array_merge($sArr, array(
                     'cmd'           => '_ext-enter',
                     'redirect_cmd'  => '_xclick',
                     'item_name'     => $businessName ? $businessName : $storeName,
                     'amount'        => sprintf('%.2f', $amount),
+                    'invoice'      => $Order_Id,
+                    'custom'       => $mOrderList,  // added by aks
                 ));
             $_shippingTax = $this->getQuote()->getShippingAddress()->getBaseTaxAmount();
             $_billingTax = $this->getQuote()->getBillingAddress()->getBaseTaxAmount();
@@ -223,7 +297,190 @@ public function getStandardCheckoutFormFields()
         }
         return $rArr;
     }
-	
+    
+     public function ipnPostSubmit()
+    {
+    
+                
+        $sReq = '';
+        $sReqDebug = '';
+        foreach($this->getIpnFormData() as $k=>$v) {
+            $sReq .= '&'.$k.'='.urlencode(stripslashes($v));
+            $sReqDebug .= '&'.$k.'=';
+
+        }
+        //append ipn commdn
+        $sReq .= "&cmd=_notify-validate";
+        $sReq = substr($sReq, 1);
+
+        if ($this->getDebug()) {
+            $debug = Mage::getModel('paypal/api_debug')
+                    ->setApiEndpoint($this->getPaypalUrl())
+                    ->setRequestBody($sReq)
+                    ->save();
+        }
+        $http = new Varien_Http_Adapter_Curl();
+        $http->write(Zend_Http_Client::POST,$this->getPaypalUrl(), '1.1', array(), $sReq);
+        $response = $http->read();
+        $response = preg_split('/^\r?$/m', $response, 2);
+        $response = trim($response[1]);
+        if ($this->getDebug()) {
+            $debug->setResponseBody($response)->save();
+        }
+
+         //when verified need to convert order into invoice
+        $id = $this->getIpnFormData('invoice');   
+        $mOrderList = $this->getIpnFormData('custom');
+        
+        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Invoice: was used in single order situation \n".print_r($mOrderList,true)) ;
+ 	  	Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." mOrderList: \n".print_r($mOrderList,true)) ;
+
+ 	 
+        $mordids = array() ;
+//       $msg_arr1 = $this->strgetcsv($msg,"|") ; did not work for me, that is why this loop
+        
+        $i = 0 ; 
+    	$tok = strtok($mOrderList,"|");
+    	while ($tok != false) {
+    	   $mordids[$i++] = $tok ; 
+    	   $tok = strtok("|"); 
+    	}   
+        
+        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." PayPal returned Order Ids\n".print_r($mordids,true)) ;
+        
+        
+        
+      foreach($mordids as $key => $id ) {
+          	                Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($id,true)) ;
+            
+          	                
+        
+        $order = Mage::getModel('sales/order');
+        $order->loadByIncrementId($id);
+
+        if ($response=='VERIFIED') {
+            if (!$order->getId()) {
+                /*
+                * need to have logic when there is no order with the order id from paypal
+                */
+
+            } else {
+                          //I HAVE CHANGED THIS to ! as the return amount is in dollar whereas the amount stored is in RS
+                if (!($this->getIpnFormData('mc_gross')!=$order->getBaseGrandTotal())) {
+                    //when grand total does not equal, need to have some logic to take care
+                    $order->addStatusToHistory(
+                        $order->getStatus(),//continue setting current order status
+                        Mage::helper('paypal')->__('Order total amount does not match paypal gross total amount')
+                    );
+                    $order->save();
+                } else {
+                    /*
+                    //quote id
+                    $quote_id = $order->getQuoteId();
+                    //the customer close the browser or going back after submitting payment
+                    //so the quote is still in session and need to clear the session
+                    //and send email
+                    if ($this->getQuote() && $this->getQuote()->getId()==$quote_id) {
+                        $this->getCheckout()->clear();
+                        $order->sendNewOrderEmail();
+                    }
+                    */
+
+                    // get from config order status to be set
+                    $newOrderStatus = $this->getConfigData('order_status', $order->getStoreId());
+                    if (empty($newOrderStatus)) {
+                        $newOrderStatus = $order->getStatus();
+                    }
+
+                    /*
+                    if payer_status=verified ==> transaction in sale mode
+                    if transactin in sale mode, we need to create an invoice
+                    otherwise transaction in authorization mode
+                    */
+                    if ($this->getIpnFormData('payment_status') == 'Completed') {
+                       if (!$order->canInvoice()) {
+                           //when order cannot create invoice, need to have some logic to take care
+                           $order->addStatusToHistory(
+                                $order->getStatus(), // keep order status/state
+                                Mage::helper('paypal')->__('Error in creating an invoice', true),
+                                $notified = true
+                           );
+
+                       } else {
+                           //need to save transaction id
+                           $order->getPayment()->setTransactionId($this->getIpnFormData('txn_id'));
+                           //need to convert from order into invoice
+                           $invoice = $order->prepareInvoice();
+                           $invoice->register()->pay();
+                           Mage::getModel('core/resource_transaction')
+                               ->addObject($invoice)
+                               ->addObject($invoice->getOrder())
+                               ->save();
+                           $order->setState(
+                               Mage_Sales_Model_Order::STATE_COMPLETE, true,
+                               Mage::helper('paypal')->__('Invoice #%s created', $invoice->getIncrementId()),
+                               $notified = true
+                           );
+                       }
+                    } else {
+                        $order->setState(
+                            Mage_Sales_Model_Order::STATE_PROCESSING, $newOrderStatus,
+                            Mage::helper('paypal')->__('Received IPN verification'),
+                            $notified = true
+                        );
+                    }
+
+                    $ipnCustomerNotified = true;
+                    if (!$order->getPaypalIpnCustomerNotified()) {
+                        $ipnCustomerNotified = false;
+                        $order->setPaypalIpnCustomerNotified(1);
+                    }
+
+                    $order->save();
+
+                    if (!$ipnCustomerNotified) {
+                        $order->sendNewOrderEmail();
+                    }
+
+                }//else amount the same and there is order obj
+                //there are status added to order
+            }
+        }else{
+            /*
+            Canceled_Reversal
+            Completed
+            Denied
+            Expired
+            Failed
+            Pending
+            Processed
+            Refunded
+            Reversed
+            Voided
+            */
+            $payment_status= $this->getIpnFormData('payment_status');
+            $comment = $payment_status;
+            if ($payment_status == 'Pending') {
+                $comment .= ' - ' . $this->getIpnFormData('pending_reason');
+            } elseif ( ($payment_status == 'Reversed') || ($payment_status == 'Refunded') ) {
+                $comment .= ' - ' . $this->getIpnFormData('reason_code');
+            }
+            //response error
+            if (!$order->getId()) {
+                /*
+                * need to have logic when there is no order with the order id from paypal
+                */
+            } else {
+                $order->addStatusToHistory(
+                    $order->getStatus(),//continue setting current order status
+                    Mage::helper('paypal')->__('Paypal IPN Invalid %s.', $comment)
+                );
+                $order->save();
+            }
+        }
+      } // end of for
+    }
+
 	/*public function getStandardCheckoutFormFields()
     {
         if ($this->getQuote()->getIsVirtual()) {

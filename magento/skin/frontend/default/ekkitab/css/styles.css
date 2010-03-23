@@ -1321,16 +1321,14 @@ a:hover {
 	margin-left: 5px;
 }
 .bkHomePage {
-	width: 765px;
-	float: left;
+	float: right;
 	line-height: 25px;
 	text-align: right;
 }
 .proceedCheckout {
-	width: 166px;
 	margin-left: 5px;
-	float: left;
-
+	float: right;
+	text-align:right;
 }
 .scartArea .skuImageHdr, .scartArea .skuImage {
 	float:left;
