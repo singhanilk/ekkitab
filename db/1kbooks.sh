@@ -22,7 +22,7 @@ then
    read response
 else
    uid=$1
-   pwd=$2
+   pswd=$2
    dbhost=$3
    echo "The command will be run as :$0  $uid $pswd $dbhost "
    echo ""
@@ -41,27 +41,15 @@ echo "Continuing....."
 ##########################################################
 ###  import the 1k test data
 ##########################################################
- php importbooks.php 1ktestdata   ../data/1ktestdata.txt english
- php importdescription.php 1ktestdata -l  ../data/1ktestdata.txt 
- php importpricestock.php 1ktestdata ../data/1ktestdata.txt
-
+ php importbooks.php -a 1ktestdata   ../data/1ktestdata.txt
 ##########################################################
 ###  import the 50 low-cost books.
 ##########################################################
- php importbooks.php 1ktestdata   ../data/50lowcostbooks.txt english 
- php importdescription.php 1ktestdata -l   ../data/50lowcostbooks.txt
- php importpricestock.php 1ktestdata   ../data/50lowcostbooks.txt 
-
-##########################################################
-### Update the reference db with descriptions and price
-##########################################################
- mysql -u $uid -p$pswd < update_prices_and_stock.sql
- mysql -u $uid -p$pswd < update_descriptions.sql
-
+ php importbooks.php -a 1ktestdata   ../data/50lowcostbooks.txt
 ##########################################################
 ### Copy the books table to ekkitab_books database. 
 ##########################################################
- mysql -u $uid -p$pswd < loadbooks.sql
+. loadbooks.sh $3 $1 $2
 
 ##########################################################
 ### Create the search index. 
