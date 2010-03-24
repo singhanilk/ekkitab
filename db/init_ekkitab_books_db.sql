@@ -312,8 +312,19 @@ INSERT INTO `core_config_data` (`config_id`, `scope`, `scope_id`, `path`, `value
 (743, 'default', 0, 'ccav/wps/merchant_id', 'M_singhak_11811'),
 (744, 'default', 0, 'ccav/wps/logo_url', ''),
 (745, 'default', 0, 'ccav/wps/sandbox_flag', '0'),
-(746, 'default', 0, 'ccav/wps/debug_flag', '0');
-
+(746, 'default', 0, 'ccav/wps/debug_flag', '0')
+(823, 'default', 0, 'payment/billdesk/title', 'Master / Visa Billdesk'),
+(824, 'default', 0, 'payment/billdesk/payment_action', 'AUTHORIZATION'),
+(825, 'default', 0, 'payment/billdesk/order_status', 'processing'),
+(826, 'default', 0, 'payment/billdesk/transaction_type', 'O'),
+(827, 'default', 0, 'payment/billdesk/sort_order', ''),
+(888, 'default', 0, 'billdesk/wps/checksum_key', 'pWUb4i1oTLCs'),
+(889, 'default', 0, 'billdesk/wps/merchant_url', 'https://www.billdesk.com/pgidsk/pgmerc/EKKITABPay.jsp'),
+(890, 'default', 0, 'billdesk/wps/return_url', 'http://ekkitab.co.in/scm/magento/billdesk/standard/ccavresponse'),
+(891, 'default', 0, 'billdesk/wps/merchant_id', ''),
+(892, 'default', 0, 'billdesk/wps/logo_url', ''),
+(893, 'default', 0, 'billdesk/wps/sandbox_flag', '0'),
+(894, 'default', 0, 'billdesk/wps/debug_flag', '0');
 
 
 
