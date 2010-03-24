@@ -487,7 +487,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
             $x = $this->getCheckout()->getLastRealOrderId(); 
   //          $Order_Ids[] = $x ; // will not use this for reason as given below
             
-   			 if ($x != $r_orderid ) { // This should never happen, but I have seen it happening once in blue moon, keep a watch on it
+   			 if ($x != $Order_Id ) { // This should never happen, but I have seen it happening once in blue moon, keep a watch on it
                       	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."LOGICERROR \n".print_r($x,true)) ;
             }
           
