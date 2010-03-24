@@ -308,7 +308,7 @@ INSERT INTO `core_config_data` (`config_id`, `scope`, `scope_id`, `path`, `value
 (691, 'default', 0, 'payment/ccav/sort_order', ''),
 (740, 'default', 0, 'ccav/wps/checksum_key', 'kvppt13q4lwbo4g90y'),
 (741, 'default', 0, 'ccav/wps/merchant_url', 'https://www.ccavenue.com/shopzone/cc_details.jsp'),
-(742, 'default', 0, 'ccav/wps/return_url', 'http://localhost/scm/magento/ccav/standard/ccavresponse'),
+(742, 'default', 0, 'ccav/wps/return_url', 'http://ekkitab.co.in/scm/magento/ccav/standard/ccavresponse'),
 (743, 'default', 0, 'ccav/wps/merchant_id', 'M_singhak_11811'),
 (744, 'default', 0, 'ccav/wps/logo_url', ''),
 (745, 'default', 0, 'ccav/wps/sandbox_flag', '0'),
