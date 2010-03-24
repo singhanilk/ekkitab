@@ -319,7 +319,7 @@ INSERT INTO `core_config_data` (`config_id`, `scope`, `scope_id`, `path`, `value
 (826, 'default', 0, 'payment/billdesk/transaction_type', 'O'),
 (827, 'default', 0, 'payment/billdesk/sort_order', ''),
 (888, 'default', 0, 'billdesk/wps/checksum_key', 'pWUb4i1oTLCs'),
-(889, 'default', 0, 'billdesk/wps/merchant_url', 'https://www.billdesk.com/pgidsk/pgmerc/EKKITABPay.jsp'),
+(889, 'default', 0, 'billdesk/wps/merchant_url', 'https://www.billdesk.com/pgidsk/pgmerc/EKKITABPaymentoption.jsp'),
 (890, 'default', 0, 'billdesk/wps/return_url', 'http://ekkitab.co.in/scm/magento/billdesk/standard/ccavresponse'),
 (891, 'default', 0, 'billdesk/wps/merchant_id', ''),
 (892, 'default', 0, 'billdesk/wps/logo_url', ''),
