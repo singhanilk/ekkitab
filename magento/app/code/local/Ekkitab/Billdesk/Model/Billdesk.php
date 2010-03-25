@@ -567,9 +567,9 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
     }
     else {
   //        $Order_Ids[] = $Order_Id ;  // will not use the Order Id from CCav but from LastOrder_ID
-  //          $x = $this->getCheckout()->getLastRealOrderId(); 
-
-    		$x = $this->getCheckout()->getLastOrderId(); 
+  //          $x = $this->getCheckout()->getLastOrderId(); 
+    
+           $x = $this->getCheckout()->getLastRealOrderId(); 
     
             if ($x != $r_orderid ) { // This should never happen, but I have seen it happening once in blue moon, keep a watch on it
                       	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."LOGICERROR \n".print_r($x,true)) ;

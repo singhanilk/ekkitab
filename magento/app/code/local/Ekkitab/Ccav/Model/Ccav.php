@@ -491,9 +491,9 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     }
     else {
         	$Order_Ids[] = $Order_Id ;  // will use the Order Id from CCav but from LastOrder_ID
-    //        $x = $this->getCheckout()->getLastRealOrderId(); 
-             $x = $this->getCheckout()->getLastOrderId(); 
-        	
+            $x = $this->getCheckout()->getLastRealOrderId(); 
+            
+   //          $x = $this->getCheckout()->getLastOrderId(); 
   //          $Order_Ids[] = $x ; // will not use this for reason as given below
             
    			 if ($x != $Order_Id ) { // This should never happen, but I have seen it happening once in blue moon, keep a watch on it
