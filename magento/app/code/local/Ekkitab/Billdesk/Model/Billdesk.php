@@ -270,7 +270,9 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
  //           'txtCustomerId'		=> $a->getCustomerId(),
              'RU'                => $returnurl, 
  	
- 	          'txtCustomerID'  => $this->getCheckout()->getLastRealOrderId(),  // Invoice
+ //	          'txtCustomerID'  => $this->getCheckout()->getLastRealOrderId(),  // Invoice
+  	          'txtCustomerID'  => $Order_Id,  // Invoice
+ 	
  //            'txtAdditionalInfo1'  => $this->getCheckout()->getLastRealOrderId(),  // Invoice
  	
  	
