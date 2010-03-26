@@ -554,7 +554,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 	}
    
 	if (empty($Order_Ids)) {
-	       $flag = flase ;
+	       $flag = false ;
 	       
 	} else {
        foreach($Order_Ids as $key => $orid ) {
