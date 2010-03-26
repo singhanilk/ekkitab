@@ -442,8 +442,9 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     public function ccavPostResponse()
     
     {
-    
-    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
+    $session_id   =  Mage::getSingleton('core/session')->getSessionId();   // for mltiple shipment orders
+    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." SESSION ID : \n".print_r($session_id));
+    	  		
     
      if ($this->getQuote()->getIsMultiShipping()){
                      $Merchant_Param="M" ; 
