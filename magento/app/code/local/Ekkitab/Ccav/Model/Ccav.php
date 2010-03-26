@@ -239,7 +239,10 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 	  	
     public function getStandardCheckoutFormFields()
     {
-    	  Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
+    	  		$session_id    =  Mage::getSingleton('core/session')->getSessionId();   // for mltiple shipment orders
+    	  		Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." SESSION ID : \n".print_r($session_id,true)) ;
+    	  		
+    
     
 //	$Merchant_Param="" ;     // this is optional, you can fill up with any value, we are using it for checkout type
 
