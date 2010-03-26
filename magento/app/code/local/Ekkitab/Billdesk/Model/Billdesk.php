@@ -406,7 +406,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
     
     {
     			$session_id    =  Mage::getSingleton('core/session')->getSessionId();   // for mltiple shipment orders
-    	  		Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." SESSION ID : \n".print_r($session_id));
+    	  		Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." SESSION ID : \n".print_r($session_id,true));
     	  		
     
       $msg = $_REQUEST['msg'];
