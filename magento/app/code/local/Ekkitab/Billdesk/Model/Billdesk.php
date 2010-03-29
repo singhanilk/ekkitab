@@ -347,7 +347,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
         
         $sArr = array_merge($sArr, array(
    //            'txtTxnAmount' => $grand_total
-                            'txtTxnAmount' => "2"
+                            'txtTxnAmount' => "2.00"
         
                 ));
         
