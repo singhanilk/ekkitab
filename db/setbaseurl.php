@@ -13,7 +13,7 @@
         exit(1);
     }
 
-    $query = "insert into core_config_data (scope, scope_id, path, value) values ('default', 0, 'web/unsecure/base_url', '" . $argv[4] . "')";
+    $query = "insert into core_config_data (scope, scope_id, path, value) values ('default', 0, 'web/unsecure/base_url', '" . $argv[4] . "')" . " on duplicate key update value = '" . $argv[4] . "'";
     try {
 	    $result = mysqli_query($db, $query);
         if (!$result) {
@@ -26,7 +26,8 @@
         exit(1);
     } 
 
-    $query = "insert into core_config_data (scope, scope_id, path, value) values ('default', 0, 'web/secure/base_url', '" . $argv[4] . "')";
+    $query = "insert into core_config_data (scope, scope_id, path, value) values ('default', 0, 'web/secure/base_url', '" . $argv[4] . "')" . " on duplicate key update value = '" . $argv[4] . "'";
+;
     try {
 	    $result = mysqli_query($db, $query);
         if (!$result) {
