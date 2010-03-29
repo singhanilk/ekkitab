@@ -239,9 +239,13 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 	  	
     public function getStandardCheckoutFormFields()
     {
-    	  Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
+    	  		$session_id    =  Mage::getSingleton('core/session')->getSessionId();   // for mltiple shipment orders
+    	  		Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." SESSION ID : \n".print_r($session_id,true)) ;
+    	  		
+    
     
 //	$Merchant_Param="" ;     // this is optional, you can fill up with any value, we are using it for checkout type
+
     
           if ($this->getQuote()->getIsMultiShipping()){
                      $Merchant_Param="M" ; 
@@ -438,8 +442,9 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     public function ccavPostResponse()
     
     {
-    
-    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
+    $session_id   =  Mage::getSingleton('core/session')->getSessionId();   // for mltiple shipment orders
+    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." SESSION ID : \n".print_r($session_id,true));
+    	  		
     
      if ($this->getQuote()->getIsMultiShipping()){
                      $Merchant_Param="M" ; 
@@ -480,12 +485,24 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     		$Order_Ids    =  Mage::getSingleton('core/session')->getOrderIds();
     
 	         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Multiship Returned from CCav\n".print_r($Order_Ids,true)) ;
+
+	         if (empty($Order_Ids)) {
+	         	         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."LOGICERROR Multiship Returned from CCav empty OrderIds in session\n") ;
+	         }
+	         
+	         
 	                
     }
     else {
-  //        $Order_Ids[] = $Order_Id ;  // will not use the Order Id from CCav but from LastOrder_ID
+        	$Order_Ids[] = $Order_Id ;  // will use the Order Id from CCav but from LastOrder_ID
             $x = $this->getCheckout()->getLastRealOrderId(); 
-            $Order_Ids[] = $x ;
+            
+   //          $x = $this->getCheckout()->getLastOrderId(); 
+  //          $Order_Ids[] = $x ; // will not use this for reason as given below
+            
+   			 if ($x != $Order_Id ) { // This should never happen, but I have seen it happening once in blue moon, keep a watch on it
+                      	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."LOGICERROR \n".print_r($x,true)) ;
+            }
           
           	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Order_Id from CCav\n".print_r($Order_Id,true)) ;
           	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Order_Id from LastRealOredrId \n".print_r($x,true)) ;
@@ -540,7 +557,11 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 		//to perform any operation in this condition
 	}
    
-    foreach($Order_Ids as $key => $orid ) {
+	if (empty($Order_Ids)) {
+	       $flag = false ;
+	       
+	} else {
+       foreach($Order_Ids as $key => $orid ) {
           	                Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($orid,true)) ;
           
           $Order_Id = $orid ;
@@ -689,6 +710,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
             }
             
     } // end of for
+	}// end of if
     
     
               Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($flag,true)) ;

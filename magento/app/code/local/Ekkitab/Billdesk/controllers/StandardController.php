@@ -130,6 +130,12 @@ class Ekkitab_Billdesk_StandardController extends Mage_Core_Controller_Front_Act
     // to do testing, we will remove the next line
     
     //  $this->getStandard()->billdeskPostResponse() ;   //delete it later
+               
+       
+       $session = Mage::getSingleton('checkout/session');
+       
+       $session_id    =  Mage::getSingleton('checkout/session')->getSessionId();   // for mltiple shipment orders
+    	Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." CHECKOUT SESSION ID  : \n".print_r($session_id,true));
        
        
     if (!$this->getRequest()->isPost()) {

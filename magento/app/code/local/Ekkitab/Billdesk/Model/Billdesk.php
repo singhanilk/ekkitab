@@ -164,7 +164,10 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
 
     public function getStandardCheckoutFormFields()
     {
-    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
+  			    $session_id   =  Mage::getSingleton('core/session')->getSessionId();   // for mltiple shipment orders
+    	  		Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." SESSION ID : \n".print_r($session_id,true));
+    	  		
+    
     /*
         if ($this->getQuote()->getIsVirtual()) {
             $a = $this->getQuote()->getBillingAddress();
@@ -270,7 +273,9 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
  //           'txtCustomerId'		=> $a->getCustomerId(),
              'RU'                => $returnurl, 
  	
- 	          'txtCustomerID'  => $this->getCheckout()->getLastRealOrderId(),  // Invoice
+ //	          'txtCustomerID'  => $this->getCheckout()->getLastRealOrderId(),  // Invoice
+  	          'txtCustomerID'  => $Order_Id,  // Invoice
+ 	
  //            'txtAdditionalInfo1'  => $this->getCheckout()->getLastRealOrderId(),  // Invoice
  	
  	
@@ -341,8 +346,8 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
         $grand_total = $amount + $shipping + $tax ;
         
         $sArr = array_merge($sArr, array(
-   //                 'txtTxnAmount' => $grand_total
-                            'txtTxnAmount' => "2"
+   //            'txtTxnAmount' => $grand_total
+                            'txtTxnAmount' => "2.00"
         
                 ));
         
@@ -400,13 +405,14 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
     public function billdeskPostResponse()
     
     {
+    			$session_id    =  Mage::getSingleton('core/session')->getSessionId();   // for mltiple shipment orders
+    	  		Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." SESSION ID : \n".print_r($session_id,true));
+    	  		
     
-     	$msg = $_REQUEST['msg'];
+      $msg = $_REQUEST['msg'];
     
           Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($msg,true)) ;
      	
-    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
-    
     
           if ($this->getQuote()->getIsMultiShipping()){
                      $Merchant_Param="M" ; 
@@ -558,19 +564,34 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
     		$Order_Ids    =  Mage::getSingleton('core/session')->getOrderIds();
     
 	         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Multiship Returned from Billdesk\n".print_r($Order_Ids,true)) ;
+	         
+	          if (empty($Order_Ids)) {
+	         	         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."LOGICERROR Multiship Returned from Billdesk empty OrderIds in session\n") ;
+	         }
+	         
 	                
     }
     else {
   //        $Order_Ids[] = $Order_Id ;  // will not use the Order Id from CCav but from LastOrder_ID
-            $x = $this->getCheckout()->getLastRealOrderId(); 
-            $Order_Ids[] = $x ;
+  //          $x = $this->getCheckout()->getLastOrderId(); 
+    
+           $x = $this->getCheckout()->getLastRealOrderId(); 
+    
+            if ($x != $r_orderid ) { // This should never happen, but I have seen it happening once in blue moon, keep a watch on it
+                      	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."LOGICERROR \n".print_r($x,true)) ;
+            }
           
-          	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Order_Id from LastRealOredrId \n".print_r($x,true)) ;
+            $Order_Ids[] = $r_orderid  ;  // will take the orderid returned from billdesk from Billdesk rather than last Real Order id
+          
+          	Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Order_Id from LastRealOredrId \n".print_r($x,true)) ;
           	    
           	    // we have to find out if these values are same, than use one of them or continue using both of them
           	    
     }
     
+    if (empty($Order_Ids)) {
+	       $flag = false ;
+    } else {
      foreach($Order_Ids as $key => $orid ) {
           	                Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($orid,true)) ;
        
@@ -714,6 +735,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
                  }
             }
      }// end of For
+    }// end of if
      
      
               Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($flag,true)) ;
