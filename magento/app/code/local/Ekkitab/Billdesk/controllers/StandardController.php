@@ -91,6 +91,7 @@ class Ekkitab_Billdesk_StandardController extends Mage_Core_Controller_Front_Act
     /**
      * When a customer cancel payment from paypal.
      */
+    /*
     public function cancelAction()
     {
         $session = Mage::getSingleton('checkout/session');
@@ -104,15 +105,15 @@ class Ekkitab_Billdesk_StandardController extends Mage_Core_Controller_Front_Act
             }
         }
 
-        /*we are calling getPaypalStandardQuoteId with true parameter, the session object will reset the session if parameter is true.
-        so we don't need to manually unset the session*/
+        //we are calling getPaypalStandardQuoteId with true parameter, the session object will reset the session if parameter is true.
+        //so we don't need to manually unset the session
         //$session->unsPaypalStandardQuoteId();
 
         //need to save quote as active again if the user click on cacanl payment from paypal
         //Mage::getSingleton('checkout/session')->getQuote()->setIsActive(true)->save();
         //and then redirect to checkout one page
         $this->_redirect('checkout/cart');
-    }
+    }*/
 
    
 
@@ -146,7 +147,7 @@ class Ekkitab_Billdesk_StandardController extends Mage_Core_Controller_Front_Act
         }
 
         if($this->getStandard()->getDebug()){
-            $debug = Mage::getModel('bildesk/api_debug')
+            $debug = Mage::getModel('billdesk/api_debug')
                 ->setApiEndpoint($this->getStandard()->getBilldeskUrl())
                 ->setResponseBody(print_r($this->getRequest()->getPost(),1))
                 ->save();
