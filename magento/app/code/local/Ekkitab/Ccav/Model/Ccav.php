@@ -643,9 +643,14 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
                                $notified = true
                            );
            
-                       
+                    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Before Order Save\n") ;
                     $order->save();
+                    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Before Send Order Mail\n") ;
+                    
                     $order->sendNewOrderEmail();  // should we send an email now ?
+                    
+                    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Before Send SMS\n") ;
+                    
                     
                     $this->sendsms($billing_cust_tel,$Order_Id);
                     $flag = true ;
