@@ -650,9 +650,9 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
                     $order->sendNewOrderEmail();  // should we send an email now ?
                     
                     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Before Send SMS\n") ;
+     // It is taking upto 15 seconds to send a SMS, so I have commented it               
                     
-                    
-                    $this->sendsms($billing_cust_tel,$Order_Id);
+ //                   $this->sendsms($billing_cust_tel,$Order_Id);
                     $flag = true ;
                }//
                 // it may be a JCB Card or rare american expresss charges that is autorized after a delay
