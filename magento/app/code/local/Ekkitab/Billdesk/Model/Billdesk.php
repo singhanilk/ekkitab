@@ -704,15 +704,24 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
                     }
              */
                    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($r_txnrefid,true)) ;
-                   Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($order->getpayment()->getTransactionID(),true)) ;
+                   Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Before Order Save\n".print_r($order->getpayment()->getTransactionID(),true)) ;
                    
                        
                     $order->save();
+                    
+                    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."After Order Save\n") ;
+                    
 
                 /*    if (!$ipnCustomerNotified) { */
                       $order->sendNewOrderEmail();  // should we send an email now ?
                       
+                       Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."After Send Mail\n") ;
+                      
+                      
                       $this->sendsms($r_telno,$orid);
+                      
+                       Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."After sending SMS\n") ;
+                      
                   //  }
 
                //else amount the same and there is order obj
