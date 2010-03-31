@@ -12,18 +12,17 @@ class Ekkitab_Review_Block_Customer_Recent extends Mage_Review_Block_Customer_Re
 {
     public function __construct()
     {
-        parent::__construct();
+        //parent::__construct();
         $this->setTemplate('review/customer/list.phtml');
 
-        $this->_collection = Mage::getModel('ekkitab_review/review')->getProductCollection();
-
+        $this->_collection = Mage::getModel('ekkitab_review/review')->getCollection();
         $this->_collection
             ->addStoreFilter(Mage::app()->getStore()->getId())
             ->addCustomerFilter(Mage::getSingleton('customer/session')->getCustomerId())
             ->setDateOrder()
             ->setPageSize(5)
-            ->load()
-            ->addReviewSummary();
+			->load();
+			//->addReviewSummary();
     }
 
     public function getReviewLink()

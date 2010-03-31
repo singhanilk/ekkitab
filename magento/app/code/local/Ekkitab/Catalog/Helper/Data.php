@@ -319,4 +319,17 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
     {
 		return ('images/catalog/product/placeholder/'.$attr.'.png');
 	}
+
+		/**
+     * Retrieve result page url
+     *
+     * @param   string $query
+     * @return  string
+     */
+    public function getGlobalSectionViewUrl($sectionId)
+    {
+        return $this->_getUrl('ekkitab_catalog/globalsection/view/', array('id'=>$sectionId));
+    }
+
+
 }

@@ -37,17 +37,10 @@
 	<form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post">
 	<div id="titleText">
 		<div class="skuScartRow">
-			<div class="checkBoxColHdr">
-				<!--label>
-					<div class="chkBox"><input type="checkbox" name="checkbox" value="checkbox" /></div>
-				</label-->
-			</div>
-			<div class="skuImageHdr">&nbsp;</div>
 			<div class="itemColHdr">Item</div>
-			<div class="unitPriceColHdr">Unit Price</div>
 			<div class="qtyColHdr">Qty.</div>
+			<div class="unitPriceColHdr">Unit Price</div>
 			<div class="subTotalColHdr">Sub Total</div>
-			<div class="trashBoxColHdr"></div>
 			<div class="clear"></div>
 		</div><!--skuScartRow -->
 	</div>
@@ -55,19 +48,18 @@
         <?php echo $this->getItemHtml($_item) ?>
     <?php endforeach ?>
 
-	<div class="skuScartRow">
-		<div class="modifiedText">Click on the checkbox to</div>
-		<div class="updateBut"><a href="#"><img src="<?php echo $this->getSkinUrl('images/move_wishlist_but.png') ?>" alt="<?php echo $this->__('Move to Wishlist') ?>" width="103" height="22" border="0" /></a></div> 
+	<div class="grandTotalArea">
+		<div class="wishlistText">Click on the checkbox to</div>
+		<div class="wishListBut"><a href="#"><img src="<?php echo $this->getSkinUrl('images/move_wishlist_but.png') ?>" alt="<?php echo $this->__('Move to Wishlist') ?>" width="103" height="22" border="0" /></a></div> 
 		<!-- updateBut --> 
-		<div class="modifiedText1">OR</div> 
 		<!-- updateBut -->
-		<div class="modifiedText">Modified any quantities</div>
-		<div class="updateBut"><input type="image" src="<?php echo $this->getSkinUrl('images/update_cart_but.png') ?>" alt="<?php echo $this->__('Update Shopping Cart') ?>" width="103" height="22" border="0" /></div><!-- updateBut -->
+		<div class="modifiedText">Modified any quantities ?
+		<div class="updateBut"><input type="image" src="<?php echo $this->getSkinUrl('images/update_cart_but.png') ?>" alt="<?php echo $this->__('Update Shopping Cart') ?>" width="103" height="22" border="0" /></div></div><!-- updateBut -->
+		<?php echo $this->getChildHtml('totals'); ?>
 		<div class="clear"></div>
 	</div>
 	</form>
 	
-	<?php echo $this->getChildHtml('totals'); ?>
 
 	<div class="skuScartRow">
 	<div class="bkHomePage">Click here to go to <a href="<?php if($this->getContinueShoppingUrl()): echo $this->getContinueShoppingUrl(); endif; ?>" class="boldFont">ekkitab's Homepage</a> and add more to your cart <?php if(!$this->hasError()): ?><span class="boldFont">OR</span><?php echo $this->getChildHtml('methods') ?><?php endif; ?></div>

@@ -25,28 +25,17 @@
  */
 ?>
 <?php if( $this->getCollection() && $this->count()): ?>
-<div class="account-box ad-reviews">
-    <div class="head-alt2">
-        <h4 class="title"><?php echo $this->__('My Recent Reviews') ?></h4>
-        <a href="<?php echo $this->getAllReviewsUrl() ?>"><?php echo $this->__('View All Reviews') ?></a>
-    </div>
+<div class="accTop">
+    <div class="accHdr"><?php echo $this->__('My Recent Reviews') ?></div>
+    <div class="edit"> <?php if( $this->count() > 0 ): ?><a href="<?php echo $this->getAllReviewsUrl() ?>"><?php echo $this->__('View All Reviews') ?></a><?php endif; ?></div>
+	<div class="clear"></div>
+</div><!-- accTop -->       
+<div class="content">
+    <ul>
     <?php $iterator = 0 ?>
     <?php foreach ($this->getCollection() as $_review): ?>
-    <ol class="recent-reviews">
-        <li<?php if($iterator % 2 == 0): ?> class="odd"<?php endif; ?>>
-            <div class="content">
-                <a href="<?php echo $this->getReviewUrl($_review->getReviewId()) ?>"><?php echo $this->htmlEscape($_review->getName()) ?></a>
-                <?php if($_review->getSum()): ?>
-                <div class="ratings">
-                    <small><?php echo $this->__('Rating:') ?></small>
-                        <div class="rating-box">
-                            <div class="rating" style="width:<?php echo ( $_review->getSum() / $_review->getCount() ) ?>%;"></div>
-                        </div>
-                 </div>
-                <?php endif; ?>
-            </div>
-        </li>
-    </ol>
+        <li><a href="<?php echo $this->getReviewUrl($_review->getReviewId()) ?>"><?php echo $this->htmlEscape($_review->getTitle()) ?></a></li>
     <?php endforeach; ?>
-</div><br/>
+</div>
+<div class="clear">&nbsp;</div>
 <?php endif; ?>

@@ -26,7 +26,11 @@
 ?>
 <div class="contentArea">
     <div class="pageHeader"><?php echo $this->__('Shopping Cart is Empty') ?></div>
-	<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-	<p><?php echo $this->__('You have no items in your shopping cart.') ?></p>
-	<p><?php echo $this->__('Please <a href="%s">continue shopping</a>.', $this->getContinueShoppingUrl()) ?></p>
+    <div class="content">
+		<ul>
+			<li><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></li>
+			<li><?php echo $this->__('You have no items in your shopping cart.') ?></li>
+			<li><?php echo $this->__('Please <a href="%s">continue shopping</a>.', $this->getContinueShoppingUrl()) ?></li>
+		</ul>
+	</div>
 </div>

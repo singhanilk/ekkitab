@@ -26,11 +26,12 @@
 ?>
 <div class="contentArea">
 	<div class="pageHeader"><?php echo Mage::helper('customer')->__("You're now Logged Out") ?></div>
-	<p>
-		<?php echo Mage::helper('customer')->__('You have been successfully logged out and will be redirected to our homepage in 5 seconds.') ?>
-		<br class=clear"/>
-	</p>
-</div>
+	<div class="content">
+		<ul>
+			<li><?php echo Mage::helper('customer')->__('You have been successfully logged out and will be redirected to our homepage in 5 seconds.') ?>		<li/>
+		</ul>
+	</div>
 <script type="text/javascript">
-//setTimeout(function(){ location.href = '<?php echo $this->getUrl() ?>'},5000);
+setTimeout(function(){ location.href = '<?php echo $this->getUrl() ?>'},5000);
 </script>
+</div>

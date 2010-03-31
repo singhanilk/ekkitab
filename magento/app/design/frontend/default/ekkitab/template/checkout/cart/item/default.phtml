@@ -31,18 +31,18 @@
 ?>
 <div class="skuScartRow">
 	<div class="checkBoxCol">
-		<?php if ($this->helper('wishlist')->isAllowInCart()) : ?>
-		<div class="chkBox"><input type="checkbox" value="1" name="cart[<?php echo $_item->getId() ?>][wishlist]" /></div>    
-		<?php endif ?>
+		<div class="chkBox"><?php if ($this->helper('wishlist')->isAllowInCart()) : ?>
+		<input type="checkbox" value="1" name="cart[<?php echo $_item->getId() ?>][wishlist]" /> 
+		<?php endif ?></div>   
 	</div>
 	
 	<div class="skuImage"><a href="<?php echo $this->getUrl($this->getProductUrl()) ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'thumbnail',false,null, 74); ?>" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" width="75" /></a></div>
 
 	<div class="itemCol"><a href="<?php echo $this->getUrl($this->getProductUrl()) ?>"><?php echo $this->getProductName() ?></a></div>
 
-	<div class="unitPriceCol"> <?php echo $this->helper('checkout')->formatPrice($_item->getCalculationPrice()) ?></div>
-
 	<div class="qtyCol"> <label><input name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" size="4" class="input-text qty" maxlength="8" /></label></div>
+	
+	<div class="unitPriceCol"> <?php echo $this->helper('checkout')->formatPrice($_item->getCalculationPrice()) ?></div>
 
 	<div class="subTotalCol"><?php echo $this->helper('checkout')->formatPrice($_item->getRowTotal()) ?></div>
 

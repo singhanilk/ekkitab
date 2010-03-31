@@ -273,7 +273,7 @@ a:hover {
 	width: 630px;
 	margin-left: 30px;
 	line-height: 22px;
-	text-align: right;
+	text-align: left;
 	padding-top: 40px;
 	font-size: 1.2em;
 	font-weight: bold;
@@ -300,7 +300,7 @@ a:hover {
 	width: 21px;
 	height: 21px;
 	float: left;
-	margin-left: 5px;
+	margin:0px 5px;
 }
 .globalLinks {
 	width: 960px;
@@ -359,6 +359,14 @@ a:hover {
 	font-size: 1.6em;
 	color: #c60;
 	margin-bottom: 6px;
+
+}
+.mainArea .mainHdr {
+	font-size: 1.6em;
+	color: #c60;
+	margin-bottom: 6px;
+	padding-bottom: 6px;
+	border-bottom: 1px dotted #333;
 
 }
 .collText {
@@ -445,7 +453,15 @@ a:hover {
 }
 .hmInScrollRow {
 	width: 550px;
+	margin-bottom: 8px;
 }
+.hmInScrollRowSep {
+	width: 550px;
+	padding-top:5px;
+	margin-bottom: 5px;
+	border-bottom: 1px dotted #666;
+}
+
 .leftNavArea .linkHdr {
 	font-size: 1.2em;
 	font-weight: bold;
@@ -770,13 +786,14 @@ a:hover {
 }
 
 .welcomeMsgArea {
-	width: 300px;
+	margin:0px 10px;
 	float: left;
 	text-align: right;
 	line-height: 25px;
 	font-size: 11px;
 	color: #c60;
 }
+.topLinksOut .version          { width:130px; color:#ff0000; font-weight:bold; font-size:12px; }
 
 .paginationAreaOut{
 	float:right;
@@ -1149,7 +1166,7 @@ a:hover {
 .scartArea .itemColHdr {
 	padding-left: 10px;
 	text-align: left;
-	width: 420px;
+	width: 555px;
 	float: left;
 	border-right: 1px solid #666;
 	border-left: 1px solid #666;
@@ -1163,15 +1180,6 @@ a:hover {
 	text-align: left;
 }
 
-.scartArea .trashBoxColHdr {
-	width: 26px;
-	float: left;
-	border-right: 1px solid #666;
-	background-color: #e6e6e6;
-	text-align: center;
-	height: 22px;
-
-}
 .scartArea .trashBoxCol {
 	width: 27px;
 	float: left;
@@ -1234,7 +1242,7 @@ a:hover {
 
 .scartArea .subTotalColHdr {
 	padding-left: 10px;
-	width: 130px;
+	width: 157px;
 	text-align: left;
 	float: left;
 	border-right: 1px solid #666;
@@ -1292,8 +1300,7 @@ a:hover {
 	border-bottom: 2px solid #c60;
 }
 .grandTotalLeft {
-	width: 799px;
-	padding-right: 5px;
+	padding: 0 5px 0 60px;
 	text-align: right;
 	font-weight: bold;
 	float: left;
@@ -1303,24 +1310,35 @@ a:hover {
 	font-size: 12px;
 	width: 129px;
 	float: left;
-	padding-right: 6px;
-	text-align: right;
+	padding-left: 13px;
+	text-align: left;
 	font-weight: bold;
 }
 .modifiedText {
 	float: left;
-}
-.modifiedText1 {
-	float: left;
-	font-weight: bold;
-	padding: 0 10px;
+	text-align:left;
+	padding: 0 0 0 120px ;
 }
 .updateBut {
+	width: 103px;
+	float: right;
+	margin-left: 5px;
+}
+.wishlistText {
+	float: left;
+}
+.orText {
+	float: left;
+	font-weight: bold;
+	padding: 0 60px;
+}
+.wishListBut {
 	width: 103px;
 	float: left;
 	margin-left: 5px;
 }
 .bkHomePage {
+	margin-top: 5px;
 	float: right;
 	line-height: 25px;
 	text-align: right;
@@ -1431,24 +1449,309 @@ a:hover {
 
 
 .contentArea {
-	margin:16px auto 10px;
+	margin:2px auto 10px;
 	padding-bottom:10px;
-	width:880px;
+	width:100%;
 	font-size: 11px;
 	line-height: 22px;
-	min-height:140px;
+	min-height:155px;
 }
 .contentArea .pageHeader {
 	border-bottom:1px dotted #333333;
 	color:#CC6600;
 	float:none;
 	font-size:20px;
-	width:100%;
-	margin-bottom:20px;
 }
 .contentArea p {
 	margin: 0;
 	padding: 0;
 	margin-left: 20px;
 	list-style-type:circle;
+}
+
+<!-- styles below added/modified on March 14, 2010 -->
+.delete {
+	clear: both
+}
+
+.notFoundArea, .regArea {
+	border-bottom:1px dotted #333333;
+	margin:16px auto 10px;
+	padding-bottom:10px;
+	width:100%;
+	font-size: 11px;
+	line-height: 22px;
+}
+.notFoundArea .pageHeader, .regArea .pageHeader {
+	color:#CC6600;
+	float:none;
+	font-size:20px;
+	width:100%;
+}
+.regArea .persDetailsBg {
+	margin-top: 16px;
+	background-image: url(../images/toplink_bg.png);
+	background-position: left top;
+	background-repeat: repeat-x;
+	line-height: 21px;
+	padding-left: 8px;
+	color: #fff;
+	font-weight: bold;
+}
+.regArea .regFormArea {
+	width: 460px;
+	border: 1px solid #e6e6e6;
+	border-top: none;
+	margin: 10px auto;
+}
+
+.regArea .subHdrs{
+	color:#c60;
+	font-size:1.1em;
+	font-weight:bold;
+	text-align: center;
+	padding-top: 8px;
+	border-top: 1px solid #e6e6e6;
+}
+.regFormArea .leftColumn {
+	width: 130px;
+	float: left;
+	padding-left: 5px;
+	border-right: 1px solid #e6e6e6;
+	border-top: 1px solid #e6e6e6;
+	line-height: 26px;
+	color: #666;
+}
+.regFormArea .rightColumn {
+	width: 319px;
+	float: left;
+	border-top: 1px solid #e6e6e6;
+	padding: 2px 0;
+	padding-left: 5px;
+}
+.regFormArea .rightColumn  .textField, .regFormArea .rightColumn .dropDown {
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 11px;
+	width: 275px;
+}
+.regFormArea .manNote {
+	display: block;
+	font-style: italic;
+	color: #666;
+	line-height: 14px;
+	font-weight: normal;
+	padding-bottom: 8px;
+}
+.redFont {
+	color: #c00;
+}
+.regFormArea .smallNote {
+	margin: 0 30px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	line-height: 12px;
+	color: #999;
+	text-align: center;
+	border-top: 1px dotted #999;
+	padding: 5px 0; 
+} 
+.regFormArea .buttonArea {
+	border-top: 1px solid #e6e6e6;
+	padding: 5px 0;
+	text-align: center;
+}
+.buttonArea .buttons {
+	padding: 0 2px;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 11px;
+}
+.regFormArea .forgotPwrd {
+	text-align: center;
+	margin: 8px 0;
+
+}
+
+<!-- styles below added/modified on March 20, 2010 -->
+.delete {
+	clear: both
+}
+
+.thankYouMsg {
+	margin: 16px 0;
+	line-height: 30px;
+	background-color: #f3f3f3;
+	padding-left: 8px;
+	font-size: 14px;
+	border: 1px solid #ccc;
+}
+.myAccCopy {
+	font-size: 11px;
+	line-height: 18px;
+}
+.leftNavArea ul li a .active {
+	color: #000;
+	cursor: pointer;
+	font-weight: bold;
+}
+.myAccCopy .leftCol, .myAccCopy .rightCol {
+	width: 48%;
+	float: left;
+	margin-top: 12px;
+	
+}
+.myAccCopy .leftCol {
+	margin-right: 2%;
+}
+.myAccCopy .accTop {
+	background-color: #f3f3f3;
+	border-bottom: 1px solid #ccc;
+}
+.myAccCopy .accHdr {
+	line-height: 22px;
+	padding-left: 8px;
+	font-weight: bold;
+	width: 63%;
+	float: left;
+}
+.myAccCopy .edit {
+	line-height: 22px;
+	padding-right: 8px;
+	font-weight: normal;
+	width: 32%;
+	float: right;
+	text-align: right;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+}
+.myAccCopy ul {
+	padding: 3px;
+	list-style-type: none;
+	
+}
+.myAccCopy ul li {
+	padding: 2px;
+}
+.myAccCopy .content {
+	padding: 0px 0 0 8px;
+}
+.myAccCopy .textField, .myAccCopy .dropDown, .myAccCopy .longTextField {
+	font-family:Georgia,"Times New Roman",Times,serif;
+	font-size:11px;
+	width:275px;
+}
+.myAccCopy .longTextField {
+	width: 650px;
+}
+.myAccCopy .buttonArea  {
+	border-top:1px solid #E6E6E6;
+	padding:5px 0;
+	text-align:center;
+}
+.manNote  {
+	color:#666666;
+	display:block;
+	font-style:italic;
+	font-weight:normal;
+	line-height:14px;
+	padding-bottom:8px;
+}
+.myAccCopy .oneCol {
+	margin-top: 12px;
+}
+.clear5 {
+	clear: both;
+	height: 5px;
+}
+.regArea .left {
+	width: 422px;
+	margin: 0;
+	float: left;
+	border-right: 1px solid #333;
+	padding-right: 20px;
+}
+.regArea .signInArea {
+	margin: 10px 0;
+	width:420px;
+	border: 1px solid #e6e6e6;
+	border-top: none;
+}
+.signInArea .leftColumn {
+	border-right:1px solid #E6E6E6;
+	border-top:1px solid #E6E6E6;
+	color:#666666;
+	float:left;
+	line-height:26px;
+	padding-left:5px;
+	width:100px;
+}
+.signInArea .rightColumn {
+	border-top:1px solid #E6E6E6;
+	float:left;
+	padding:2px 0 2px 5px;
+	width:309px;
+}
+.signInArea .buttonArea {
+	border-top:1px solid #E6E6E6;
+	padding:5px 0;
+	text-align:center;
+}
+.signInArea .forgotPwrd {
+	margin:8px 0;
+	text-align:center;
+}
+.regArea .right {
+	width: 314px;
+	margin: 0px 0 0 20px;
+	float: left;
+
+}
+.regArea .newCustArea {
+	width: 314px;
+	color: #666;
+}
+
+.pageHeader {
+	width: 74%;
+	font-size: 20px;
+	color: #c60;
+	float: left;
+}
+
+/* Data Table */
+.dashboard-table { width:100%; }
+.dashboard-table tr { background:#fff; }
+.dashboard-table .odd  { background:#fff }
+.dashboard-table .even { background:#fcfcfc; }
+/*.dashboard-table tr.last th,*/
+.dashboard-table tr.last td { border-bottom:0 !important; }
+.dashboard-table th { padding:2px 8px; white-space:nowrap; font-size:10px; font-weight:bold; color:#cc6600; text-transform:uppercase; border-bottom:1px solid #d9dde3; }
+.dashboard-table th.wrap { white-space:normal; }
+.dashboard-table th a,
+.dashboard-table th a:hover { color:#fff; }
+.dashboard-table td { padding:3px 8px; }
+.dashboard-table thead tr { background:#fcfcfc; }
+.dashboard-table tfoot { border-bottom:1px solid #d9dde3; }
+.dashboard-table tfoot tr.first {}
+.dashboard-table tfoot tr { background-color:#f3f3f3 !important; }
+.dashboard-table tbody td { border-bottom:1px solid #d9dde3; }
+/* Bundle Product row */
+.dashboard-table tbody.odd tr { background:#fff; }
+.dashboard-table tbody.even tr { background:#fcfcfc; }
+.dashboard-table tbody.odd tr td,
+.dashboard-table tbody.even tr td { border-bottom:0; }
+.dashboard-table tbody.odd tr.border td,
+.dashboard-table tbody.even tr.border td { border-bottom:1px solid #d9dde3; }
+
+.dashboard-table tbody td h5.title { margin:0; padding:0; font-size:1em; font-weight:bold; color:#444; }
+.dashboard-table tbody td .option-label { font-weight:bold; font-style:italic; }
+.dashboard-table tbody td .option-value { padding-left:10px; }
+
+.striked{
+	text-decoration:line-through;
+}
+
+.orangeTxt {
+	font-size: 11px;
+	color: #c60;
+	font-weight:bold;
 }

@@ -47,10 +47,10 @@ Customer account pages, rendered for all tabs in dashboard
 -->
 
     <customer_account>
-        <!-- Mage_Tag -->
+        <!-- Mage_Tag 
         <reference name="customer_account_navigation">
             <action method="addLink" translate="label" module="tag"><name>tags</name><path>tag/customer/</path><label>My Tags</label></action>
-        </reference>
+        </reference>-->
     </customer_account>
 
 <!--
@@ -58,11 +58,11 @@ Customer account home dashboard layout
 -->
 
     <customer_account_index>
-        <!-- Mage_Tag -->
+        <!-- Mage_Tag 
         <reference name="customer_account_dashboard">
             <action method="unsetChild"><name>customer_account_dashboard_info2</name></action>
             <block type="tag/customer_recent" name="customer_account_dashboard_info2" as="info2" template="tag/customer/recent.phtml"/>
-        </reference>
+        </reference>-->
     </customer_account_index>
 
     <catalog_product_view>

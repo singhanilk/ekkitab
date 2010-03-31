@@ -1,0 +1,37 @@
+<?php
+/**
+ * 
+ * Frontend Quick search Block
+ * @category   design/ekkitab
+ * @author Anisha (anisha@ekkitab.com)
+ * @version 1.0 Nov 17, 2009
+ * 
+ * @copyright  COPYRIGHT (C) 2009 Ekkitab Educational Services India Pvt. Ltd.
+ * @license    All Rights Reserved. All material contained in this file (including, but not limited to, text, images, graphics, HTML, programming code and scripts) 
+ * constitute proprietary and  * confidential information protected by copyright laws, trade secret and other laws. No part of this software may be copied, reproduced, modified or 
+ * distributed in any form or by any means, or stored in a database or retrieval system without the prior written permission of Ekkitab Educational Services.
+ * 
+ * 
+ */
+?>
+<?php
+/**
+ * @see Ekkitab_Catalog_Block_Globalsection
+ */
+?>
+<div class="globalLinks">
+<?php $_links = $this->getAllItems(); ?>
+<?php $count = count($_links);	?>
+<?php if($count >0):	?>
+<?php	$i = 1;	?>
+<?php	foreach($_links as $_link): ?>
+			<a href="<?php echo Mage::helper('ekkitab_catalog')->getGlobalSectionViewUrl($_link->getSectionId()) ?>"><?php echo $_link->getDisplayName() ?></a>
+<?php		if($i < $count): ?> 
+				|
+<?php		endif; ?> 
+<?php	$i++;	?>
+<?php	endforeach; ?>
+<?php else: ?>
+&nbsp;
+<?php endif; ?>
+</div>

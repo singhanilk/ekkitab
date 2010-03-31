@@ -45,7 +45,8 @@ Default layout, loads most of the pages
     <default>
         <!-- Mage_Catalog -->
         <reference name="root">
-                 <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+			<block type="ekkitab_catalog/globalsection" name="global_section" as="global_section" template="catalog/globalsection/top_links.phtml" />
         </reference>
 		<!--reference name="quick.search">
 		</reference-->
@@ -115,23 +116,6 @@ Category default layout
 Category Lecene search layout
 -->
 
-<ekkitab_catalog_search_index>
-        <!-- Mage_Catalogsearch -->
-        <reference name="root">
-            <action method="setTemplate"><template>page/1column.phtml</template></action>
-        </reference>
-        <!--reference name="left">
-			   <block type="catalog/navigation" name="catalog.leftnav" before="popular_categories" template="catalog/navigation/left_child_categories.phtml"/>
-        </reference-->
-		<reference name="content">
-            <block type="ekkitab_catalog/category_searchResult" name="catalog_category_searchresult" template="catalog/category/search_result.phtml">
-                <block type="page/html" name="donate_book_blurb" template="page/html/donate_blurb.phtml" />
-				 <action method="setColumnCount"><count>4</count></action>
-                <action method="setPageSize"><count>15</count></action>
-            </block>
-        </reference>
-</ekkitab_catalog_search_index>
-
 
     <ekkitab_catalog_category_viewall>
         <reference name="content">
@@ -154,6 +138,22 @@ Category Lecene search layout
         </reference>
     </ekkitab_catalog_author_viewall>
 
+	<ekkitab_catalog_search_index>
+			<!-- Mage_Catalogsearch -->
+			<reference name="root">
+				<action method="setTemplate"><template>page/1column.phtml</template></action>
+			</reference>
+			<!--reference name="left">
+				   <block type="catalog/navigation" name="catalog.leftnav" before="popular_categories" template="catalog/navigation/left_child_categories.phtml"/>
+			</reference-->
+			<reference name="content">
+				<block type="ekkitab_catalog/category_searchResult" name="catalog_category_searchresult" template="catalog/category/search_result.phtml">
+					<block type="page/html" name="donate_book_blurb" template="page/html/donate_blurb.phtml" />
+					 <action method="setColumnCount"><count>4</count></action>
+					<action method="setPageSize"><count>15</count></action>
+				</block>
+			</reference>
+	</ekkitab_catalog_search_index>
 
 <!--
 Category layered navigation layout
@@ -307,6 +307,19 @@ Product view
             <block type="catalog/product_list_related" name="catalog.product.related" before="-" template="catalog/product/list/related.phtml"/>
         </reference>
     </ekkitab_catalog_product_view>
+
+
+<ekkitab_catalog_globalsection_view>
+        <!-- Mage_Catalogsearch -->
+        <reference name="root">
+            <action method="setTemplate"><template>page/3columns.phtml</template></action>
+        </reference>
+		<reference name="content">
+            <block type="ekkitab_catalog/globalsection_view" name="globalsection_view" template="catalog/globalsection/view.phtml">
+                <block type="page/html" name="donate_book_blurb_home" template="page/html/donate_blurb_home.phtml" />
+            </block>
+        </reference>
+</ekkitab_catalog_globalsection_view>
 
 <!--
 Additional block dependant on product type

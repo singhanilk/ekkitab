@@ -27,6 +27,7 @@
 <?php if (!($_shippingRateGroups = $this->getShippingRates())): ?>
     <strong><?php echo $this->__('Sorry, no quotes are available for this order at this time.') ?></strong>
 <?php else: ?>
+<?php $first=true; $inFirst=true; ?>
 <dl class="shipment-methods">
     <?php foreach ($_shippingRateGroups as $code => $_rates): ?>
         <dt><?php echo $this->getCarrierName($code) ?></dt>
@@ -37,7 +38,7 @@
                    <?php if ($_rate->getErrorMessage()): ?>
 	                <ul class="messages"><li class="error-msg"><ul><li><?php echo $_rate->getErrorMessage() ?></li></ul></li></ul>
                    <?php else: ?>
-                        <input name="shipping_method" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$this->getAddressShippingMethod()) echo ' checked="checked"' ?>/>
+                        <input name="shipping_method" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$this->getAddressShippingMethod() || ($first && $inFirst) ) echo ' checked="checked"' ?>/>
                         <label for="s_method_<?php echo $_rate->getCode() ?>"><?php echo $_rate->getMethodTitle() ?>
                         <strong>
                         <?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax()); ?>
@@ -51,9 +52,10 @@
                         </label>
                    <?php endif ?>
                 </li>
-            <?php endforeach; ?>
+            <?php $inFirst=false; endforeach; ?>
             </ul>
         </dd>
-    <?php endforeach; ?>
+    <?php $first=false;
+	endforeach; ?>
 </dl>
 <?php endif; ?>

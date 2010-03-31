@@ -27,12 +27,11 @@
 <div class="header">
 	<div class="logo"><a href="<?php echo $this->getUrl('/index.php') ?>" title="ekkitab homepage"></a></div>
 	<div class="headerRight">
-
 		<!-- topLinks -->
 		<div class="topLinksOut">
 			<?php echo $this->getChildHtml('buildVersion') ?>
-			<div class="welcomeMsgArea"> <?php echo $this->getWelcome() ?></div>
 			<div class="topLinksArea">
+				<div class="welcomeMsgArea"> <?php echo $this->getWelcome() ?></div>
 				<div class="linkAreaLeft"></div>
 				<div class="linkAreaMain">
 					<?php echo $this->getChildHtml('topLinks')?>

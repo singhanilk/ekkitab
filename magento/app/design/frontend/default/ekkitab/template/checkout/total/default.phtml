@@ -1,1 +1,36 @@
-<div class="grandTotalRight"><?php echo $this->helper('checkout')->formatPrice($this->getTotal()->getValue()) ?></div><!--grandTotalRight -->
+<tr>
+    <td style="<?php echo $this->getTotal()->getStyle() ?>" class="a-right" colspan="<?php echo $this->getColspan(); ?>">
+        <?php if ($this->getRenderingArea() == $this->getTotal()->getArea()): ?>
+			<?php if ($this->getColspan()>1): ?>
+				<strong>
+			<?php else: ?>
+				<div class="grandTotalLeft">
+			<?php endif; ?>
+		<?php endif; ?>
+        <?php echo $this->getTotal()->getTitle() ?>:
+		<?php if ($this->getRenderingArea() == $this->getTotal()->getArea()): ?>
+			<?php if ($this->getColspan()>1): ?>
+				</strong>
+			<?php else: ?>
+				</div>
+			<?php endif; ?>
+		<?php endif; ?>
+    </td>
+    <td style="<?php echo $this->getTotal()->getStyle() ?>" class="a-right">
+        <?php if ($this->getRenderingArea() == $this->getTotal()->getArea()): ?>
+			<?php if ($this->getColspan()>1): ?>
+				<strong>
+			<?php else: ?>
+				<div class="grandTotalRight">
+			<?php endif; ?>
+		<?php endif; ?>
+		<?php echo $this->helper('checkout')->formatPrice($this->getTotal()->getValue()) ?>
+        <?php if ($this->getRenderingArea() == $this->getTotal()->getArea()): ?>
+			<?php if ($this->getColspan()>1): ?>
+				</strong>
+			<?php else: ?>
+				</div>
+			<?php endif; ?>
+		<?php endif; ?>
+    </td>
+</tr>

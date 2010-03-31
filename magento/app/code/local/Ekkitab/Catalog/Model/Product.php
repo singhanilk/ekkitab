@@ -169,6 +169,73 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
     }
 
     /**
+     * Get product status
+     *
+     * @return int
+     */
+    public function getAuthor()
+    {
+        $author= $this->_getData('author');
+        $authors= "";
+        $illustrators= "";
+        $translators= "";
+        $editors= "";
+        $photographers= "";
+		if(strlen($author) > 0){
+			$authArr = explode("&",$author);
+			foreach($authArr as $auth){
+				if((preg_match("/:[a-z]:/i",trim($auth))) ){
+					$str = substr(trim($auth),0,3);
+					Mage::log($str);
+					Mage::log(substr(trim($auth),3));
+					switch($str){
+						case ':e:':
+							if(strlen($editors) > 0){
+								$editors.=" & ";
+							}
+							$editors.=substr(trim($auth),3);
+							break;
+
+						case ':i:':
+							if(strlen($illustrators) > 0){
+								$illustrators.=" & ";
+							}
+							$illustrators.=substr(trim($auth),3);
+							break;
+
+						case ':t:':
+							if(strlen($translators) > 0){
+								$translators.=" & ";
+							}
+							$translators.=substr(trim($auth),3);
+							break;
+
+						case ':p:':
+							if(strlen($photographers) > 0){
+								$editors.=" & ";
+							}
+							$photographers.=substr(trim($auth),3);
+							break;
+					}
+				
+				}else{
+					if(strlen($authors) > 0){
+						$authors.=" & ";
+					}
+					$authors.=trim($auth);
+				}
+			}
+		}
+		$parsedAuthor['a']= $authors ;
+		$parsedAuthor['e']= $editors ;
+		$parsedAuthor['t']= $translators ;
+		$parsedAuthor['i']= $illustrators ;
+		$parsedAuthor['p']= $photographers ;
+		return $parsedAuthor;
+    }
+
+
+	/**
      * Get product price throught type instance
      *
      * @return unknown

@@ -40,6 +40,12 @@
 						<wishlist_item>
 							<table>wishlist_item</table>
 						</wishlist_item>
+						<globalsection>
+							<table>ek_catalog_global_sections</table>
+						</globalsection>
+						<globalsection_products>
+							<table>ek_catalog_global_section_products</table>
+						</globalsection_products>
 				 </entities>
 			</ekkitab_catalog_resource_mysql4>
 		</models>

@@ -51,7 +51,7 @@ class Mage_Shipping_Model_Carrier_Flatrate
             return false;
         }
 
-        $freeBoxes = 0;
+		$freeBoxes = 0;
         if ($request->getAllItems()) {
             foreach ($request->getAllItems() as $item) {
 
@@ -73,36 +73,42 @@ class Mage_Shipping_Model_Carrier_Flatrate
         $this->setFreeBoxes($freeBoxes);
 
         $result = Mage::getModel('shipping/rate_result');
-        if ($this->getConfigData('type') == 'O') { // per order
-            $shippingPrice = $this->getConfigData('price');
-        } elseif ($this->getConfigData('type') == 'I') { // per item
-            $shippingPrice = ($request->getPackageQty() * $this->getConfigData('price')) - ($this->getFreeBoxes() * $this->getConfigData('price'));
-        } else {
-            $shippingPrice = false;
-        }
 
-        $shippingPrice = $this->getFinalPriceWithHandlingFee($shippingPrice);
+        $packageValue = $request->getPackageValueWithDiscount();
+		$allow =$packageValue < $this->getConfigData('free_shipping_subtotal') ;
 
-        if ($shippingPrice !== false) {
-            $method = Mage::getModel('shipping/rate_result_method');
+        if ($allow) {
 
-            $method->setCarrier('flatrate');
-            $method->setCarrierTitle($this->getConfigData('title'));
+			if ($this->getConfigData('type') == 'O') { // per order
+				$shippingPrice = $this->getConfigData('price');
+			} elseif ($this->getConfigData('type') == 'I') { // per item
+				$shippingPrice = ($request->getPackageQty() * $this->getConfigData('price')) - ($this->getFreeBoxes() * $this->getConfigData('price'));
+			} else {
+				$shippingPrice = false;
+			}
 
-            $method->setMethod('flatrate');
-            $method->setMethodTitle($this->getConfigData('name'));
+			$shippingPrice = $this->getFinalPriceWithHandlingFee($shippingPrice);
 
-            if ($request->getFreeShipping() === true || $request->getPackageQty() == $this->getFreeBoxes()) {
-                $shippingPrice = '0.00';
-            }
+			if ($shippingPrice !== false) {
+				$method = Mage::getModel('shipping/rate_result_method');
+
+				$method->setCarrier('flatrate');
+				$method->setCarrierTitle($this->getConfigData('title'));
+
+				$method->setMethod('flatrate');
+				$method->setMethodTitle($this->getConfigData('name'));
+
+				if ($request->getFreeShipping() === true || $request->getPackageQty() == $this->getFreeBoxes()) {
+					$shippingPrice = '0.00';
+				}
 
 
-            $method->setPrice($shippingPrice);
-            $method->setCost($shippingPrice);
+				$method->setPrice($shippingPrice);
+				$method->setCost($shippingPrice);
 
-            $result->append($method);
-        }
-
+				$result->append($method);
+			}
+		}
         return $result;
     }
 

@@ -24,23 +24,14 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="page-head">
-    <h3><?php echo $this->__('My Account Dashboard') ?></h3>
-</div>
-<div class="padder">
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<?php echo $this->getChildHtml('hello') ?>
-<?php echo $this->getChildHtml('top') ?>
-<br/>
-<div class="account-box">
-     <div class="head-alt">
-        <h4 class="title"><?php echo $this->__('Account Information') ?></h4>
-     </div>
-    <?php echo $this->getChildHtml('info') ?>
-    <?php echo $this->getChildHtml('address') ?>
-</div>
-
-<?php echo $this->getChildHtml('info1') ?>
-<?php echo $this->getChildHtml('info2') ?>
-
+<div class="pageHeader"><?php echo $this->__('My Account Dashboard') ?></div>
+<div class="clear"> <br/></div>
+<div class="myAccCopy">
+	<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+	<?php echo $this->getChildHtml('hello') ?>
+	<?php echo $this->getChildHtml('info') ?>
+	<?php echo $this->getChildHtml('address') ?>
+	<?php echo $this->getChildHtml('top') ?>
+	<?php echo $this->getChildHtml('info1') ?>
+	<?php echo $this->getChildHtml('info2') ?>
 </div>

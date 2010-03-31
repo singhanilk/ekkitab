@@ -127,7 +127,9 @@ if(!is_null($results) && is_array($results)){
 </div><!-- searchResTop -->
 	<?php 
 		foreach($bookList as $book):	
-			$author = strlen($book->getAuthor()) > 0 ? $book->getAuthor() : "Unknown";
+			$authorArr = $book->getAuthor();
+			$author = $authorArr['a'] ;
+			$author = strlen($author) > 0 ? $author : "Unknown";
 			$title = $book->getTitle();
 			$image = $book->getImage();
 			$id = $book->getId();

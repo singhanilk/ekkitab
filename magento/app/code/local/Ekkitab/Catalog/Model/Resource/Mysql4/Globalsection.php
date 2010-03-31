@@ -1,11 +1,12 @@
 <?php
 /**
  * 
- * Frontend Quick search Block
- * @category   design/ekkitab
+ * Frontend Popular Categories Resource Model
+ * @category   Local/Ekkitab
  * @author Anisha (anisha@ekkitab.com)
  * @version 1.0 Nov 17, 2009
  * 
+ * @package    Local_Ekkitab
  * @copyright  COPYRIGHT (C) 2009 Ekkitab Educational Services India Pvt. Ltd.
  * @license    All Rights Reserved. All material contained in this file (including, but not limited to, text, images, graphics, HTML, programming code and scripts) 
  * constitute proprietary and  * confidential information protected by copyright laws, trade secret and other laws. No part of this software may be copied, reproduced, modified or 
@@ -13,7 +14,12 @@
  * 
  * 
  */
-?>
-<div class="globalLinks">
-<a href="#">Great Bargains</a> | <a href="#">Top Books of the Month</a> | <a href="#">Top Books of 2009</a> | <a href="#">Top Children's Books</a> | <a href="#">Top Authors</a> | <a href="#">Best Indian Books</a>
-</div>
+
+class Ekkitab_Catalog_Model_Resource_Mysql4_Globalsection extends Mage_Core_Model_Mysql4_Abstract
+{
+    protected function _construct()
+    {
+		$this->_init('ekkitab_catalog/globalsection','section_id');
+    }
+
+}

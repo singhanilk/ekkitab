@@ -84,7 +84,7 @@ input.checkbox            { margin-right:3px; }
 .button-top-set { margin-top:0; border-top:0; padding-top:0; padding-bottom:8px; }
 
 /* Form lists */
-.form-list                          { margin-bottom:10px; }
+.form-list                          { margin:10px 0px; }
 .form-list li                       { margin-bottom:6px; }
 .form-list li .input-box .input-text,
 .form-list li .input-box textarea   { width:250px; }
@@ -328,7 +328,6 @@ h1#logo                 { float:left; }
 .toplinks-bar .top-links a:hover      { color:#000; font-size: 1.1em; }
 .toplinks-bar .top-links a            { padding:0 7px 0 0; background:url(../images/links_separator.gif) no-repeat 100% 50%; }
 .toplinks-bar .top-links .last a      { padding:0; background:none; }
-.topLinksOut .version          { width:130px; color:#ff0000; font-weight:bold; font-size:12px; }
 .search-bar             { padding:10px 12px 2px 12px; background:#efefef;line-height:1.25em; }
 .breadcrumbs-bar { padding:2px 12px 2px 12px; margin: 5px 0px 15px 0px}
 .breadcrumbs-bar .breadcrumbs            { float:left; width:580px; overflow:hidden; }
@@ -928,7 +927,7 @@ tr.grand_total td, p.grand_total { padding-top:5px; padding-bottom:5px; }
 .one-page-checkout .allow h3 { color:#fff; }
 .one-page-checkout .active h3 { color:#fff; }
 .one-page-checkout .active .box { display:block; border-color:#ddd; background:#fbfbfb; }
-.one-page-checkout dd .form-list ul { margin:5px 17px 15px 17px; }
+.one-page-checkout dd .form-list ul { margin:10px 17px 15px 17px; }
 .one-page-checkout .checkmo-mailing-address { padding-left:20px; }
 .one-page-checkout-progress .page-head { margin-bottom:1em; }
 .one-page-checkout-progress li { margin-bottom:6px; }

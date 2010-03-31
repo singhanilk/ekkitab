@@ -34,11 +34,23 @@
     $_helper = $this->helper('catalog/output');
     $_product = $this->getProduct();
 	if(!is_null($_product)){
-		$author = $_product->getAuthor();
+		$authors = $_product->getAuthor();
 		$productUrl = $_product->getProductUrl();
 		$inStock = $_product->getInStock();
-		$author = strlen($author) > 0 ? "by ".$author : "";
 		
+		$author = $authors['a'];
+		$editors=$authors['e']	;
+		$translators=$authors['t'];
+		$illustrators=$authors['i'];
+		$photographers=$authors['p'];
+
+		$parsedAuthor = "";
+		$parsedAuthor.= strlen($author) > 0 ? "by ".$author : "";
+		$parsedAuthor.= strlen($editors) > 0 ?(strlen($parsedAuthor) > 0 ? ";":"")." Edited by ".$editors : "";
+		$parsedAuthor.= strlen($translators) > 0 ? (strlen($parsedAuthor) > 0 ? ";":"")." Translated by ".$translators : "";
+		$parsedAuthor.= strlen($illustrators) > 0 ? (strlen($parsedAuthor) > 0 ? ";":"")." Illustrated by ".$illustrators : "";
+		$parsedAuthor.= strlen($photographers) > 0 ? (strlen($parsedAuthor) > 0 ? ";":"")." Photographed by ".$photographers : "";
+
 		$savingsPerct= ($_product->getListPrice() >0 )?	(($_product->getListPrice() - $_product->getFinalPrice())/ $_product->getListPrice() ) * 100 : 0; 
 		$shippingTime= $_product->getDeliveryPeriod();
 		$shippingTime= $shippingTime  > 0 ? "Normally Ships in ".$shippingTime. ($shippingTime  == 1 ? " day":" days"): "";
@@ -50,7 +62,7 @@
            <img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'image',false,null, 135); ?>">
         </div>
 		<div class="midArea">
-			<div class="finDetBkTitle"><?php echo $this->htmlEscape($_product->getTitle()) ?><span class="lineHeight14em"> <?php echo $author?></span></div><!-- authorEtc -->
+			<div class="finDetBkTitle"><?php echo $this->htmlEscape($_product->getTitle()) ?><span class="lineHeight14em"> <?php echo $parsedAuthor?></span></div><!-- authorEtc -->
 			<div class="lineHeight14em"><span class="boldFont">ISBN:  <?php echo $_product->getIsbn() ?></span></div>
 			<div class="lineHeight14em"><span class="boldFont">Binding: <?php echo ucwords($_product->getBinding()) ?></span></div>
 			<div class="lineHeight14em"><span class="boldFont">Language : <?php echo ucwords($_product->getLanguage()) ?></span></div>

@@ -25,23 +25,27 @@
  */
 ?>
 
-<div class="head-alt2">
-    <h5 class="title"><?php echo $this->__('Address Book') ?></h5>
-    <a href="<?php echo $this->getAddressBookUrl() ?>"><?php echo $this->__('Manage Addresses') ?></a>
+<div class="accTop">
+    <div class="accHdr"><?php echo $this->__('Address Book') ?></div>
+    <div class="edit"><a href="<?php echo $this->getAddressBookUrl() ?>"><?php echo $this->__('Manage Addresses') ?></a></div>
+		<div class="clear"></div>
+</div><!-- accTop -->
+<div class="leftCol">
+	<div class="content">
+		<ul><li class="boldFont"><?php echo $this->__('Primary Billing Address') ?></li>
+			<?php echo $this->getPrimaryBillingAddressHtml() ?><br/>
+			<a href="<?php echo $this->getPrimaryBillingAddressEditUrl() ?>"><?php echo $this->__('Edit Address') ?></a>
+		</ul>
+	</div>
 </div>
-<div class="col2-set">
-    <div class="col-1">
-        <h6><?php echo $this->__('Primary Billing Address') ?></h6>
-        <address>
-            <?php echo $this->getPrimaryBillingAddressHtml() ?><br/>
-            <a href="<?php echo $this->getPrimaryBillingAddressEditUrl() ?>"><?php echo $this->__('Edit Address') ?></a>
-        </address>
-    </div>
-    <div class="col-2">
-        <h6><?php echo $this->__('Primary Shipping Address') ?></h6>
-        <address>
+<div class="rightCol">
+	<div class="content">
+		<ul>
+			<li class="boldFont"><?php echo $this->__('Primary Shipping Address') ?></li>
             <?php echo $this->getPrimaryShippingAddressHtml() ?><br/>
             <a href="<?php echo $this->getPrimaryShippingAddressEditUrl() ?>"><?php echo $this->__('Edit Address') ?></a>
-        </address>
-    </div>
-</div><br/>
+		</ul>
+	</div>
+</div>
+<div class="clear">&nbsp;</div>
+
