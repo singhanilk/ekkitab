@@ -6964,6 +6964,52 @@ ALTER TABLE `eav_entity`
   ADD CONSTRAINT `FK_eav_entity_store` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 
+--
+-- Table structure for table `ek_catalog_global_sections`
+--
+
+DROP TABLE IF EXISTS `ek_catalog_global_sections`;
+
+CREATE TABLE IF NOT EXISTS `ek_catalog_global_sections` (
+  `section_id` int(11) NOT NULL AUTO_INCREMENT,
+  `display_name` varchar(100) NOT NULL,
+  `description` text,
+  `active_from_date` datetime DEFAULT NULL,
+  `active_to_date` datetime DEFAULT NULL,
+  `template_path` varchar(300) NOT NULL,
+  `is_homepage_display` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`section_id`),
+  UNIQUE KEY `ek_catalog_global_sections` (`display_name`),
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+
+--
+-- Table structure for table `ek_catalog_global_sections`
+--
+
+DROP TABLE IF EXISTS `ek_catalog_global_section_products`;
+
+CREATE TABLE IF NOT EXISTS `ek_catalog_global_section_products` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `section_id` int(11) NOT NULL ,
+  `product_id` int(11) NOT NULL ,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ek_catalog_global_section_products` (`section_id`,`product_id`),
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Constraints for table `ek_catalog_global_sections`
+--
+ALTER TABLE `ek_catalog_global_section_products`
+  ADD CONSTRAINT `FK_CATALOG_GLOBAL_SECTION` FOREIGN KEY (`section_id`) REFERENCES `ek_catalog_global_sections` (`section_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `ek_catalog_global_section_products`
+  ADD CONSTRAINT `FK_CATALOG_GLOBAL_SECTION_PRODUCTS` FOREIGN KEY (`product_id`) REFERENCES `books` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ANSI';
 
 USE `mysql` ;

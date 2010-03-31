@@ -102,8 +102,8 @@ INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 ('stores', 1, 'design/header/logo_src', 'images/logo.png'),
 ('stores', 1, 'design/header/logo_alt', 'Ekkitab Education Services Pvt Ltd'),
 ('stores', 1, 'design/header/welcome', 'Welcome Guest!'),
-('stores', 1, 'design/footer/copyright', '&copy; 2009 Ekkitab Educational Services Pvt Ltd. All Rights Reserved.');
-
+('stores', 1, 'design/footer/copyright', '&copy; 2009 Ekkitab Educational Services Pvt Ltd. All Rights Reserved.'),
+('default', 0, 'carriers/flatrate/free_shipping_subtotal', '250');
 -- -------------------------------------------------------------
 
 --
@@ -342,8 +342,8 @@ INSERT INTO `core_config_data` (`config_id`, `scope`, `scope_id`, `path`, `value
 (891, 'default', 0, 'billdesk/wps/merchant_id', ''),
 (892, 'default', 0, 'billdesk/wps/logo_url', ''),
 (893, 'default', 0, 'billdesk/wps/sandbox_flag', '0'),
-(894, 'default', 0, 'billdesk/wps/debug_flag', '0');
-
+(894, 'default', 0, 'billdesk/wps/debug_flag', '0'),
+(482, 'default', 0, 'sales/reorder/allow', '0');
 
 
 --
@@ -354,3 +354,75 @@ INSERT INTO `core_config_data` (`config_id`, `scope`, `scope_id`, `path`, `value
 INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 ( 'stores', 1, 'catalog/placeholder/image_placeholder', 'stores/1/image.png'),
 ( 'stores', 1, 'catalog/placeholder/small_image_placeholder', 'stores/1/small_image.png');
+
+--
+-- Dumping data for table `ek_catalog_global_sections`
+
+Delete from `ek_catalog_global_sections`;
+
+INSERT INTO `ek_catalog_global_sections` (  `section_id` ,`display_name`, `description` , `active_from_date`,  `active_to_date`,`template_path`,`is_homepage_display`) VALUES
+( 1, 'Best Sellers', '','2010-03-01','2011-03-31','','0'),
+( 2, 'New Releases', '','2010-03-01','2011-03-31','','0'),
+( 3, 'Great Bargains', '','2010-03-01','2011-03-31','','0'),
+( 4, 'Best Boxed Sets', '','2010-03-01','2011-03-31','','0'),
+( 5, 'Top Children''s Books', '','2010-03-01','2011-03-31','','0'),
+( 6, 'Top Books of the Month', '','2010-03-01','2011-03-31','','0');
+
+--
+-- Dumping data for table `ek_catalog_global_section_products`
+
+Delete from `ek_catalog_global_section_products`;
+
+INSERT INTO `ek_catalog_global_section_products` (`section_id`, `product_id`) VALUES
+(1, 1),
+(1,23),
+(1,4),
+(1,56),
+(1,90),
+(1,79),
+(1,58);
+
+INSERT INTO `ek_catalog_global_section_products` (`section_id`, `product_id`) VALUES
+(2, 125),
+(2,47),
+(2,35),
+(2,26),
+(2,54),
+(2,9),
+(2,4);
+
+INSERT INTO `ek_catalog_global_section_products` (`section_id`, `product_id`) VALUES
+(3, 451),
+(3,243),
+(3,46),
+(3,576),
+(3,940),
+(3,769),
+(3,598);
+
+INSERT INTO `ek_catalog_global_section_products` (`section_id`, `product_id`) VALUES
+(4,25),
+(4,427),
+(4,355),
+(4,2096),
+(4,554),
+(4,934),
+(4,4545);
+
+INSERT INTO `ek_catalog_global_section_products` (`section_id`, `product_id`) VALUES
+(5,6561),
+(5,2653),
+(5,4755),
+(5,5675),
+(5,9034),
+(5,7349),
+(5,528);
+
+INSERT INTO `ek_catalog_global_section_products` (`section_id`, `product_id`) VALUES
+(6,6725),
+(6,4734),
+(6,3523),
+(6,265),
+(6,5453),
+(6,923),
+(6,443);
