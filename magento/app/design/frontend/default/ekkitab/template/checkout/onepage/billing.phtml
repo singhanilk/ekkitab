@@ -106,7 +106,9 @@
     </fieldset>
     <?php if ($this->canShip()): ?>
         <p>
-            <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_yes" value="1" <?php if ($this->isUseBillingAddressForShipping()) {?>checked="checked" <?php }?>onclick="$('shipping:same_as_billing').checked = true;" />&nbsp;<label for="billing:use_for_shipping_yes"><?php echo  $this->__('Ship to this address') ?></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_no" value="0" <?php if (!$this->isUseBillingAddressForShipping()) {?>checked="checked" <?php }?>onclick="$('shipping:same_as_billing').checked = false;" />&nbsp;<label for="billing:use_for_shipping_no"><?php echo $this->__('Ship to different address') ?></label>
+            <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_yes" value="1" <?php if ($this->isUseBillingAddressForShipping() || !($this->isCustomerLoggedIn())) {?>checked="checked" <?php }?>onclick="$('shipping:same_as_billing').checked = true;" />&nbsp;<label for="billing:use_for_shipping_yes"><?php echo  $this->__('Ship to this address') ?></label>&nbsp; &nbsp; 
+			
+			<input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_no" value="0" <?php if (!$this->isUseBillingAddressForShipping() && $this->isCustomerLoggedIn() ) {?>checked="checked" <?php }?>onclick="$('shipping:same_as_billing').checked = false;" />&nbsp;<label for="billing:use_for_shipping_no"><?php echo $this->__('Ship to different address') ?></label>
         </p>
     <?php else: ?>
         <p class="no-display"><input type="hidden" name="billing[use_for_shipping]" value="1" /></p>

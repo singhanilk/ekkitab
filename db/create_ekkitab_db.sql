@@ -1238,8 +1238,10 @@ CREATE TABLE IF NOT EXISTS `cms_block` (
 -- Dumping data for table `cms_block`
 --
 
-INSERT INTO `cms_block` (`block_id`, `title`, `identifier`, `content`, `creation_time`, `update_time`, `is_active`) VALUES
-(5, 'Footer Links', 'footer_links', '<a href="{{store url=""}}about-ekkitab">About Us</a> | <a href="{{store url=""}}customer-service">Customer Service</a> | ', '2009-10-15 15:05:20', '2009-10-15 15:05:20', 1);
+-- Commented off this code... footer to be powered through layout XMLs itself..no need of DB entry.
+
+--INSERT INTO `cms_block` (`block_id`, `title`, `identifier`, `content`, `creation_time`, `update_time`, `is_active`) VALUES
+--(5, 'Footer Links', 'footer_links', '<a href="{{store url=""}}about-ekkitab">About Us</a> | <a href="{{store url=""}}customer-service">Customer Service</a> | ', '2009-10-15 15:05:20', '2009-10-15 15:05:20', 1);
 
 --
 -- Table structure for table `cms_block_store`
@@ -6980,7 +6982,7 @@ CREATE TABLE IF NOT EXISTS `ek_catalog_global_sections` (
   `is_homepage_display` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`section_id`),
-  UNIQUE KEY `ek_catalog_global_sections` (`display_name`),
+  UNIQUE KEY `ek_catalog_global_sections` (`display_name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
@@ -6996,7 +6998,7 @@ CREATE TABLE IF NOT EXISTS `ek_catalog_global_section_products` (
   `section_id` int(11) NOT NULL ,
   `product_id` int(11) NOT NULL ,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `ek_catalog_global_section_products` (`section_id`,`product_id`),
+  UNIQUE KEY `ek_catalog_global_section_products` (`section_id`,`product_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --

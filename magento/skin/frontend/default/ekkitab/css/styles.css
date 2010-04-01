@@ -1152,9 +1152,13 @@ a:hover {
 }
 
 .scartArea .skuScartRow {
+	margin-bottom: 6px;
 	padding-bottom: 3px;
-	margin-bottom: 3px;
 	border-bottom: 1px dotted #333;
+}
+.scartArea .skuScartHeaderRow {
+	margin-bottom: 8px;
+	border-bottom: 1px dotted #666;
 }
 /*.scartArea .skuScartRow .titleText {
 	text-align: center;
@@ -1166,10 +1170,9 @@ a:hover {
 .scartArea .itemColHdr {
 	padding-left: 10px;
 	text-align: left;
-	width: 555px;
+	width: 556px;
 	float: left;
 	border-right: 1px solid #666;
-	border-left: 1px solid #666;
 	font-weight: bold;
 	background-color: #e6e6e6;
 }
@@ -1242,10 +1245,9 @@ a:hover {
 
 .scartArea .subTotalColHdr {
 	padding-left: 10px;
-	width: 157px;
+	width: 159px;
 	text-align: left;
 	float: left;
-	border-right: 1px solid #666;
 	font-weight: bold;
 	background-color: #e6e6e6;
 }
@@ -1325,6 +1327,7 @@ a:hover {
 	margin-left: 5px;
 }
 .wishlistText {
+	width: 153px;
 	float: left;
 }
 .orText {
