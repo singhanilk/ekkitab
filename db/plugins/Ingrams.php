@@ -38,7 +38,7 @@ class Parser {
                 }
             }
             if ($this->mode & MODE_PRICE) {
-                switch(substr($line,217,1)) {
+                switch(substr($line,220,1)) {
                    case 'P':
                    case 'Q':
                    case 'R':  return true;
@@ -217,8 +217,8 @@ class Parser {
             
 			$isbn = substr($line,1,13);
 			
-			$listprice    = substr($line,150,6)/100;
-			$discount     = substr($line,163,3);
+			$listprice    = substr($line,150,7)/100;
+			$discount     = substr($line,165,3);
 			
 			//Extracting the Supplier Discount Info
 			if ($discount = 'REG'){
@@ -240,23 +240,24 @@ class Parser {
 			$pos = 38;
 
 			while($pos <= 60){
-				$distCenterStk[] = substr($line,38,7) ;
+				$distCenterStk[] = substr($line,$pos,7) ;
 				$pos = $pos + 7;
 			}
-			$distCenterStk[] = substr($line,87,7) ;
+			//$distCenterStk[] = substr($line,87,7) ;
 
 			foreach($distCenterStk as $value){
 				if($value > 0){
 					$stock = 1;
+                    break;
 				}
 			}
 			
-			if($discount == 0){
-				$stock = 0;
-			}
+			//if($discount == 0){
+		    //		$stock = 0;
+		    //	}
 
 			//Extracting the Pub-Date
-			$pubdate = substr($line,185,8) ;
+			$pubdate = substr($line,188,8) ;
 						
 			$book['list_price']		    = $listprice;
 			$book['suppliers_discount'] = $discount;
