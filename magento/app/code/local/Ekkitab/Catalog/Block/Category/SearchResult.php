@@ -165,6 +165,10 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 			$categoryPath = strtolower(str_replace('__', "/", $this->getCurrentCategoryPath())); // this is to parse the parents and child categories seperated by '__'
 			// this is to filter the search by title / author / or both
 			$filterBy = strlen($this->getFilterByText()) > 0 ?($this->getFilterByText().":"):""; 
+			//this is to check if the query text is all numbers...then maybe its isbn... so append isbn: before the query text... 
+			if($this->isIsbn($this->helper('ekkitab_catalog')->getEscapedQueryText())){
+				$filterBy = "isbn:"; 
+			}
 			$results = $search->searchBook($this->getDecodedString($categoryPath),$filterBy.$this->helper('ekkitab_catalog')->getEscapedQueryText(), $this->getPageSize(), $this->getCurrentPageNumber());
 		}
 		catch(Exception $e)
@@ -201,6 +205,10 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 			$categoryPath = strtolower(str_replace('__', "/", $this->getCurrentCategoryPath())); // this is to parse the parents and child categories seperated by '__'
 			// this is to filter the search by title / author / or both
 			$filterBy = strlen($this->getFilterByText()) > 0 ?($this->getFilterByText().":"):""; 
+			//this is to check if the query text is all numbers...then maybe its isbn... so append isbn: before the query text... 
+			if($this->isIsbn($this->helper('ekkitab_catalog')->getEscapedQueryText())){
+				$filterBy = "isbn:"; 
+			}
 			$results = $search->searchBook($this->getDecodedString($categoryPath),$filterBy.$this->helper('ekkitab_catalog')->getEscapedQueryText(), $this->getPageSize(), $this->getCurrentPageNumber());
 			if(!is_null($results)){
 				$productIds = java_values($results->get("books"));
@@ -215,6 +223,8 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 				//}
 				$booksResult = array("books"=>$books,"counts"=>$results->get("counts"),"hits"=>java_values($results->get("hits")));
 				$this->_productCollection = $booksResult;
+			}else{
+				$booksResult = array("books"=>null,"counts"=>null,"hits"=>null);
 			}
 
 		}
@@ -418,6 +428,22 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
     public function getDecodedString($str)
     {
 		return urldecode($str);
+    }
+
+	/**
+     * Retrieve search result count
+     *
+     * @return boolean
+     */
+    public function isIsbn($str)
+    {
+		if(preg_match("/^[0-9]*$/",trim($str))){
+			Mage::log("In isIsbn method.....");
+			return true;
+		}else{
+			return false;
+		}
+		
     }
 
 	/**

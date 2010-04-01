@@ -14,7 +14,6 @@
  * 
  */
 ?>
-<div class="leftNavArea">
 <?php
 	function getShortenedString($str,$count){
 		$resStr = '';
@@ -30,26 +29,23 @@
 		}
      return $resStr;
 	}
- 
- $results=$this->getProductCollection();
+$results=$this->getProductCollection();
 if(!is_null($results) && is_array($results)){
   $bookList = $results["books"];
   $subcats = $results["counts"];
-  if (!is_null($bookList)) {
-	$count = $bookList->count();
-	$curr_cp = $this->getCurrentCategoryPath();
-	if (!java_is_null($subcats)) {
+}
+?>
+<div class="leftNavArea">
+<?php
+  if (!java_is_null($subcats)) {
 	  $retsize = java_values($subcats->size());
 	  //echo "Size of Category List:[" . $retsize . "]\n"; 
 	  $keys = java_values($subcats->keySet());
 	  sort($keys);
-	  if($retsize > 0){
-?>
-	<!-- linkHdr -->
-	<div class="linkHdr">Search in Category </div>
+	  if($retsize > 0){		?>
+		<div class="linkHdr">Search in Category </div>		<!-- linkHdr -->
 		<ul>
-<?php
-		foreach($keys as $key): 
+<?php	foreach($keys as $key): 
 			$val = java_values($subcats->get($key));
 			$key =  java_values($key);
 			$urlKey = $key;
@@ -60,73 +56,76 @@ if(!is_null($results) && is_array($results)){
 				$cp =  $curr_cp."__". $urlKey;
 			}else{
 				$cp =  $urlKey;
-			}
-?>		<li><a href="<?php echo $this->getSubCategorySearchUrl($cp,1) ?>"><?php echo ucwords($key). "[". $val ."]"?></a></li>
+			}		?>
+			<li><a href="<?php echo $this->getSubCategorySearchUrl($cp,1) ?>"><?php echo ucwords($key). "[". $val ."]"?></a></li>
 <?php	endforeach;	?>
-	</ul>
-	<div class="seeAll"><!--a href="#">See all &raquo;</a-->&nbsp;</div><!-- seeAll -->
-<?php 	} //end of if(retsize > 0)
+		</ul>
+		<div class="seeAll"><!--a href="#">See all &raquo;</a-->&nbsp;</div><!-- seeAll -->
+<?php 
+	  } //end of if(retsize > 0)
 	} //end of if(!java_is_null(subcats))
 ?>
-<?php if($count >0 ): ?>
 	<?php echo $this->getDonateBlurbHtml() ?>
 </div><!-- leftNavArea inside checks -->
+
 <div class="mainArea">
-<div class="inLeft">
-<?php echo $this->getMessagesBlock()->getGroupedHtml()  ?>
-	<?php if ($messages = $this->getNoteMessages()):?>
-	<div class="note-msg">
-		<?php foreach ($messages as $message):?>
-		<?php echo $message?><br />
-		<?php endforeach;?>
-	</div>
-	<?php endif; ?>
-	<?php //echo $this->getToolbarHtml()
-	?>
-<div class="searchResTop">
-	<div class="leftArea">
-		<?php if($this->getLastPageNumber()>1): ?>
-			<?php echo $this->__('Showing %s to %s of %s books', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
-		<?php elseif($this->getTotalNum()==1): ?>
-			<?php echo $this->__('Showing the only book', $this->getTotalNum()) ?>
-		<?php else: ?>
-			<?php echo $this->__('Showing all %s books', $this->getTotalNum()) ?>
+<?php 
+if(!is_null($results) && is_array($results)){
+  if (!is_null($bookList) && $bookList->count() > 0) {
+	$curr_cp = $this->getCurrentCategoryPath(); ?>
+	
+	<div class="inLeft">
+		<?php echo $this->getMessagesBlock()->getGroupedHtml()  ?>
+		<?php if ($messages = $this->getNoteMessages()):?>
+			<div class="note-msg">
+				<?php foreach ($messages as $message):?>
+				<?php echo $message?><br />
+				<?php endforeach;?>
+			</div>
 		<?php endif; ?>
-		<!--<?php echo $this->__("results for '%s'", $this->helper('ekkitab_catalogsearch')->getEscapedQueryText()) ?>-->
-	</div><!-- leftArea -->
-
-	<div class="rightArea">
-		<div class="topPaginationArea">
-			<?php if($this->getLastPageNumber()>1): ?>
-			<ul>
-				<?php if (!$this->isFirstPage()): ?>
-					<li><a href="<?php echo $this->getPreviousPageUrl() ?>" id="prev"><?php echo $this->__('Prev') ?></a></li>
+		<div class="searchResTop">
+			<div class="leftArea">
+				<?php if($this->getLastPageNumber()>1): ?>
+					<?php echo $this->__('Showing %s to %s of %s books', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+				<?php elseif($this->getTotalNum()==1): ?>
+					<?php echo $this->__('Showing the only book', $this->getTotalNum()) ?>
 				<?php else: ?>
-					<li class="nolink"><?php echo $this->__('Prev') ?></li>
+					<?php echo $this->__('Showing all %s books', $this->getTotalNum()) ?>
 				<?php endif; ?>
-				
-				<?php foreach ($this->getPages() as $_page): ?>
-					<?php if ($this->isPageCurrent($_page)): ?>
-						<li><span><?php echo $_page ?></span></li>
-					<?php else: ?>
-						<li><a href="<?php echo $this->getPageUrl($_page) ?>"><?php echo $_page ?></a></li>
-					<?php endif ?>
-				<?php endforeach; ?>
+				<!--<?php echo $this->__("results for '%s'", $this->helper('ekkitab_catalogsearch')->getEscapedQueryText()) ?>-->
+			</div><!-- leftArea -->
 
-				<?php if (!$this->isLastPage()): ?>
-					<li><a href="<?php echo $this->getNextPageUrl() ?>"><?php echo $this->__('Next') ?></a></li>
-				<?php else: ?>
-					<li><b id="sep"><?php echo $this->__('Next') ?></b></li>
-				<?php endif; ?>
+			<div class="rightArea">
+				<div class="topPaginationArea">
+					<?php if($this->getLastPageNumber()>1): ?>
+					<ul>
+						<?php if (!$this->isFirstPage()): ?>
+							<li><a href="<?php echo $this->getPreviousPageUrl() ?>" id="prev"><?php echo $this->__('Prev') ?></a></li>
+						<?php else: ?>
+							<li class="nolink"><?php echo $this->__('Prev') ?></li>
+						<?php endif; ?>
+						
+						<?php foreach ($this->getPages() as $_page): ?>
+							<?php if ($this->isPageCurrent($_page)): ?>
+								<li><span><?php echo $_page ?></span></li>
+							<?php else: ?>
+								<li><a href="<?php echo $this->getPageUrl($_page) ?>"><?php echo $_page ?></a></li>
+							<?php endif ?>
+						<?php endforeach; ?>
 
-			</ul>
-			<?php endif; ?>
-		</div>
-	</div><!-- rightArea -->
-	<div class="clear"></div>
-</div><!-- searchResTop -->
-	<?php 
-		foreach($bookList as $book):	
+						<?php if (!$this->isLastPage()): ?>
+							<li><a href="<?php echo $this->getNextPageUrl() ?>"><?php echo $this->__('Next') ?></a></li>
+						<?php else: ?>
+							<li><b id="sep"><?php echo $this->__('Next') ?></b></li>
+						<?php endif; ?>
+
+					</ul>
+					<?php endif; ?>
+				</div>
+			</div><!-- rightArea -->
+			<div class="clear"></div>
+		</div><!-- searchResTop -->
+<?php 	foreach($bookList as $book):	
 			$authorArr = $book->getAuthor();
 			$author = $authorArr['a'] ;
 			$author = strlen($author) > 0 ? $author : "Unknown";
@@ -154,9 +153,8 @@ if(!is_null($results) && is_array($results)){
 			
 			$shortDesc = getShortenedString($shortDesc,30);
 
-			$url=$this->helper('ekkitab_catalog')->getProductUrl($author,$title,$id);
-			
-	?>
+			$url=$this->helper('ekkitab_catalog')->getProductUrl($author,$title,$id);	?>
+
 			<!-- searchRowBegins -->
 			<div class="searchRow">
 			<div class="skuImage"><div class="image"><a href="<?php echo $this->getUrl($url)?>" title="<?php  echo $title?>">
@@ -185,7 +183,7 @@ if(!is_null($results) && is_array($results)){
 			<div class="clear"></div>
 		<?php endforeach; ?>
 	</div><!-- inLeft-->
-<div class="clear"></div>
+	<div class="clear"></div>
 	<div class="paginationAreaOut">
 		<div class="paginationArea">
 			<?php if($this->getLastPageNumber()>1): ?>
@@ -214,47 +212,37 @@ if(!is_null($results) && is_array($results)){
 			<div class="clear"></div>
 		</div><!-- paginationArea-->
 	</div><!-- paginationAreaOut-->
-
-</div><!-- mainArea -->
-
-<?php else: //else of if(count >0 ) ?>
-    	<?php echo $this->getDonateBlurbHtml() ?>
-	</div><!-- leftNavArea -->
-	<!--div class="page-head">
-        <h3><?php echo ($this->getHeaderText() || $this->getHeaderText() === false) ? $this->getHeaderText() : $this->__("Search results for '%s'", $this->helper('ekkitab_catalogsearch')->getEscapedQueryText()) ?></h3>
-    </div-->
-	<div class="mainArea">
-		<div class="inLeft">
-			<div class="note-msg">
-				<?php echo ($this->getNoResultText()) ? $this->getNoResultText() : $this->__('Your search returns no results.') ?>
-				<?php if ($messages = $this->getNoteMessages()):?>
-					<?php foreach ($messages as $message):?>
-					<br /><?php echo $message?>
-					<?php endforeach;?>
-				<?php endif; ?>
+<?php
+	} 	
+	else { // else of if (!java_is_null(bookList))
+		$searchTxt = trim($this->helper('ekkitab_catalogsearch')->getEscapedQueryText());?>
+			<div class="inLeft">
+<?php		if(strlen($searchTxt) > 0 && strlen($searchTxt) < 4 ){ ?>
+				<div class="boldFont orangeTxt12">Too many results to be displayed for your search - "<?php echo $searchTxt ?>".</div> 
+				<div class="clear"><br/></div>
+				<p> We suggest you:</p> 
+				<ul>
+					<li> Provide atleast a minimum of 4 letters.</li> 
+					<li> Try different keywords.</li> 
+				</ul>
+<?php		}	
+			else { ?>
+				<div class="boldFont orangeTxt12">Your search for - "<?php echo $searchTxt ?>" - did not match any book.</div>
+				<div class="clear"><br/></div>
+				<p> We suggest you:</p> 
+				<ul>
+					<li> Make sure all words are spelled correctly.</li> 
+					<li> Try different keywords.</li> 
+				</ul>
+<?php		} ?>
 			</div>
-			<div class="padder">
-				<div class="note-msg">
-					<?php echo $this->__('There are no products matching the selection.') ?>
-				</div>
-			</div>
-		</div>
-	</div>
-
-<?php endif;
-} else { // else of if (!java_is_null(bookList)) {
-
+		</div><div class="clear"></div>
+<?php } // ending of else of if (!java_is_null(bookList))
+} // ending of if(!is_null(results))
+else { // else of if (!java_is_null(results)) {
 ?>
-   	<?php echo $this->getDonateBlurbHtml() ?>
-	</div><!-- leftNavArea -->
- <!--div class="page-head">
-        <h3><?php echo ($this->getHeaderText() || $this->getHeaderText() === false) ? $this->getHeaderText() : $this->__("Search results for '%s'", $this->helper('ekkitab_catalogsearch')->getEscapedQueryText()) ?></h3>
-    </div-->
-	<div class="mainArea">
 		<div class="inLeft">
 			<div class="note-msg"> Sorry, we are unable to process your request now. Please try again later or write to us if the problem persists.</div>
 		</div>
-    </div>
-<?php }
-} // ending if(!is_null(results)){ no else part right now.
-?>
+<?php } // ending else part of if(!is_null(results)) ?>
+</div>

@@ -1755,3 +1755,14 @@ a:hover {
 	color: #c60;
 	font-weight:bold;
 }
+
+.orangeTxt12 {
+	font-size: 12px;
+	color: #c60;
+	font-weight:bold;
+}
+
+.inLeft ul {
+	margin-left: 20px;
+	list-style-type:circle;
+}
