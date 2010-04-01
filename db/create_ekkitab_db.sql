@@ -1235,15 +1235,6 @@ CREATE TABLE IF NOT EXISTS `cms_block` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='CMS Blocks' AUTO_INCREMENT=6 ;
 
 --
--- Dumping data for table `cms_block`
---
-
--- Commented off this code... footer to be powered through layout XMLs itself..no need of DB entry.
-
---INSERT INTO `cms_block` (`block_id`, `title`, `identifier`, `content`, `creation_time`, `update_time`, `is_active`) VALUES
---(5, 'Footer Links', 'footer_links', '<a href="{{store url=""}}about-ekkitab">About Us</a> | <a href="{{store url=""}}customer-service">Customer Service</a> | ', '2009-10-15 15:05:20', '2009-10-15 15:05:20', 1);
-
---
 -- Table structure for table `cms_block_store`
 --
 
@@ -1253,13 +1244,6 @@ CREATE TABLE IF NOT EXISTS `cms_block_store` (
   PRIMARY KEY (`block_id`,`store_id`),
   KEY `FK_CMS_BLOCK_STORE_STORE` (`store_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='CMS Blocks to Stores';
-
---
--- Dumping data for table `cms_block_store`
---
-
-INSERT INTO `cms_block_store` (`block_id`, `store_id`) VALUES
-(5, 0);
 
 --
 -- Table structure for table `cms_page`
@@ -7006,11 +6990,6 @@ CREATE TABLE IF NOT EXISTS `ek_catalog_global_section_products` (
 --
 ALTER TABLE `ek_catalog_global_section_products`
   ADD CONSTRAINT `FK_CATALOG_GLOBAL_SECTION` FOREIGN KEY (`section_id`) REFERENCES `ek_catalog_global_sections` (`section_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `ek_catalog_global_section_products`
-  ADD CONSTRAINT `FK_CATALOG_GLOBAL_SECTION_PRODUCTS` FOREIGN KEY (`product_id`) REFERENCES `books` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-
 
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ANSI';
 
