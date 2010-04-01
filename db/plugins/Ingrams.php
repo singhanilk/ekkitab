@@ -97,6 +97,61 @@ class Parser {
             }
             return $book;
         }
+        function getContributionPrefix($role) {
+            $prefix = "";
+            switch($role) {
+                case "ec":
+                case "ev":
+                case "E ":  
+                        $prefix = ":e:";
+                        break;
+                case "I ":  
+                        $prefix = ":i:";
+                        break;
+                case "P ":  
+                        $prefix = ":p:";
+                        break;
+                case "TB":  
+                case "T ":  
+                        $prefix = ":t:";
+                        break;
+                case "Y ":  
+                        $prefix = ":n:";
+                        break;
+                case "9 ":  
+                case "8 ":  
+                case "7 ":  
+                case "6 ":  
+                case "5 ":  
+                case "4 ":  
+                case "3 ":  
+                case "2 ":  
+                case "1 ":  
+                case "0 ":  
+                case "Z ":  
+                case "Y ":  
+                case "W ":  
+                case "V ":  
+                case "U ":  
+                case "TT":  
+                case "S ":  
+                case "Q ":  
+                case "L ":  
+                case "K ":  
+                case "J ":  
+                case "H ":  
+                case "F ":  
+                case "ES":  
+                case "D ":  
+                case "BI":  
+                case "B ":  
+                        $prefix = ":c:";
+                        break;
+                default:    
+                        break;
+            }
+            return $prefix;
+        }
 
         function getBasic($line, $book, $db, $logger) {
             $book['isbn10'] = trim(substr($line, 0, 10));
@@ -107,39 +162,26 @@ class Parser {
             $author = "";
             $illustrator = "";
             $role = trim(substr($line, 265,2));
-            if ((!strcmp($role, "A")) || (!strcmp($role, "JA")) || (!strcmp($role, "AA")) || (!strcmp($role, "E"))) {
-                $author = substr($line, 225, 40);
-                $author = $this->correctName($author);
-            }
-            if (!strcmp($role, "I")) {
-                $illustrator = substr($line, 225, 40);
-                $illustrator = $this->correctName($illustrator);
+            $author = trim(substr($line, 225, 40));
+            if (strlen($author) > 0) {
+                $cprefix = $this->getContributionPrefix($role);
+                $author = $cprefix . $this->correctName($author);
             }
             $role = trim(substr($line, 307,2));
-            if ((!strcmp($role, "A")) || (!strcmp($role, "JA")) || (!strcmp($role, "AA")) || (!strcmp($role, "E"))) {
-                $tmp = substr($line, 267, 40);
-                $tmp = $this->correctName($tmp);
+            $tmp = trim(substr($line, 267, 40));
+            if (strlen($tmp) > 0) {
+                $cprefix = $this->getContributionPrefix($role);
+                $tmp = $cprefix . $this->correctName($tmp);
                 $author = $author . " & ". $tmp;
-            }
-            if (!strcmp($role, "I")) {
-                $tmp = substr($line, 267, 40);
-                $tmp = $this->correctName($tmp);
-                $illustrator = $illustrator . " & " . $tmp;
             }
             $role = trim(substr($line, 349,2));
-            if ((!strcmp($role, "A")) || (!strcmp($role, "JA")) || (!strcmp($role, "AA")) || (!strcmp($role, "E"))) {
-                $tmp = substr($line, 309, 40);
-                $tmp = $this->correctName($tmp);
+            $tmp = trim(substr($line, 309, 40));
+            if (strlen($tmp) > 0) {
+                $cprefix = $this->getContributionPrefix($role);
+                $tmp = $cprefix . $this->correctName($tmp);
                 $author = $author . " & ". $tmp;
             }
-            if (!strcmp($role, "I")) {
-                $tmp = substr($line, 309, 40);
-                $tmp = $this->correctName($tmp);
-                $illustrator = $illustrator . " & " . $tmp;
-            }
-            $illustrator = preg_replace("/^ & /", "", $illustrator);
             $author = preg_replace("/^ & /", "", $author);
-            $book['illustrator'] = $this->escape($illustrator);
             $book['author'] = $this->escape($author);
             $book['publisher'] = $this->escape(trim(substr($line, 351, 45)));
             $book['isbn'] = trim(substr($line, 442, 17));

@@ -201,6 +201,9 @@ public class BookIndex {
 
             author = result.getString("author");
             author = author == null ? "" : author;
+            if (author.matches(":[a-z]:.*")) {
+                author = author.substring(3);
+            }
 
             sourcedfrom = result.getString("sourced_from");
             sourcedfrom = sourcedfrom == null ? "" : sourcedfrom;

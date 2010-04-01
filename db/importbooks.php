@@ -279,9 +279,9 @@ ini_set("display_errors", 1);
 
        $query = "insert into books ( $insertfields ) values ( $insertvalues )"; 
 
-       if (!($mode & MODE_BASIC)) {
+       //if (!($mode & MODE_BASIC)) {
             $query .= " on duplicate key " . $updatestatement;
-       }
+       //}
 
        if (! $result = mysqli_query($db, $query)) {
            warn("Failed to write to Books: ". mysqli_error($db), $query);
