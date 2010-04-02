@@ -182,11 +182,11 @@ ini_set("display_errors", 1);
                     foreach($ids as $id) {
                         $catIds[$id] = 1;
                     }
+                    $bisac_codes = $bisac_codes . (empty($bisac_codes) ? "" : ",") . $value;
                 }
                 else {
                     $unclassified[$value]++;
                 }
-                $bisac_codes = $bisac_codes . (empty($bisac_codes) ? "" : ",") . $value;
             }
         }
       }

@@ -219,9 +219,8 @@ public class BookIndex {
                 for (int i=0; i< codes.length; i++) {
                     Map<String, String> book = new HashMap<String, String>();
                     String[] categories = getFullCategoryForCode(codes[i]);
-                    if (categories.length > 0)
-                        saveCategories(categories);
                     if (categories != null) {
+                        saveCategories(categories);
                         for (int j=0; j<categories.length; j++) {
                             int index = j+1;
                             String label = "level" + index; 
