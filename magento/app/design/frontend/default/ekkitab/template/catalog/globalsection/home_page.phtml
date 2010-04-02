@@ -1,0 +1,79 @@
+<?php
+/**
+ * 
+ * Frontend Global Section Template
+ * @category   design/ekkitab
+ * @author Anisha (anisha@ekkitab.com)
+ * @version 1.0 Nov 17, 2009
+ * 
+ * @copyright  COPYRIGHT (C) 2009 Ekkitab Educational Services India Pvt. Ltd.
+ * @license    All Rights Reserved. All material contained in this file (including, but not limited to, text, images, graphics, HTML, programming code and scripts) 
+ * constitute proprietary and  * confidential information protected by copyright laws, trade secret and other laws. No part of this software may be copied, reproduced, modified or 
+ * distributed in any form or by any means, or stored in a database or retrieval system without the prior written permission of Ekkitab Educational Services.
+ * 
+ * 
+ */
+?>
+<?php $sections= $this->getHomePageSections();?>
+<?php if(!is_null($sections)):
+		foreach($sections as $section):
+			if($section):
+				$products= $section->getSectionProducts();
+				//$productIds= $section->getSectionProductIds();
+				$_count = is_array($products)?count($products):$products->count(); 
+				$_columnSize=4;
+				$counter=0;
+				$firstTime=0;
+				$_totalRows= intval($_count/ $_columnSize) ;
+				$_totalRows= ($_count % $_columnSize) > 0 ? $_totalRows +1 : $_totalRows  ;
+?>
+	<div class="hmScrollRow">
+		<div class="mainHomeHdr"><?php echo $section->getDisplayName() ?></div>
+<?php	foreach($products as $product){  ?>
+<?php		if($counter%$_columnSize==0){  ?>
+<?php			if($firstTime!=0){  ?>
+					</div>
+					<div class="clear hmInScrollRowSep"></div>
+<?php			}					?>
+				<div class="hmInScrollRow" >
+<?php		}
+			$counter+=1;
+			$savingsPerct= ($product->getPrice() >0 )?	(($product->getPrice() - $product->getFinalPrice())/ $product->getPrice() ) * 100 : 0; 
+			$author = $product->getBoAuthor();
+			$title= $this->htmlEscape($product->getName());
+			if(isset($author) && strlen(trim($author)) > 0)
+			{
+				$bookName=$author."__";
+			}else{
+				$bookName="";
+			}
+			$bookName=$bookName.$title."__".$product->getId();
+			$bookName = preg_replace('#[^A-Za-z0-9\_]+#', '-', $bookName);//($repArr2, "-", $urlKey);
+			$bookName="ekkitab_catalog/product/view/book/".$bookName.".html";
+	
+	?>
+					<div class="vColumns">
+						<a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>"><img src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->keepFrame(false)->resize(null, 100); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" /></a>
+						<div class="titleEtc">
+							<div class="bkTitle"><a href="<?php echo $this->getUrl($bookName)?>"  title="<?php echo $product->getTitle() ?>"><?php echo $title ?></a></div><!-- bkTitle -->
+							<div class="lineHeight14em"><?php echo $this->htmlEscape($product->getBoAuthor())?></div>
+							<div class="youSave"><?php echo Mage::helper('core')->currency($product->getFinalPrice(),true,false) ?></div>
+							<div class="lineHeight14em"><span class="striked"><?php echo Mage::helper('core')->currency($product->getListPrice(),true,false) ?></span></div>
+							<?php if($savingsPerct > 0):?><div class="youSave">Save <?php echo number_format($savingsPerct,2,'.','') ?>%</div><?php endif; ?>
+						</div><!-- titleEtc -->
+					</div>
+<?php		$firstTime =1;
+		}					?>
+			</div><!-- hmInScrollRow -->
+			<div class="clear"></div>
+		</div><!-- hmScrollRow -->
+<?php else: ?>
+	<div class="hmMainRows">
+		<div class="mainLeftHdr"><?php echo $section->getDisplayName() ?></div>This section will be updated soon.
+	</div><!-- hmMainRows -->
+<?php endif; ?>
+<div class="clear"></div>
+<?php endforeach; ?>
+<?php endif; ?>
+
+
