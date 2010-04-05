@@ -17,52 +17,6 @@
 use `ekkitab_books`;
 
 --
--- Dumping data for table `ek_catalog_product_bestsellers`
---
-
-Delete from `ek_catalog_product_bestsellers`;
-
-INSERT INTO `ek_catalog_product_bestsellers` (`product_id`,  `is_active`, `order_no`, `date`, `timestamp`) VALUES
-(7, 1, 1,'2009-11-19 16:20:53', '2009-11-19 16:20:56'),
-(19,1, 2,'2009-11-19 14:18:57', '2009-11-19 14:18:57'),
-(13,1, 3,'2009-11-19 16:19:28', '2009-11-19 16:19:46'),
-(6, 1, 4,'2009-11-19 16:20:31', '2009-11-19 16:20:56');
-
--- -------------------------------------------------------------
-
-
-
---
--- Dumping data for table `ek_catalog_product_newreleases`
---
-
-Delete from `ek_catalog_product_newreleases`;
-
-INSERT INTO `ek_catalog_product_newreleases` (`product_id`, `is_active`, `order_no`, `date`, `timestamp`) VALUES
-(36, 1, 1,'2009-11-19 16:20:53', '2009-11-19 16:20:56'),
-(37, 1, 2,'2009-11-19 14:18:57', '2009-11-19 14:18:57'),
-(38, 1, 3,'2009-11-19 16:19:28', '2009-11-19 16:19:46'),
-(77, 1, 4,'2009-11-19 16:20:31', '2009-11-19 16:20:56');
-
--- -------------------------------------------------------------
-
-
-
---
--- Dumping data for table `ek_catalog_product_best_boxedsets`
---
-
-Delete from `ek_catalog_product_best_boxedsets`;
-
-INSERT INTO `ek_catalog_product_best_boxedsets` (`product_id`,`is_active`, `order_no`, `date`, `timestamp`) VALUES
-(56, 1, 1,'2009-11-19 16:20:53', '2009-11-19 16:20:56'),
-(55, 1, 2,'2009-11-19 14:18:57', '2009-11-19 14:18:57'),
-(96, 1, 3,'2009-11-19 16:19:28', '2009-11-19 16:19:46'),
-(41, 1, 4,'2009-11-19 16:20:31', '2009-11-19 16:20:56');
-
--- -------------------------------------------------------------
-
---
 -- Update the `cms_page` table with about-ekkitab & coustomer service
 --
 
@@ -112,14 +66,16 @@ INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 
 Delete from `ek_catalog_popular_categories`;
 
-INSERT INTO `ek_catalog_popular_categories` (`id`, `category`, `url_path`,  `order_no`, `is_active`,  `popularity`, `date`, `timestamp`) VALUES
-(1, 'Fiction','fiction.html', 1, 1, 15,'2009-11-19 16:20:53', '2009-11-19 16:20:56'),
-(2, 'Comics & Graphic Novels', 'comics-graphic-novels.html', 2, 1, 11,'2009-11-19 14:18:57', '2009-11-19 14:18:57'),
-(3, 'Religion', 'religion.html', 3, 1, 13,'2009-11-19 16:19:28', '2009-11-19 16:19:46'),
-(4, 'Juvenile Nonfiction', 'juvenile-nonfiction.html', 4, 1, 15,'2009-11-19 16:20:31', '2009-11-19 16:20:56'),
-(5, 'Business & Economics', 'business-economics.html', 5, 1, 10,'2009-11-19 16:20:31', '2009-11-19 16:20:56'),
-(6, 'Travel', 'travel.html', 6, 1, 14,'2009-11-19 16:20:31', '2009-11-19 16:20:56'),
-(7, 'Cooking', 'cooking.html', 7, 1, 11,'2009-11-19 16:20:31', '2009-11-19 16:20:56');
+ALTER Table `ek_catalog_popular_categories`drop column url_path;
+
+INSERT INTO `ek_catalog_popular_categories` (`id`, `category`, `order_no`, `is_active`,  `popularity`, `date`, `timestamp`) VALUES
+(1, 'Fiction',1, 1, 15,'2009-11-19 16:20:53', '2009-11-19 16:20:56'),
+(2, 'Comics & Graphic Novels', 2, 1, 11,'2009-11-19 14:18:57', '2009-11-19 14:18:57'),
+(3, 'Religion', 3, 1, 13,'2009-11-19 16:19:28', '2009-11-19 16:19:46'),
+(4, 'Juvenile Nonfiction', 4, 1, 15,'2009-11-19 16:20:31', '2009-11-19 16:20:56'),
+(5, 'Business & Economics', 5, 1, 10,'2009-11-19 16:20:31', '2009-11-19 16:20:56'),
+(6, 'Travel', 6, 1, 14,'2009-11-19 16:20:31', '2009-11-19 16:20:56'),
+(7, 'Cooking', 7, 1, 11,'2009-11-19 16:20:31', '2009-11-19 16:20:56');
 
 -- -------------------------------------------------------------
 
@@ -426,3 +382,7 @@ INSERT INTO `ek_catalog_global_section_products` (`section_id`, `product_id`) VA
 (6,5453),
 (6,923),
 (6,443);
+
+
+UPDATE `cms_page` set content = ' {{block type="page/html" name="donate_book_blurb_home"  template="page/html/donate_blurb_home.phtml" }}
+{{block type="ekkitab_catalog/globalsection" name="homesection"  template="catalog/globalsection/home_page.phtml" }}'  where page_id =2;
