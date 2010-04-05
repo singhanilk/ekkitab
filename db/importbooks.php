@@ -266,22 +266,29 @@ ini_set("display_errors", 1);
             $book['image'] = getHashedPath($book['image']);
        }
 
-       $updatestatement = "update ";
+       #$updatestatement = "update ";
        $insertfields = "";
        $insertvalues = "";
        $conjunct = "";
+       $isbn = "";
        foreach($book as $key => $value) {
-          $updatestatement  .= $conjunct . $key . " = " . "'" . $value . "'" ;
+          if (strcmp($key, "isbn")) {
+            $updatestatement  .= $conjunct . $key . " = " . "'" . $value . "'" ;
+          }
+          else {
+            $isbn = $value;
+          }
           $insertfields .= $conjunct . $key;
           $insertvalues .= $conjunct . "'" . $value . "'";
           $conjunct = ",";
        }
 
-       $query = "insert into books ( $insertfields ) values ( $insertvalues )"; 
-
-       //if (!($mode & MODE_BASIC)) {
-            $query .= " on duplicate key " . $updatestatement;
-       //}
+       if ($mode & MODE_BASIC) {
+            $query = "insert into books ( $insertfields ) values ( $insertvalues )"; 
+       }
+       else {
+            $query = "update books set " . $updatestatement . " where isbn = '$isbn'";
+       }
 
        if (! $result = mysqli_query($db, $query)) {
            warn("Failed to write to Books: ". mysqli_error($db), $query);
@@ -362,8 +369,8 @@ ini_set("display_errors", 1);
         $unclassified = 0;
         $filenotfound = 0;
     
-        $startid = getStartId($db);
-        debug("Start Id: $startid");
+        //$startid = getStartId($db);
+        //debug("Start Id: $startid");
     
         while ($line = fgets($fh)) {
             $book = array();

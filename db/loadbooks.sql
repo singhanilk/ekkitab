@@ -7,5 +7,6 @@ select "may take a few minutes on a large database ...";
 delete from books where list_price is null;
 use ekkitab_books;
 drop table if exists books;
+select "copying books table from reference to ekkitab_books ...";
 create table books like reference.books;
 insert into books select * from reference.books;
