@@ -33,7 +33,7 @@ class Ekkitab_Catalog_Block_Globalsection extends Mage_Core_Block_Template
      * Get popular catagories of current store
      *
      */
-    public function getHomePageSection()
+    public function getHomePageSections()
     {
 		$sections = Mage::getModel('ekkitab_catalog/globalsection')->getCollection()
 			->addHomePageFilter();

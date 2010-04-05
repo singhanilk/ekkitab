@@ -33,6 +33,7 @@ $results=$this->getProductCollection();
 if(!is_null($results) && is_array($results)){
   $bookList = $results["books"];
   $subcats = $results["counts"];
+  $curr_cp = $this->getCurrentCategoryPath();
 }
 ?>
 <div class="leftNavArea">
@@ -72,7 +73,7 @@ if(!is_null($results) && is_array($results)){
 <?php 
 if(!is_null($results) && is_array($results)){
   if (!is_null($bookList) && $bookList->count() > 0) {
-	$curr_cp = $this->getCurrentCategoryPath(); ?>
+ ?>
 	
 	<div class="inLeft">
 		<?php echo $this->getMessagesBlock()->getGroupedHtml()  ?>

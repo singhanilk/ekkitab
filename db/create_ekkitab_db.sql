@@ -4486,7 +4486,6 @@ CREATE TABLE IF NOT EXISTS `eav_entity_varchar` (
 CREATE TABLE IF NOT EXISTS `ek_catalog_popular_categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `category` varchar(100) NOT NULL,
-  `url_path` varchar(100) NOT NULL,
   `order_no` int(11) NOT NULL,
   `is_active` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `popularity` int(11) NOT NULL DEFAULT '9',

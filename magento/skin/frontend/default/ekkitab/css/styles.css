@@ -369,6 +369,13 @@ a:hover {
 	border-bottom: 1px dotted #333;
 
 }
+.mainArea .mainHomeHdr {
+	font-size: 1.6em;
+	color: #c60;
+	margin-bottom: 6px;
+	padding-bottom: 6px;
+}
+
 .collText {
 	width: 330px;
 	float: left;

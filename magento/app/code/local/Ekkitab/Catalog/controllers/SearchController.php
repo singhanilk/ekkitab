@@ -58,9 +58,6 @@ class Ekkitab_Catalog_SearchController extends Mage_Core_Controller_Front_Action
 				}
 
 				Mage::helper('ekkitab_catalog')->checkNotes();
-				if (!Mage::helper('ekkitab_catalog')->isMinQueryLength()) {
-					$query->save();
-				}
 			}else{
                 Mage::getSingleton('core/session')->setCurrentQueryText(array('current_query_text'=>''));
 			}
@@ -69,7 +66,9 @@ class Ekkitab_Catalog_SearchController extends Mage_Core_Controller_Front_Action
 			$this->_initLayoutMessages('checkout/session');
 			$this->renderLayout();
 
-
+			if (!Mage::helper('ekkitab_catalog')->isMinQueryLength()) {
+				$query->save();
+			}
 		}
         else {
             $this->_redirectReferer();
