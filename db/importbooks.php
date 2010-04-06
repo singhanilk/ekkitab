@@ -282,6 +282,7 @@ ini_set("display_errors", 1);
           $insertvalues .= $conjunct . "'" . $value . "'";
           $conjunct = ",";
        }
+       $updatestatement = preg_replace("/^\s*,/", "", $updatestatement);
 
        if ($mode & MODE_BASIC) {
             $query = "insert into books ( $insertfields ) values ( $insertvalues )"; 

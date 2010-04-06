@@ -271,7 +271,7 @@ class Parser {
 		
 		function getDesc($line, $book, $db, $logger) {
 			$book['isbn']  = substr($line,0,13);
-			$description  = substr($line,18);
+			$description  = substr($line,15);
 			$description = str_replace("'", "", $description);
             if (strlen($description) > MAX_DESCRIPTION_LENGTH) {
                 $description = substr($description, 0, MAX_DESCRIPTION_LENGTH - 4);
