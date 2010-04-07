@@ -80,7 +80,7 @@ class Ekkitab_Billdesk_StandardController extends Mage_Core_Controller_Front_Act
        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;  
     
         $session = Mage::getSingleton('checkout/session');
-        $session->setPaypalStandardQuoteId($session->getQuoteId());
+ //       $session->setPaypalStandardQuoteId($session->getQuoteId());
         $this->getResponse()->setBody($this->getLayout()->createBlock('billdesk/redirect')->toHtml());
         $session->unsQuoteId();
         
