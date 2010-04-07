@@ -33,9 +33,13 @@ class Parser {
             if ($this->mode & MODE_BASIC) {
                 switch(substr($line, 412, 1)) {
                    case 'B':
-                   case 'N':  return true;
+                   case 'N':  break;
                    default:   return false;
                 }
+                if (strcmp(strtoupper(substr($line, 834,3)), "ENG")){
+                   return false;
+                }
+                return true;
             }
             if ($this->mode & MODE_PRICE) {
                 switch(substr($line,220,1)) {
