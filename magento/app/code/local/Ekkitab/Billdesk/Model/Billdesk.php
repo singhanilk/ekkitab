@@ -408,11 +408,11 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
     public function billdeskPostResponse()
     
     {
-    			$session_id    =  Mage::getSingleton('core/session')->getSessionId();   // for mltiple shipment orders
-    	  		Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." SESSION ID : \n".print_r($session_id,true));
+    		$session_id    =  Mage::getSingleton('core/session')->getSessionId();   // for mltiple shipment orders
+    	  	Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." SESSION ID : \n".print_r($session_id,true));
     	  		
     
-      $msg = $_REQUEST['msg'];
+     	  $msg = $_REQUEST['msg'];
     
           Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($msg,true)) ;
      	
@@ -482,7 +482,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
         
 			    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Checksum Security Error. Illegal access detected\n");
             }
-            
+            	
      */
         
         
