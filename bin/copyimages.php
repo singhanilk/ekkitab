@@ -54,7 +54,7 @@ ini_set("display_errors", 1);
 		if(file_exists($pfile)){
 			return;
 		}
-		else{
+		else {
 			while ($file = readdir($dir)) {
 				if (($file == ".") || ($file == ".."))
 					continue;
@@ -78,15 +78,14 @@ ini_set("display_errors", 1);
 					else 
 						$files_ignored++;
 					
-					$pfile = $directory."/.processed";
-				    $fh = fopen($pfile,"w");
-				    fclose($fh);
-				
 				}
 				
 			}
-		}
+			$pfile = $directory."/.processed";
+			$fh = fopen($pfile,"w");
+			fclose($fh);
 			echo "Copied: $files_copied  Failed: $files_failed  Ignored: $files_ignored.\n";
+		}
    }
 
   if ($argc < 2) {

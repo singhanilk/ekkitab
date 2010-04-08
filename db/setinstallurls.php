@@ -27,7 +27,7 @@
     } 
 
     $query = "insert into core_config_data (scope, scope_id, path, value) values ('default', 0, 'web/secure/base_url', '" . $argv[4] . "')" . " on duplicate key update value = '" . $argv[4] . "'";
-;
+
     try {
 	    $result = mysqli_query($db, $query);
         if (!$result) {
@@ -40,7 +40,35 @@
         exit(1);
     } 
 
-    echo "Base urls set correctly.\n";
+    $query = "insert into core_config_data (scope, scope_id, path, value) values ('default', 0, 'billdesk/wps/return_url', '" . $argv[4] . "billdesk/standard/response" . "')" . " on duplicate key update value = '" . $argv[4] . "billdesk/standard/response" . "'";
+
+    try {
+	    $result = mysqli_query($db, $query);
+        if (!$result) {
+            echo "Update of billdesk return url failed. \n";
+            exit(1);
+        }
+    }
+    catch (exception $e) {
+        echo "Update of billdesk return url failed. " . $e->getmessage() . "\n";
+        exit(1);
+    } 
+
+    $query = "insert into core_config_data (scope, scope_id, path, value) values ('default', 0, 'ccav/wps/return_url', '" . $argv[4] . "ccav/standard/ccavresponse" . "')" . " on duplicate key update value = '" . $argv[4] . "ccav/standard/ccavresponse" . "'";
+
+    try {
+	    $result = mysqli_query($db, $query);
+        if (!$result) {
+            echo "Update of billdesk return url failed. \n";
+            exit(1);
+        }
+    }
+    catch (exception $e) {
+        echo "Update of billdesk return url failed. " . $e->getmessage() . "\n";
+        exit(1);
+    } 
+
+    echo "Installation specific urls set correctly.\n";
 
     mysqli_close($db);
 ?>

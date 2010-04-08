@@ -287,6 +287,11 @@ public class BookSearch {
        String modquery = "";
        StringBuffer sb = new StringBuffer();
 
+       // escape all non alpha numeric characters since they may interfere with the lucene 
+       // parse function.
+       query = query.replaceAll("([^a-zA-Z0-9 ])", "\\\\$1");
+
+
        if (!query.equals("")) {
 
             String phrase = "";
@@ -313,9 +318,14 @@ public class BookSearch {
                         sbtmp.append(usesearchfield+":"+word+" ");
                     }
                     else {
-                        sbtmp.append(word+" ");
-                        sbtmp.append(conjunction);
-                        sbtmp.append("author:"+word+" ");
+                        if (word.matches("^[0-9]{10,}$")) { //can be an ISBN
+                            sbtmp.append("isbn:"+word+" ");
+                        }
+                        else {
+                            sbtmp.append(word+" ");
+                            sbtmp.append(conjunction);
+                            sbtmp.append("author:"+word+" ");
+                        }
                     }
                 }
             }
@@ -406,7 +416,7 @@ public class BookSearch {
                                                                }
                                                             });
                         if (hits.cardinality() > 0) {
-                            catMap.put(catname, hits.cardinality()); 
+                            catMap.put(catname, (hits.cardinality() > MAXHITS ? MAXHITS : hits.cardinality())); 
                         }
                     }
                 }

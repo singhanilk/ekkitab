@@ -182,7 +182,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
      *
      * @return bool
      */
-    public function canUseForMultishipping()  // What is its significance ?
+    public function canUseForMultishipping() 
     {
         return true;
     }
@@ -254,7 +254,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
           else {
                       $Merchant_Param="S" ; 
                       Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Onepage\n") ;
-       	 }
+       	  }
        
        	$total_amount = 0 ;
 	
@@ -285,12 +285,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
    		    $a = $this->getQuote()->getBillingAddress();
             $b = $this->getQuote()->getShippingAddress();
             
-  
-            
-        //getQuoteCurrencyCode
- //  $currency_code = $this->getQuote()->getBaseCurrencyCode();
-       
-        
+    
             
  //copied from Checkout.php3
             
@@ -394,7 +389,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 
         foreach ($sArr as $k=>$v) {
             
-           // replacing & char with and. otherwise it will break the post
+           // replacing & char with and. otherwise it will break the post....this is continuing from paypal....is not true for CCav
             
             $value =  str_replace("&","and",$v);
             $rArr[$k] =  $value;
@@ -449,12 +444,12 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
      if ($this->getQuote()->getIsMultiShipping()){
                      $Merchant_Param="M" ; 
                       Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Multishipping\n") ;
-          }
-          else {
+     }
+     else {
                       $Merchant_Param="S" ; 
                       Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Onepage\n") ;
                                            
-       	 }
+     }
     
 
     
