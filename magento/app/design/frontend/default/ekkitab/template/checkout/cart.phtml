@@ -51,7 +51,7 @@
 	<div class="grandTotalArea">
 	
 		<div class="wishlistText"><?php if ($this->helper('wishlist')->isAllowInCart()) : ?>Click on the checkbox and <?php else:?>&nbsp;<?php endif ?></div>
-		<div class="wishListBut"><?php if ($this->helper('wishlist')->isAllowInCart()) : ?><a href="#"><img src="<?php echo $this->getSkinUrl('images/move_wishlist_but.png') ?>" alt="<?php echo $this->__('Move to Wishlist') ?>" width="103" height="22" border="0" /></a><?php else:?>&nbsp;<?php endif ?></div> 
+		<div class="wishListBut"><?php if ($this->helper('wishlist')->isAllowInCart()) : ?><input type="image" src="<?php echo $this->getSkinUrl('images/move_wishlist_but.png') ?>" alt="<?php echo $this->__('Move to Wishlist') ?>" width="103" height="22" border="0" /><?php else:?>&nbsp;<?php endif ?></div> 
 		
 		<!-- updateBut --> 
 		<!-- updateBut -->

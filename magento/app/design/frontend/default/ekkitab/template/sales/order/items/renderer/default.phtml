@@ -24,9 +24,11 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php $_item = $this->getItem() ?>
+<?php 
+$_item = $this->getItem() ;
+Mage::log(get_class($_item));?>
 <tr class="border" id="order-item-row-<?php echo $_item->getId() ?>">
-    <td><h5 class="title"><?php echo $this->htmlEscape($_item->getName()) ?></h5>
+    <td class="first"><?php echo $this->htmlEscape($_item->getName()) ?> (<?php echo Mage::helper('core/string')->splitInjection($this->getSku()) ?>)
         <?php if($_options = $this->getItemOptions()): ?>
         <dl class="item-options">
         <?php foreach ($_options as $_option) : ?>
@@ -54,8 +56,7 @@
             <br /><a href="#" id="order-item-gift-message-link-<?php echo $_item->getId() ?>" class="giftmessage-preview-link expand" onclick="return giftMessageToogle('<?php echo $_item->getId() ?>')"><?php echo $this->__('Gift Message') ?></a>
         <?php endif; ?>
     </td>
-    <td><?php echo Mage::helper('core/string')->splitInjection($this->getSku()) ?></td>
-    <td class="a-right nowrap">
+    <td class="a-left nowrap">
         <?php if ($this->helper('tax')->displayCartBothPrices() || $this->helper('tax')->displayCartPriceExclTax()): ?>
             <span class="price-excl-tax">
                 <?php if ($this->helper('tax')->displayCartBothPrices()): ?>
@@ -171,7 +172,7 @@
             </span>
         <?php endif; ?>
     </td>
-    <td class="a-right nowrap">
+    <td class="a-left nowrap">
         <span class="nobr">
                 <?php if ($this->getItem()->getQtyOrdered() > 0): ?>
             <?php echo $this->__('Ordered'); ?>: <strong><?php echo $this->getItem()->getQtyOrdered()*1 ?></strong><br />
