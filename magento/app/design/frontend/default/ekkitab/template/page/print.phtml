@@ -38,13 +38,17 @@
 <div>
     <div class="print-head">
         <img src="<?php echo $this->getPrintLogoUrl() ? $this->getPrintLogoUrl() : $this->getSkinUrl('images/logo_print.gif') ?>" alt=""/>
+		<div class="clear"></br></div>
+		<div class="divider"></div>
         <?php if ($this->getPrintLogoText()):?>
             <address><?php echo nl2br($this->htmlEscape($this->getPrintLogoText())) ?></address>
         <?php endif;?>
     </div>
     <?php echo $this->getChildHtml('content') ?>
-    <div class="button-set">
-        <a href="#" onclick="window.close(); return false;"><img src="<?php echo $this->getSkinUrl('images/btn_close_window.gif') ?>" alt="<?php echo $this->__('Close Window') ?>"/></a>
+    <?php echo $this->getChildHtml('print_footer') ?>
+    <div class="printArea-buttons">
+        <a href="#" onclick="window.print(); return false;"><img src="<?php echo $this->getSkinUrl('images/print_button.png') ?>" alt="<?php echo $this->__('Print Window') ?>"/></a>
+         &nbsp; <a href="#" onclick="window.close(); return false;"><img src="<?php echo $this->getSkinUrl('images/close_window_button.png') ?>" alt="<?php echo $this->__('Close Window') ?>"/></a>
     </div>
     <?php echo $this->getAbsoluteFooter() ?>
 </div>

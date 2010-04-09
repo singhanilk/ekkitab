@@ -26,20 +26,16 @@
 ?>
 <fieldset class="form-list">
 <?php if ($this->getMethod()->getPayableTo() || $this->getMethod()->getMailingAddress()): ?>
-    <ul id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none">
-        <li>
-            <div class="input-box">
-                <?php if ($this->getMethod()->getPayableTo()): ?>
-                    <?php echo $this->__('<label>Make Check payable to</label>: %s', $this->getMethod()->getPayableTo()) ?><br />
-                <?php endif; ?>
-                <?php if ($this->getMethod()->getMailingAddress()): ?>
-                    <label><?php echo Mage::helper('payment')->__('Send Check to:') ?></label>
-                    <div class="checkmo-mailing-address">
-                        <?php echo nl2br($this->getMethod()->getMailingAddress()) ?>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </li>
-    </ul>
+    <div class="payment-checkmo-info" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none">
+			<?php if ($this->getMethod()->getPayableTo()): ?>
+				<div class="col-1"><strong><?php echo Mage::helper('payment')->__('Check payable to:') ?></strong></div>
+				<div class="col-2"><?php echo $this->getMethod()->getPayableTo() ?></div>
+				<div class="clear"></div>
+			<?php endif; ?>
+			<?php if ($this->getMethod()->getMailingAddress()): ?>
+				<div class="col-1"><strong><?php echo Mage::helper('payment')->__('Send to:') ?></strong></div>
+				<div class="col-2"><?php echo nl2br($this->getMethod()->getMailingAddress()) ?><br /></div>
+			<?php endif; ?>
+    </div>
 <?php endif ?>
 </fieldset>

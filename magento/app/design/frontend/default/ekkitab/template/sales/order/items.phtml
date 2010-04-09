@@ -25,19 +25,18 @@
  */
 ?>
 <?php  $_order = $this->getOrder() ?>
-<table cellspacing="0" class="data-table" id="my-orders-table">
-    <col />
-    <col width="25%" />
-    <col width="1" />
-    <col width="1" />
+<table cellspacing="0" class="custom-data-table" id="my-orders-table">
+    <col width="70%"/>
+    <col width="10%" />
+    <col width="10%" />
+    <col width="10%" />
     <col width="1" />
     <thead>
         <tr>
-            <th><?php echo $this->__('Product Name') ?></th>
-            <th><?php echo $this->__('SKU') ?></th>
-            <th class="a-right"><?php echo $this->__('Price') ?></th>
-            <th class="a-center"><?php echo $this->__('Qty') ?></th>
-            <th class="a-right"><?php echo $this->__('Subtotal') ?></th>
+            <th><?php echo $this->__('Book Name') ?></th>
+            <th ><?php echo $this->__('Price') ?></th>
+            <th ><?php echo $this->__('Qty') ?></th>
+            <th ><?php echo $this->__('Subtotal') ?></th>
         </tr>
         <!-- tr>
             <?php if ($this->helper('tax')->displayCartBothPrices() || $this->helper('tax')->displayCartPriceExclTax()): ?>
@@ -57,16 +56,16 @@
             <?php endif; ?>
         </tr -->
     </thead>
-    <?php $colspan = 4; ?>
+    <?php $colspan = 3; ?>
     <tfoot>
         <tr>
             <td colspan="<?php echo $colspan; ?>" class="a-right"><?php echo $this->__('Order Subtotal') ?></td>
-            <td class="last a-right"><?php echo $_order->formatPrice($_order->getSubtotal()) ?></td>
+            <td class="last a-left"><?php echo $_order->formatPrice($_order->getSubtotal()) ?></td>
         </tr>
         <?php if ($_order->getDiscountAmount() > 0): ?>
             <tr>
                 <td colspan="<?php echo $colspan; ?>" class="a-right"><?php echo $this->__('Discount '.($_order->getCouponCode()?'('.$_order->getCouponCode().')':'')) ?></td>
-                <td class="last a-right"><?php echo $_order->formatPrice(0.00 - $_order->getDiscountAmount()) ?></td>
+                <td class="last a-left"><?php echo $_order->formatPrice(0.00 - $_order->getDiscountAmount()) ?></td>
             </tr>
         <?php endif; ?>
         <?php if (($_order->getTaxAmount() > 0)||(Mage::helper('tax')->displayZeroTax())): ?>
@@ -75,17 +74,17 @@
         <?php if ($_order->getShippingAmount() || $_order->getShippingDescription()): ?>
             <tr>
                 <td colspan="<?php echo $colspan; ?>" class="a-right"><?php echo $this->__('Shipping & Handling') ?></td>
-                <td class="last a-right"><?php echo $_order->formatPrice($_order->getShippingAmount()) ?></td>
+                <td class="last a-left"><?php echo $_order->formatPrice($_order->getShippingAmount()) ?></td>
             </tr>
         <?php endif; ?>
         <tr>
             <td colspan="<?php echo $colspan; ?>" class="a-right"><?php echo $this->__('Grand Total') ?></td>
-            <td class="last a-right"><?php echo $_order->formatPrice($_order->getGrandTotal()) ?></td>
+            <td class="last a-left"><?php echo $_order->formatPrice($_order->getGrandTotal()) ?></td>
         </tr>
         <?php if ($_order->isCurrencyDifferent()): ?>
         <tr>
             <td colspan="<?php echo $colspan; ?>" class="a-right"><?php echo $this->__('Grand Total to be charged') ?></td>
-            <td class="last a-right"><?php echo $_order->formatBasePrice($_order->getBaseGrandTotal()) ?></td>
+            <td class="last a-left"><?php echo $_order->formatBasePrice($_order->getBaseGrandTotal()) ?></td>
         </tr>
         <?php endif; ?>
     </tfoot>
@@ -95,7 +94,7 @@
     <?php foreach ($_items as $_item): ?>
     <?php if ($_item->getParentItem()) continue; ?>
     <tbody>
-        <?php echo $this->getItemHtml($_item) ?>
+        <?php echo	$this->getItemHtml($_item) ?>
         <?php if($this->helper('giftmessage/message')->getIsMessagesAvailable('order_item', $_item) && $_item->getGiftMessageId()): ?>
         <tr class="border<?php echo ($_index++ > $_count ? ' last':'') ?>" id="order-item-gift-message-<?php echo $_item->getId() ?>" style="display:none;">
             <?php $_giftMessage=$this->helper('giftmessage/message')->getGiftMessageForEntity($_item); ?>

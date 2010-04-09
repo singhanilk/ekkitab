@@ -24,7 +24,7 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<p><?php echo $this->getMethod()->getTitle() ?>
+<?php echo $this->getMethod()->getTitle() ?>
 <?php if($this->getInfo()->getAdditionalData()): ?>
     <?php if($this->getPayableTo()): ?><br /><?php echo $this->__('Make Check payable to: %s', $this->htmlEscape($this->getPayableTo())) ?><?php endif; ?>
     <?php if($this->getMailingAddress()): ?>
@@ -35,4 +35,3 @@
         </span>
     <?php endif; ?>
 <?php endif; ?>
-</p>

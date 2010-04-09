@@ -174,9 +174,10 @@ p.required { text-align:right; }
 .page-head, .page-head-alt { text-align:right; }
 .page-head h3, .page-head-alt h3 {
     margin:0;
-    font-size:23px;
+    font-size:20px;
     font-weight:normal !important;
     text-transform:none  !important;
+	color:#CC6600;
     text-align:left;
     }
 .button-level h3 { /* heading level with buttons */
@@ -834,7 +835,7 @@ dl.item-options dd { padding-left:10px; }
 
 select.address-select {width:630px}
 .shipment-methods dd { margin-bottom:13px; }
-.payment-methods dt { margin-bottom:5px; }
+.payment-methods dt { margin:5px 0px; }
 .payment-methods dd { padding:5px 20px; }
 
 
@@ -930,8 +931,10 @@ tr.grand_total td, p.grand_total { padding-top:5px; padding-bottom:5px; }
 .one-page-checkout dd .form-list ul { margin:10px 17px 15px 17px; }
 .one-page-checkout .checkmo-mailing-address { padding-left:20px; }
 .one-page-checkout-progress .page-head { margin-bottom:1em; }
+.one-page-checkout-progress ol { margin-bottom:3px; }
 .one-page-checkout-progress li { margin-bottom:6px; }
 .one-page-checkout-progress h4 { margin:0; border:1px solid #ddd; padding:2px 8px; background:#eee; color:#555; font-size:10px; font-weight:normal; text-transform:uppercase;  }
+.one-page-checkout-progress h3 { margin-bottom: 5px; font-size: 1.1em; line-height: 1em; padding:2px 2px; color: #c60  }
 .one-page-checkout-progress h4 a { text-transform:none; }
 .one-page-checkout-progress .content { background:none; }
 #opc-login .button-set { border-top:0; }
@@ -950,14 +953,14 @@ tr.grand_total td, p.grand_total { padding-top:5px; padding-bottom:5px; }
 .checkout-progress td {
     float:left;
     margin-right:3px;
-    border-top:6px solid #999;
+    border-top:6px solid #ebe5ea;
     padding:4px 20px;
     color:#abb5ba;
     font-weight:bold;
     }
 .checkout-progress td.active {
-    border-top-color:#e96200;
-    color:#e96200;
+    border-top-color:#c60;
+    color:#c60;
     }
 .multi-address-checkout-description {
     margin-top:-10px;
@@ -968,16 +971,20 @@ tr.grand_total td, p.grand_total { padding-top:5px; padding-bottom:5px; }
     margin-top:15px;
     margin-bottom:25px;
     border:1px solid #ddd;
-    background:#fbfbfb;
+    background:#fff;
     }
 .multi-address-checkout-box .content {
     padding:10px 20px 20px 20px;
     }
 .multi-address-checkout-box .count-head {
-    border-bottom:1px solid #777;
-    background:#777;
+	border-width:1px;
+	background:#eee;
+    border-style:solid;
+    border-color:#fff #D9DDE3 #D9DDE3 #D9DDE3;
+    background:#eee;
+	cursor:default; 
     padding:2px 10px;
-    }
+}
 .shipment-count {
     background:#E26703;
     padding:2px 5px;
@@ -985,7 +992,7 @@ tr.grand_total td, p.grand_total { padding-top:5px; padding-bottom:5px; }
     font-size:.95em;
     line-height:1em;
     }
-.multi-address-checkout-box .count-head h4 {  margin:0; color:#fff; }
+.multi-address-checkout-box .count-head h4 {  margin:0; color:#c60; }
 .multi-address-checkout-box .head { margin-bottom:4px; }
 .multi-address-checkout-box .head a { font-weight:normal; }
 .multi-address-checkout-box .checkmo-mailing-address { display:block; padding-left:20px; }
@@ -1227,6 +1234,7 @@ tr.grand_total td, p.grand_total { padding-top:5px; padding-bottom:5px; }
 
 
 /* Reviews */
+.my-review-detail { float:left; margin-top:15px }
 .my-review-detail .product-image { float:left; width:135px; }
 .my-review-detail .product-image p { margin-bottom:0; }
 .my-review-detail .product-image p img { vertical-align:top; }
@@ -1262,10 +1270,10 @@ table.print .price-incl-tax .price { display:inline; }
 
 
 /********************** Pop up pages */
-.page-popup { background:#fff; margin:25px 30px; text-align:left; }
-.page-popup .print-head { margin:0 0 15px; }
-.page-popup .print-head img { float:left; }
-.page-popup .print-head address { float:left; margin-left:15px; }
+.page-popup { background:#fff; margin:10px 20px; text-align:left; }
+.page-popup .print-head { font-family:arial;margin:0 0 5px; text-align:center; width:100%;}
+.page-popup .print-head img { float:center;text-align:center;  }
+.page-popup .print-head address { font-size:11px; float:center; margin-left:15px;text-align:center; }
 .product-gallery-nav { padding:0 5px; }
 
 

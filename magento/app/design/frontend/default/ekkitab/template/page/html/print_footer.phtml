@@ -22,16 +22,9 @@
  * @package    Mage
  * @copyright  Copyright (c) 2008 Irubin Consulting Inc. DBA Varien (http://www.varien.com)
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- * 
- * This writes a message on checkout page just below the payment option:" You will be redirected to CCAvenue website when you place an order"
- * you have to put this message in'' in  $this->__('') .
  */
 ?>
-<fieldset class="form-list">
-    <?php $_code=$this->getMethodCode() ?>
-    <ul id="payment_form_<?php echo $_code ?>" style="display:none">
-        <li>
-            <?php echo $this->__('You will be redirected to CCAvenue payment gateway when you place an order.') ?>
-        </li>
-    </ul>
-</fieldset>
+<div class="printFooter">
+	<p>Thank You For Shopping With ekkitab.com! We value your feedback. Please send your suggestions to feedback@ekkitab.com</p>
+	<p>( This is a system generated electronic invoice and it does not require any signature. )</p>
+</div><!-- printFooter -->

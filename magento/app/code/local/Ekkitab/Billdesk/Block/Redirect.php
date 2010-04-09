@@ -26,7 +26,7 @@ class Ekkitab_Billdesk_Block_Redirect extends Mage_Core_Block_Abstract
         
         
         $html = '<html><body>';
-        $html.= $this->__('You will be redirected to Billdesk in a few seconds.');
+        $html.= $this->__('You will be redirected to Billdesk Payment Gateway in a few seconds.');
         $html.= $form->toHtml();
         $html.= '<script type="text/javascript">document.getElementById("billdesk_checkout").submit();</script>';
         $html.= '</body></html>';

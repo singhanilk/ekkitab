@@ -181,40 +181,46 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
         $translators= "";
         $editors= "";
         $photographers= "";
+        $others= "";
 		if(strlen($author) > 0){
 			$authArr = explode("&",$author);
 			foreach($authArr as $auth){
 				if((preg_match("/:[a-z]:/i",trim($auth))) ){
 					$str = substr(trim($auth),0,3);
-					Mage::log($str);
-					Mage::log(substr(trim($auth),3));
+					$dataStr=substr(trim($auth),3);
 					switch($str){
 						case ':e:':
 							if(strlen($editors) > 0){
 								$editors.=" & ";
 							}
-							$editors.=substr(trim($auth),3);
+							$editors.=$dataStr;
 							break;
 
 						case ':i:':
 							if(strlen($illustrators) > 0){
 								$illustrators.=" & ";
 							}
-							$illustrators.=substr(trim($auth),3);
+							$illustrators.=$dataStr;
 							break;
 
 						case ':t:':
 							if(strlen($translators) > 0){
 								$translators.=" & ";
 							}
-							$translators.=substr(trim($auth),3);
+							$translators.=$dataStr;
 							break;
 
 						case ':p:':
 							if(strlen($photographers) > 0){
-								$editors.=" & ";
+								$photographers.=" & ";
 							}
-							$photographers.=substr(trim($auth),3);
+							$photographers.=$dataStr;
+							break;
+						default :
+							if(strlen($others) > 0){
+								$others.=" & ";
+							}
+							$others.=$dataStr;
 							break;
 					}
 				
@@ -231,6 +237,7 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
 		$parsedAuthor['t']= $translators ;
 		$parsedAuthor['i']= $illustrators ;
 		$parsedAuthor['p']= $photographers ;
+		$parsedAuthor['o']= $others ;
 		return $parsedAuthor;
     }
 

@@ -24,68 +24,79 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="padder">
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<div class="page-head">
-    <h3><?php echo $this->__('My Wishlist') ?></h3>
-</div>
-
-<?php if($this->getWishlist()->getSize()): ?>
-    <?php if($this->helper('wishlist')->isRssAllow()): ?>
-        <p class="a-right">
-        <a href="<?php echo $this->helper('wishlist')->getRssUrl(); ?>" class="link-feed"><?php echo $this->__('RSS Feed') ?></a>
-        </p>
-    <?php endif; ?>
-<form action="<?php echo $this->getUrl('*/*/update') ?>" method="post">
-    <?php echo $this->getBlockHtml('formkey')?>
-    <table cellspacing="0" width="100%" class="data-table box-table" id="wishlist-table">
-    <col width="130"/>
-    <col width="300"/>
-    <col/>
-    <col/>
-        <thead>
-            <tr>
-                <th><?php echo $this->__('Product') ?></th>
-                <th><?php echo $this->__('Comment') ?></th>
-                <th><?php echo $this->__('Added On') ?></th>
-                <th class="a-center">&nbsp;</th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php foreach($this->getWishlist() as $item): ?>
-            <tr>
-                <td>
-                    <div><a href="<?php echo $item->getProductUrl() ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($item->getImage(), 'small_image',false,null,109); ?>" alt="<?php echo $this->htmlEscape($item->getName()) ?>" /></a></div>
-                    <div><a href="<?php echo $item->getProductUrl() ?>" title="<?php echo $this->htmlEscape($item->getName()) ?>"><?php echo $this->htmlEscape($item->getName()) ?></a></div>
-                    <?php echo $this->getPriceHtml($item) ?>
-                </td>
-                <td align="center">
-                    <textarea name="description[<?php echo $item->getWishlistItemId() ?>]" rows="3" cols="3" style="width:95%;height:160px;" onfocus="focusComment(this)" onblur="focusComment(this)"><?php echo ( $item->getDescription() ) ? $item->getDescription() : $this->helper('ekkitab_wishlist')->defaultCommentString() ?><?php echo $item->getWishlistItemDescription()?></textarea>
-                </td>
-                <td>
-                    <?php echo $this->getFormatedDate($item->getAddedAt()) ?>
-                </td>
-                <td class="a-center">
-                <?php if($item->isSaleable()): ?>
-                    <a href="<?php echo $this->getItemAddToCartUrl($item) ?>"><img src="<?php echo $this->getSkinUrl('images/btn_add_to_cart_sm.gif') ?>" alt="<?php echo $this->__('Add to Cart') ?>" class="v-middle"/></a><br/>
-                <?php endif; ?>
-                    <a href="<?php echo $this->getItemRemoveUrl($item) ?>" onclick="return confirmRemoveWishlistItem();" class="link-remove" ><?php echo $this->__('Remove Item') ?></a>
-                </td>
-            </tr>
-        <?php endforeach ?>
-        </tbody>
-    </table>
-<script type="text/javascript">decorateTable('wishlist-table')</script>
-    <div class="button-set">
-
-        <a href="<?php echo $this->getBackUrl() ?>" class="f-left">&laquo; <?php echo $this->__('Back') ?></a>
-        <a href="#" onclick="setLocation('<?php echo $this->getUrl('*/*/share') ?>')"><img src="<?php echo $this->getSkinUrl('images/btn_share_wishlist.gif');?>" alt="<?php echo $this->__('Share Wishlist') ?>" class="v-middle"/></a>
-        <?php if($this->isSaleable()):?>
-        &nbsp;<a href="<?php echo $this->getUrl('*/*/allcart') ?>"><img src="<?php echo $this->getSkinUrl('images/btn_add_all_to_cart.gif');?>" alt="<?php echo $this->__('Add All to Cart') ?>" class="v-middle"/></a>&nbsp;
-        <?php endif;?>
-        <input type="image" name="do" src="<?php echo $this->getSkinUrl('images/btn_update_wishlist.gif');?>" alt="<?php echo $this->__('Update Wishlist') ?>"/>
-    </div>
-</form>
+<div class="pageHeader"><?php echo $this->__('My Wishlist') ?></div>
+<div class="clear">&nbsp;</div>
+<div class="myAccCopy">
+	<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+	<?php if($this->getWishlist()->getSize()): ?>
+		<?php if($this->helper('wishlist')->isRssAllow()): ?>
+			<p class="a-right">
+			<a href="<?php echo $this->helper('wishlist')->getRssUrl(); ?>" class="link-feed"><?php echo $this->__('RSS Feed') ?></a>
+			</p>
+		<?php endif; ?>
+		<form action="<?php echo $this->getUrl('*/*/update') ?>" method="post">
+			<?php echo $this->getBlockHtml('formkey')?>
+			<table cellspacing="0" width="100%" class="custom-data-table box-table wishlist" id="wishlist-table">
+			<col width="100"/>
+			<col width="290"/>
+			<col width="210"/>
+			<col />
+			<thead>
+				<tr>
+					<th><?php echo $this->__('Item') ?></th>
+					<th class="a-center">&nbsp;</th>
+					<th><?php echo $this->__('Comment') ?></th>
+					<th><?php echo $this->__('Move/Remove') ?></th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php foreach($this->getWishlist() as $item): 
+					$listPrice = $item->getListPrice() ;
+					$discPrice = $item->getDiscountPrice();
+					$savings= $listPrice - $discPrice;
+					$savingsPerct= ($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 0;
+					$stock=$item->getInStock();
+			?>
+				<tr >
+					<td>
+						<div class="image"><a href="<?php echo $this->getUrl($item->getProductUrl()) ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($item->getImage(), 'small_image',false,null,109); ?>" alt="<?php echo $this->htmlEscape($item->getName()) ?>" /></a></div>
+					</td>
+					<td align="left">
+						<div><a href="<?php echo $this->getUrl($item->getProductUrl()) ?>" title="<?php echo $this->htmlEscape($item->getName()) ?>"><?php echo $this->htmlEscape($item->getName()) ?></a></div>
+						<div class="lineHeight14em">Added on: <?php echo $this->getFormatedDate($item->getAddedAt()) ?>
+						<?php if($savings > 0):?>
+							<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($discPrice,true,false) ?> ( Save <?php echo number_format($savingsPerct,2,'.','') ?>%)</div>
+						<?php endif; ?>
+						<?php if($listPrice > 0):?>
+							<div class="lineHeight14em">MRP Price : <?php echo Mage::helper('core')->currency($listPrice,true,false) ?></div>
+						<?php endif; ?>
+						<div class="youSave"><?php if(!($stock && $listPrice >0)) : ?>Out of Stock<?php endif;?> </div><br/>		
+					</td>
+					<td>
+						<textarea name="description[<?php echo $item->getWishlistItemId() ?>]" rows="3" cols="3" style="width:95%;height:60px;" onfocus="focusComment(this)" onblur="focusComment(this)"><?php echo ( $item->getDescription() ) ? $item->getDescription() : $this->helper('ekkitab_wishlist')->defaultCommentString() ?><?php echo $item->getWishlistItemDescription()?></textarea>						
+					</td>
+					<td class="a-center">
+					<?php if($item->isSaleable()): ?>
+						<a href="<?php echo $this->getItemAddToCartUrl($item) ?>"><img src="<?php echo $this->getSkinUrl('images/move_cart_button_grey.png') ?>" alt="<?php echo $this->__('Add to Cart') ?>" class="v-middle"/></a><br/><br/>
+					<?php endif; ?>
+					<a href="<?php echo $this->getItemRemoveUrl($item) ?>" onclick="return confirmRemoveWishlistItem();" class="link-remove" ><img src="<?php echo $this->getSkinUrl('images/remove_button_grey.png') ?>" alt="<?php echo $this->__('Remove Item') ?>" class="v-middle"/></a><br/>
+					</td>
+				</tr>
+			<?php endforeach ?>
+			</tbody>
+		</table>
+		<script type="text/javascript">decorateTable('wishlist-table')</script>
+		<div class="content">
+			<ul>
+				<li><a href="#" onclick="setLocation('<?php echo $this->getUrl('*/*/share') ?>')"><img src="<?php echo $this->getSkinUrl('images/share_wlist_button.png');?>" alt="<?php echo $this->__('Share Wishlist') ?>" class="v-middle"/></a>
+				<?php if($this->isSaleable()):?>
+					&nbsp;<a href="<?php echo $this->getUrl('*/*/allcart') ?>"><img src="<?php echo $this->getSkinUrl('images/moveall_cart_button.png');?>" alt="<?php echo $this->__('Move All to Cart') ?>" class="v-middle"/></a>&nbsp;
+				<?php endif;?>
+				<input type="image" name="do" src="<?php echo $this->getSkinUrl('images/update_comment_button.png');?>" alt="<?php echo $this->__('Update Comments') ?>"/><br/></li>
+				
+				<li><a href="<?php echo $this->getBackUrl() ?>" class="f-left">&laquo; <?php echo $this->__('Back') ?></a></li>
+		</div>
+	</form>
 <?php else: ?>
     <p><?php echo $this->__('You have no items in your wishlist.') ?></p>
     <div class="button-set">

@@ -25,71 +25,72 @@
  */
 ?>
 <?php  $_order = $this->getOrder() ?>
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<div class="padder">
+<div class="pageHeader"><?php echo $this->__('Order #%s - %s', $_order->getRealOrderId(), $_order->getStatusLabel()) ?></div>
 <div class="page-head button-level">
-    <h3><?php echo $this->__('Order #%s - %s', $_order->getRealOrderId(), $_order->getStatusLabel()) ?></h3>
-    <?php if($this->helper('rss/order')->isStatusNotificationAllow()): ?>
-        <a href="<?php echo $this->helper('rss/order')->getStatusHistoryRssUrl($_order) ?>" class="link-feed"><?php echo $this->__('Subscribe to Order Status') ?></a>
-        <span class="pipe">|</span>
-    <?php endif; ?>
-    <?php if ($this->helper('sales/reorder')->canReorder($_order)) : ?>
-        <a href="<?php echo $this->getReorderUrl($_order) ?>"><img src="<?php echo $this->getSkinUrl('images/btn_reorder.gif')?>" alt="<?php echo $this->__('Reorder') ?>" class="v-middle"/></a>
-    <?php endif ?>
-    <a href="<?php echo $this->getPrintUrl($_order) ?>" onclick="this.target='_blank'"><img src="<?php echo $this->getSkinUrl('images/btn_print-order.gif')?>" alt="<?php echo $this->__('Print Order') ?>" class="v-middle"/></a>
+	<?php if($this->helper('rss/order')->isStatusNotificationAllow()): ?>
+		<a href="<?php echo $this->helper('rss/order')->getStatusHistoryRssUrl($_order) ?>" class="link-feed"><?php echo $this->__('Subscribe to Order Status') ?></a>
+		<span class="pipe">|</span>
+	<?php endif; ?>
+	<?php if ($this->helper('sales/reorder')->canReorder($_order)) : ?>
+		<a href="<?php echo $this->getReorderUrl($_order) ?>"><img src="<?php echo $this->getSkinUrl('images/btn_reorder.gif')?>" alt="<?php echo $this->__('Reorder') ?>" class="v-middle"/></a>
+	<?php endif ?>
+	<a href="#"  onclick='document.open("<?php echo $this->getPrintUrl($_order) ?>", "_blank", "height=1000, width=800,scrollbars=1");'><img src="<?php echo $this->getSkinUrl('images/print_order_button.png')?>" alt="<?php echo $this->__('Print Order') ?>" class="v-middle"/></a>
 </div>
-<?php echo $this->getStatusHistoryRssUrl($_order) ?>
+<div class="myAccCopy">
+	<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+	<?php echo $this->getStatusHistoryRssUrl($_order) ?>
+</div>
 <ul class="tabs">
   <?php $_links = $this->getLinks(); ?>
-    <?php $count=1?>
-                <?php foreach ($_links as $_link): ?>
-                        <?php if($_link->getUrl()): ?>
-                        <li<?php if(count($_links) == $count):?> class="last"<?php endif?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
-                        <?php else: ?>
-                        <li class="active<?php if(count($_links) == $count):?> last<?php endif?>"><a href="#" onclick="return false;"><?php echo $_link->getLabel() ?></a></li>
-                        <?php endif; ?>
-
-    <?php $count++?>
-                <?php endforeach; ?>
+	<?php $count=1?>
+	<?php foreach ($_links as $_link): ?>
+		<?php if($_link->getUrl()): ?>
+			<li<?php if(count($_links) == $count):?> class="last"<?php endif?>><a href="<?php echo $_link->getUrl() ?>"><b><?php echo $_link->getLabel() ?></b></a></li>
+		<?php else: ?>
+			<li class="active<?php if(count($_links) == $count):?> last<?php endif?>"><a href="#" onclick="return false;"><?php echo $_link->getLabel() ?></a></li>
+		<?php endif; ?>
+		<?php $count++?>
+	<?php endforeach; ?>
 </ul>
+<div class="myAccCopy">
+	<div class="content">
+		<p><?php echo $this->__('Order Date: %s', $this->formatDate($_order->getCreatedAtStoreDate(), 'long')) ?></p>
+		<?php if (!$_order->getIsVirtual()): ?>
+			<div class="col2-set">
+				<div class="col-1">
+					<div class="head-alt3">
+						<h5 class="title"><?php echo $this->__('Shipping Address') ?></h5>
+					</div>
+					<address><?php echo $_order->getShippingAddress()->format('html') ?></address>
+				</div>
+				<div class="col-2">
+					<div class="head-alt3">
+						<h5 class="title"><?php echo $this->__('Billing Address') ?></h5>
+					</div>
+					<address><?php echo $_order->getBillingAddress()->format('html') ?></address>
+				</div>
+			</div><br/>
+		<?php endif; ?>
+		<div class="col2-set">
+			<div class="col-1">
+				<div class="head-alt3">
+					<h5 class="title"><?php echo $this->__('Shipping Method') ?><?php /* | <a href="#"><?php echo $this->__('Track Order') ?></a>*/ ?></h5>
+				</div>
+				<?php if ($_order->getShippingDescription()): ?>
+					<?php echo $_order->getShippingDescription() ?>
+				<?php else: ?>
+					<?php echo $this->helper('sales')->__('No shipping information available'); ?>
+				<?php endif; ?>
 
+			</div>
+			<div class="col-2">
 
-<p><?php echo $this->__('Order Date: %s', $this->formatDate($_order->getCreatedAtStoreDate(), 'long')) ?></p>
-<?php if (!$_order->getIsVirtual()): ?>
-<div class="col2-set">
-    <div class="col-1">
-        <div class="head-alt3">
-            <h5 class="title"><?php echo $this->__('Shipping Address') ?></h5>
-        </div>
-        <address><?php echo $_order->getShippingAddress()->format('html') ?></address>
-    </div>
-    <div class="col-2">
-
-        <div class="head-alt3">
-            <h5 class="title"><?php echo $this->__('Shipping Method') ?><?php /* | <a href="#"><?php echo $this->__('Track Order') ?></a>*/ ?></h5>
-        </div>
-        <?php if ($_order->getShippingDescription()): ?>
-            <?php echo $_order->getShippingDescription() ?>
-        <?php else: ?>
-            <?php echo $this->helper('sales')->__('No shipping information available'); ?>
-        <?php endif; ?>
-    </div>
-</div><br/>
-<?php endif; ?>
-<div class="col2-set">
-    <div class="col-1">
-
-        <div class="head-alt3">
-            <h5 class="title"><?php echo $this->__('Billing Address') ?></h5>
-        </div>
-        <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
-    </div>
-    <div class="col-2">
-
-        <div class="head-alt3">
-            <h5 class="title"><?php echo $this->__('Payment Method') ?></h5>
-        </div>
-        <?php echo $this->getPaymentInfoHtml() ?>
-    </div>
+				<div class="head-alt3">
+					<h5 class="title"><?php echo $this->__('Payment Method') ?></h5>
+				</div>
+				<?php echo $this->getPaymentInfoHtml() ?>
+			</div>
+		</div>
+	</div>
 </div>
-</div><br/>
+<br/>
