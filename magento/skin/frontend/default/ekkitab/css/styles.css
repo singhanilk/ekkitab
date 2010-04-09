@@ -2002,3 +2002,28 @@ a:hover {
 .multi-address-checkout-box .col2-alt-set .col-1 .col-1-left { float:left; width:45%; border-right:1px dotted #cacaca;}
 .multi-address-checkout-box .col2-alt-set .col-1 .col-1-right { margin-left:20px;float:left; width:39%; border-right:1px dotted #cacaca;}
 .multi-address-checkout-box .col2-alt-set .col-2 { float:right; width:55%; }
+
+.note {
+	color:#0033cc;
+	padding-left:5px;
+	text-decoration: none;
+}
+
+.payment-checkmo-info {
+	 width:80%;
+	 margin-left:20px;
+	 clear:both; 
+}
+.payment-checkmo-info .col-1 { 
+	width:22.5%;
+	margin:5px;
+	text-align:right;
+	float:left; 
+}
+.payment-checkmo-info .col-2 { 
+	width:70.5%;
+	margin:5px;
+	text-align:left;
+	float:right; 
+}
+

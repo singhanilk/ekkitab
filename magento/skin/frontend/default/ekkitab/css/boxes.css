@@ -835,7 +835,7 @@ dl.item-options dd { padding-left:10px; }
 
 select.address-select {width:630px}
 .shipment-methods dd { margin-bottom:13px; }
-.payment-methods dt { margin-bottom:5px; }
+.payment-methods dt { margin:5px 0px; }
 .payment-methods dd { padding:5px 20px; }
 
 
