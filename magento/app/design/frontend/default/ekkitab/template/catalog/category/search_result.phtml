@@ -30,6 +30,9 @@
      return $resStr;
 	}
 $results=$this->getProductCollection();
+$bookList = null;
+$subcats = null;
+$curr_cp = null;
 if(!is_null($results) && is_array($results)){
   $bookList = $results["books"];
   $subcats = $results["counts"];

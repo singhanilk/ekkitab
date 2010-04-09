@@ -26,7 +26,7 @@
 ?>
 <?php $_orders = $this->getOrders(); ?>
 <div class="accTop">
-    <div class="accHdr"><?php echo $this->__('Recent Orders') ?></div>
+    <div class="accHdr"><?php echo $this->__('Recent')?><?php if( sizeof($_orders->getItems()) > 0 ): echo " ".sizeof($_orders->getItems()) ; endif;?><?php echo $this->__(' Orders') ?></div>
     <div class="edit"> <?php if( sizeof($_orders->getItems()) > 0 ): ?><a href="<?php echo $this->getUrl('sales/order/history') ?>"><?php echo $this->__('View All') ?></a><?php endif; ?></div>
 	<div class="clear"></div>
 </div><!-- accTop -->
@@ -39,7 +39,7 @@
                 <th><?php echo $this->__('Ship to') ?></th>
                 <th><?php echo $this->__('Order Total') ?></th>
                 <th><?php echo $this->__('Status') ?></th>
-                <th></th>
+                <th>&nbsp;</th>
             </tr>
         </thead>
         <tbody>

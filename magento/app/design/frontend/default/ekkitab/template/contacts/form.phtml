@@ -24,18 +24,19 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="padder">
-<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
-<div class="page-head">
-    <h3><?php echo Mage::helper('contacts')->__('Contact Us') ?></h3>
-</div>
-<form action="<?php echo $this->getFormAction(); ?>" id="contactForm" method="post">
-        <div class="head-alt2">
-            <h4 class="title"><?php echo Mage::helper('contacts')->__('Contact Information') ?></h4>
-        </div>
-    <fieldset class="group-select">
-        <ul>
-        <li>
+<div class="pageHeader"><?php echo Mage::helper('contacts')->__('Contact Us') ?></div>
+<div class="clear">&nbsp;</div>
+<div class="myAccCopy">
+	<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+	<form action="<?php echo $this->getFormAction(); ?>" id="contactForm" method="post">
+		<div class="accTop">
+			<div class="accHdr"><?php echo Mage::helper('contacts')->__('Contact Information') ?></div>
+			<div class="clear"></div>
+		</div>	
+		<div class="content">
+			<fieldset class="group-select">
+			<ul>
+				<li>
                 <div class="input-box">
                     <label for="name"><?php echo Mage::helper('contacts')->__('Name') ?> <span class="required">*</span></label><br />
                     <input name="name" id="name" title="<?php echo Mage::helper('contacts')->__('Name') ?>" value="<?php echo $this->htmlEscape($this->helper('contacts')->getUserName()) ?>" class="required-entry input-text" type="text"/>
@@ -47,8 +48,8 @@
                 </div>
 
                 <div class="clear"></div>
-    </li>
-    <li>
+			</li>
+			<li>
                 <div class="input-box">
                     <label for="telephone"><?php echo Mage::helper('contacts')->__('Telephone') ?></label><br />
                     <input name="telephone" id="telephone" title="<?php echo Mage::helper('contacts')->__('Telephone') ?>" value="" class="input-text" type="text"/>
@@ -56,18 +57,19 @@
 
                 <div class="clear"></div>
 
-    </li>
-    <li>
+			</li>
+			<li>
                 <div class="input-box">
                     <label for="comment"><?php echo Mage::helper('contacts')->__('Comment') ?> <span class="required">*</span></label><br />
                     <textarea name="comment" id="comment" title="<?php echo Mage::helper('contacts')->__('Comment') ?>" class="required-entry input-text" style="height:150px;width:525px;" cols="50" rows="5"></textarea>
                 </div>
-                </li>
-                </ul>
-    </fieldset>
-    <div class="button-set">
-        <p class="required"><?php echo Mage::helper('contacts')->__('* Required Fields') ?></p>
-        <input type="image" src="<?php echo $this->getSkinUrl('images/btn_submit.gif');?>" alt="<?php echo Mage::helper('contacts')->__('Submit') ?>"/>
+			</li>
+			<li>
+				<input type="image" src="<?php echo $this->getSkinUrl('images/submit_button.png');?>" alt="<?php echo Mage::helper('contacts')->__('Submit') ?>"/>
+			</li>
+		</ul>
+		</fieldset>
+	</div>
     </div>
 </form>
 <script type="text/javascript">

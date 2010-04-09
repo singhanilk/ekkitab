@@ -31,7 +31,9 @@
  * @see Mage_Page_Block_Html_Pager
  */
 ?>
-<?php if($this->getCollection()->getSize()): ?>
+<?php 
+$this->setShowPerPage(0);
+if($this->getCollection()->getSize()): ?>
 <table class="pager" cellspacing="0">
     <tr>
         <td>

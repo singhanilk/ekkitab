@@ -84,7 +84,6 @@
     <p><input type="checkbox" name="shipping[same_as_billing]" id="shipping:same_as_billing" value="1" <?php if($this->getAddress()->getSameAsBilling()): ?>checked="checked"<?php endif ?> onclick="shipping.setSameAsBilling(this.checked)"/> &nbsp;<label for="shipping:same_as_billing"><?php echo $this->__('Use Billing Address') ?></label></p>
 </form>
 <div class="button-set">
-    <p class="required"><?php echo $this->__('* Required Fields') ?></p>
     <div id="shipping-buttons-container">
         <a href="#" class="left" onclick="checkout.back(); return false;">&laquo; <?php echo $this->__('Back') ?></a>
         <span id="shipping-please-wait" style="display:none;" class="opc-please-wait">

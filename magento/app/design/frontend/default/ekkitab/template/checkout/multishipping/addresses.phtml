@@ -34,48 +34,42 @@
 <form action="<?php echo $this->getPostActionUrl() ?>" method="post">
 <div class="page-head button-level">
     <h3><?php echo $this->__('Ship to Multiple Addresses') ?></h3>
-    <input type="image" src="<?php echo $this->getSkinUrl('images/btn_enter_new_address.gif') ?>" onclick="$('add_new_address_flag').value=1" alt="<?php echo $this->__('Enter a New Address') ?>"/>
+    <input type="image" src="<?php echo $this->getSkinUrl('images/enter_new_add_button.png') ?>" onclick="$('add_new_address_flag').value=1" alt="<?php echo $this->__('Enter a New Address') ?>"/>
 </div>
-<div class="multi-address-checkout-description"><?php echo $this->__('Please select shipping address for applicable items') ?></div>
+<div class="scartArea">
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <fieldset>
     <input type="hidden" name="continue" value="0" id="can_continue_flag"/>
     <input type="hidden" name="new_address" value="0" id="add_new_address_flag"/>
-    <table cellspacing="0" id="multiship-addresses-table" class="data-table box-table">
-        <col width="300"/>
-        <col width="30"/>
-        <col/>
-        <col width="30"/>
-        <thead>
-            <tr>
-                <th><?php echo $this->__('Product') ?></th>
-                <th class="a-center"><?php echo $this->__('Qty') ?></th>
-                <th><?php echo $this->__('Send to') ?></th>
-                <th><?php echo $this->__('Remove') ?></th>
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <td colspan="100" class="a-right"><input type="image" src="<?php echo $this->getSkinUrl('images/btn_update_qty.gif') ?>" onclick="$('can_continue_flag').value=0" alt="<?php echo $this->__('Update Qty &amp; Addresses') ?>"/></td>
-            </tr>
-        </tfoot>
-        <tbody>
-        <?php foreach ($this->getItems() as $_index => $_item): ?>
-            <tr>
-                <td class="attributes-col">
-                    <?php echo $this->getItemHtml($_item->getQuoteItem())?>
-                </td>
-                <td class="a-center"><input name="ship[<?php echo $_index ?>][<?php echo $_item->getQuoteItemId() ?>][qty]" value="<?php echo $this->htmlEscape($_item->getQty()) ?>" size="2" class="input-text qty"/></td>
-                <td><?php if ($_item->getProduct()->getIsVirtual()): echo $this->__('Shipping selection is not applicable'); else: echo $this->getAddressesHtmlSelect($_item, $_index); endif; ?></td>
-                <td class="a-center"><a href="<?php echo $this->getItemDeleteUrl($_item) ?>"><img src="<?php echo $this->getSkinUrl('images/btn_trash.gif') ?>" width="16" height="16" alt="<?php echo $this->__('Remove Item') ?>"/></a></td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
+	<div class="skuScartHeaderRow" id="titleText">
+		<div class="titleColHdr"><?php echo $this->__('Item') ?></div>
+		<div class="qtyColHdr"><?php echo $this->__('Qty') ?></div>
+		<div class="sendToColHdr"><?php echo $this->__('Send to') ?></div>
+		<div class="clear"></div>
+	</div><!--skuScartRow -->
+	<?php foreach ($this->getItems() as $_index => $_item): ?>
+	<div class="skuScartRow">
+			<div class="titleCol"><?php echo $this->getItemHtml($_item->getQuoteItem())?></div>
+
+			<div class="qtyCol"><input name="ship[<?php echo $_index ?>][<?php echo $_item->getQuoteItemId() ?>][qty]" value="<?php echo $this->htmlEscape($_item->getQty()) ?>" size="2" class="input-text qty"/></div>
+			<div class="sendToCol"><?php if ($_item->getProduct()->getIsVirtual()): echo $this->__('Shipping selection is not applicable'); else: echo $this->getAddressesHtmlSelect($_item, $_index); endif; ?></div>
+			<div class="trashBoxCol"><a href="<?php echo $this->getItemDeleteUrl($_item) ?>"><img src="<?php echo $this->getSkinUrl('images/btn_trash.gif') ?>" width="16" height="16" alt="<?php echo $this->__('Remove Item') ?>"/></a></div>
+			<div class="clear"></div>
+	</div>
+	<?php endforeach; ?>
+	<div class="grandTotalArea">
+		<div class="modifiedText">Modified any quantities ?
+		<div class="updateBut"><input type="image" src="<?php echo $this->getSkinUrl('images/update_cart_but.png') ?>" onclick="$('can_continue_flag').value=0" alt="<?php echo $this->__('Update Qty &amp; Addresses') ?>"/></div></div><!-- updateBut -->
+		<div class="clear"></div>
+	</div>
     <script type="text/javascript">decorateTable('multiship-addresses-table')</script>
-<div class="button-set">
-    <a href="<?php echo $this->getBackUrl() ?>" class="f-left"><?php echo $this->__('&laquo; Back to Shopping Cart') ?></a>
-    <input type="image" src="<?php echo $this->getSkinUrl('images/btn_continue.gif') ?>" alt="<?php echo $this->__('Continue to Shipping Information') ?>" onclick="$('can_continue_flag').value=1" <?php if ($this->isContinueDisabled()):?>disabled="disabled" style="border-color:#999; background-color:#ccc;"<?php endif ?> />
-</div>
+	<div class="skuScartRow">
+		<div class="bkHomePage left"><a href="<?php echo $this->getBackUrl() ?>" class="f-left"><?php echo $this->__('&laquo; Back to Shopping Cart') ?></a></div> <div class="bkHomePage right"><input type="image" src="<?php echo $this->getSkinUrl('images/btn_continue.gif') ?>" alt="<?php echo $this->__('Continue to Shipping Information') ?>" onclick="$('can_continue_flag').value=1" <?php if ($this->isContinueDisabled()):?>disabled="disabled" style="border-color:#999; background-color:#ccc;"<?php endif ?> /></div>
+		<div class="clear"></div>
+		</div>
+		<!-- proceedCheckout -->
+		<div class="clear"></div>
+	</div><!-- skuScartRow -->
 </fieldset>
 </form>
+</div>

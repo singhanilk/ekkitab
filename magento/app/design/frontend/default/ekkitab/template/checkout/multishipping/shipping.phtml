@@ -44,64 +44,65 @@
     </div>
     <div class="content col2-alt-set">
         <div class="col-1">
-            <div class="head">
-                <h5 class="title"><?php echo $this->__('Shipping to') ?><span class="pipe">|</span><a href="<?php echo $this->getAddressEditUrl($_address) ?>"><?php echo $this->__('Change') ?></a></h5>
-            </div>
-            <address>
-                <?php echo $_address->format('html') ?>
-            </address>
-            <br/>
-            <div class="shipping-method-pointer">
-
-                <div class="head">
-                    <h5 class="title"><?php echo $this->__('Shipping Method') ?></h5>
-                </div>
+			<div class="col-1-left">
+				<div class="head">
+					<h5 class="title"><?php echo $this->__('Shipping to') ?><span class="pipe">|</span><a href="<?php echo $this->getAddressEditUrl($_address) ?>"><?php echo $this->__('Change') ?></a></h5>
+				</div>
+				<address>
+					<?php echo $_address->format('html') ?>
+				</address>
+			</div>
+			<div class="col-1-right">
+				<div class="head">
+					<h5 class="title"><?php echo $this->__('Shipping Method') ?></h5>
+				</div>
                 <?php if (!($_shippingRateGroups = $this->getShippingRates($_address))): ?>
                     <strong><?php echo $this->__('Sorry, no quotes are available for this order at this time.') ?></strong>
                 <?php else: ?>
-                <dl class="shipment-methods">
-                    <?php foreach ($_shippingRateGroups as $code => $_rates): ?>
-                        <dt><?php echo $this->getCarrierName($code) ?></dt>
-                        <dd>
-                            <ul>
-                            <?php foreach ($_rates as $_rate): ?>
-                                <li>
-                                   <?php if ($_rate->getErrorMessage()): ?>
-                                        <strong><?php echo $_rate->getCarrierTitle() ?>: <?php echo $_rate->getErrorMessage() ?></strong>
-                                   <?php else: ?>
-                                        <input name="shipping_method[<?php echo $_address->getId() ?>]" type="radio" value="<?php echo $this->htmlEscape($_rate->getCode()) ?>" id="s_method_<?php echo $_address->getId() ?>_<?php echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$this->getAddressShippingMethod($_address)) echo ' checked="checked"' ?>/>
-                                        <label for="s_method_<?php echo $_address->getId() ?>_<?php echo $_rate->getCode() ?>"><?php echo $_rate->getMethodTitle() ?>
-                                        <strong>
-                                        <?php $_excl = $this->getShippingPrice($_address, $_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax()); ?>
-                                        <?php $_incl = $this->getShippingPrice($_address, $_rate->getPrice(), true); ?>
+					<?php $first=true; $inFirst=true; ?>
+					<dl class="shipment-methods">
+						<?php foreach ($_shippingRateGroups as $code => $_rates): ?>
+							<dt><?php echo $this->getCarrierName($code) ?></dt>
+							<dd>
+								<ul>
+								<?php foreach ($_rates as $_rate): ?>
+									<li>
+									   <?php if ($_rate->getErrorMessage()): ?>
+											<strong><?php echo $_rate->getCarrierTitle() ?>: <?php echo $_rate->getErrorMessage() ?></strong>
+									   <?php else: ?>
+											<input name="shipping_method[<?php echo $_address->getId() ?>]" type="radio" value="<?php echo $this->htmlEscape($_rate->getCode()) ?>" id="s_method_<?php echo $_address->getId() ?>_<?php echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$this->getAddressShippingMethod($_address)|| ($first && $inFirst)) echo ' checked="checked"' ?>/>
+											<label for="s_method_<?php echo $_address->getId() ?>_<?php echo $_rate->getCode() ?> "><?php echo $_rate->getMethodTitle() ?>
+											<strong>
+											<?php $_excl = $this->getShippingPrice($_address, $_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax()); ?>
+											<?php $_incl = $this->getShippingPrice($_address, $_rate->getPrice(), true); ?>
 
-                                        <?php echo $_excl; ?>
-                                        <?php if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                                            (<?php echo $this->__('Incl. Tax'); ?> <?php echo $_incl; ?>)
-                                        <?php endif; ?>
-                                        </strong>
-                                        </label>
-                                   <?php endif ?>
-                                </li>
-                            <?php endforeach; ?>
-                            </ul>
-                        </dd>
-                    <?php endforeach; ?>
-                </dl>
+											<?php echo $_excl; ?>
+											<?php if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_excl): ?>
+												(<?php echo $this->__('Incl. Tax'); ?> <?php echo $_incl; ?>)
+											<?php endif; ?>
+											</strong>
+											</label>
+									   <?php endif ?>
+									</li>
+								<?php $inFirst=false;  endforeach; ?>
+								</ul>
+							</dd>
+						<?php $first=false; endforeach; ?>
+					</dl>
                 <?php endif; ?>
-            </div>
-        </div>
+			</div>
+		</div>
         <div class="col-2">
             <?php echo $this->helper('giftmessage/message')->getInline('multishipping_adress_checkbox', $_address); ?>
             <div class="head">
                 <h5 class="title"><?php echo $this->__('Items') ?><span class="pipe">|</span><a href="<?php echo $this->getItemsEditUrl($_address) ?>"><?php echo $this->__('Edit Items') ?></a></h5>
             </div>
-            <table cellspacing="0" id="shipping-table-<?php echo $_address->getId() ?>" class="data-table nested-table">
+            <table cellspacing="0" id="shipping-table-<?php echo $_address->getId() ?>" class="custom-data-table nested-table">
                 <col/>
                 <col width="30"/>
                 <thead>
                     <tr>
-                        <th><?php echo $this->__('Product Name') ?></th>
+                        <th><?php echo $this->__('Book Name') ?></th>
                         <th class="a-center"><?php echo $this->__('Qty') ?></th>
                     </tr>
                 </thead>
@@ -125,8 +126,12 @@
 <?php endforeach; ?>
 <?php echo $this->getChildHtml('checkout_billing_items') ?>
 </div>
-<div class="button-set">
-    <a href="<?php echo $this->getBackUrl() ?>" class="f-left"><?php echo $this->__('&laquo; Back to Select Addresses') ?></a>
-    <input  type="image" src="<?php echo $this->getSkinUrl('images/btn_continue.gif') ?>" alt="<?php echo $this->__('Continue to Billing Information') ?>"/>
-</div>
+<div class="skuScartRow">
+	<div class="bkHomePage left"><a href="<?php echo $this->getBackUrl() ?>" class="f-left"><?php echo $this->__('&laquo; Back to Select Addresses') ?></a></div> <div class="bkHomePage right"> <input  type="image" src="<?php echo $this->getSkinUrl('images/btn_continue.gif') ?>" alt="<?php echo $this->__('Continue to Billing Information') ?>"/></div>
+	<div class="clear"></div>
+	</div>
+	<!-- proceedCheckout -->
+	<div class="clear"></div>
+</div><!-- skuScartRow -->
+<div class="clear"><br/></div>
 </form>
