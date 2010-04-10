@@ -137,36 +137,15 @@ CREATE TABLE IF NOT EXISTS `ek_supplier_params` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8  AUTO_INCREMENT=1 ;
 
 --
--- Table structure for `book_description.`
--- This is a temp table to hold data from text files.
+-- Table structure for `book_availability`
 --
 
-CREATE TABLE if not exists `book_description` (
-  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `book_availability` (
+  `id` int NOT NULL AUTO_INCREMENT,
   `isbn` varchar(20) NOT NULL,
-  `description` varchar(2048) DEFAULT NULL,
-  `short_description` varchar(2048) DEFAULT NULL,
-  `updated` tinyint(1) default 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `ISBN` (`isbn`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Table structure for `book_stock_and_prices.`
--- This is a temp table to hold data from text files.
---
-
-CREATE TABLE if not exists `book_stock_and_prices` (
-  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `isbn` varchar(20) NOT NULL,
+  `distributor` varchar(80) NOT NULL,
   `in_stock` tinyint(1) default 0,
-  `list_price` decimal(8,2),
-  `discount_price` decimal(8,2),
-  `suppliers_price` decimal(8,2),
-  `suppliers_discount` decimal(4,2),
-  `currency` varchar(20),
-  `publishing_date` date,
-  `updated` tinyint(1) default 0,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `ISBN` (`isbn`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  UNIQUE KEY (`isbn`, `distributor`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  AUTO_INCREMENT=1 ;
+

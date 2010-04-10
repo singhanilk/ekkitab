@@ -2,7 +2,7 @@
 error_reporting(E_ALL  & ~E_NOTICE);
 ini_set("display_errors", 1); 
 include(EKKITAB_HOME . "/" . "db" . "/" . "importbooks_config.php");
-define (REQUIRED_FIELDS, 16);
+define (REQUIRED_FIELDS, 9);
 
 //  
 //
@@ -98,6 +98,9 @@ class Parser {
         }
 
         function getDeliveryPeriod($db, $supplier, $publisher) {
+            if (strlen($supplier) > 0) {
+                $supplier = strtolower($supplier);
+            }
             if (empty($this->supplierparams)) {
                 $this->supplierparams = $this->initSupplierParams($db);
             }
@@ -146,6 +149,10 @@ class Parser {
         }
 
         function getSuppliersDiscount($db, $supplier, $publisher) {
+
+            if (strlen($supplier) > 0) {
+                $supplier = strtolower($supplier);
+            }
             if (empty($this->supplierparams)) {
                 $this->supplierparams = $this->initSupplierParams($db);
             }
@@ -200,75 +207,40 @@ class Parser {
         }
 
         function getBasic($line, $book, $db, $logger) {
-            $preloaded = false;
             $fields = explode("\t", $line);
-            $preloaded_field = 15;
-            if (count($fields) == (REQUIRED_FIELDS + 1)) {
-               if (!strcmp($fields[$preloaded_field], "PRELOADED")) {
-                    $preloaded = true;
-               }
+            $book['isbn']            = trim($fields[0]);
+            $book['isbn10']          = trim($fields[1]);
+            $book['title']           = $this->escape(trim($fields[2]));
+            $book['author']          = $this->escape(trim($fields[3]));
+            $book['binding']         = trim($fields[4]);
+            $book['publishing_date'] = trim($fields[6]);
+            $book['publisher']       = $this->escape(trim($fields[7]));
+            $book['pages']           = trim($fields[8]);
+            $book['language']        = trim($fields[9]);
+            $book['weight']          = trim($fields[11]);
+            $book['dimension']       = trim($fields[12]);
+            $book['shipping_region'] = trim($fields[13]);
+            $book['info_source']     = "Penguin India";	
+            $book['sourced_from']    = "India";
+            $book['image']           = $book['isbn'].".jpg";
+
+            $bisaccodes = array();
+            //$bisaccodes[] = trim($fields[16]);
+            //$book['bisac'] = $this->getBisacCodes($db, $bisaccodes);
+            $bisaccodes = explode(",", trim($fields[16]));
+            foreach($bisaccodes as $bisac) {
+               $book['bisac'][] = trim($bisac);
             }
-            $book['isbn'] = trim($fields[0]);
-            $book['isbn10'] = trim($fields[1]);
-            $book['title']  = $this->escape(trim($fields[2]));
-            $book['edition'] = trim($fields[5]);
-            $authors = explode("&", str_replace("\"", "", trim($fields[3])));
-            foreach ($authors as $author) {
-                $author = $this->escape($this->correctName($author));
-                $book['author'] = $book['author'] . " & " . $author;
-            }
-            $book['author'] = preg_replace("/^ & /", "", $book['author']);
-            $book['publisher'] = $this->escape(trim($fields[7]));
-            $book['binding'] = "";
-            $formatdetails = trim($fields[6]);
-            $formats = explode(",", $formatdetails);
-            foreach ($formats as $format) {
-                if (stripos($format, "imensions") > 0) {
-                    $book['dimension'] = trim(preg_replace("/[Dd]imensions/", "", $format));
-                }
-                else if (stripos($format, "Pages") > 0) {
-                    $book['pages'] = trim(preg_replace("/[Pp]ages/", "", $format));
-                }
-            }
-            $book['language'] = $fields[9];
-            switch (strtoupper(trim($fields[9]))) {
-                case 'EN' : 
-                case 'ENGLISH':
-                            $book['language'] = "English";
-                            break;
-                default:    $book['language'] = strtoupper(trim($fields[9]));;
-                            echo "Language not defined - " . $book['language'] . "\n";
-                            break; 
-            }
-		
-            $book['info_source'] = str_replace("\"", "", trim($fields[13]));	
-            if (!strcmp($book['info_source'], "--")) {
-                $book['info_source'] = UNKNOWN_INFO_SOURCE;
-            }
-            $book['sourced_from'] = "India";
-            $book['image'] = $book['isbn'].".jpg";
-            if (!$preloaded) {
-                $subjects = explode(":", trim($fields[8]));
-                $book['bisac'] = $this->getBisacCodes($db, $subjects);
-            }
-            else {
-                $bisaccodes = explode(",", trim($fields[8]));
-                foreach($bisaccodes as $bisac) {
-                    $book['bisac'][] = trim($bisac);
-                }
-            }
-            $indianpub = str_replace("\"", "", trim($fields[14]));
-            $book['delivery_period'] = $this->getDeliveryPeriod($db, strtolower($book['info_source']), "Any");
-            if ($book['delivery_period'] == null) {
-                throw new exception("No delivery period data for " . $book['info_source']);
-            }
+
 
             return($book);
         }
 
 		function getPrice($line, $book, $db, $logger){
             $fields = explode("\t", $line);
-            switch (str_replace("\"", "", strtoupper(trim($fields[11])))) {
+            $book['isbn'] = str_replace("\"", "", trim($fields[3]));
+            $book['distributor'] = "Penguin";
+            switch (str_replace("\"", "", strtoupper(trim($fields[7])))) {
                 case 'I'  : $book['currency'] = "INR";
                             break;
                 case 'P'  : $book['currency'] = "BRI";
@@ -278,33 +250,33 @@ class Parser {
                 case 'C'  : $book['currency'] = "CAN";
                             break;
                 default:    $book['currency'] = "XXX";
-                            echo "Unknown currency: " . str_replace("\"", "", strtoupper(trim($fields[11]))) . "\n";
+                            throw new exception("Unknown currency " . str_replace("\"", "", strtoupper(trim($fields[7]))));
                             break;
             }
-            $book['info_source']  = str_replace("\"", "", trim($fields[13]));	
-            if (!strcmp($book['info_source'], "--")) {
-                $book['info_source'] = UNKNOWN_INFO_SOURCE;
-            }
-			$book['list_price'] = trim($fields[10]);
-            $indianpub = str_replace("\"", "", trim($fields[14]));
-			$book['suppliers_discount'] = $this->getSuppliersDiscount($db, strtolower($book['info_source']), "Any");
+			$book['list_price'] = str_replace("\"", "", trim($fields[6]));
+			$book['suppliers_discount'] = $this->getSuppliersDiscount($db, $book['distributor'], "Any");
             if ($book['suppliers_discount'] == null) {
-                throw new exception("No supplier discount data for " . $book['info_source']);
+                throw new exception("No supplier discount data for " . $book['distributor']);
             }
-            $availability = trim(str_replace("\"", "", $fields[count($fields) - 1]));
+            $availability = trim(str_replace("\"", "", $fields[9]));
             if (!strcmp(strtoupper($availability), "AVAILABLE")) {
 			    $book['in_stock'] = 1;
             }
             else {
 			    $book['in_stock'] = 0;
             }
-            $book['isbn'] = trim($fields[0]);
+
+            $book['delivery_period'] = $this->getDeliveryPeriod($db, $book['distributor'], "Any");
+            if ($book['delivery_period'] == null) {
+                throw new exception("No delivery period data for " . $book['distributor']);
+            }
+
             return $book;
         }
             
 		function getDesc($line,$book, $db, $logger){
             $fields = explode("\t", $line);
-			$description  = trim($fields[4]);
+			$description  = trim($fields[5]);
 			$book['description'] = str_replace("'", "\'", $description);
             $book['isbn'] = trim($fields[0]);
             return $book;

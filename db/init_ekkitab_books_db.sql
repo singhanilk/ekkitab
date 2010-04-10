@@ -366,3 +366,8 @@ INSERT INTO `ek_catalog_global_section_products` (`section_id`, `product_id`) VA
 (6,5453),
 (6,923),
 (6,443);
+
+INSERT INTO `customer_entity` VALUES (1,1,0,1,'install@ekkitab.com',1,'000000004',1,'2010-04-10 06:42:03','2010-04-10 06:42:04',1);
+INSERT INTO `customer_entity_varchar` VALUES (1,1,5,1,'Installation'),(2,1,7,1,'Account'),(4,1,3,1,'Ekkitab'),(5,1,12,1,'4bb0eca7e3bc6e125aa64148e1f42163:O7');
+
+

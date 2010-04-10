@@ -300,6 +300,22 @@ ini_set("display_errors", 1);
        }
     }
 
+    function updateBookAvailability($book, $db) {
+
+       $query = "insert into book_availability (isbn, distributor, in_stock) values ( ";
+       $query .= "'" . $book['isbn'] . "','" . $book['distributor'] . "','" . $book['in_stock'] . "'";
+       $query .= " ) on duplicate key update in_stock = ";
+       $query .= "'" . $book['in_stock'] . "'";
+
+       if (! $result = mysqli_query($db, $query)) {
+           warn("Failed to update book availability: ". mysqli_error($db), $query);
+           return(0); 
+       }
+       else {
+           return(1);
+       }
+    }
+
     function doCommit($db) {
        $query = "commit"; 
 
@@ -412,12 +428,17 @@ ini_set("display_errors", 1);
                     }
                     $book['list_price'] = round($book['list_price'] * $conv_rate);
                     $book['suppliers_price'] = round($book['list_price'] * ((100 - $book['suppliers_discount'])/100));
-                    $disc_rate = $discountrates[strtolower($book['info_source'])];
+                    $distributor = isset($book['info_source']) ? $book['info_source'] : $book['distributor'];
+                    $disc_rate = $discountrates[strtolower($distributor)];
                     if (empty($disc_rate)) {
-                        fatal("No discount rate available for supplier " . $book['info_source']);
+                        fatal("No discount rate available for supplier " . $distributor);
                     }
                     $discount =  ($book['list_price'] - $book['suppliers_price']) * $disc_rate / 100 ;
                     $book['discount_price'] = round($book['list_price'] - $discount);
+                    if (isset($book['distributor'])) {
+                        updateBookAvailability($book, $db);
+                        unset($book['distributor']);
+                    }
                 }
                 if (!insertBook($book, $db, $pgm_mode)){
                     $errorcount++;
