@@ -35,17 +35,18 @@ echo "Continuing....."
 ##########################################################
 ### Reset Ekkitab_Books and Reference Databases.
 ##########################################################
- mysql -u $uid -p$pswd < reset_ekkitab_books.sql
- mysql -u $uid -p$pswd < reset_refdb.sql
+# mysql -u $uid -p$pswd < reset_ekkitab_books.sql
+(cd $EKKITAB_HOME/db; ./reset_ekkitab_books.sh $dbhost $uid $pswd)
+mysql -u $uid -p$pswd < reset_refdb.sql
 
 ##########################################################
 ###  import the 1k test data
 ##########################################################
- php importbooks.php -a 1ktestdata   ../data/1ktestdata.txt
+php importbooks.php -a 1ktestdata   ../data/1ktestdata.txt
 ##########################################################
 ###  import the 50 low-cost books.
 ##########################################################
- php importbooks.php -a 1ktestdata   ../data/50lowcostbooks.txt
+php importbooks.php -a 1ktestdata   ../data/50lowcostbooks.txt
 ##########################################################
 ### Copy the books table to ekkitab_books database. 
 ##########################################################
