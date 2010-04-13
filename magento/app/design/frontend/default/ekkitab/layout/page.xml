@@ -80,13 +80,16 @@ Default layout, loads most of the pages
 			<block type="page/html_breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
 
             <block type="core/text_list" name="left" as="left"/>
+           
+			<block type="core/text_list" name="right" as="right" >
+                <block type="page/html" name="testimonial" as="testimonial" template="page/html/testimonial.phtml"/>
+                <block type="page/html" name="news" as="news" template="page/html/news.phtml"/>
+			</block>
 
             <block type="core/messages" name="global_messages" as="global_messages"/>
             <block type="core/messages" name="messages" as="messages"/>
 
             <block type="core/text_list" name="content" as="content"/>
-
-            <block type="core/text_list" name="right" as="right"/>
 
             <block type="page/html_footer" name="footer" as="footer" template="page/html/footer.phtml">
                 <block type="page/switch" name="store_switcher" as="store_switcher" template="page/switch/stores.phtml"/>

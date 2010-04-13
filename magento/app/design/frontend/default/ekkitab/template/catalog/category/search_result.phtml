@@ -60,7 +60,11 @@ if(!is_null($results) && is_array($results)){
 				$cp =  $curr_cp."__". $urlKey;
 			}else{
 				$cp =  $urlKey;
-			}		?>
+			}		
+			if($val >= 1000 ){
+				$val =  " >". $val;
+			}
+			?>
 			<li><a href="<?php echo $this->getSubCategorySearchUrl($cp,1) ?>"><?php echo ucwords($key). "[". $val ."]"?></a></li>
 <?php	endforeach;	?>
 		</ul>
@@ -90,7 +94,11 @@ if(!is_null($results) && is_array($results)){
 		<div class="searchResTop">
 			<div class="leftArea">
 				<?php if($this->getLastPageNumber()>1): ?>
-					<?php echo $this->__('Showing %s to %s of %s books', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+					<?php if($this->getTotalNum() >= 1000): ?>
+						<?php echo $this->__('Showing %s to %s of more than %s books', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+					<?php else : ?>
+						<?php echo $this->__('Showing %s to %s of %s books', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+					<?php endif; ?>
 				<?php elseif($this->getTotalNum()==1): ?>
 					<?php echo $this->__('Showing the only book', $this->getTotalNum()) ?>
 				<?php else: ?>
