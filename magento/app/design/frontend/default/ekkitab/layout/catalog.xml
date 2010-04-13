@@ -315,9 +315,15 @@ Product view
             <action method="setTemplate"><template>page/3columns.phtml</template></action>
         </reference>
 		<reference name="content">
-            <block type="ekkitab_catalog/globalsection_view" name="globalsection_view" template="catalog/globalsection/view.phtml">
+            <block type="ekkitab_catalog/globalsection_view" name="globalsection_view" >
+                <action method="setDefaultTemplate"><value>catalog/globalsection/view.phtml</value></action>
+				<action method="chooseTemplate"/>
                 <block type="page/html" name="donate_book_blurb_home" template="page/html/donate_blurb_home.phtml" />
             </block>
+        </reference>
+        <reference name="right">
+			<block type="page/html" name="donate_book_blurb" before="news" template="page/html/donate_blurb.phtml" />
+			<remove name="testimonial" />
         </reference>
 </ekkitab_catalog_globalsection_view>
 

@@ -30,7 +30,7 @@
 		}
 ?>
 <div class="hmScrollRow">
-	<div class="mainHdr"><?php echo $section->getDisplayName() ?></div>
+	<div class="mainHdr">"<?php echo $section->getDisplayName() ?>"- This is Special. </div>
 <?php	if(!is_null($products) && $_count > 0){
 			foreach($products as $product){  ?>
 <?php			if($counter%$_columnSize==0){  ?>
@@ -74,7 +74,7 @@
 		</div><!-- hmScrollRow -->
 <?php else: ?>
 <div class="hmMainRows">
-	<div class="mainLeftHdr">Our Apologies...</div>
+	<div class="mainLeftHdr">Special Apologies...</div>
 	<div class="notFoundArea">
 		<p> The content you have requested for is not available.
 		<ul>
@@ -83,13 +83,13 @@
 		<li>If you clicked on a link to get here, the link might be outdated</li></ul>
 		</p>
 		<p><div class="boldFont">What can you do?</div>
-		Please contact Customer Care at  <a href="mailto:support@ekkitab.com">support@ekkitab.com</a> and let us know of this problem. We appreciate your help in ensuring that the service is available and runs error free.
+		Please contact Customer Care at <a href="mailto:ccare@ekkitab.com">ccare@ekkitab.com</a> and let us know of this problem. We appreciate your help in ensuring that the service is available and runs error free.
 		<ul>
-		<li>Go <a href="javascript:history.back();">back to the previous page</a></li>
-		<li>Use the Search Facility at the top of the page to search the ekkitab web site</li>
+		<li>Go <a href="#">back to the previous page</a></li>
+		<li>Use the <a href="#">Search Facility</a> at the top of the page to search the ekkitab web site</li>
 		<li>Click on any of the links below to get you back on track
-		<ul><li><a href="<?php echo $this->getUrl('home')?>">ekkitab Home Page</a></li>
-		<li><a href="<?php echo $this->getUrl('customer/account')?>">My Account</a> (You will have to Sign in or Register, if it's your first time)</li>
+		<ul><li><a href="#">ekkitab Home Page</a></li>
+		<li><a href="#">My Account</a> (You will have to Sign in or Register, if it's your first time)</li>
 		</ul>
 		</li></ul>
 		</p>

@@ -20,53 +20,60 @@
 			if($section):
 				$products= $section->getSectionProducts();
 				//$productIds= $section->getSectionProductIds();
-				$_count = is_array($products)?count($products):$products->count(); 
+				$_count = (!is_null($products) && is_array($products))?count($products):(!is_null($products))? $products->count() :0; 
 				$_columnSize=4;
 				$counter=0;
 				$firstTime=0;
-				$_totalRows= intval($_count/ $_columnSize) ;
-				$_totalRows= ($_count % $_columnSize) > 0 ? $_totalRows +1 : $_totalRows  ;
+				if($_count > 0){
+					$_totalRows= intval($_count/ $_columnSize) ;
+					$_totalRows= ($_count % $_columnSize) > 0 ? $_totalRows +1 : $_totalRows  ;
+				}else{
+					$_totalRows= 0;
+				}
 ?>
-	<div class="hmScrollRow">
-		<div class="mainHomeHdr"><?php echo $section->getDisplayName() ?></div>
-<?php	foreach($products as $product){  ?>
-<?php		if($counter%$_columnSize==0){  ?>
-<?php			if($firstTime!=0){  ?>
-					</div>
-					<div class="clear hmInScrollRowSep"></div>
-<?php			}					?>
-				<div class="hmInScrollRow" >
-<?php		}
-			$counter+=1;
-			$savingsPerct= ($product->getPrice() >0 )?	(($product->getPrice() - $product->getFinalPrice())/ $product->getPrice() ) * 100 : 0; 
-			$author = $product->getBoAuthor();
-			$title= $this->htmlEscape($product->getName());
-			if(isset($author) && strlen(trim($author)) > 0)
-			{
-				$bookName=$author."__";
-			}else{
-				$bookName="";
-			}
-			$bookName=$bookName.$title."__".$product->getId();
-			$bookName = preg_replace('#[^A-Za-z0-9\_]+#', '-', $bookName);//($repArr2, "-", $urlKey);
-			$bookName="ekkitab_catalog/product/view/book/".$bookName.".html";
-	
+				<div class="hmScrollRow">
+				<div class="mainHomeHdr"><?php echo $section->getDisplayName() ?></div>
+<?php			if(!is_null($products) && $_count > 0){
+					foreach($products as $product){  ?>
+<?php					if($counter%$_columnSize==0){  ?>
+<?php						if($firstTime!=0){  ?>
+								</div>
+								<div class="clear hmInScrollRowSep"></div>
+<?php						}					?>
+							<div class="hmInScrollRow" >
+<?php					}
+						$counter+=1;
+						$savingsPerct= ($product->getPrice() >0 )?	(($product->getPrice() - $product->getFinalPrice())/ $product->getPrice() ) * 100 : 0; 
+						$author = $product->getBoAuthor();
+						$title= $this->htmlEscape($product->getName());
+						if(isset($author) && strlen(trim($author)) > 0)
+						{
+							$bookName=$author."__";
+						}else{
+							$bookName="";
+						}
+						$bookName=$bookName.$title."__".$product->getId();
+						$bookName = preg_replace('#[^A-Za-z0-9\_]+#', '-', $bookName);//($repArr2, "-", $urlKey);
+						$bookName="ekkitab_catalog/product/view/book/".$bookName.".html";
 	?>
-					<div class="vColumns">
-						<a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>"><img src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->keepFrame(false)->resize(null, 100); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" /></a>
-						<div class="titleEtc">
-							<div class="bkTitle"><a href="<?php echo $this->getUrl($bookName)?>"  title="<?php echo $product->getTitle() ?>"><?php echo $title ?></a></div><!-- bkTitle -->
-							<div class="lineHeight14em"><?php echo $this->htmlEscape($product->getBoAuthor())?></div>
-							<div class="youSave"><?php echo Mage::helper('core')->currency($product->getFinalPrice(),true,false) ?></div>
-							<div class="lineHeight14em"><span class="striked"><?php echo Mage::helper('core')->currency($product->getListPrice(),true,false) ?></span></div>
-							<?php if($savingsPerct > 0):?><div class="youSave">Save <?php echo number_format($savingsPerct,2,'.','') ?>%</div><?php endif; ?>
-						</div><!-- titleEtc -->
-					</div>
-<?php		$firstTime =1;
-		}					?>
-			</div><!-- hmInScrollRow -->
-			<div class="clear"></div>
-		</div><!-- hmScrollRow -->
+								<div class="vColumns">
+									<a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>"><img src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->keepFrame(false)->resize(null, 100); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" /></a>
+									<div class="titleEtc">
+										<div class="bkTitle"><a href="<?php echo $this->getUrl($bookName)?>"  title="<?php echo $product->getTitle() ?>"><?php echo $title ?></a></div><!-- bkTitle -->
+										<div class="lineHeight14em"><?php echo $this->htmlEscape($product->getBoAuthor())?></div>
+										<div class="youSave"><?php echo Mage::helper('core')->currency($product->getFinalPrice(),true,false) ?></div>
+										<div class="lineHeight14em"><span class="striked"><?php echo Mage::helper('core')->currency($product->getListPrice(),true,false) ?></span></div>
+										<?php if($savingsPerct > 0):?><div class="youSave">Save <?php echo number_format($savingsPerct,2,'.','') ?>%</div><?php endif; ?>
+									</div><!-- titleEtc -->
+								</div>
+<?php					$firstTime =1;
+					}	//end of foreach...	?>
+					</div><!-- hmInScrollRow -->
+					<div class="clear"></div>
+<?php			} else { //end of if(products not null )... ?>
+				This section will be updated soon...
+<?php			} //end of else ..?>
+			</div><!-- hmScrollRow -->
 <?php else: ?>
 	<div class="hmMainRows">
 		<div class="mainLeftHdr"><?php echo $section->getDisplayName() ?></div>This section will be updated soon.

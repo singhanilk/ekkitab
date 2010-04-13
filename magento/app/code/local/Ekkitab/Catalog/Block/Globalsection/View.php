@@ -19,6 +19,19 @@ class Ekkitab_Catalog_Block_Globalsection_View extends Mage_Core_Block_Template
 
     private $_globalsection;
 
+    public function chooseTemplate()
+    {
+		if(is_null($this->_globalsection)){
+           $this->_globalsection = $this->getGlobalsection();
+		}
+		if($this->_globalsection && $this->_globalsection->getId() && strlen($this->_globalsection->getTemplatePath()) > 0 ){
+		   $this->setTemplate($this->_globalsection->getTemplatePath());
+        }
+		else {
+		   $this->setTemplate($this->getDefaultTemplate());
+        }
+    }
+
 	/**
      * Get popular of current store
      *
