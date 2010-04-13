@@ -1,6 +1,14 @@
 <?php
 error_reporting(E_ALL  & ~E_NOTICE);
 ini_set("display_errors", 1); 
+$EKKITAB_HOME=getenv("EKKITAB_HOME");
+if (strlen($EKKITAB_HOME) == 0) {
+    echo "EKKITAB_HOME is not defined...Exiting.\n";
+    exit(1);
+}
+else {
+    define(EKKITAB_HOME, $EKKITAB_HOME); 
+}
 //  
 //
 // COPYRIGHT (C) 2009 Ekkitab Educational Services India Pvt. Ltd.  
@@ -17,9 +25,10 @@ ini_set("display_errors", 1);
 
 // This script will import books into the reference database from a vendor file......
 
-    include("importbooks_config.php");
+    ini_set(include_path, ${include_path}.PATH_SEPARATOR.EKKITAB_HOME."/"."config");
+    include("ekkitab.php");
     require_once(LOG4PHP_DIR . '/LoggerManager.php');
-    ini_set(include_path, ${include_path}.EKKITAB_HOME."/"."bin");
+    ini_set(include_path, ${include_path}.PATH_SEPARATOR.EKKITAB_HOME."/"."bin");
     include("imagehash.php");
 
     define(UNCLASSIFIED, "ZZZ000000");
@@ -375,7 +384,7 @@ ini_set("display_errors", 1);
 
         readBisacEquivalents();
         require_once(IMPORTBOOKS_PLUGINS_DIR . "/" . $argv[2] . ".php");
-        $config = getConfig(IMPORTBOOKS_INI);
+        $config = getConfig(CONFIG_FILE);
         $db = initDatabases($config);
 
         $parser       = new Parser($pgm_mode);

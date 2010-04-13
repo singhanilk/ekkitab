@@ -1,5 +1,0 @@
--b Ingrams "/mnt3/publisherdata/Ingram/ttlingv2.txt"
--d Ingrams "/mnt3/publisherdata/Ingram/TQANNOT-13.TXT"
--p Ingrams "/mnt3/publisherdata/Ingram/stockv2@ingram.dat"
--bd Penguin "/mnt3/publisherdata/Penguin/PenguinBooks-catalog.txt"
--p Penguin "/mnt3/publisherdata/Penguin/PenguinBooks-stock.txt"

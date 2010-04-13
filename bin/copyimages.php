@@ -1,6 +1,14 @@
 <?php
 error_reporting(E_ALL  & ~E_NOTICE);
 ini_set("display_errors", 1); 
+$EKKITAB_HOME=getenv("EKKITAB_HOME");
+if (strlen($EKKITAB_HOME) == 0) {
+    echo "EKKITAB_HOME is not defined...Exiting.\n";
+    exit(1);
+}
+else {
+    define(EKKITAB_HOME, $EKKITAB_HOME); 
+}
 
 //  
 //
@@ -21,8 +29,9 @@ ini_set("display_errors", 1);
 // magento image location.
 // the same directory if not rehashed using this function.
 
-  include("copyimages_config.php");
-  ini_set(include_path, ${include_path}.":".EKKITAB_HOME."/"."bin");
+  ini_set(include_path, ${include_path}.PATH_SEPARATOR.EKKITAB_HOME."/"."config");
+  include("ekkitab.php");
+  ini_set(include_path, ${include_path}.PATH_SEPARATOR.EKKITAB_HOME."/"."bin");
   include("imagehash.php");
 
   /**

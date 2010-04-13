@@ -8,6 +8,5 @@ fi;
 #    echo "Not enough arguments...."; echo "Usage: $0 <host> <user> <password>" 
 #    exit 1;
 #fi;
-mysql -s -h $host -u $user -p$password <<!
-source $EKKITAB_HOME/db/loadbooks.sql;
-!
+(cd $EKKITAB_HOME/db; ./reset_ekkitab_books.sh)
+(cd $EKKITAB_HOME/db; mysql -h $host -u $user -p$password < reset_refdb.sql)

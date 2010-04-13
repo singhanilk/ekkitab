@@ -1,19 +1,46 @@
 <?php
+    $EKKITAB_HOME=getenv("EKKITAB_HOME");
+    if (strlen($EKKITAB_HOME) == 0) {
+        echo "EKKITAB_HOME is not defined...Exiting.\n";
+        exit(1);
+    }
+    else {
+        define(EKKITAB_HOME, $EKKITAB_HOME); 
+    }
     error_reporting(E_ALL  & ~E_NOTICE);
     ini_set("display_errors", 1); 
-    if ($argc != 5) {
-        echo "Usage: $argv[0] <host> <username> <password> <base url>\n";
+    ini_set(include_path, ${include_path}.PATH_SEPARATOR.EKKITAB_HOME."/"."config");
+    include("ekkitab.php");
+
+   /** 
+    * Read and return the configuration data from file. 
+    */
+    function getConfig($file) {
+	    $config	= parse_ini_file($file, true);
+        if (! $config) {
+            fatal("Configuration file missing or incorrect."); 
+        }
+        return $config;
+    }
+
+    $config = getConfig(CONFIG_FILE);
+	$host   = $config[database][server];
+	$user   = $config[database][user];
+	$psw    = $config[database][password];
+
+    if ($argc != 2) {
+        echo "Usage: $argv[0] <base url>\n";
         exit(0);
     }
     try  {
-	    $db     = mysqli_connect($argv[1],$argv[2],$argv[3],"ekkitab_books");
+	    $db     = mysqli_connect($host,$user,$psw,"ekkitab_books");
     }
     catch (exception $e) {
         echo "Database connection failed. " .  $e->getmessage() . "\n";
         exit(1);
     }
 
-    $query = "insert into core_config_data (scope, scope_id, path, value) values ('default', 0, 'web/unsecure/base_url', '" . $argv[4] . "')" . " on duplicate key update value = '" . $argv[4] . "'";
+    $query = "insert into core_config_data (scope, scope_id, path, value) values ('default', 0, 'web/unsecure/base_url', '" . $argv[1] . "')" . " on duplicate key update value = '" . $argv[1] . "'";
     try {
 	    $result = mysqli_query($db, $query);
         if (!$result) {
@@ -26,7 +53,7 @@
         exit(1);
     } 
 
-    $query = "insert into core_config_data (scope, scope_id, path, value) values ('default', 0, 'web/secure/base_url', '" . $argv[4] . "')" . " on duplicate key update value = '" . $argv[4] . "'";
+    $query = "insert into core_config_data (scope, scope_id, path, value) values ('default', 0, 'web/secure/base_url', '" . $argv[1] . "')" . " on duplicate key update value = '" . $argv[1] . "'";
 
     try {
 	    $result = mysqli_query($db, $query);
@@ -40,7 +67,7 @@
         exit(1);
     } 
 
-    $query = "insert into core_config_data (scope, scope_id, path, value) values ('default', 0, 'billdesk/wps/return_url', '" . $argv[4] . "billdesk/standard/response" . "')" . " on duplicate key update value = '" . $argv[4] . "billdesk/standard/response" . "'";
+    $query = "insert into core_config_data (scope, scope_id, path, value) values ('default', 0, 'billdesk/wps/return_url', '" . $argv[1] . "billdesk/standard/response" . "')" . " on duplicate key update value = '" . $argv[1] . "billdesk/standard/response" . "'";
 
     try {
 	    $result = mysqli_query($db, $query);
@@ -54,7 +81,7 @@
         exit(1);
     } 
 
-    $query = "insert into core_config_data (scope, scope_id, path, value) values ('default', 0, 'ccav/wps/return_url', '" . $argv[4] . "ccav/standard/ccavresponse" . "')" . " on duplicate key update value = '" . $argv[4] . "ccav/standard/ccavresponse" . "'";
+    $query = "insert into core_config_data (scope, scope_id, path, value) values ('default', 0, 'ccav/wps/return_url', '" . $argv[1] . "ccav/standard/ccavresponse" . "')" . " on duplicate key update value = '" . $argv[1] . "ccav/standard/ccavresponse" . "'";
 
     try {
 	    $result = mysqli_query($db, $query);

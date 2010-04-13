@@ -2,6 +2,14 @@
 
 error_reporting(E_ALL  & ~E_NOTICE);
 ini_set("display_errors", 1); 
+$EKKITAB_HOME=getenv("EKKITAB_HOME");
+if (strlen($EKKITAB_HOME) == 0) {
+    echo "EKKITAB_HOME is not defined...Exiting.\n";
+    exit(1);
+}
+else {
+    define(EKKITAB_HOME, $EKKITAB_HOME); 
+}
 
 //  
 //
@@ -19,7 +27,8 @@ ini_set("display_errors", 1);
 
 // This script will create category information in the ekkitab database. 
 
-    include("create_categories_config.php");
+    ini_set(include_path, ${include_path}.PATH_SEPARATOR.EKKITAB_HOME."/"."config");
+    include("ekkitab.php");
 
     require_once(LOG4PHP_DIR . '/LoggerManager.php');
 
@@ -533,7 +542,7 @@ ini_set("display_errors", 1);
     $mastercodes = array();
     $mastercats = array();
 
-    $config = getConfig(CREATE_CATEGORIES_INI);
+    $config = getConfig(CONFIG_FILE);
 
     $fhandles = array();
     $fhandles = initFiles($config);
