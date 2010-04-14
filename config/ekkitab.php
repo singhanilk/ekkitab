@@ -11,5 +11,5 @@ define (MODE_PRICE, 0x02);
 define (MODE_DESC, 0x04);
 define (MAX_DESCRIPTION_LENGTH, 1024);
 define (UNKNOWN_INFO_SOURCE, "Unknown");
-define("IMAGE_TARGET", "/var/www/scm/magento/media/catalog/product");
+define("IMAGE_TARGET", EKKITAB_HOME . "/magento/media/catalog/product");
 ?>
