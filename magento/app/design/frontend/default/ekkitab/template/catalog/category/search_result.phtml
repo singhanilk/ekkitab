@@ -62,10 +62,12 @@ if(!is_null($results) && is_array($results)){
 				$cp =  $urlKey;
 			}		
 			if($val >= 1000 ){
-				$val =  " >". $val;
+				$val ="";
+			}else{
+				$val ="[".$val."]";
 			}
 			?>
-			<li><a href="<?php echo $this->getSubCategorySearchUrl($cp,1) ?>"><?php echo ucwords($key). "[". $val ."]"?></a></li>
+			<li><a href="<?php echo $this->getSubCategorySearchUrl($cp,1) ?>"><?php echo ucwords($key)." ".$val?></a></li>
 <?php	endforeach;	?>
 		</ul>
 		<div class="seeAll"><!--a href="#">See all &raquo;</a-->&nbsp;</div><!-- seeAll -->
@@ -227,9 +229,35 @@ if(!is_null($results) && is_array($results)){
 <?php
 	} 	
 	else { // else of if (!java_is_null(bookList))
-		$searchTxt = trim($this->helper('ekkitab_catalogsearch')->getEscapedQueryText());?>
-			<div class="inLeft">
-<?php		if(strlen($searchTxt) > 0 && strlen($searchTxt) < 4 ){ ?>
+		$queryTxt = trim($this->helper('ekkitab_catalogsearch')->getEscapedQueryText());
+		$catTxt = trim($this->helper('ekkitab_catalog')->getEscapedQueryCategoryPath());
+		
+		if(strlen($catTxt)>0) {
+			$parentCatArr = explode("__",$catTxt);
+			if(!is_null($parentCatArr) && sizeof($parentCatArr) > 0){
+				$arrSize = sizeof($parentCatArr);
+				$catTxt ="";
+				Mage::log("In search results....arrSize is : $arrSize");
+				for($i=0;$i < $arrSize ; $i++){
+					$cat = $parentCatArr[$i];
+					$cat = ucwords($this->getDecodedString($cat));
+					$catTxt=$catTxt.$cat."/";
+				}
+				$catTxt=substr($catTxt,0,-1);
+			}
+		}
+		$searchTxt="";
+		if (strlen($queryTxt)>0){
+			$searchTxt="for '";
+			$searchTxt=$searchTxt." ".$queryTxt." ' ";
+			if(strlen($catTxt)>0){
+				$searchTxt=$searchTxt." in ' ".$catTxt." ' ";
+			}
+		}else if(strlen($catTxt)>0) {
+			$searchTxt="in ' ".$catTxt." ' ";
+		}
+?>			<div class="inLeft">
+<?php		if(strlen($queryTxt) > 0 && strlen($queryTxt) < 4 ){ ?>
 				<div class="boldFont orangeTxt12">Too many results to be displayed for your search - "<?php echo $searchTxt ?>".</div> 
 				<div class="clear"><br/></div>
 				<p> We suggest you:</p> 
@@ -239,7 +267,7 @@ if(!is_null($results) && is_array($results)){
 				</ul>
 <?php		}	
 			else { ?>
-				<div class="boldFont orangeTxt12">Your search for - "<?php echo $searchTxt ?>" - did not match any book.</div>
+				<div class="boldFont orangeTxt12">Your search <?php echo $searchTxt ?> did not match any book.</div>
 				<div class="clear"><br/></div>
 				<p> We suggest you:</p> 
 				<ul>

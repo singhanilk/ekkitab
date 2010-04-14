@@ -47,9 +47,11 @@ rem ### Copy the books table to ekkitab_books database.
 rem ##########################################################
 call loadbooks.bat %dbhost% %uid% %pswd%
 rem ##########################################################
-rem ### Create the search index. 
+mysql -s -h %dbhost% -u %uid% -p%pswd% reference < %EKKITAB_HOME%/data/books_tmp_windows.sql 
 rem ##########################################################
-rem #12. (cd $EKKITAB_HOME/bin; ./create_index.sh <db host> <db user> <db password>;)
+mysql -s -h %dbhost% -u %uid% -p%pswd% ekkitab_books < %EKKITAB_HOME%/data/books_tmp_windows.sql 
+rem ##########################################################
+rem ### Create the search index. 
 
 cd %EKKITAB_HOME%/bin
 
