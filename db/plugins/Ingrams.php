@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL  & ~E_NOTICE);
 ini_set("display_errors", 1); 
-include(EKKITAB_HOME . "/" . "db" . "/" . "importbooks_config.php");
+include(EKKITAB_HOME . "/" . "config" . "/" . "ekkitab.php");
 
 //  
 //
@@ -225,15 +225,15 @@ class Parser {
 			$discount     = substr($line,165,3);
 			
 			//Extracting the Supplier Discount Info
-			if ($discount = 'REG'){
-				$discount = 40;
-			}
-			elseif ($dicount = 'NET'){
-				$discount = 0;
-			}
-			elseif ($discount = 'LOW'){
-				$discount = 20;
-			}
+            if (!strcmp($discount, "REG")){
+                $discount = 40;
+            }
+            elseif (!strcmp($discount, "NET")){
+                $discount = 0;
+            }
+            elseif (!strcmp($discount, "LOW")){
+                $discount = 20;
+            }
 			else{
 				$discount = str_replace("%", "", $discount);
 			}

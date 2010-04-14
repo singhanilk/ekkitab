@@ -281,7 +281,9 @@ public class BookSearch {
        int startIndex = (page - 1) * pageSz;
        int endIndex   = startIndex + pageSz;
 
-       QueryParser qpt = new QueryParser("title", new StandardAnalyzer());
+       String[] stopWords = new String[0];
+
+       QueryParser qpt = new QueryParser("title", new StandardAnalyzer(stopWords));
        //QueryParser qpt = new QueryParser("title", new SimpleAnalyzer());
 
        String modquery = "";
@@ -294,20 +296,22 @@ public class BookSearch {
 
        if (!query.equals("")) {
 
-            String phrase = "";
-            String[] words = query.split(" ");
+            String phrase = "\"" + query + "\"";
+
+            /*String[] words = query.split(" ");
             if (words.length > 1)
                     phrase = "\"" + query + "\"";
-
+            */
             if (!phrase.equals("")) {
                 if (usesearchfield != null) {
-                    sb.append(usesearchfield+":"+phrase+"^3 ");
+                    sb.append(usesearchfield+":"+phrase+"^5 ");
                 }
                 else {
-                    sb.append(phrase+"^3 ");
-                    sb.append("author:"+phrase+"^3 ");
+                    sb.append(phrase+"^5 ");
+                    sb.append("author:"+phrase+"^5 ");
                 }
             }
+            /*
             String conjunction = "";
             StringBuffer sbtmp = new StringBuffer();
             for (String word: words) {
@@ -333,7 +337,7 @@ public class BookSearch {
                 sb.append("+( ");
                 sb.append(sbtmp.toString());
                 sb.append(") ");
-            }
+            } */
        }
 
        if (!category.equals("")) {
@@ -350,8 +354,8 @@ public class BookSearch {
             }
        }
 
-       if (sb.length() > 0) 
-            sb.append("sourcedfrom:India^5 ");
+       /*if (sb.length() > 0) 
+            sb.append("sourcedfrom:India^3 "); */
 
        modquery = sb.toString();
 
