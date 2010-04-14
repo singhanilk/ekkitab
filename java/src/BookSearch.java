@@ -281,9 +281,9 @@ public class BookSearch {
        int startIndex = (page - 1) * pageSz;
        int endIndex   = startIndex + pageSz;
 
-       String[] stopWords = new String[0];
+       //String[] stopWords = new String[0];
 
-       QueryParser qpt = new QueryParser("title", new StandardAnalyzer(stopWords));
+       QueryParser qpt = new QueryParser("title", new StandardAnalyzer());
        //QueryParser qpt = new QueryParser("title", new SimpleAnalyzer());
 
        String modquery = "";
@@ -303,6 +303,7 @@ public class BookSearch {
                     phrase = "\"" + query + "\"";
             */
             if (!phrase.equals("")) {
+                sb.append("( ");
                 if (usesearchfield != null) {
                     sb.append(usesearchfield+":"+phrase+"^5 ");
                 }
@@ -310,6 +311,7 @@ public class BookSearch {
                     sb.append(phrase+"^5 ");
                     sb.append("author:"+phrase+"^5 ");
                 }
+                sb.append(" ) ");
             }
             /*
             String conjunction = "";
@@ -346,6 +348,9 @@ public class BookSearch {
             searchcats = getSearchCategories(levels);
             searchlevel = levels.length+1;
             String prelude = "";
+            if (sb.length() > 0) {
+                prelude = " AND ";
+            }
             sb.append(" ");
             for (int i = 0; i<levels.length; i++) {
                 int j = i+1;
@@ -412,7 +417,7 @@ public class BookSearch {
                     catsize = cats.size();
                     for (String catname: cats) {
                         hits.clear();
-                        String newquery = modquery + " +level"+searchlevel+":"+catname.replaceAll("\\W+", "");
+                        String newquery = modquery + " AND +level"+searchlevel+":"+catname.replaceAll("\\W+", "");
                         Query newLuceneQuery = qpt.parse(newquery);
                         searcher.search(newLuceneQuery, new HitCollector() { 
                                                                public void collect(int doc, float score) {
