@@ -108,67 +108,62 @@ public function getStandardCheckoutFormFields()
         }
  
         $transaciton_type = $this->getConfigData('transaction_type');
+		
+		//************Ekkitab*******************************
+		//brought this code outside so can be used globally
+		if ($this->getQuote()->getIsMultiShipping()){
+			 $Merchant_Param="M" ; 
+			  Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Multishipping\n") ;
+		}
+		else {
+			  $Merchant_Param="S" ; 
+			  Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Onepage\n") ;
+		}
+   
         /*
         O=aggregate cart amount to paypal
         I=individual items to paypal
         */
-       
-			//Mage::log("In getStandardCheckoutFormFields... amount >> $amount");
-        
         if ($transaciton_type=='O') {
             $businessName = Mage::getStoreConfig('paypal/wps/business_name');
             $storeName = Mage::getStoreConfig('store/system/name');
             
-  //************Ekkitab*******************************
-  //        $amount = ($a->getBaseSubtotal()+$b->getBaseSubtotal())-($a->getBaseDiscountAmount()+$b->getBaseDiscountAmount());
+		  //************Ekkitab*******************************
+		  // $amount = ($a->getBaseSubtotal()+$b->getBaseSubtotal())-($a->getBaseDiscountAmount()+$b->getBaseDiscountAmount());
   
-             if ($this->getQuote()->getIsMultiShipping()){
-                     $Merchant_Param="M" ; 
-                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Multishipping\n") ;
-        	  }
-          	else {
-                      $Merchant_Param="S" ; 
-                      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Onepage\n") ;
-       		 }
-       
        		$total_amount = 0 ;
-
-       		
        		$mOrderList = "" ;
-       		
-        if ($Merchant_Param=="S") { // OnestepCheckout Order
-     		 $Order_Id =  $this->getCheckout()->getLastRealOrderId();  // for single shipment order 
-	  	   	 $order = Mage::getModel('sales/order');
-     	     $order->loadByIncrementId($Order_Id);  
-             $total_amount = $order->getGrandTotal();
-             $mOrderList = $Order_Id ;
-
-             Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Single Address Checkout\n".print_r($total_amount,true)) ;
-                  
-	  	} else {  // it is "M" : Multishipping order
-	  		$Order_Ids    =  Mage::getSingleton('core/session')->getOrderIds();   // for mltiple shipment orders
-	  		$Order_Id = end($Order_Ids);
-	  		foreach( $Order_Ids as $key => $orid) {
-	  	 				  $order = Mage::getModel('sales/order');
-     			 		  $order->loadByIncrementId($orid);  
-     					  $total_amount = $total_amount + $order->getGrandTotal() ;
-     					  $mOrderList = $mOrderList."|".$orid ;
+				
+			if ($Merchant_Param=="S") { // OnestepCheckout Order
+				 $Order_Id =  $this->getCheckout()->getLastRealOrderId();  // for single shipment order 
+				 $order = Mage::getModel('sales/order');
+				 $order->loadByIncrementId($Order_Id);  
+				// $total_amount = $order->getGrandTotal();
+				 $total_amount = $order->getSubtotal();
+				 $mOrderList = $Order_Id ;
+				 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Single Address Checkout..total amount is :".$total_amount."\n") ;
+			} else {  // it is "M" : Multishipping order
+				$Order_Ids    =  Mage::getSingleton('core/session')->getOrderIds();   // for mltiple shipment orders
+				$Order_Id = end($Order_Ids);
+				foreach( $Order_Ids as $key => $orid) {
+							  $order = Mage::getModel('sales/order');
+							  $order->loadByIncrementId($orid);  
+							  //$total_amount = $total_amount + $order->getGrandTotal() ;
+							  $total_amount = $total_amount + $order->getSubtotal() ;
+							  $mOrderList = $mOrderList."|".$orid ;
       	  
-	  	    }
+	  			}
 
-	  	     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($Order_Ids,true)) ;
-	  	     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." Multiple Address Checkout\n".print_r($total_amount,true)) ;
+				Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($Order_Ids,true)) ;
+				Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." \n".print_r($total_amount,true)) ;
+				Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Multiple Address Checkout..total amount is :".$total_amount."\n") ;
+			
+			}
+			Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." mOrderList \n".print_r($mOrderList,true)) ;
+			$amount = $total_amount ;
 	  	
-	  	}
-	  		  	     
-	  	Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." mOrderList \n".print_r($mOrderList,true)) ;
-	  	
-
-	  	$amount = $total_amount ;
-	  	
-//***********Ekkitab************************
-	  	
-        //convert the amount to the current currency
+			//***********Ekkitab************************
+			//convert the amount to the current currency
             if ($bConvert) {
                  $amount = $storeCurrency->convert($amount, $currency_code);
             }
@@ -182,6 +177,10 @@ public function getStandardCheckoutFormFields()
                     'invoice'      => $Order_Id,
                     'custom'       => $mOrderList,  // added by aks
                 ));
+			//***********Ekkitab************************
+			//Not altering this code now, because we don;t have tax...
+			//but incase tax is applied this needs to be altered to handle multiple shipping and single address shipping
+
             $_shippingTax = $this->getQuote()->getShippingAddress()->getBaseTaxAmount();
             $_billingTax = $this->getQuote()->getBillingAddress()->getBaseTaxAmount();
             $tax = $_shippingTax + $_billingTax;
@@ -198,6 +197,10 @@ public function getStandardCheckoutFormFields()
             }
  
         } else {
+			//***********Ekkitab************************
+			//Not altering this code now, because we don;t do individual item billing..
+			//but incase we choose to do so this needs to be altered to handle multiple shipping and single address shipping
+
             $sArr = array_merge($sArr, array(
                 'cmd'       => '_cart',
                 'upload'       => '1',
@@ -239,7 +242,33 @@ public function getStandardCheckoutFormFields()
         }
  
         $totalArr = $a->getTotals();
-        $shipping = $this->getQuote()->getShippingAddress()->getBaseShippingAmount();
+       
+		//***********Ekkitab************************
+		//Code altered to handle multiple shipping...commenting the following line of code..
+		//$shipping = $this->getQuote()->getShippingAddress()->getBaseShippingAmount();
+		$shipping = 0;
+		if ($Merchant_Param=="S") { // OnestepCheckout Order
+			 $Order_Id =  $this->getCheckout()->getLastRealOrderId();  // for single shipment order 
+			 $order = Mage::getModel('sales/order');
+			 $order->loadByIncrementId($Order_Id);  
+			 $shipping = $order->getShippingAmount();
+			 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Single Address Checkout..shipping amount is :".$shipping."\n") ;
+		} else {  // it is "M" : Multishipping order
+			$Order_Ids    =  Mage::getSingleton('core/session')->getOrderIds();   // for mltiple shipment orders
+			$Order_Id = end($Order_Ids);
+			foreach( $Order_Ids as $key => $orid) {
+				$order = Mage::getModel('sales/order');
+				$order->loadByIncrementId($orid);  
+				$shipping =$shipping+$order->getShippingAmount();
+			}
+
+			Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($Order_Ids,true)) ;
+			Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." \n".print_r($total_amount,true)) ;
+			Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Multiple Address Checkout..shipping amount is :".$shipping."\n") ;
+		
+		}
+			
+
         if ($shipping>0 && !$this->getQuote()->getIsVirtual()) {
           //convert the amount to the current currency
           if ($bConvert) {
@@ -248,10 +277,17 @@ public function getStandardCheckoutFormFields()
           $shipping = sprintf('%.2f', $shipping);
          
           if ($transaciton_type=='O') {
+
               $sArr = array_merge($sArr, array(
                     'shipping' => $shipping
               ));
           } else {
+			
+			//***********Ekkitab************************
+			//Not altering this code now, because we don;t do individual item billing..
+			//but incase we choose to do so this needs to be altered to handle multiple shipping and single address shipping
+
+
               $shippingTax = $this->getQuote()->getShippingAddress()->getBaseShippingTaxAmount();
               //convert the amount to the current currency
               if ($bConvert) {
