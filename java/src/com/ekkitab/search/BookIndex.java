@@ -1,3 +1,4 @@
+package com.ekkitab.search;
 import java.io.*;
 import java.util.*;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -6,6 +7,11 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.document.Field;
+
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.search.spell.Dictionary;
+import org.apache.lucene.search.spell.LuceneDictionary;
+import org.apache.lucene.search.spell.SpellChecker;
 
 import java.sql.DriverManager;
 import java.sql.Connection;
@@ -262,9 +268,9 @@ public class BookIndex {
 
     public void addDocument(List<Map<String, String>> books) throws Exception {
 
-        Iterator iter = books.iterator();
+        Iterator<Map<String, String>> iter = books.iterator();
         while (iter.hasNext()) {
-            Map<String, String> book = (Map<String, String>)iter.next();
+            Map<String, String> book = iter.next();
             Document doc = new Document();
             doc.add(new Field("entityId", book.get("id"), Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.add(new Field("sourcedfrom", book.get("sourcedfrom"), Field.Store.NO, Field.Index.ANALYZED));
@@ -378,6 +384,25 @@ public class BookIndex {
         }
     }
 
+    private void createSpellIndex(String[] fields, String indexDir) throws IOException {
+
+        IndexReader indexReader = null;
+        try {
+            Directory d  = FSDirectory.getDirectory(indexDir);
+            Directory dspell  = FSDirectory.getDirectory(indexDir + "_spell");
+            indexReader = IndexReader.open(d);
+            SpellChecker spellChecker = new SpellChecker(dspell);
+            for (String field:fields) {
+                Dictionary dict = new LuceneDictionary(indexReader, field);
+                spellChecker.indexDictionary(dict);
+            }
+        } finally {
+            if (indexReader != null) {
+                indexReader.close();
+            }
+        }
+    }
+
     public static void main(String[] args) {
         if (args.length < 7) {
             System.out.println("Insufficient arguments.");
@@ -390,6 +415,8 @@ public class BookIndex {
                 int startcount = Integer.parseInt(args[6]);
                 BookIndex bookIndex = new BookIndex(args[0], args[1], newindex, args[3], args[4], args[5], startcount);
                 bookIndex.runIndex();
+                String[] fields = new String[] {"title", "author"};
+                bookIndex.createSpellIndex(fields, args[0]);
             }
             catch(Exception e) {
                 e.printStackTrace();
