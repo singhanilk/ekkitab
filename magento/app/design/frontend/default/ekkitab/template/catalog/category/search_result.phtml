@@ -35,8 +35,9 @@ $subcats = null;
 $curr_cp = null;
 if(!is_null($results) && is_array($results)){
   $bookList = $results["books"];
-  $subcats = $results["counts"];
+  $subcats = $results["categories"];
   $curr_cp = $this->getCurrentCategoryPath();
+  $suggest=$results["suggest"];
 }
 ?>
 <div class="leftNavArea">
@@ -61,11 +62,11 @@ if(!is_null($results) && is_array($results)){
 			}else{
 				$cp =  $urlKey;
 			}		
-			if($val >= 1000 ){
-				$val ="";
-			}else{
+			//if($val >= 1000 ){
+			//	$val ="";
+			//}else{
 				$val ="[".$val."]";
-			}
+			//}
 			?>
 			<li><a href="<?php echo $this->getSubCategorySearchUrl($cp,1) ?>"><?php echo ucwords($key)." ".$val?></a></li>
 <?php	endforeach;	?>
@@ -94,6 +95,12 @@ if(!is_null($results) && is_array($results)){
 			</div>
 		<?php endif; ?>
 		<div class="searchResTop">
+		<?php if(!is_null($suggest) && strlen($suggest)>0 ) : ?>
+			<div class="leftArea">
+				Your search query returned zero results. Did u mean "<?php echo  $suggest?>" instead ?
+			</div><!-- leftArea -->
+			<br/>
+		<?php endif; ?>
 			<div class="leftArea">
 				<?php if($this->getLastPageNumber()>1): ?>
 					<?php if($this->getTotalNum() >= 1000): ?>
@@ -106,7 +113,6 @@ if(!is_null($results) && is_array($results)){
 				<?php else: ?>
 					<?php echo $this->__('Showing all %s books', $this->getTotalNum()) ?>
 				<?php endif; ?>
-				<!--<?php echo $this->__("results for '%s'", $this->helper('ekkitab_catalogsearch')->getEscapedQueryText()) ?>-->
 			</div><!-- leftArea -->
 
 			<div class="rightArea">

@@ -37,6 +37,8 @@
 		$authors = $_product->getAuthor();
 		$productUrl = $_product->getProductUrl();
 		$inStock = $_product->getInStock();
+		$publishers=$_product->getPublisher();
+		$publishDate=$_product->getPublishingDate();
 		
 		$author = $authors['a'];
 		$editors=$authors['e']	;
@@ -45,15 +47,16 @@
 		$photographers=$authors['p'];
 
 		$parsedAuthor = "";
-		$parsedAuthor.= strlen($author) > 0 ? "by ".$author : "";
-		$parsedAuthor.= strlen($editors) > 0 ?(strlen($parsedAuthor) > 0 ? ";":"")." Edited by ".$editors : "";
-		$parsedAuthor.= strlen($translators) > 0 ? (strlen($parsedAuthor) > 0 ? ";":"")." Translated by ".$translators : "";
-		$parsedAuthor.= strlen($illustrators) > 0 ? (strlen($parsedAuthor) > 0 ? ";":"")." Illustrated by ".$illustrators : "";
-		$parsedAuthor.= strlen($photographers) > 0 ? (strlen($parsedAuthor) > 0 ? ";":"")." Photographed by ".$photographers : "";
+		$parsedAuthor.= strlen($author) > 0 ? "by ".$author." (Author)" : "";
+		$parsedAuthor.= strlen($editors) > 0 ?(strlen($parsedAuthor) > 0 ? "; ":"").$editors." (Editor)" : "";
+		$parsedAuthor.= strlen($translators) > 0 ? (strlen($parsedAuthor) > 0 ? "; ":"").$translators."(Translators)" : "";
+		$parsedAuthor.= strlen($illustrators) > 0 ? (strlen($parsedAuthor) > 0 ? "; ":"").$illustrators." (Illustrators)" : "";
+		$parsedAuthor.= strlen($photographers) > 0 ? (strlen($parsedAuthor) > 0 ? "; ":"").$photographers."(Photographers) " : "";
 
 		$savingsPerct= ($_product->getListPrice() >0 )?	(($_product->getListPrice() - $_product->getFinalPrice())/ $_product->getListPrice() ) * 100 : 0; 
 		$shippingTime= $_product->getDeliveryPeriod();
 		$shippingTime= $shippingTime  > 0 ? "Normally Ships in ".$shippingTime. ($shippingTime  == 1 ? " day":" days"): "";
+		$publishers=strlen($publishers)>0 ? ucwords($publishers):"NA";
 		$image = $_product->getImage();
 ?>
 <div class="searchArea">
@@ -62,9 +65,11 @@
            <img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'image',false,null, 200); ?>">
         </div>
 		<div class="midArea">
-			<div class="finDetBkTitle"><?php echo $this->htmlEscape($_product->getTitle()) ?><span class="lineHeight14em"> <?php echo $parsedAuthor?></span></div><!-- authorEtc -->
+			<div class="finDetBkTitle"><?php echo $this->htmlEscape($_product->getTitle()) ?> <?php echo (strlen($author) > 0 )? "<br/><span class=\"lineHeight14em\"> by ".$author ."</span>" :""?></div><!-- authorEtc -->
 			<div class="lineHeight14em"><span class="boldFont">ISBN:  <?php echo $_product->getIsbn() ?></span></div>
 			<div class="lineHeight14em"><span class="boldFont">Binding: <?php echo ucwords($_product->getBinding()) ?></span></div>
+			<div class="lineHeight14em"><span class="boldFont">Publisher:  <?php echo $publishers ?></span></div>
+			<div class="lineHeight14em"><span class="boldFont">Publishing Date:  <?php echo $publishDate ?></span></div>
 			<div class="lineHeight14em"><span class="boldFont">Language : <?php echo ucwords($_product->getLanguage()) ?></span></div>
 			<?php if(!$inStock || $_product->getListPrice() <= 0):?>
 			  <div class="marginTop5px"><img src="<?php echo $this->getSkinUrl('images/out_of_stock_image.png')?>" align="absmiddle"> &nbsp; <a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($_product->getId()) ?>">Add to Wishlist</a> </div>

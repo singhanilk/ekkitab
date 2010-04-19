@@ -4,62 +4,23 @@
 // to execute a Java class and get and use the returned results in PHP.
 // This is very rough coding and has no proper exception handling. Beware!
 
-require_once("http://localhost:8080/JavaBridge/java/Java.inc");
-
-$search = new java("BookSearch", "search_index_dir");
-do {
-   $query = readline("Search for? ");
-   $query = $query == null ? "" : $query;
-   $category = readline("Category? ");
-   $category = $category == null ? "" : $category;
-   $page = readline("Page? ");
-   $page = $page == null ? "1" : $page;
-   $pagenum = $page + 0;
-
-   $start = (float) array_sum(explode(' ', microtime()));
-   $page_sz = 10;
-   echo "Search query: '".$query."'  category: '".$category."'  Page: '".$pagenum."'\n";
-   $results = $search->searchBook($category, $query, $page_sz, $pagenum);
-   $end = (float) array_sum(explode(' ', microtime()));
-   $time = sprintf("%.1f", ($end - $start));
-    
-   if ($results) {
-      $hitcount = $results->get("hits");
-      $books = $results->get("books");
-      $sz = java_values($books->size());
-      $iter = $books->iterator();
-      for ($i=0; $i<$sz; $i++) {
-          $book = $books->get($i);
-          $author = $book->get("author");
-          $title = $book->get("title");
-          $image = $book->get("image");
-          $url = $book->get("url");
-          $id = $book->get("entityId");
-          $price = $book->get("listprice");
-          $discountprice = $book->get("discountprice");
-          echo "Author: $author\n";
-          echo "Title: $title\n";
-          echo "Id: $id\n";
-          echo "------------------------\n";
-      } 
-      $subcats = $results->get("counts");
-      if ($subcats != null) {
-        $retsize = $subcats->size();
-        echo "Size of Category List:[" . $retsize . "]\n"; 
-        $keys = $subcats->keySet();
-        foreach($keys as $key) { 
-            $val = $subcats->get($key);
-            echo "Category: $key [$val]\n";
-        }
-      }
-      echo "Returned: $hitcount hits in $time seconds.\n";
-   }
-   else 
-      echo "No results were returned. \n";
-} while ($query = readline("Continue? ")) ;
-
-
-
+$db  = mysqli_connect("localhost", "root", "root", "reference");
+if (!$db) {
+    echo "Could not connect to database.\n";
+    exit(1);
+}
+function getBookDetails($id) {
+    global $db;
+    $query = "select author,title from books where id = '" . $id . "'"; 
+    $result = mysqli_query($db, $query);
+    if ($result && (mysqli_num_rows($result) > 0)) {
+	   $book = mysqli_fetch_array($result);
+       return $book;
+    }
+    else {
+       return null;
+    }
+}
 function readline ($searchFor) {
 	echo $searchFor ;
 	$fp = fopen("php://stdin", "r");
@@ -72,5 +33,63 @@ function readline ($searchFor) {
 	echo "the string is:$newin:\n";
 	return $newin;
 }
+
+require_once("http://localhost:8080/JavaBridge/java/Java.inc");
+do {
+   
+	$search = new java("com.ekkitab.search.BookSearch", "search_index_dir");
+	$query = readline("Search for? ");
+	$query = $query == null ? "" : $query;
+	$category = readline("Category? ");
+	$category = $category == null ? "" : $category;
+	$page = readline("Page? ");
+	$page = $page == null ? "1" : $page;
+	$pagenum = $page + 0;
+
+	$start = (float) array_sum(explode(' ', microtime()));
+	$page_sz = 15;
+	echo "Search query: '".$query."'  category: '".$category."'  Page: '".$pagenum."'\n";
+	$results = $search->searchBook($category, $query, $page_sz, $pagenum);
+	$end = (float) array_sum(explode(' ', microtime()));
+	$time = sprintf("%.1f", ($end - $start));
+    
+	if ($results) {
+      $suggest = $results->getSuggestQuery();
+      if (($suggest != null) && (strlen($suggest) > 0)) {
+        echo "Your search query returned zero results.\n";
+        echo "Did you mean: " . trim($suggest) . " instead?\n";
+      }
+      $hitcount = $results->getHitCount();
+      $books = $results->getBookIds();
+      if (!java_is_null($books)) {
+        echo "Size of returned book list is: " . $books->size() . "\n";
+        for ($i = 0; $i < java_cast($books->size(), "integer"); $i++) {
+            $id = $books->get($i);
+            $book = getBookDetails($id);
+            echo "Author: " . $book['author'] . "\n";
+            echo "Title: " . $book['title'] . "\n";
+            echo "------------------------\n";
+            if ($i >= 6) {
+                break;
+            }
+        } 
+      }
+      $subcats = $results->getResultCategories();
+      if (!java_is_null($subcats)) {
+         $retsize = $subcats->size();
+         echo "Size of Category List:[" . $retsize . "]\n"; 
+         $keys = $subcats->keySet();
+         foreach($keys as $key) { 
+            $val = $subcats->get($key);
+            echo "Category: $key [$val]\n";
+         }
+      }
+      echo "Returned: $hitcount hits in $time seconds.\n";
+   }
+   else 
+      echo "No results were returned. \n";
+} while (($query = readline("Continue? ")) && (!strcmp(strtolower($query), "y")));
+echo "Exiting...\n";
+
 
 ?> 
