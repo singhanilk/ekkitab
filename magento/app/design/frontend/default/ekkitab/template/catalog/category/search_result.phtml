@@ -37,7 +37,7 @@ if(!is_null($results) && is_array($results)){
   $bookList = $results["books"];
   $subcats = $results["categories"];
   $curr_cp = $this->getCurrentCategoryPath();
-  $suggest=$results["suggest"];
+  $suggest=trim($results["suggest"]);
 }
 ?>
 <div class="leftNavArea">
@@ -94,19 +94,19 @@ if(!is_null($results) && is_array($results)){
 				<?php endforeach;?>
 			</div>
 		<?php endif; ?>
-		<div class="searchResTop">
 		<?php if(!is_null($suggest) && strlen($suggest)>0 ) : ?>
-			<div class="leftArea">
-				Your search query returned zero results. Did u mean "<?php echo  $suggest?>" instead ?
-			</div><!-- leftArea -->
-			<br/>
+		<div class="suggestResTop">
+			<span class="boldFont ">Your search query returned zero results. Did you mean <span class="orangeItTxt12"><?php echo  ucwords($suggest) ?></span> instead ?</span>
+		</div><!-- suggestResTop -->
 		<?php endif; ?>
+		<div class="searchResTop">
 			<div class="leftArea">
 				<?php if($this->getLastPageNumber()>1): ?>
 					<?php if($this->getTotalNum() >= 1000): ?>
-						<?php echo $this->__('Showing %s to %s of more than %s books', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+						<?php echo $this->__('Showing %s to %s of more than %s books', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?><?php if(!is_null($suggest) && strlen($suggest)>0 ) : ?> for ' <?php echo  ucwords($suggest) ?> '<?php endif; ?>
 					<?php else : ?>
-						<?php echo $this->__('Showing %s to %s of %s books', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+						<?php echo $this->__('Showing %s to %s of %s books', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?><?php if(!is_null($suggest) && strlen($suggest)>0 ) : ?> for ' <?php echo  ucwords($suggest) ?> '<?php endif; ?>
+
 					<?php endif; ?>
 				<?php elseif($this->getTotalNum()==1): ?>
 					<?php echo $this->__('Showing the only book', $this->getTotalNum()) ?>
