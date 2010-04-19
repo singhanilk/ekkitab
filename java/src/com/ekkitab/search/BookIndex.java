@@ -387,6 +387,7 @@ public class BookIndex {
     private void createSpellIndex(String[] fields, String indexDir) throws IOException {
 
         IndexReader indexReader = null;
+        System.out.println("Creating spell dictionary and index...");
         try {
             Directory d  = FSDirectory.getDirectory(indexDir);
             Directory dspell  = FSDirectory.getDirectory(indexDir + "_spell");
