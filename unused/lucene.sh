@@ -30,7 +30,9 @@ service tomcat6 start
 sleep 15
 
 mkdir -p $TOM_WEBINF/classes
-cp $EKKITAB_HOME/java/bin/* $TOM_WEBINF/classes
+cp $EKKITAB_HOME/java/bin/log4j.properties $TOM_WEBINF/classes
+cp $EKKITAB_HOME/java/bin/search.properties $TOM_WEBINF/classes
+cp $EKKITAB_HOME/java/bin/ekkitabsearch.jar $TOM_WEBINF/lib
 
 rm -f $TOM_WEBINF/lib/lucene*
 
