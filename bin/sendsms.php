@@ -51,27 +51,27 @@ function strgetcsv($msg)
     
 }
 
-function sendsms($recepientno,$Order_Id)
+function sendsms($recepientno,$msg)
 {
     $ch = curl_init();
     $user="anil@ekkitab.com:meritos1959";
     $senderID="EKKITAB1";
-    $msgtxt="Thank you for shopping with EkKitab. Your Order Id is $Order_Id";
+//    $msgtxt="Thank you for shopping with EkKitab. Your Order Id is $Order_Id";
+    $msgtxt= $msg ;
     $state="4" ;
   	curl_setopt($ch,CURLOPT_URL,  "http://api.mVaayoo.com/mvaayooapi/MessageCompose") ;
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_POST, 1);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, "user=$user&senderID=$senderID&receipientno=$recepientno&msgtxt=$msgtxt&state=$state");
 	
 	$buffer = curl_exec($ch);
 	if(empty ($buffer))
 	{ 
-//	  	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Buffer is empty\n".print_r($buffer,true)) ;
-	
+    	System_Daemon::info(' sending sms to  Mobile: %s failed ', $recepientno) ;
          }
 	else
 	{ 
-//		     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($buffer,true)) ;
+    	System_Daemon::info(' sending sms to Mobile: %s msg  %s', $recepientno, $msg ) ;
 	}
 	
 	curl_close($ch);
@@ -88,11 +88,10 @@ function process_dir($dir) {
           } else {
 		$data = file($path) ;
 		foreach ($data as $number => $line ) {
-                        echo "Line $number: ", $line, "<br>" ;
-//			phorder = array() ;
-                        $phorder = strgetcsv($line) ;
-			echo "Phone no: $phorder[0]" ; 
- 			echo "Order no: $phorder[1]" ;
+                        $phmsg = strgetcsv($line) ;
+			$phoneno=$phmsg[0];
+                        $msg = $phmsg[1] ;
+			sendsms($phoneno, $msg) ;
 		}
 		unlink($path) ;
           }
@@ -104,19 +103,6 @@ function process_dir($dir) {
   return true ;
 }
    
-/*
-  $result = process_dir('C:/webserver/Apache2/httpdocs/processdir',TRUE);
-
- // Output each opened file and then close
-  foreach ($result as $file) {
-    if (is_resource($file['handle'])) {
-        echo "\n\nFILE (" . $file['dirpath'].'/'.$file['filename'] . "):\n\n" . fread($file['handle'], filesize($file['dirpath'].'/'.$file['filename']));
-        fclose($file['handle']);
-    }
-  }
-
-*/
-//  $result = process_dir('/tmp/aks' ) ;
 
 // Allowed arguments & their defaults 
 $runmode = array(
@@ -192,8 +178,7 @@ if (!$runmode['write-initd']) {
 // Here comes your own actual code
  
 // This variable gives your own code the ability to breakdown the daemon:
-//$runningOkay = true;
-$runningOkay = echohello();
+	$runningOkay = true;
  
 // This variable keeps track of how many 'runs' or 'loops' your daemon has
 // done so far. For example purposes, we're quitting on 3.
@@ -220,9 +205,8 @@ while (!System_Daemon::isDying() && $runningOkay && $cnt <=3) {
     // In the actuall logparser program, You could replace 'true'
     // With e.g. a  parseLog('vsftpd') function, and have it return
     // either true on success, or false on failure.
-    $runningOkay = true;
-	$runningOkay = echohello();
-	  $runningOkay = process_dir('/tmp/aks' ) ;
+    	$runningOkay = true;
+	$runningOkay = process_dir('/var/log/ekkitab/sms' ) ;
     //$runningOkay = parseLog('vsftpd');
     
     // Should your parseLog('vsftpd') return false, then

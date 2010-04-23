@@ -1,0 +1,73 @@
+Apache Server Configuration
+
+(1)     Turning On Rewrite:
+
+        The following must be present, suitably modified for the domain name.
+
+        RewriteEngine On
+        RewriteCond %{HTTP_HOST}    !^www\.ekkitab\.co\.in
+        RewriteCond %{HTTP_HOST}    !^$
+        RewriteRule ^/(.*)          http://www.ekkitab.co.in/$1
+
+(2)     Setting the document root:
+
+        DocumentRoot /var/www
+
+(3)     The following must be set to allow .htaccess overrides.
+        Note: AllowOverride is set to ALL
+              Options does not contain INDEXES
+
+        <Directory /var/www/>
+                Options FollowSymLinks MultiViews
+                AllowOverride All
+                Order allow,deny
+                allow from all
+        </Directory>
+
+(4)     The following symbolic link must be present in
+        the directory: /etc/apache2/mods-enabled
+    
+        rewrite.load --> ../mods-available/rewrite.load
+
+Tomcat Configuration
+
+(1)     Turn off Tomcat security.
+
+        TOMCAT6_SECURITY=no
+
+MySQL Configuration
+
+(1)     The following must be set in the file my.cnf 
+        in the mysqld section of the configuration file.
+
+        datadir         = /mnt3/mysql 
+
+        Also add the following in the appropriate place:
+        innodb_buffer_pool_size = 64M
+
+        After setting the above, the following must be 
+        executed.
+
+        Edit the file and change the lines shown commented
+        below to the equivalent correct lines.
+ 
+        #  /var/lib/mysql/ r,
+        #  /var/lib/mysql/** rwk,
+           /mnt3/mysql/ r,
+           /mnt3/mysql/** rwk,
+
+        Force the apparmor daemon to reload the configuration
+        by executing the following:
+
+        sudo /etc/init.d/apparmor reload
+
+PHP5 Configuration
+
+(1)    Change the following line in the config files as follows:
+
+       allow_url_include = On
+
+       The config files are:
+       /etc/php5/cli/php.ini
+       /etc/php5/apache2/php.ini
+

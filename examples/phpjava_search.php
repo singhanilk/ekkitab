@@ -4,7 +4,7 @@
 // to execute a Java class and get and use the returned results in PHP.
 // This is very rough coding and has no proper exception handling. Beware!
 
-$db  = mysqli_connect("localhost", "root", "zen1000", "reference");
+$db  = mysqli_connect("localhost", "root", "root", "reference");
 if (!$db) {
     echo "Could not connect to database.\n";
     exit(1);

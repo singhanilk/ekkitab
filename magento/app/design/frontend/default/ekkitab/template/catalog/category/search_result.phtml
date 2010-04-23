@@ -37,7 +37,7 @@ if(!is_null($results) && is_array($results)){
   $bookList = $results["books"];
   $subcats = $results["categories"];
   $curr_cp = $this->getCurrentCategoryPath();
-  $suggest=$results["suggest"];
+  $suggest=trim($results["suggest"]);
 }
 ?>
 <div class="leftNavArea">
@@ -94,25 +94,25 @@ if(!is_null($results) && is_array($results)){
 				<?php endforeach;?>
 			</div>
 		<?php endif; ?>
-		<div class="searchResTop">
 		<?php if(!is_null($suggest) && strlen($suggest)>0 ) : ?>
-			<div class="leftArea">
-				Your search query returned zero results. Did u mean "<?php echo  $suggest?>" instead ?
-			</div><!-- leftArea -->
-			<br/>
+		<div class="suggestResTop">
+			<span class="boldFont ">Your search query returned zero results. Did you mean <span class="orangeItTxt12"><?php echo  ucwords($suggest) ?></span> instead ?</span>
+		</div><!-- suggestResTop -->
 		<?php endif; ?>
+		<div class="searchResTop">
 			<div class="leftArea">
 				<?php if($this->getLastPageNumber()>1): ?>
 					<?php if($this->getTotalNum() >= 1000): ?>
 						<?php echo $this->__('Showing %s to %s of more than %s books', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
 					<?php else : ?>
 						<?php echo $this->__('Showing %s to %s of %s books', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+
 					<?php endif; ?>
 				<?php elseif($this->getTotalNum()==1): ?>
 					<?php echo $this->__('Showing the only book', $this->getTotalNum()) ?>
 				<?php else: ?>
 					<?php echo $this->__('Showing all %s books', $this->getTotalNum()) ?>
-				<?php endif; ?>
+				<?php endif; ?><?php if(!is_null($suggest) && strlen($suggest)>0 ) : ?> for ' <?php echo  ucwords($suggest) ?> '<?php endif; ?>
 			</div><!-- leftArea -->
 
 			<div class="rightArea">
@@ -194,7 +194,7 @@ if(!is_null($results) && is_array($results)){
 			<?php if($listPrice > 0):?><div class="lineHeight14em">MRP Price : <?php echo Mage::helper('core')->currency($listPrice,true,false) ?></div><?php endif; ?>
 			<?php if($savings > 0):?><div class="youSave">Save <?php echo Mage::helper('core')->currency($savings,true,false) ?> (<?php echo number_format($savingsPerct,2,'.','') ?>%)</div><?php endif; ?>
 			<div class="lineHeight14em"><?php echo $shippingTime ?></div>
-			<div class="youSave"><?php if($stock && $listPrice >0) : ?>In Stock</div><?php else:?>Out of Stock </div><a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($id)?>"><?php echo $this->__('Add to Wishlist') ?></a><br/><?php endif;?>		
+			<div class="youSave"><?php if($stock && $listPrice >0) : ?>In Stock</div><?php else:?>Out of Stock </div><?php endif;?>	<a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($id)?>"><?php echo $this->__('Add to Wishlist') ?></a><br/>	
 			
 			<!--a href="#" onclick="setLocation('<?php echo $this->getAddToCartUrl($id)?>')"><img src="<?php echo $this->getSkinUrl('images/btn_add_to_cart.gif') ?>" alt="<?php echo $this->__('Add to Cart') ?>"></a-->
 			</div><!-- priceArea -->

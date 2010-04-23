@@ -870,6 +870,13 @@ a:hover {
 	text-align:left;
 	border-bottom: 1px dotted #333;
 }
+.suggestResTop {
+	font-size:11px;
+	line-height:24px;
+	margin-bottom:8px;
+	padding-right:0px;
+	text-align:left;
+}
 .searchResTop .leftArea {
 	width: 65%;
 	float: left;
@@ -1841,6 +1848,13 @@ a:hover {
 	font-size: 12px;
 	color: #c60;
 	font-weight:bold;
+}
+
+.orangeItTxt12 {
+	font-size: 12px;
+	color: #c60;
+	font-weight:bold;
+	font-style:italic;
 }
 
 .inLeft ul {

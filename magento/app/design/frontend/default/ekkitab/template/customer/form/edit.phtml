@@ -28,7 +28,7 @@
 <div class="clear"><br/></div>
 <div class="myAccCopy">
 	<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-	<form action="<?php echo $this->getUrl('customer/account/editPost') ?>" method="post" id="form-validate">
+	<form action="<?php echo $this->getUrl('customer/account/editPost') ?>" autocomplete="off" method="post" id="form-validate">
 	<?php echo $this->getBlockHtml('formkey')?>
 	<fieldset class="group-select">
 	<div class="accTop">
