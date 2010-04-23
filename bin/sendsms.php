@@ -188,7 +188,8 @@ $cnt = 1;
 // - That the Daemon Class hasn't reported it's dying
 // - That your own code has been running Okay
 // - That we're not executing more than 3 runs 
-while (!System_Daemon::isDying() && $runningOkay && $cnt <=3) {
+//while (!System_Daemon::isDying() && $runningOkay && $cnt <=3) {
+while (!System_Daemon::isDying() && $runningOkay && $cnt > 0) {
     // What mode are we in?
     $mode = '"'.(System_Daemon::isInBackground() ? '' : 'non-' ).
         'daemon" mode';
