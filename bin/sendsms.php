@@ -94,6 +94,7 @@ function process_dir($dir) {
 			sendsms($phoneno, $msg) ;
 		}
 		unlink($path) ;
+		sleep(1) ; // otherwise, it loops back and sends the same message twice as os has not deleted the file
           }
         }
       }
