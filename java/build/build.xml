@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<project name="ekkitab_search" default="build" basedir=".">
+
+    <property name="lib.dir" value="../lib"/>
+    <property name="classes.dir" value="../bin"/>
+    <property name="src.dir" value="../src"/>
+    <property name="ekkitabsearch-jarfile" value="${classes.dir}/ekkitabsearch.jar"/>
+
+    <path id="project.class.path">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="clean"
+            description="Remove all built class files.">
+        <delete dir="${classes.dir}/com"/>
+        <delete file="${ekkitabsearch-jarfile}"/>
+    </target>
+
+    <target name="build"
+            depends="clean"
+            description="Build everything and create the jar file.">
+            <javac destdir="${classes.dir}"
+                   debug="on"
+                   optimize="on"
+                   srcdir="${src.dir}">
+                   <classpath refid="project.class.path"/>
+                   <compilerarg value="-Xlint:unchecked"/>
+                   <compilerarg value="-Xlint:deprecation"/>
+            </javac>
+            <jar destfile="${ekkitabsearch-jarfile}">
+                <fileset dir="${classes.dir}" includes="**/*.class"/>
+                <manifest>
+                    <attribute name="Main-Class" value="com.ekkitab.search.BookSearch"/>
+                </manifest>
+            </jar>
+    </target>
+</project>

@@ -2854,7 +2854,7 @@ INSERT INTO `directory_currency_rate` (`currency_from`, `currency_to`, `rate`) V
 ('USD', 'USD', 1.000000000000),
 ('INR', 'EUR', 0.014710600000),
 ('INR', 'INR', 1.000000000000),
-('INR', 'USD', 0.021418600000);
+('INR', 'USD', 0.0246913);
 
 --
 -- Table structure for table `downloadable_link`

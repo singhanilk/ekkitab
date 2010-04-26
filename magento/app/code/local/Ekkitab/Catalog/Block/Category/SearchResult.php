@@ -201,7 +201,7 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 		}
 		try{
 			require($javaIncFile);
-			$search = new java("BookSearch",$indexFilePath );
+			$search = new java("com.ekkitab.search.BookSearch",$indexFilePath );
 			$categoryPath = strtolower(str_replace('__', "/", $this->getCurrentCategoryPath())); // this is to parse the parents and child categories seperated by '__'
 			// this is to filter the search by title / author / or both
 			$filterBy = strlen($this->getFilterByText()) > 0 ?($this->getFilterByText().":"):""; 
@@ -211,7 +211,8 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 			}
 			$results = $search->searchBook($this->getDecodedString($categoryPath),$filterBy.$this->helper('ekkitab_catalog')->getEscapedQueryText(), $this->getPageSize(), $this->getCurrentPageNumber());
 			if(!is_null($results)){
-				$productIds = java_values($results->get("books"));
+			  $suggest = $results->getSuggestQuery();
+  			  $productIds = java_values($results->getBookIds());
 				/*if (!is_null($bookList)) {
 					foreach($bookList as  $book){
 						$productIds[] = $book->get("entityId");
@@ -221,10 +222,10 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 						->addIdFilter($productIds);
 					}
 				//}
-				$booksResult = array("books"=>$books,"counts"=>$results->get("counts"),"hits"=>java_values($results->get("hits")));
+				$booksResult = array("books"=>$books,"hits"=>java_values($results->getHitCount()),"categories"=>$results->getResultCategories(),"suggest"=> $suggest);
 				$this->_productCollection = $booksResult;
 			}else{
-				$booksResult = array("books"=>null,"counts"=>null,"hits"=>null);
+				$booksResult = array("books"=>null,"hits"=>null,"categories"=>null,"suggest"=>null);
 			}
 
 		}
