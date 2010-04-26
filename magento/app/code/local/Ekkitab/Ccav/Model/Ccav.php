@@ -762,7 +762,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__.":".print_r($stateObject->getStatus(),true)."\n") ;
         
     }
-
+/*
     public function sendsms($recepientno,$Order_Id)
     {
     $ch = curl_init();
@@ -788,8 +788,30 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 	
 	curl_close($ch);
     }
+ */
+ public function sendsms($recepientno,$Order_Id)
+    {
+    $ch = curl_init();
+    $user="anil@ekkitab.com:meritos1959";
+    $senderID="EKKITAB1";
+    $msgtxt="Thank you for shopping with EkKitab. Your Order Id is $Order_Id";
+    $filen ="/var/log/ekkitab/sms".$Order_Id ;
+    if ( file_put_contents($filen, $msgtxt )== FALSE)
+	{ 
+	  	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."can't write sms to $filen: ".print_r($msgtxt,true)) ;
+	
+    }
+	else
+	{ 
+		     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." $filen: \n".print_r($buffer,true)) ;
+	}
+	
+	curl_close($ch);
+    }
  
 }
+ 
+
 
 
 /*
