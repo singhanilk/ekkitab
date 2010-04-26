@@ -795,7 +795,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     $user="anil@ekkitab.com:meritos1959";
     $senderID="EKKITAB1";
     $msgtxt="Thank you for shopping with EkKitab. Your Order Id is $Order_Id";
-    $filen ="/var/log/ekkitab/sms".$Order_Id ;
+    $filen ="/var/log/ekkitab/sms/sms".$Order_Id ;
     $msg = $recepientno."|".$msgtxt ;
     if ( file_put_contents($filen, $msg )== FALSE)
 	{ 
