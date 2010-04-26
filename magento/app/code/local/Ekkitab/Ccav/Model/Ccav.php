@@ -791,12 +791,12 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
  */
  public function sendsms($recepientno,$Order_Id)
     {
-    $ch = curl_init();
+
     $user="anil@ekkitab.com:meritos1959";
     $senderID="EKKITAB1";
     $msgtxt="Thank you for shopping with EkKitab. Your Order Id is $Order_Id";
     $filen ="/var/log/ekkitab/sms".$Order_Id ;
-    if ( file_put_contents($filen, $msgtxt )== FALSE)
+    if ( file_put_contents($filen, $recepientno."|",$msgtxt )== FALSE)
 	{ 
 	  	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."can't write sms to $filen: ".print_r($msgtxt,true)) ;
 	
