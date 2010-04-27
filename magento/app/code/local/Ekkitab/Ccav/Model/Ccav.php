@@ -319,7 +319,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 	$billing_cust_email=$a->getEmail();
 	 
 	$recepientno = $billing_cust_tel ;
-	 $recepientno = preg_replace('/^0-9/','',$recepientno);
+	 $recepientno = preg_replace('/[^0-9]/','',$recepientno);
 	 	 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($billing_cust_tel,true)) ;
 	 	 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($recepientno,true)) ;
 	 	 
