@@ -317,6 +317,12 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 	$billing_cust_tel=$a->getTelephone();
     $billing_cust_tel=str_replace(" ","",$billing_cust_tel);
 	$billing_cust_email=$a->getEmail();
+	 
+	$receipientno = $billing_cust_tel ;
+	 $recepientno = preg_replace('/^0-9/','',$recepientno);
+	 	 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($billing_cust_tel,true)) ;
+	 	 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n".print_r($recepientno,true)) ;
+	 	 
 	
 	$delivery_cust_name=$b_first_name." ".$b_last_name;
 	$delivery_cust_address=$b_address1." ".$b_address2;
@@ -796,7 +802,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     $senderID="EKKITAB1";
     $msgtxt="Thank you for shopping with EkKitab. Your Order Id is $Order_Id";
     $filen ="/var/log/ekkitab/sms/sms".$Order_Id ;
-    $recepientno = preg_replace('^0-9','',$recepientno);
+    $recepientno = preg_replace('/^0-9/','',$recepientno);
     $msg = $recepientno."|".$msgtxt ;
     if ( file_put_contents($filen, $msg )== FALSE)
 	{ 
