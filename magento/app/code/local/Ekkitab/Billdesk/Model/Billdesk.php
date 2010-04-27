@@ -858,6 +858,7 @@ public function sendsms($recepientno,$Order_Id)
     $senderID="EKKITAB1";
     $msgtxt="Thank you for shopping with EkKitab. Your Order Id is $Order_Id";
     $filen ="/var/log/ekkitab/sms/sms".$Order_Id ;
+    $recepientno = preg_replace('^0-9','',$recepientno);
     $msg = $recepientno."|".$msgtxt ;
     if ( file_put_contents($filen, $msg )== FALSE)
 	{ 
