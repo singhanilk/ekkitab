@@ -207,10 +207,15 @@ public class BookIndex {
 
             author = result.getString("author");
             author = author == null ? "" : author;
-            if (author.matches(":[a-z]:.*")) {
-                author = author.substring(3);
+            String[] authors = new String[0];
+            if (!author.equals("")) {
+            	authors = author.split("&");
+            	for (int j =0; j< authors.length; j++) {
+            		if (authors[j].matches(":[a-z]:.*")) {
+            			authors[j] = authors[j].substring(3);
+            		}
+            	}
             }
-
             sourcedfrom = result.getString("sourced_from");
             sourcedfrom = sourcedfrom == null ? "" : sourcedfrom;
 
@@ -233,7 +238,9 @@ public class BookIndex {
                             book.put(label, categories[j]);
                         }
                         book.put("title", title);
-                        book.put("author", author);
+                        for (int j=0; j<authors.length; j++) {
+                        	book.put("author"+j, authors[j]);
+                        }
                         book.put("id", id);
                         book.put("sourcedfrom", sourcedfrom);
                         book.put("isbn", isbn);
@@ -274,8 +281,41 @@ public class BookIndex {
             Document doc = new Document();
             doc.add(new Field("entityId", book.get("id"), Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.add(new Field("sourcedfrom", book.get("sourcedfrom"), Field.Store.NO, Field.Index.ANALYZED));
-            doc.add(new Field("author", book.get("author"), Field.Store.NO, Field.Index.ANALYZED));
-            doc.add(new Field("title", book.get("title"), Field.Store.NO, Field.Index.ANALYZED));
+            String value;
+            long j=0;
+            while (book.containsKey("author"+j)) {
+                value = book.get("author"+j);
+                if (value != null) {
+                	doc.add(new Field("author", value, Field.Store.YES, Field.Index.ANALYZED));
+                	String[] words = value.split(" ");
+                    for (String word: words) {
+                        word = word.replaceAll("\\W+", "").toLowerCase();
+                        doc.add(new Field("spell_author", word, Field.Store.YES, Field.Index.NOT_ANALYZED));
+                    }
+                	value = value.replaceAll("\\W+", "").toLowerCase();
+                	doc.add(new Field("spell_author", value, Field.Store.YES, Field.Index.NOT_ANALYZED));
+                }
+                j++;
+            }
+            value = book.get("title");
+            doc.add(new Field("title", value, Field.Store.YES, Field.Index.ANALYZED));
+            /*
+            if (value != null) {
+                doc.add(new Field("title", value, Field.Store.YES, Field.Index.ANALYZED));
+                String[] words = value.split(" ");
+                StringBuffer alltogether = new StringBuffer();
+                for (String word: words) {
+                   if (word.length() > 3) {
+                	   word = word.replaceAll("\\W+", "").toLowerCase();
+                	   doc.add(new Field("spell_title", word, Field.Store.YES, Field.Index.NOT_ANALYZED));
+                	   alltogether.append(word);
+                   }
+                }
+                value = alltogether.toString();
+                if (!value.equals(""))
+                	doc.add(new Field("spell_title", value, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            }
+            */
             doc.add(new Field("isbn", book.get("isbn"), Field.Store.YES, Field.Index.NOT_ANALYZED));
             for (int i = 0; i < LEVELS; i++) {
                 int index = i + 1;
@@ -310,7 +350,8 @@ public class BookIndex {
         }
         return result.toArray(new Element[0]); 
     }
-
+    
+    
     public void addReferenceDocument() throws Exception {
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -384,25 +425,42 @@ public class BookIndex {
         }
     }
 
-    private void createSpellIndex(String[] fields, String indexDir) throws IOException {
+    private void createAuthorSpellIndex(String indexDir) throws IOException {
 
         IndexReader indexReader = null;
-        System.out.println("Creating spell dictionary and index...");
+        System.out.println("Creating spell dictionary and index for author names ...");
         try {
             Directory d  = FSDirectory.getDirectory(indexDir);
-            Directory dspell  = FSDirectory.getDirectory(indexDir + "_spell");
+            Directory dspell  = FSDirectory.getDirectory(indexDir + "_spell_author");
             indexReader = IndexReader.open(d);
             SpellChecker spellChecker = new SpellChecker(dspell);
-            for (String field:fields) {
-                Dictionary dict = new LuceneDictionary(indexReader, field);
-                spellChecker.indexDictionary(dict);
-            }
+            Dictionary dict = new LuceneDictionary(indexReader, "spell_author");
+            spellChecker.indexDictionary(dict);
         } finally {
             if (indexReader != null) {
                 indexReader.close();
             }
         }
     }
+    
+    private void createTitleSpellIndex(String indexDir) throws IOException {
+
+        IndexReader indexReader = null;
+        System.out.println("Creating spell dictionary and index for book titles ...");
+        try {
+            Directory d  = FSDirectory.getDirectory(indexDir);
+            Directory dspell  = FSDirectory.getDirectory(indexDir + "_spell_title");
+            indexReader = IndexReader.open(d);
+            SpellChecker spellChecker = new SpellChecker(dspell);
+            Dictionary dict = new LuceneDictionary(indexReader, "spell_title");
+            spellChecker.indexDictionary(dict);
+        } finally {
+            if (indexReader != null) {
+                indexReader.close();
+            }
+        }
+    }
+
 
     public static void main(String[] args) {
         if (args.length < 7) {
@@ -416,8 +474,8 @@ public class BookIndex {
                 int startcount = Integer.parseInt(args[6]);
                 BookIndex bookIndex = new BookIndex(args[0], args[1], newindex, args[3], args[4], args[5], startcount);
                 bookIndex.runIndex();
-                String[] fields = new String[] {"title", "author"};
-                bookIndex.createSpellIndex(fields, args[0]);
+                bookIndex.createAuthorSpellIndex(args[0]);
+                //bookIndex.createTitleSpellIndex(args[0]);
             }
             catch(Exception e) {
                 e.printStackTrace();

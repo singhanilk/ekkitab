@@ -259,9 +259,11 @@ public class EkkitabSearch {
 
        StringBuilder sb = new StringBuilder();
        query = query.replaceAll("\"", "");
+       Directory dir = null;
+       SpellChecker spchkr = null;
        try {
-            Directory dir = FSDirectory.getDirectory(this.indexDir + "_spell");
-            SpellChecker spchkr = new SpellChecker(dir);
+            dir = FSDirectory.getDirectory(this.indexDir + "_spell");
+            spchkr = new SpellChecker(dir);
             String[] words = query.split(" ");
             for (String word: words) {
                 if (word.length() <= 3) { //discard 3 letter words
@@ -280,6 +282,8 @@ public class EkkitabSearch {
             }
        }
        finally {
+    	   if (dir != null)
+    		   dir.close();
        }
        return sb.toString();
     }
@@ -336,4 +340,22 @@ public class EkkitabSearch {
         }
         return result;
     }
+    
+    protected void finalize() throws Throwable {
+        try {
+        	if (searcher != null) {
+    			searcher.close(); 
+    		}
+        	if (reader != null) {
+    			reader.close();
+    		} 
+        	if (searchDir != null) {
+        		searchDir.close();
+        	}
+    		
+        } finally {
+            super.finalize();
+        }
+    }
+
 }
