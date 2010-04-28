@@ -78,25 +78,28 @@ public class EkkitabSearch {
         Query luceneQuery = null;
 
         searchQuery = createSearchQuery(query, categories, searchfield);
-        String suggestQuery;
+        String suggestQueries[] = new String[1];
+        suggestQueries[0] = "";
 
         try {
         	if (!searchQuery.equals("")) {
         		luceneQuery = new QueryParser("title", new StandardAnalyzer()).parse(searchQuery);
         	}
 
-        	suggestQuery = "";
+        	//suggestQuery = "";
 
         	if (luceneQuery != null) {
         		docs = search(luceneQuery);
         		if (docs == null) { // Try lucene suggest
-        			suggestQuery  = getSuggestQuery(query);
-        			searchQuery = createSearchQuery(suggestQuery, categories, searchfield);
-        			//logger.debug("DEBUG: Search Query is: '" + searchQuery + "'");
-        			if (!searchQuery.equals("")) {
-        				luceneQuery = new QueryParser("title", new StandardAnalyzer()).parse(searchQuery);
-        				if (luceneQuery != null) {
-        					docs = search(luceneQuery);
+        			suggestQueries  = getSuggestQuery(query);
+        			if (suggestQueries.length > 0) {
+        				searchQuery = createSearchQuery(suggestQueries[0], categories, searchfield);
+        				//logger.debug("DEBUG: Search Query is: '" + searchQuery + "'");
+        				if (!searchQuery.equals("")) {
+        					luceneQuery = new QueryParser("title", new StandardAnalyzer()).parse(searchQuery);
+        					if (luceneQuery != null) {
+        						docs = search(luceneQuery);
+        					}
         				}
         			}
         		}
@@ -138,7 +141,8 @@ public class EkkitabSearch {
 
         logger.debug("["+instanceId+"] Books collected in "+(fstop - fstart)+" millisec.");
 
-        return (new SearchResult(books, new HashMap<String, Integer>(), allhits.cardinality(), suggestQuery)); 
+        return (new SearchResult(books, new HashMap<String, Integer>(), allhits.cardinality(), 
+        		    (suggestQueries.length > 0 ? suggestQueries[0] : ""))); 
     }
 
     public Map<String, Integer> getValidCategories(int level, Set<String> categories)
@@ -255,16 +259,68 @@ public class EkkitabSearch {
        return docs;
     }
 
-    private String getSuggestQuery(String query) throws Exception {
+    private String[] getSuggestQuery(String query) throws Exception {
 
-       StringBuilder sb = new StringBuilder();
+       //StringBuilder sb = new StringBuilder();
        query = query.replaceAll("\"", "");
+       query = query.replaceAll("\\W+", "");
        Directory dir = null;
+       Sort sorter = new Sort();
        SpellChecker spchkr = null;
+       List<String> results = new ArrayList<String>();
+       String[] suggestions = new String[0];
        try {
-            dir = FSDirectory.getDirectory(this.indexDir + "_spell");
+            dir = FSDirectory.getDirectory(this.indexDir + "_spell_author");
             spchkr = new SpellChecker(dir);
+            suggestions = spchkr.suggestSimilar(query, 5);
+            
+            for (String suggestion: suggestions) {
+
+                //System.out.println("suggestion>> "+suggestion);
+                TermQuery tq = new TermQuery(new Term("spell_author", suggestion));
+                
+                TopFieldDocCollector collector = new TopFieldDocCollector(reader, sorter, 10);
+
+                searcher.search(tq, collector);
+
+                ScoreDoc[] docs = new ScoreDoc[0];
+                if (collector.getTotalHits() > 0) {
+                    docs = collector.topDocs().scoreDocs;
+                }
+                
+                int count = results.size();
+
+                for (int i = 0; (i < docs.length) && (results.size() == count); i++) {
+                    Document doc = searcher.doc(docs[i].doc);
+                    if (doc != null) {
+                         String[] values = doc.getValues("author");
+                         for (String value: values) {
+                            String[] words = value.split(" ");
+                            for (String word: words) {
+                                word = word.replaceAll("\\W+", "").toLowerCase();
+                                if (word.equals(suggestion)) {
+                                   results.add(value);
+                                   break;
+                                }
+                            }
+                         }
+                    }
+                }
+             }
+            
+             if (dir != null)
+     		   dir.close();
+            
+             if (results.size() == 0) {
+            	 //System.out.println("Entered title search!");
+            	 dir = FSDirectory.getDirectory(this.indexDir + "_spell_title");
+                 spchkr = new SpellChecker(dir);
+                 suggestions = spchkr.suggestSimilar(query, 5);
+             }
+
+            /*
             String[] words = query.split(" ");
+            
             for (String word: words) {
                 if (word.length() <= 3) { //discard 3 letter words
                     sb.append(word + " ");
@@ -279,13 +335,13 @@ public class EkkitabSearch {
                 else {
                     sb.append(word + " ");
                 }
-            }
+            }*/
        }
        finally {
     	   if (dir != null)
     		   dir.close();
        }
-       return sb.toString();
+       return (results.size() > 0 ? results.toArray(new String[0]): suggestions);
     }
 
     private BitSet dedup(BitSet hits) throws Exception {

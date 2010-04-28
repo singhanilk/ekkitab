@@ -281,7 +281,7 @@ public class BookIndex {
             Document doc = new Document();
             doc.add(new Field("entityId", book.get("id"), Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.add(new Field("sourcedfrom", book.get("sourcedfrom"), Field.Store.NO, Field.Index.ANALYZED));
-            String value;
+            String value = null;
             long j=0;
             while (book.containsKey("author"+j)) {
                 value = book.get("author"+j);
@@ -298,24 +298,22 @@ public class BookIndex {
                 j++;
             }
             value = book.get("title");
-            doc.add(new Field("title", value, Field.Store.YES, Field.Index.ANALYZED));
-            /*
             if (value != null) {
                 doc.add(new Field("title", value, Field.Store.YES, Field.Index.ANALYZED));
                 String[] words = value.split(" ");
-                StringBuffer alltogether = new StringBuffer();
+                //StringBuffer alltogether = new StringBuffer();
                 for (String word: words) {
                    if (word.length() > 3) {
                 	   word = word.replaceAll("\\W+", "").toLowerCase();
                 	   doc.add(new Field("spell_title", word, Field.Store.YES, Field.Index.NOT_ANALYZED));
-                	   alltogether.append(word);
+                	   //alltogether.append(word);
                    }
                 }
-                value = alltogether.toString();
-                if (!value.equals(""))
-                	doc.add(new Field("spell_title", value, Field.Store.YES, Field.Index.NOT_ANALYZED));
+                //value = alltogether.toString();
+                //if (!value.equals(""))
+                	//doc.add(new Field("spell_title", value, Field.Store.YES, Field.Index.NOT_ANALYZED));
             }
-            */
+            
             doc.add(new Field("isbn", book.get("isbn"), Field.Store.YES, Field.Index.NOT_ANALYZED));
             for (int i = 0; i < LEVELS; i++) {
                 int index = i + 1;
@@ -475,7 +473,7 @@ public class BookIndex {
                 BookIndex bookIndex = new BookIndex(args[0], args[1], newindex, args[3], args[4], args[5], startcount);
                 bookIndex.runIndex();
                 bookIndex.createAuthorSpellIndex(args[0]);
-                //bookIndex.createTitleSpellIndex(args[0]);
+                bookIndex.createTitleSpellIndex(args[0]);
             }
             catch(Exception e) {
                 e.printStackTrace();
