@@ -315,8 +315,11 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 	$billing_cust_state=$a->getRegion();
     $billing_cust_country = Mage::getModel('directory/country')->load($a->getCountry())->getName();
 	$billing_cust_tel=$a->getTelephone();
-    $billing_cust_tel=str_replace(" ","",$billing_cust_tel);
+ //   $billing_cust_tel=str_replace(" ","",$billing_cust_tel);
+    $billing_cust_tel=  preg_replace('/[^0-9]/','',$billing_cust_tel);
 	$billing_cust_email=$a->getEmail();
+	 
+	
 	
 	$delivery_cust_name=$b_first_name." ".$b_last_name;
 	$delivery_cust_address=$b_address1." ".$b_address2;
@@ -647,7 +650,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
                     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Before Send SMS\n") ;
      // It is taking upto 15 seconds to send a SMS, so I have commented it               
                     
- //                   $this->sendsms($billing_cust_tel,$Order_Id);
+                   $this->sendsms($billing_cust_tel,$Order_Id);
                     $flag = true ;
                }//
                 // it may be a JCB Card or rare american expresss charges that is autorized after a delay
@@ -762,7 +765,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__.":".print_r($stateObject->getStatus(),true)."\n") ;
         
     }
-
+/*
     public function sendsms($recepientno,$Order_Id)
     {
     $ch = curl_init();
@@ -788,8 +791,31 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 	
 	curl_close($ch);
     }
+ */
+ public function sendsms($recepientno,$Order_Id)
+    {
+
+    $user="anil@ekkitab.com:meritos1959";
+    $senderID="EKKITAB1";
+    $msgtxt="Thank you for shopping with EkKitab. Your Order Id is $Order_Id";
+    $filen ="/var/log/ekkitab/sms/sms".$Order_Id ;
+    $msg = $recepientno."|".$msgtxt ;
+    if ( file_put_contents($filen, $msg )== FALSE)
+	{ 
+	  	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."can't write sms to $filen: ".print_r($msg,true)) ;
+	
+    }
+	else
+	{ 
+		     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." $filen: \n".print_r($msg,true)) ;
+	}
+	
+
+    }
  
 }
+ 
+
 
 
 /*

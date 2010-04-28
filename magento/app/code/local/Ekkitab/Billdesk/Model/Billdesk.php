@@ -288,12 +288,17 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
            'txtAdditionalInfo3'             => $a->getRegionCode(),
             'txtAdditionalInfo4'           => $a->getCountry(),
             'txtAdditionalInfo5'               => $a->getPostcode(),
-            'txtAdditionalInfo6'               => $a->getTelephone(),
+ //          'txtAdditionalInfo6'               => $a->getTelephone(),
+            'txtAdditionalInfo6'               =>  preg_replace('/[^0-9]/','', $a->getTelephone()),
+ 	
  	        'txtAdditionalInfo7'               => $a->getEmail()
  	
  	
  
         );
+        
+            $billing_cust_tel=  preg_replace('/[^0-9]/','',$billing_cust_tel);
+        
         
         
         
@@ -823,7 +828,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
     
     
     }
-    
+ /*   
      public function sendsms($recepientno,$Order_Id)
     {
     $ch = curl_init();
@@ -849,6 +854,30 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
 	
 	curl_close($ch);
     }
+    */
+    
+public function sendsms($recepientno,$Order_Id)
+    {
+
+    $user="anil@ekkitab.com:meritos1959";
+    $senderID="EKKITAB1";
+    $msgtxt="Thank you for shopping with EkKitab. Your Order Id is $Order_Id";
+    $filen ="/var/log/ekkitab/sms/sms".$Order_Id ;
+    $msg = $recepientno."|".$msgtxt ;
+    if ( file_put_contents($filen, $msg )== FALSE)
+	{ 
+	  	    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."can't write sms to $filen: ".print_r($msg,true)) ;
+	
+    }
+	else
+	{ 
+		     Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." $filen: \n".print_r($msg,true)) ;
+	}
+	
+
+    }
+ 
+
  
     
 

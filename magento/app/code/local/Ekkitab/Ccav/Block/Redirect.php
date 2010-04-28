@@ -26,7 +26,7 @@ class Ekkitab_Ccav_Block_Redirect extends Mage_Core_Block_Abstract
         
         
         $html = '<html><body>';
-        $html.= $this->__('You will be redirected to CCavenue Payment Gateway in a few seconds.');
+    //    $html.= $this->__('You will be redirected to CCavenue Payment Gateway in a few seconds.');
         $html.= $this->__(' ');
         
         $html.= $form->toHtml();
