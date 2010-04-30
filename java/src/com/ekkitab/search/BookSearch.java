@@ -23,6 +23,8 @@ public class BookSearch {
     private static final String PROP_INDEXFILE = "searchdir.path";
     private static final String PROPERTIESFILE = "search.properties";
 
+    private static EkkitabSearch searcher = null;
+
 
     static {
         logger = LogManager.getLogger("BookSearch.class");
@@ -49,22 +51,31 @@ public class BookSearch {
             logger.fatal("Failed category initialization. "+e.getMessage());
             catTree = null;
         }
+
+        try {
+            searcher = new EkkitabSearch(properties.getProperty(PROP_INDEXFILE));
+        }
+        catch (EkkitabSearchException e) {
+            logger.fatal("Failed Lucene Initialization. "+e.getMessage());
+            searcher = null;
+        }
     }
     
     public BookSearch(String indexDir) throws EkkitabSearchException {
 
-    	if ((catTree == null) || (properties == null)) {
-    		throw new EkkitabSearchException("Failed during initialization. Cannot instantiate Search class.");
+    	if ((catTree == null) || (searcher == null) || (properties == null)) {
+    		throw new EkkitabSearchException("Ekkitab Search was not initialized correctly. Cannot continue.");
     	}
-        if (indexDir != null) 
-           this.indexDir = indexDir;
-        else
-           this.indexDir = properties.getProperty(PROP_INDEXFILE);
+        // Ignore the indexDir value that is supplied.
+        //if (indexDir != null) 
+        //   this.indexDir = indexDir;
+        //else
+        //   this.indexDir = properties.getProperty(PROP_INDEXFILE);
 
         synchronized (BookSearch.class) {
             instanceId = ++allInstances;
-            if (allInstances >= 10000000)
-                allInstances = 0;
+            //if (allInstances >= 10000000)
+            //    allInstances = 0;
         }
         
     }
@@ -95,8 +106,7 @@ public class BookSearch {
        // parse function.
        query = query.replaceAll("([^a-zA-Z0-9 ])", "\\\\$1");
 
-       EkkitabSearch search = new EkkitabSearch(instanceId, query, indexDir, usesearchfield);
-       SearchResult result = search.searchInCategory(categories, startIndex, endIndex);
+       SearchResult result = searcher.searchInCategory(instanceId, query, usesearchfield, categories, startIndex, endIndex);
        Set<String> cats = catTree.getSearchCategories(null);
        int searchlevel = 1;
        if (categories != null) {
@@ -104,7 +114,7 @@ public class BookSearch {
           searchlevel = categories.length+1;
        }
        if (result.getHitCount() > 0) {
-    	   result.setResultCategories(search.getValidCategories(searchlevel, cats));
+    	   result.setResultCategories(searcher.getValidCategories(instanceId, result.getSearchQuery(), searchlevel, cats));
        }
 
        return result;

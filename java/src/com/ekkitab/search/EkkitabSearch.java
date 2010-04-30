@@ -6,6 +6,10 @@ import org.apache.log4j.LogManager;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.MapFieldSelector;
+import org.apache.lucene.document.FieldSelector;
+import org.apache.lucene.document.FieldSelectorResult;
+import org.apache.lucene.document.LoadFirstFieldSelector;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.HitCollector;
 import org.apache.lucene.search.IndexSearcher;
@@ -27,57 +31,51 @@ import org.apache.lucene.search.DuplicateFilter;
 import org.apache.lucene.search.spell.SpellChecker;
 
 public class EkkitabSearch {
-    private String query;
-    private String indexDir;
-    private String searchfield;
-    private Directory searchDir;
-    private IndexReader reader;
-    private IndexSearcher searcher;
-    private Sort sorter;
-    private String searchQuery;
+    private static String indexDir;
+    private static Directory searchDir;
+    private static IndexReader reader;
+    private static IndexSearcher searcher;
+    private static Sort sorter;
+    private static Directory author_spell_dir;
+    private static Directory title_spell_dir;
+    private static SpellChecker author_speller;
+    private static SpellChecker title_speller;
     private static Logger logger = LogManager.getLogger("EkkitabSearch.class");
     private static final int MAXHITS = 1000;
-    private long instanceId;
+    private static final int FUZZYLIMIT = 150;
 
-    public EkkitabSearch(long instanceId, String query, String indexDir, String searchfield)
-    					throws EkkitabSearchException {
-    	this.instanceId = instanceId;
-        this.query = query;
+    public EkkitabSearch(String indexDir) throws EkkitabSearchException {
         this.indexDir = indexDir;
-        this.searchfield = searchfield;
         try {
-        	searchDir = FSDirectory.getDirectory(this.indexDir);
+        	this.searchDir = FSDirectory.getDirectory(this.indexDir);
+    	    this.reader    = IndexReader.open(this.searchDir);
+    		this.searcher  = new IndexSearcher(reader);
+    		this.sorter = new Sort();
+    		this.author_spell_dir = FSDirectory.getDirectory(this.indexDir + "_spell_author");
+    		this.title_spell_dir = FSDirectory.getDirectory(this.indexDir + "_spell_title");
+    		this.author_speller = new SpellChecker(this.author_spell_dir);
+    		this.title_speller = new SpellChecker(this.title_spell_dir);
         }
         catch(Exception e) {
-        	logger.fatal("Failed to read search index directory.");
-        	throw new EkkitabSearchException(e);
+        	throw new EkkitabSearchException(e.getMessage());
         }
-        this.reader = null;
-        this.searcher = null;
-        this.sorter = new Sort();
-        searchQuery = null;
+        logger.info("Success:  Singleton instance of EkkitabSearch has been initialized.");
     }
 
-    public SearchResult searchInCategory(String[] categories, int start, int end) 
-    					throws EkkitabSearchException {
-    	
-        try {
-    		if (reader == null) {
-    			reader = IndexReader.open(searchDir);
-    		} 
-    		if (searcher == null) {
-    			searcher = new IndexSearcher(reader);
-    		}
-        }
-        catch(Exception e) {
-        	logger.fatal("Failed to initialize Lucene Search.");
-        	throw new EkkitabSearchException(e);
-        }
+    public SearchResult searchInCategory(long instanceId, 
+                                         String query,
+                                         String searchfield,
+                                         String[] categories, 
+                                         int start, int end) throws EkkitabSearchException {
+
+        if ((reader == null) || (searcher == null))	
+            throw new EkkitabSearchException("Initialization Error!");
 
         ScoreDoc[] docs = null;
         Query luceneQuery = null;
 
-        searchQuery = createSearchQuery(query, categories, searchfield);
+        String searchQuery = createSearchQuery(query, categories, searchfield);
+        logger.debug("DEBUG: Search Query is: '" + searchQuery + "'");
         String suggestQueries[] = new String[1];
         suggestQueries[0] = "";
 
@@ -89,8 +87,8 @@ public class EkkitabSearch {
         	//suggestQuery = "";
 
         	if (luceneQuery != null) {
-        		docs = search(luceneQuery);
-        		if (docs == null) { // Try lucene suggest
+        		docs = search(luceneQuery, instanceId);
+        		if ((docs == null) && (!query.equals(""))){ // Try lucene suggest
         			suggestQueries  = getSuggestQuery(query);
         			if (suggestQueries.length > 0) {
         				searchQuery = createSearchQuery(suggestQueries[0], categories, searchfield);
@@ -98,7 +96,7 @@ public class EkkitabSearch {
         				if (!searchQuery.equals("")) {
         					luceneQuery = new QueryParser("title", new StandardAnalyzer()).parse(searchQuery);
         					if (luceneQuery != null) {
-        						docs = search(luceneQuery);
+        						docs = search(luceneQuery, instanceId);
         					}
         				}
         			}
@@ -106,7 +104,7 @@ public class EkkitabSearch {
         	}
         }
         catch (Exception e) {
-        	logger.fatal("Lucene search failed with exception" + e.getMessage());
+        	logger.fatal("["+instanceId+"] Lucene search failed with exception" + e.getMessage());
         	throw new EkkitabSearchException(e);
         }
 
@@ -115,54 +113,93 @@ public class EkkitabSearch {
         	SearchResult result = new SearchResult(new ArrayList<String>(), 
                                     			   new HashMap<String, Integer>(),
                                      			   0,
-                                     			   "");
+                                     			   "",
+                                     			   "",
+                                                   searchQuery);
         	return result;
         }
 
-        BitSet allhits = new BitSet(reader.maxDoc());
-        for (int i = 0; (i < docs.length); i++) {
-        	allhits.set(docs[i].doc);
-        }
+        //BitSet allhits = new BitSet(reader.maxDoc());
+        //for (int i = 0; (i < docs.length); i++) {
+        //	allhits.set(docs[i].doc);
+        //}
 
-        List<String> books = null;
+        //List<String> books = null;
+        String[] fields = {"entityId"};
+        BitSet processed = new BitSet(MAXHITS);
+        int index = 0;
+        List<String> books = new ArrayList<String>();
+        int documentCount = 0;
         
         long fstart = System.currentTimeMillis();
-        if (allhits.cardinality() > 0) {
-        	try {
-        		allhits = dedup(allhits);
-        		books = getBooks(docs, allhits, start, end);
+        long f1total = 0, f2total = 0, f3total = 0;
+        FieldSelector fselect = new FieldSelector() {
+        	public FieldSelectorResult accept(String fieldName) {
+        		if (fieldName.equals("entityId"))
+        			return FieldSelectorResult.LOAD_AND_BREAK;
+        		else
+        			return FieldSelectorResult.NO_LOAD;
         	}
-        	catch (Exception e){
-        		logger.fatal("Failed to get books with error: " + e.getMessage());
-        		throw new EkkitabSearchException(e);
+        };
+
+        
+        if (docs.length > 0) {
+        	try {
+        		for (int i = 0; i < docs.length; i++) {
+        			if (!processed.get(docs[i].doc)) {
+        				long f = System.currentTimeMillis();
+        				Document doc = reader.document(docs[i].doc, fselect);
+        				f1total += System.currentTimeMillis() - f;
+        				
+        				if (doc != null) {
+        					f = System.currentTimeMillis();
+        					String id = doc.get("entityId");
+        					f2total += System.currentTimeMillis() - f;
+        					if (id != null) {
+        						if ((index++ >= start) && (index <= end)) {
+        							books.add(id);
+        						}
+        						f = System.currentTimeMillis();
+        						Term t = new Term("entityId", id);
+        						TermDocs td = reader.termDocs(t);
+        						while (td.next()) {
+                                    processed.set(td.doc(),true);
+        						}
+        						td.close();
+        						f3total += System.currentTimeMillis() - f;
+        						documentCount++;
+        						if ((documentCount > FUZZYLIMIT) && (index > end)) {
+        							documentCount = docs.length;
+        							break;
+        						}
+        					}
+        				}
+        			}
+        		}
+        	}
+        	catch (Exception e) {
+        		logger.fatal("["+instanceId+"] Error processing Lucene reults " + e.getMessage());
+        		throw new EkkitabSearchException(e.getMessage());
         	}
         }
         long fstop = System.currentTimeMillis();
 
-        logger.debug("["+instanceId+"] Books collected in "+(fstop - fstart)+" millisec.");
+        logger.debug("["+instanceId+"] Collection times: "+(fstop - fstart)+":"+f1total+":"+f2total+":"+f3total+" millisec.");
+        
+        StringBuffer otherSuggestions = new StringBuffer();
+        for (int i=1; i < suggestQueries.length; i++) {
+        	otherSuggestions.append(suggestQueries[i]+"|");
+        }
 
-        return (new SearchResult(books, new HashMap<String, Integer>(), allhits.cardinality(), 
-        		    (suggestQueries.length > 0 ? suggestQueries[0] : ""))); 
+        return (new SearchResult(books, new HashMap<String, Integer>(), documentCount, 
+        		    (suggestQueries.length > 0 ? suggestQueries[0] : ""), otherSuggestions.toString(),searchQuery)); 
     }
 
-    public Map<String, Integer> getValidCategories(int level, Set<String> categories)
+    public Map<String, Integer> getValidCategories(long instanceId, String searchQuery, int level, Set<String> categories)
     							throws EkkitabSearchException {
 
-    	try {
-    		if (reader == null) {
-    			reader = IndexReader.open(searchDir);
-    		} 
-    		if (searcher == null) {
-    			searcher = new IndexSearcher(reader);
-    		}
-    	}	
-        catch(Exception e) {
-        	logger.fatal("Failed to initialize Lucene Search.");
-        	throw new EkkitabSearchException(e);
-        }
-        if (searchQuery == null) {
-			searchQuery = "";
-		}
+        if ((reader == null) || (searcher == null))	
+            throw new EkkitabSearchException("Initialization Error!");
 
         final BitSet hits = new BitSet(reader.maxDoc());
 
@@ -242,7 +279,7 @@ public class EkkitabSearch {
         return (sb.toString());
     }
 
-    private ScoreDoc[] search(Query query) throws Exception {
+    private ScoreDoc[] search(Query query, long instanceId) throws Exception {
        logger.debug("["+instanceId+"] Lucene Query: "+query.toString());
        TopFieldDocCollector collector = new TopFieldDocCollector(reader, sorter, MAXHITS);
 
@@ -264,59 +301,54 @@ public class EkkitabSearch {
        //StringBuilder sb = new StringBuilder();
        query = query.replaceAll("\"", "");
        query = query.replaceAll("\\W+", "");
-       Directory dir = null;
-       Sort sorter = new Sort();
-       SpellChecker spchkr = null;
+       
        List<String> results = new ArrayList<String>();
        String[] suggestions = new String[0];
-       try {
-            dir = FSDirectory.getDirectory(this.indexDir + "_spell_author");
-            spchkr = new SpellChecker(dir);
-            suggestions = spchkr.suggestSimilar(query, 5);
+       
+       suggestions = author_speller.suggestSimilar(query, 5);
             
-            for (String suggestion: suggestions) {
+       for (String suggestion: suggestions) {
 
-                //System.out.println("suggestion>> "+suggestion);
-                TermQuery tq = new TermQuery(new Term("spell_author", suggestion));
+           TermQuery tq = new TermQuery(new Term("spell_author", suggestion));
                 
-                TopFieldDocCollector collector = new TopFieldDocCollector(reader, sorter, 10);
+           TopFieldDocCollector collector = new TopFieldDocCollector(reader, sorter, 10);
 
-                searcher.search(tq, collector);
+           searcher.search(tq, collector);
 
-                ScoreDoc[] docs = new ScoreDoc[0];
-                if (collector.getTotalHits() > 0) {
-                    docs = collector.topDocs().scoreDocs;
-                }
+           ScoreDoc[] docs = new ScoreDoc[0];
+           if (collector.getTotalHits() > 0) {
+               docs = collector.topDocs().scoreDocs;
+           }
                 
-                int count = results.size();
+           int count = results.size();
 
-                for (int i = 0; (i < docs.length) && (results.size() == count); i++) {
-                    Document doc = searcher.doc(docs[i].doc);
-                    if (doc != null) {
-                         String[] values = doc.getValues("author");
-                         for (String value: values) {
-                            String[] words = value.split(" ");
-                            for (String word: words) {
-                                word = word.replaceAll("\\W+", "").toLowerCase();
-                                if (word.equals(suggestion)) {
-                                   results.add(value);
-                                   break;
-                                }
-                            }
-                         }
-                    }
+           for (int i = 0; (i < docs.length) && (results.size() == count); i++) {
+                Document doc = searcher.doc(docs[i].doc);
+                if (doc != null) {
+                     String[] values = doc.getValues("author");
+                     for (String value: values) {
+                          String name = value.replaceAll("\\W+", "").toLowerCase();
+                          if (name.equals(suggestion)) {
+                              results.add(value);
+                          }
+                          else {
+                        	  String[] words = value.split(" ");
+                              for (String word: words) {
+                        		 word = word.replaceAll("\\W+", "").toLowerCase();
+                        		 if (word.equals(suggestion)) {
+                        		     results.add(value);
+                        			 break;
+                        		 }
+                              }
+                          }
+                     }
                 }
-             }
+           }
+       }
             
-             if (dir != null)
-     		   dir.close();
-            
-             if (results.size() == 0) {
-            	 //System.out.println("Entered title search!");
-            	 dir = FSDirectory.getDirectory(this.indexDir + "_spell_title");
-                 spchkr = new SpellChecker(dir);
-                 suggestions = spchkr.suggestSimilar(query, 5);
-             }
+       if (results.size() == 0) {
+           suggestions = title_speller.suggestSimilar(query, 5);
+       }
 
             /*
             String[] words = query.split(" ");
@@ -336,41 +368,39 @@ public class EkkitabSearch {
                     sb.append(word + " ");
                 }
             }*/
-       }
-       finally {
-    	   if (dir != null)
-    		   dir.close();
-       }
        return (results.size() > 0 ? results.toArray(new String[0]): suggestions);
     }
 
     private BitSet dedup(BitSet hits) throws Exception {
+    	String[] fields = {"entityId"};
         for (int i = hits.nextSetBit(0); (i >= 0); i = hits.nextSetBit(i+1)) {
-            Document doc = reader.document(i);
+            Document doc = reader.document(i, new MapFieldSelector(fields));
             if (doc != null) {
                String id = doc.get("entityId");
                if (id != null) {
                     Term t = new Term("entityId", id);
-                    TermEnum te = reader.terms(t);
-                    if (te != null) {
-                        Term ct = te.term();
-                        if((ct != null) && (ct.field()== t.field())) {
-                            if (te.docFreq() > 1) {
-                                TermDocs td = reader.termDocs(ct);
-                                while (td.next()) {    
-                                   hits.set(td.doc(),false);
-                                } 
-                            }
-                            hits.set(i);
-                        }
+                    //TermEnum te = reader.terms(t);
+                    //if (te != null) {
+                        //Term ct = te.term();
+                        //if((ct != null) && (ct.field()== t.field())) {
+                            //if (te.docFreq() > 1) {
+                    TermDocs td = reader.termDocs(t);
+                    while (td.next()) {
+                    	 if (td.doc() != i)
+                            hits.set(td.doc(),false);
                     }
+                    td.close();
+                            // }
+                    //hits.set(i);
+                      //  }
+                   // }
                }
             }
         }
         return hits;
     }
 
-    private List<String> getBooks(ScoreDoc[] hits, BitSet uniques, int start, int end) 
+    private List<String> getBooks(long instanceId, ScoreDoc[] hits, BitSet uniques, int start, int end) 
                         throws Exception {
 
         int index = 0;
@@ -398,17 +428,16 @@ public class EkkitabSearch {
     }
     
     protected void finalize() throws Throwable {
+    	logger.fatal("Severe:  Singleton instance of EkkitabSearch has been destroyed.");
         try {
         	if (searcher != null) {
     			searcher.close(); 
+    			searcher = null;
     		}
         	if (reader != null) {
     			reader.close();
+    			reader = null;
     		} 
-        	if (searchDir != null) {
-        		searchDir.close();
-        	}
-    		
         } finally {
             super.finalize();
         }

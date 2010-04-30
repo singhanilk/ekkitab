@@ -29,6 +29,21 @@ Apache Server Configuration
     
         rewrite.load --> ../mods-available/rewrite.load
 
+(5)     Setting Expiry on page resources 
+        Ensure the following is in the site specific configuration file:
+
+        <Directory /var/www/>
+                ExpiresDefault A300
+                ExpiresByType text/html "access plus 1 day"
+                ExpiresByType text/css "access plus 1 day"
+                ExpiresByType text/javascript "access plus 1 day"
+                ExpiresByType image/gif "access plus 1 month"
+                ExpiresByType image/jpg "access plus 1 month"
+                ExpiresByType image/png "access plus 1 month"
+                ExpiresByType application/x-shockwave-flash "access plus 1 day"
+        </Directory>
+
+
 Tomcat Configuration
 
 (1)     Turn off Tomcat security.
