@@ -34,6 +34,8 @@ Tomcat Configuration
 (1)     Turn off Tomcat security.
 
         TOMCAT6_SECURITY=no
+(2)     Increase Java heap size for Tomcat process
+        set the following: "-Xms512M -Xmx1024M" to the JAVA_OPTS variable.
 
 MySQL Configuration
 

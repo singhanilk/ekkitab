@@ -9,7 +9,7 @@ magento/app/.settings/
 magento/downloader/
 magento/media/images.zip
 magento/search_index_dir/
-magento/search_index_dir_spell/
+magento/search_index_dir_spell_author/
 magento/categories.xml
 db/data/
 db/unclassified_codes
