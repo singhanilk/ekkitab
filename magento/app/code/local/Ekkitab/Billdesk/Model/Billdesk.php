@@ -297,7 +297,6 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
  
         );
         
-            $billing_cust_tel=  preg_replace('/[^0-9]/','',$billing_cust_tel);
         
         
         
@@ -723,7 +722,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
                        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."After Send Mail\n") ;
                       
                       
-  //                    $this->sendsms($r_telno,$orid);
+                      $this->sendsms($r_telno,$orid);
                       
                        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."After sending SMS\n") ;
                       
