@@ -372,15 +372,20 @@ public function getStandardCheckoutFormFields()
  	  	Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." mOrderList: \n".print_r($mOrderList,true)) ;
 
  	 
-        $mordids = array() ;
+ //       $mordids = array() ;
 //       $msg_arr1 = $this->strgetcsv($msg,"|") ; did not work for me, that is why this loop
-        
+  /*      
         $i = 0 ; 
     	$tok = strtok($mOrderList,"|");
     	while ($tok != false) {
     	   $mordids[$i++] = $tok ; 
     	   $tok = strtok("|"); 
-    	}   
+    	}
+   */
+        // above was working, but the explode is better than above loop   
+    	
+    	$mordids = explode ("|", $mOrderList) ;
+    	
         
         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." PayPal returned Order Ids\n".print_r($mordids,true)) ;
         
