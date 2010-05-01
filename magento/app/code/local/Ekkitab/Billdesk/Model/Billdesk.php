@@ -453,12 +453,16 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
                 
         
   
-         $i = 0 ; 
+     /*    $i = 0 ; 
     	$tok = strtok($msg,"|");
     	while ($tok != false) {
-    	   $msg_arr[$i++] = $tok ; 
+	    	   $msg_arr[$i++] = $tok ; 
     	   $tok = strtok("|"); 
     	}
+    	
+    	*/
+    	
+    	$msg_arr = explode ("|", $msg) ;
         
             Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
         
@@ -810,7 +814,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
 
         return true ;
     }
-    
+ /*   
     public function strgetcsv($msg)
     {
                 Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."\n") ;
@@ -827,6 +831,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
     
     
     }
+ */
  /*   
      public function sendsms($recepientno,$Order_Id)
     {
