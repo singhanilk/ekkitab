@@ -145,12 +145,18 @@ public function getStandardCheckoutFormFields()
 			} else {  // it is "M" : Multishipping order
 				$Order_Ids    =  Mage::getSingleton('core/session')->getOrderIds();   // for mltiple shipment orders
 				$Order_Id = end($Order_Ids);
+				$j = 0 ;
 				foreach( $Order_Ids as $key => $orid) {
 							  $order = Mage::getModel('sales/order');
 							  $order->loadByIncrementId($orid);  
 							  //$total_amount = $total_amount + $order->getGrandTotal() ;
 							  $total_amount = $total_amount + $order->getSubtotal() ;
-							  $mOrderList = $mOrderList."|".$orid ;
+							  If ($j++)
+							 	 $mOrderList = $mOrderList."|".$orid ;
+							  else
+							     $mOrderList = $orid ;						     
+//							  $mOrderList = $mOrderList."|".$orid ;
+							  
       	  
 	  			}
 
