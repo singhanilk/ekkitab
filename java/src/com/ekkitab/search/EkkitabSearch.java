@@ -17,6 +17,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopFieldDocCollector;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.SimpleAnalyzer;
@@ -47,10 +48,10 @@ public class EkkitabSearch {
     public EkkitabSearch(String indexDir) throws EkkitabSearchException {
         this.indexDir = indexDir;
         try {
-        	this.searchDir = FSDirectory.getDirectory(this.indexDir);
-    	    this.reader    = IndexReader.open(this.searchDir);
+        	this.searchDir = new RAMDirectory(FSDirectory.getDirectory(this.indexDir));
+    	    this.reader    = IndexReader.open(this.searchDir, true);
     		this.searcher  = new IndexSearcher(reader);
-    		this.sorter = new Sort();
+    		this.sorter = new Sort();	
     		this.author_spell_dir = FSDirectory.getDirectory(this.indexDir + "_spell_author");
     		this.title_spell_dir = FSDirectory.getDirectory(this.indexDir + "_spell_title");
     		this.author_speller = new SpellChecker(this.author_spell_dir);
@@ -126,7 +127,7 @@ public class EkkitabSearch {
 
         //List<String> books = null;
         String[] fields = {"entityId"};
-        BitSet processed = new BitSet(MAXHITS);
+        BitSet processed = new BitSet(reader.maxDoc());
         int index = 0;
         List<String> books = new ArrayList<String>();
         int documentCount = 0;
@@ -163,7 +164,7 @@ public class EkkitabSearch {
         						Term t = new Term("entityId", id);
         						TermDocs td = reader.termDocs(t);
         						while (td.next()) {
-                                    processed.set(td.doc(),true);
+        							processed.set(td.doc(),true);
         						}
         						td.close();
         						f3total += System.currentTimeMillis() - f;
@@ -205,34 +206,41 @@ public class EkkitabSearch {
 
         Map<String, Integer> catMap = new HashMap<String, Integer>();
         int catsize = 0;
+        long ftotal = 0;
 
         long fstart = System.currentTimeMillis();
         if (categories != null) {
             catsize = categories.size();
             searchQuery = searchQuery.equals("") ? "" : searchQuery + " AND ";
+            
             for (String category: categories) {
-                 hits.clear();
+                 //hits.clear();
                  String query = searchQuery + "+level"+level+":"+category.replaceAll("\\W+", "");
                  try {
+                	 long f = System.currentTimeMillis();
                 	 Query luceneQuery = new QueryParser("title", new StandardAnalyzer()).parse(query);
-                	 searcher.search(luceneQuery, new HitCollector() { 
-                                                         	public void collect(int doc, float score) {
-                                                         		hits.set(doc);
-                                                         	}
-                                                     	});
+                	 ftotal += System.currentTimeMillis() - f;
+                	 //searcher.search(luceneQuery, new HitCollector() { 
+                     //                                    	public void collect(int doc, float score) {
+                     //                                    		hits.set(doc);
+                     //                                    	}
+                     //                                	});
+                	 TopDocs t = searcher.search(luceneQuery, null, MAXHITS);
+                	 if (t.totalHits > 0)
+                		 catMap.put(category, t.totalHits);
                  }
                  catch (Exception e) {
                 	logger.fatal("Search failed while collecting category information with error " + e.getMessage());
                 	throw new EkkitabSearchException(e);
                  }
-                 if (hits.cardinality() > 0) {
-                	catMap.put(category, (hits.cardinality() > MAXHITS ? MAXHITS : hits.cardinality())); 
-                 }
+                 //if (hits.cardinality() > 0) {
+                	//catMap.put(category, (hits.cardinality() > MAXHITS ? MAXHITS : hits.cardinality())); 
+                 //}
             }
        }
        long fstop = System.currentTimeMillis();
 
-       logger.debug("["+instanceId+"] Hits counted in "+catsize+" categories in: "+(fstop - fstart)+" millisec.");
+       logger.debug("["+instanceId+"] Hits counted in "+catsize+" categories in: "+(fstop - fstart)+":"+ftotal+" millisec.");
        return catMap;
 
     }
