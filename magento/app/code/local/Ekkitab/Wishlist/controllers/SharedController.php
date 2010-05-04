@@ -19,7 +19,7 @@ class Ekkitab_Wishlist_SharedController extends Mage_Wishlist_SharedController
             $this->_forward('noRoute');
             return;
         }
-        $wishlist = Mage::getModel('wishlist/wishlist')->loadByCode($code);
+        $wishlist = Mage::getModel('ekkitab_wishlist/wishlist')->loadByCode($code);
 
         if ($wishlist->getCustomerId() && $wishlist->getCustomerId() == Mage::getSingleton('customer/session')->getCustomerId()) {
             $this->_redirectUrl(Mage::helper('ekkitab_wishlist')->getListUrl());

@@ -32,7 +32,7 @@
 Default layout, loads most of the pages
 -->
 
-    <default>
+    <customer_logged_in>
 
         <reference name="top.links">
             <block type="ekkitab_wishlist/links" name="wishlist_link">
@@ -41,7 +41,7 @@ Default layout, loads most of the pages
         </reference>
 
 
-    </default>
+    </customer_logged_in>
 
 <!--
 Customer account pages, rendered for all tabs in dashboard

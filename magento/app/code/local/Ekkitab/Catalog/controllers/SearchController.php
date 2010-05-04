@@ -18,12 +18,13 @@ class Ekkitab_Catalog_SearchController extends Mage_Core_Controller_Front_Action
 
 	public function indexAction()
     {
-        $categoryPath = Mage::helper('ekkitab_catalog')->getCurrentCategoryPath();
+		$categoryPath = Mage::helper('ekkitab_catalog')->getCurrentCategoryPath();
 		// @var $query Mage_CatalogSearch_Model_Query
 		$queryText = Mage::helper('ekkitab_catalog')->getQueryText();
 		
 		
 		if ((isset($categoryPath) && strlen($categoryPath) > 0 ) || strlen($queryText) > 0 ) {
+			Mage::log(" In SearchController : Start : for search string : '".$queryText."' and category: '".$categoryPath."' @ time:".date('H:m:s'));
 			if (strlen($categoryPath) > 0 ) {
                 Mage::getSingleton('core/session')->setCurrentCategoryPath(array('current_category_path'=>$categoryPath));
 			}else{
@@ -65,10 +66,11 @@ class Ekkitab_Catalog_SearchController extends Mage_Core_Controller_Front_Action
 			$this->_initLayoutMessages('catalog/session');
 			$this->_initLayoutMessages('checkout/session');
 			$this->renderLayout();
-
+			//Mage::log(" In Controller, after rendering layout for search string : ".$queryText." and category: ".$categoryPath." at time:".date('H:m:s'));
 			if (!Mage::helper('ekkitab_catalog')->isMinQueryLength()) {
 				$query->save();
 			}
+			Mage::log(" In SearchController : End : for search string : '".$queryText."' and category: '".$categoryPath."' @ time:".date('H:m:s'));
 		}
         else {
             $this->_redirectReferer();

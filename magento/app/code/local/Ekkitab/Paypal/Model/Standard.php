@@ -145,12 +145,18 @@ public function getStandardCheckoutFormFields()
 			} else {  // it is "M" : Multishipping order
 				$Order_Ids    =  Mage::getSingleton('core/session')->getOrderIds();   // for mltiple shipment orders
 				$Order_Id = end($Order_Ids);
+				$j = 0 ;
 				foreach( $Order_Ids as $key => $orid) {
 							  $order = Mage::getModel('sales/order');
 							  $order->loadByIncrementId($orid);  
 							  //$total_amount = $total_amount + $order->getGrandTotal() ;
 							  $total_amount = $total_amount + $order->getSubtotal() ;
-							  $mOrderList = $mOrderList."|".$orid ;
+							  If ($j++)
+							 	 $mOrderList = $mOrderList."|".$orid ;
+							  else
+							     $mOrderList = $orid ;						     
+//							  $mOrderList = $mOrderList."|".$orid ;
+							  
       	  
 	  			}
 
@@ -372,15 +378,20 @@ public function getStandardCheckoutFormFields()
  	  	Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." mOrderList: \n".print_r($mOrderList,true)) ;
 
  	 
-        $mordids = array() ;
+ //       $mordids = array() ;
 //       $msg_arr1 = $this->strgetcsv($msg,"|") ; did not work for me, that is why this loop
-        
+  /*      
         $i = 0 ; 
     	$tok = strtok($mOrderList,"|");
     	while ($tok != false) {
     	   $mordids[$i++] = $tok ; 
     	   $tok = strtok("|"); 
-    	}   
+    	}
+   */
+        // above was working, but the explode is better than above loop   
+    	
+    	$mordids = explode ("|", $mOrderList) ;
+    	
         
         Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." PayPal returned Order Ids\n".print_r($mordids,true)) ;
         

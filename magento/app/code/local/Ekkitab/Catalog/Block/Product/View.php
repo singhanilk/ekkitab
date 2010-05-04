@@ -24,8 +24,10 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
 	protected function _prepareLayout()
     {
 		$title = $this->getProduct()->getName();
+		$authorArr= $this->getProduct()->getAuthor();
+		$author = !is_null($authorArr['a']) ? " by ".$authorArr['a'] :"";
 		if ($headBlock = $this->getLayout()->getBlock('head')) {
-			$headBlock->setTitle($title." @ Ekkitab Educational Services");
+			$headBlock->setTitle($title.$author." @ Ekkitab Educational Services");
 			$headBlock->setKeywords($title." @ Ekkitab Educational Services");
 			$headBlock->setDescription( $this->getProduct()->getDescription() );
 		}

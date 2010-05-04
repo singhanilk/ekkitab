@@ -169,7 +169,15 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 			if($this->isIsbn($this->helper('ekkitab_catalog')->getEscapedQueryText())){
 				$filterBy = "isbn:"; 
 			}
+			
 			$results = $search->searchBook($this->getDecodedString($categoryPath),$filterBy.$this->helper('ekkitab_catalog')->getEscapedQueryText(), $this->getPageSize(), $this->getCurrentPageNumber());
+
+
+
+			//save the time taken, the search string and timestamp
+
+
+
 		}
 		catch(Exception $e)
 		{
@@ -209,7 +217,20 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 			if($this->isIsbn($this->helper('ekkitab_catalog')->getEscapedQueryText())){
 				$filterBy = "isbn:"; 
 			}
+			$start = (float) array_sum(explode(' ', microtime()));
+			//Mage::log(" In getSearchResultsNew for search string : ".$filterBy.$this->helper('ekkitab_catalog')->getEscapedQueryText()." and category: ".$categoryPath." at time:".date('H:m:s'));
 			$results = $search->searchBook($this->getDecodedString($categoryPath),$filterBy.$this->helper('ekkitab_catalog')->getEscapedQueryText(), $this->getPageSize(), $this->getCurrentPageNumber());
+			//Mage::log(" In getSearchResultsNew after search for query : ".$filterBy.$this->helper('ekkitab_catalog')->getEscapedQueryText()." and category: ".$categoryPath." at time:".date('H:m:s'));
+			$end = (float) array_sum(explode(' ', microtime()));
+			$time = sprintf("%.5f", ($end - $start));
+			//$log = Mage::getModel('ekkitab_catalogsearch/log');
+			//$log->setCategory($this->getDecodedString($categoryPath));
+			//$log->setQuery($filterBy.$this->helper('ekkitab_catalog')->getEscapedQueryText());
+			//$log->setTimeTaken($time*1000);
+			//Mage::log($log);
+			//$log->save();
+
+			$start = (float) array_sum(explode(' ', microtime()));
 			if(!is_null($results)){
 			  $suggest = $results->getSuggestQuery();
   			  $productIds = java_values($results->getBookIds());
@@ -220,6 +241,7 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 					if(!is_null($productIds) && is_array($productIds) && count($productIds) > 0 ){
 						$books = Mage::getModel('ekkitab_catalog/product')->getCollection()
 						->addIdFilter($productIds);
+						//Mage::log(" In getSearchResultsNew after fetching books for query : ".$filterBy.$this->helper('ekkitab_catalog')->getEscapedQueryText()." and category: ".$categoryPath." at time:".date('H:m:s'));
 					}
 				//}
 				$booksResult = array("books"=>$books,"hits"=>java_values($results->getHitCount()),"categories"=>$results->getResultCategories(),"suggest"=> $suggest);
@@ -227,6 +249,14 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 			}else{
 				$booksResult = array("books"=>null,"hits"=>null,"categories"=>null,"suggest"=>null);
 			}
+			$end = (float) array_sum(explode(' ', microtime()));
+			$time = sprintf("%.5f", ($end - $start));
+			//$log = Mage::getModel('ekkitab_catalogsearch/log');
+			//$log->setCategory($this->getDecodedString($categoryPath));
+			//$log->setQuery("fetching books for ids");
+			//$log->setTimeTaken($time*1000);
+			//Mage::log($log);
+			//$log->save();
 
 		}
 		catch(Exception $e)
@@ -235,6 +265,7 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 			Mage::log($e->getMessage());
 			Mage::log("OR Exception in SearchResult.php : Could not include Java.inc file @ http://localhost:8080/JavaBridge/java/Java.inc");
 		}
+		//Mage::log(" In getSearchResultsNew returning books for query : ".$filterBy.$this->helper('ekkitab_catalog')->getEscapedQueryText()." and category: ".$categoryPath." at time:".date('H:m:s'));
 		return $booksResult;
     }
  
