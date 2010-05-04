@@ -101,7 +101,10 @@ Layout for customer log out page
         <!-- Mage_Customer -->
         <remove name="left"/>
         <reference name="root">
-            <action method="setTemplate"><template>page/1column.phtml</template></action>
+           	<reference name="head">
+				<remove name="auth-redirect"/>
+			</reference>
+			<action method="setTemplate"><template>page/1column.phtml</template></action>
         </reference>
         <reference name="content">
             <block type="core/template" name="customer_logout" template="customer/logout.phtml"/>

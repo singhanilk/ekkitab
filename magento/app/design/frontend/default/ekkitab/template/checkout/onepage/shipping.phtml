@@ -69,7 +69,7 @@
             <?php echo $this->getCountryHtmlSelect('shipping') ?>
             </div></li>
         <li><div class="input-box">
-            <label for="shipping:telephone"><?php echo $this->__('Telephone') ?> <span class="required">*</span></label><br/>
+            <label for="shipping:telephone"><?php echo $this->__('Telephone') ?> <span class="required">*</span> <span class="note-9px">( Mobile Number Preferred )</span></label><br/>
             <input type="text" name="shipping[telephone]" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" title="<?php echo $this->__('Telephone') ?>" class="required-entry input-text" id="shipping:telephone" onchange="shipping.setSameAsBilling(false);"/></div>
             <div class="input-box">
             <label for="shipping:fax"><?php echo $this->__('Fax') ?></label><br />
