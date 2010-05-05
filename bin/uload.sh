@@ -1,5 +1,7 @@
 apt-get update
 apt-get install git-core
+apt-get install ant
+apt-get install openjdk-6-jdk
 apt-get install php5-cli
 apt-get install php5-curl
 apt-get install apache2
