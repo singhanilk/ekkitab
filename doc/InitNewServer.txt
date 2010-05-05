@@ -28,11 +28,13 @@ Apache Server Configuration
         the directory: /etc/apache2/mods-enabled
     
         rewrite.load --> ../mods-available/rewrite.load
+        expires.load --> ../mods-available/expires.load
 
 (5)     Setting Expiry on page resources 
         Ensure the following is in the site specific configuration file:
 
         <Directory /var/www/>
+                ExpiresActive On
                 ExpiresDefault A300
                 ExpiresByType text/html "access plus 1 day"
                 ExpiresByType text/css "access plus 1 day"
@@ -50,7 +52,7 @@ Tomcat Configuration
 
         TOMCAT6_SECURITY=no
 (2)     Increase Java heap size for Tomcat process
-        set the following: "-Xms512M -Xmx1024M" to the JAVA_OPTS variable.
+        set the following: "-Xms512M -Xmx4096M" to the JAVA_OPTS variable.
 
 MySQL Configuration
 
@@ -65,7 +67,7 @@ MySQL Configuration
         After setting the above, the following must be 
         executed.
 
-        Edit the file and change the lines shown commented
+        Edit the file, /etc/apparmor.d/usr.sbin.mysqld, and change the lines shown commented
         below to the equivalent correct lines.
  
         #  /var/lib/mysql/ r,
