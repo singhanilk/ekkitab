@@ -114,7 +114,12 @@ public class BookSearch {
           searchlevel = categories.length+1;
        }
        if (result.getHitCount() > 0) {
-    	   result.setResultCategories(searcher.getValidCategories(instanceId, result.getSearchQuery(), searchlevel, cats));
+    	   Map<String, Integer> catMap = result.getResultCategories();
+    	   for (String category: cats) {
+    		   catMap.put(category, 1);
+    	   }
+    	   result.setResultCategories(catMap);
+    	   //result.setResultCategories(searcher.getValidCategories(instanceId, result.getSearchQuery(), searchlevel, cats));
        }
 
        return result;
