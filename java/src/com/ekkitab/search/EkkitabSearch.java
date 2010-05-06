@@ -300,7 +300,7 @@ public class EkkitabSearch {
     }
 
     private ScoreDoc[] search(Query query, long instanceId) throws Exception {
-       //logger.debug("["+instanceId+"] Lucene Query: "+query.toString());
+       logger.debug("["+instanceId+"] Lucene Query: "+query.toString());
        TopFieldDocCollector collector = new TopFieldDocCollector(reader, sorter, MAXHITS);
 
        //long fstart = System.currentTimeMillis();
