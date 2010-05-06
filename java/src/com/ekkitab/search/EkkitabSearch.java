@@ -1,6 +1,7 @@
 package com.ekkitab.search;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.log4j.Logger;
 import org.apache.log4j.LogManager;
 
@@ -44,6 +45,9 @@ public class EkkitabSearch {
     private static Logger logger = LogManager.getLogger("EkkitabSearch.class");
     private static final int MAXHITS = 1000;
     private static final int FUZZYLIMIT = 150;
+    private static AtomicReference<TimerSnapshot> basicSearchTimer = new AtomicReference<TimerSnapshot>(new TimerSnapshot());
+    private static AtomicReference<TimerSnapshot> catSearchTimer = new AtomicReference<TimerSnapshot>(new TimerSnapshot());
+    
 
     public EkkitabSearch(String indexDir) throws EkkitabSearchException {
         this.indexDir = indexDir;
@@ -72,11 +76,12 @@ public class EkkitabSearch {
         if ((reader == null) || (searcher == null))	
             throw new EkkitabSearchException("Initialization Error!");
 
+        long fstart = System.currentTimeMillis();
         ScoreDoc[] docs = null;
         Query luceneQuery = null;
 
         String searchQuery = createSearchQuery(query, categories, searchfield);
-        logger.debug("DEBUG: Search Query is: '" + searchQuery + "'");
+        //logger.debug("DEBUG: Search Query is: '" + searchQuery + "'");
         String suggestQueries[] = new String[1];
         suggestQueries[0] = "";
 
@@ -110,7 +115,7 @@ public class EkkitabSearch {
         }
 
         if (docs == null) {
-        	logger.debug("["+instanceId+"] No results.");
+        	//logger.debug("["+instanceId+"] No results.");
         	SearchResult result = new SearchResult(new ArrayList<String>(), 
                                     			   new HashMap<String, Integer>(),
                                      			   0,
@@ -132,8 +137,7 @@ public class EkkitabSearch {
         List<String> books = new ArrayList<String>();
         int documentCount = 0;
         
-        long fstart = System.currentTimeMillis();
-        long f1total = 0, f2total = 0, f3total = 0;
+        //long f1total = 0, f2total = 0, f3total = 0;
         FieldSelector fselect = new FieldSelector() {
         	public FieldSelectorResult accept(String fieldName) {
         		if (fieldName.equals("entityId"))
@@ -148,26 +152,26 @@ public class EkkitabSearch {
         	try {
         		for (int i = 0; i < docs.length; i++) {
         			if (!processed.get(docs[i].doc)) {
-        				long f = System.currentTimeMillis();
+        				//long f = System.currentTimeMillis();
         				Document doc = reader.document(docs[i].doc, fselect);
-        				f1total += System.currentTimeMillis() - f;
+        				//f1total += System.currentTimeMillis() - f;
         				
         				if (doc != null) {
-        					f = System.currentTimeMillis();
+        					//f = System.currentTimeMillis();
         					String id = doc.get("entityId");
-        					f2total += System.currentTimeMillis() - f;
+        					//f2total += System.currentTimeMillis() - f;
         					if (id != null) {
         						if ((index++ >= start) && (index <= end)) {
         							books.add(id);
         						}
-        						f = System.currentTimeMillis();
+        						//f = System.currentTimeMillis();
         						Term t = new Term("entityId", id);
         						TermDocs td = reader.termDocs(t);
         						while (td.next()) {
         							processed.set(td.doc(),true);
         						}
         						td.close();
-        						f3total += System.currentTimeMillis() - f;
+        						//f3total += System.currentTimeMillis() - f;
         						documentCount++;
         						if ((documentCount > FUZZYLIMIT) && (index > end)) {
         							documentCount = docs.length;
@@ -184,8 +188,12 @@ public class EkkitabSearch {
         	}
         }
         long fstop = System.currentTimeMillis();
-
-        logger.debug("["+instanceId+"] Collection times: "+(fstop - fstart)+":"+f1total+":"+f2total+":"+f3total+" millisec.");
+        synchronized (basicSearchTimer) {
+        	TimerSnapshot timer = basicSearchTimer.get();
+        	timer.set(fstop - fstart);
+        	basicSearchTimer.set(timer);
+        }
+        //logger.debug("["+instanceId+"] Collection times: "+(fstop - fstart)+":"+f1total+":"+f2total+":"+f3total+" millisec.");
         
         StringBuffer otherSuggestions = new StringBuffer();
         for (int i=1; i < suggestQueries.length; i++) {
@@ -206,7 +214,7 @@ public class EkkitabSearch {
 
         Map<String, Integer> catMap = new HashMap<String, Integer>();
         int catsize = 0;
-        long ftotal = 0;
+        //long ftotal = 0;
 
         long fstart = System.currentTimeMillis();
         if (categories != null) {
@@ -217,9 +225,9 @@ public class EkkitabSearch {
                  //hits.clear();
                  String query = searchQuery + "+level"+level+":"+category.replaceAll("\\W+", "");
                  try {
-                	 long f = System.currentTimeMillis();
+                	 //long f = System.currentTimeMillis();
                 	 Query luceneQuery = new QueryParser("title", new StandardAnalyzer()).parse(query);
-                	 ftotal += System.currentTimeMillis() - f;
+                	 //ftotal += System.currentTimeMillis() - f;
                 	 //searcher.search(luceneQuery, new HitCollector() { 
                      //                                    	public void collect(int doc, float score) {
                      //                                    		hits.set(doc);
@@ -239,8 +247,12 @@ public class EkkitabSearch {
             }
        }
        long fstop = System.currentTimeMillis();
-
-       logger.debug("["+instanceId+"] Hits counted in "+catsize+" categories in: "+(fstop - fstart)+":"+ftotal+" millisec.");
+       synchronized (catSearchTimer) {
+       	TimerSnapshot timer = catSearchTimer.get();
+       	timer.set(fstop - fstart);
+       	catSearchTimer.set(timer);
+       }
+       //logger.debug("["+instanceId+"] Hits counted in "+catsize+" categories in: "+(fstop - fstart)+":"+ftotal+" millisec.");
        return catMap;
 
     }
@@ -288,14 +300,14 @@ public class EkkitabSearch {
     }
 
     private ScoreDoc[] search(Query query, long instanceId) throws Exception {
-       logger.debug("["+instanceId+"] Lucene Query: "+query.toString());
+       //logger.debug("["+instanceId+"] Lucene Query: "+query.toString());
        TopFieldDocCollector collector = new TopFieldDocCollector(reader, sorter, MAXHITS);
 
-       long fstart = System.currentTimeMillis();
+       //long fstart = System.currentTimeMillis();
        searcher.search(query, collector);
-       long fstop = System.currentTimeMillis();
+       //long fstop = System.currentTimeMillis();
 
-       logger.debug("["+instanceId+"] Search returned in: "+(fstop - fstart)/1000+" sec. with "+collector.getTotalHits()+" hits.");
+       //logger.debug("["+instanceId+"] Search returned in: "+(fstop - fstart)/1000+" sec. with "+collector.getTotalHits()+" hits.");
 
        ScoreDoc[] docs = null;
        if (collector.getTotalHits() > 0) {
@@ -433,6 +445,14 @@ public class EkkitabSearch {
             throw new Exception(e.getMessage());
         }
         return result;
+    }
+    
+    protected TimerSnapshot getTimer(String type) {
+    	if (type.equalsIgnoreCase("basic"))
+    		return basicSearchTimer.get();
+    	else if (type.equalsIgnoreCase("categories"))
+    		return catSearchTimer.get();
+    	return null;
     }
     
     protected void finalize() throws Throwable {
