@@ -77,6 +77,10 @@ public class BookSearch {
     	return runningInstances.get();
     }
     
+    public static long getLatestSequenceId() {
+    	return instanceSequence.get();
+    }
+    
     public static TimerSnapshot getTimer(String type) {
     	return searcher.getTimer(type);
     }
