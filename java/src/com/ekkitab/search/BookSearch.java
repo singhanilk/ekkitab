@@ -2,6 +2,10 @@ package com.ekkitab.search;
 
 import java.util.*;
 import java.io.*;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+
 
 
 import org.apache.log4j.Logger;
@@ -11,12 +15,15 @@ import org.apache.log4j.LogManager;
 public class BookSearch {
 
     private static Set<String> searchfields = null; 
-    private static long allInstances = 0;
+    private static AtomicLong instanceSequence = new AtomicLong(0);
+    private static AtomicInteger runningInstances = new AtomicInteger(0);
     private static Logger logger = null; 
     private static EkkitabCategoryTree catTree = null;
     private static Properties properties = null;
+    private static boolean initSuccessful = false;
+    //private static BookSearch bookSearch = null;
 
-    private String indexDir;
+    //private String indexDir;
     private long instanceId = 0; 
 
     private static final String PROP_XMLFILE   = "categoriesfile.path";
@@ -28,42 +35,32 @@ public class BookSearch {
 
     static {
         logger = LogManager.getLogger("BookSearch.class");
-
-        properties = new Properties(); 
-        try { 
-            InputStream is = BookSearch.class.getClassLoader().getResourceAsStream(PROPERTIESFILE);
-            properties.load(is); 
-        } 
-        catch (IOException e) { 
-            logger.fatal("Failed to load properties. "+e.getMessage());
-            properties = null;
-        } 
-
         searchfields = new HashSet<String>();
         searchfields.add("title");
         searchfields.add("author");
         searchfields.add("isbn");
 
+        properties = new Properties(); 
+        
         try {
+        	InputStream is = BookSearch.class.getClassLoader().getResourceAsStream(PROPERTIESFILE);
+            properties.load(is);
             catTree = new EkkitabCategoryTree(properties.getProperty(PROP_XMLFILE));
-        }
-        catch (EkkitabSearchException e) {
-            logger.fatal("Failed category initialization. "+e.getMessage());
-            catTree = null;
-        }
-
-        try {
             searcher = new EkkitabSearch(properties.getProperty(PROP_INDEXFILE));
+            //bookSearch = new BookSearch("");
+            initSuccessful = true;
+        }
+        catch (IOException e) {
+        	logger.fatal("Failed Initialization. "+e.getMessage());
         }
         catch (EkkitabSearchException e) {
-            logger.fatal("Failed Lucene Initialization. "+e.getMessage());
-            searcher = null;
+            logger.fatal("Failed Initialization. "+e.getMessage());
         }
     }
     
     public BookSearch(String indexDir) throws EkkitabSearchException {
 
-    	if ((catTree == null) || (searcher == null) || (properties == null)) {
+    	if (!initSuccessful) {
     		throw new EkkitabSearchException("Ekkitab Search was not initialized correctly. Cannot continue.");
     	}
         // Ignore the indexDir value that is supplied.
@@ -72,12 +69,16 @@ public class BookSearch {
         //else
         //   this.indexDir = properties.getProperty(PROP_INDEXFILE);
 
-        synchronized (BookSearch.class) {
-            instanceId = ++allInstances;
-            //if (allInstances >= 10000000)
-            //    allInstances = 0;
-        }
-        
+    	instanceId = instanceSequence.incrementAndGet();
+    	runningInstances.incrementAndGet();
+    }
+    
+    public static long getRunningInstances() {
+    	return runningInstances.get();
+    }
+    
+    public static TimerSnapshot getTimer(String type) {
+    	return searcher.getTimer(type);
     }
 
     public SearchResult searchBook(String categoryPath, String query, int pageSz, int page) throws Exception {
@@ -161,9 +162,9 @@ public class BookSearch {
 
               List<String> books = result.getBookIds();
               if (books != null) {
-                Iterator iter = books.iterator();
+                Iterator<String> iter = books.iterator();
                 while (iter.hasNext()) {
-                    String bookId = (String)iter.next();
+                    String bookId = iter.next();
                     System.out.println("--------------------------------------");
                     System.out.println("Book Id: "+bookId);
                     System.out.println("--------------------------------------");
@@ -193,8 +194,10 @@ public class BookSearch {
     }
 
     protected void finalize() throws Throwable {
+    	
+       runningInstances.decrementAndGet();
        try {
-            logger.debug("["+instanceId+"] Exiting...");
+            //logger.debug("["+instanceId+"] Exiting...");
        }
        finally {
             super.finalize();
