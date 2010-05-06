@@ -71,7 +71,7 @@ public class BookSearch {
 
     	instanceId = instanceSequence.incrementAndGet();
     	runningInstances.incrementAndGet();
-    	logger.debug("Instance Id is: " + instanceId);
+    	//logger.debug("Instance Id is: " + instanceId);
     }
     
     public static long getRunningInstances() {
