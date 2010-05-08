@@ -31,12 +31,12 @@ public class TimerSnapshot {
 		count++;
 		total += timeInMillis;
 		if (timeInMillis > max) {
-			max = (int)timeInMillis;
+			max = timeInMillis;
 		}
 		if (timeInMillis < min) {
-			min = (int)timeInMillis;
+			min = timeInMillis;
 		}
-		average = (int)total/count;
+		average = total/count;
 	}
 
 }

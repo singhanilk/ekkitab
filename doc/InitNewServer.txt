@@ -80,6 +80,14 @@ MySQL Configuration
 
         sudo /etc/init.d/apparmor reload
 
+(2)     Turn on Query caching
+
+        Add the following lines to the configuration file (my.cnf)
+        under the mysqld section.
+
+        query_cache_type=1 
+        query_cache_size=64M 
+
 PHP5 Configuration
 
 (1)    Change the following line in the config files as follows:
@@ -90,3 +98,19 @@ PHP5 Configuration
        /etc/php5/cli/php.ini
        /etc/php5/apache2/php.ini
 
+SET UP MEMORY FILE SYSTEM FOR cache and session
+
+(1)   Add the following lines to the /etc/fstab file:
+      (expand $EKKITAB_HOME before addding the lines. It is only a placeholder here.)
+      tmpfs $EKKITAB_HOME/magento/var/cache/ tmpfs size=256,mode=0744 0 0
+      tmpfs $EKKITAB_HOME/magento/var/session/ tmpfs size=64,mode=0744 0 0
+
+(2)   To get the above effective without restarting the server, execute the script
+      $EKKITAB_HOME/bin/initmemcache.sh
+
+
+LOCAL CHANGES
+
+(1)   Set the soft link:
+      ln -s /mnt3/magento_product_images $EKKITAB_HOME/magento/media/catalog/product 
+(2)   cp $EKKITAB_HOME/magento/app/local.xml.ekkitab $EKKITAB_HOME/magento/app/local.xml
