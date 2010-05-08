@@ -83,7 +83,7 @@ MySQL Configuration
 (2)     Turn on Query caching
 
         Add the following lines to the configuration file (my.cnf)
-        under the mysqld section.
+        under the mysqld section. (If they do not already exist)
 
         query_cache_type=1 
         query_cache_size=64M 
