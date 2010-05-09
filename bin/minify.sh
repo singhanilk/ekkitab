@@ -9,7 +9,13 @@
 # YUI Compressor is used for the minification.
 # SYLVESTER THOMAS 05-May-2010.
 
+if [ -z $EKKITAB_HOME ] ; then
+    echo "EKKITAB_HOME is not set..."
+    exit 1;
+fi;
+
 DIR="."		#default = current directory
+CLASSPATH="$EKKITAB_HOME/extern"
 
 function get_files()
 {
@@ -30,7 +36,7 @@ function get_files()
 	else
 #					protect from minifying the minified files!! :-)
 		res=`perl -e "if ( '$file' =~ /_ek_min\./) { print 'yes'}else{print 'no'}"`
-		echo; echo Inspecting file: $file - Compress = : $res
+		#echo; echo Inspecting file: $file - Compress = : $res
 
 		if [ "$res" == 'yes' ]	
 		then
@@ -45,12 +51,11 @@ function get_files()
                 		ftype="--type js"
 			fi
 		
-			echo File Type is: "${file##*.}"
+			#echo File Type is: "${file##*.}"
 			if [ "${ftype}" != "" ]	
 			then
 				echo Processing file: "$file"
-#				java -jar ../yuicompressor-2.4.2.jar "$ftype" "$file" -o  "${file%.*}"_ek_min."${file##*.}" 
-				java -jar yuicompressor-2.4.2.jar "$file"  -o  "${file%.*}"_ek_min."${file##*.}" 
+				java -jar $CLASSPATH/yuicompressor-2.4.2.jar $ftype -o  ${file%.*}_ek_min.${file##*.} $file 
 			fi
 		fi
 	fi
