@@ -85,6 +85,7 @@ INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 ('default', 0, 'dev/log/active', '1'),
 ('default', 0, 'dev/log/file', 'system.log'),
 ('default', 0, 'dev/log/exception_file', 'exception.log'),
+('default', 0, 'dev/js/merge_files', 0),
 ('default', 0, 'currency/options/base', 'INR'),
 ('default', 0, 'currency/options/default', 'INR'),
 ('default', 0, 'currency/options/allow', 'EUR,INR,USD'),
@@ -301,72 +302,19 @@ INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 
 Delete from `ek_catalog_global_sections`;
 
-INSERT INTO `ek_catalog_global_sections` (  `section_id` ,`display_name`, `description` , `active_from_date`,  `active_to_date`,`template_path`,`is_homepage_display`) VALUES
+-- INSERT INTO `ek_catalog_global_sections` (  `section_id` ,`display_name`, `description` , `active_from_date`,  `active_to_date`,`template_path`,`is_homepage_display`) VALUES
+-- ( 1, 'Indian Classics', '','2010-03-01','2011-03-31','catalog/globalsection/indian_classics.phtml','0'),
+-- ( 2, 'All Time Great Fiction', '','2010-03-01','2011-03-31','catalog/globalsection/great_fiction.phtml','0'),
+-- ( 3, 'Top Children''s Books', '','2010-03-01','2011-03-31','catalog/globalsection/top_childrens_books.phtml','0'),
+-- ( 4, 'Summer Reading', '','2010-03-01','2011-03-31','catalog/globalsection/summer_reading.phtml','1');
+ 
+ INSERT INTO `ek_catalog_global_sections` (  `section_id` ,`display_name`, `description` , `active_from_date`,  `active_to_date`,`template_path`,`is_homepage_display`) VALUES
 ( 1, 'Best Sellers', '','2010-03-01','2011-03-31','','0'),
 ( 2, 'New Releases', '','2010-03-01','2011-03-31','','0'),
 ( 3, 'Great Bargains', '','2010-03-01','2011-03-31','','1'),
 ( 4, 'Best Boxed Sets', '','2010-03-01','2011-03-31','','0'),
 ( 5, 'Top Children''s Books', '','2010-03-01','2011-03-31','','0'),
 ( 6, 'Top Books of the Month', '','2010-03-01','2011-03-31','','0');
-
---
--- Dumping data for table `ek_catalog_global_section_products`
-
-Delete from `ek_catalog_global_section_products`;
-
-INSERT INTO `ek_catalog_global_section_products` (`section_id`, `product_id`) VALUES
-(1, 1),
-(1,23),
-(1,4),
-(1,56),
-(1,90),
-(1,79),
-(1,58);
-
-INSERT INTO `ek_catalog_global_section_products` (`section_id`, `product_id`) VALUES
-(2, 125),
-(2,47),
-(2,35),
-(2,26),
-(2,54),
-(2,9),
-(2,4);
-
-INSERT INTO `ek_catalog_global_section_products` (`section_id`, `product_id`) VALUES
-(3, 451),
-(3,243),
-(3,46),
-(3,576),
-(3,940),
-(3,769),
-(3,598);
-
-INSERT INTO `ek_catalog_global_section_products` (`section_id`, `product_id`) VALUES
-(4,25),
-(4,427),
-(4,355),
-(4,2096),
-(4,554),
-(4,934),
-(4,4545);
-
-INSERT INTO `ek_catalog_global_section_products` (`section_id`, `product_id`) VALUES
-(5,6561),
-(5,2653),
-(5,4755),
-(5,5675),
-(5,9034),
-(5,7349),
-(5,528);
-
-INSERT INTO `ek_catalog_global_section_products` (`section_id`, `product_id`) VALUES
-(6,6725),
-(6,4734),
-(6,3523),
-(6,265),
-(6,5453),
-(6,923),
-(6,443);
 
 INSERT INTO `customer_entity` VALUES (1,1,0,1,'install@ekkitab.com',1,'000000004',1,'2010-04-10 06:42:03','2010-04-10 06:42:04',1);
 INSERT INTO `customer_entity_varchar` VALUES (1,1,5,1,'Installation'),(2,1,7,1,'Account'),(4,1,3,1,'Ekkitab'),(5,1,12,1,'78e356fc19336772aceb39e57d122dcc:lr');
