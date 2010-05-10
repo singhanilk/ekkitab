@@ -1,0 +1,5 @@
+Options +FollowSymlinks
+RewriteEngine on
+RewriteCond %{REQUEST_URI} !/scm/magento/maintenance.html$ 
+RewriteRule $ /scm/magento/maintenance.html [R=302,L]
+
