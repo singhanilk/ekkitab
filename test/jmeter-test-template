@@ -69,11 +69,11 @@
           <stringProp name="LoopController.loops">1</stringProp>
         </LoopController>
         <hashTree>
-          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="http://www.ekkitab.co.in/scm/magento" enabled="true">
+          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="http://TARGETSYSTEM/scm/magento" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Argument List" enabled="true">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
-            <stringProp name="HTTPSampler.domain">www.ekkitab.co.in</stringProp>
+            <stringProp name="HTTPSampler.domain">TARGETSYSTEM</stringProp>
             <stringProp name="HTTPSampler.port">80</stringProp>
             <stringProp name="HTTPSampler.connect_timeout"></stringProp>
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
@@ -102,7 +102,7 @@
             </HeaderManager>
             <hashTree/>
           </hashTree>
-          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="http://www.ekkitab.co.in/scm/magento/index.php/customer/account/loginPost/" enabled="true">
+          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="http://TARGETSYSTEM/scm/magento/index.php/customer/account/loginPost/" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Argument List" enabled="true">
               <collectionProp name="Arguments.arguments">
                 <elementProp name="login[username]" elementType="HTTPArgument">
@@ -135,7 +135,7 @@
                 </elementProp>
               </collectionProp>
             </elementProp>
-            <stringProp name="HTTPSampler.domain">www.ekkitab.co.in</stringProp>
+            <stringProp name="HTTPSampler.domain">TARGETSYSTEM</stringProp>
             <stringProp name="HTTPSampler.port">80</stringProp>
             <stringProp name="HTTPSampler.connect_timeout"></stringProp>
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
@@ -162,13 +162,13 @@
                 </elementProp>
                 <elementProp name="" elementType="Header">
                   <stringProp name="Header.name">Referer</stringProp>
-                  <stringProp name="Header.value">http://www.ekkitab.co.in/scm/magento/index.php/customer/account/login/?___SID=U</stringProp>
+                  <stringProp name="Header.value">http://TARGETSYSTEM/scm/magento/index.php/customer/account/login/?___SID=U</stringProp>
                 </elementProp>
               </collectionProp>
             </HeaderManager>
             <hashTree/>
           </hashTree>
-          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="http://www.ekkitab.co.in/scm/magento/index.php/ekkitab_catalog/search/index/" enabled="true">
+          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="http://TARGETSYSTEM/scm/magento/index.php/ekkitab_catalog/search/index/" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Argument List" enabled="true">
               <collectionProp name="Arguments.arguments">
                 <elementProp name="q" elementType="HTTPArgument">
@@ -201,7 +201,7 @@
                 </elementProp>
               </collectionProp>
             </elementProp>
-            <stringProp name="HTTPSampler.domain">www.ekkitab.co.in</stringProp>
+            <stringProp name="HTTPSampler.domain">TARGETSYSTEM</stringProp>
             <stringProp name="HTTPSampler.port">80</stringProp>
             <stringProp name="HTTPSampler.connect_timeout"></stringProp>
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
@@ -224,7 +224,7 @@
               <collectionProp name="HeaderManager.headers">
                 <elementProp name="" elementType="Header">
                   <stringProp name="Header.name">Referer</stringProp>
-                  <stringProp name="Header.value">http://www.ekkitab.co.in/scm/magento/</stringProp>
+                  <stringProp name="Header.value">http://TARGETSYSTEM/scm/magento/</stringProp>
                 </elementProp>
               </collectionProp>
             </HeaderManager>
@@ -241,11 +241,11 @@
             </CSVDataSet>
             <hashTree/>
           </hashTree>
-          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="http://www.ekkitab.co.in/scm/magento/index.php/" enabled="true">
+          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="http://TARGETSYSTEM/scm/magento/index.php/" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Argument List" enabled="true">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
-            <stringProp name="HTTPSampler.domain">www.ekkitab.co.in</stringProp>
+            <stringProp name="HTTPSampler.domain">TARGETSYSTEM</stringProp>
             <stringProp name="HTTPSampler.port">80</stringProp>
             <stringProp name="HTTPSampler.connect_timeout"></stringProp>
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
@@ -268,17 +268,17 @@
               <collectionProp name="HeaderManager.headers">
                 <elementProp name="" elementType="Header">
                   <stringProp name="Header.name">Referer</stringProp>
-                  <stringProp name="Header.value">http://www.ekkitab.co.in/scm/magento/index.php/ekkitab_catalog/search/index/?q=production&amp;filterby=&amp;x=16&amp;y=11</stringProp>
+                  <stringProp name="Header.value">http://TARGETSYSTEM/scm/magento/index.php/ekkitab_catalog/search/index/?q=production&amp;filterby=&amp;x=16&amp;y=11</stringProp>
                 </elementProp>
               </collectionProp>
             </HeaderManager>
             <hashTree/>
           </hashTree>
-          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="http://www.ekkitab.co.in/scm/magento/index.php/customer/account/logout/" enabled="true">
+          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="http://TARGETSYSTEM/scm/magento/index.php/customer/account/logout/" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Argument List" enabled="true">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
-            <stringProp name="HTTPSampler.domain">www.ekkitab.co.in</stringProp>
+            <stringProp name="HTTPSampler.domain">TARGETSYSTEM</stringProp>
             <stringProp name="HTTPSampler.port">80</stringProp>
             <stringProp name="HTTPSampler.connect_timeout"></stringProp>
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
@@ -301,17 +301,17 @@
               <collectionProp name="HeaderManager.headers">
                 <elementProp name="" elementType="Header">
                   <stringProp name="Header.name">Referer</stringProp>
-                  <stringProp name="Header.value">http://www.ekkitab.co.in/scm/magento/index.php/</stringProp>
+                  <stringProp name="Header.value">http://TARGETSYSTEM/scm/magento/index.php/</stringProp>
                 </elementProp>
               </collectionProp>
             </HeaderManager>
             <hashTree/>
           </hashTree>
-          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="http://www.ekkitab.co.in/scm/magento/index.php/" enabled="true">
+          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="http://TARGETSYSTEM/scm/magento/index.php/" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Argument List" enabled="true">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
-            <stringProp name="HTTPSampler.domain">www.ekkitab.co.in</stringProp>
+            <stringProp name="HTTPSampler.domain">TARGETSYSTEM</stringProp>
             <stringProp name="HTTPSampler.port">80</stringProp>
             <stringProp name="HTTPSampler.connect_timeout"></stringProp>
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
@@ -334,7 +334,7 @@
               <collectionProp name="HeaderManager.headers">
                 <elementProp name="" elementType="Header">
                   <stringProp name="Header.name">Referer</stringProp>
-                  <stringProp name="Header.value">http://www.ekkitab.co.in/scm/magento/index.php/customer/account/logoutSuccess/</stringProp>
+                  <stringProp name="Header.value">http://TARGETSYSTEM/scm/magento/index.php/customer/account/logoutSuccess/</stringProp>
                 </elementProp>
               </collectionProp>
             </HeaderManager>
