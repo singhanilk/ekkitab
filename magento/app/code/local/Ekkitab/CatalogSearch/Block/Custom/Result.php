@@ -125,65 +125,6 @@ class Ekkitab_CatalogSearch_Block_Custom_Result extends Mage_CatalogSearch_Block
 
  
 		
-	//methods to retrieve books based on product Ids
-	
-	/**
-     * Set Search Result collection
-     *
-     * @return Mage_CatalogSearch_Block_Result
-    
-    */
-	
-	/*
-	public function setListCollection() {
-		Mage::log(" In Ekkitab_CatalogSearch_Block_CustomResult .................. setListCollection()" );
-        $this->getListBlock()
-           ->setCollection($this->_getCustomProductCollection());
-       return $this;
-    }
-   
-    /**
-     * Retrieve loaded category collection
-     *
-     * @return Mage_CatalogSearch_Model_Mysql4_Product_Collection
-     */
-	/*
-    protected function _getCustomProductCollection()
-    {
-        $productIds = array("93","92","91","90","88","89","87","86","85","84","81","82","80","78","79","77","76","74","75","73","72","71","70","69","68","67","66","65","63","64","62");
-		if (is_null($this->_productCollection)) {
-			Mage::log(" In Ekkitab_CatalogSearch_Block_CustomResult .................. _productCollection is null" );
-			$this->_productCollection = Mage::getModel('catalog/product')->getCollection()
-				->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
-				->addIdFilter($productIds);
-			Mage::getSingleton('catalog/product_status')->addVisibleFilterToCollection($this->_productCollection);
-			Mage::getSingleton('catalog/product_visibility')->addVisibleInSearchFilterToCollection($this->_productCollection);
 
-		} else{
-			Mage::log(" In Ekkitab_CatalogSearch_Block_CustomResult .................. _productCollection is not null" );
-		}
-        return $this->_productCollection;
-    }
-
-     */
-
-    /**
-     * Retrieve search result count
-     *
-     * @return string
-     */
-    /*
-    public function getCustomResultCount()
-    {
-	   if (!$this->getData('custom_result_count')) {
-		    Mage::log(" In Ekkitab_CatalogSearch_Block_CustomResult .... getResultCount mthod....custom_result_count is not available... so fetch" );
-            $size = $this->_getCustomProductCollection()->getSize();
-		    Mage::log(" In Ekkitab_CatalogSearch_Block_CustomResult .... getResultCount mthod....custom_result_count is : $size" );
-            $this->_getQuery()->setNumResults($size);
-            $this->setCustomResultCount($size);
-        }
-        return $this->getData('custom_result_count');
-    }
-	*/
 
 }

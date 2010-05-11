@@ -50,10 +50,7 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Globalsection_Products_Collection
      */
     public function addSectionIdFilter()
     {
-		Mage::log($this->getSection()->getSectionId());
-        //if ($this->getSection() && $this->getSection()->getSectionId()) {
 		$this->addFieldToFilter("section_id", $this->getSection()->getSectionId());
-       // }
         return $this;
     }
     

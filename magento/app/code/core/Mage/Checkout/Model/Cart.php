@@ -215,7 +215,7 @@ class Mage_Checkout_Model_Cart extends Varien_Object
         if ($product->getId()) {
 
             $result = $this->getQuote()->addProduct($product, $request);
-
+			Mage::log("Item was added...... quote item Id is :".$result->getId() );
             /**
              * String we can get if prepare process has error
              */
@@ -233,6 +233,7 @@ class Mage_Checkout_Model_Cart extends Varien_Object
         }
 
         Mage::dispatchEvent('checkout_cart_product_add_after', array('quote_item'=>$result, 'product'=>$product));
+		Mage::log("Item was added...... quote item Id is :".$result->getId() );
         $this->getCheckoutSession()->setLastAddedProductId($product->getId());
         return $this;
     }

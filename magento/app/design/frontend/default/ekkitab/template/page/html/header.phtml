@@ -64,6 +64,31 @@
 		}
 	}
 </script>
+<!-- added this for global sections view all page -->
+<script language="javascript">
+	function seeAll(rowSize){
+		var i ;
+		for(i=1;i<=rowSize;i++){
+			var dataDivName = "gs_row_"+i;
+			var sepDivName = "sep_"+i;
+			var obj = document.getElementById(dataDivName);
+			var sepObj = document.getElementById(sepDivName);
+			var ua = navigator.userAgent.toLowerCase();
+			if(obj){
+				obj.style.display ="block";
+			}
+			if(sepObj){
+				sepObj.style.display ="block";
+			}
+			var seeAllDivName = "seeAll";
+			obj = document.getElementById(seeAllDivName);
+			if(obj){
+				obj.style.display ="none";
+			}
+		}
+	}
+</script>
+
 
 
 

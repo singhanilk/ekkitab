@@ -13,8 +13,26 @@
 			</ekkitab_catalogsearch>   
 			<ekkitab_catalogsearch_mysql4>
 				<class>Ekkitab_CatalogSearch_Model_Mysql4</class>  
+				 <entities>
+					<log>
+						<table>ek_catalog_search_log</table>
+					</log>
+				 </entities>
 			</ekkitab_catalogsearch_mysql4>
 		</models>
+		<resources>
+			<ekkitab_catalogsearch_write>
+				<connection>
+					<use>core_write</use>
+				</connection>
+			</ekkitab_catalogsearch_write>
+			<ekkitab_catalogsearch_read>
+				<connection>
+					<use>core_read</use>
+				</connection>
+			</ekkitab_catalogsearch_read>      
+		</resources> 	
+
 		<helpers>
             <ekkitab_catalogsearch>
                 <class>Ekkitab_CatalogSearch_Helper</class>

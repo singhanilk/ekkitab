@@ -10,7 +10,7 @@
 		<fieldset>
 			<div class="searchText"><?php echo $this->__('Search for') ?></div>
 
-			<input id="search" type="text" class="textField" name="<?php echo $this->helper('ekkitab_catalog')->getQueryParamName() ?>" value="<?php echo $this->helper('ekkitab_catalog')->getEscapedQueryText() ?>" />
+			<input id="search" type="text" class="textField" name="<?php echo $this->helper('ekkitab_catalog')->getQueryParamName() ?>" value="<?php echo urldecode($this->helper('ekkitab_catalog')->getEscapedQueryText()) ?>" />
 			
 			<input type="hidden" name="<?php echo $this->helper('ekkitab_catalog')->getQueryFilterName() ?>" value="" />
 
