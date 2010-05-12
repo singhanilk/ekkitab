@@ -30,6 +30,7 @@
      return $resStr;
 	}
 $results=$this->getProductCollection();
+$start=microtime(true);
 $bookList = null;
 $subcats = null;
 $curr_cp = null;
@@ -290,5 +291,9 @@ else { // else of if (!java_is_null(results)) {
 		<div class="inLeft">
 			<div class="note-msg"> Sorry, we are unable to process your request now. Please try again later or write to us if the problem persists.</div>
 		</div>
-<?php } // ending else part of if(!is_null(results)) ?>
+<?php } // ending else part of if(!is_null(results)) 
+
+$end=microtime(true);
+Mage::getSingleton('core/session')->setPhtmlDebugTimer(array('start'=>$start,'end'=>$end));
+?>
 </div>

@@ -409,7 +409,6 @@ a:hover {
 	margin-bottom: 8px;
 }
 .vColumns, .vMidColumn {
-	width: 23%;
 	float: left;
 	text-align: center;
 	margin-top: 8px;
@@ -441,9 +440,7 @@ a:hover {
 	font-weight: bold;
 }
 .hmScrollRow {
-	width: 550px;
 	padding-bottom: 8px;
-	border-bottom: 1px dotted #666;
 	margin-bottom: 8px;
 	background-color: #fff;
 }
@@ -459,11 +456,9 @@ a:hover {
 	float:right;
 }
 .hmInScrollRow {
-	width: 550px;
 	margin-bottom: 8px;
 }
 .hmInScrollRowSep {
-	width: 550px;
 	padding-top:5px;
 	margin-bottom: 5px;
 	border-bottom: 1px dotted #666;
@@ -594,11 +589,7 @@ a:hover {
 	margin: 0 15px 15px 15px;
 }
 
-<!-- styles below added on Feb 2, 2010 -->
-
-.delete {
-	clear: both
-}
+/* styles below added on Feb 2, 2010 */
 
 .donateAreaIn {
 	width: 180px;
@@ -764,11 +755,8 @@ a:hover {
 	border-bottom: 1px dotted #333;
 }
 
-<!-- styles below changed / added on Feb 3, 2010 -->
+/* styles below changed / added on Feb 3, 2010 */
 
-.delete {
-	clear: both
-}
 .globalLinks {
 	font-size:1.1em;
 	font-weight:bold;
@@ -1151,11 +1139,7 @@ a:hover {
 	margin-top: 5px;
 }
 
-<!-- styles added / changed on March 10 -->
-.delete {
-	clear: both;
-}
-
+/*  styles added / changed on March 10 */
 
 .scartArea {
 	width: 940px;
@@ -1524,10 +1508,7 @@ a:hover {
 	list-style-type:circle;
 }
 
-<!-- styles below added/modified on March 14, 2010 -->
-.delete {
-	clear: both
-}
+/*  styles below added/modified on March 14, 2010 */
 
 .notFoundArea, .regArea {
 	border-bottom:1px dotted #333333;
@@ -1626,10 +1607,8 @@ a:hover {
 
 }
 
-<!-- styles below added/modified on March 20, 2010 -->
-.delete {
-	clear: both
-}
+/* styles below added/modified on March 20, 2010 */
+
 
 .thankYouMsg {
 	margin: 16px 0;
@@ -2041,3 +2020,38 @@ a:hover {
 	float:right; 
 }
 
+.note-9px {
+	font-size:9px;
+	font-weight:normal;
+	text-decoration: none;
+}
+
+.delete {
+	clear: both;
+}
+
+.spSectionImage {
+	width: 720px;
+	margin-bottom: 16px;
+}
+.spHdrs {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 32px;
+	line-height: 28px;
+	color: #3865b8;
+	margin-bottom: 30px;
+}
+.spSlider {
+	width: 720px;
+}
+.spSeeAll  {
+	font-size:11px;
+	line-height:16px;
+	margin:5px 0 10px;
+	text-align:right;
+}
+.spBotImage {
+	text-align: right;
+	margin-top: 30px;
+
+}

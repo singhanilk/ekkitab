@@ -111,9 +111,6 @@ class Ekkitab_CatalogSearch_Block_Custom_ResultIndex extends Mage_Core_Block_Tem
 		try{
 			require_once($javaIncFile);
 			$search = new java("BookSearch",$indexFilePath );
-			//Mage::log("In ResultIndex....before decoding....getEscapedQueryCategoryPath=> ".$this->helper('ekkitab_catalogsearch')->getEscapedQueryCategoryPath());
-			//Mage::log("In ResultIndex....before decoding....plain category path=> ". $this->helper('ekkitab_catalogsearch')->getCurrentCategoryPath());
-			//Mage::log("In ResultIndex....after decoding.... ". urldecode($this->helper('ekkitab_catalogsearch')->getEscapedQueryCategoryPath()));
 			$results = $search->searchBook(urldecode($this->helper('ekkitab_catalogsearch')->getCurrentCategoryPath()),$this->helper('ekkitab_catalogsearch')->getEscapedQueryText(), $this->getPageSize(), $this->getCurrentPageNumber());
 		}
 		catch(Exception $e)
@@ -403,26 +400,6 @@ class Ekkitab_CatalogSearch_Block_Custom_ResultIndex extends Mage_Core_Block_Tem
 
 
   
-	/**
-     * Retrieve loaded category collection
-     *
-     * @return Mage_CatalogSearch_Model_Mysql4_Product_Collection
-    protected function getProductCollection()
-    {
-		if (is_null($this->_productCollection)) {
-			Mage::log(" In Ekkitab_CatalogSearch_Block_CustomResult .................. _productCollection is null" );
-			$productIds = $this->getSearchResultsIds();
-			$this->_productCollection = Mage::getModel('catalog/product')->getCollection()
-				->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
-				->addIdFilter($productIds);
-			Mage::getSingleton('catalog/product_visibility')->addVisibleInSearchFilterToCollection($this->_productCollection);
-
-		} else{
-			Mage::log(" In Ekkitab_CatalogSearch_Block_CustomResult .................. _productCollection is not null" );
-		}
-        return $this->_productCollection;
-    }
-     */
     
 	protected function getSearchResultsIds() 
     {

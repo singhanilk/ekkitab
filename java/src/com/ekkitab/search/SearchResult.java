@@ -7,13 +7,19 @@ public class SearchResult {
     private Map<String, Integer> resultCategories; 
     private int hitCount;
     private String suggestQuery;
+    private String searchQuery;
+    private String suggestOther;
 
     public SearchResult(List<String> bookIds, 
-                        Map<String, Integer> resultCategories, 
+                        Map<String, Integer> resultCategories,
                         int hitCount, 
-                        String suggestQuery) {
+                        String suggestQuery,
+                        String suggestOther,
+                        String searchQuery) {
 
         this.suggestQuery = suggestQuery;
+        this.searchQuery = searchQuery;
+        this.suggestOther = suggestOther;
         this.bookIds      = bookIds;
         this.resultCategories = resultCategories;
         this.hitCount     = hitCount;
@@ -26,6 +32,24 @@ public class SearchResult {
     public String getSuggestQuery() {
         return suggestQuery;
     }
+
+    public void setSearchQuery(String query) {
+        this.searchQuery = query;
+    }
+
+    public String getSearchQuery() {
+        return searchQuery;
+    }
+    
+    public void setSuggestOther(String suggestion) {
+        this.suggestOther = suggestion;
+    }
+
+    public String getSuggestOther() {
+        return suggestOther;
+    }
+    
+    
 
     public void setBookIds(List<String> ids) {
         this.bookIds = ids;

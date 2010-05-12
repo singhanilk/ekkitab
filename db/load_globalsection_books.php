@@ -1,6 +1,15 @@
 <?php
 error_reporting(E_ALL  & ~E_NOTICE);
 ini_set("display_errors", 1); 
+$EKKITAB_HOME=getenv("EKKITAB_HOME");
+if (strlen($EKKITAB_HOME) == 0) {
+    echo "EKKITAB_HOME is not defined...Exiting.\n";
+    exit(1);
+}
+else {
+    define(EKKITAB_HOME, $EKKITAB_HOME); 
+}
+
 //  
 //
 // COPYRIGHT (C) 2009 Ekkitab Educational Services India Pvt. Ltd.  
@@ -17,13 +26,14 @@ ini_set("display_errors", 1);
 
 // This script will import books into the reference database from a vendor file......
 
-    include("importbooks_config.php");
+    ini_set(include_path, ${include_path}.PATH_SEPARATOR.EKKITAB_HOME."/"."config");
+    include("ekkitab.php");
     require_once(LOG4PHP_DIR . '/LoggerManager.php');
     ini_set(include_path, ${include_path}.EKKITAB_HOME."/"."bin");
 
 
     // global logger
-    $logger =& LoggerManager::getLogger("loadbooks");
+    $logger =& LoggerManager::getLogger("loadglobalsection");
 
    /** 
     * Log the error and terminate the program.
@@ -119,9 +129,10 @@ ini_set("display_errors", 1);
 
 				if ($sectonId > 0) {
 					//get all the isbns for that section
-					$isbns;
+					$isbns="";
+					$books = array();
 					foreach($globalSecArr as $secBooks){
-						$isbns =$isbns.trim($secBooks).",";
+						$isbns =$isbns."'".trim($secBooks)."',";
 					}
 					$isbns =substr(trim($isbns), 0, -1);
 
@@ -173,7 +184,9 @@ ini_set("display_errors", 1);
     */
     function start($argc, $argv) {
 
-		$config = getConfig(IMPORTBOOKS_INI);
+       // require_once(IMPORTBOOKS_PLUGINS_DIR . "/" . $argv[2] . ".php");
+        $config = getConfig(CONFIG_FILE);
+//		$config = getConfig(IMPORTBOOKS_INI);
 		$db = initDatabases($config);
 
 		if ($argc <= 1) {

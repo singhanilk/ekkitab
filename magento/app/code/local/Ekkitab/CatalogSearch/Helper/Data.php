@@ -125,15 +125,11 @@ class Ekkitab_CatalogSearch_Helper_Data extends Mage_CatalogSearch_Helper_Data
     {
 		if (is_null($this->_categoryPath)) {
 			$this->_categoryPath = $this->_getRequest()->getParam($this->getCategoryPath());
-			//Mage::log("In helper ....before decoding....=> ".$this->_categoryPath);
 			if ($this->_categoryPath === null) {
                 $this->_categoryPath = '';
             } else {
                 $this->_categoryPath = trim($this->_categoryPath);
-               // $this->_categoryPath = urldecode(trim($this->_categoryPath));
-				//Mage::log("In helper ....after  decoding....=> ".$this->_categoryPath);
 				$this->_categoryPath = Mage::helper('core/string')->cleanString($this->_categoryPath);
-				//Mage::log("In helper ....after cleaning ....=> ".$this->_categoryPath);
             }
 		}
         return $this->_categoryPath;

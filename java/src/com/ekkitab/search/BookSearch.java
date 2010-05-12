@@ -2,6 +2,10 @@ package com.ekkitab.search;
 
 import java.util.*;
 import java.io.*;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+
 
 
 import org.apache.log4j.Logger;
@@ -11,62 +15,75 @@ import org.apache.log4j.LogManager;
 public class BookSearch {
 
     private static Set<String> searchfields = null; 
-    private static long allInstances = 0;
+    private static AtomicLong instanceSequence = new AtomicLong(0);
+    private static AtomicInteger runningInstances = new AtomicInteger(0);
     private static Logger logger = null; 
     private static EkkitabCategoryTree catTree = null;
     private static Properties properties = null;
+    private static boolean initSuccessful = false;
+    //private static BookSearch bookSearch = null;
 
-    private String indexDir;
+    //private String indexDir;
     private long instanceId = 0; 
 
     private static final String PROP_XMLFILE   = "categoriesfile.path";
     private static final String PROP_INDEXFILE = "searchdir.path";
     private static final String PROPERTIESFILE = "search.properties";
 
+    private static EkkitabSearch searcher = null;
+
 
     static {
         logger = LogManager.getLogger("BookSearch.class");
-
-        properties = new Properties(); 
-        try { 
-            InputStream is = BookSearch.class.getClassLoader().getResourceAsStream(PROPERTIESFILE);
-            properties.load(is); 
-        } 
-        catch (IOException e) { 
-            logger.fatal("Failed to load properties. "+e.getMessage());
-            properties = null;
-        } 
-
         searchfields = new HashSet<String>();
         searchfields.add("title");
         searchfields.add("author");
         searchfields.add("isbn");
 
+        properties = new Properties(); 
+        
         try {
+        	InputStream is = BookSearch.class.getClassLoader().getResourceAsStream(PROPERTIESFILE);
+            properties.load(is);
             catTree = new EkkitabCategoryTree(properties.getProperty(PROP_XMLFILE));
+            searcher = new EkkitabSearch(properties.getProperty(PROP_INDEXFILE));
+            //bookSearch = new BookSearch("");
+            initSuccessful = true;
+        }
+        catch (IOException e) {
+        	logger.fatal("Failed Initialization. "+e.getMessage());
         }
         catch (EkkitabSearchException e) {
-            logger.fatal("Failed category initialization. "+e.getMessage());
-            catTree = null;
+            logger.fatal("Failed Initialization. "+e.getMessage());
         }
     }
     
     public BookSearch(String indexDir) throws EkkitabSearchException {
 
-    	if ((catTree == null) || (properties == null)) {
-    		throw new EkkitabSearchException("Failed during initialization. Cannot instantiate Search class.");
+    	if (!initSuccessful) {
+    		throw new EkkitabSearchException("Ekkitab Search was not initialized correctly. Cannot continue.");
     	}
-        if (indexDir != null) 
-           this.indexDir = indexDir;
-        else
-           this.indexDir = properties.getProperty(PROP_INDEXFILE);
+        // Ignore the indexDir value that is supplied.
+        //if (indexDir != null) 
+        //   this.indexDir = indexDir;
+        //else
+        //   this.indexDir = properties.getProperty(PROP_INDEXFILE);
 
-        synchronized (BookSearch.class) {
-            instanceId = ++allInstances;
-            if (allInstances >= 10000000)
-                allInstances = 0;
-        }
-        
+    	instanceId = instanceSequence.incrementAndGet();
+    	runningInstances.incrementAndGet();
+    	//logger.debug("Instance Id is: " + instanceId);
+    }
+    
+    public static long getRunningInstances() {
+    	return runningInstances.get();
+    }
+    
+    public static long getLatestSequenceId() {
+    	return instanceSequence.get();
+    }
+    
+    public static TimerSnapshot getTimer(String type) {
+    	return searcher.getTimer(type);
     }
 
     public SearchResult searchBook(String categoryPath, String query, int pageSz, int page) throws Exception {
@@ -95,8 +112,7 @@ public class BookSearch {
        // parse function.
        query = query.replaceAll("([^a-zA-Z0-9 ])", "\\\\$1");
 
-       EkkitabSearch search = new EkkitabSearch(instanceId, query, indexDir, usesearchfield);
-       SearchResult result = search.searchInCategory(categories, startIndex, endIndex);
+       SearchResult result = searcher.searchInCategory(instanceId, query, usesearchfield, categories, startIndex, endIndex);
        Set<String> cats = catTree.getSearchCategories(null);
        int searchlevel = 1;
        if (categories != null) {
@@ -104,7 +120,15 @@ public class BookSearch {
           searchlevel = categories.length+1;
        }
        if (result.getHitCount() > 0) {
-    	   result.setResultCategories(search.getValidCategories(searchlevel, cats));
+    	   /*
+    	   Map<String, Integer> catMap = result.getResultCategories();
+    	    
+    	   for (String category: cats) {
+    		   catMap.put(category, 1);
+    	   }
+    	   result.setResultCategories(catMap);
+    	   */
+    	   result.setResultCategories(searcher.getValidCategories(instanceId, result.getSearchQuery(), searchlevel, cats));
        }
 
        return result;
@@ -143,9 +167,9 @@ public class BookSearch {
 
               List<String> books = result.getBookIds();
               if (books != null) {
-                Iterator iter = books.iterator();
+                Iterator<String> iter = books.iterator();
                 while (iter.hasNext()) {
-                    String bookId = (String)iter.next();
+                    String bookId = iter.next();
                     System.out.println("--------------------------------------");
                     System.out.println("Book Id: "+bookId);
                     System.out.println("--------------------------------------");
@@ -175,8 +199,10 @@ public class BookSearch {
     }
 
     protected void finalize() throws Throwable {
+    	
+       runningInstances.decrementAndGet();
        try {
-            logger.debug("["+instanceId+"] Exiting...");
+            //logger.debug("["+instanceId+"] Exiting...");
        }
        finally {
             super.finalize();

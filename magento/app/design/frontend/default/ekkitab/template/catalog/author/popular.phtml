@@ -15,8 +15,8 @@
  */
 ?>
 <?php 
-		$authors= $this->getTopAuthors();
-		$_count = is_array($authors)?count($authors):$authors->count(); 
+	$authors= $this->getTopAuthors();
+	$_count = is_array($authors)?count($authors):$authors->count(); 
 ?>
  <script language="JavaScript"  type="text/javascript">
     function searchAuthor(query){
@@ -28,17 +28,14 @@
 </script>
 <div class="linkHdr">Popular Authors</div><!-- linkHdr -->
 <?php if($_count): ?>
-	<form name="search_author" action="<?php echo $this->helper('ekkitab_catalog')->getFormSearchResultByIndexUrl() ?>" method="get">
-		<input type="hidden" name="<?php echo $this->helper('catalogSearch')->getQueryParamName() ?>" value="" />
-		<input type="hidden" name="<?php echo $this->helper('ekkitab_catalog')->getQueryFilterName() ?>" value="" />
-	</form>
 	<ul>
 		<?php foreach ($authors as $author): ?>
 			<?php if($author->getIsActive()): 
 					$randNo = 10 * $author->getPopularity();
+					$url = $this->helper('ekkitab_catalog')->getSearchResultByIndexUrl(null,array($this->helper('ekkitab_catalog')->getQueryParamName()=>urlencode($author->getAuthor()),$this->helper('ekkitab_catalog')->getQueryFilterName() => 'author'));
 				?>
 				<li>
-					<a href="javascript:searchAuthor('<?php echo $author->getAuthor()?>');"><?php echo $this->htmlEscape($author->getAuthor()) ?></a></li>
+					<a href="<?php echo $url ?>"><?php echo $this->htmlEscape($author->getAuthor()) ?></a></li>
 			<?php endif; ?>
 		<?php endforeach ?>
 	</ul>

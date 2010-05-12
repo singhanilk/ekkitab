@@ -22,6 +22,7 @@
 				//$productIds= $section->getSectionProductIds();
 				$_count = (!is_null($products) && is_array($products))?count($products):(!is_null($products))? $products->count() :0; 
 				$_columnSize=4;
+				$width=(int) 100/$_columnSize;
 				$counter=0;
 				$firstTime=0;
 				if($_count > 0){
@@ -56,7 +57,7 @@
 						$bookName = preg_replace('#[^A-Za-z0-9\_]+#', '-', $bookName);//($repArr2, "-", $urlKey);
 						$bookName="ekkitab_catalog/product/view/book/".$bookName.".html";
 	?>
-								<div class="vColumns">
+								<div class="vColumns" style="width:<?php echo $width ?>%;" >
 									<a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>"><img src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->keepFrame(false)->resize(null, 100); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" /></a>
 									<div class="titleEtc">
 										<div class="bkTitle"><a href="<?php echo $this->getUrl($bookName)?>"  title="<?php echo $product->getTitle() ?>"><?php echo $title ?></a></div><!-- bkTitle -->

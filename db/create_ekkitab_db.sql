@@ -6914,6 +6914,29 @@ CREATE TABLE IF NOT EXISTS `ek_catalog_global_section_products` (
 ALTER TABLE `ek_catalog_global_section_products`
   ADD CONSTRAINT `FK_CATALOG_GLOBAL_SECTION` FOREIGN KEY (`section_id`) REFERENCES `ek_catalog_global_sections` (`section_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+
+--
+-- Table structure for table `ek_catalog_search_log`
+--
+
+CREATE TABLE IF NOT EXISTS `ek_catalog_search_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `category` varchar(100) DEFAULT NULL,
+  `query` varchar(100) DEFAULT NULL,
+  `time_taken` float  DEFAULT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+
+--
+-- Constraints for table `ek_catalog_global_sections`
+--
+ALTER TABLE `ek_home_left_link_products`
+  ADD CONSTRAINT `FK_CATALOG_HOME_LEFT_LINKS` FOREIGN KEY (`link_id`) REFERENCES `ek_home_left_links` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ANSI';
 
 USE `mysql` ;
