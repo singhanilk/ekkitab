@@ -1,4 +1,22 @@
 #!/usr/bin/perl
+
+# This is not a generic script! It has been written for very specific input and in order to generate
+# very specific output.
+# This script takes, as input, a file which contains book data. This data is specified in a tab separated format
+# and every line is a different book.
+# ISBN information is specified in field 1 and 'path' information in field 2.   
+# The path is a the part of the 'url' that extends beyond the base which is 'www.penguinbooksindia.com'.
+# The specified url is fetched and the following information read from the received html page:
+# Title
+# Authors
+# Image url (which is then subsequently downloaded)
+# Publishing date
+# Publisher
+# Number of pages
+# Format
+# Classification.
+# This collected information is written to the output file in a tab separated format - each line representing a book.
+
 require LWP::UserAgent;
 use HTML::Entities;
 

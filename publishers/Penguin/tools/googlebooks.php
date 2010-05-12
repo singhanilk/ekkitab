@@ -1,4 +1,13 @@
 <?php
+// This is not a generic script! It has been written for very specific input and in order to generate
+// very specific output.
+// This script takes, as input, a file which contains book data. One line per book and ISBN in field 3. 
+// It then uses the googlebooks API to search for this book and extract information.
+// GoogleBooks API has a quote on how many times the API can be used in one session. So on a large input
+// file, this will reach the "API Quote Exceeded" error frequently. The script when re-invoked determines
+// the last successful ISBN processed and continues from there.
+// Whatever information that is fetched through the API is written out to a file in tab separated format.
+
 error_reporting(E_ALL  & ~E_NOTICE);
 ini_set("display_errors", 1); 
 define (OUTPUT_FILE, "PenguinBooks-googledata-import.txt");
