@@ -302,21 +302,91 @@ INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 
 Delete from `ek_catalog_global_sections`;
 
--- INSERT INTO `ek_catalog_global_sections` (  `section_id` ,`display_name`, `description` , `active_from_date`,  `active_to_date`,`template_path`,`is_homepage_display`) VALUES
--- ( 1, 'Indian Classics', '','2010-03-01','2011-03-31','catalog/globalsection/indian_classics.phtml','0'),
--- ( 2, 'All Time Great Fiction', '','2010-03-01','2011-03-31','catalog/globalsection/great_fiction.phtml','0'),
--- ( 3, 'Top Children''s Books', '','2010-03-01','2011-03-31','catalog/globalsection/top_childrens_books.phtml','0'),
--- ( 4, 'Summer Reading', '','2010-03-01','2011-03-31','catalog/globalsection/summer_reading.phtml','1');
- 
- INSERT INTO `ek_catalog_global_sections` (  `section_id` ,`display_name`, `description` , `active_from_date`,  `active_to_date`,`template_path`,`is_homepage_display`) VALUES
-( 1, 'Best Sellers', '','2010-03-01','2011-03-31','','0'),
-( 2, 'New Releases', '','2010-03-01','2011-03-31','','0'),
-( 3, 'Great Bargains', '','2010-03-01','2011-03-31','','1'),
-( 4, 'Best Boxed Sets', '','2010-03-01','2011-03-31','','0'),
-( 5, 'Top Children''s Books', '','2010-03-01','2011-03-31','','0'),
-( 6, 'Top Books of the Month', '','2010-03-01','2011-03-31','','0');
+INSERT INTO `ek_catalog_global_sections` (  `section_id` ,`display_name`, `description` , `active_from_date`,  `active_to_date`,`template_path`,`is_homepage_display`) VALUES
+( 1, 'Indian Classics', '','2010-03-01','2011-03-31','catalog/globalsection/indian_classics.phtml','0'),
+( 2, 'All Time Great Fiction', '','2010-03-01','2011-03-31','catalog/globalsection/great_fiction.phtml','0'),
+( 3, 'Top Children''s Books', '','2010-03-01','2011-03-31','catalog/globalsection/top_childrens_books.phtml','0'),
+( 4, 'Summer Reading', '','2010-03-01','2011-03-31','catalog/globalsection/summer_reading.phtml','1');
+
 
 INSERT INTO `customer_entity` VALUES (1,1,0,1,'install@ekkitab.com',1,'000000004',1,'2010-04-10 06:42:03','2010-04-10 06:42:04',1);
 INSERT INTO `customer_entity_varchar` VALUES (1,1,5,1,'Installation'),(2,1,7,1,'Account'),(4,1,3,1,'Ekkitab'),(5,1,12,1,'78e356fc19336772aceb39e57d122dcc:lr');
 
 
+--
+-- Dumping data for table `ek_left_link_header`
+
+Delete from `ek_left_link_header`;
+
+INSERT INTO `ek_left_link_header` (`id`, `header`) VALUES
+(1, 'New York Times Best Sellers'),
+(2, 'Penguin Best Sellers'),
+(3, 'Indian Best Sellers'),
+(4, 'Prize Winning Books'),
+(5, 'New Releases'),
+(6, 'Top Categories'),
+(7, 'Top Authors'),
+(8, 'Children''s Fiction'),
+(9, 'Ekkitab All Time Favorites');
+
+
+
+--
+-- Dumping data for table `ek_left_links`
+
+Delete from `ek_left_links`;
+
+INSERT INTO `ek_left_links` (`id`, `header_id`,`caption`) VALUES
+(1, 1,'Fiction'),
+(2, 1,'Non-Fiction'),
+(3, 2,'Fiction'),
+(4, 2,'Non-Fiction'),
+(5, 3,'Fiction'),
+(6, 3,'Non-Fiction'),
+(7, 4,'The Man Booker Prize'),
+(8, 4,'The Hugo Award'),
+(9, 4,'The Pulitzer Prize'),
+(10, 5,'Fiction'),
+(11, 5,'Non-Fiction'),
+(12, 5,'Autobiography'),
+(13, 5,'Political'),
+(14, 6,'Philosophy'),
+(15, 6,'Fiction'),
+(16, 6,'Self-Help'),
+(17, 7,'Robin Sharma'),
+(18, 7,'John Grisham'),
+(19, 7,'Amartya Sen'),
+(20, 8,'Enid Blyton Books'),
+(21, 8,'Harry Potter Series'),
+(22, 9,'Hitchhikers Guide to the Galaxy'),
+(23, 9,'Lord of the Rings');
+
+--
+-- Dumping data for table `ek_left_link_query`
+
+Delete from `ek_left_link_query`;
+
+INSERT INTO `ek_left_link_query` (`link_id`, `search_keyword` ,`search_category`,`search_filter`,`related_book_ids` ,`url_prefix` , `action_method`, `template_path`) VALUES
+(1, '','','','','','',''),
+(2, '','','','','','',''),
+(3, '','','','','','',''),
+(4, '','','','','','',''),
+(5, '','','','','','',''),
+(6, '','','','','','',''),
+(7, '','','','','','',''),
+(8, '','','','','','',''),
+(9, '','','','','','',''),
+(10,'','','','','','',''),
+(11,'','','','','','',''),
+(12,'','','','','','',''),
+(13,'','','','','','',''),
+(14,'','','','','','',''),
+(15,'','','','','','',''),
+(16,'','','','','','',''),
+(17,'','','','','','',''),
+(18,'','','','','','',''),
+(19,'','','','','','',''),
+(20,'','','','','','',''),
+(21,'','','','','','',''),
+(22,'','','','','','',''),
+(23,'','','','','','','');

@@ -6929,12 +6929,63 @@ CREATE TABLE IF NOT EXISTS `ek_catalog_search_log` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
+--
+-- Table structure for table `ek_left_link_header`
+--
+
+DROP TABLE IF EXISTS `ek_left_link_header`;
+
+CREATE TABLE IF NOT EXISTS `ek_left_link_header` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `header` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Constraints for table `ek_catalog_global_sections`
+-- Table structure for table `ek_left_links`
 --
-ALTER TABLE `ek_home_left_link_products`
-  ADD CONSTRAINT `FK_CATALOG_HOME_LEFT_LINKS` FOREIGN KEY (`link_id`) REFERENCES `ek_home_left_links` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+DROP TABLE IF EXISTS `ek_left_links`;
+
+CREATE TABLE IF NOT EXISTS `ek_left_links` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `header_id` int(11) NOT NULL ,
+  `caption` varchar(100) DEFAULT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Table structure for table `ek_left_link_query`
+--
+
+DROP TABLE IF EXISTS `ek_left_link_query`;
+
+CREATE TABLE IF NOT EXISTS `ek_left_link_query` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `link_id` int(11) NOT NULL ,
+  `search_keyword` varchar(100) DEFAULT NULL,
+  `search_category` varchar(100) DEFAULT NULL,
+  `search_filter` varchar(100) DEFAULT NULL,
+  `related_book_ids` varchar(500) DEFAULT NULL,
+  `url_prefix` varchar(300) DEFAULT NULL,
+  `action_method` varchar(200) DEFAULT NULL,
+  `template_path` varchar(300) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+--
+-- Constraints for table `ek_left_links`
+--
+ALTER TABLE `ek_left_links`
+  ADD CONSTRAINT `FK_CATALOG_LEFT_LINK_HEADER` FOREIGN KEY (`header_id`) REFERENCES `ek_left_link_header` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `ek_left_link_query`
+--
+ALTER TABLE `ek_left_link_query`
+  ADD CONSTRAINT `FK_CATALOG_LEFT_LINK_QUERY` FOREIGN KEY (`link_id`) REFERENCES `ek_left_links` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ANSI';
