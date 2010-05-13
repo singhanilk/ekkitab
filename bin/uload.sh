@@ -16,4 +16,6 @@ apt-get install memcached
 apt-get install php5-memcache
 apt-get install php-pear
 pear install -f System_Daemon
+apt-get install monit 
+apt-get install munin munin-node
 
