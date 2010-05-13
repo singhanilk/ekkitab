@@ -1,14 +1,13 @@
 #!/bin/bash
 datestr=`date +%B%Y`
 targetdir="/mnt4/publisherdata/Ingram"
-targetfile="ttlingv2"
-fileextn="zip"
+targetfile="antingrm-13.txt"
 
-echo "getting file $targetfile.$fileextn ...."
+echo "getting file $targetfile ...."
 (cd $targetdir; mkdir $datestr)
-(cd $targetdir/$datestr; wget -O $targetfile-$datestr.$fileextn ftp://w20M0695:ees695@ftp1.ingrambook.com/titleswk/$targetfile.$fileextn)
-echo "unzipping file $targetfile.$fileextn ..."
-(cd $targetdir/$datestr; unzip $targetfile-$datestr.$fileextn)
+(cd $targetdir/$datestr; wget -O $targetfile ftp://w20M0695:ees695@ftp1.ingrambook.com/titleswk/$targetfile)
+echo "unzipping file $targetfile ..."
+(cd $targetdir/$datestr; unzip $targetfile)
 
 
 
