@@ -139,7 +139,7 @@ else {
             $data = getImagePathAndIsbn($db, $book);
             if ($data != null) {
                 $totalbooks++;
-                echo "Checking for image: ".$imagedir."/".$data['image']."\n";
+                #echo "Checking for image: ".$imagedir."/".$data['image']."\n";
                 if (!file_exists($imagedir."/".$data['image'])) {
                     $missingimages++;
                     if ($fh) {
