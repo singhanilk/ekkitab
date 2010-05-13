@@ -14,7 +14,7 @@ do
   plugin=`echo $line | cut -d' ' -f2 | while read z; do echo $z; done | sed 's/\"//g'`;
   filename=`echo $line | cut -d' ' -f3 | while read z; do echo $z; done | sed 's/\"//g'`;
   #echo php importbooks.php $args $plugin $filename
-  if [ $args != "#" ] ; then  
+  if [[ ! $args =~ \#+ ]] ; then
     (cd $EKKITAB_HOME/db; php importbooks.php $args $plugin $filename) ;
   fi
 done < $1  
