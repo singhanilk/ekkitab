@@ -9,6 +9,7 @@ if (strlen($EKKITAB_HOME) == 0) {
 else {
     define(EKKITAB_HOME, $EKKITAB_HOME); 
 }
+define(BATCHSZ, 100);
 //  
 //
 // COPYRIGHT (C) 2009 Ekkitab Educational Services India Pvt. Ltd.  
@@ -74,25 +75,33 @@ else {
     }
 
     function getMaxId($db) {
-        $query = "select max(id) from books";
-        if (! $result = mysqli_query($db, $query)) {
-           fatal("Failed to get maximum count: ". mysqli_error($db), $query);
-           return(0); 
+        static $max = null;
+        if ($max == null) {
+            $query = "select max(id) from books";
+            if (! $result = mysqli_query($db, $query)) {
+                fatal("Failed to get maximum count: ". mysqli_error($db), $query);
+            }
+	        $row = mysqli_fetch_array($result);
+            if ($row[0] == null) {
+                $max = 1;
+            }
+            else {
+                $max = $row[0] + 1;
+            }
         }
-	    $row = mysqli_fetch_array($result);
-        if ($row[0] == null)
-            return 1;
-        else
-            return $row[0] + 1;
+	    return $max;
     }
 
-    function getImagePathAndIsbn($db, $id) {
-        $query = "select image,isbn from books where id = '" . $id . "'";
-        if (! $result = mysqli_query($db, $query)) {
-           return null; 
+    function getImagePathAndIsbn($db) {
+        static $pos = 0;
+        $max = $pos + BATCHSZ;
+        $query = "select image,isbn from books where id > $pos and id <= $max";
+        $result = mysqli_query($db, $query); 
+        if ($pos < getMaxId($db)) {
+            $pos += BATCHSZ;
+            return $result;
         }
-	    $row = mysqli_fetch_array($result);
-        return $row;
+        return null;
     }
 
 
@@ -129,26 +138,25 @@ else {
             }
         }
 
-        $maxId = getMaxId($db);
+        #$maxId = getMaxId($db);
         $imagedir=EKKITAB_HOME."/"."magento/media/catalog/product";
 
         $missingimages = 0;
         $totalbooks = 0;
 
-        for ($book = 0; $book < $maxId; $book++) {
-            $data = getImagePathAndIsbn($db, $book);
-            if ($data != null) {
+        while ($result = getImagePathAndIsbn($db)) {
+            while ($row = mysqli_fetch_array($result)) {
                 $totalbooks++;
                 #echo "Checking for image: ".$imagedir."/".$data['image']."\n";
-                if (!file_exists($imagedir."/".$data['image'])) {
+                if (!file_exists($imagedir."/".$row['image'])) {
                     $missingimages++;
                     if ($fh) {
-                        fprintf($fh, "%s\n", $data['isbn']); 
+                        fprintf($fh, "%s\n", $row['isbn']); 
                     }
                 }
-            }
-            if (($totalbooks % 100000) == 0) {
-                debug("Completed processing $totalbooks ...");
+                if ((($totalbooks % 100000) == 0) && ($totalbooks > 0)) {
+                    debug("Completed processing $totalbooks. [".$missingimages."] missing images.");
+            	}
             }
         }
         mysqli_close($db);
