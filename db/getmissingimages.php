@@ -147,6 +147,9 @@ else {
                     }
                 }
             }
+            if (($totalbooks % 100000) == 0) {
+                debug("Completed processing $totalbooks ...");
+            }
         }
         mysqli_close($db);
         if ($fh) {
