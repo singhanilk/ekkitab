@@ -42,10 +42,10 @@
 <?php		if($counter%$_columnSize==0){  ?>
 <?php			if($firstRow!=0){  ?>
 					</div>
-					<div class="clear hmInScrollRowSep" id="sep_<?php echo $rowNo?>" style="display:none" ></div>
+					<div class="clear hmInScrollRowSep" id="sep_<?php echo $rowNo?>" ></div>
 <?php				$rowNo+=1;
 				}					?>
-				<div class="hmInScrollRow" id="gs_row_<?php echo $rowNo?>" style="<?php if($firstRow!=0): echo "display:none"; endif;?>">
+				<div class="hmInScrollRow" id="gs_row_<?php echo $rowNo?>" >
 <?php		}
 			$counter+=1;
 			$savingsPerct= ($product->getPrice() >0 )?	(($product->getPrice() - $product->getFinalPrice())/ $product->getPrice() ) * 100 : 0; 
@@ -81,7 +81,7 @@
 		<div class="clear"></div>
 	</div><!-- hmScrollRow -->
 	<div class="spSeeAll" id="seeAll">
-	<a href="javascript:seeAll('<?php echo $rowNo ?>')">See All</a>
+	<!-- a href="javascript:seeAll('<?php echo $rowNo ?>')">See All</a-->
 	</div>
 
 <?php } else { //end of if(products not null )... ?>

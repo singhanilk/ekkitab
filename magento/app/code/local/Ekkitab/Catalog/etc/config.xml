@@ -40,6 +40,15 @@
 						<wishlist_item>
 							<table>wishlist_item</table>
 						</wishlist_item>
+						<leftlinks>
+							<table>ek_left_links</table>
+						</leftlinks>
+						<leftlink_header>
+							<table>ek_left_link_header</table>
+						</leftlink_header>
+						<leftlink_query>
+							<table>ek_left_link_query</table>
+						</leftlink_query>
 						<globalsection>
 							<table>ek_catalog_global_sections</table>
 						</globalsection>

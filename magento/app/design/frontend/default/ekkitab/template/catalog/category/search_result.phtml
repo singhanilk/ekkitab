@@ -244,7 +244,6 @@ if(!is_null($results) && is_array($results)){
 			if(!is_null($parentCatArr) && sizeof($parentCatArr) > 0){
 				$arrSize = sizeof($parentCatArr);
 				$catTxt ="";
-				Mage::log("In search results....arrSize is : $arrSize");
 				for($i=0;$i < $arrSize ; $i++){
 					$cat = $parentCatArr[$i];
 					$cat = ucwords($this->getDecodedString($cat));
