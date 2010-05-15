@@ -4,8 +4,8 @@ if [ -z $EKKITAB_HOME ] ; then
     exit 1;
 fi;
 . $EKKITAB_HOME/bin/db.sh 
-if [ $# -ne 1 ] ; then
-    echo "Not enough arguments...."; echo "Usage: $0 <config-file>" 
+if [ $# -lt 1 ] ; then
+    echo "Not enough arguments...."; echo "Usage: $0 <config-file> [ -n ]" 
     exit 1;
 fi;
 while read line;
@@ -18,6 +18,10 @@ do
     (cd $EKKITAB_HOME/db; php importbooks.php $args $plugin $filename) ;
   fi
 done < $1  
-(cd $EKKITAB_HOME/db; ./loadbooks.sh)
-(cd $EKKITAB_HOME/bin; ./create_index.sh)
+if [ $# -gt 1 ] && [ $2 == '-n' ] ; then
+    echo "Not indexing or loading books to production ..." 
+else 
+   (cd $EKKITAB_HOME/db; ./loadbooks.sh)
+   (cd $EKKITAB_HOME/bin; ./create_index.sh)
+fi
 
