@@ -8,6 +8,13 @@ if [ $# -lt 1 ] ; then
     echo "Not enough arguments...."; echo "Usage: $0 <config-file> [ -n ]" 
     exit 1;
 fi;
+dbid=`mysql -e "select max(id) from books" -h $host -u $user -p$password reference`
+dbid=`echo $dbid | cut -d' ' -f2`
+if [[ $dbid != "NULL" ]] ; then
+    let dbid=$dbid+1;
+else 
+    let dbid=0;
+fi
 while read line;
 do 
   args=`echo $line | cut -d' ' -f1 | while read z; do echo $z; done | sed 's/\"//g'`; 
@@ -21,7 +28,11 @@ done < $1
 if [ $# -gt 1 ] && [ $2 == '-n' ] ; then
     echo "Not indexing or loading books to production ..." 
 else 
-   (cd $EKKITAB_HOME/db; ./loadbooks.sh)
-   (cd $EKKITAB_HOME/bin; ./create_index.sh)
+   ( cd $EKKITAB_HOME/db; ./loadbooks.sh )
+   if [[ $dbid == 0 ]] ; then
+        ( cd $EKKITAB_HOME/bin; ./create_index.sh )
+   else 
+        ( cd $EKKITAB_HOME/bin; ./update_index.sh $dbid )
+   fi
 fi
 
