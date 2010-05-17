@@ -76,7 +76,7 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Product_Collection extends Mage_Core
      */
     public function __call($method, $args)
     {
-		Mage::log("Invalid method ".get_class($this)."::".$method."(".print_r($args,1).")");
+		//Mage::log("Invalid method ".get_class($this)."::".$method."(".print_r($args,1).")");
         throw new Exception("Invalid method ".get_class($this)."::".$method."(".print_r($args,1).")");
     }
 

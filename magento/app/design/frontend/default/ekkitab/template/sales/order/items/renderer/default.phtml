@@ -25,8 +25,7 @@
  */
 ?>
 <?php 
-$_item = $this->getItem() ;
-Mage::log(get_class($_item));?>
+$_item = $this->getItem() ; ?>
 <tr class="border" id="order-item-row-<?php echo $_item->getId() ?>">
     <td class="first"><?php echo $this->htmlEscape($_item->getName()) ?> (<?php echo Mage::helper('core/string')->splitInjection($this->getSku()) ?>)
         <?php if($_options = $this->getItemOptions()): ?>

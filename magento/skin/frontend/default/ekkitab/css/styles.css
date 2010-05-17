@@ -63,6 +63,7 @@ a:hover {
 	font-size: 1.2em;
 	font-weight: bold;
 	color: #c60;
+	margin-top: 5px;
 }
 .leftNavArea ul {
 	list-style-type: none;
@@ -518,12 +519,6 @@ a:hover {
 	height: 89px;
 	background-image: url(../images/ekkitab_logo.png);
 	background-position: left top;
-	background-repeat: no-repeat;
-	display: block;
-}
-.logo a:hover{
-	background-image: url(../images/ekkitab_logo.png);
-	background-position: left -100px;
 	background-repeat: no-repeat;
 	display: block;
 }
@@ -2054,4 +2049,124 @@ a:hover {
 	text-align: right;
 	margin-top: 30px;
 
+}
+
+<!-- styles below added/modified on May 12, 2010 -->
+.delete {
+	clear: both
+}
+
+.vColumns, .vMidColumn {
+	float:left;
+	margin-top:8px;
+	text-align:center;
+	width:31%;
+
+}
+.linkSubHdr {
+	color:#333;
+	font-size:1.2em;
+	font-weight:bold;
+}
+.leftNavArea ol li a  {
+	display:block;
+	line-height:normal;
+	margin:4px 0 0px;
+	font-size: 11px;
+}
+.leftNavArea ol li span {
+	line-height: 12px;
+}
+.leftNavArea ol li .author {
+	color:#CC6600;
+	line-height: 12px;
+}
+.searchRow {
+	border-bottom:1px dotted #333333;
+	margin-bottom:10px;
+	padding-bottom:10px;
+}
+.searchRow .skuImage {
+	float:left;
+	width:15%;
+}
+.searchRow .detailsArea {
+	border-right:1px dotted #333333;
+	float:left;
+	font-size:11px;
+	width:61%;
+}
+.searchRow .priceArea {
+	float:left;
+	font-size:11px;
+	margin:15px 0 0 10px;
+	width:22%;
+}
+.listRow {
+	border-bottom:1px dotted #333333;
+	margin-bottom:10px;
+	padding-bottom:10px;
+}
+.listRow .skuImage {
+	float:left;
+	width:15%;
+
+}
+.listRow .detailsArea {
+	border-right:1px dotted #333333;
+	float:left;
+	font-size:11px;
+	width:56%;
+}
+.listRow .priceArea {
+	float:left;
+	font-size:11px;
+	margin:15px 0 0 10px;
+	width:22%;
+
+}
+.listRow .detailsArea .synop {
+	color:#666666;
+	font-style:italic;
+	margin:5px 0;
+}
+.weekNoRow {
+	border-bottom: 1px dotted #333;
+	margin-bottom: 3px;
+}
+.weekNoArea, .weekNoAreaLast {
+	width: 5%;
+	background-color: #fff;
+	text-align: center;
+	font-size: 10px;
+	float: left;
+}
+.weekNoAreaLast {
+	margin-left: 89%;
+}
+.listRow .weekNo, .listRow .weekNoLast {
+	width: 5%;
+	float: left;
+	font-weight: bold;
+	text-align: center;
+}
+.listRow .weekNoLast {
+	margin-top: 15px;
+}
+.listPageHeader {
+	font-size: 16px;
+	padding-left: 6px;
+	font-weight: bold;
+	line-height: 24px;
+	background-color: #c60;
+	color: #fff;
+	border-bottom: 8px solid #fff;
+}
+.listReviewArea {
+	padding: 5px 8px;
+	background-image: url(../images/striped_bg.png);
+	background-position: left top;
+	background-repeat: repeat;
+	font-size: 11px;
+	color: #666;
 }
