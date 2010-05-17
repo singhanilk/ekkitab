@@ -6,6 +6,7 @@
 # and every line is a different book.
 # ISBN information is specified in field 1 and 'path' information in field 2.   
 # The path is a the part of the 'url' that extends beyond the base which is 'www.penguinbooksindia.com'.
+# See the file penguinbooks.out in the Penguin publisher directory for the format of the input file.
 # The specified url is fetched and the following information read from the received html page:
 # Title
 # Authors

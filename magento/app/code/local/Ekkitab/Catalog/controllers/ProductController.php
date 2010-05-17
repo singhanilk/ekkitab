@@ -34,13 +34,15 @@ class Ekkitab_Catalog_ProductController extends Mage_Core_Controller_Front_Actio
 
 		if (!(is_int($productId) && $productId > 0) ) {
 			$productId  = (int) $this->getRequest()->getParam('id');
-			if (!(is_int($productId) && $productId > 0 )) {
-				$this->_forward('noRoute');
-			}
 		}
-		Mage::register('productId', $productId);
-		$this->loadLayout();
-		$this->renderLayout();
+		if (!(is_int($productId) && $productId > 0 )) {
+			$this->_forward('noRoute');
+		}
+		else{
+			Mage::register('productId', $productId);
+			$this->loadLayout();
+			$this->renderLayout();
+		}
     }
 
 }

@@ -1,4 +1,8 @@
 #!/bin/bash
+if [ -z $EKKITAB_HOME ] ; then
+    echo "EKKITAB_HOME is not set..."
+    exit 1;
+fi;
 if [ $# -ne 1 ] ; then
     echo "Not enough arguments...."; echo "Usage: $0 <date in MMDDYY format>" 
     exit 1;
@@ -6,6 +10,7 @@ fi;
 d1=10#$1
 tmpfile="./.newingramsimages"
 archivedir='/mnt4/publisherdata/archives'
+imagedir='/mnt4/publisherdata/images'
 ftp ftp1.ingrambook.com > $tmpfile <<!
 w20M0695
 passive
@@ -21,14 +26,15 @@ do
         then 
             dir=`echo $i | sed 's/^\([0-9]*\).*\([0-9]of[0-9]\).*/\1-\2/'`
             echo "starting ftp for file $i"
-            wget -O $i ftp://w20M0695:ees695@ftp1.ingrambook.com/Imageswk/j400w/$i
+            (cd $imagedir; wget -O $i ftp://w20M0695:ees695@ftp1.ingrambook.com/Imageswk/j400w/$i)
             echo "unzipping file $i"
-            (mkdir $dir; cd $dir; unzip ../$i)
+            (cd $imagedir; mkdir $dir; cd $dir; unzip ../$i)
             echo "archiving file $i"
-            mv $i $archivedir 
+            (cd $imagedir; mv $i $archivedir)
+            echo "distributing image files to production directories."
+            (cd $imagedir; php $EKKITAB_HOME/bin/copyimages.php $dir)
     fi
 done
 rm $tmpfile 
-
 
 

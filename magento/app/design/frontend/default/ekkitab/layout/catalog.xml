@@ -54,8 +54,9 @@ Default layout, loads most of the pages
             <block type="catalog/navigation" name="catalog.topnav" template="catalog/navigation/top.phtml"/>
         </reference>
 		<reference name="left">
-			<block type="ekkitab_catalog/category_popular" name="popular.categories" as="popular_categories" template="catalog/category/popular.phtml"/>
-            <block type="ekkitab_catalog/author_topAuthors" name="top.authors" as="top_authors" template="catalog/author/popular.phtml"/>
+            <block type="ekkitab_catalog/leftlinks" name="catalog.leftlink" template="catalog/navigation/left_links.phtml"/>
+			<!--block type="ekkitab_catalog/category_popular" name="popular.categories" as="popular_categories" template="catalog/category/popular.phtml"/>
+            <block type="ekkitab_catalog/author_topAuthors" name="top.authors" as="top_authors" template="catalog/author/popular.phtml"/-->
             <!--<block type="core/template" name="left.permanent.callout" after="-" template="callouts/left_col.phtml">
                 <action method="setImgSrc"><src>images/media/col_left_callout.jpg</src></action>
                 <action method="setImgAlt" translate="alt" module="catalog"><alt>Did you know? Our customer service is available 24/7</alt></action>
@@ -148,11 +149,13 @@ Category Lecene search layout
 				   <block type="catalog/navigation" name="catalog.leftnav" before="popular_categories" template="catalog/navigation/left_child_categories.phtml"/>
 			</reference-->
 			<reference name="content">
-				<block type="ekkitab_catalog/category_searchResult" name="catalog_category_searchresult" template="catalog/category/search_result.phtml">
+				<block type="ekkitab_catalog/category_searchResult" name="catalog_category_searchresult" template="catalog/category/search_result.phtml" >
+					<!--action method="setDefaultTemplate"><value>catalog/category/search_result.phtml</value></action>
+					<action method="chooseTemplate"/-->
 					<block type="page/html" name="donate_book_blurb" template="page/html/donate_blurb.phtml" />
-					 <action method="setColumnCount"><count>4</count></action>
-					<action method="setPageSize"><count>15</count></action>
-				</block>
+						 <action method="setColumnCount"><count>4</count></action>
+						<action method="setPageSize"><count>15</count></action>
+					</block>
 			</reference>
 	</ekkitab_catalog_search_index>
 
@@ -327,6 +330,24 @@ Product view
 			<remove name="testimonial" />
         </reference>
 </ekkitab_catalog_globalsection_view>
+
+<ekkitab_catalog_leftlinks_view>
+        <!-- Mage_Catalogsearch -->
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+        </reference>
+		<reference name="content">
+            <block type="ekkitab_catalog/leftlinks_view" name="leftlink_view" >
+                <action method="setDefaultTemplate"><value>catalog/leftlinks/view.phtml</value></action>
+				<action method="chooseTemplate"/>
+                <block type="page/html" name="donate_book_blurb_home" template="page/html/donate_blurb_home.phtml" />
+            </block>
+        </reference>
+        <reference name="right">
+			<block type="page/html" name="donate_book_blurb" before="news" template="page/html/donate_blurb.phtml" />
+			<remove name="testimonial" />
+        </reference>
+</ekkitab_catalog_leftlinks_view>
 
 <!--
 Additional block dependant on product type

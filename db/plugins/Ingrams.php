@@ -103,52 +103,52 @@ class Parser {
         }
         function getContributionPrefix($role) {
             $prefix = "";
-            switch($role) {
+            switch(trim($role)) {
                 case "ec":
                 case "ev":
-                case "E ":  
+                case "E":  
                         $prefix = ":e:";
                         break;
-                case "I ":  
+                case "I":  
                         $prefix = ":i:";
                         break;
-                case "P ":  
+                case "P":  
                         $prefix = ":p:";
                         break;
                 case "TB":  
-                case "T ":  
+                case "T":  
                         $prefix = ":t:";
                         break;
-                case "Y ":  
+                case "Y":  
                         $prefix = ":n:";
                         break;
-                case "9 ":  
-                case "8 ":  
-                case "7 ":  
-                case "6 ":  
-                case "5 ":  
-                case "4 ":  
-                case "3 ":  
-                case "2 ":  
-                case "1 ":  
-                case "0 ":  
-                case "Z ":  
-                case "Y ":  
-                case "W ":  
-                case "V ":  
-                case "U ":  
+                case "9":  
+                case "8":  
+                case "7":  
+                case "6":  
+                case "5":  
+                case "4":  
+                case "3":  
+                case "2":  
+                case "1":  
+                case "0":  
+                case "Z":  
+                case "Y":  
+                case "W":  
+                case "V":  
+                case "U":  
                 case "TT":  
-                case "S ":  
-                case "Q ":  
-                case "L ":  
-                case "K ":  
-                case "J ":  
-                case "H ":  
-                case "F ":  
+                case "S":  
+                case "Q":  
+                case "L":  
+                case "K":  
+                case "J":  
+                case "H":  
+                case "F":  
                 case "ES":  
-                case "D ":  
+                case "D":  
                 case "BI":  
-                case "B ":  
+                case "B":  
                         $prefix = ":c:";
                         break;
                 default:    
@@ -237,6 +237,12 @@ class Parser {
 			else{
 				$discount = str_replace("%", "", $discount);
 			}
+
+            //If list price is less the 15 dollars, reduce discount to 0
+            //so that our discount to customer will be 0.
+            if ($listprice < 15) {
+                $discount = 0;
+            }
 			
 			//Extracting the Stock Info
 			$stock = 0;
