@@ -4,6 +4,18 @@ function initXML($name) {
     return simplexml_load_file($name);
 }
 
+function addHeader($fh) {
+   fprintf($fh, "%s\n", '/**');
+   fprintf($fh, "%s\n", ' *');
+   fprintf($fh, "%s\n", ' * menuitems.php');
+   fprintf($fh, "%s\n", ' * generated on: ' . date('d-m-y:h-i a'));
+   fprintf($fh, "%s\n", ' * COPYRIGHT (C) 2009-10 Ekkitab Educational Services India Pvt. Ltd.');
+   fprintf($fh, "%s\n", ' * This is a generated file. Please do not edit. If you wish to change the contents');
+   fprintf($fh, "%s\n", ' * please change the xml source and regenerate this file.');
+   fprintf($fh, "%s\n", ' *');
+   fprintf($fh, "%s\n", ' */');
+}
+
 if ($argc < 3) {
    echo "Usage: $argv[0] -i <Input XML file> [ -o <Output Directory> ]\n";
    exit(1);
@@ -55,6 +67,7 @@ if (!$fhtml) {
 }
 
 fprintf($fhtml, "%s\n", '<?php');
+addHeader($fhtml);
 fprintf($fhtml, "%s\n", '$sections = array();');
 fprintf($fhtml, "%s\n", '$collections = array();');
 fprintf($fhtml, "\n");
