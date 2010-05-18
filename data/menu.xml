@@ -1,0 +1,144 @@
+<MENU>
+    <SECTION title="Best Sellers">
+        <LINK name="From the New York Times" type="collection"> 
+            <ID>9780515147902</ID>
+            <ID>9781441850119</ID>
+            <ID>9781847246929</ID>
+            <ID>9780778326434</ID>
+            <ID>9781847443298</ID>
+            <ID>9780061579097</ID>
+            <ID>9780099538950</ID>
+            <ID>9781906694159</ID>
+            <ID>9780373774524</ID>
+            <ID>9780312368128</ID>
+            <ID>9780805089257</ID>
+            <ID>9780099515029</ID>
+            <ID>9780747585664</ID>
+            <ID>9780099493525</ID>
+            <ID>9780062003058</ID>
+            <ID>9780141329000</ID>
+            <ID>9780393330472</ID>
+            <ID>9781400078455</ID>
+            <ID>9780349113463</ID>
+            <ID>9780141014593</ID>
+        </LINK>
+        <LINK name="From Penguin Books" type="collection"> 
+            <ID>9780670083442</ID>
+            <ID>9789380480046</ID>
+            <ID>9780143067115</ID>
+            <ID>9780143068570</ID>
+            <ID>9780143067078</ID>
+            <ID>9780670083466</ID>
+            <ID>9780143331117</ID>
+            <ID>9781408805763</ID>
+            <ID>9780143068105</ID>
+            <ID>9780141036243</ID>
+            <ID>9780143066088</ID>
+            <ID>9780670083527</ID>
+            <ID>9780307739964</ID>
+            <ID>9780199754410</ID>
+            <ID>9780143066811</ID>
+            <ID>9789380480138</ID>
+            <ID>9780670082957</ID>
+            <ID>9789380480121</ID>
+        </LINK>
+        <LINK name="India's Most Popular" type="collection"> 
+        </LINK>
+    </SECTION>
+    <SECTION title="Prize Winning Books">
+        <LINK name="The Man Booker Prize" type="collection"> 
+            <ID>9780007292417</ID>
+            <ID>9788172238476</ID>
+            <ID>9780099535072</ID>
+            <ID>9780143102786</ID>
+            <ID>9780330513913</ID>
+            <ID>9780330483216</ID>
+            <ID>9780571215171</ID>
+            <ID>9780143028482</ID>
+            <ID>9780571207930</ID>
+            <ID>9781860498800</ID>
+        </LINK>
+        <LINK name="The Hugo Award" type="collection"> 
+            <ID>9780061712821</ID>
+            <ID>9780007150939</ID>
+            <ID>9780812536362</ID>
+            <ID>9780765348258</ID>
+            <ID>9780765356154</ID>
+            <ID>9780380818617</ID>
+            <ID>9780765345004</ID>
+            <ID>9780747263746</ID>
+            <ID>9780747582380</ID>
+            <ID>9780812536355</ID>
+        </LINK>
+        <LINK name="The Pulitzer Prize" type="collection"> 
+            <ID>9781934137123</ID>
+            <ID>9780743467728</ID>
+            <ID>9780571241231</ID>
+            <ID>9780330448628</ID>
+            <ID>9780143036661</ID>
+            <ID>9781844081486</ID>
+            <ID>9780060557546</ID>
+            <ID>9780747561620</ID>
+            <ID>9780375726408</ID>
+            <ID>9781841154930</ID>
+        </LINK>
+    </SECTION>
+    <SECTION title="New Releases">
+        <LINK name="Fiction" type="collection"> 
+        </LINK>
+        <LINK name="Non Fiction" type="collection"> 
+        </LINK>
+    </SECTION>
+    <SECTION title="Top Categories">
+        <LINK name="Autobiographies" type="search"> 
+            <SEARCH field="category">autobiographies</SEARCH>
+        </LINK>
+        <LINK name="Philiosophy" type="search"> 
+            <SEARCH field="category">philosophy</SEARCH>
+        </LINK>
+        <LINK name="Self-Help" type="search"> 
+            <SEARCH field="category">selfhelp</SEARCH>
+        </LINK>
+        <LINK name="See All Categories" type="search"> 
+            <SEARCH field="category">allcategories</SEARCH>
+        </LINK>
+    </SECTION>
+    <SECTION title="Top Authors">
+        <LINK name="Robin Sharma" type="search"> 
+            <SEARCH field="author">robin sharma</SEARCH>
+        </LINK>
+        <LINK name="Amartya Sen" type="search"> 
+            <SEARCH field="author">amartya sen</SEARCH>
+        </LINK>
+        <LINK name="John Grisham" type="search"> 
+            <SEARCH field="author">john grisham</SEARCH>
+        </LINK>
+        <LINK name="Jeffrey Archer" type="search"> 
+            <SEARCH field="author">jeffrey archer</SEARCH>
+        </LINK>
+        <LINK name="Shiv Khera" type="search"> 
+            <SEARCH field="author">shiv khera</SEARCH>
+        </LINK>
+    </SECTION>
+    <SECTION title="Selections">
+        <LINK name="Pick of the Week" type="collection"> 
+            <ID>9781408808863</ID>
+            <ID>9781423113386</ID>
+            <ID>9780340920343</ID>
+            <ID>9780670084449</ID>
+            <ID>9788190453028</ID>
+            <ID>9781849162104</ID>
+            <ID>9781847670946</ID>
+        </LINK>
+        <LINK name="Childrens Books" type="collection"> 
+        </LINK>
+        <LINK name="All Time Favorites" type="collection"> 
+        </LINK>
+        <LINK name="Recommended" type="collection"> 
+            <ID>9780747594895</ID>
+            <ID>9781582701707</ID>
+            <ID>9781847246929</ID>
+        </LINK>
+    </SECTION>
+</MENU>
+
