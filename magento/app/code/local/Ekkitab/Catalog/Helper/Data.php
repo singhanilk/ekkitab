@@ -23,6 +23,8 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
     const QUERY_CATEGORY_PATH = 'category';
 
     const QUERY_FILTER_NAME = 'filterby';
+    
+	const QUERY_AUTHOR_NAME = 'author';
 	
 	protected $_repArr= array(" & ", "&");
 
@@ -67,6 +69,17 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
      *
      * @return string
      */
+    public function getAuthorQueryName()
+    {
+        return self::QUERY_AUTHOR_NAME;
+    }
+	
+	
+	/**
+     * Retrieve search query parameter name
+     *
+     * @return string
+     */
     public function getPageNoVarName()
     {
         return self::QUERY_PAGE_NO;
@@ -95,6 +108,33 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
             self::QUERY_VAR_NAME => $query
         )));
     }
+
+    /**
+     * Retrieve result page url
+     *
+     * @param   string $query
+     * @return  string
+     */
+    public function getLeftLinkUrl($urlprefix, $params=null)
+    {
+		$urlprefix = 'ekkitab_catalog/'.$urlprefix;
+		$url='';
+		if(!is_null($params) && is_array($params)){
+			foreach ($params as $param => $value) {
+               if(isset($value) && strlen($value) > 0){
+				  $url  = $url.$param."/".$value."/";
+			   }
+            }
+        }  
+		if(isset($url) && strlen($url) > 0){
+			$url= $urlprefix."/".$url;
+		}else{
+			$url= $urlprefix;
+		}
+		$url = $this->_getUrl($url);
+        return $url;
+    }
+
 
     /**
      * Retrieve result page url
@@ -186,6 +226,34 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
         return $this->htmlEscape($this->_filterBy);
     }
 
+    /**
+     * Retrieve HTML escaped search query
+     *
+     * @return string
+     */
+    public function setQueryFilterByText($filterBy)
+    {
+		$this->_filterBy = $filterBy;
+    }
+
+    /**
+     * Retrieve search query text
+     *
+     * @return string
+     */
+    public function getAuthorQueryText()
+    {
+        if (is_null($this->_queryText) || strlen($this->_queryText) <=0 ) {
+            $this->_queryText = $this->_getRequest()->getParam($this->getAuthorQueryName());
+			if ($this->_queryText === null) {
+                $this->_queryText = '';
+            } else {
+				$this->_queryText = Mage::helper('core/string')->cleanString(trim($this->_queryText));
+				$this->setQueryFilterByText('author');
+            }
+        }
+        return $this->_queryText;
+    }
 
     /**
      * Retrieve HTML escaped search query

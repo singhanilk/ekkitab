@@ -97,7 +97,7 @@
             <SEARCH field="category">philosophy</SEARCH>
         </LINK>
         <LINK name="Self-Help" type="search"> 
-            <SEARCH field="category">selfhelp</SEARCH>
+            <SEARCH field="category">self-help</SEARCH>
         </LINK>
         <LINK name="See All Categories" type="search"> 
             <SEARCH field="category">allcategories</SEARCH>

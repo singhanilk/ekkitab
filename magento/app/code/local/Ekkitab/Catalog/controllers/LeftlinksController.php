@@ -17,6 +17,27 @@ class Ekkitab_Catalog_LeftlinksController extends Mage_Core_Controller_Front_Act
 {
 
 	public function viewAction()
+	{
+		//Mage::dispatchEvent('catalog_controller_product_init_before', array('controller_action'=>$this));
+		$linkUrl  = (String) $this->getRequest()->getParam('details');
+
+		// insert the split function here.....and get the link Id
+		$linkIdStartIndex = strrpos($linkUrl, DIRECTORY_SEPARATOR); 	  
+		$linkIdEndIndex = strpos($linkUrl, ".html"); 	
+		$linkIdEndIndex = $linkIdEndIndex - $linkIdStartIndex;  //.html/	
+		//$linkId = (int) substr($linkUrl,$linkIdStartIndex,$linkIdEndIndex);
+		$key = substr($linkUrl,$linkIdStartIndex,$linkIdEndIndex);
+
+		if ( is_null($key) || strlen($key) <=0 ) {
+			$this->_forward('noRoute');
+		} else {
+			Mage::register('link_key',$key);
+			$this->loadLayout();
+			$this->renderLayout();
+		}
+	}
+
+	public function viewOldAction()
     {
 		//Mage::dispatchEvent('catalog_controller_product_init_before', array('controller_action'=>$this));
 		$linkUrl  = (String) $this->getRequest()->getParam('details');

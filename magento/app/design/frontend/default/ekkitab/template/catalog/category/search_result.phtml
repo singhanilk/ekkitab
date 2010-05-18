@@ -77,7 +77,8 @@ if(!is_null($results) && is_array($results)){
 	  } //end of if(retsize > 0)
 	} //end of if(!java_is_null(subcats))
 ?>
-	<?php echo $this->getDonateBlurbHtml() ?>
+	<?php echo $this->getDonateBlurbHtml(); ?>
+	<?php echo $this->getChildHtml('leftlink_menu'); ?>
 </div><!-- leftNavArea inside checks -->
 
 <div class="mainArea">
@@ -197,7 +198,6 @@ if(!is_null($results) && is_array($results)){
 			<div class="lineHeight14em"><?php echo $shippingTime ?></div>
 			<div class="youSave"><?php if($stock && $listPrice >0) : ?>In Stock</div><?php else:?>Out of Stock </div><?php endif;?>	<a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($id)?>"><?php echo $this->__('Add to Wishlist') ?></a><br/>	
 			
-			<!--a href="#" onclick="setLocation('<?php echo $this->getAddToCartUrl($id)?>')"><img src="<?php echo $this->getSkinUrl('images/btn_add_to_cart.gif') ?>" alt="<?php echo $this->__('Add to Cart') ?>"></a-->
 			</div><!-- priceArea -->
 			<div class="clear"></div>
 			</div><!-- searchRowEnds -->

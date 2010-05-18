@@ -17,14 +17,13 @@
 class Ekkitab_Catalog_Block_Leftlinks_View extends Mage_Core_Block_Template
 {
 
-    private $_link;
+    private $_link_key;
     private $_relatedBooks;
     private $_templatePath;
 
     public function chooseTemplate()
     {
 		$this->_templatePath = Mage::registry('templatePath');
-		$this->_link =Mage::registry('link');
 		
 		if(!is_null($this->_templatePath) && strlen(trim($this->_templatePath)) > 0 ){
 			$this->setTemplate($this->_templatePath);
@@ -34,17 +33,16 @@ class Ekkitab_Catalog_Block_Leftlinks_View extends Mage_Core_Block_Template
         }
     }
 
-    public function getLinkDetails()
+    public function getLinkKey()
     {
 		if(is_null($this->_link) ){
-			$this->_link = Mage::registry('link');
+			$this->_link = Mage::registry('link_key');
 		}
 		return $this->_link;
     }
 
-    public function getLinkBooks()
+    public function getLinkBooks($productIsbns)
     {
-		$productIsbns = Mage::registry('related_book_ids');
 		if(!is_null($productIsbns) && is_array($productIsbns) && count($productIsbns) > 0 ){
 			$condition = array('in'=>$productIsbns);
 			$this->_relatedBooks = Mage::getModel('ekkitab_catalog/product')->getCollection()

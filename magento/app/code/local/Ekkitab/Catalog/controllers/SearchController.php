@@ -22,6 +22,10 @@ class Ekkitab_Catalog_SearchController extends Mage_Core_Controller_Front_Action
 		// @var $query Mage_CatalogSearch_Model_Query
 		$queryText = Mage::helper('ekkitab_catalog')->getQueryText();
 		//$start=(float)microtime(true);
+		
+		if(!($queryText) || strlen($queryText) <= 0){
+			$queryText = Mage::helper('ekkitab_catalog')->getAuthorQueryText();
+		}
 		if ((isset($categoryPath) && strlen($categoryPath) > 0 ) || strlen($queryText) > 0 ) {
 			if (strlen($categoryPath) > 0 ) {
                 Mage::getSingleton('core/session')->setCurrentCategoryPath(array('current_category_path'=>$categoryPath));
@@ -60,12 +64,16 @@ class Ekkitab_Catalog_SearchController extends Mage_Core_Controller_Front_Action
 			}else{
                 Mage::getSingleton('core/session')->setCurrentQueryText(array('current_query_text'=>''));
 			}
-			$this->loadLayout();
-			$this->_initLayoutMessages('catalog/session');
-			$this->_initLayoutMessages('checkout/session');
-			$this->renderLayout();
-			if (!Mage::helper('ekkitab_catalog')->isMinQueryLength()) {
-				$query->save();
+			if( isset($categoryPath) && strlen($categoryPath) > 0  && $categoryPath=='allcategories' ){
+				$this->_redirect('ekkitab_catalog/category/viewAll');
+			}else{
+				$this->loadLayout();
+				$this->_initLayoutMessages('catalog/session');
+				$this->_initLayoutMessages('checkout/session');
+				$this->renderLayout();
+				if (!Mage::helper('ekkitab_catalog')->isMinQueryLength()) {
+					$query->save();
+				}
 			}
 			//$end=(float)microtime(true);
 			//$blockTimerArr= Mage::getSingleton('core/session')->getBlockDebugTimer();
@@ -73,22 +81,10 @@ class Ekkitab_Catalog_SearchController extends Mage_Core_Controller_Front_Action
 			//Mage::log("Debug Times From controller to start of block: ".sprintf("%.5f", (float)($blockTimerArr['block1']-$start))." : to initialization of java class : ".sprintf("%.5f", (float)($blockTimerArr['block2']-$start))." : to searching of book :  ".sprintf("%.5f", (float)($blockTimerArr['block3']-$start))." : to fetch books :".sprintf("%.5f", (float)($blockTimerArr['block4']-$start))." : to start phtml rendering : ".sprintf("%.5f", (float)($phtmlTimerArr['start']-$start))." : to finish rendering : ".sprintf("%.5f", (float)($phtmlTimerArr['end']-$start))." : total time :".sprintf("%.5f", (float)($end-$start)));
 		}
         else {
-            $this->_redirectReferer();
+            $this->_forward('noRoute');
         }
 
     }
 
-	/*public function resultAction()
-    {
-        $this->loadLayout();
-        try {
-			Mage::getSingleton('ekkitab_catalogsearch/custom')->addAuthorTitleFilters($this->getRequest()->getQuery());
-        } catch (Mage_Core_Exception $e) {
-            Mage::getSingleton('catalogsearch/session')->addError($e->getMessage());
-            $this->_redirectError(Mage::getURL('*'.'/*'.'/'));
-        }
-        $this->_initLayoutMessages('catalog/session');
-        $this->renderLayout();
-    }*/
 
 }

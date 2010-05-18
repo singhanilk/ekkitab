@@ -40,7 +40,7 @@
 						<wishlist_item>
 							<table>wishlist_item</table>
 						</wishlist_item>
-						<leftlinks>
+						<!--leftlinks>
 							<table>ek_left_links</table>
 						</leftlinks>
 						<leftlink_header>
@@ -48,7 +48,7 @@
 						</leftlink_header>
 						<leftlink_query>
 							<table>ek_left_link_query</table>
-						</leftlink_query>
+						</leftlink_query-->
 						<globalsection>
 							<table>ek_catalog_global_sections</table>
 						</globalsection>
