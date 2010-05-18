@@ -1,6 +1,15 @@
 <MENU>
-    <SECTION title="Best Sellers">
-        <LINK name="From the New York Times" type="collection"> 
+    <SECTION title="New York Times BestSellers">
+        <LINK name="Wild Fire by Christine Feehan" type="single"> 
+            <ID>9780515147902</ID>
+        </LINK>
+        <LINK name="Sweet Tea at Sunrise by Sherryl Woods" type="single"> 
+            <ID>9781441850119</ID>
+        </LINK>
+        <LINK name="The Girl with the Dragon Tattoo by Stieg Larsson" type="single"> 
+            <ID>9781847246929</ID>
+        </LINK>
+        <LINK name="See All" style="seeall" type="collection"> 
             <ID>9780515147902</ID>
             <ID>9781441850119</ID>
             <ID>9781847246929</ID>
@@ -22,7 +31,18 @@
             <ID>9780349113463</ID>
             <ID>9780141014593</ID>
         </LINK>
-        <LINK name="From Penguin Books" type="collection"> 
+    </SECTION>
+    <SECTION title="Penguin BestSellers">
+        <LINK name="The Scientific Indian by A P J Abdul Kalam" type="single"> 
+            <ID>9780670083442</ID>
+        </LINK>
+        <LINK name="The Dolphin by Sergio Bambaren and Michele Gold" type="single"> 
+            <ID>9789380480046</ID>
+        </LINK>
+        <LINK name="Dork: The Incredible Adventures by Sidin Vadukut" type="single"> 
+            <ID>9780143067115</ID>
+        </LINK>
+        <LINK name="See All" style="seeall" type="collection"> 
             <ID>9780670083442</ID>
             <ID>9789380480046</ID>
             <ID>9780143067115</ID>
@@ -42,7 +62,9 @@
             <ID>9780670082957</ID>
             <ID>9789380480121</ID>
         </LINK>
-        <LINK name="India's Most Popular" type="collection"> 
+    </SECTION>
+    <SECTION title="Most Popular Indian Books">
+        <LINK name="Contemporary Fiction" type="collection"> 
         </LINK>
     </SECTION>
     <SECTION title="Prize Winning Books">

@@ -78,10 +78,13 @@ foreach ($xml as $section) {
     fprintf($fhtml, "%s\n", '$sections['.$z.'][\'header\'] = ' . "\"" . $section['title'] . "\";");
     fprintf($fhtml, "\n");
     foreach ($section as $link) {
-        fprintf($fhtml, "%s\n", '$sections['.$z.'][\'link\'][] = ' .  "\"" . $link['name'] . "\";");
-
+        $name = $link['name'];
+        if (!strcmp($link['style'], "seeall")) {
+            $name = "[" . $name . "]"; 
+        }
+        fprintf($fhtml, "%s\n", '$sections['.$z.'][\'link\'][] = ' .  "\"" . $name . "\";");
         if (!strcmp($link['type'],"collection")) {
-            $key = strtolower(preg_replace('/\W+/', '_', $link['name']));
+            $key = strtolower(preg_replace('/\W+/', '_', $section['title']."_".$link['name']));
             $ids = "";
             $k = 0;
             $collections .= sprintf("%s\n", '$collections[\'' . $key . '\'] = array();');
@@ -102,11 +105,16 @@ foreach ($xml as $section) {
                 $field = $search['field'];
             }
             if (!strcmp($field, "author")) {
-                fprintf($fhtml, "%s\n", '$sections['.$z.'][\'url\'][] = ' .  "\"" . '/ekkitab_catalog/search/index/author/' . $name . "\";");
+                fprintf($fhtml, "%s\n", '$sections['.$z.'][\'url\'][] = ' .  "\"" . 'ekkitab_catalog/search/index/author/' . $name . "\";");
             }
             elseif (!strcmp($field, "category")) {
-                fprintf($fhtml, "%s\n", '$sections['.$z.'][\'url\'][] = ' .  "\"" . '/ekkitab_catalog/search/index/category/' . $name . "\";");
+                fprintf($fhtml, "%s\n", '$sections['.$z.'][\'url\'][] = ' .  "\"" . 'ekkitab_catalog/search/index/category/' . $name . "\";");
             }
+        }
+        elseif (!strcmp($link['type'], "single")) {
+            $name = strtolower(preg_replace('/\W+/', '_', $link['name']));
+            $id = (string)$link->ID;
+            fprintf($fhtml, "%s\n", '$sections['.$z.'][\'url\'][] = ' .  "\"" . 'ekkitab_catalog/product/view/book/' . $name . "__" . $id . ".html\";");
         }
         fprintf($fhtml, "\n");
     }
