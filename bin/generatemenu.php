@@ -102,10 +102,10 @@ foreach ($xml as $section) {
                 $field = $search['field'];
             }
             if (!strcmp($field, "author")) {
-                fprintf($fhtml, "%s\n", '$sections['.$z.'][\'url\'][] = ' .  "\"" . '/ekkitab_catalog/search/index/author/' . $name . "\";");
+                fprintf($fhtml, "%s\n", '$sections['.$z.'][\'url\'][] = ' .  "\"" . 'ekkitab_catalog/search/index/author/' . $name . "\";");
             }
             elseif (!strcmp($field, "category")) {
-                fprintf($fhtml, "%s\n", '$sections['.$z.'][\'url\'][] = ' .  "\"" . '/ekkitab_catalog/search/index/category/' . $name . "\";");
+                fprintf($fhtml, "%s\n", '$sections['.$z.'][\'url\'][] = ' .  "\"" . 'ekkitab_catalog/search/index/category/' . $name . "\";");
             }
         }
         fprintf($fhtml, "\n");
