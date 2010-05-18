@@ -645,6 +645,7 @@ a:hover {
 .searchArea .bigImage {
 	width: 20%;
 	float: left;
+	overflow:hidden;
 	text-align: center;
 
 }
