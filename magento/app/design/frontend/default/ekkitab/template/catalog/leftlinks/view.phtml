@@ -53,7 +53,12 @@
 				$listPrice = $book->getListPrice() ;
 				$discPrice = $book->getDiscountPrice();
 				$isbn = $book->getIsbn();
-				$shippingTime=$book->getDeliveryPeriod();
+				$sourcedFrom =  $book->getSourcedFrom();
+				if($sourcedFrom && strlen(trim($sourcedFrom)) > 0 && strtolower($sourcedFrom)=='us'){
+					$isbn.= " <em>[ International Edition ]</em>";
+				}
+				$shippingTimeMin =(int)$book->getDeliveryPeriod();
+				$shippingTimeMax = round($shippingTimeMin + (.5 * $shippingTimeMin) );
 				$binding=strlen($book->getBinding()) > 0 ? ucfirst($book->getBinding()) : "Not Available" ;
 				$language=strlen($book->getLanguage()) > 0 ? $book->getLanguage() : "Unknown";
 				$stock=$book->getInStock();
@@ -61,8 +66,9 @@
 			
 				//further alterations.
 				$savings= $listPrice - $discPrice;
-				$savingsPerct= ($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 0;
-				$shippingTime= $shippingTime  > 0 ? "Normally Ships in ".$shippingTime. ($shippingTime  == 1 ? " day":" days"): "";
+				$savingsPerct= round(($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 0);
+				$savingsPerct= $savingsPerct > 5 ? $savingsPerct : 0; 
+				$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Ships in ".$shippingTimeMin." - ".$shippingTimeMax." days":"";
 				$shortDesc= ($shortDesc =="Not Available") ? "" : $shortDesc;
 				
 				$shortDesc = getShortenedString($shortDesc,30);
@@ -70,7 +76,7 @@
 				$url=$this->helper('ekkitab_catalog')->getProductUrl($author,$title,$id);	
 ?>
 				<div class="listRow">
-				<div class="skuImage"><div class="image"><a href="<?php echo $this->getUrl($url)?>" title="<?php echo $title ?>"><img src="<img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $title ?>" title="<?php echo $title ?>" /></a></div></div>
+				<div class="skuImage"><div class="image"><a href="<?php echo $this->getUrl($url)?>" title="<?php echo $title ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $title ?>" /></a></div></div>
 				<!-- skuImage -->
 				<div class="detailsArea">
 					<div class="bkTitle"><a href="<?php echo $this->getUrl($url)?>"  title="<?php echo $title ?>"><?php echo $title ?></a></div><!-- bkTitle -->
@@ -78,13 +84,14 @@
 					<div class="lineHeight14em">ISBN: <?php echo $isbn ?></div>
 					<div class="lineHeight14em">Binding: <?php echo $binding ?></div>
 					<div class="lineHeight14em">Language : <?php echo $language ?> </div>
-					<div class="synop"<?php echo $shortDesc ?>... <a href="<?php echo $this->getUrl($url)?>" title="<?php echo $title ?>">More details</a></div><!-- synop -->
+					<div class="synop"> <?php echo $shortDesc ?>... <a href="<?php echo $this->getUrl($url)?>" title="<?php echo $title ?>">More details</a></div><!-- synop -->
 				</div><!-- detailsArea -->
 
 				<div class="priceArea">
 				<?php if($savings > 0):?><div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($discPrice,true,false) ?></div><?php endif; ?>
 				<?php if($listPrice > 0):?><div class="lineHeight14em">MRP Price : <?php echo Mage::helper('core')->currency($listPrice,true,false) ?></div><?php endif; ?>
-				<?php if($savings > 0):?><div class="youSave">Save <?php echo Mage::helper('core')->currency($savings,true,false) ?> (<?php echo number_format($savingsPerct,2,'.','') ?>%)</div><?php endif; ?>
+				<div class="youSave"><?php if($savings > 0):?>Save <?php echo Mage::helper('core')->currency($savings,true,false) ?><?php endif; ?>
+				<?php if($savingsPerct > 0):?>(<?php echo $savingsPerct?>%)<?php endif; ?></div>
 				<div class="lineHeight14em"><?php echo $shippingTime ?></div>
 				<div class="youSave"><?php if($stock && $listPrice >0) : ?>In Stock</div><?php else:?>Out of Stock </div><?php endif;?>	<a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($id)?>"><?php echo $this->__('Add to Wishlist') ?></a><br/>	
 				</div><!-- priceArea -->

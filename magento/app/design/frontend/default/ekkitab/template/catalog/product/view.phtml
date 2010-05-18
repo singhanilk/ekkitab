@@ -34,6 +34,13 @@
     $_helper = $this->helper('catalog/output');
     $_product = $this->getProduct();
 	if(!is_null($_product)){
+		
+		$isbn = $_product->getIsbn();
+		$sourcedFrom =  $_product->getSourcedFrom();
+		if($sourcedFrom && strlen(trim($sourcedFrom)) > 0 && strtolower($sourcedFrom)=='us'){
+			$isbn.= " <em>[ International Edition ]</em>";
+		}
+
 		$authors = $_product->getAuthor();
 		$productUrl = $_product->getProductUrl();
 		$inStock = $_product->getInStock();
@@ -53,9 +60,13 @@
 		$parsedAuthor.= strlen($illustrators) > 0 ? (strlen($parsedAuthor) > 0 ? "; ":"").$illustrators." (Illustrators)" : "";
 		$parsedAuthor.= strlen($photographers) > 0 ? (strlen($parsedAuthor) > 0 ? "; ":"").$photographers."(Photographers) " : "";
 
-		$savingsPerct= ($_product->getListPrice() >0 )?	(($_product->getListPrice() - $_product->getFinalPrice())/ $_product->getListPrice() ) * 100 : 0; 
-		$shippingTime= $_product->getDeliveryPeriod();
-		$shippingTime= $shippingTime  > 0 ? "Normally Ships in ".$shippingTime. ($shippingTime  == 1 ? " day":" days"): "";
+		$listPrice = $_product->getListPrice() ;
+		$discPrice = $_product->getDiscountPrice();
+		$savings= $listPrice - $discPrice;
+		$savingsPerct= round(($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 0);
+		$shippingTimeMin = (int)$_product->getDeliveryPeriod();
+		$shippingTimeMax = round($shippingTimeMin + (.5 * $shippingTimeMin) );
+		$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Ships in ".$shippingTimeMin." - ".$shippingTimeMax." days":"";
 		$publishers=strlen($publishers)>0 ? ucwords($publishers):"NA";
 		$image = $_product->getImage();
 ?>
@@ -66,7 +77,7 @@
         </div>
 		<div class="midArea">
 			<div class="finDetBkTitle"><?php echo $this->htmlEscape($_product->getTitle()) ?> <?php echo (strlen($author) > 0 )? "<br/><span class=\"lineHeight14em\"> by ".$author ."</span>" :""?></div><!-- authorEtc -->
-			<div class="lineHeight14em"><span class="boldFont">ISBN:  <?php echo $_product->getIsbn() ?></span></div>
+			<div class="lineHeight14em"><span class="boldFont">ISBN:  <?php echo $isbn ?></span></div>
 			<div class="lineHeight14em"><span class="boldFont">Binding: <?php echo ucwords($_product->getBinding()) ?></span></div>
 			<div class="lineHeight14em"><span class="boldFont">Publisher:  <?php echo $publishers ?></span></div>
 			<div class="lineHeight14em"><span class="boldFont">Publishing Date:  <?php echo $publishDate ?></span></div>
@@ -87,7 +98,8 @@
 	<div class="buyArea">
 		<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($_product->getFinalPrice(),true,false) ?></div>
 		<?php if($_product->getListPrice() > 0):?><div class="authorEtc">MRP : <?php echo Mage::helper('core')->currency($_product->getListPrice(),true,false) ?></div><?php endif; ?>
-		<?php if($savingsPerct > 0):?><div class="youSave">Save : <?php echo Mage::helper('core')->currency(($_product->getListPrice()-$_product->getFinalPrice()),true,false) ?> (<?php echo number_format($savingsPerct,2,'.','') ?>%)</div><?php endif; ?>
+		<div class="youSave"><?php if($savings > 0):?>Save <?php echo Mage::helper('core')->currency($savings,true,false) ?><?php endif; ?>
+		<?php if($savingsPerct > 0):?>(<?php echo $savingsPerct?>%)<?php endif; ?></div>
 		<div class="authorEtc"><?php echo $shippingTime ?></div>
 		<?php if($inStock && $_product->getListPrice() > 0):?>
 			<form action="<?php echo $this->helper('ekkitab_catalog')->getCartUrl($_product->getId(),$this->helper('core/url')->getCurrentUrl()) ?>" method="post" id="product_addtocart_form">
@@ -119,4 +131,25 @@
 </div>
 <br /><br />
 <?php echo $this->getChildHtml('info_tabs') ?>
-<?php }  ?>
+<?php } else { ?>
+	<div class="notFoundArea">
+		<div class="pageHeader">Our Apologies...</div>
+		<p> <div class="boldFont"> The content you have requested for is not available.</div>
+		<ul>
+
+		<li>If you typed the URL directly, please make sure that the spelling is correct.</li>
+		<li>If you clicked on a link to get here, the link might be outdated</li></ul>
+		</p>
+		<p><div class="boldFont">What can you do?</div>
+		Please contact Customer Care at  <a href="mailto:support@ekkitab.com">support@ekkitab.com</a> and let us know of this problem. We appreciate your help in ensuring that the service is available and runs error free.
+		<ul>
+		<li>Go <a href="javascript:history.back();">back to the previous page</a></li>
+		<li>Use the Search Facility at the top of the page to search the ekkitab web site</li>
+		<li>Click on any of the links below to get you back on track
+		<ul><li><a href="<?php echo $this->getUrl('home')?>">ekkitab Home Page</a></li>
+		<li><a href="<?php echo $this->getUrl('customer/account')?>">My Account</a> (You will have to Sign in or Register, if it's your first time)</li>
+		</ul>
+		</li></ul>
+		</p>
+	</div><!-- notFoundArea -->
+<?php }?>

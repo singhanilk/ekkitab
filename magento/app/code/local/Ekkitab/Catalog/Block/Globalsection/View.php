@@ -40,7 +40,7 @@ class Ekkitab_Catalog_Block_Globalsection_View extends Mage_Core_Block_Template
     {
 		if(is_null($this->_globalsection)){
 			if (!Mage::registry('sectionId')) {
-				Mage::register('sectionId', Mage::helper('ekkitab_catalog/globalsection')->getSectionId());
+				Mage::register('sectionId', Mage::helper('ekkitab_catalog/globalsection_data')->getSectionId());
 			}
 			$this->_globalsection = Mage::getModel('ekkitab_catalog/globalsection')->load(Mage::registry('sectionId'));
 		}

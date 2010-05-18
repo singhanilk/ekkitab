@@ -23,13 +23,20 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
 
 	protected function _prepareLayout()
     {
-		$title = $this->getProduct()->getName();
-		$authorArr= $this->getProduct()->getAuthor();
-		$author = !is_null($authorArr['a']) ? " by ".$authorArr['a'] :"";
+		if($this->getProduct()){
+			$title = $this->getProduct()->getName();
+			$authorArr= $this->getProduct()->getAuthor();
+			$author = !is_null($authorArr['a']) ? " by ".$authorArr['a'] :"";
+			$desc = $this->getProduct()->getDescription() ;
+		}else{
+			$title = "unKnown";
+			$author = "unknown";
+			$desc ="";
+		}
 		if ($headBlock = $this->getLayout()->getBlock('head')) {
 			$headBlock->setTitle($title.$author." @ Ekkitab Educational Services");
 			$headBlock->setKeywords($title." @ Ekkitab Educational Services");
-			$headBlock->setDescription( $this->getProduct()->getDescription() );
+			$headBlock->setDescription( $desc);
 		}
 		if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')){
 			$breadcrumbs->addCrumb('home', array(
@@ -128,9 +135,18 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
     {
 		if(is_null($this->_product)){
 			if (!Mage::registry('productId')) {
-				Mage::register('productId', Mage::helper('ekkitab_catalog/product')->getProductId());
+				//Mage::unregister('productId');
+				Mage::register('productId', Mage::helper('ekkitab_catalog/product_data')->getProductId());
 			}
-			$this->_product = Mage::getModel('ekkitab_catalog/product')->load(Mage::registry('productId'));
+			if(!is_int(Mage::registry('productId')) && strlen(Mage::registry('productId'))==13 ){
+				$products = Mage::getModel('ekkitab_catalog/product')->getCollection()
+							->addFieldToFilter('main_table.isbn',Mage::registry('productId'));
+				foreach($products as $product){
+					$this->_product = $product;
+				}
+			}else{
+				$this->_product = Mage::getModel('ekkitab_catalog/product')->load(Mage::registry('productId'));
+			}
 		}
 		return $this->_product;
 	}

@@ -63,7 +63,6 @@ button      { vertical-align:middle; }
 
 /* Lists */
 dt          { display:block; font-weight:bold; }
-ul,ol       { list-style:none; }
 
 /* Size */
 small       { font-size:.85em; }

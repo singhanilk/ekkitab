@@ -36,12 +36,29 @@ class Ekkitab_Catalog_Helper_Product_Data extends Mage_Core_Helper_Abstract
     public function getProductId()	
     {
         if (is_null($this->_productId)) {
-			$productUrl  = (String) $this->getRequest()->getParam('book');
+			$productUrl  = (String) $this->_getRequest()->getParam('book');
 
 			$productIdStartIndex = strrpos($productUrl, "__")+2; 	  
 			$productIdEndIndex = strpos($productUrl, ".html"); 	
 			$productIdEndIndex = $productIdEndIndex - $productIdStartIndex;  //.html/	
-			$this->_productId = (int) substr($productUrl,$productIdStartIndex,$productIdEndIndex);
+			$productId = trim(urldecode(substr($productUrl,$productIdStartIndex,$productIdEndIndex)));
+			
+			if( $productId && strlen($productId)==13){
+				//this is isbn.....
+				 $this->_productId = $productId;
+			}else {
+				$productId = (int) $productId;
+				if (!$productId || $productId <= 0) {
+					$productId  = (int) $this->_getRequest()->getParam('id');
+				}
+				$this->_productId = $productId;
+			}
+
+			if ($this->_productId <= 0 ) {
+				//check if it is an isbn ...
+				$this->_productId = trim(urldecode(substr($productUrl,$productIdStartIndex,$productIdEndIndex)));
+			}
+
         }
         return $this->_productId;
     }

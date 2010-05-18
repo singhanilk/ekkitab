@@ -1444,14 +1444,6 @@ a:hover {
 	padding-left: 10px;
 	border-left: 1px solid #c60;
 }
-.notFoundArea {
-	border-bottom:1px dotted #333333;
-	margin:16px auto 10px;
-	padding-bottom:10px;
-	width:880px;
-	font-size: 11px;
-	line-height: 22px;
-}
 .notFoundArea .pageHeader {
 	color:#CC6600;
 	float:none;
@@ -1511,7 +1503,7 @@ a:hover {
 	font-size: 11px;
 	line-height: 22px;
 }
-.notFoundArea .pageHeader, .regArea .pageHeader {
+.regArea .pageHeader {
 	color:#CC6600;
 	float:none;
 	font-size:20px;
@@ -2150,6 +2142,11 @@ a:hover {
 }
 .listRow .weekNoLast {
 	margin-top: 15px;
+}
+.listRow .skuImage .image {
+	width: 72px;
+	overflow:hidden;
+	border:1px solid #cacaca;
 }
 .listPageHeader {
 	font-size: 16px;

@@ -30,18 +30,32 @@ class Ekkitab_Catalog_ProductController extends Mage_Core_Controller_Front_Actio
 		$productIdStartIndex = strrpos($productUrl, "__")+2; 	  
 		$productIdEndIndex = strpos($productUrl, ".html"); 	
 		$productIdEndIndex = $productIdEndIndex - $productIdStartIndex;  //.html/	
-		$productId = (int) substr($productUrl,$productIdStartIndex,$productIdEndIndex);
+		$productId = trim(urldecode(substr($productUrl,$productIdStartIndex,$productIdEndIndex)));
 
-		if (!(is_int($productId) && $productId > 0) ) {
-			$productId  = (int) $this->getRequest()->getParam('id');
-		}
-		if (!(is_int($productId) && $productId > 0 )) {
-			$this->_forward('noRoute');
-		}
-		else{
+		
+		if( $productId && strlen($productId)==13){
+			//this is isbn.....
+			//Mage::log("1 Product controller....product id is : ".$productId);
 			Mage::register('productId', $productId);
 			$this->loadLayout();
 			$this->renderLayout();
+		}else {
+			$productId = (int) $productId;
+			//Mage::log("2 Product controller....product id is : ".$productId);
+			if (!$productId || $productId <= 0) {
+				//Mage::log("3 Product controller....product id is : ".$productId);
+				$productId  = (int) $this->getRequest()->getParam('id');
+			}
+			if (!$productId || $productId <= 0) {
+				//Mage::log("4 Product controller....product id is : ".$productId);
+				$this->_forward('noRoute');
+			}
+			else{
+				//Mage::log("5 Product controller....product id is : ".$productId);
+				Mage::register('productId', (int)$productId);
+				$this->loadLayout();
+				$this->renderLayout();
+			}
 		}
     }
 
