@@ -321,7 +321,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     $billing_cust_tel=  preg_replace('/[^0-9]/','',$billing_cust_tel);
 	$billing_cust_email=$a->getEmail();
 	 
-	 $smshelp = Ekkitab::helper('ccav/data') ;
+	 $smshelp = Mage::helper('ccav/data') ;
                    $smshelp->sendsms($billing_cust_tel,$Order_Id);
 	
 	$delivery_cust_name=$b_first_name." ".$b_last_name;
