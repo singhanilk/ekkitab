@@ -367,8 +367,8 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
             replacing & char with and. otherwise it will break the post
             */
         
-            $value = str_replace("&","and",$v);  // this was there from paypal do, we need it ?
-            $value = preg_replace("/\<|\>|\%|\;|\,|\"|\^|\`|\#\:\(\)\!\@\$\&\*\{\}\[\]\+\=/"," ", $value); // as per Bill pay
+//            $value = str_replace("&","and",$v);  // this was there from paypal do, we need it ?
+            $value = preg_replace("/\<|\>|\%|\;|\,|\"|\^|\`|\#|\:|\(|\)|\!|\@|\$|\&|\*|\{|\}|\[|\]|\+|\=|\\/"," ", $v); // as per Bill pay
        
             $rArr[$k] =  $value;
             $sReq .= '&'.$k.'='.$value;
