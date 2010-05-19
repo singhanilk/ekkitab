@@ -15,54 +15,45 @@
  */
 ?>
 <?php 
-include("menuitems.php");
-$sec_count = is_array($sections)?count($sections):$sections->count(); 
+global $sections,$books;
+require("menuitems.php");
+$sec_count = getNumberOfSections();
 if($sec_count): 
-	foreach ($sections as $section):
-		$header = $section['header'];
+	$sectionKeys = array_keys($sections);
+	foreach ($sectionKeys as $key) :
+		$header = getHeader($key);
 		$tagEnded = false;
-		if(array_key_exists('author',$section)){
-			$startTag="<ol>";
-			$endTag="</ol>";
-		}
-		else {
-			$startTag="<ul>";
-			$endTag="</ul>";
-		}
+		$startTag="<ul>";
+		$endTag="</ul>";
 ?>	
 		<div class="linkHdr"><?php echo $header?> </div><!-- linkHdr -->
 		<?php echo $startTag ?>
-
-<?php	$link_count = is_array($section['link'])?count($section['link']): 0 ;
-		if($link_count > 0 ){
-			for ($i=0; $i < $link_count ; $i++) {
-				$linkAuthor = null;
-				$linkCaption = trim($section['link'][$i]) ;
-				if(array_key_exists('author',$section) && array_key_exists($i,$section['author'])){
-					
-					if($section['author'][$i] && strlen(trim($section['author'][$i])) > 0 ){
-						$linkAuthor = "by <span class='author'>".trim($section['author'][$i])."</span>" ;
-					}else{
-						$linkAuthor = null;
-					}
-				}
-				$linkUrl = $section['url'][$i];
-				$linkUrl = $this->getUrl($linkUrl);
-				if( substr($linkCaption, 0,1 )=='[' && substr($linkCaption, -1)==']') {
-					$linkCaption = substr(trim($section['link'][$i]),1,-1) ;
-
+<?php			
+		$links = getLinks($key);
+		foreach($links as $link){
+			$linkCaption = ucwords(trim($link['name'])) ;
+			if (preg_match("/__by__/", $linkCaption)) {
+				$info = explode("__by__", $linkCaption);
+				$linkCaption= trim($info[0]);
+				$linkAuthor = 'by <span class="author">'.trim($info[1]).'</span>' ;
+			}else{
+				$linkAuthor="";
+			}
+			$linkUrl = $link['url'];
+			$linkUrl = $this->getUrl($linkUrl);
+			if( substr($linkCaption, 0,1 )=='[' && substr($linkCaption, -1)==']') {
+				$linkCaption = ucwords(substr($linkCaption,1,-1)) ;
 ?>				<?php echo $endTag ?>
 				<div class="seeAll"><a href="<?php echo $linkUrl ?>"><?php echo $linkCaption ?> &raquo;</a></div><!-- seeAll -->
 <?php			$tagEnded =true;
-				} else { ?>
-					<li><a href="<?php echo $linkUrl ?>"><?php echo $this->htmlEscape($linkCaption) ?></a><?php echo $linkAuthor ?></li>
-<?php			}
-			}
+			} else { ?>
+				<li><a href="<?php echo $linkUrl ?>"><?php echo $this->htmlEscape($linkCaption) ?></a><?php  echo $linkAuthor ?></li>
+<?php		}
 		}
 		if(!$tagEnded){
-?>		<?php echo $endTag ?>
-<?php	} ?>
-		<div class="menuSep"></div>
+?>			<?php echo $endTag ?>
+<?php	} 
+?>		<div class="menuSep"></div>
 <?php 
 	endforeach;
 endif; ?>

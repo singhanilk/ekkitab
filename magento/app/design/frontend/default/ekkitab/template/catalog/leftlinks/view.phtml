@@ -15,8 +15,6 @@
  */
 ?>
 <?php	
-	include("menuitems.php");
-
 	function getShortenedString($str,$count){
 		$resStr = '';
 		//$str = eregi_replace(" +", " ", $str);
@@ -38,11 +36,10 @@
 ?>
 		<div class="listPageHeader"><?php echo $header ?></div><!-- listPageHeader -->
 <?php	
-		if($collections && $collections[$linkKey]){
-		  $productsArr=$collections[$linkKey];
-		  $products= $this->getLinkBooks($productsArr);
-		  $_count = (!is_null($products) && is_array($products))?count($products):(!is_null($products))? $products->count() :0;  
-		  if(!is_null($products) && $_count > 0){ 
+		$productsArr = getBooksForKey($linkKey);
+		$products= $this->getLinkBooks($productsArr);
+		$_count = (!is_null($products) && is_array($products))?count($products):(!is_null($products))? $products->count() :0;  
+		if(!is_null($products) && $_count > 0){ 
 			foreach($products as $book){ 
 				$authorArr = $book->getAuthor();
 				$author = $authorArr['a'] ;
@@ -112,14 +109,6 @@
 		<ul><li>This section will be updated soon...</li></ul></div>
 <?php
 		}
-	  }
-	  else{ 
-		//end of if(collections not null )...
-?>
-		<div class="notFoundArea">
-		<ul><li>			This section will be updated soon...</li></ul></div>
-<?php
-	  }
 	} else { //end of if(linkKey not null )... 
 ?>
 			<div class="hmMainRows">

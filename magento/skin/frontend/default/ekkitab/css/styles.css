@@ -85,7 +85,16 @@ a:hover {
 	font-size: 1.1em;
 	color: #666;
 }
-.leftNavArea ol li .author{
+.leftNavArea ul {
+	list-style:disc;
+	padding: 0;
+	margin: 0;
+	margin-left: 2px;
+	padding-left: 10px;
+	font-size: 1.1em;
+	color: #666;
+}
+.leftNavArea ul li .author{
 	color: #c60;
 }
 .leftNavArea ol li a {
@@ -2058,16 +2067,17 @@ a:hover {
 	font-size:1.2em;
 	font-weight:bold;
 }
-.leftNavArea ol li a  {
+.leftNavArea ul li a  {
 	display:block;
 	line-height:normal;
 	margin:4px 0 0px;
 	font-size: 11px;
 }
-.leftNavArea ol li span {
+.leftNavArea ul li span {
+	font-size: 11px;
 	line-height: 12px;
 }
-.leftNavArea ol li .author {
+.leftNavArea ul li .author {
 	color:#CC6600;
 	line-height: 12px;
 }
