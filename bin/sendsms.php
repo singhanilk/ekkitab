@@ -199,11 +199,11 @@ while (!System_Daemon::isDying() && $runningOkay && $cnt > 0) {
     // Depending on runmode it will either end up:
     //  - In the /var/log/logparser.log
     //  - On screen (in case we're not a daemon yet)  
-    System_Daemon::info('{appName} running in %s %s/3',
+/*    System_Daemon::info('{appName} running in %s %s/3',
         $mode,
         $cnt
     );
-    
+  */  
     // In the actuall logparser program, You could replace 'true'
     // With e.g. a  parseLog('vsftpd') function, and have it return
     // either true on success, or false on failure.
