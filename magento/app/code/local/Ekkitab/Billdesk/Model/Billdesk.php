@@ -368,7 +368,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
             */
         
 //            $value = str_replace("&","and",$v);  // this was there from paypal do, we need it ?
-            $value = preg_replace('/\<|\>|\%|\;|\,|\"|\^|\`|\#|\:|\(|\)|\!|\$|\&|\*|\{|\}|\[|\]|\+|\\\|\=/'," ", $v); // as per Bill pay
+            $value = preg_replace('/\<|\>|\%|\;|\,|\"|\^|\`|\#|\(|\)|\!|\$|\&|\*|\{|\}|\[|\]|\+|\\\|\=/'," ", $v); // as per Bill pay
        
             $rArr[$k] =  $value;
             $sReq .= '&'.$k.'='.$value;
