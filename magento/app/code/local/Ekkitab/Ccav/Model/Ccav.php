@@ -321,8 +321,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     $billing_cust_tel=  preg_replace('/[^0-9]/','',$billing_cust_tel);
 	$billing_cust_email=$a->getEmail();
 	 
-	 $smshelp = Mage::helper('ccav/data') ;
-                   $smshelp->sendsms($billing_cust_tel,$Order_Id);
+	
 	
 	$delivery_cust_name=$b_first_name." ".$b_last_name;
 	$delivery_cust_address=$b_address1." ".$b_address2;
@@ -654,8 +653,10 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
      // It is taking upto 15 seconds to send a SMS, so I have commented it               
                     
  //                  $this->sendsms($billing_cust_tel,$Order_Id);
-                   $smshelp = Ekkitab::helper('ccav/data') ;
+ 
+                   $smshelp = Mage::helper('ccav/data') ;
                    $smshelp->sendsms($billing_cust_tel,$Order_Id);
+                  
                    
                     $flag = true ;
                }//
@@ -798,6 +799,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 	curl_close($ch);
     }
  */
+ /*
  public function sendsms($recepientno,$Order_Id)
     {
 
@@ -818,6 +820,7 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 	
 
     }
+*/
  
 }
  
