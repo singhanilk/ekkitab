@@ -367,8 +367,8 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
             replacing & char with and. otherwise it will break the post
             */
         
-            $value = str_replace("&","and",$v);  // this was there from paypal do, we need it ?
-            $value = preg_replace("/\<|\>|\%|\;|\,|\"|\^|\`|\#/"," ", $value); // as per Bill pay
+//            $value = str_replace("&","and",$v);  // this was there from paypal do, we need it ?
+            $value = preg_replace('/\<|\>|\%|\;|\,|\"|\^|\`|\#|\(|\)|\!|\$|\&|\*|\{|\}|\[|\]|\+|\\\|\=/'," ", $v); // as per Bill pay
        
             $rArr[$k] =  $value;
             $sReq .= '&'.$k.'='.$value;
@@ -728,7 +728,10 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
                        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."After Send Mail\n") ;
                       
                       
-                      $this->sendsms($r_telno,$orid);
+ //                     $this->sendsms($r_telno,$orid);
+ 
+                        $smshelp = Mage::helper('ccav/data') ;
+                        $smshelp->sendsms($r_telno,$orid);
                       
                        Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."After sending SMS\n") ;
                       
@@ -861,7 +864,7 @@ class Ekkitab_Billdesk_Model_Billdesk extends Mage_Payment_Model_Method_Abstract
 	curl_close($ch);
     }
     */
-    
+ /*   
 public function sendsms($recepientno,$Order_Id)
     {
 
@@ -882,6 +885,7 @@ public function sendsms($recepientno,$Order_Id)
 	
 
     }
+ */
  
 
  
