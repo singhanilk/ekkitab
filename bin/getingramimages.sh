@@ -3,14 +3,20 @@ if [ -z $EKKITAB_HOME ] ; then
     echo "EKKITAB_HOME is not set..."
     exit 1;
 fi;
-if [ $# -ne 1 ] ; then
-    echo "Not enough arguments...."; echo "Usage: $0 <date in MMDDYY format>" 
-    exit 1;
-fi;
-d1=10#$1
 tmpfile="./.newingramsimages"
 archivedir='/mnt4/publisherdata/archives'
 imagedir='/mnt4/publisherdata/images'
+logfile='/mnt2/scm/logs/ingramimages.log'
+if [ $# -ne 1 ] ; then
+    a=10#`ls -lrt $archivedir/*.zip | tail -1 | cut -d' ' -f9 | sed 's/.*\/\([0-9]*\)j400.*.zip/\1/g'`
+    let a=a+100; if (( $a < 100000 )) ; then a=0$a; fi; 
+    d1=10#$a
+    echo "No date provided. Usage: $0 [ <date in MMDDYY format> ]" 
+    echo "Using $a as start date instead. " 
+else 
+    d1=10#$1
+fi;
+echo "Please input password 'ees695' when prompted."
 ftp ftp1.ingrambook.com > $tmpfile <<!
 w20M0695
 passive
@@ -26,13 +32,13 @@ do
         then 
             dir=`echo $i | sed 's/^\([0-9]*\).*\([0-9]of[0-9]\).*/\1-\2/'`
             echo "starting ftp for file $i"
-            (cd $imagedir; wget -O $i ftp://w20M0695:ees695@ftp1.ingrambook.com/Imageswk/j400w/$i)
+            (cd $imagedir; wget -O $i ftp://w20M0695:ees695@ftp1.ingrambook.com/Imageswk/j400w/$i >> $logfile)
             echo "unzipping file $i"
-            (cd $imagedir; mkdir $dir; cd $dir; unzip ../$i)
+            (cd $imagedir; mkdir $dir; cd $dir; unzip ../$i >> $logfile)
             echo "archiving file $i"
             (cd $imagedir; mv $i $archivedir)
             echo "distributing image files to production directories."
-            (cd $imagedir; php $EKKITAB_HOME/bin/copyimages.php $dir)
+            (cd $imagedir; php $EKKITAB_HOME/bin/copyimages.php $dir >> $logfile)
     fi
 done
 rm $tmpfile 
