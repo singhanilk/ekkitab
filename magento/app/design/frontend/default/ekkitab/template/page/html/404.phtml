@@ -1,0 +1,44 @@
+<?php
+/**
+ * 
+ * Frontend About Us page.
+ * @category   design/ekkitab
+ * @author Anisha (anisha@ekkitab.com)
+ * @version 1.0 Jan 5, 2010
+ * 
+ * @copyright  COPYRIGHT (C) 2009 Ekkitab Educational Services India Pvt. Ltd.
+ * @license    All Rights Reserved. All material contained in this file (including, but not limited to, text, images, graphics, HTML, programming code and scripts) 
+ * constitute proprietary and  * confidential information protected by copyright laws, trade secret and other laws. No part of this software may be copied, reproduced, modified or 
+ * distributed in any form or by any means, or stored in a database or retrieval system without the prior written permission of Ekkitab Educational Services.
+ * 
+ * 
+ */
+?>
+
+<div class="notFoundArea">
+	<div class="pageHeader">Our apologies...</div>
+	<p> 
+		<div class="boldFont">The page you requested was not found.</div>
+		<ul>
+			<li>If you typed the URL directly, please make sure that the spelling is correct.</li>
+			<li>If you clicked on a link to get here, the link might be outdated</li>
+		</ul>
+	</p>
+	
+	<p>
+		<div class="boldFont">What can you do?</div>	
+		Please contact our support team at <a href="mailto:support@ekkitab.com">support@ekkitab.com</a> and let us know of this problem. We appreciate your help in ensuring that the service is available and runs error free.
+		
+		<ul>
+			<li>Go <a href="javascript:history.back();">back to the previous page</a></li>
+			<li>Use the Search Facility at the top of the page to search the ekkitab web site</li>
+			<li>Click on any of the links below to get you back on track.
+				<ul>
+					<li><a href="<?php echo $this->getUrl("home") ?>">ekkitab Home Page</a></li>
+					<li><a href="<?php echo $this->getUrl("customer/account") ?>">My Account</a> (You will have to Sign in or Register, if it''s your first time)</li>
+				</ul>
+			</li>
+		</ul>
+	</p>
+	<div class="clear"></div>
+</div><!-- notFoundArea -->

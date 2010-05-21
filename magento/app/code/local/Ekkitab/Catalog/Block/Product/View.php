@@ -65,7 +65,7 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
 
 		   if(isset($queryText) && strlen($queryText)>0){
 				$link=$this->getPagerUrl(array($this->helper('ekkitab_catalog')->getCategoryVarName()=>'',$this->helper('ekkitab_catalog')->getPageNoVarName()=>1),array($this->helper('ekkitab_catalog')->getQueryParamName()=>$queryText));
-				$searchText = $this->__("Search for '%s'", $queryText);
+				$searchText = $this->__("Search for '%s'", urldecode($queryText));
 				
 				$breadcrumbs->addCrumb('search', array(
 					'label'=>$searchText,

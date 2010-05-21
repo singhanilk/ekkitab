@@ -25,6 +25,12 @@ if($sec_count):
 		$tagEnded = false;
 		$startTag="<ul>";
 		$endTag="</ul>";
+		$showAllLink=getShowAllLink($key);
+		$header = getHeader($key);
+	    if ($showAllLink !="" ) {
+			$header=$header." <span class='seeAllLink'> [<a href='".$this->getUrl($showAllLink)."' title='See All'  >See All</a>] </span>";
+		}
+
 ?>	
 		<div class="linkHdr"><?php echo $header?> </div><!-- linkHdr -->
 		<?php echo $startTag ?>
@@ -41,19 +47,19 @@ if($sec_count):
 			}
 			$linkUrl = $link['url'];
 			$linkUrl = $this->getUrl($linkUrl);
-			if( substr($linkCaption, 0,1 )=='[' && substr($linkCaption, -1)==']') {
-				$linkCaption = ucwords(substr($linkCaption,1,-1)) ;
-?>				<?php echo $endTag ?>
-				<div class="seeAll"><a href="<?php echo $linkUrl ?>"><?php echo $linkCaption ?> &raquo;</a></div><!-- seeAll -->
-<?php			$tagEnded =true;
-			} else { ?>
+			//if( substr($linkCaption, 0,1 )=='[' && substr($linkCaption, -1)==']') {
+				//$linkCaption = ucwords(substr($linkCaption,1,-1)) ;
+?>				<?php /*echo $endTag */ ?>
+<?php			//$tagEnded =true;
+			//} else { ?>
 				<li><a href="<?php echo $linkUrl ?>"><?php echo $this->htmlEscape($linkCaption) ?></a><?php  echo $linkAuthor ?></li>
-<?php		}
+<?php		//}
 		}
 		if(!$tagEnded){
 ?>			<?php echo $endTag ?>
 <?php	} 
-?>		<div class="menuSep"></div>
+?>	
+	<div class="menuSep">&nbsp;</div>
 <?php 
 	endforeach;
 endif; ?>

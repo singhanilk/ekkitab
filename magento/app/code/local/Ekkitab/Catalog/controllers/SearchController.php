@@ -64,16 +64,12 @@ class Ekkitab_Catalog_SearchController extends Mage_Core_Controller_Front_Action
 			}else{
                 Mage::getSingleton('core/session')->setCurrentQueryText(array('current_query_text'=>''));
 			}
-			if( isset($categoryPath) && strlen($categoryPath) > 0  && $categoryPath=='allcategories' ){
-				$this->_redirect('ekkitab_catalog/category/viewAll');
-			}else{
-				$this->loadLayout();
-				$this->_initLayoutMessages('catalog/session');
-				$this->_initLayoutMessages('checkout/session');
-				$this->renderLayout();
-				if (!Mage::helper('ekkitab_catalog')->isMinQueryLength()) {
-					$query->save();
-				}
+			$this->loadLayout();
+			$this->_initLayoutMessages('catalog/session');
+			$this->_initLayoutMessages('checkout/session');
+			$this->renderLayout();
+			if (!Mage::helper('ekkitab_catalog')->isMinQueryLength()) {
+				$query->save();
 			}
 			//$end=(float)microtime(true);
 			//$blockTimerArr= Mage::getSingleton('core/session')->getBlockDebugTimer();
