@@ -18,10 +18,12 @@ function addHeader($fh) {
 
 function printCollectionSection($fh, $z, $section, $books) {
    
-    printSectionHeader($fh, $z, "collection", $section['header']); 
+    printSectionHeader($fh, $z, "collection", $section['header'], $section['showall']); 
     fprintf($fh, "%s\n", '$sections[\''.$z.'\'][\'shuffle\'] = "'.$section['shuffle'] . '";');
-    fprintf($fh, "%s\n", '$sections[\''.$z.'\'][\'showall\'] = "'.$section['showall'] . '";');
     fprintf($fh, "%s\n", '$sections[\''.$z.'\'][\'highlight\'] = '.$section['highlight'] . ";");
+    if (isset($section['showall_url'])) {
+        fprintf($fh, "%s\n", '$sections[\''.$z.'\'][\'showall_url\'] = '. "\"" . $section['showall_url'] . "\";");
+    }
     fprintf($fh, "%s\n", '$books[\''.$z.'\'] = array();');
     for ($i=0; $i< count($books); $i++) {
         fprintf($fh, "%s\n", '$books[\''.$z.'\']['.$i.'] = array();');
@@ -31,9 +33,10 @@ function printCollectionSection($fh, $z, $section, $books) {
     }
 }
 
-function printSectionHeader($fh, $z, $type, $title) {
+function printSectionHeader($fh, $z, $type, $title, $showall) {
     fprintf($fh, "%s\n", '$sections[\''.$z.'\'] = array();');
     fprintf($fh, "%s\n", '$sections[\''.$z.'\'][\'header\'] = "'. $title . '";');
+    fprintf($fh, "%s\n", '$sections[\''.$z.'\'][\'showall\'] = "'. $showall . '";');
     fprintf($fh, "%s\n", '$sections[\''.$z.'\'][\'type\'] = "'. $type . '";');
 }
 
@@ -96,12 +99,6 @@ function printUtilityFunctions($fh) {
    fprintf($fh, "%s\n", '           $link[\'url\'] = "ekkitab_catalog/product/view/book/" . $url . ".html";');
    fprintf($fh, "%s\n", '           $result[] = $link;');
    fprintf($fh, "%s\n", '       }');
-   fprintf($fh, "%s\n", '       if ($sections[$id][\'showall\'] != "") {');
-   fprintf($fh, "%s\n", '           $link = array();');
-   fprintf($fh, "%s\n", '           $link[\'name\'] = "[". $sections[$id][\'showall\'] . "]";');
-   fprintf($fh, "%s\n", '           $link[\'url\'] = "ekkitab_catalog/leftlinks/view/details/" . $id . ".html";');
-   fprintf($fh, "%s\n", '           $result[] = $link;');
-   fprintf($fh, "%s\n", '       }');
    fprintf($fh, "%s\n", '   }');
    fprintf($fh, "%s\n", '   elseif ($sections[$id][\'type\'] == "links") {');
    fprintf($fh, "%s\n", '       foreach($sections[$id] as $link) {');
@@ -129,6 +126,19 @@ function printUtilityFunctions($fh) {
    fprintf($fh, "%s\n", '   }');
    fprintf($fh, "%s\n", '   return $ids;');
    fprintf($fh, "%s\n", ' }');
+   fprintf($fh, "%s\n", '');
+   fprintf($fh, "%s\n", ' function getShowAllLink($key) {');
+   fprintf($fh, "%s\n", '   global $sections;');
+   fprintf($fh, "%s\n", '   if (!isset($sections[$key])) {');
+   fprintf($fh, "%s\n", '       return "";');
+   fprintf($fh, "%s\n", '   }');
+   fprintf($fh, "%s\n", '   if ($sections[$key][\'showall\'] == "yes") {');
+   fprintf($fh, "%s\n", '       if (isset($sections[$key][\'showall_url\'])) {');
+   fprintf($fh, "%s\n", '           return $sections[$key][\'showall_url\']; ');
+   fprintf($fh, "%s\n", '       }');
+   fprintf($fh, "%s\n", '       return "ekkitab_catalog/leftlinks/view/details/" . $key . ".html"; ');
+   fprintf($fh, "%s\n", '   }');
+   fprintf($fh, "%s\n", ' }');
 }
 
 function printDebugCode($fh, $commented) {
@@ -151,6 +161,11 @@ function printDebugCode($fh, $commented) {
    fprintf($fh, "%s\n", '       echo "Link name: " . $link[\'name\'] . "\n";');
    fprintf($fh, "%s\n", '       echo "Link url: " . $link[\'url\'] . "\n";');
    fprintf($fh, "%s\n", '   }');
+   fprintf($fh, "%s\n", '}');
+   fprintf($fh, "%s\n", '');
+   fprintf($fh, "%s\n", 'foreach ($keys as $key) {');
+   fprintf($fh, "%s\n", '   $link = getShowAllLink($key);');
+   fprintf($fh, "%s\n", '   echo "Show All Link url: " . $link . "\n";');
    fprintf($fh, "%s\n", '}');
    fprintf($fh, "%s\n", '');
    fprintf($fh, "%s\n", ' $ids = getBooksForKey("the_man_booker_prize");');
@@ -265,7 +280,10 @@ foreach ($xml as $section) {
     elseif ($section['type'] == "links") {
         $key = strtolower(preg_replace('/\W+/', '_', $section['title']));; 
         $ids = array();
-        printSectionHeader($fhtml, $key, "links", $section['title']);
+        printSectionHeader($fhtml, $key, "links", $section['title'], $section['showall']);
+        if (isset($section['showall_url'])) {
+            fprintf($fhtml, "%s\n", '$sections[\''.$key.'\'][\'showall_url\'] = '. "\"" .$section['showall_url'] . "\";");
+        }
         foreach($section as $link) {
             if ($link['type'] == "collection") {
                 $name = $link['name'];
