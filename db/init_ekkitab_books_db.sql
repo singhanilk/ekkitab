@@ -18,18 +18,52 @@
 use `ekkitab_books`;
 
 --
--- Update the `cms_page` table with about-ekkitab & coustomer service
+-- Dumping data for table `cms_page`
 --
 
+Delete from `cms_page`;
 
-UPDATE `cms_page` set `identifier` = 'about-ekkitab',`content` = '<div class="aboutUsArea"><div class="pageHeader">About ekkitab</div><div class="abtTextArea"><p>Ekkitab Educational Services Pvt. Ltd. was founded in 2009 and is headquartered in Bangalore, India.</p><p><em>Ekkitab is founded on the desire to promote reading. It is based on the belief that every child and adult in India should have access to good books irrespective of where they live and their level in society.</em></p><p>To achieve this objective, Ekkitab is putting up a globally accessible book store that carries English and all Indian language books. The immediate goal is to make this on-line bookstore very successful by virtue of good design, easy access and comprehensive stocking.</p><p>Ekkitab will<span class="boldFont"> actively promote organizations</span> that are centers of learning, like schools, colleges, city, town and village libraries, by inviting its visitors to donate to these organizations. The company wishes to encourage readership by making good books available easily and by making community reading centers like city and town libraries active and popular by virtue of having good content.</p><p>Ekkitab wants to<span class="boldFont"> create the largest donor network of books</span> in the country and thereby realize its vision of providing every Indian with access to good books. This donor network will be driven by goodwill, community and a sense of commitment to the cause that Ekkitab is working towards. We hope to solve the difficulties that exist today for people to share good books and promote reading.</p><p>In the process of achieving its vision, Ekkitab hopes to become the best known and best loved brand in bookshops, on-line or otherwise. We hope to be able to take the bookstore and the concept of on-line buying to smaller towns and villages across the country. Eventually, we hope to increase readership and the sheer size of the book business in India. We hope to be able to work with publishers and distributors in the country to help increase access to every book that is in print. This will help the publishing industry by extending their reach across the country and will help readers by decreasing the cost of books.</p><p>We hope to become an important channel for publishers to reach their customers and are willing to work with them to build new digital models of commerce that can provide conveniences that are not possible today. In making the business a success we hope to stimulate the donor network to give liberally to the cause of reading in India and to reduce the digital divide between the rich and the poor.</p><p>We also hope that by doing so, we can remove the bane of piracy from the industry and ensure that the benefits of each sale reaches its rightful owners. In the longer term, Ekkitab wants to promote good writers and provide a platform for publishers to promote new authors and their works. In everything, we want to support and nourish the book eco-system in the country by scaling it manifold across the Indian population.</p><p>Thank you for your interest.</p><div class="boldFont">Team Ekkitab</div></div><div class="excerptArea"><div class="boldFont">We hope that you have a pleasant experience at www.ekkitab.com and we count on your support of the cause.</div><p>You can reach us at: <a href="mailto:support@ekkitab.com">support@ekkitab.com</a></p><p>We are located at:<br />#82/83, Borewell Road,<br />Whitefield Main, <br />Bangalore - 560066.</p></div><div class="clear"></div></div><!-- aboutUsArea -->' where page_id = '3';
+INSERT INTO `cms_page` (`page_id`, `title`, `root_template`, `meta_keywords`, `meta_description`, `identifier`, `content`, `creation_time`, `update_time`, `is_active`, `sort_order`, `layout_update_xml`, `custom_theme`, `custom_theme_from`, `custom_theme_to`) VALUES
+(1, '404 Page Not Found', 'one_column', '', '', 'no-route', '<!-- notFoundArea -->{{block type="page/html" name="page_not_found"  template="page/html/404.phtml" }}', '2007-06-20 18:38:32', '2007-08-26 19:11:13', 1, 0, NULL, NULL, NULL, NULL),
 
-UPDATE `cms_page` set `content` = '<div class="notFoundArea"><div class="pageHeader">Our apologies...</div><p> <div class="boldFont">The page you requested was not found.</div><ul><li>If you typed the URL directly, please make sure that the spelling is correct.</li><li>If you clicked on a link to get here, the link might be outdated</li></ul></p>	<p><div class="boldFont">What can you do?</div>	Please contact our support team at <a href="mailto:support@ekkitab.com">support@ekkitab.com</a> and let us know of this problem. We appreciate your help in ensuring that the service is available and runs error free.<ul><li>Go <a href="javascript:history.back();">back to the previous page</a></li><li>Use the Search Facility at the top of the page to search the ekkitab web site</li><li>Click on any of the links below to get you back on track.<ul><li><a href="{{store url="home"}}">ekkitab Home Page</a></li><li><a href="{{store url="customer/account"}}">My Account</a> (You will have to Sign in or Register, if it''s your first time)</li></ul></li></ul></p><div class="clear"></div></div><!-- notFoundArea -->' where page_id='1';
+(2, 'Home page', 'three_columns', '', '', 'home', '{{block type="page/html" name="donate_book_blurb_home"  template="page/html/donate_blurb_home.phtml" }}
+{{block type="ekkitab_catalog/globalsection" name="homesection"  template="catalog/globalsection/home_page.phtml" }}', '', '', 1, 0, NULL, NULL,NULL,NULL),
+
+(3, 'About  Us', 'one_column', '', '', 'about-ekkitab', '<!-- aboutUsArea -->{{block type="page/html" name="about_us"  template="page/html/about_us.phtml" }}', '2007-08-30 14:01:18', '2007-08-30 14:01:18', 1, 0, NULL, NULL, NULL, NULL),
+
+(4, 'Help', 'one_column', '', '', 'help', '{{block type="page/html" name="help"  template="page/html/help.phtml" }}', '2007-08-30 14:02:20', '2007-08-30 14:03:37', 1, 0, NULL, NULL, NULL, NULL),
+
+(5, 'Enable Cookies', 'one_column', '', '', 'enable-cookies', '<div class="std">\r\n    <ul class="messages">\r\n        <li class="notice-msg">\r\n            <ul>\r\n                <li>Please enable cookies in your web browser to continue.</li>\r\n            </ul>\r\n        </li>\r\n    </ul>\r\n    <div class="page-head">\r\n        <h3><a name="top"></a>What are Cookies?</h3>\r\n    </div>\r\n    <p>Cookies are short pieces of data that are sent to your computer when you visit a website. On later visits, this data is then returned to that website. Cookies allow us to recognize you automatically whenever you visit our site so that we can personalize your experience and provide you with better service. We also use cookies (and similar browser data, such as Flash cookies) for fraud prevention and other purposes. If your web browser is set to refuse cookies from our website, you will not be able to complete a purchase or take advantage of certain features of our website, such as storing items in your Shopping Cart or receiving personalized recommendations. As a result, we strongly encourage you to configure your web browser to accept cookies from our website.</p>\r\n    <h3>Enabling Cookies</h3>\r\n    <ul>\r\n        <li><a href="#ie7">Internet Explorer 7.x</a></li>\r\n        <li><a href="#ie6">Internet Explorer 6.x</a></li>\r\n        <li><a href="#firefox">Mozilla/Firefox</a></li>\r\n        <li><a href="#opera">Opera 7.x</a></li>\r\n    </ul>\r\n    <h4><a name="ie7"></a>Internet Explorer 7.x</h4>\r\n    <ol>\r\n        <li>\r\n            <p>Start Internet Explorer</p>\r\n        </li>\r\n        <li>\r\n            <p>Under the <strong>Tools</strong> menu, click <strong>Internet Options</strong></p>\r\n            <p><img src="{{skin url="images/cookies/ie7-1.gif"}}" alt="" /></p>\r\n        </li>\r\n        <li>\r\n            <p>Click the <strong>Privacy</strong> tab</p>\r\n            <p><img src="{{skin url="images/cookies/ie7-2.gif"}}" alt="" /></p>\r\n        </li>\r\n        <li>\r\n            <p>Click the <strong>Advanced</strong> button</p>\r\n            <p><img src="{{skin url="images/cookies/ie7-3.gif"}}" alt="" /></p>\r\n        </li>\r\n        <li>\r\n            <p>Put a check mark in the box for <strong>Override Automatic Cookie Handling</strong>, put another check mark in the <strong>Always accept session cookies </strong>box</p>\r\n            <p><img src="{{skin url="images/cookies/ie7-4.gif"}}" alt="" /></p>\r\n        </li>\r\n        <li>\r\n            <p>Click <strong>OK</strong></p>\r\n            <p><img src="{{skin url="images/cookies/ie7-5.gif"}}" alt="" /></p>\r\n        </li>\r\n        <li>\r\n            <p>Click <strong>OK</strong></p>\r\n            <p><img src="{{skin url="images/cookies/ie7-6.gif"}}" alt="" /></p>\r\n        </li>\r\n        <li>\r\n            <p>Restart Internet Explore</p>\r\n        </li>\r\n    </ol>\r\n    <p class="a-top"><a href="#top">Back to Top</a></p>\r\n    <h4><a name="ie6"></a>Internet Explorer 6.x</h4>\r\n    <ol>\r\n        <li>\r\n            <p>Select <strong>Internet Options</strong> from the Tools menu</p>\r\n            <p><img src="{{skin url="images/cookies/ie6-1.gif"}}" alt="" /></p>\r\n        </li>\r\n        <li>\r\n            <p>Click on the <strong>Privacy</strong> tab</p>\r\n        </li>\r\n        <li>\r\n            <p>Click the <strong>Default</strong> button (or manually slide the bar down to <strong>Medium</strong>) under <strong>Settings</strong>. Click <strong>OK</strong></p>\r\n            <p><img src="{{skin url="images/cookies/ie6-2.gif"}}" alt="" /></p>\r\n        </li>\r\n    </ol>\r\n    <p class="a-top"><a href="#top">Back to Top</a></p>\r\n    <h4><a name="firefox"></a>Mozilla/Firefox</h4>\r\n    <ol>\r\n        <li>\r\n            <p>Click on the <strong>Tools</strong>-menu in Mozilla</p>\r\n        </li>\r\n        <li>\r\n            <p>Click on the <strong>Options...</strong> item in the menu - a new window open</p>\r\n        </li>\r\n        <li>\r\n            <p>Click on the <strong>Privacy</strong> selection in the left part of the window. (See image below)</p>\r\n            <p><img src="{{skin url="images/cookies/firefox.png"}}" alt="" /></p>\r\n        </li>\r\n        <li>\r\n            <p>Expand the <strong>Cookies</strong> section</p>\r\n        </li>\r\n        <li>\r\n            <p>Check the <strong>Enable cookies</strong> and <strong>Accept cookies normally</strong> checkboxes</p>\r\n        </li>\r\n        <li>\r\n            <p>Save changes by clicking <strong>Ok</strong>.</p>\r\n        </li>\r\n    </ol>\r\n    <p class="a-top"><a href="#top">Back to Top</a></p>\r\n    <h4><a name="opera"></a>Opera 7.x</h4>\r\n    <ol>\r\n        <li>\r\n            <p>Click on the <strong>Tools</strong> menu in Opera</p>\r\n        </li>\r\n        <li>\r\n            <p>Click on the <strong>Preferences...</strong> item in the menu - a new window open</p>\r\n        </li>\r\n        <li>\r\n            <p>Click on the <strong>Privacy</strong> selection near the bottom left of the window. (See image below)</p>\r\n            <p><img src="{{skin url="images/cookies/opera.png"}}" alt="" /></p>\r\n        </li>\r\n        <li>\r\n            <p>The <strong>Enable cookies</strong> checkbox must be checked, and <strong>Accept all cookies</strong> should be selected in the &quot;<strong>Normal cookies</strong>&quot; drop-down</p>\r\n        </li>\r\n        <li>\r\n            <p>Save changes by clicking <strong>Ok</strong></p>\r\n        </li>\r\n    </ol>\r\n    <p class="a-top"><a href="#top">Back to Top</a></p>\r\n</div>\r\n', '2009-10-15 09:35:23', '2009-10-15 09:35:23', 1, 0, NULL, NULL, NULL, NULL),
+
+(6, 'Privacy Policy', 'one_column', '', '', 'privacy-policy', '{{block type="page/html" name="privacy"  template="page/html/help.phtml" }}', '2009-10-15 09:35:23', '2009-10-15 09:35:23', 1, 0, NULL, NULL, NULL, NULL),
+
+(7, 'Terms and Conditions', 'one_column', '', '', 'terms', '{{block type="page/html" name="terms"  template="page/html/help.phtml" }}', '2009-10-15 09:35:23', '2009-10-15 09:35:23', 1, 0, NULL, NULL, NULL, NULL);
+
+--
+-- Update the `cms_page` table with about-ekkitab & coustomer service
+--
+--
+-- Dumping data for table `cms_page_store`
+--
+
+INSERT INTO `cms_page_store` (`page_id`, `store_id`) VALUES
+(1, 0),
+(2, 0),
+(3, 0),
+(4, 0),
+(5, 0),
+(6, 0),
+(7, 0);
+
+
+UPDATE `cms_page` set `identifier` = 'about-ekkitab',`content` = ' {{block type="page/html" name="about_us"  template="page/html/about_us.phtml" }}' where page_id = '3';
+
+UPDATE `cms_page` set `content` = '{{block type="page/html" name="page_not_found"  template="page/html/404.phtml" }}' where page_id='1';
 
 UPDATE `cms_page` set content = ' {{block type="page/html" name="donate_book_blurb_home"  template="page/html/donate_blurb_home.phtml" }}
 {{block type="ekkitab_catalog/globalsection" name="homesection"  template="catalog/globalsection/home_page.phtml" }}', root_template='three_columns' where page_id =2;
 
-UPDATE `cms_page` set `content` = '<div class="page-head">\r\n<h3>Customer Service</h3>\r\n</div>\r\n<ul class="disc" style="margin-bottom:15px;">\r\n<li><a href="#answer1">Shipping & Delivery</a></li>\r\n<li><a href="#answer2">Privacy & Security</a></li>\r\n<li><a href="#answer3">Returns & Replacements</a></li>\r\n<li><a href="#answer4">Ordering</a></li>\r\n<li><a href="#answer5">Payment, Pricing & Promotions</a></li>\r\n<li><a href="#answer6">Viewing Orders</a></li>\r\n<li><a href="#answer7">Updating Account Information</a></li>\r\n</ul>\r\n<dl>\r\n<dt id="answer1">Shipping & Delivery</dt>\r\n<dd style="margin-bottom:10px;">To be updated.</dd>\r\n<dt id="answer2">Privacy & Security</dt>\r\n<dd style="margin-bottom:10px;"></dd>\r\n<dt id="answer3">Returns & Replacements</dt>\r\n<dd style="margin-bottom:10px;">To be updated</dd>\r\n<dt id="answer4">Ordering</dt>\r\n<dd style="margin-bottom:10px;">To be updated</dd>\r\n<dt id="answer5">Payment, Pricing & Promotions</dt>\r\n<dd style="margin-bottom:10px;">To be updated</dd>\r\n<dt id="answer6">Viewing Orders</dt>\r\n<dd style="margin-bottom:10px;">To be updated</dd>\r\n<dt id="answer7">Updating Account Information</dt>\r\n<dd style="margin-bottom:10px;">To be updated</dd>\r\n</dl>' where page_id='4';
+UPDATE `cms_page` set `content` = '{{block type="page/html" name="customer_service"  template="page/html/help.phtml" }}' where page_id='4';
 
 
 -- -------------------------------------------------------------
@@ -312,81 +346,4 @@ INSERT INTO `ek_catalog_global_sections` (  `section_id` ,`display_name`, `descr
 INSERT INTO `customer_entity` VALUES (1,1,0,1,'install@ekkitab.com',1,'000000004',1,'2010-04-10 06:42:03','2010-04-10 06:42:04',1);
 INSERT INTO `customer_entity_varchar` VALUES (1,1,5,1,'Installation'),(2,1,7,1,'Account'),(4,1,3,1,'Ekkitab'),(5,1,12,1,'78e356fc19336772aceb39e57d122dcc:lr');
 
-
---
--- Dumping data for table `ek_left_link_header`
-
-Delete from `ek_left_link_header`;
-
-INSERT INTO `ek_left_link_header` (`id`, `header`) VALUES
-(1, 'New York Times Best Sellers'),
-(2, 'Penguin Best Sellers'),
-(3, 'Indian Best Sellers'),
-(4, 'Prize Winning Books'),
-(5, 'New Releases'),
-(6, 'Top Categories'),
-(7, 'Top Authors'),
-(8, 'Children''s Fiction'),
-(9, 'Ekkitab All Time Favorites');
-
-
-
---
--- Dumping data for table `ek_left_links`
-
-Delete from `ek_left_links`;
-
-INSERT INTO `ek_left_links` (`id`, `header_id`,`caption`) VALUES
-(1, 1,'Fiction'),
-(2, 1,'Non-Fiction'),
-(3, 2,'Fiction'),
-(4, 2,'Non-Fiction'),
-(5, 3,'Fiction'),
-(6, 3,'Non-Fiction'),
-(7, 4,'The Man Booker Prize'),
-(8, 4,'The Hugo Award'),
-(9, 4,'The Pulitzer Prize'),
-(10, 5,'Fiction'),
-(11, 5,'Non-Fiction'),
-(12, 5,'Autobiography'),
-(13, 5,'Political'),
-(14, 6,'Philosophy'),
-(15, 6,'Fiction'),
-(16, 6,'Self-Help'),
-(17, 7,'Robin Sharma'),
-(18, 7,'John Grisham'),
-(19, 7,'Amartya Sen'),
-(20, 8,'Enid Blyton Books'),
-(21, 8,'Harry Potter Series'),
-(22, 9,'Hitchhikers Guide to the Galaxy'),
-(23, 9,'Lord of the Rings');
-
---
--- Dumping data for table `ek_left_link_query`
-
-Delete from `ek_left_link_query`;
-
-INSERT INTO `ek_left_link_query` (`link_id`, `search_keyword` ,`search_category`,`search_filter`,`related_book_ids` ,`url_prefix` , `action_method`, `template_path`) VALUES
-(1, '','','','','','',''),
-(2, '','','','','','',''),
-(3, '','','','','','',''),
-(4, '','','','','','',''),
-(5, '','','','','','',''),
-(6, '','','','','','',''),
-(7, '','','','','','',''),
-(8, '','','','','','',''),
-(9, '','','','','','',''),
-(10,'','','','','','',''),
-(11,'','','','','','',''),
-(12,'','','','','','',''),
-(13,'','','','','','',''),
-(14,'','','','','','',''),
-(15,'','','','','','',''),
-(16,'','','','','','',''),
-(17,'','','','','','',''),
-(18,'','','','','','',''),
-(19,'','','','','','',''),
-(20,'','','','','','',''),
-(21,'','','','','','',''),
-(22,'','','','','','',''),
-(23,'','','','','','','');
+	

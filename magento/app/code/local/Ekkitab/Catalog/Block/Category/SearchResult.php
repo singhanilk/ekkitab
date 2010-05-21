@@ -210,6 +210,7 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 			Mage::log("OR Exception in SearchResult.php : Could not include Java.inc file @ http://localhost:8080/JavaBridge/java/Java.inc");
 		}
 		//Mage::getSingleton('core/session')->setBlockDebugTimer(array('block1'=>$start1,'block2'=>$start2,'block3'=>$start3,'block4'=>$start4));
+		unset($search);
 		return $booksResult;
     }
  

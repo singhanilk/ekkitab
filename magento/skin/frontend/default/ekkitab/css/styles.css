@@ -63,7 +63,7 @@ a:hover {
 	font-size: 1.2em;
 	font-weight: bold;
 	color: #c60;
-	margin-top: 5px;
+	margin-top: 10px;
 }
 .leftNavArea ul {
 	list-style-type: none;
@@ -86,11 +86,10 @@ a:hover {
 	color: #666;
 }
 .leftNavArea ul {
-	list-style:disc;
 	padding: 0;
 	margin: 0;
 	margin-left: 2px;
-	padding-left: 10px;
+	padding-left: 2px;
 	font-size: 1.1em;
 	color: #666;
 }
@@ -478,6 +477,14 @@ a:hover {
 	font-weight: bold;
 	color: #c60;
 }
+
+.leftNavArea .linkHdr a 
+{
+	color: #c60;
+	text-decoration: none;
+
+}
+
 .mainRight .testiText {
 	font-size: 1.0em;
 	font-style: italic;
@@ -2178,4 +2185,28 @@ a:hover {
 
 .menuSep {
 	height:5px;
+	border-bottom: 1px dotted #000;
+	margin: 10px 0px 0px 0px;
+}
+
+.seeAllLink {
+	font-size:10px;
+	font-weight:normal;
+	color:#0033cc;
+	line-height:90%;
+}
+
+.leftNavArea .linkHdr .seeAllLink a {
+	text-decoration:none;
+	color:#0033cc;
+}
+
+.leftNavArea .linkHdr .seeAllLink a:hover {
+	color:#4f8100;
+	text-decoration: underline;
+}
+
+.maintenance{
+	height:300px;
+	padding:25px 25px 25px 25px;
 }
