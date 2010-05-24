@@ -1,5 +1,5 @@
 <MENU>
-    <SECTION title="New York Times BestSellers" type="collection" showall="see all" highlight="3" shuffle="yes">
+    <SECTION title="New York Times BestSellers" type="collection" showall="yes" highlight="3" shuffle="yes">
         <BOOK id="9780515147902" title="Wild Fire" author="Christine Feehan"/>
         <BOOK id="9781441850119" title="Sweet Tea at Sunrise" author="Sherryl Woods"/>
         <BOOK id="9781847246929" title="The Girl with the Dragon Tattoo" author="Stieg Larsson"/>
@@ -21,7 +21,7 @@
         <BOOK id="9780349113463" title="The Tipping Point" author="Malcolm Gladwell"/>
         <BOOK id="9780141014593" title="Blink: The Power Of Thinking Without Thinking" author="Malcolm Gladwell"/>
     </SECTION>
-    <SECTION title="Penguin BestSellers" type="collection" showall="see all" highlight="5" shuffle="yes">
+    <SECTION title="Penguin BestSellers" type="collection" showall="yes" highlight="5" shuffle="yes">
         <BOOK id="9780670083442" title="The Scientific Indian" author="A P J Abdul Kalam"/>
         <BOOK id="9789380480046" title="The Dolphin" author="Sergio Bambaren and Michele Gold"/>
         <BOOK id="9780143067115" title="Dork: The Incredible Adventures" author="Sidin Vadukut"/>
@@ -41,9 +41,9 @@
         <BOOK id="9780670082957" title="The Professional" author="Subroto Bagchi"/>
         <BOOK id="9789380480121" title="Your Personality Your Health" author="Carol Ritberger"/>
     </SECTION>
-    <SECTION title="Most Popular Indian Books" type="collection" showall="see all" highlight="0" shuffle="no">
+    <SECTION title="Most Popular Indian Books" type="collection" showall="no" highlight="0" shuffle="no">
     </SECTION>
-    <SECTION title="Prize Winning Books" type="links">
+    <SECTION title="Prize Winning Books" type="links" showall="no">
         <LINK name="The Man Booker Prize" type="collection">
             <BOOK id="9780007292417" title="" author=""/>
             <BOOK id="9788172238476" title="" author=""/>
@@ -56,7 +56,7 @@
             <BOOK id="9780571207930" title="" author=""/>
             <BOOK id="9781860498800" title="" author=""/>
         </LINK>
-        <LINK name="The Hugo Award" type="collection"> 
+        <LINK name="The Hugo Award" type="collection" showall="no"> 
             <BOOK id="9780061712821" title="" author=""/>
             <BOOK id="9780007150939" title="" author=""/>
             <BOOK id="9780812536362" title="" author=""/>
@@ -68,7 +68,7 @@
             <BOOK id="9780747582380" title="" author=""/>
             <BOOK id="9780812536355" title="" author=""/>
         </LINK>
-        <LINK name="The Pulitzer Prize" type="collection"> 
+        <LINK name="The Pulitzer Prize" type="collection" showall="no"> 
             <BOOK id="9781934137123" title="" author=""/>
             <BOOK id="9780743467728" title="" author=""/>
             <BOOK id="9780571241231" title="" author=""/>
@@ -81,13 +81,13 @@
             <BOOK id="9781841154930" title="" author=""/>
         </LINK>
     </SECTION>
-    <SECTION title="New Releases" type="links">
+    <SECTION title="New Releases" type="links" showall="no">
         <LINK name="Fiction" type="collection"> 
         </LINK>
         <LINK name="Non Fiction" type="collection"> 
         </LINK>
     </SECTION>
-    <SECTION title="Top Categories" type="links">
+    <SECTION title="Top Categories" type="links" showall="yes" showall_url="ekkitab_catalog/category/viewAll">
         <LINK name="Autobiographies" type="search"> 
             <SEARCH field="category">autobiographies</SEARCH>
         </LINK>
@@ -97,11 +97,8 @@
         <LINK name="Self-Help" type="search"> 
             <SEARCH field="category">self-help</SEARCH>
         </LINK>
-        <LINK name="See All Categories" type="search"> 
-            <SEARCH field="category">allcategories</SEARCH>
-        </LINK>
     </SECTION>
-    <SECTION title="Top Authors" type="links">
+    <SECTION title="Top Authors" type="links" showall="no">
         <LINK name="Robin Sharma" type="search"> 
             <SEARCH field="author">robin sharma</SEARCH>
         </LINK>
@@ -118,7 +115,7 @@
             <SEARCH field="author">shiv khera</SEARCH>
         </LINK>
     </SECTION>
-    <SECTION title="Pick Of the Week" type="collection" showall="see all" highlight="1" shuffle="yes">
+    <SECTION title="Pick Of the Week" type="collection" showall="yes" highlight="1" shuffle="yes">
         <BOOK id="9781408808863" title="Alex's Adventures In Numberland" author="Alex Bellos"/>
         <BOOK id="9781423113386" title="The Kane Chronicles: Red Pyramid" author="Rick Riordan"/>
         <BOOK id="9780340920343" title="Arrows Of Fury: Empire II" author="Anthony Riches"/>
@@ -127,7 +124,7 @@
         <BOOK id="9781849162104" title="Gandhi: Naked Ambition" author="Jad Adams"/>
         <BOOK id="9781847670946" title="Dreams From My Father: A Story Of Race And Inheritance" author="Barack Obama"/>
     </SECTION>
-    <SECTION title="Selections" type="links">
+    <SECTION title="Selections" type="links" showall="no">
         <LINK name="Childrens Books" type="collection"> 
         </LINK>
         <LINK name="All Time Favorites" type="collection"> 
