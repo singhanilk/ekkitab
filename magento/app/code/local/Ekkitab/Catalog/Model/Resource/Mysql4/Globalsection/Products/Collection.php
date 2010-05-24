@@ -54,4 +54,26 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Globalsection_Products_Collection
         return $this;
     }
     
+    /**
+     * Add section to filter
+     *
+     * @return Ekkitab_Catalog_Model_Globalsection
+     */
+    public function setLimit($limit)
+    {
+		$this->getSelect()->limit($limit);
+        return $this;
+    }
+    
+    /**
+     * Add section to filter
+     *
+     * @return Ekkitab_Catalog_Model_Globalsection
+     */
+    public function setRandomOrder()
+    {
+		$this->getSelect()->order('rand()');
+        return $this;
+    }
+    
 }

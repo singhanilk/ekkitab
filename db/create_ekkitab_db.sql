@@ -6875,8 +6875,9 @@ CREATE TABLE IF NOT EXISTS `ek_catalog_global_sections` (
   `description` text,
   `active_from_date` datetime DEFAULT NULL,
   `active_to_date` datetime DEFAULT NULL,
-  `template_path` varchar(300) NOT NULL,
+  `homepage_template_path` varchar(300) NULL,
   `is_homepage_display` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `template_path` varchar(300) NULL,
   `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`section_id`),
   UNIQUE KEY `ek_catalog_global_sections` (`display_name`)

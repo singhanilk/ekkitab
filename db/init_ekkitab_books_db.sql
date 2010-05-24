@@ -27,7 +27,7 @@ INSERT INTO `cms_page` (`page_id`, `title`, `root_template`, `meta_keywords`, `m
 (1, '404 Page Not Found', 'one_column', '', '', 'no-route', '<!-- notFoundArea -->{{block type="page/html" name="page_not_found"  template="page/html/404.phtml" }}', '2007-06-20 18:38:32', '2007-08-26 19:11:13', 1, 0, NULL, NULL, NULL, NULL),
 
 (2, 'Home page', 'three_columns', '', '', 'home', '{{block type="page/html" name="donate_book_blurb_home"  template="page/html/donate_blurb_home.phtml" }}
-{{block type="ekkitab_catalog/globalsection" name="homesection"  template="catalog/globalsection/home_page.phtml" }}', '', '', 1, 0, NULL, NULL,NULL,NULL),
+{{block type="ekkitab_catalog/globalsection" name="globalsection_home" template="catalog/globalsection/home_page.phtml" }}', '', '', 1, 0, NULL, NULL,NULL,NULL),
 
 (3, 'About  Us', 'one_column', '', '', 'about-ekkitab', '<!-- aboutUsArea -->{{block type="page/html" name="about_us"  template="page/html/about_us.phtml" }}', '2007-08-30 14:01:18', '2007-08-30 14:01:18', 1, 0, NULL, NULL, NULL, NULL),
 
@@ -46,6 +46,8 @@ INSERT INTO `cms_page` (`page_id`, `title`, `root_template`, `meta_keywords`, `m
 -- Dumping data for table `cms_page_store`
 --
 
+Delete from `cms_page_store`;
+
 INSERT INTO `cms_page_store` (`page_id`, `store_id`) VALUES
 (1, 0),
 (2, 0),
@@ -54,16 +56,6 @@ INSERT INTO `cms_page_store` (`page_id`, `store_id`) VALUES
 (5, 0),
 (6, 0),
 (7, 0);
-
-
-UPDATE `cms_page` set `identifier` = 'about-ekkitab',`content` = ' {{block type="page/html" name="about_us"  template="page/html/about_us.phtml" }}' where page_id = '3';
-
-UPDATE `cms_page` set `content` = '{{block type="page/html" name="page_not_found"  template="page/html/404.phtml" }}' where page_id='1';
-
-UPDATE `cms_page` set content = ' {{block type="page/html" name="donate_book_blurb_home"  template="page/html/donate_blurb_home.phtml" }}
-{{block type="ekkitab_catalog/globalsection" name="homesection"  template="catalog/globalsection/home_page.phtml" }}', root_template='three_columns' where page_id =2;
-
-UPDATE `cms_page` set `content` = '{{block type="page/html" name="customer_service"  template="page/html/help.phtml" }}' where page_id='4';
 
 
 -- -------------------------------------------------------------
@@ -336,11 +328,11 @@ INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 
 Delete from `ek_catalog_global_sections`;
 
-INSERT INTO `ek_catalog_global_sections` (  `section_id` ,`display_name`, `description` , `active_from_date`,  `active_to_date`,`template_path`,`is_homepage_display`) VALUES
-( 1, 'Indian Classics', '','2010-03-01','2011-03-31','catalog/globalsection/indian_classics.phtml','0'),
-( 2, 'All Time Great Fiction', '','2010-03-01','2011-03-31','catalog/globalsection/great_fiction.phtml','0'),
-( 3, 'Top Children''s Books', '','2010-03-01','2011-03-31','catalog/globalsection/top_childrens_books.phtml','0'),
-( 4, 'Summer Reading', '','2010-03-01','2011-03-31','catalog/globalsection/summer_reading.phtml','1');
+INSERT INTO `ek_catalog_global_sections` (  `section_id` ,`display_name`, `description` , `active_from_date`,  `active_to_date`,`template_path`, `is_homepage_display`, `homepage_template_path`) VALUES
+( 1, 'Indian Classics', '','2010-03-01','2011-03-31','catalog/globalsection/indian_classics.phtml','0',''),
+( 2, 'All Time Great Fiction', '','2010-03-01','2011-03-31','catalog/globalsection/great_fiction.phtml','0',''),
+( 3, 'Top Children''s Books', '','2010-03-01','2011-03-31','catalog/globalsection/top_childrens_books.phtml','0',''),
+( 4, 'Summer Reading', '','2010-03-01','2011-03-31','catalog/globalsection/summer_reading.phtml','1','catalog/globalsection/summer_reading_home.phtml');
 
 
 INSERT INTO `customer_entity` VALUES (1,1,0,1,'install@ekkitab.com',1,'000000004',1,'2010-04-10 06:42:03','2010-04-10 06:42:04',1);

@@ -2210,3 +2210,40 @@ a:hover {
 	height:300px;
 	padding:25px 25px 25px 25px;
 }
+
+.hmSummerRow {
+	background-image: url(../images/hm_summer_vis.jpg);
+	background-position: right top;
+	background-repeat: no-repeat;
+	padding-bottom: 8px;
+	margin-bottom: 8px;
+}
+.hmSummerTextImage {
+	background-image: url(../images/hm_summer_text.png);
+	background-position: left top;
+	background-repeat: no-repeat;
+	padding-top: 85px;
+	line-height: 1.6em;
+}
+
+
+.mainArea .hmSummerRow .readMore {
+	text-align:right;
+}
+.largerFont {
+	font-size: 1.25em;
+}
+.tagoreArea {
+	padding-bottom: 5px;
+	border-bottom: 1px dotted #666;
+	margin-bottom: 8px;
+}
+.tagoreArea .face{
+	height: 201px;
+	margin: 5px auto;
+	
+}
+.tagoreArea .tagText{
+	margin: 0px auto 10px;
+	
+}

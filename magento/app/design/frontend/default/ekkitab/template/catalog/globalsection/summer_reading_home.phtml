@@ -14,8 +14,7 @@
  * 
  */
 ?>
-<?php 
-	  $section= $this->getHomePageSection();
+<?php $section= $this->getHomePageSection();
 	  $_columnSize=4;
 	  $_deziredRows= 1;
 ?>
@@ -36,8 +35,12 @@
 		}
 		$_totalRows= 1;
 ?>
+	<div class="hmSummerRow">
+	<div class="hmSummerTextImage">
+		Some text on "<?php echo $section->getDisplayName() ?>"<br />
+		will come here. How the recommendations have<br />
+		been worked out etc.
 		<div class="hmScrollRow">
-		<div class="mainHomeHdr"><?php echo $section->getDisplayName() ?></div>
 <?php	if(!is_null($products) && $_count > 0){
 			foreach($products as $product){  ?>
 <?php			if($counter%$_columnSize==0){  ?>
@@ -74,7 +77,13 @@
 <?php			$firstTime =1;
 			}	//end of foreach...	?>
 			</div><!-- hmInScrollRow -->
+			<div class="clear">&nbsp;</div>
+			<div class="readMore"><a href="<?php echo Mage::helper('ekkitab_catalog')->getGlobalSectionViewUrl($section->getSectionId()) ?>">See All...</a></div>
+			<div class="clear hmInScrollRowSep"></div>
 			<div class="clear"></div>
+	</div><!-- hmInScrollRow -->
+</div><!-- hmScrollRow -->
+
 <?php	} else { //end of if(products not null )... ?>
 			This section will be updated soon...
 <?php	} //end of else ..?>

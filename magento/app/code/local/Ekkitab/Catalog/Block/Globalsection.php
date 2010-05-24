@@ -18,6 +18,8 @@ class Ekkitab_Catalog_Block_Globalsection extends Mage_Core_Block_Template
 {
 
 
+    private $_homeSection =null;
+
 	/**
      * Get popular catagories of current store
      *
@@ -29,15 +31,39 @@ class Ekkitab_Catalog_Block_Globalsection extends Mage_Core_Block_Template
 		return $sections;
 	}
 	
+    public function _prepareLayout()
+    {
+		//$this->setDefaultTemplate('catalog/globalsection/home_page.phtml');
+		if(is_null($this->_homeSection)){
+           $this->_homeSection = $this->getHomePageSection();
+		}
+
+		if($this->_homeSection && $this->_homeSection->getId() && trim($this->_homeSection->getHomepageTemplatePath())!="" ){
+		   $this->setTemplate($this->_homeSection->getHomepageTemplatePath());
+        }
+		//else {
+		//   $this->setTemplate($this->getTemplate());
+       // }
+    }
+
 	/**
      * Get popular catagories of current store
      *
      */
-    public function getHomePageSections()
+    public function getHomePageSection()
     {
-		$sections = Mage::getModel('ekkitab_catalog/globalsection')->getCollection()
-			->addHomePageFilter();
-		return $sections;
+		if(is_null($this->_homeSection)){
+			$sections = Mage::getModel('ekkitab_catalog/globalsection')->getCollection()
+									->addHomePageFilter();
+			if(!is_null($sections)){
+				foreach($sections as $section){
+					if($section){
+						$this->_homeSection=$section;
+					}
+				}
+			}
+		}
+		return $this->_homeSection;
 	}
 	
 

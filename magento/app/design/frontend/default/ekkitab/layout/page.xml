@@ -82,8 +82,9 @@ Default layout, loads most of the pages
             <block type="core/text_list" name="left" as="left"/>
            
 			<block type="core/text_list" name="right" as="right" >
-                <block type="page/html" name="testimonial" as="testimonial" template="page/html/testimonial.phtml"/>
-                <block type="page/html" name="news" as="news" template="page/html/news.phtml"/>
+                <block type="page/html" name="tagore" as="tagore" template="page/html/tagore.phtml"/>
+                <!--block type="page/html" name="testimonial" as="testimonial" template="page/html/testimonial.phtml"/>
+                <block type="page/html" name="news" as="news" template="page/html/news.phtml"/-->
 			</block>
 
             <block type="core/messages" name="global_messages" as="global_messages"/>
