@@ -372,7 +372,7 @@ class Mage_Sales_Model_Order_Shipment extends Mage_Sales_Model_Abstract
         
 //***************EKKITAB**********************       
         $smshelp = Mage::helper('ccav/data') ;
-        $smshelp->sendsms1($order->getTelephone(),$order->getRealOrderId());
+        $smshelp->sendsms1($order->getBillingAddress()->getTelephone(),$order->getRealOrderId());
 //**********EKKITAB*****************************  
 
         return $this;
