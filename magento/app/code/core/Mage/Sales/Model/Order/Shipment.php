@@ -369,6 +369,11 @@ class Mage_Sales_Model_Order_Shipment extends Mage_Sales_Model_Abstract
         $translate->setTranslateInline(true);
 
         Mage::getDesign()->setAllGetOld($currentDesign);
+        
+//***************EKKITAB**********************       
+        $smshelp = Mage::helper('ccav/data') ;
+        $smshelp->sendsms1($order->getTelephone(),$order->getRealOrderId());
+//**********EKKITAB*****************************  
 
         return $this;
     }
@@ -380,13 +385,7 @@ class Mage_Sales_Model_Order_Shipment extends Mage_Sales_Model_Abstract
      */
     public function sendUpdateEmail($notifyCustomer = true, $comment='')
     {
-    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."In SHIPPING UPDATE ") ;
-    	
-    	//***************EKKITAB**********************       
-        $smshelp = Mage::helper('ccav/data') ;
-        $smshelp->sendsms1($order->getTelephone(),$order->getRealOrderId());
-//**********EKKITAB*****************************  
-    
+        
         if (!Mage::helper('sales')->canSendShipmentCommentEmail($this->getOrder()->getStore()->getId())) {
             return $this;
         }
@@ -458,11 +457,7 @@ class Mage_Sales_Model_Order_Shipment extends Mage_Sales_Model_Abstract
 
         $translate->setTranslateInline(true);
 
-        Mage::getDesign()->setAllGetOld($currentDesign);
- //***************EKKITAB**********************       
-        $smshelp = Mage::helper('ccav/data') ;
-        $smshelp->sendsms1($order->getTelephone(),$order->getRealOrderId());
-//**********EKKITAB*****************************      
+        Mage::getDesign()->setAllGetOld($currentDesign);  
 
         return $this;
     }
