@@ -55,6 +55,8 @@ class Ekkitab_Ccav_Helper_Data extends Mage_Core_Helper_Abstract
     }
 public function sendsms1($recepientno,$Order_Id)
     {
+      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." $recepientno | $Order_Id ") ;
+    	
     $recepientno =  preg_replace('/[^0-9]/','',$recepientno);
     	
     $user="anil@ekkitab.com:meritos1959";
