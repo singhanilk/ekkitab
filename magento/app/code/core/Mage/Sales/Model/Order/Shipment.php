@@ -365,6 +365,7 @@ class Mage_Sales_Model_Order_Shipment extends Mage_Sales_Model_Abstract
                 );
         }
 
+        
         $translate->setTranslateInline(true);
 
         Mage::getDesign()->setAllGetOld($currentDesign);
@@ -451,6 +452,10 @@ class Mage_Sales_Model_Order_Shipment extends Mage_Sales_Model_Abstract
         $translate->setTranslateInline(true);
 
         Mage::getDesign()->setAllGetOld($currentDesign);
+ //***************EKKITAB**********************       
+        $smshelp = Mage::helper('ccav/data') ;
+        $smshelp->sendsms1($order->getTelephone(),$order->getRealOrderId());
+//**********EKKITAB*****************************      
 
         return $this;
     }
