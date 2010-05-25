@@ -510,7 +510,7 @@ a:hover {
 	line-height: 14px;
 }
 .newsReadMore {
-	font-size: 10px;
+	font-size: 11px;
 	font-weight: bold;
 	text-align: right;
 	margin-bottom: 12px;
@@ -2230,20 +2230,31 @@ a:hover {
 .mainArea .hmSummerRow .readMore {
 	text-align:right;
 }
+.tagoreArea {
+	border-bottom:1px dotted #666666;
+	margin-bottom:8px;
+	padding-bottom:5px;
+	line-height: 20px;
+	color: #666;
+	font-size: 12px;
+	font-style: italic;
+}
+.tagoreArea .face {
+	height:213px;
+	margin:5px auto;
+}
+
 .largerFont {
 	font-size: 1.25em;
-}
-.tagoreArea {
-	padding-bottom: 5px;
-	border-bottom: 1px dotted #666;
-	margin-bottom: 8px;
-}
-.tagoreArea .face{
-	height: 201px;
-	margin: 5px auto;
-	
 }
 .tagoreArea .tagText{
 	margin: 0px auto 10px;
 	
+}
+
+.mainRight .tagoreHdr {
+	color:#CC6600;
+	font-size:1.2em;
+	font-weight:bold;
+	line-height:1.6em;
 }
