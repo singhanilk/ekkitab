@@ -2245,7 +2245,8 @@ a:hover {
 }
 
 .largerFont {
-	font-size: 1.25em;
+	font-size: 12px;
+	font-weight:bold;
 }
 .tagoreArea .tagText{
 	margin: 0px auto 10px;
@@ -2254,7 +2255,7 @@ a:hover {
 
 .mainRight .tagoreHdr {
 	color:#CC6600;
-	font-size:1.2em;
-	font-weight:bold;
+	font-size:12px;
+	font-weight:normal;
 	line-height:1.6em;
 }
