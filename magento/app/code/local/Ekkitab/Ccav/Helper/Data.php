@@ -55,13 +55,13 @@ class Ekkitab_Ccav_Helper_Data extends Mage_Core_Helper_Abstract
     }
 public function sendsms1($recepientno,$Order_Id)
     {
-      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." $recepientno | $Order_Id ") ;
+    Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__." $recepientno | $Order_Id ") ;
     	
     $recepientno =  preg_replace('/[^0-9]/','',$recepientno);
     	
     $user="anil@ekkitab.com:meritos1959";
     $senderID="EKKITAB1";
-    $msgtxt="Thank you for shopping with EkKitab. Your $Order_Id has been shipped";
+    $msgtxt="Thank you for shopping with EkKitab. Your Order Id $Order_Id has been shipped";
     $filen ="/var/log/ekkitab/sms/sms".$Order_Id ;
     $msg = $recepientno."|".$msgtxt ;
     if ( file_put_contents($filen, $msg )== FALSE)
