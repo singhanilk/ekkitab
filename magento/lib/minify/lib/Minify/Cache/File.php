@@ -33,6 +33,9 @@ class Minify_Cache_File {
         if (is_file($this->_path . '/' . $id)) {
             @unlink($this->_path . '/' . $id);
         }
+        if (!file_exists($this->_path)) {
+            @mkdir($this->_path, 0777);
+        }
         if (! @file_put_contents($this->_path . '/' . $id, $data, $flag)) {
             return false;
         }
