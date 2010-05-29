@@ -42,9 +42,9 @@
 		been worked out etc.
 		<div class="hmScrollRow">
 <?php	if(!is_null($products) && $_count > 0){
-			foreach($products as $product){  ?>
-<?php			if($counter%$_columnSize==0){  ?>
-<?php				if($firstTime!=0){  ?>
+			foreach($products as $product){  
+				if($counter%$_columnSize==0){  
+				    if($firstTime!=0){  ?>
 						</div>
 						<div class="clear hmInScrollRowSep"></div>
 <?php				}					?>
@@ -82,12 +82,13 @@
 			<div class="clear hmInScrollRowSep"></div>
 			<div class="clear"></div>
 	</div><!-- hmInScrollRow -->
-</div><!-- hmScrollRow -->
 
 <?php	} else { //end of if(products not null )... ?>
-			This section will be updated soon...
+			<br/>This section will be updated soon...<br/>
 <?php	} //end of else ..?>
 		</div><!-- hmScrollRow -->
+	</div><!-- hmSummerTextImage -->
+</div><!-- hmSummerRow -->
 <?php endif; ?>
 <div class="clear"></div>
 
