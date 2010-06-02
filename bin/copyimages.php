@@ -76,9 +76,8 @@ else {
 					if ((strlen($newfile) > 4) && (substr($newfile, strlen($newfile) - 4, 4) == ".jpg")) {
                         $isbn = substr($newfile, 0, strpos($newfile, ".jpg"));
                         if (strlen($isbn) == 10) {
-                            echo "converting file $newfile to ";
+                            echo "converting $newfile\n";
                             $newfile = convertisbn($isbn) . ".jpg";
-                            echo "$newfile.\n";
                         } 
                         if (strlen($newfile) == 17) { //13 isbn digits and 4 for the suffix
 						    $imagePath = getHashedPath($newfile);
