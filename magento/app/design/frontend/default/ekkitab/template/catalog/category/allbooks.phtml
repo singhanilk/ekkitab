@@ -1,0 +1,246 @@
+<?php
+/**
+ * 
+ * Frontend  Catalog Category search results template
+ * @category   design/ekkitab
+ * @author Anisha (anisha@ekkitab.com)
+ * @version 1.0 Dec 7, 2009
+ * 
+ * @copyright  COPYRIGHT (C) 2009 Ekkitab Educational Services India Pvt. Ltd.
+ * @license    All Rights Reserved. All material contained in this file (including, but not limited to, text, images, graphics, HTML, programming code and scripts) 
+ * constitute proprietary and  * confidential information protected by copyright laws, trade secret and other laws. No part of this software may be copied, reproduced, modified or 
+ * distributed in any form or by any means, or stored in a database or retrieval system without the prior written permission of Ekkitab Educational Services.
+ * 
+ * 
+ */
+?>
+<?php
+
+function getShortenedString($str,$count){
+	$resStr = '';
+	//$str = eregi_replace(" +", " ", $str);
+	$array = explode(" ", $str);
+	$arrCount = count($array); 
+	if($arrCount >0){
+		$count = $count > $arrCount ? $arrCount : $count;
+		for($i=0;$i < $count ;$i++)
+		{
+			$resStr=$resStr." ".$array[$i];
+		}
+	}
+	return $resStr;
+}
+
+$bookList=$this->getProductCollection();
+?>
+<div class="leftNavArea">
+	<?php echo $this->getDonateBlurbHtml(); ?>
+	<?php echo $this->getChildHtml('leftlink_menu'); ?>
+</div><!-- leftNavArea inside checks -->
+
+<div class="mainArea">
+<?php 
+  if (!is_null($bookList) && $bookList->count() > 0) {
+ ?>
+	
+	<div class="inLeft">
+		<?php echo $this->getMessagesBlock()->getGroupedHtml()  ?>
+		<?php if ($messages = $this->getNoteMessages()):?>
+			<div class="note-msg">
+				<?php foreach ($messages as $message):?>
+				<?php echo $message?><br />
+				<?php endforeach;?>
+			</div>
+		<?php endif; ?>
+		<div class="searchResTop">
+			<div class="leftArea">
+				<?php if($this->getLastPageNumber()>1): ?>
+					<?php if($this->getTotalNum() >= 1000): ?>
+						<?php echo $this->__('Showing %s to %s of more than %s books', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+					<?php else : ?>
+						<?php echo $this->__('Showing %s to %s of %s books', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+
+					<?php endif; ?>
+				<?php elseif($this->getTotalNum()==1): ?>
+					<?php echo $this->__('Showing the only book', $this->getTotalNum()) ?>
+				<?php else: ?>
+					<?php echo $this->__('Showing all %s books', $this->getTotalNum()) ?>
+				<?php endif; ?>
+			</div><!-- leftArea -->
+
+			<div class="rightArea">
+				<div class="topPaginationArea">
+					<?php if($this->getLastPageNumber()>1): ?>
+					<ul>
+						<?php if (!$this->isFirstPage()): ?>
+							<li><a href="<?php echo $this->getPreviousPageUrl() ?>" id="prev"><?php echo $this->__('Prev') ?></a></li>
+						<?php else: ?>
+							<li class="nolink"><?php echo $this->__('Prev') ?></li>
+						<?php endif; ?>
+						
+						<?php foreach ($this->getPages() as $_page): ?>
+							<?php if ($this->isPageCurrent($_page)): ?>
+								<li><span><?php echo $_page ?></span></li>
+							<?php else: ?>
+								<li><a href="<?php echo $this->getPageUrl($_page) ?>"><?php echo $_page ?></a></li>
+							<?php endif ?>
+						<?php endforeach; ?>
+
+						<?php if (!$this->isLastPage()): ?>
+							<li><a href="<?php echo $this->getNextPageUrl() ?>"><?php echo $this->__('Next') ?></a></li>
+						<?php else: ?>
+							<li><b id="sep"><?php echo $this->__('Next') ?></b></li>
+						<?php endif; ?>
+
+					</ul>
+					<?php endif; ?>
+				</div>
+			</div><!-- rightArea -->
+			<div class="clear"></div>
+		</div><!-- searchResTop -->
+<?php 	foreach($bookList as $book):	
+			$authorArr = $book->getAuthor();
+			$author = $authorArr['a'] ;
+			$author = strlen($author) > 0 ? $author : "Unknown";
+			$title = $book->getTitle();
+			$image = $book->getImage();
+			$id = $book->getId();
+			$listPrice = $book->getListPrice() ;
+			$discPrice = $book->getDiscountPrice();
+			$isbn = $book->getIsbn();
+			$sourcedFrom =  $book->getSourcedFrom();
+			if($sourcedFrom && strlen(trim($sourcedFrom)) > 0 && strtolower($sourcedFrom)=='us'){
+				$isbn.= " <em>[ International Edition ]</em>";
+			}
+			$shippingTimeMin = (int)$book->getDeliveryPeriod();
+			$shippingTimeMax = round($shippingTimeMin + (.5 * $shippingTimeMin) );
+			$binding=strlen($book->getBinding()) > 0 ? ucfirst($book->getBinding()) : "Not Available" ;
+			$language=strlen($book->getLanguage()) > 0 ? $book->getLanguage() : "Unknown";
+			$stock=$book->getInStock();
+			$shortDesc=$book->getDescription();
+			//$shortDesc='Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves. The focal point of the ministry is its pastor, Victor Swain Pillars is about four men friends since childhood that establish a ministry for the sole purpose of generating exorbitant salaries for themselves.';
+			
+			//$url = $book->get("url");
+			//$url="catalog/product/view/id/".$id;
+
+			//further alterations.
+			$savings= $listPrice - $discPrice;
+			$savingsPerct= round(($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 0);
+			$savingsPerct= $savingsPerct > 5 ? $savingsPerct : 0; 
+			$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Ships in ".$shippingTimeMin." - ".$shippingTimeMax." days":"";
+			$shortDesc= ($shortDesc =="Not Available") ? "" : $shortDesc;
+			
+			$shortDesc = getShortenedString($shortDesc,30);
+
+			$url=$this->helper('ekkitab_catalog')->getProductUrl($author,$title,$id);	?>
+
+			<!-- searchRowBegins -->
+			<div class="searchRow">
+			<div class="skuImage"><div class="image"><a href="<?php echo $this->getUrl($url)?>" title="<?php  echo $title?>">
+				<img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $title?>"></a></div></div>
+			<!-- skuImage -->
+			<div class="detailsArea">
+			<div class="bkTitle"><a href="<?php echo $this->getUrl($url)?>" title="<?php echo $title ?>"><?php echo $title ?></a></div><!-- bkTitle -->
+			<div class="lineHeight14em">Author: <?php echo $author ?></div>
+			<div class="lineHeight14em">ISBN:  <?php echo $isbn ?></div>
+			<div class="lineHeight14em">Binding: <?php echo $binding ?></div>
+			<div class="lineHeight14em">Language : <?php echo $language ?></div>
+			<div class="synop"><?php echo $shortDesc ?>... <a href="<?php echo $this->getUrl($url)?>" title="<?php echo $title ?>">More details</a></div><!-- synop -->
+			</div><!-- detailsArea -->
+
+			<div class="priceArea">
+			<?php if($savings > 0):?><div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($discPrice,true,false) ?></div><?php endif; ?>
+			<?php if($listPrice > 0):?><div class="lineHeight14em">MRP Price : <?php echo Mage::helper('core')->currency($listPrice,true,false) ?></div><?php endif; ?>
+			<div class="youSave"><?php if($savings > 0):?>Save <?php echo Mage::helper('core')->currency($savings,true,false) ?><?php endif; ?>
+			<?php if($savingsPerct > 0):?>(<?php echo $savingsPerct?>%)<?php endif; ?></div>
+			<div class="lineHeight14em"><?php echo $shippingTime ?></div>
+			<div class="youSave"><?php if($stock && $listPrice >0) : ?>In Stock</div><?php else:?>Out of Stock </div><?php endif;?>	<a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($id)?>"><?php echo $this->__('Add to Wishlist') ?></a><br/>	
+			
+			</div><!-- priceArea -->
+			<div class="clear"></div>
+			</div><!-- searchRowEnds -->
+			<div class="clear"></div>
+		<?php endforeach; ?>
+	</div><!-- inLeft-->
+	<div class="clear"></div>
+	<div class="paginationAreaOut">
+		<div class="paginationArea">
+			<?php if($this->getLastPageNumber()>1): ?>
+			<ul>
+				<?php if (!$this->isFirstPage()): ?>
+					<li><a href="<?php echo $this->getPreviousPageUrl() ?>" id="prev"><?php echo $this->__('Prev') ?></a></li>
+				<?php else: ?>
+					<li class="nolink"><?php echo $this->__('Prev') ?></li>
+				<?php endif; ?>
+				
+				<?php foreach ($this->getPages() as $_page): ?>
+					<?php if ($this->isPageCurrent($_page)): ?>
+						<li><span><?php echo $_page ?></span></li>
+					<?php else: ?>
+						<li><a href="<?php echo $this->getPageUrl($_page) ?>"><?php echo $_page ?></a></li>
+					<?php endif ?>
+				<?php endforeach; ?>
+
+				<?php if (!$this->isLastPage()): ?>
+					<li><a href="<?php echo $this->getNextPageUrl() ?>"><?php echo $this->__('Next') ?></a></li>
+				<?php else: ?>
+					<li><b id="sep"><?php echo $this->__('Next') ?></b></li>
+				<?php endif; ?>
+			</ul>
+			<?php endif; ?>
+			<div class="clear"></div>
+		</div><!-- paginationArea-->
+	</div><!-- paginationAreaOut-->
+<?php
+	} 	
+	else { // else of if (!java_is_null(bookList))
+		$queryTxt = trim($this->helper('ekkitab_catalogsearch')->getEscapedQueryText());
+		$catTxt = trim($this->helper('ekkitab_catalog')->getEscapedQueryCategoryPath());
+		
+		if(strlen($catTxt)>0) {
+			$parentCatArr = explode("__",$catTxt);
+			if(!is_null($parentCatArr) && sizeof($parentCatArr) > 0){
+				$arrSize = sizeof($parentCatArr);
+				$catTxt ="";
+				for($i=0;$i < $arrSize ; $i++){
+					$cat = $parentCatArr[$i];
+					$cat = ucwords($this->getDecodedString($cat));
+					$catTxt=$catTxt.$cat."/";
+				}
+				$catTxt=substr($catTxt,0,-1);
+			}
+		}
+		$searchTxt="";
+		if (strlen($queryTxt)>0){
+			$searchTxt="for '";
+			$searchTxt=$searchTxt." ".$queryTxt." ' ";
+			if(strlen($catTxt)>0){
+				$searchTxt=$searchTxt." in ' ".$catTxt." ' ";
+			}
+		}else if(strlen($catTxt)>0) {
+			$searchTxt="in ' ".$catTxt." ' ";
+		}
+?>			<div class="inLeft">
+<?php		if(strlen($queryTxt) > 0 && strlen($queryTxt) < 4 ){ ?>
+				<div class="boldFont orangeTxt12">Too many results to be displayed for your search - "<?php echo $searchTxt ?>".</div> 
+				<div class="clear"><br/></div>
+				<p> We suggest you:</p> 
+				<ul>
+					<li> Provide atleast a minimum of 4 letters.</li> 
+					<li> Try different keywords.</li> 
+				</ul>
+<?php		}	
+			else { ?>
+				<div class="boldFont orangeTxt12">Your search <?php echo $searchTxt ?> did not match any book.</div>
+				<div class="clear"><br/></div>
+				<p> We suggest you:</p> 
+				<ul>
+					<li> Make sure all words are spelled correctly.</li> 
+					<li> Try different keywords.</li> 
+				</ul>
+<?php		} ?>
+			</div>
+		</div><div class="clear"></div>
+<?php } // ending of else of if (!java_is_null(bookList))
+?>
+</div>

@@ -44,4 +44,18 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Product extends Mage_Core_Model_Mysq
 		sort($result);
         return $result;
     }
+    
+	/**
+     * Substract product from all quotes quantities
+     *
+     * @param Mage_Catalog_Model_Product $product
+     */
+    public function getMaxBookId()
+    {
+		$query= $this->_getReadAdapter()->query("SELECT max(id) as count FROM books");
+		while ($row = $query->fetch()) {
+			$maxId = $row['count'];
+        }
+        return $maxId;
+    }
 }
