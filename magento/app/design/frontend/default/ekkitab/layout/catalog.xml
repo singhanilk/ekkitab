@@ -72,6 +72,7 @@ Default layout, loads most of the pages
             </block>-->
         </reference>
         <reference name="footer_links">
+            <action method="addLink" translate="label title" module="catalog" ><label>Catalog</label><url helper="ekkitab_catalog/getFullCatalogUrl"/><title>Catalog</title></action>
             <action method="addLink" translate="label title" module="catalog" ifconfig="catalog/seo/site_map"><label>Site Map</label><url>sitemap.html</url>
 			<!--url helper="catalog/map/getCategoryUrl" /--><title>Site Map</title></action>
         </reference>
@@ -157,6 +158,23 @@ Category Lecene search layout
 					</block>
 			</reference>
 	</ekkitab_catalog_search_index>
+
+	<ekkitab_catalog_search_fullcatalog>
+			<!-- Mage_Catalogsearch -->
+			<reference name="root">
+				<action method="setTemplate"><template>page/1column.phtml</template></action>
+			</reference>
+			<reference name="content">
+				<block type="ekkitab_catalog/category_allBooks" name="catalog_category_searchresult" template="catalog/category/allbooks.phtml" >
+					<!--action method="setDefaultTemplate"><value>catalog/category/search_result.phtml</value></action>
+					<action method="chooseTemplate"/-->
+					<block type="page/html" name="donate_book_blurb" before="leftlink_menu" template="page/html/donate_blurb.phtml" />
+					<action method="setPageNo"><count>1</count></action>
+					<action method="setPageSize"><count>15</count></action>
+					<block type="ekkitab_catalog/leftlinks" name="leftlink_menu" template="catalog/leftlinks/menu.phtml"/>
+					</block>
+			</reference>
+	</ekkitab_catalog_search_fullcatalog>
 
 <!--
 Category layered navigation layout
