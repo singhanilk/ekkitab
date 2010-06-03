@@ -11,18 +11,36 @@ else {
 }
 ini_set(“memory_limit”,"1024M");
 
-if($argc < 5) {
-    echo "Usage: $argv[0] <stocklist> <catalog> <outputmissinglist> <outputpricelist>\n";
+ini_set(include_path, ${include_path}.PATH_SEPARATOR.EKKITAB_HOME."/"."config");
+include("ekkitab.php");
+
+function getConfig($file) {
+   $config	= parse_ini_file($file, true);
+   if (! $config) {
+      echo "Configuration file missing. $file\n";
+      exit (1); 
+   }
+   return $config;
+}
+
+if($argc < 2) {
+    echo "Usage: $argv[0] <stocklist>\n";
 	exit (1);
 }
 
 $stocklistfile    = $argv[1];
-$catalogfile      = $argv[2];
-$missingisbnfile  = $argv[3];
-$pricefile        = $argv[4];
+
+$config = getConfig(STOCK_PROCESS_CONFIG_FILE);
+
+$catalogfile      = $config['penguin']['catalog'];
+$missingisbnfile  = $config['penguin']['missingisbns'];
+$pricefile        = $config['penguin']['pricefile'];
+
+echo "Catalog file: $catalogfile\n";
+echo "Missing ISBN file: $missingisbnfile\n";
+echo "Price file: $pricefile\n";
 
 $books = array();
-/* open catalog.txt */
 
 $fhandle = fopen($catalogfile,"r");
 if (!$fhandle){
@@ -77,10 +95,10 @@ while($contents = fgets($fhandle)){
     $availability = $fields[3];
 
     if (!isset($books[$isbn])) { // not in catalog
-      fprintf($fhandle2, "%s\t%s\t%s\n" $isbn, $title, $author);
+      fprintf($fhandle2, "%s\t%s\t%s\n", $isbn, $title, $author);
     }
     else {
-      fprintf($fhandle3, "%s\t%s\t%s\t%s\n" $isbn, $currency, $listPrice, $availability);
+      fprintf($fhandle3, "%s\t%s\t%s\t%s\n", $isbn, $currency, $listPrice, $availability);
     }
 }
 
