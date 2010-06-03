@@ -52,7 +52,7 @@ public class EkkitabSearch {
     public EkkitabSearch(String indexDir) throws EkkitabSearchException {
         this.indexDir = indexDir;
         try {
-        	if (Runtime.getRuntime().maxMemory() < 4000000000L) { // not enough memory for RAM directory
+        	if (Runtime.getRuntime().maxMemory() < 3000000000L) { // not enough memory for RAM directory
         		this.searchDir =  FSDirectory.getDirectory(this.indexDir);
         		logger.info("Inadequate memory for RAM Directory. Using disk based index.");
         	}

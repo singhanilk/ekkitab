@@ -109,6 +109,19 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
         )));
     }
 
+	/**
+     * Retrieve result page url
+     *
+     * @param   string $query
+     * @return  string
+     */
+    public function getFullCatalogUrl($query = null)
+    {
+        return $this->_getUrl('ekkitab_catalog/search/fullcatalog', array('_query' => array(
+            self::QUERY_VAR_NAME => $query
+        )));
+    }
+
     /**
      * Retrieve result page url
      *
