@@ -47,7 +47,7 @@ CREATE TABLE `books` (
   `binding` varchar(20),
   `description` varchar(2048) DEFAULT NULL,
   `short_description` varchar(2048) DEFAULT NULL,
-  `publishing_date` date,
+  `publishing_date` varchar(128) DEFAULT '',
   `publisher` varchar(100),
   `pages` INT NOT NULL default '0',
   `language` varchar(20),

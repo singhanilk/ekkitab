@@ -3,7 +3,8 @@ error_reporting(E_ALL  & ~E_NOTICE);
 ini_set("display_errors", 1); 
 include(EKKITAB_HOME . "/" . "config" . "/" . "ekkitab.php");
 include(EKKITAB_HOME . "/" . "bin" . "/" . "convertisbn.php");
-define (REQUIRED_FIELDS, 13);
+define (REQUIRED_BASIC_FIELDS, 13);
+define (REQUIRED_PRICE_FIELDS, 4);
 
 //  
 //
@@ -34,7 +35,10 @@ class Parser {
             if ($line[0] == '#')
                 return false;
             $fields = explode("\t", $line);
-            if (count($fields) != REQUIRED_FIELDS) {
+            if (($this->mode == MODE_BASIC) && (count($fields) != REQUIRED_BASIC_FIELDS)) {
+                return false;
+            } 
+            elseif (($this->mode == MODE_PRICE) && (count($fields) != REQUIRED_PRICE_FIELDS)) {
                 return false;
             } 
             return true;
