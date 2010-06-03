@@ -246,9 +246,9 @@ class Parser {
 
 		function getPrice($line, $book, $db, $logger){
             $fields = explode("\t", $line);
-            $book['isbn'] = str_replace("\"", "", trim($fields[3]));
+            $book['isbn'] = str_replace("\"", "", trim($fields[0]));
             $book['distributor'] = "Penguin";
-            switch (str_replace("\"", "", strtoupper(trim($fields[7])))) {
+            switch (str_replace("\"", "", strtoupper(trim($fields[1])))) {
                 case 'I'  : $book['currency'] = "INR";
                             break;
                 case 'P'  : $book['currency'] = "BRI";
@@ -258,15 +258,15 @@ class Parser {
                 case 'C'  : $book['currency'] = "CAN";
                             break;
                 default:    $book['currency'] = "XXX";
-                            throw new exception("Unknown currency " . str_replace("\"", "", strtoupper(trim($fields[7]))));
+                            throw new exception("Unknown currency " . str_replace("\"", "", strtoupper(trim($fields[1]))));
                             break;
             }
-			$book['list_price'] = str_replace("\"", "", trim($fields[6]));
+			$book['list_price'] = str_replace("\"", "", trim($fields[2]));
 			$book['suppliers_discount'] = $this->getSuppliersDiscount($db, $book['distributor'], "Any");
             if ($book['suppliers_discount'] == null) {
                 throw new exception("No supplier discount data for " . $book['distributor']);
             }
-            $availability = trim(str_replace("\"", "", $fields[9]));
+            $availability = trim(str_replace("\"", "", $fields[3]));
             if (!strcmp(strtoupper($availability), "AVAILABLE")) {
 			    $book['in_stock'] = 1;
             }

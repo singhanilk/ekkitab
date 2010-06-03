@@ -52,7 +52,14 @@ public class EkkitabSearch {
     public EkkitabSearch(String indexDir) throws EkkitabSearchException {
         this.indexDir = indexDir;
         try {
-        	this.searchDir = new RAMDirectory(FSDirectory.getDirectory(this.indexDir));
+        	if (Runtime.getRuntime().maxMemory() < 4000000000L) { // not enough memory for RAM directory
+        		this.searchDir =  FSDirectory.getDirectory(this.indexDir);
+        		logger.info("Inadequate memory for RAM Directory. Using disk based index.");
+        	}
+        	else {
+        		this.searchDir = new RAMDirectory(FSDirectory.getDirectory(this.indexDir));
+        		logger.info("Adequate memory for RAM Directory. Using memory based index.");
+        	}
     	    this.reader    = IndexReader.open(this.searchDir, true);
     		this.searcher  = new IndexSearcher(reader);
     		this.sorter = new Sort();	
