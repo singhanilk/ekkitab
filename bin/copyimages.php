@@ -33,6 +33,7 @@ else {
   include("ekkitab.php");
   ini_set(include_path, ${include_path}.PATH_SEPARATOR.EKKITAB_HOME."/"."bin");
   include("imagehash.php");
+  include("convertisbn.php");
 
   /**
    * Generate correct image path for thumbnails and images.
@@ -73,16 +74,23 @@ else {
 				else {
 					$newfile = str_replace(".JPG", ".jpg", $file);
 					if ((strlen($newfile) > 4) && (substr($newfile, strlen($newfile) - 4, 4) == ".jpg")) {
-						$imagePath = getHashedPath($newfile);
-						if (!is_dir(dirname(IMAGE_TARGET . "/" . $imagePath)))
-							mkdir(dirname(IMAGE_TARGET . "/" . $imagePath), 0755, true); 
-						$success = copy($directory . "/" . $file, IMAGE_TARGET . "/" . $imagePath);
-						if (! $success) {
-							$files_failed++;
-						}
-						else {
-							$files_copied++;
-						}
+                        $isbn = substr($newfile, 0, strpos($newfile, ".jpg"));
+                        if (strlen($isbn) == 10) {
+                            echo "converting $newfile\n";
+                            $newfile = convertisbn($isbn) . ".jpg";
+                        } 
+                        if (strlen($newfile) == 17) { //13 isbn digits and 4 for the suffix
+						    $imagePath = getHashedPath($newfile);
+						    if (!is_dir(dirname(IMAGE_TARGET . "/" . $imagePath)))
+							    mkdir(dirname(IMAGE_TARGET . "/" . $imagePath), 0755, true); 
+						    $success = copy($directory . "/" . $file, IMAGE_TARGET . "/" . $imagePath);
+						    if (! $success) {
+							    $files_failed++;
+						    }
+						    else {
+						        $files_copied++;
+						    }
+                        }
 					}
 					else 
 						$files_ignored++;

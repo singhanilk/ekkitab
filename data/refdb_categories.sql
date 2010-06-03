@@ -5138,4 +5138,5 @@ INSERT INTO `ek_bisac_category_map` (`bisac_code`, `level1`, `level2`, `level3`,
 ('VID533000', 'video & dvd genre', 'mature', '', '', '', '', '', '5557,5608','video-dvd-genre/mature.html'),
 ('VID534000', 'video & dvd genre', 'music', '', '', '', '', '', '5557,5609','video-dvd-genre/music.html'),
 ('VID535000', 'video & dvd genre', 'reality', '', '', '', '', '', '5557,5610','video-dvd-genre/reality.html'),
-('VID536000', 'video & dvd genre', 'special interest', '', '', '', '', '', '5557,5611','video-dvd-genre/special-interest.html');
+('VID536000', 'video & dvd genre', 'special interest', '', '', '', '', '', '5557,5611','video-dvd-genre/special-interest.html'),
+('ZZT000000', 'translations', 'general', '', '', '', '', '', '5612,5613','translations/general.html');

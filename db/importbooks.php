@@ -454,10 +454,10 @@ else {
                 }
             }
         
-            if (++$i % 10000 == 0) {
+            if (++$i % 100000 == 0) {
                 doCommit($db);
                 $inserted = $i - ($errorcount + $unresolved + $filenotfound + $ignored);
-                debug("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.\n");
+                echo "Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.\n";
             }
         }
         doCommit($db);

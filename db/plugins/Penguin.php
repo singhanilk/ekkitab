@@ -2,7 +2,8 @@
 error_reporting(E_ALL  & ~E_NOTICE);
 ini_set("display_errors", 1); 
 include(EKKITAB_HOME . "/" . "config" . "/" . "ekkitab.php");
-define (REQUIRED_FIELDS, 9);
+include(EKKITAB_HOME . "/" . "bin" . "/" . "convertisbn.php");
+define (REQUIRED_FIELDS, 13);
 
 //  
 //
@@ -33,7 +34,7 @@ class Parser {
             if ($line[0] == '#')
                 return false;
             $fields = explode("\t", $line);
-            if (count($fields) < REQUIRED_FIELDS) {
+            if (count($fields) != REQUIRED_FIELDS) {
                 return false;
             } 
             return true;
@@ -208,18 +209,25 @@ class Parser {
 
         function getBasic($line, $book, $db, $logger) {
             $fields = explode("\t", $line);
-            $book['isbn']            = trim($fields[0]);
-            $book['isbn10']          = trim($fields[1]);
-            $book['title']           = $this->escape(trim($fields[2]));
-            $book['author']          = $this->escape(trim($fields[3]));
-            $book['binding']         = trim($fields[4]);
-            $book['publishing_date'] = trim($fields[6]);
-            $book['publisher']       = $this->escape(trim($fields[7]));
-            $book['pages']           = trim($fields[8]);
-            $book['language']        = trim($fields[9]);
-            $book['weight']          = trim($fields[11]);
-            $book['dimension']       = trim($fields[12]);
-            $book['shipping_region'] = trim($fields[13]);
+            $isbn = trim($fields[0]);
+            if (strlen($isbn) == 13) {
+                $book['isbn']        = $isbn;
+                $book['isbn10']      = convertisbn($isbn);
+            }
+            else {
+                $book['isbn10']      = $isbn;
+                $book['isbn']        = convertisbn($isbn);
+            }
+            $book['title']           = $this->escape(trim($fields[1]));
+            $book['author']          = $this->escape(trim($fields[2]));
+            $book['binding']         = trim($fields[3]);
+            $book['publishing_date'] = trim($fields[5]);
+            $book['publisher']       = $this->escape(trim($fields[6]));
+            $book['pages']           = trim($fields[7]);
+            $book['language']        = trim($fields[8]);
+            $book['weight']          = trim($fields[9]);
+            $book['dimension']       = trim($fields[10]);
+            $book['shipping_region'] = trim($fields[11]);
             $book['info_source']     = "Penguin India";	
             $book['sourced_from']    = "India";
             $book['image']           = $book['isbn'].".jpg";
@@ -227,7 +235,7 @@ class Parser {
             $bisaccodes = array();
             //$bisaccodes[] = trim($fields[16]);
             //$book['bisac'] = $this->getBisacCodes($db, $bisaccodes);
-            $bisaccodes = explode(",", trim($fields[16]));
+            $bisaccodes = explode(",", trim($fields[12]));
             foreach($bisaccodes as $bisac) {
                $book['bisac'][] = trim($bisac);
             }
@@ -276,7 +284,7 @@ class Parser {
             
 		function getDesc($line,$book, $db, $logger){
             $fields = explode("\t", $line);
-			$description  = trim($fields[5]);
+			$description  = trim($fields[4]);
 			$book['description'] = str_replace("'", "\'", $description);
             $book['isbn'] = trim($fields[0]);
             return $book;

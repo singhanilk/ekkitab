@@ -1,7 +1,7 @@
 use `ekkitab_books`;
 INSERT INTO `catalog_category_entity` (`entity_id`, `entity_type_id`, `attribute_set_id`, `parent_id`, `created_at`, `updated_at`, `path`, `position`, `level`, `children_count`) VALUES
 (1, 3, 0, 0, curdate(), curdate(), '1', 1, 0, 1),
-(2, 3, 3, 0, curdate(), curdate(), '1/2', 1, 1, 5609),
+(2, 3, 3, 0, curdate(), curdate(), '1/2', 1, 1, 5611),
 (3, 3, 3, 2, curdate(), curdate(), '1/2/3', 1, 2, 54),
 (4, 3, 3, 3, curdate(), curdate(), '1/2/3/4', 1, 3, 0),
 (5, 3, 3, 3, curdate(), curdate(), '1/2/3/5', 2, 3, 0),
@@ -5722,7 +5722,9 @@ INSERT INTO `catalog_category_entity` (`entity_id`, `entity_type_id`, `attribute
 (5608, 3, 3, 5557, curdate(), curdate(), '1/2/5557/5608', 51, 3, 0),
 (5609, 3, 3, 5557, curdate(), curdate(), '1/2/5557/5609', 52, 3, 0),
 (5610, 3, 3, 5557, curdate(), curdate(), '1/2/5557/5610', 53, 3, 0),
-(5611, 3, 3, 5557, curdate(), curdate(), '1/2/5557/5611', 54, 3, 0);
+(5611, 3, 3, 5557, curdate(), curdate(), '1/2/5557/5611', 54, 3, 0),
+(5612, 3, 3, 2, curdate(), curdate(), '1/2/5612', 1, 2, 1),
+(5613, 3, 3, 5612, curdate(), curdate(), '1/2/5612/5613', 1, 3, 0);
 use `ekkitab_books` ;
 INSERT INTO `catalog_category_entity_int` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 
@@ -22836,7 +22838,13 @@ INSERT INTO `catalog_category_entity_int` (`entity_type_id`, `attribute_id`, `st
 (3, 49, 0, 5610, 1),
 (3, 32, 0, 5611, 1),
 (3, 41, 0, 5611, 0),
-(3, 49, 0, 5611, 1);
+(3, 49, 0, 5611, 1),
+(3, 32, 0, 5612, 1),
+(3, 41, 0, 5612, 0),
+(3, 49, 0, 5612, 1),
+(3, 32, 0, 5613, 1),
+(3, 41, 0, 5613, 0),
+(3, 49, 0, 5613, 1);
 use `ekkitab_books` ;
 INSERT INTO `catalog_category_entity_text` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 
@@ -51264,7 +51272,17 @@ INSERT INTO `catalog_category_entity_text` (`entity_type_id`, `attribute_id`, `s
 (3, 37, 0, 5611, ''),
 (3, 38, 0, 5611, ''),
 (3, 53, 0, 5611, ''),
-(3, 98, 0, 5611, '');
+(3, 98, 0, 5611, ''),
+(3, 34, 0, 5612, ''),
+(3, 37, 0, 5612, ''),
+(3, 38, 0, 5612, ''),
+(3, 53, 0, 5612, ''),
+(3, 98, 0, 5612, ''),
+(3, 34, 0, 5613, ''),
+(3, 37, 0, 5613, ''),
+(3, 38, 0, 5613, ''),
+(3, 53, 0, 5613, ''),
+(3, 98, 0, 5613, '');
 use `ekkitab_books` ;
 INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 1, 'Root Catalog'),
@@ -91920,6 +91938,14 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 52, 0, 5611, ''),
 (3, 47, 1, 5611, 'Special-Interest.html'),
 (3, 47, 0, 5611, 'Special-Interest.html'),
+(3, 31, 0, 5613, 'General'),
+(3, 33, 0, 5613, 'General'),
+(3, 36, 0, 5613, ''),
+(3, 39, 0, 5613, 'PRODUCTS'),
+(3, 48, 0, 5613, ''),
+(3, 52, 0, 5613, ''),
+(3, 47, 1, 5613, 'General.html'),
+(3, 47, 0, 5613, 'General.html'),
 (3, 31, 0, 41, 'Sports Cards'),
 (3, 33, 0, 41, 'Sports-Cards'),
 (3, 36, 0, 41, ''),
@@ -91927,7 +91953,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 41, ''),
 (3, 52, 0, 41, ''),
 (3, 47, 1, 41, 'Sports-Cards.html'),
-(3, 47, 0, 41, 'Sports-Cards.html'),
+(3, 47, 0, 41, 'Sports-Cards.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 3, 'Antiques & Collectibles'),
 (3, 33, 0, 3, 'Antiques-Collectibles'),
 (3, 36, 0, 3, ''),
@@ -91935,8 +91962,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 3, ''),
 (3, 52, 0, 3, ''),
 (3, 47, 1, 3, 'Antiques-Collectibles.html'),
-(3, 47, 0, 3, 'Antiques-Collectibles.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 3, 'Antiques-Collectibles.html'),
 (3, 31, 0, 62, 'Buildings'),
 (3, 33, 0, 62, 'Buildings'),
 (3, 36, 0, 62, ''),
@@ -92048,7 +92074,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 161, ''),
 (3, 52, 0, 161, ''),
 (3, 47, 1, 161, 'Individual-Artists.html'),
-(3, 47, 0, 161, 'Individual-Artists.html'),
+(3, 47, 0, 161, 'Individual-Artists.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 177, 'Subjects & Themes'),
 (3, 33, 0, 177, 'Subjects-Themes'),
 (3, 36, 0, 177, ''),
@@ -92056,8 +92083,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 177, ''),
 (3, 52, 0, 177, ''),
 (3, 47, 1, 177, 'Subjects-Themes.html'),
-(3, 47, 0, 177, 'Subjects-Themes.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 177, 'Subjects-Themes.html'),
 (3, 31, 0, 203, 'Collections, Catalogs, Exhibitions'),
 (3, 33, 0, 203, 'Collections-Catalogs-Exhibitions'),
 (3, 36, 0, 203, ''),
@@ -92169,7 +92195,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 121, ''),
 (3, 52, 0, 121, ''),
 (3, 47, 1, 121, 'Art.html'),
-(3, 47, 0, 121, 'Art.html'),
+(3, 47, 0, 121, 'Art.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 263, 'Christian Standard Bible'),
 (3, 33, 0, 263, 'Christian-Standard-Bible'),
 (3, 36, 0, 263, ''),
@@ -92177,8 +92204,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 263, ''),
 (3, 52, 0, 263, ''),
 (3, 47, 1, 263, 'Christian-Standard-Bible.html'),
-(3, 47, 0, 263, 'Christian-Standard-Bible.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 263, 'Christian-Standard-Bible.html'),
 (3, 31, 0, 272, 'Contemporary English Version'),
 (3, 33, 0, 272, 'Contemporary-English-Version'),
 (3, 36, 0, 272, ''),
@@ -92290,7 +92316,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 389, ''),
 (3, 52, 0, 389, ''),
 (3, 47, 1, 389, 'New-Living-Translation.html'),
-(3, 47, 0, 389, 'New-Living-Translation.html'),
+(3, 47, 0, 389, 'New-Living-Translation.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 398, 'New Revised Standard Version'),
 (3, 33, 0, 398, 'New-Revised-Standard-Version'),
 (3, 36, 0, 398, ''),
@@ -92298,8 +92325,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 398, ''),
 (3, 52, 0, 398, ''),
 (3, 47, 1, 398, 'New-Revised-Standard-Version.html'),
-(3, 47, 0, 398, 'New-Revised-Standard-Version.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 398, 'New-Revised-Standard-Version.html'),
 (3, 31, 0, 407, 'Nueva Version International'),
 (3, 33, 0, 407, 'Nueva-Version-International'),
 (3, 36, 0, 407, ''),
@@ -92411,7 +92437,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 553, ''),
 (3, 52, 0, 553, ''),
 (3, 47, 1, 553, 'Healing.html'),
-(3, 47, 0, 553, 'Healing.html'),
+(3, 47, 0, 553, 'Healing.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 566, 'Parapsychology'),
 (3, 33, 0, 566, 'Parapsychology'),
 (3, 36, 0, 566, ''),
@@ -92419,8 +92446,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 566, ''),
 (3, 52, 0, 566, ''),
 (3, 47, 1, 566, 'Parapsychology.html'),
-(3, 47, 0, 566, 'Parapsychology.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 566, 'Parapsychology.html'),
 (3, 31, 0, 575, 'Spirituality'),
 (3, 33, 0, 575, 'Spirituality'),
 (3, 36, 0, 575, ''),
@@ -92532,7 +92558,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 742, ''),
 (3, 52, 0, 742, ''),
 (3, 47, 1, 742, 'Personal-Finance.html'),
-(3, 47, 0, 742, 'Personal-Finance.html'),
+(3, 47, 0, 742, 'Personal-Finance.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 760, 'Buying'),
 (3, 33, 0, 760, 'Buying'),
 (3, 36, 0, 760, ''),
@@ -92540,8 +92567,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 760, ''),
 (3, 52, 0, 760, ''),
 (3, 47, 1, 760, 'Buying.html'),
-(3, 47, 0, 760, 'Buying.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 760, 'Buying.html'),
 (3, 31, 0, 766, 'Almanacs'),
 (3, 33, 0, 766, 'Almanacs'),
 (3, 36, 0, 766, ''),
@@ -92653,7 +92679,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 878, ''),
 (3, 52, 0, 878, ''),
 (3, 47, 1, 878, 'Digital-Media.html'),
-(3, 47, 0, 878, 'Digital-Media.html'),
+(3, 47, 0, 878, 'Digital-Media.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 890, 'Enterprise Applications'),
 (3, 33, 0, 890, 'Enterprise-Applications'),
 (3, 36, 0, 890, ''),
@@ -92661,8 +92688,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 890, ''),
 (3, 52, 0, 890, ''),
 (3, 47, 1, 890, 'Enterprise-Applications.html'),
-(3, 47, 0, 890, 'Enterprise-Applications.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 890, 'Enterprise-Applications.html'),
 (3, 31, 0, 901, 'Personal Computers'),
 (3, 33, 0, 901, 'Personal-Computers'),
 (3, 36, 0, 901, ''),
@@ -92774,7 +92800,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 1019, ''),
 (3, 52, 0, 1019, ''),
 (3, 47, 1, 1019, 'Artificial-Intelligence.html'),
-(3, 47, 0, 1019, 'Artificial-Intelligence.html'),
+(3, 47, 0, 1019, 'Artificial-Intelligence.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 1021, 'Business Software'),
 (3, 33, 0, 1021, 'Business-Software'),
 (3, 36, 0, 1021, ''),
@@ -92782,8 +92809,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 1021, ''),
 (3, 52, 0, 1021, ''),
 (3, 47, 1, 1021, 'Business-Software.html'),
-(3, 47, 0, 1021, 'Business-Software.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 1021, 'Business-Software.html'),
 (3, 31, 0, 1028, 'Cam'),
 (3, 33, 0, 1028, 'Cam'),
 (3, 36, 0, 1028, ''),
@@ -92895,7 +92921,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 1083, ''),
 (3, 52, 0, 1083, ''),
 (3, 47, 1, 1083, 'Programming.html'),
-(3, 47, 0, 1083, 'Programming.html'),
+(3, 47, 0, 1083, 'Programming.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 1086, 'Reference'),
 (3, 33, 0, 1086, 'Reference'),
 (3, 36, 0, 1086, ''),
@@ -92903,8 +92930,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 1086, ''),
 (3, 52, 0, 1086, ''),
 (3, 47, 1, 1086, 'Reference.html'),
-(3, 47, 0, 1086, 'Reference.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 1086, 'Reference.html'),
 (3, 31, 0, 1090, 'Spreadsheets'),
 (3, 33, 0, 1090, 'Spreadsheets'),
 (3, 36, 0, 1090, ''),
@@ -93016,7 +93042,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 1128, ''),
 (3, 52, 0, 1128, ''),
 (3, 47, 1, 1128, 'Beverages.html'),
-(3, 47, 0, 1128, 'Beverages.html'),
+(3, 47, 0, 1128, 'Beverages.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 1135, 'Courses & Dishes'),
 (3, 33, 0, 1135, 'Courses-Dishes'),
 (3, 36, 0, 1135, ''),
@@ -93024,8 +93051,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 1135, ''),
 (3, 52, 0, 1135, ''),
 (3, 47, 1, 1135, 'Courses-Dishes.html'),
-(3, 47, 0, 1135, 'Courses-Dishes.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 1135, 'Courses-Dishes.html'),
 (3, 31, 0, 1158, 'Health & Healing'),
 (3, 33, 0, 1158, 'Health-Healing'),
 (3, 36, 0, 1158, ''),
@@ -93137,7 +93163,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 1334, ''),
 (3, 52, 0, 1334, ''),
 (3, 47, 1, 1334, 'Design.html'),
-(3, 47, 0, 1334, 'Design.html'),
+(3, 47, 0, 1334, 'Design.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 1355, 'Drama'),
 (3, 33, 0, 1355, 'Drama'),
 (3, 36, 0, 1355, ''),
@@ -93145,8 +93172,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 1355, ''),
 (3, 52, 0, 1355, ''),
 (3, 47, 1, 1355, 'Drama.html'),
-(3, 47, 0, 1355, 'Drama.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 1355, 'Drama.html'),
 (3, 31, 0, 1375, 'Administration'),
 (3, 33, 0, 1375, 'Administration'),
 (3, 36, 0, 1375, ''),
@@ -93258,7 +93284,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 1525, ''),
 (3, 52, 0, 1525, ''),
 (3, 47, 1, 1525, 'Christian.html'),
-(3, 47, 0, 1525, 'Christian.html'),
+(3, 47, 0, 1525, 'Christian.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 1561, 'Dark'),
 (3, 33, 0, 1561, 'Dark'),
 (3, 36, 0, 1561, ''),
@@ -93266,8 +93293,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 1561, ''),
 (3, 52, 0, 1561, ''),
 (3, 47, 1, 1561, 'Dark.html'),
-(3, 47, 0, 1561, 'Dark.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 1561, 'Dark.html'),
 (3, 31, 0, 1553, 'Fantasy'),
 (3, 33, 0, 1553, 'Fantasy'),
 (3, 36, 0, 1553, ''),
@@ -93379,7 +93405,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 1742, ''),
 (3, 52, 0, 1742, ''),
 (3, 47, 1, 1742, 'First.html'),
-(3, 47, 0, 1742, 'First.html'),
+(3, 47, 0, 1742, 'First.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 1744, 'Flying Games'),
 (3, 33, 0, 1744, 'Flying-Games'),
 (3, 36, 0, 1744, ''),
@@ -93387,8 +93414,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 1744, ''),
 (3, 52, 0, 1744, ''),
 (3, 47, 1, 1744, 'Flying-Games.html'),
-(3, 47, 0, 1744, 'Flying-Games.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 1744, 'Flying-Games.html'),
 (3, 31, 0, 1698, 'Games'),
 (3, 33, 0, 1698, 'Games'),
 (3, 36, 0, 1698, ''),
@@ -93500,7 +93526,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 1918, ''),
 (3, 52, 0, 1918, ''),
 (3, 47, 1, 1918, 'Caribbean-West-Indies.html'),
-(3, 47, 0, 1918, 'Caribbean-West-Indies.html'),
+(3, 47, 0, 1918, 'Caribbean-West-Indies.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 1923, 'Europe'),
 (3, 33, 0, 1923, 'Europe'),
 (3, 36, 0, 1923, ''),
@@ -93508,8 +93535,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 1923, ''),
 (3, 52, 0, 1923, ''),
 (3, 47, 1, 1923, 'Europe.html'),
-(3, 47, 0, 1923, 'Europe.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 1923, 'Europe.html'),
 (3, 31, 0, 1946, 'Latin America'),
 (3, 33, 0, 1946, 'Latin-America'),
 (3, 36, 0, 1946, ''),
@@ -93621,7 +93647,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 2058, ''),
 (3, 52, 0, 2058, ''),
 (3, 47, 1, 2058, 'Do-it-yourself.html'),
-(3, 47, 0, 2058, 'Do-it-yourself.html'),
+(3, 47, 0, 2058, 'Do-it-yourself.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 2046, 'House & Home'),
 (3, 33, 0, 2046, 'House-Home'),
 (3, 36, 0, 2046, ''),
@@ -93629,8 +93656,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 2046, ''),
 (3, 52, 0, 2046, ''),
 (3, 47, 1, 2046, 'House-Home.html'),
-(3, 47, 0, 2046, 'House-Home.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 2046, 'House-Home.html'),
 (3, 31, 0, 2088, 'Form'),
 (3, 33, 0, 2088, 'Form'),
 (3, 36, 0, 2088, ''),
@@ -93742,7 +93768,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 2230, ''),
 (3, 52, 0, 2230, ''),
 (3, 47, 1, 2230, 'Canada.html'),
-(3, 47, 0, 2230, 'Canada.html'),
+(3, 47, 0, 2230, 'Canada.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 2242, 'United States'),
 (3, 33, 0, 2242, 'United-States'),
 (3, 36, 0, 2242, ''),
@@ -93750,8 +93777,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 2242, ''),
 (3, 52, 0, 2242, ''),
 (3, 47, 1, 2242, 'United-States.html'),
-(3, 47, 0, 2242, 'United-States.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 2242, 'United-States.html'),
 (3, 31, 0, 2225, 'Historical'),
 (3, 33, 0, 2225, 'Historical'),
 (3, 36, 0, 2225, ''),
@@ -93863,7 +93889,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 2365, ''),
 (3, 52, 0, 2365, ''),
 (3, 47, 1, 2365, 'Social-Issues.html'),
-(3, 47, 0, 2365, 'Social-Issues.html'),
+(3, 47, 0, 2365, 'Social-Issues.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 2398, 'Sports & Recreation'),
 (3, 33, 0, 2398, 'Sports-Recreation'),
 (3, 36, 0, 2398, ''),
@@ -93871,8 +93898,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 2398, ''),
 (3, 52, 0, 2398, ''),
 (3, 47, 1, 2398, 'Sports-Recreation.html'),
-(3, 47, 0, 2398, 'Sports-Recreation.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 2398, 'Sports-Recreation.html'),
 (3, 31, 0, 2429, 'Boats'),
 (3, 33, 0, 2429, 'Boats'),
 (3, 36, 0, 2429, ''),
@@ -93984,7 +94010,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 2550, ''),
 (3, 52, 0, 2550, ''),
 (3, 47, 1, 2550, 'Family.html'),
-(3, 47, 0, 2550, 'Family.html'),
+(3, 47, 0, 2550, 'Family.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 2563, 'Foreign Language Study'),
 (3, 33, 0, 2563, 'Foreign-Language-Study'),
 (3, 36, 0, 2563, ''),
@@ -93992,8 +94019,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 2563, ''),
 (3, 52, 0, 2563, ''),
 (3, 47, 1, 2563, 'Foreign-Language-Study.html'),
-(3, 47, 0, 2563, 'Foreign-Language-Study.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 2563, 'Foreign-Language-Study.html'),
 (3, 31, 0, 2571, 'Games & Activities'),
 (3, 33, 0, 2571, 'Games-Activities'),
 (3, 36, 0, 2571, ''),
@@ -94105,7 +94131,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 2689, ''),
 (3, 52, 0, 2689, ''),
 (3, 47, 1, 2689, 'People-Places.html'),
-(3, 47, 0, 2689, 'People-Places.html'),
+(3, 47, 0, 2689, 'People-Places.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 2717, 'Mass Media'),
 (3, 33, 0, 2717, 'Mass-Media'),
 (3, 36, 0, 2717, ''),
@@ -94113,8 +94140,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 2717, ''),
 (3, 52, 0, 2717, ''),
 (3, 47, 1, 2717, 'Mass-Media.html'),
-(3, 47, 0, 2717, 'Mass-Media.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 2717, 'Mass-Media.html'),
 (3, 31, 0, 2710, 'Performing Arts'),
 (3, 33, 0, 2710, 'Performing-Arts'),
 (3, 36, 0, 2710, ''),
@@ -94226,7 +94252,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 2841, ''),
 (3, 52, 0, 2841, ''),
 (3, 47, 1, 2841, 'Sports-Recreation.html'),
-(3, 47, 0, 2841, 'Sports-Recreation.html'),
+(3, 47, 0, 2841, 'Sports-Recreation.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 2877, 'Time'),
 (3, 33, 0, 2877, 'Time'),
 (3, 36, 0, 2877, ''),
@@ -94234,8 +94261,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 2877, ''),
 (3, 52, 0, 2877, ''),
 (3, 47, 1, 2877, 'Time.html'),
-(3, 47, 0, 2877, 'Time.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 2877, 'Time.html'),
 (3, 31, 0, 2868, 'Study Aids'),
 (3, 33, 0, 2868, 'Study-Aids'),
 (3, 36, 0, 2868, ''),
@@ -94347,7 +94373,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 2995, ''),
 (3, 52, 0, 2995, ''),
 (3, 47, 1, 2995, 'Criminal-Law.html'),
-(3, 47, 0, 2995, 'Criminal-Law.html'),
+(3, 47, 0, 2995, 'Criminal-Law.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 3016, 'Family Law'),
 (3, 33, 0, 3016, 'Family-Law'),
 (3, 36, 0, 3016, ''),
@@ -94355,8 +94382,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 3016, ''),
 (3, 52, 0, 3016, ''),
 (3, 47, 1, 3016, 'Family-Law.html'),
-(3, 47, 0, 3016, 'Family-Law.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 3016, 'Family-Law.html'),
 (3, 31, 0, 3024, 'Government'),
 (3, 33, 0, 3024, 'Government'),
 (3, 36, 0, 3024, ''),
@@ -94468,7 +94494,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 3216, ''),
 (3, 52, 0, 3216, ''),
 (3, 47, 1, 3216, 'Allied-Health-Services.html'),
-(3, 47, 0, 3216, 'Allied-Health-Services.html'),
+(3, 47, 0, 3216, 'Allied-Health-Services.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 3242, 'Dentistry'),
 (3, 33, 0, 3242, 'Dentistry'),
 (3, 36, 0, 3242, ''),
@@ -94476,8 +94503,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 3242, ''),
 (3, 52, 0, 3242, ''),
 (3, 47, 1, 3242, 'Dentistry.html'),
-(3, 47, 0, 3242, 'Dentistry.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 3242, 'Dentistry.html'),
 (3, 31, 0, 3295, 'Nursing'),
 (3, 33, 0, 3295, 'Nursing'),
 (3, 36, 0, 3295, ''),
@@ -94589,7 +94615,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 3462, ''),
 (3, 52, 0, 3462, ''),
 (3, 47, 1, 3462, 'Songbooks.html'),
-(3, 47, 0, 3462, 'Songbooks.html'),
+(3, 47, 0, 3462, 'Songbooks.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 3450, 'Religious'),
 (3, 33, 0, 3450, 'Religious'),
 (3, 36, 0, 3450, ''),
@@ -94597,8 +94624,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 3450, ''),
 (3, 52, 0, 3450, ''),
 (3, 47, 1, 3450, 'Religious.html'),
-(3, 47, 0, 3450, 'Religious.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 3450, 'Religious.html'),
 (3, 31, 0, 3382, 'Music'),
 (3, 33, 0, 3382, 'Music'),
 (3, 36, 0, 3382, ''),
@@ -94710,7 +94736,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 3593, ''),
 (3, 52, 0, 3593, ''),
 (3, 47, 1, 3593, 'Film-Video.html'),
-(3, 47, 0, 3593, 'Film-Video.html'),
+(3, 47, 0, 3593, 'Film-Video.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 3598, 'Mass Media'),
 (3, 33, 0, 3598, 'Mass-Media'),
 (3, 36, 0, 3598, ''),
@@ -94718,8 +94745,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 3598, ''),
 (3, 52, 0, 3598, ''),
 (3, 47, 1, 3598, 'Mass-Media.html'),
-(3, 47, 0, 3598, 'Mass-Media.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 3598, 'Mass-Media.html'),
 (3, 31, 0, 3600, 'Theater'),
 (3, 33, 0, 3600, 'Theater'),
 (3, 36, 0, 3600, ''),
@@ -94831,7 +94857,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 3660, ''),
 (3, 52, 0, 3660, ''),
 (3, 47, 1, 3660, 'Movements.html'),
-(3, 47, 0, 3660, 'Movements.html'),
+(3, 47, 0, 3660, 'Movements.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 3635, 'Philosophy'),
 (3, 33, 0, 3635, 'Philosophy'),
 (3, 36, 0, 3635, ''),
@@ -94839,8 +94866,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 3635, ''),
 (3, 52, 0, 3635, ''),
 (3, 47, 1, 3635, 'Philosophy.html'),
-(3, 47, 0, 3635, 'Philosophy.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 3635, 'Philosophy.html'),
 (3, 31, 0, 3680, 'Collections, Catalogs, Exhibitions'),
 (3, 33, 0, 3680, 'Collections-Catalogs-Exhibitions'),
 (3, 36, 0, 3680, ''),
@@ -94952,7 +94978,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 3745, ''),
 (3, 52, 0, 3745, ''),
 (3, 47, 1, 3745, 'Poetry.html'),
-(3, 47, 0, 3745, 'Poetry.html'),
+(3, 47, 0, 3745, 'Poetry.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 3776, 'Government'),
 (3, 33, 0, 3776, 'Government'),
 (3, 36, 0, 3776, ''),
@@ -94960,8 +94987,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 3776, ''),
 (3, 52, 0, 3776, ''),
 (3, 47, 1, 3776, 'Government.html'),
-(3, 47, 0, 3776, 'Government.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 3776, 'Government.html'),
 (3, 31, 0, 3789, 'International Relations'),
 (3, 33, 0, 3789, 'International-Relations'),
 (3, 36, 0, 3789, ''),
@@ -95073,7 +95099,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 3922, ''),
 (3, 52, 0, 3922, ''),
 (3, 47, 1, 3922, 'Synonyms.html'),
-(3, 47, 0, 3922, 'Synonyms.html'),
+(3, 47, 0, 3922, 'Synonyms.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 3909, 'Reference'),
 (3, 33, 0, 3909, 'Reference'),
 (3, 36, 0, 3909, ''),
@@ -95081,8 +95108,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 3909, ''),
 (3, 52, 0, 3909, ''),
 (3, 47, 1, 3909, 'Reference.html'),
-(3, 47, 0, 3909, 'Reference.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 3909, 'Reference.html'),
 (3, 31, 0, 3949, 'Biblical Biography'),
 (3, 33, 0, 3949, 'Biblical-Biography'),
 (3, 36, 0, 3949, ''),
@@ -95194,7 +95220,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 4062, ''),
 (3, 52, 0, 4062, ''),
 (3, 47, 1, 4062, 'Christian-Theology.html'),
-(3, 47, 0, 4062, 'Christian-Theology.html'),
+(3, 47, 0, 4062, 'Christian-Theology.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 4083, 'Christianity'),
 (3, 33, 0, 4083, 'Christianity'),
 (3, 36, 0, 4083, ''),
@@ -95202,8 +95229,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 4083, ''),
 (3, 52, 0, 4083, ''),
 (3, 47, 1, 4083, 'Christianity.html'),
-(3, 47, 0, 4083, 'Christianity.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 4083, 'Christianity.html'),
 (3, 31, 0, 4133, 'Hinduism'),
 (3, 33, 0, 4133, 'Hinduism'),
 (3, 36, 0, 4133, ''),
@@ -95315,7 +95341,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 4318, ''),
 (3, 52, 0, 4318, ''),
 (3, 47, 1, 4318, 'Dynamics.html'),
-(3, 47, 0, 4318, 'Dynamics.html'),
+(3, 47, 0, 4318, 'Dynamics.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 4316, 'Mechanics'),
 (3, 33, 0, 4316, 'Mechanics'),
 (3, 36, 0, 4316, ''),
@@ -95323,8 +95350,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 4316, ''),
 (3, 52, 0, 4316, ''),
 (3, 47, 1, 4316, 'Mechanics.html'),
-(3, 47, 0, 4316, 'Mechanics.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 4316, 'Mechanics.html'),
 (3, 31, 0, 4238, 'Science'),
 (3, 33, 0, 4238, 'Science'),
 (3, 36, 0, 4238, ''),
@@ -95436,7 +95462,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 4588, ''),
 (3, 52, 0, 4588, ''),
 (3, 47, 1, 4588, 'Study-Aids.html'),
-(3, 47, 0, 4588, 'Study-Aids.html'),
+(3, 47, 0, 4588, 'Study-Aids.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 4634, 'Agriculture'),
 (3, 33, 0, 4634, 'Agriculture'),
 (3, 36, 0, 4634, ''),
@@ -95444,8 +95471,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 4634, ''),
 (3, 52, 0, 4634, ''),
 (3, 47, 1, 4634, 'Agriculture.html'),
-(3, 47, 0, 4634, 'Agriculture.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 4634, 'Agriculture.html'),
 (3, 31, 0, 4651, 'Civil'),
 (3, 33, 0, 4651, 'Civil'),
 (3, 36, 0, 4651, ''),
@@ -95557,7 +95583,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 4789, ''),
 (3, 52, 0, 4789, ''),
 (3, 47, 1, 4789, 'Automotive.html'),
-(3, 47, 0, 4789, 'Automotive.html'),
+(3, 47, 0, 4789, 'Automotive.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 4792, 'Ships & Shipbuilding'),
 (3, 33, 0, 4792, 'Ships-Shipbuilding'),
 (3, 36, 0, 4792, ''),
@@ -95565,8 +95592,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 4792, ''),
 (3, 52, 0, 4792, ''),
 (3, 47, 1, 4792, 'Ships-Shipbuilding.html'),
-(3, 47, 0, 4792, 'Ships-Shipbuilding.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 4792, 'Ships-Shipbuilding.html'),
 (3, 31, 0, 4784, 'Ships & Shipbuilding'),
 (3, 33, 0, 4784, 'Ships-Shipbuilding'),
 (3, 36, 0, 4784, ''),
@@ -95678,7 +95704,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 4912, ''),
 (3, 52, 0, 4912, ''),
 (3, 47, 1, 4912, 'Australia-Oceania.html'),
-(3, 47, 0, 4912, 'Australia-Oceania.html'),
+(3, 47, 0, 4912, 'Australia-Oceania.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 4917, 'Gt. Britain'),
 (3, 33, 0, 4917, 'Gt-Britain'),
 (3, 36, 0, 4917, ''),
@@ -95686,8 +95713,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 4917, ''),
 (3, 52, 0, 4917, ''),
 (3, 47, 1, 4917, 'Gt-Britain.html'),
-(3, 47, 0, 4917, 'Gt-Britain.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 4917, 'Gt-Britain.html'),
 (3, 31, 0, 4916, 'Europe'),
 (3, 33, 0, 4916, 'Europe'),
 (3, 36, 0, 4916, ''),
@@ -95799,7 +95825,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 4796, ''),
 (3, 52, 0, 4796, ''),
 (3, 47, 1, 4796, 'Travel.html'),
-(3, 47, 0, 4796, 'Travel.html'),
+(3, 47, 0, 4796, 'Travel.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 4997, 'Murder'),
 (3, 33, 0, 4997, 'Murder'),
 (3, 36, 0, 4997, ''),
@@ -95807,8 +95834,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 4997, ''),
 (3, 52, 0, 4997, ''),
 (3, 47, 1, 4997, 'Murder.html'),
-(3, 47, 0, 4997, 'Murder.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 4997, 'Murder.html'),
 (3, 31, 0, 4994, 'True Crime'),
 (3, 33, 0, 4994, 'True-Crime'),
 (3, 36, 0, 4994, ''),
@@ -95920,7 +95946,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 5128, ''),
 (3, 52, 0, 5128, ''),
 (3, 47, 1, 5128, 'Caribbean.html'),
-(3, 47, 0, 5128, 'Caribbean.html'),
+(3, 47, 0, 5128, 'Caribbean.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 5133, 'Caribbean & West Indies'),
 (3, 33, 0, 5133, 'Caribbean-West-Indies'),
 (3, 36, 0, 5133, ''),
@@ -95928,8 +95955,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 5133, ''),
 (3, 52, 0, 5133, ''),
 (3, 47, 1, 5133, 'Caribbean-West-Indies.html'),
-(3, 47, 0, 5133, 'Caribbean-West-Indies.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 5133, 'Caribbean-West-Indies.html'),
 (3, 31, 0, 5138, 'European'),
 (3, 33, 0, 5138, 'European'),
 (3, 36, 0, 5138, ''),
@@ -96041,7 +96067,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 5246, ''),
 (3, 52, 0, 5246, ''),
 (3, 47, 1, 5246, 'Christmas-Channukah.html'),
-(3, 47, 0, 5246, 'Christmas-Channukah.html'),
+(3, 47, 0, 5246, 'Christmas-Channukah.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 5248, 'Christmas'),
 (3, 33, 0, 5248, 'Christmas'),
 (3, 36, 0, 5248, ''),
@@ -96049,8 +96076,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 5248, ''),
 (3, 52, 0, 5248, ''),
 (3, 47, 1, 5248, 'Christmas.html'),
-(3, 47, 0, 5248, 'Christmas.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 5248, 'Christmas.html'),
 (3, 31, 0, 5244, 'Seasonal'),
 (3, 33, 0, 5244, 'Seasonal'),
 (3, 36, 0, 5244, ''),
@@ -96162,7 +96188,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 5334, ''),
 (3, 52, 0, 5334, ''),
 (3, 47, 1, 5334, 'Child.html'),
-(3, 47, 0, 5334, 'Child.html'),
+(3, 47, 0, 5334, 'Child.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 5333, 'Family'),
 (3, 33, 0, 5333, 'Family'),
 (3, 36, 0, 5333, ''),
@@ -96170,8 +96197,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 5333, ''),
 (3, 52, 0, 5333, ''),
 (3, 47, 1, 5333, 'Family.html'),
-(3, 47, 0, 5333, 'Family.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 5333, 'Family.html'),
 (3, 31, 0, 5341, 'Spirituality'),
 (3, 33, 0, 5341, 'Spirituality'),
 (3, 36, 0, 5341, ''),
@@ -96283,7 +96309,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 5411, ''),
 (3, 52, 0, 5411, ''),
 (3, 47, 1, 5411, 'Gay.html'),
-(3, 47, 0, 5411, 'Gay.html'),
+(3, 47, 0, 5411, 'Gay.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 5409, 'Lifestyles'),
 (3, 33, 0, 5409, 'Lifestyles'),
 (3, 36, 0, 5409, ''),
@@ -96291,8 +96318,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 5409, ''),
 (3, 52, 0, 5409, ''),
 (3, 47, 1, 5409, 'Lifestyles.html'),
-(3, 47, 0, 5409, 'Lifestyles.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 5409, 'Lifestyles.html'),
 (3, 31, 0, 5421, 'Entertainment'),
 (3, 33, 0, 5421, 'Entertainment'),
 (3, 36, 0, 5421, ''),
@@ -96404,7 +96430,8 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 5487, ''),
 (3, 52, 0, 5487, ''),
 (3, 47, 1, 5487, 'Soccer.html'),
-(3, 47, 0, 5487, 'Soccer.html'),
+(3, 47, 0, 5487, 'Soccer.html');
+INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
 (3, 31, 0, 5491, 'Wrestling'),
 (3, 33, 0, 5491, 'Wrestling'),
 (3, 36, 0, 5491, ''),
@@ -96412,8 +96439,7 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 5491, ''),
 (3, 52, 0, 5491, ''),
 (3, 47, 1, 5491, 'Wrestling.html'),
-(3, 47, 0, 5491, 'Wrestling.html');
-INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`, `store_id`, `entity_id`, `value`) VALUES
+(3, 47, 0, 5491, 'Wrestling.html'),
 (3, 31, 0, 5465, 'Sports'),
 (3, 33, 0, 5465, 'Sports'),
 (3, 36, 0, 5465, ''),
@@ -96517,7 +96543,15 @@ INSERT INTO `catalog_category_entity_varchar` (`entity_type_id`, `attribute_id`,
 (3, 48, 0, 5557, ''),
 (3, 52, 0, 5557, ''),
 (3, 47, 1, 5557, 'Video-Dvd-Genre.html'),
-(3, 47, 0, 5557, 'Video-Dvd-Genre.html');
+(3, 47, 0, 5557, 'Video-Dvd-Genre.html'),
+(3, 31, 0, 5612, 'Translations'),
+(3, 33, 0, 5612, 'Translations'),
+(3, 36, 0, 5612, ''),
+(3, 39, 0, 5612, 'PRODUCTS'),
+(3, 48, 0, 5612, ''),
+(3, 52, 0, 5612, ''),
+(3, 47, 1, 5612, 'Translations.html'),
+(3, 47, 0, 5612, 'Translations.html');
 use `ekkitab_books` ;
 INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_path`, `target_path`, `options`) VALUES
 (1, 4, 'category/4', 'antiques-collectibles/general.html', 'catalog/category/view/id/4', ''),
@@ -101659,6 +101693,7 @@ INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_p
 (1, 5609, 'category/5609', 'video-dvd-genre/music.html', 'catalog/category/view/id/5609', ''),
 (1, 5610, 'category/5610', 'video-dvd-genre/reality.html', 'catalog/category/view/id/5610', ''),
 (1, 5611, 'category/5611', 'video-dvd-genre/special-interest.html', 'catalog/category/view/id/5611', ''),
+(1, 5613, 'category/5613', 'translations/general.html', 'catalog/category/view/id/5613', ''),
 (1, 41, 'category/41', 'antiques-collectibles/sports-cards.html', 'catalog/category/view/id/41', ''),
 (1, 3, 'category/3', 'antiques-collectibles.html', 'catalog/category/view/id/3', ''),
 (1, 62, 'category/62', 'architecture/buildings.html', 'catalog/category/view/id/62', ''),
@@ -101669,9 +101704,9 @@ INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_p
 (1, 105, 'category/105', 'architecture/international-architecture.html', 'catalog/category/view/id/105', ''),
 (1, 112, 'category/112', 'architecture/u-s-architecture.html', 'catalog/category/view/id/112', ''),
 (1, 117, 'category/117', 'architecture/universal.html', 'catalog/category/view/id/117', ''),
-(1, 119, 'category/119', 'architecture/sustainable.html', 'catalog/category/view/id/119', ''),
-(1, 58, 'category/58', 'architecture.html', 'catalog/category/view/id/58', '');
+(1, 119, 'category/119', 'architecture/sustainable.html', 'catalog/category/view/id/119', '');
 INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_path`, `target_path`, `options`) VALUES
+(1, 58, 'category/58', 'architecture.html', 'catalog/category/view/id/58', ''),
 (1, 124, 'category/124', 'art/american.html', 'catalog/category/view/id/124', ''),
 (1, 138, 'category/138', 'art/collections-catalogs-exhibitions.html', 'catalog/category/view/id/138', ''),
 (1, 151, 'category/151', 'art/history.html', 'catalog/category/view/id/151', ''),
@@ -101720,9 +101755,9 @@ INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_p
 (1, 452, 'category/452', 'biography-autobiography.html', 'catalog/category/view/id/452', ''),
 (1, 538, 'category/538', 'body-mind-spirit/astrology.html', 'catalog/category/view/id/538', ''),
 (1, 544, 'category/544', 'body-mind-spirit/divination.html', 'catalog/category/view/id/544', ''),
-(1, 553, 'category/553', 'body-mind-spirit/healing.html', 'catalog/category/view/id/553', ''),
-(1, 566, 'category/566', 'body-mind-spirit/parapsychology.html', 'catalog/category/view/id/566', '');
+(1, 553, 'category/553', 'body-mind-spirit/healing.html', 'catalog/category/view/id/553', '');
 INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_path`, `target_path`, `options`) VALUES
+(1, 566, 'category/566', 'body-mind-spirit/parapsychology.html', 'catalog/category/view/id/566', ''),
 (1, 575, 'category/575', 'body-mind-spirit/spirituality.html', 'catalog/category/view/id/575', ''),
 (1, 589, 'category/589', 'body-mind-spirit/metaphysical-phenomena.html', 'catalog/category/view/id/589', ''),
 (1, 535, 'category/535', 'body-mind-spirit.html', 'catalog/category/view/id/535', ''),
@@ -101771,9 +101806,9 @@ INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_p
 (1, 1028, 'category/1028', 'computers/web/cad/cam.html', 'catalog/category/view/id/1028', ''),
 (1, 1027, 'category/1027', 'computers/web/cad.html', 'catalog/category/view/id/1027', ''),
 (1, 1030, 'category/1030', 'computers/web/computer-architecture.html', 'catalog/category/view/id/1030', ''),
-(1, 1032, 'category/1032', 'computers/web/computer-graphics.html', 'catalog/category/view/id/1032', ''),
-(1, 1041, 'category/1041', 'computers/web/desktop-applications.html', 'catalog/category/view/id/1041', '');
+(1, 1032, 'category/1032', 'computers/web/computer-graphics.html', 'catalog/category/view/id/1032', '');
 INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_path`, `target_path`, `options`) VALUES
+(1, 1041, 'category/1041', 'computers/web/desktop-applications.html', 'catalog/category/view/id/1041', ''),
 (1, 1047, 'category/1047', 'computers/web/database-management.html', 'catalog/category/view/id/1047', ''),
 (1, 1052, 'category/1052', 'computers/web/desktop-publishing.html', 'catalog/category/view/id/1052', ''),
 (1, 1057, 'category/1057', 'computers/web/financial-applications.html', 'catalog/category/view/id/1057', ''),
@@ -101822,9 +101857,9 @@ INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_p
 (1, 1373, 'category/1373', 'education.html', 'catalog/category/view/id/1373', ''),
 (1, 1452, 'category/1452', 'family-relationships/abuse.html', 'catalog/category/view/id/1452', ''),
 (1, 1480, 'category/1480', 'family-relationships/life-stages/adolescence/drugs.html', 'catalog/category/view/id/1480', ''),
-(1, 1477, 'category/1477', 'family-relationships/life-stages.html', 'catalog/category/view/id/1477', ''),
-(1, 1490, 'category/1490', 'family-relationships/parenting.html', 'catalog/category/view/id/1490', '');
+(1, 1477, 'category/1477', 'family-relationships/life-stages.html', 'catalog/category/view/id/1477', '');
 INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_path`, `target_path`, `options`) VALUES
+(1, 1490, 'category/1490', 'family-relationships/parenting.html', 'catalog/category/view/id/1490', ''),
 (1, 1506, 'category/1506', 'family-relationships/health.html', 'catalog/category/view/id/1506', ''),
 (1, 1450, 'category/1450', 'family-relationships.html', 'catalog/category/view/id/1450', ''),
 (1, 1513, 'category/1513', 'fiction/african-american.html', 'catalog/category/view/id/1513', ''),
@@ -101873,9 +101908,9 @@ INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_p
 (1, 1880, 'category/1880', 'history.html', 'catalog/category/view/id/1880', ''),
 (1, 2052, 'category/2052', 'house-home/decorating/painting.html', 'catalog/category/view/id/2052', ''),
 (1, 2054, 'category/2054', 'house-home/decorating/upholstery.html', 'catalog/category/view/id/2054', ''),
-(1, 2058, 'category/2058', 'house-home/do-it-yourself.html', 'catalog/category/view/id/2058', ''),
-(1, 2046, 'category/2046', 'house-home.html', 'catalog/category/view/id/2046', '');
+(1, 2058, 'category/2058', 'house-home/do-it-yourself.html', 'catalog/category/view/id/2058', '');
 INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_path`, `target_path`, `options`) VALUES
+(1, 2046, 'category/2046', 'house-home.html', 'catalog/category/view/id/2046', ''),
 (1, 2088, 'category/2088', 'humor/form.html', 'catalog/category/view/id/2088', ''),
 (1, 2095, 'category/2095', 'humor/topic.html', 'catalog/category/view/id/2095', ''),
 (1, 2086, 'category/2086', 'humor.html', 'catalog/category/view/id/2086', ''),
@@ -101924,9 +101959,9 @@ INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_p
 (1, 2571, 'category/2571', 'juvenile-nonfiction/games-activities.html', 'catalog/category/view/id/2571', ''),
 (1, 2584, 'category/2584', 'juvenile-nonfiction/health-daily-living.html', 'catalog/category/view/id/2584', ''),
 (1, 2604, 'category/2604', 'juvenile-nonfiction/history/canada.html', 'catalog/category/view/id/2604', ''),
-(1, 2620, 'category/2620', 'juvenile-nonfiction/history/united-states.html', 'catalog/category/view/id/2620', ''),
-(1, 2598, 'category/2598', 'juvenile-nonfiction/history.html', 'catalog/category/view/id/2598', '');
+(1, 2620, 'category/2620', 'juvenile-nonfiction/history/united-states.html', 'catalog/category/view/id/2620', '');
 INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_path`, `target_path`, `options`) VALUES
+(1, 2598, 'category/2598', 'juvenile-nonfiction/history.html', 'catalog/category/view/id/2598', ''),
 (1, 2631, 'category/2631', 'juvenile-nonfiction/holidays-celebrations.html', 'catalog/category/view/id/2631', ''),
 (1, 2646, 'category/2646', 'juvenile-nonfiction/humor.html', 'catalog/category/view/id/2646', ''),
 (1, 2650, 'category/2650', 'juvenile-nonfiction/language-arts.html', 'catalog/category/view/id/2650', ''),
@@ -101975,9 +102010,9 @@ INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_p
 (1, 3105, 'category/3105', 'literary-criticism/american.html', 'catalog/category/view/id/3105', ''),
 (1, 3112, 'category/3112', 'literary-criticism/asian.html', 'catalog/category/view/id/3112', ''),
 (1, 3125, 'category/3125', 'literary-criticism/european.html', 'catalog/category/view/id/3125', ''),
-(1, 3102, 'category/3102', 'literary-criticism.html', 'catalog/category/view/id/3102', ''),
-(1, 3159, 'category/3159', 'mathematics/algebra.html', 'catalog/category/view/id/3159', '');
+(1, 3102, 'category/3102', 'literary-criticism.html', 'catalog/category/view/id/3102', '');
 INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_path`, `target_path`, `options`) VALUES
+(1, 3159, 'category/3159', 'mathematics/algebra.html', 'catalog/category/view/id/3159', ''),
 (1, 3178, 'category/3178', 'mathematics/geometry.html', 'catalog/category/view/id/3178', ''),
 (1, 3196, 'category/3196', 'mathematics/probability-statistics.html', 'catalog/category/view/id/3196', ''),
 (1, 3156, 'category/3156', 'mathematics.html', 'catalog/category/view/id/3156', ''),
@@ -102026,9 +102061,9 @@ INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_p
 (1, 3602, 'category/3602', 'pets.html', 'catalog/category/view/id/3602', ''),
 (1, 3653, 'category/3653', 'philosophy/history-surveys/17th.html', 'catalog/category/view/id/3653', ''),
 (1, 3647, 'category/3647', 'philosophy/history-surveys.html', 'catalog/category/view/id/3647', ''),
-(1, 3660, 'category/3660', 'philosophy/movements.html', 'catalog/category/view/id/3660', ''),
-(1, 3635, 'category/3635', 'philosophy.html', 'catalog/category/view/id/3635', '');
+(1, 3660, 'category/3660', 'philosophy/movements.html', 'catalog/category/view/id/3660', '');
 INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_path`, `target_path`, `options`) VALUES
+(1, 3635, 'category/3635', 'philosophy.html', 'catalog/category/view/id/3635', ''),
 (1, 3680, 'category/3680', 'photography/collections-catalogs-exhibitions.html', 'catalog/category/view/id/3680', ''),
 (1, 3687, 'category/3687', 'photography/individual-photographers.html', 'catalog/category/view/id/3687', ''),
 (1, 3695, 'category/3695', 'photography/subjects-themes.html', 'catalog/category/view/id/3695', ''),
@@ -102077,9 +102112,9 @@ INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_p
 (1, 4133, 'category/4133', 'religion/hinduism.html', 'catalog/category/view/id/4133', ''),
 (1, 4140, 'category/4140', 'religion/holidays.html', 'catalog/category/view/id/4140', ''),
 (1, 4149, 'category/4149', 'religion/islam.html', 'catalog/category/view/id/4149', ''),
-(1, 4161, 'category/4161', 'religion/judaism.html', 'catalog/category/view/id/4161', ''),
-(1, 4180, 'category/4180', 'religion/prayerbooks.html', 'catalog/category/view/id/4180', '');
+(1, 4161, 'category/4161', 'religion/judaism.html', 'catalog/category/view/id/4161', '');
 INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_path`, `target_path`, `options`) VALUES
+(1, 4180, 'category/4180', 'religion/prayerbooks.html', 'catalog/category/view/id/4180', ''),
 (1, 4191, 'category/4191', 'religion/sermons.html', 'catalog/category/view/id/4191', ''),
 (1, 4207, 'category/4207', 'religion/bibles.html', 'catalog/category/view/id/4207', ''),
 (1, 3942, 'category/3942', 'religion.html', 'catalog/category/view/id/3942', ''),
@@ -102128,9 +102163,9 @@ INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_p
 (1, 4833, 'category/4833', 'travel/europe.html', 'catalog/category/view/id/4833', ''),
 (1, 4855, 'category/4855', 'travel/middle-east.html', 'catalog/category/view/id/4855', ''),
 (1, 4870, 'category/4870', 'travel/south-america.html', 'catalog/category/view/id/4870', ''),
-(1, 4877, 'category/4877', 'travel/special-interest.html', 'catalog/category/view/id/4877', ''),
-(1, 4892, 'category/4892', 'travel/united-states/midwest.html', 'catalog/category/view/id/4892', '');
+(1, 4877, 'category/4877', 'travel/special-interest.html', 'catalog/category/view/id/4877', '');
 INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_path`, `target_path`, `options`) VALUES
+(1, 4892, 'category/4892', 'travel/united-states/midwest.html', 'catalog/category/view/id/4892', ''),
 (1, 4896, 'category/4896', 'travel/united-states/northeast.html', 'catalog/category/view/id/4896', ''),
 (1, 4900, 'category/4900', 'travel/united-states/south.html', 'catalog/category/view/id/4900', ''),
 (1, 4909, 'category/4909', 'travel/united-states/west/asia.html', 'catalog/category/view/id/4909', ''),
@@ -102179,9 +102214,9 @@ INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_p
 (1, 5232, 'category/5232', 'recorded-music/new-age.html', 'catalog/category/view/id/5232', ''),
 (1, 5238, 'category/5238', 'recorded-music/rap-hip.html', 'catalog/category/view/id/5238', ''),
 (1, 5240, 'category/5240', 'recorded-music/rock-pop.html', 'catalog/category/view/id/5240', ''),
-(1, 5246, 'category/5246', 'recorded-music/seasonal/christmas-channukah.html', 'catalog/category/view/id/5246', ''),
-(1, 5248, 'category/5248', 'recorded-music/seasonal/christmas.html', 'catalog/category/view/id/5248', '');
+(1, 5246, 'category/5246', 'recorded-music/seasonal/christmas-channukah.html', 'catalog/category/view/id/5246', '');
 INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_path`, `target_path`, `options`) VALUES
+(1, 5248, 'category/5248', 'recorded-music/seasonal/christmas.html', 'catalog/category/view/id/5248', ''),
 (1, 5244, 'category/5244', 'recorded-music/seasonal.html', 'catalog/category/view/id/5244', ''),
 (1, 5258, 'category/5258', 'recorded-music/soundtracks.html', 'catalog/category/view/id/5258', ''),
 (1, 5273, 'category/5273', 'recorded-music/techno-electronic/go.html', 'catalog/category/view/id/5273', ''),
@@ -102230,9 +102265,9 @@ INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_p
 (1, 5465, 'category/5465', 'periodicals/sports.html', 'catalog/category/view/id/5465', ''),
 (1, 5500, 'category/5500', 'periodicals/literary/gay.html', 'catalog/category/view/id/5500', ''),
 (1, 5506, 'category/5506', 'periodicals/literary/poetry.html', 'catalog/category/view/id/5506', ''),
-(1, 5494, 'category/5494', 'periodicals/literary.html', 'catalog/category/view/id/5494', ''),
-(1, 5512, 'category/5512', 'periodicals/men.html', 'catalog/category/view/id/5512', '');
+(1, 5494, 'category/5494', 'periodicals/literary.html', 'catalog/category/view/id/5494', '');
 INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_path`, `target_path`, `options`) VALUES
+(1, 5512, 'category/5512', 'periodicals/men.html', 'catalog/category/view/id/5512', ''),
 (1, 5526, 'category/5526', 'periodicals/music/rap.html', 'catalog/category/view/id/5526', ''),
 (1, 5521, 'category/5521', 'periodicals/music.html', 'catalog/category/view/id/5521', ''),
 (1, 5539, 'category/5539', 'periodicals/regional/mid.html', 'catalog/category/view/id/5539', ''),
@@ -102240,4 +102275,5 @@ INSERT INTO `core_url_rewrite` (`store_id`, `category_id`, `id_path`, `request_p
 (1, 5551, 'category/5551', 'periodicals/travel/gay.html', 'catalog/category/view/id/5551', ''),
 (1, 5549, 'category/5549', 'periodicals/travel.html', 'catalog/category/view/id/5549', ''),
 (1, 5282, 'category/5282', 'periodicals.html', 'catalog/category/view/id/5282', ''),
-(1, 5557, 'category/5557', 'video-dvd-genre.html', 'catalog/category/view/id/5557', '');
+(1, 5557, 'category/5557', 'video-dvd-genre.html', 'catalog/category/view/id/5557', ''),
+(1, 5612, 'category/5612', 'translations.html', 'catalog/category/view/id/5612', '');
