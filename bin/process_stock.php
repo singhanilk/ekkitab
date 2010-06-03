@@ -86,6 +86,7 @@ if (!$fhandle3){
 fprintf($fhandle3, "# ISBN\tCURRENCY\tLIST-PRICE\tAVAILABILITY\n");
 
 while($contents = fgets($fhandle)){
+    $contents = str_replace("\n", "", $contents);
     $fields = explode("\t", $contents);
     $isbn = $fields[0];
     $title = $fields[5];
