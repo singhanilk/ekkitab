@@ -1,0 +1,19 @@
+Update /etc/wu-ftpd/ftpaccess as follows:
+
+The passive address lines report what IP address clients will be told to connect to when they send a PASV command. The first parameter on each line is the address reported, the second is the network to which it will be reported. So if your FTP server had two NICs, a LAN NIC with address 10.0.0.12 and subnet mask 255.255.255.0, and an Internet NIC with address 63.236.73.201, you could use:
+
+passive address 10.0.0.12 10.0.0.0/24
+passive address 63.236.73.201 0.0.0.0/0
+
+Any machine with an IP address of 10.0.0.* would be told to connect to 10.0.0.12, and any other machine would be told to connect to 63.236.73.201.
+
+The / at the end of the network is a shorthand way of indicating the subnet mask - 255.0.0.0 is /8, 255.255.0.0 is /16, 255.255.255.0 is /24 and for any other subnet mask you'll need to work out how many bits are set.
+
+The passive ports lines indicate a range of ports used for each network's passive transfers. So if you want to open up ports 20000-20999 for passive transfers you can do
+
+passive ports 0.0.0.0/0 20000 20999
+
+If you want the LAN to get different ports than the outside world:
+
+passive ports 10.0.0.0/24 21000 21999
+passive ports 0.0.0.0/0 20000 20999
