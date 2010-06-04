@@ -133,6 +133,22 @@ public class BookSearch {
 
        return result;
     }
+    
+    public SearchResult searchSequential(int pageSz, int page) throws Exception {
+    	return searcher.getSequential(instanceId, page, pageSz);
+    }
+    
+    public SearchResult lookup(String author, String title) throws Exception {
+    	String query = "";
+    	String[] authors = author.split("&");
+    	for (String name: authors) {
+    		query += "+author:\""+name+"\" ";
+    	}
+    	query += "+title:\""+title+"\" ";
+    	String searchfield = "exact";
+    	String[] categories = null;
+    	return searcher.searchInCategory(instanceId, query, searchfield, categories, 0, 10);
+    }
 
     public static void main (String[] args) {
        BookSearch booksearch = null;
