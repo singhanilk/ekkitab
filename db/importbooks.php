@@ -296,6 +296,17 @@ else {
        if ($mode & MODE_BASIC) {
             $query = "insert into books ( $insertfields ) values ( $insertvalues )"; 
        }
+       elseif ($mode & MODE_PRICE) {
+            $bookavailable = $book['in_stock'];
+            $discountprice = $book['discount_price']; 
+            if ($bookavailable == '0') {
+              $whereclause = "(isbn = '$isbn') and ((discount_price is null) or ((in_stock = '0') and discount_price > '$discountprice'))";
+            }
+            else {
+              $whereclause = "(isbn = '$isbn') and ((discount_price is null) or (in_stock = '0') or ((in_stock = '1') and discount_price > '$discountprice'))";
+            }
+            $query = "update books set " . $updatestatement . " where $whereclause";
+       }
        else {
             $query = "update books set " . $updatestatement . " where isbn = '$isbn'";
        }

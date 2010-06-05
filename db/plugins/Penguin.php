@@ -232,8 +232,7 @@ class Parser {
             $book['weight']          = trim($fields[9]);
             $book['dimension']       = trim($fields[10]);
             $book['shipping_region'] = trim($fields[11]);
-            $book['info_source']     = "Penguin India";	
-            $book['sourced_from']    = "India";
+            $book['info_source']     = "Penguin";	
             $book['image']           = $book['isbn'].".jpg";
 
             $bisaccodes = array();
@@ -282,6 +281,8 @@ class Parser {
             if ($book['delivery_period'] == null) {
                 throw new exception("No delivery period data for " . $book['distributor']);
             }
+            $book['info_source']     = "Penguin";	
+            $book['sourced_from']    = "India";
 
             return $book;
         }

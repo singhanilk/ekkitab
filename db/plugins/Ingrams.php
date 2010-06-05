@@ -209,11 +209,7 @@ class Parser {
             $book['dimension'] = (trim(substr($line, 804, 5)) / 100)*2.54 . "x" . (trim(substr($line, 809, 5))/100)*2.54 . "x" . (trim(substr($line, 814, 5))/100)*2.54;
             //$book['pubcode'] = trim(substr($line, 827,  4));
             $book['image'] = $book['isbn'].".jpg";
-            $book['sourced_from'] = "US";
-			$book['delivery_period'] = 14 ;
-            $book['info_source'] = "Ingrams";	
             $book['language'] = "English";	
-            $book['shipping_region'] = 0;	
             return($book);
         }
 
@@ -276,6 +272,10 @@ class Parser {
             $book['isbn']               = $isbn ;
 			$book['publishing_date']    = $pubdate ;
             $book['info_source']        = "Ingrams";	
+			$book['delivery_period']    = 14 ;
+            $book['sourced_from']       = "US";
+            $book['info_source']        = "Ingrams";	
+            $book['shipping_region']    = 0;	
 			return($book);
 		}
 		
