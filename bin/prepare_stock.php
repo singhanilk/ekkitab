@@ -71,7 +71,7 @@ else {
                if ((strlen($file) > 4) && (substr($file, strlen($file) - 4, 4) == ".xls")) {
                    $plugin = strtolower(basename($directory));
                    $processorhome = $config['general']['processorhome'];
-                   $outputdir = $config['general']['outputdir'];
+                   $outputdir = $config['general']['stocklistdir'];
                    if (isset($config[$plugin])) {
                         $processor = $config[$plugin]['processor'];
                    }
