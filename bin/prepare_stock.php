@@ -43,7 +43,7 @@ else {
     }
 
 
-    function process($directory, $config) {
+    function process($directory, $archivedir, $config) {
 
         global $files_processed;
         global $files_failed;
@@ -65,7 +65,7 @@ else {
 		    if (($file == ".") || ($file == ".."))
 			   continue;
 			if (is_dir($directory."/".$file)) {
-			   process($directory."/".$file, $config); 
+			   process($directory."/".$file, $archivedir, $config); 
 			}
 			else {
                if ((strlen($file) > 4) && (substr($file, strlen($file) - 4, 4) == ".xls")) {
@@ -89,6 +89,16 @@ else {
                         }
                         else {
                              echo "  ...passed.\n";
+                             // move the processed file to archive
+                             if ($archivedir != "") {
+                                $archivedir .= "/" . $plugin;
+                                if (!file_exists($archivedir)) {
+                                    mkdir($archivedir, 0755, true);
+                                }
+                                $sourcefile = $directory . "/" . $file;
+                                $targetfile = $archivedir . "/" . $file;
+                                rename($sourcefile, $targetfile);
+                             }
                              $files_processed++;
                         }
                    }
@@ -118,7 +128,14 @@ else {
 
     $config = getConfig(STOCK_PROCESS_CONFIG_FILE);
     $startdir = $config['general']['home'];
-    process($startdir, $config); 
+    $archivedir = "";
+    if (!isset($config['general']['archive'])) {
+       echo "No archive directory set. Will not archive files.\n";
+    }
+    else {
+       $archivedir = $config['general']['archive'];
+    }
+    process($startdir, $archivedir, $config); 
 
 	echo "Processed: $files_processed  Failed: $files_failed  Ignored: $files_ignored.\n";
 
