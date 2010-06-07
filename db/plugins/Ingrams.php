@@ -247,7 +247,7 @@ class Parser {
             $book['publisher'] = $this->escape(trim(substr($line, 351, 45)));
             $book['isbn'] = trim(substr($line, 442, 17));
             $binding = substr($line, 410, 2);
-            $book['binding'] = getBinding($binding);
+            $book['binding'] = $this->getBinding($binding);
             $book['bisac'][0] = trim(substr($line, 463, 9));
             $book['bisac'][1] = trim(substr($line, 532, 9));
             $book['bisac'][2] = trim(substr($line, 601, 9));
