@@ -1,5 +1,6 @@
 Options +FollowSymlinks
 RewriteEngine on
+RewriteCond %{REQUEST_URI} !^/bugzilla
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-l
 RewriteCond %{REQUEST_URI} !/maintenance.html$ 

@@ -156,6 +156,63 @@ class Parser {
             }
             return $prefix;
         }
+        
+        function getBinding($code) {
+            $binding = "";
+            $code = strtoupper($code);
+            switch($code) {
+                case "AT": $binding = "Activity Book";
+                           break;
+                case "BA": 
+                case "BD": $binding = "Cloth/Bath/Board";
+                           break;
+                case "BL": $binding = "Bonded Leather";
+                           break;
+                case "BX": $binding = "Boxed Set";
+                           break;
+                case "CB": 
+                case "CT": $binding = "Coil/Cloth Textbook";
+                           break;
+                case "MS": 
+                case "MU": 
+                case "TY": 
+                case "DL": $binding = "Book and Merchandise";
+                           break;
+                case "FB": 
+                case "FF": $binding = "Fabric/Folded";
+                           break;
+                case "IL": $binding = "Imitation Leather";
+                           break;
+                case "LB": $binding = "Library Binding";
+                           break;
+                case "LE": $binding = "Leather";
+                           break;
+                case "LL": $binding = "Loose Leaf";
+                           break;
+                case "MM": 
+                case "TP": $binding = "Paperback";
+                           break;
+                case "TC": $binding = "Hardcover";
+                           break;
+                case "PB": $binding = "Prebound";
+                           break;
+                case "PI": $binding = "Picture Book";
+                           break;
+                case "SP": $binding = "Spiral";
+                           break;
+                case "RL": $binding = "Reinforced Library";
+                           break;
+                case "RB": $binding = "RingBound";
+                           break;
+                case "PO": $binding = "Printed Paper over Board";
+                           break;
+                case "PT": $binding = "Paper Textbook";
+                           break;
+                default:   break;
+
+            }
+            return $binding;
+        }
 
         function getBasic($line, $book, $db, $logger) {
             $book['isbn10'] = trim(substr($line, 0, 10));
@@ -190,17 +247,7 @@ class Parser {
             $book['publisher'] = $this->escape(trim(substr($line, 351, 45)));
             $book['isbn'] = trim(substr($line, 442, 17));
             $binding = substr($line, 410, 2);
-            if (substr($binding, 0, 1) == 'T')  {
-                $q = substr($binding, 1, 1) ;
-                if ($q == 'P') {
-                    $book['binding'] = "paperback";
-                }
-                elseif ($q == 'C') {
-                    $book['binding'] = "hardcover";
-                }
-                else 
-                    $book['binding'] = "unknown";
-            }
+            $book['binding'] = getBinding($binding);
             $book['bisac'][0] = trim(substr($line, 463, 9));
             $book['bisac'][1] = trim(substr($line, 532, 9));
             $book['bisac'][2] = trim(substr($line, 601, 9));
