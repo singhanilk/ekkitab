@@ -32,6 +32,9 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
 	protected $_lastPageNo;
 	protected $_displayPages = 5;
 
+    const XML_PATH_SEARCH_INDEX_FILE = 'global/search_index/path';
+	const JAVA_BRIDGE_INC_FILE = 'global/java_inc/path';
+
    protected function _prepareLayout()
     {
 	   
@@ -77,18 +80,45 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
 		
 	protected function getAllBooks() 
     {
+		$indexFilePathArray;
+		$javaIncFilePathArray;
+		$indexFilePath;
+		$javaIncFile;
 		$books=null;
-		$booksResult =NULL;
-		$pageSize=$this->getPageSize();
-		$currPageNo=$this->getCurrentPageNumber();
-		$startId=($currPageNo-1)*$pageSize;
-		$endId=($currPageNo*$pageSize)+1;
-		$results = Mage::getModel('ekkitab_catalog/product')->getCollection()
-					->addIdRangeFilter($startId,$endId);
-		return $results;
+		if (!($indexFilePathArray = Mage::getConfig()->getNode(self::XML_PATH_SEARCH_INDEX_FILE))) {
+			$indexFilePath = 'search_index_dir';
+		}else {
+			$indexFilePath = (string) $indexFilePathArray[0];
+		}
+		$indexFilePath =  Mage::getRoot().DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR.$indexFilePath;
+		if (!($javaIncFilePathArray = Mage::getConfig()->getNode(self::JAVA_BRIDGE_INC_FILE))) {
+			$javaIncFile = 'Java.inc';
+		}else {
+			$javaIncFile = (string) $javaIncFilePathArray[0];
+		}
+		try{
+			require($javaIncFile);
+			$search = new java("com.ekkitab.search.BookSearch",$indexFilePath );
+			
+			$results = $search->searchSequential($this->getPageSize(), $this->getCurrentPageNumber());
+			if(!is_null($results)){
+  				$productIds = java_values($results->getBookIds());
+				if(!is_null($productIds) && is_array($productIds) && count($productIds) > 0 ){
+					$books = Mage::getModel('ekkitab_catalog/product')->getCollection()
+					->addIdFilter($productIds);
+				}
+				$this->_productCollection = $books;
+			}
+		}
+		catch(Exception $e)
+		{
+			Mage::logException($e);
+			Mage::log($e->getMessage());
+			Mage::log("OR Exception in AllBooks.php : Could not include Java.inc file @ http://localhost:8080/JavaBridge/java/Java.inc");
+		}
+		unset($search);
+		return $books;
     }
- 
-		
  
 	public function getProductCollection(){
 
@@ -126,12 +156,18 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
      */
     public function getTotalResultCount()
     {
-	   if (!$this->getData('total_result_count')) {
+		$countArr = Mage::getSingleton('core/session')->getFullCatalogResultCount();
+		if(is_array($countArr) && count($countArr) > 0 ){
+			$size	= $countArr['total'];
+		}else{
+			$size ='';
+		}
+		if (!$size || $size=='') {
 			$size =  Mage::getResourceSingleton('ekkitab_catalog/product')
 					->getMaxBookId();
-			$this->setTotalResultCount($size);
+			Mage::getSingleton('core/session')->setFullCatalogResultCount(array('total'=>$size));
         }
-        return $this->getData('total_result_count');
+        return $size;
     }
 
 	/**
