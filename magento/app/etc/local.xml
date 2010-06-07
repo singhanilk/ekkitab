@@ -27,6 +27,10 @@
 -->
 <config>
     <global>
+       <cache>
+          <ek_cache>apc</ek_cache>
+          <backend>apc</backend>
+        </cache>
         <install>
             <date><![CDATA[Sat, 08 Aug 2009 14:14:58 +0000]]></date>
         </install>
