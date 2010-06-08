@@ -23,7 +23,7 @@ function getConfig($file) {
    return $config;
 }
 
-function process($directory, $config, $books) {
+function process($directory, $outputdir, $config, $books) {
 
    if (!is_dir($directory))
        return;
@@ -48,8 +48,8 @@ function process($directory, $config, $books) {
             if ((strlen($file) > 4) && (substr($file, strlen($file) - 4, 4) == ".txt")) {
 
                 $plugin = substr($file, 0, strpos($file, "-"));
-                $missingisbnfile  = $config[$plugin]['missingisbns'];
-                $pricefile        = $config[$plugin]['pricefile'];
+                $missingisbnfile  = $outputdir . "/" . $plugin . "-" ."missingisbns.txt";
+                $pricefile        = $outputdir . "/" . $plugin . "-" ."prices.txt";
                 echo "Missing ISBN file: $missingisbnfile\n";
                 echo "Price file: $pricefile\n";
                 $fh1 = fopen($missingisbnfile, "w");
@@ -104,7 +104,17 @@ $stocklistdir = $argv[1];
 
 $config = getConfig(STOCK_PROCESS_CONFIG_FILE);
 
+if (!isset($config['general']['catalog'])) {
+    echo "Catalog file is not defined in the configuration. Cannot continue.\n";
+    exit(1);
+}
+if (!isset($config['general']['outputdir'])) {
+    echo "Output directory is not defined in the configuration. Cannot continue.\n";
+    exit(1);
+}
+
 $catalogfile  = $config['general']['catalog'];
+$targetdir = $config['general']['outputdir'];
 
 $books = array();
 $fhandle = fopen($catalogfile,"r");
@@ -127,6 +137,6 @@ while($contents = fgets($fhandle)){
    }
 }
 fclose($fhandle);
-process($stocklistdir, $config, $books);
+process($stocklistdir, $targetdir, $config, $books);
 
 ?>

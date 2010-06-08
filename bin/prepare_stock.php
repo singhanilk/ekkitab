@@ -49,6 +49,8 @@ else {
         global $files_failed;
         global $files_ignored;
 
+        static $currentplugin = "";
+
         if (!is_dir($directory))
             return;
 
@@ -70,18 +72,30 @@ else {
 			else {
                if ((strlen($file) > 4) && (substr($file, strlen($file) - 4, 4) == ".xls")) {
                    $plugin = strtolower(basename($directory));
+                   if ($config[$plugin]['concatfiles'] == 1) {
+                        if (strcmp($currentplugin, $plugin)) { //first file to be processed in this directory
+                            $filewritemode = ">";
+                        }
+                        else {
+                            $filewritemode = ">>";
+                        }
+                   }
+                   else {
+                        $filewritemode = ">";
+                   }
+                   $currentplugin = $plugin;
                    $processorhome = $config['general']['processorhome'];
-                   $outputdir = $config['general']['outputdir'];
-                   if (isset($config[$plugin])) {
+                   $outputdir = $config['general']['stocklistdir'];
+                   if (isset($config[$plugin]['processor'])) {
                         $processor = $config[$plugin]['processor'];
                    }
                    else {
                         $processor = "";
                    }
-                   if (is_executable($processorhome . "/" . $processor)) {
+                   if (($processor != "") && is_executable($processorhome . "/" . $processor)) {
                         echo "Running... " . $processor . " on '" . $file . "'\n";
                         $outputfile = str_replace(".pl","", $processor) . "-stocklist.txt";
-                        $commandline = $processorhome . "/" . $processor . " '" . $directory . "/" . $file . "' >  " . $outputdir . "/" . $outputfile;
+                        $commandline = $processorhome . "/" . $processor . " '" . $directory . "/" . $file . "' " . $filewritemode . "  " . $outputdir . "/" . $outputfile;
                         $success = system($commandline, $returnvalue);
                         if ($returnvalue != 0) {
                              echo "  ...failed.\n";
@@ -91,12 +105,12 @@ else {
                              echo "  ...passed.\n";
                              // move the processed file to archive
                              if ($archivedir != "") {
-                                $archivedir .= "/" . $plugin;
-                                if (!file_exists($archivedir)) {
-                                    mkdir($archivedir, 0755, true);
+                                $outputdir = $archivedir . "/" . $plugin;
+                                if (!file_exists($outputdir)) {
+                                    mkdir($outputdir, 0755, true);
                                 }
                                 $sourcefile = $directory . "/" . $file;
-                                $targetfile = $archivedir . "/" . $file;
+                                $targetfile = $outputdir . "/" . $file;
                                 rename($sourcefile, $targetfile);
                              }
                              $files_processed++;
