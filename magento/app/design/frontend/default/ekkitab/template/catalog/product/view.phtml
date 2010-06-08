@@ -52,6 +52,7 @@
 		$translators=$authors['t'];
 		$illustrators=$authors['i'];
 		$photographers=$authors['p'];
+		$others=$authors['o'];
 
 		$parsedAuthor = "";
 		$parsedAuthor.= strlen($author) > 0 ? "by ".$author." (Author)" : "";
@@ -82,6 +83,27 @@
 			<div class="lineHeight14em"><span class="boldFont">Publisher:  <?php echo $publishers ?></span></div>
 			<div class="lineHeight14em"><span class="boldFont">Publishing Date:  <?php echo $publishDate ?></span></div>
 			<div class="lineHeight14em"><span class="boldFont">Language : <?php echo ucwords($_product->getLanguage()) ?></span></div>
+			<?php if($editors && trim($editors)!=''):?>
+			  <div class="lineHeight14em"><span class="boldFont">Editors : <?php echo ucwords($editors) ?></span></div>
+			<?php endif;?>
+			
+			<?php if($illustrators && trim($illustrators)!=''):?>
+			  <div class="lineHeight14em"><span class="boldFont">Illustrators : <?php echo ucwords($illustrators) ?></span></div>
+			<?php endif;?>
+			
+			<?php if($translators && trim($translators)!=''):?>
+			  <div class="lineHeight14em"><span class="boldFont">Translators : <?php echo ucwords($translators) ?></span></div>
+			<?php endif;?>
+			
+			<?php if($photographers && trim($photographers)!=''):?>
+			  <div class="lineHeight14em"><span class="boldFont">Photographers : <?php echo ucwords($photographers) ?></span></div>
+			<?php endif;?>
+			
+			
+			<?php if($others && trim($others)!=''):?>
+			  <div class="lineHeight14em"><span class="boldFont">Other Contributors : <?php echo ucwords($others) ?></span></div>
+			<?php endif;?>
+			
 			<?php if(!$inStock || $_product->getListPrice() <= 0):?>
 			  <div class="marginTop5px"><img src="<?php echo $this->getSkinUrl('images/out_of_stock_image.png')?>" align="absmiddle"> &nbsp; <a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($_product->getId()) ?>">Add to Wishlist</a> </div>
 
