@@ -86,13 +86,13 @@ else {
                    $currentplugin = $plugin;
                    $processorhome = $config['general']['processorhome'];
                    $outputdir = $config['general']['stocklistdir'];
-                   if (isset($config[$plugin])) {
+                   if (isset($config[$plugin]['processor'])) {
                         $processor = $config[$plugin]['processor'];
                    }
                    else {
                         $processor = "";
                    }
-                   if (is_executable($processorhome . "/" . $processor)) {
+                   if (($processor != "") && is_executable($processorhome . "/" . $processor)) {
                         echo "Running... " . $processor . " on '" . $file . "'\n";
                         $outputfile = str_replace(".pl","", $processor) . "-stocklist.txt";
                         $commandline = $processorhome . "/" . $processor . " '" . $directory . "/" . $file . "' " . $filewritemode . "  " . $outputdir . "/" . $outputfile;
