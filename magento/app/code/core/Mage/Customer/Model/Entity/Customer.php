@@ -124,7 +124,17 @@ class Mage_Customer_Model_Entity_Customer extends Mage_Eav_Model_Entity_Abstract
      */
     protected function _saveAddresses(Mage_Customer_Model_Customer $customer)
     {
+        //Ekkitab: Change. Do not save more than 50 addresses.
+        //No legitimate customer will require more than this number of addresses.
+        //All addresses beyond 50 are marked for delete.
+
+        $addresscount = 0;
+        $maxaddresses = 50;
+
         foreach ($customer->getAddresses() as $address) {
+            if ($addresscount++ >= $maxaddresses) {
+                $address->setData('_deleted', 1);
+            } 
             if ($address->getData('_deleted')) {
                 if ($address->getId() == $customer->getData('default_billing')) {
                     $customer->setData('default_billing', null);
