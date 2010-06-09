@@ -94,6 +94,9 @@ $bookList=$this->getProductCollection();
 
 					</ul>
 					<?php endif; ?>
+					<br/>
+					<form id="allbooks_paginnation" action="<?php echo $this->helper('ekkitab_catalog')->getFullCatalogUrl() ?>" method="get">
+					Go to Page : &nbsp; <input id="search" type="text" class="pageNoField" name="<?php echo $this->helper('ekkitab_catalog')->getPageNoVarName() ?>" value="<?php echo $this->helper('ekkitab_catalog')->getCurrentPageNumber() ?>" /> <input type="image" src="<?php echo $this->getSkinUrl('images/search_button.png') ?>"  width="21" height="21" alt="<?php echo $this->__('Go') ?>" border="0" /></form>
 				</div>
 			</div><!-- rightArea -->
 			<div class="clear"></div>
@@ -101,7 +104,20 @@ $bookList=$this->getProductCollection();
 <?php 	foreach($bookList as $book):	
 			$authorArr = $book->getAuthor();
 			$author = $authorArr['a'] ;
-			$author = strlen($author) > 0 ? $author : "Unknown";
+			$parsedAuthor = "";
+			if(!$author || trim($author)==''){
+				$editors=$authorArr['e'];
+				$translators=$authorArr['t'];
+				$illustrators=$authorArr['i'];
+				$photographers=$authorArr['p'];
+				$others=$authorArr['o'];
+			
+				$parsedAuthor.= strlen($editors) > 0 ?(strlen($parsedAuthor) > 0 ? "; ":"")."Editor: ".$editors: "";
+				$parsedAuthor.= strlen($translators) > 0 ? (strlen($parsedAuthor) > 0 ? "; ":"")."Translator: ".$translators: "";
+				$parsedAuthor.= strlen($illustrators) > 0 ? (strlen($parsedAuthor) > 0 ? "; ":"")."Illustrators: ".$illustrators: "";
+				$parsedAuthor.= strlen($others) > 0 ? (strlen($parsedAuthor) > 0 ? "; ":"")."Contributors: ".$others: "";
+			}
+			
 			$title = $book->getTitle();
 			$image = $book->getImage();
 			$id = $book->getId();
@@ -141,7 +157,7 @@ $bookList=$this->getProductCollection();
 			<!-- skuImage -->
 			<div class="detailsArea">
 			<div class="bkTitle"><a href="<?php echo $this->getUrl($url)?>" title="<?php echo $title ?>"><?php echo $title ?></a></div><!-- bkTitle -->
-			<div class="lineHeight14em">Author: <?php echo $author ?></div>
+			<div class="lineHeight14em"><?php if($author && trim($author)!=''):?>Author: <?php echo $author ?><?php else: ?><?php echo $parsedAuthor ?><?php endif; ?></div>
 			<div class="lineHeight14em">ISBN:  <?php echo $isbn ?></div>
 			<div class="lineHeight14em">Binding: <?php echo $binding ?></div>
 			<div class="lineHeight14em">Language : <?php echo $language ?></div>

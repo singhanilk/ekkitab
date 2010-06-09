@@ -151,7 +151,21 @@ if(!is_null($results) && is_array($results)){
 <?php 	foreach($bookList as $book):	
 			$authorArr = $book->getAuthor();
 			$author = $authorArr['a'] ;
-			$author = strlen($author) > 0 ? $author : "Unknown";
+			
+			$parsedAuthor = "";
+			if(!$author || trim($author)==''){
+				$editors=$authorArr['e'];
+				$translators=$authorArr['t'];
+				$illustrators=$authorArr['i'];
+				$photographers=$authorArr['p'];
+				$others=$authorArr['o'];
+			
+				$parsedAuthor.= strlen($editors) > 0 ?(strlen($parsedAuthor) > 0 ? "; ":"")."Editor: ".$editors: "";
+				$parsedAuthor.= strlen($translators) > 0 ? (strlen($parsedAuthor) > 0 ? "; ":"")."Translator: ".$translators: "";
+				$parsedAuthor.= strlen($illustrators) > 0 ? (strlen($parsedAuthor) > 0 ? "; ":"")."Illustrators: ".$illustrators: "";
+				$parsedAuthor.= strlen($others) > 0 ? (strlen($parsedAuthor) > 0 ? "; ":"")."Contributors: ".$others: "";
+			}
+			
 			$title = $book->getTitle();
 			$image = $book->getImage();
 			$id = $book->getId();
@@ -191,7 +205,7 @@ if(!is_null($results) && is_array($results)){
 			<!-- skuImage -->
 			<div class="detailsArea">
 			<div class="bkTitle"><a href="<?php echo $this->getUrl($url)?>" title="<?php echo $title ?>"><?php echo $title ?></a></div><!-- bkTitle -->
-			<div class="lineHeight14em">Author: <?php echo $author ?></div>
+			<div class="lineHeight14em"><?php if($author && trim($author)!=''):?>Author: <?php echo $author ?><?php else: ?><?php echo $parsedAuthor ?><?php endif; ?></div>
 			<div class="lineHeight14em">ISBN:  <?php echo $isbn ?></div>
 			<div class="lineHeight14em">Binding: <?php echo $binding ?></div>
 			<div class="lineHeight14em">Language : <?php echo $language ?></div>

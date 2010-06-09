@@ -764,8 +764,6 @@ a:hover {
 	border-bottom: 1px dotted #333;
 }
 
-/* styles below changed / added on Feb 3, 2010 */
-
 .globalLinks {
 	font-size:1.1em;
 	font-weight:bold;
@@ -1148,8 +1146,6 @@ a:hover {
 	margin-top: 5px;
 }
 
-/*  styles added / changed on March 10 */
-
 .scartArea {
 	width: 940px;
 	margin: 0 0 100px;
@@ -1509,8 +1505,6 @@ a:hover {
 	list-style-type:circle;
 }
 
-/*  styles below added/modified on March 14, 2010 */
-
 .notFoundArea, .regArea {
 	border-bottom:1px dotted #333333;
 	margin:16px auto 10px;
@@ -1607,9 +1601,6 @@ a:hover {
 	margin: 8px 0;
 
 }
-
-/* styles below added/modified on March 20, 2010 */
-
 
 .thankYouMsg {
 	margin: 16px 0;
@@ -1787,7 +1778,7 @@ a:hover {
 .custom-data-table .odd  { background:#fff }
 .custom-data-table .even { background:#fcfcfc; }
 /*.custom-data-table tr.last th,*/
-.custom-data-table tr.last td { !important; }
+.custom-data-table tr.last td {}
 .custom-data-table .wishlist { padding:8px 0px; }
 .custom-data-table th { padding:2px 6px; white-space:nowrap; font-size:10px; font-weight:bold; text-transform:uppercase; border-bottom:1px solid #cccccc; }
 .custom-data-table th.wrap { white-space:normal; }
@@ -1908,7 +1899,7 @@ a:hover {
 	color:#CC6600;
 	float:left;
 	font-size:20px;
-	padding-left: 2x;
+	padding-left: 2px;
 }
 .printArea .edit {
 	font-family: Arial, Helvetica, sans-serif;
@@ -1943,7 +1934,7 @@ a:hover {
 .print-data-table .odd  { background:#fff }
 .print-data-table .even { background:#fff; }
 /*.print-data-table tr.last th,*/
-.print-data-table tr.last td { !important; }
+.print-data-table tr.last td { }
 .print-data-table th { padding:2px 6px; white-space:nowrap; font-size:11px; font-weight:bold; text-transform:uppercase; border-bottom:1px solid #cccccc; }
 .print-data-table th.wrap { white-space:normal; }
 .print-data-table th a,
@@ -2057,7 +2048,6 @@ a:hover {
 
 }
 
-<!-- styles below added/modified on May 12, 2010 -->
 .delete {
 	clear: both
 }
@@ -2258,4 +2248,12 @@ a:hover {
 	font-size:12px;
 	font-weight:normal;
 	line-height:1.6em;
+}
+
+.searchResTop .pageNoField {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #000;
+	width: 45px;
+	margin-right: 8px;
 }
