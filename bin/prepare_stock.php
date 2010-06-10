@@ -71,7 +71,8 @@ else {
 			}
 			else {
                if ((strlen($file) > 4) && (substr($file, strlen($file) - 4, 4) == ".xls")) {
-                   $plugin = strtolower(basename($directory));
+                   $lower_directory = strtolower(basename($directory));
+                   $plugin = str_replace(" ","",$lower_directory);
                    if ($config[$plugin]['concatfiles'] == 1) {
                         if (strcmp($currentplugin, $plugin)) { //first file to be processed in this directory
                             $filewritemode = ">";
