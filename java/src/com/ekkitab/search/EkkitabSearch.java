@@ -10,9 +10,7 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.MapFieldSelector;
 import org.apache.lucene.document.FieldSelector;
 import org.apache.lucene.document.FieldSelectorResult;
-import org.apache.lucene.document.LoadFirstFieldSelector;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.HitCollector;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
@@ -21,15 +19,12 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.TermEnum;
 import org.apache.lucene.index.TermDocs;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.search.DuplicateFilter;
 import org.apache.lucene.search.spell.SpellChecker;
 
 public class EkkitabSearch {
@@ -47,6 +42,7 @@ public class EkkitabSearch {
     private static final int FUZZYLIMIT = 150;
     private static AtomicReference<TimerSnapshot> basicSearchTimer = new AtomicReference<TimerSnapshot>(new TimerSnapshot());
     private static AtomicReference<TimerSnapshot> catSearchTimer = new AtomicReference<TimerSnapshot>(new TimerSnapshot());
+    private enum MATCH_MODE {MATCH_PHRASE, MATCH_WORDS};
     
 
     public EkkitabSearch(String indexDir) throws EkkitabSearchException {
@@ -109,7 +105,7 @@ public class EkkitabSearch {
     	
     	return new SearchResult(books, new HashMap<String, Integer>(), 0, "", "", ""); 
     }
-
+    
     public SearchResult searchInCategory(long instanceId, 
                                          String query,
                                          String searchfield,
@@ -117,49 +113,66 @@ public class EkkitabSearch {
                                          int start, int end) throws EkkitabSearchException {
 
         if ((reader == null) || (searcher == null))	
-            throw new EkkitabSearchException("Initialization Error!");
+            throw new EkkitabSearchException("Search Not Initialized.");
 
         long fstart = System.currentTimeMillis();
         ScoreDoc[] docs = null;
-        Query luceneQuery = null;
+                
         String searchQuery = null;
-        if ((searchfield != null) && (searchfield.equals("exact"))) {
-        	searchQuery = query;
-        }
-        else {
-        	searchQuery = createSearchQuery(query, categories, searchfield);
-        }
-        //logger.debug("DEBUG: Search Query is: '" + searchQuery + "'");
-        String suggestQueries[] = new String[1];
-        suggestQueries[0] = "";
+        Query luceneQuery = null;
+        String suggestQueries[] = {""};
 
+        //Search strategy: steps to execute until you find one or more books.
+        //1. Try to get exact match for give phrase.
+        //2. Break up phrase into words. Search for words.
+        //3. Try suggest (if not exact match requested)
+        //4. In the above if searchfield is isbn, then step 1. only.
+        
         try {
-        	if (!searchQuery.equals("")) {
+
+        	boolean exitsearch = false;
+        	
+        	MATCH_MODE matchmode = MATCH_MODE.MATCH_PHRASE;
+        	searchQuery = createSearchQuery(query, categories, searchfield, matchmode);
+        	
+            if ((searchQuery != null) && (!searchQuery.equals(""))) {
         		luceneQuery = new QueryParser("title", new StandardAnalyzer()).parse(searchQuery);
-        	}
-        	//logger.debug("DEBUG: Lucene Query is: '" + luceneQuery.toString() + "'");
-
-        	//suggestQuery = "";
-
-        	if (luceneQuery != null) {
-        		docs = search(luceneQuery, instanceId);
-        		if ((docs == null) && (!query.equals(""))){ // Try lucene suggest
-        			suggestQueries  = getSuggestQuery(query, searchfield);
-        			if (suggestQueries.length > 0) {
-        				searchQuery = createSearchQuery(suggestQueries[0], categories, searchfield);
-        				//logger.debug("DEBUG: Search Query is: '" + searchQuery + "'");
-        				if (!searchQuery.equals("")) {
-        					luceneQuery = new QueryParser("title", new StandardAnalyzer()).parse(searchQuery);
-        					if (luceneQuery != null) {
-        						docs = search(luceneQuery, instanceId);
-        					}
-        				}
-        			}
+        		//logger.debug("DEBUG: Lucene Query is: '" + luceneQuery.toString() + "'");
+            }
+        	docs = search(luceneQuery, instanceId);
+        	if (docs == null) {   
+        		if ((searchfield != null) && (searchfield.equals("isbn") || searchfield.equals("exact"))) {
+        			exitsearch = true;;
         		}
         	}
+        	
+        	if ((docs == null) && (!exitsearch)) {
+        		matchmode = MATCH_MODE.MATCH_WORDS;
+        		searchQuery = createSearchQuery(query, categories, searchfield, matchmode);
+            	
+                if ((searchQuery != null) && (!searchQuery.equals(""))) {
+            		luceneQuery = new QueryParser("title", new StandardAnalyzer()).parse(searchQuery);
+            		//logger.debug("DEBUG: Lucene Query is: '" + luceneQuery.toString() + "'");
+                }
+            	docs = search(luceneQuery, instanceId);
+        	}
+        	
+        	if ((docs == null) && (!exitsearch)) {
+        		suggestQueries  = getSuggestQuery(query, searchfield);
+    			if (suggestQueries.length > 0) {
+    				searchQuery = createSearchQuery(suggestQueries[0], categories, searchfield, matchmode);
+                	
+                    if ((searchQuery != null) && (!searchQuery.equals(""))) {
+                		luceneQuery = new QueryParser("title", new StandardAnalyzer()).parse(searchQuery);
+                		//logger.debug("DEBUG: Lucene Query is: '" + luceneQuery.toString() + "'");
+                    }
+                	docs = search(luceneQuery, instanceId);
+    			}
+        	}
+            
         }
         catch (Exception e) {
-        	logger.fatal("["+instanceId+"] Lucene search failed with exception" + e.getMessage());
+        	logger.fatal("["+instanceId+"] Lucene search failed with exception " + e.getMessage());
         	throw new EkkitabSearchException(e);
         }
 
@@ -170,23 +183,15 @@ public class EkkitabSearch {
                                      			   0,
                                      			   "",
                                      			   "",
-                                                   searchQuery);
+                                                   "");
         	return result;
         }
 
-        //BitSet allhits = new BitSet(reader.maxDoc());
-        //for (int i = 0; (i < docs.length); i++) {
-        //	allhits.set(docs[i].doc);
-        //}
-
-        //List<String> books = null;
-        String[] fields = {"entityId"};
         BitSet processed = new BitSet(reader.maxDoc());
         int index = 0;
         List<String> books = new ArrayList<String>();
         int documentCount = 0;
         
-        //long f1total = 0, f2total = 0, f3total = 0;
         FieldSelector fselect = new FieldSelector() {
         	public FieldSelectorResult accept(String fieldName) {
         		if (fieldName.equals("entityId"))
@@ -262,12 +267,10 @@ public class EkkitabSearch {
         final BitSet hits = new BitSet(reader.maxDoc());
 
         Map<String, Integer> catMap = new HashMap<String, Integer>();
-        int catsize = 0;
-        //long ftotal = 0;
-
+       
         long fstart = System.currentTimeMillis();
         if (categories != null) {
-            catsize = categories.size();
+            int catsize = categories.size();
             searchQuery = searchQuery.equals("") ? "" : searchQuery + " AND ";
             
             for (String category: categories) {
@@ -310,27 +313,44 @@ public class EkkitabSearch {
         return (fd == null ? null : fd.stringValue());
     }
     
-    private String createSearchQuery(String query, String[] categories, String searchfield) {
+    private String createSearchQuery(String query, String[] categories, String searchfield, MATCH_MODE mode) {
 
         if ((categories == null) && 
             ((query == null) || (query.equals("")))) {
             return "";
         }
+        
+        if ((searchfield != null) && (searchfield.equals("exact"))) {
+        	return query;
+        }
 
         StringBuffer sb = new StringBuffer();
-
+        List<String> terms = new ArrayList<String>();        
         if (!query.equals("")) {
-           String phrase = "\"" + query + "\"";
-           sb.append("( ");
+        	switch (mode) {
+        		case MATCH_PHRASE:
+        			terms.add("\"" + query + "\"");
+        			break;
+        		case MATCH_WORDS:
+        			String[] words = query.split(" ");
+        			for (String word: words) {
+        				terms.add(word);
+        			}
+        			break;
+        		default: break;
+        	}
+        }
+    	sb.append("( ");
+        for (String term: terms) {
            if (searchfield != null) {
-              sb.append(searchfield+":"+phrase+"^5 ");
+              sb.append(searchfield+":"+term+" ");
            }
            else {
-              sb.append("title:"+phrase+"^5 ");
-              sb.append("author:"+phrase+"^5 ");
+              sb.append("title:"+term+"^2 ");
+              sb.append("author:"+term+" ");
            }
-           sb.append(" ) ");
         }
+        sb.append(" ) ");
 
         if (categories != null) {
            String prelude = "";
@@ -349,6 +369,10 @@ public class EkkitabSearch {
     }
 
     private ScoreDoc[] search(Query query, long instanceId) throws Exception {
+    	
+       if (query == null) {
+    	   return null;
+       }
        //logger.debug("["+instanceId+"] Lucene Query: "+query.toString());
        TopFieldDocCollector collector = new TopFieldDocCollector(reader, sorter, MAXHITS);
 
@@ -366,19 +390,22 @@ public class EkkitabSearch {
     }
 
     private String[] getSuggestQuery(String query, String searchfield) throws Exception {
-
-       //StringBuilder sb = new StringBuilder();
-       query = query.replaceAll("\"", "");
-       query = query.replaceAll("\\W+", "");
-       
+    	
        List<String> results = new ArrayList<String>();
        String[] suggestions = new String[0];
-       
+        
+       if (query.equals("")) {
+    	   return suggestions;
+       }
        if (searchfield != null) {
     	   if (searchfield.equals("exact")) { //Nothing to do.
     		   return suggestions;
     	   }
        }
+
+       //StringBuilder sb = new StringBuilder();
+       query = query.replaceAll("\"", "");
+       query = query.replaceAll("\\W+", "");
        
        suggestions = author_speller.suggestSimilar(query, 5);
             
