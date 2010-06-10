@@ -27,35 +27,68 @@
 <?php if (!($_shippingRateGroups = $this->getShippingRates())): ?>
     <strong><?php echo $this->__('Sorry, no quotes are available for this order at this time.') ?></strong>
 <?php else: ?>
-<?php $first=true; $inFirst=true; ?>
 <dl class="shipment-methods">
-    <?php foreach ($_shippingRateGroups as $code => $_rates): ?>
-        <dt><?php echo $this->getCarrierName($code) ?></dt>
-        <dd>
-            <ul>
-            <?php foreach ($_rates as $_rate): ?>
-                <li>
-                   <?php if ($_rate->getErrorMessage()): ?>
-	                <ul class="messages"><li class="error-msg"><ul><li><?php echo $_rate->getErrorMessage() ?></li></ul></li></ul>
-                   <?php else: ?>
-                        <input name="shipping_method" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$this->getAddressShippingMethod() || ($first && $inFirst) ) echo ' checked="checked"' ?>/>
-                        <label for="s_method_<?php echo $_rate->getCode() ?>"><?php echo $_rate->getMethodTitle() ?>
-                        <strong>
-                        <?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax()); ?>
-                        <?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
+<?php 
+	$groupCount = is_array($_shippingRateGroups)? count($_shippingRateGroups):$_shippingRateGroups->count();
+	$radioOption=true;
+	if($groupCount==1){
+		$keyArr = array_keys($_shippingRateGroups);
+		$_rates = $_shippingRateGroups[$keyArr[0]];
+		$ratesCount = is_array($_rates)? count($_rates):$_rates->count();
+		if($ratesCount==1){
+			$radioOption=false;
+			$rtKeyArr = array_keys($_rates);
+			$_rate = $_rates[$rtKeyArr[0]];
+?>
+<?php
+			if ($_rate->getErrorMessage()): ?>
+				<dt><?php echo $this->getCarrierName($keyArr[0]) ?></dt> 
+				<ul class="messages"><li class="error-msg"><ul><li><?php echo $_rate->getErrorMessage() ?></li></ul></li></ul>
+<?php		else: ?>
+				<input name="shipping_method" type="hidden" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_rate->getCode() ?>" <?php if($_rate->getCode()===$this->getAddressShippingMethod()) echo ' checked="checked"' ?>/>
+				<dt>
+					<label for="s_method_<?php echo $_rate->getCode() ?>"><?php echo $this->getCarrierName($keyArr[0]) ?> - 			
+					<?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax()); ?>
+					<?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
+					<?php echo $_excl; ?>
+					<?php if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_excl): ?>
+						(<?php echo $this->__('Incl. Tax'); ?> <?php echo $_incl; ?>)
+					<?php endif; ?></label>
+				</dt> 
+				
+<?php		endif; ?>
+<?php	}
+	}
+	if($radioOption){
+		foreach ($_shippingRateGroups as $code => $_rates): ?>
+			<dt><?php echo $this->getCarrierName($code) ?></dt>
+			<dd>
+				<ul>
+				<?php foreach ($_rates as $_rate): ?>
+					<li>
+					   <?php if ($_rate->getErrorMessage()): ?>
+						<ul class="messages"><li class="error-msg"><ul><li><?php echo $_rate->getErrorMessage() ?></li></ul></li></ul>
+					   <?php else: ?>
+							<input name="shipping_method" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$this->getAddressShippingMethod()) echo ' checked="checked"' ?>/>
+							<label for="s_method_<?php echo $_rate->getCode() ?>"><?php echo $_rate->getMethodTitle() ?>
+							<strong>
+							<?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax()); ?>
+							<?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
 
-                        <?php echo $_excl; ?>
-                        <?php if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                            (<?php echo $this->__('Incl. Tax'); ?> <?php echo $_incl; ?>)
-                        <?php endif; ?>
-                        </strong>
-                        </label>
-                   <?php endif ?>
-                </li>
-            <?php $inFirst=false; endforeach; ?>
-            </ul>
-        </dd>
-    <?php $first=false;
-	endforeach; ?>
+							<?php echo $_excl; ?>
+							<?php if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_excl): ?>
+								(<?php echo $this->__('Incl. Tax'); ?> <?php echo $_incl; ?>)
+							<?php endif; ?>
+							</strong>
+							</label>
+					   <?php endif ?>
+					</li>
+				<?php endforeach; ?>
+				</ul>
+			</dd>
+<?php	endforeach;
+	}
+?>
 </dl>
 <?php endif; ?>
+
