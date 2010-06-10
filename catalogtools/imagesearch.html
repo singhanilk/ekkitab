@@ -1,0 +1,110 @@
+<!--
+  copyright (c) 2009 Google inc.
+
+  You are free to copy and use this sample.
+  License can be found here: http://code.google.com/apis/ajaxsearch/faq/#license
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Google AJAX Search API Sample</title>
+    <script src="http://www.google.com/jsapi?key=ABQIAAAA1XbMiDxx_BTCY2_FkPh06RRaGTYH6UMl8mADNa0YKuWNNa8VNxQEerTAUcfkyrr6OwBovxn7TDAH5Q"></script>
+    <script type="text/javascript">
+    /*
+    *  How to search for images and restrict them by size.
+    *  This demo will also show how to use Raw Searchers, aka a searcher that is
+    *  not attached to a SearchControl.  Thus, we will handle and draw the results
+    *  manually.
+    */
+    
+    google.load('search', '1');
+    
+    function searchComplete(searcher,isbn) {
+      // Check that we got results
+      if (searcher.results && searcher.results.length > 0) {
+        var formContainer = document.createElement('form');
+        formContainer.name = "myform";
+        formContainer.action = "http://localhost/datafiles/imagesearch.php";
+        formContainer.method="post";
+        // Grab our content div, clear it.
+        var contentDiv = document.getElementById('content');
+        contentDiv.innerHTML = '';
+        // Loop through our results, printing them to the page.
+        var results = searcher.results;
+        for (var i = 0; i < results.length; i++) {
+          // For each result write it's title and image to the screen
+          var result = results[i];
+          var imgContainer = document.createElement('div');
+    
+          var title = document.createElement('h2');
+          // We use titleNoFormatting so that no HTML tags are left in the title
+          title.innerHTML = result.titleNoFormatting;
+          //alert(result.titleNoFormatting);
+
+          var newImg = document.createElement('input');
+          // There is also a result.url property which has the escaped version
+          newImg.name = 'imagesrc[]';
+          newImg.value = result.tbUrl;
+	        //alert(result.tbUrl);
+
+          imgContainer.appendChild(title);
+          imgContainer.appendChild(newImg);
+          // Put our title + image in the content
+          formContainer.appendChild(imgContainer);
+        }
+        var inputText = document.createElement('input');
+        inputText.name ="lastisbn";
+        inputText.value = isbn;
+        formContainer.appendChild(inputText);
+        contentDiv.appendChild(formContainer);
+      } else {
+        var formContainer = document.createElement('form');
+        formContainer.name = "myform";
+        formContainer.action = "http://localhost/datafiles/imagesearch.php";
+        formContainer.method="post";
+        var inputText = document.createElement('input');
+        inputText.name ="lastisbn";
+        inputText.value = isbn;
+        formContainer.appendChild(inputText);
+        var contentDiv = document.getElementById('content');
+        contentDiv.innerHTML = '';
+        contentDiv.appendChild(formContainer);
+      }
+      // Submit the form so that it goes in a loop.
+      //alert("Posting the form again");
+      document.myform.submit();
+    }
+    
+    function OnLoad() {
+      // Our ImageSearch instance.
+      var imageSearch = new google.search.ImageSearch();
+    
+      // Restrict to extra large images only
+      imageSearch.setRestriction(google.search.ImageSearch.RESTRICT_IMAGESIZE,
+                                 google.search.ImageSearch.IMAGESIZE_MEDIUM);
+      imageSearch.setRestriction(google.search.ImageSearch.RESTRICT_FILETYPE,
+                            google.search.ImageSearch.FILETYPE_JPG);
+      // imageSearch.setRestriction(google.search.ImageSearch.RESTRICT_RIGHTS,
+      //                      google.search.ImageSearch.RIGHTS_REUSE);
+                          
+                      
+    
+      // Here we set a callback so that anytime a search is executed, it will call
+      // the searchComplete function and pass it our ImageSearch searcher.
+      // When a search completes, our ImageSearch object is automatically
+      // populated with the results.
+      imageSearch.setSearchCompleteCallback(this, searchComplete, [imageSearch, "ISBN"]);
+    
+      // Find me a beautiful car.
+      imageSearch.execute("ISBN");
+    }
+    google.setOnLoadCallback(OnLoad);
+
+    </script>
+  </head>
+  <body style="font-family: Arial;border: 0 none;">
+    <div id="content">Loading...</div>
+  </body>
+</html>
