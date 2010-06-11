@@ -31,6 +31,7 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 	protected $_columnCount = 4;
 	protected $_pageSize = 15;
 	protected $_pageNo;
+	protected $_isbn;
 	protected $_categoryPath;
 	protected $_filterBy;
 	protected $_queryText;
@@ -171,11 +172,13 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 			// this is to filter the search by title / author / or both
 			$filterBy = strlen($this->getFilterByText()) > 0 ?($this->getFilterByText().":"):""; 
 			//this is to check if the query text is all numbers...then maybe its isbn... so append isbn: before the query text... 
+			$query = urldecode($this->helper('ekkitab_catalog')->getEscapedQueryText());
 			if($this->isIsbn($this->helper('ekkitab_catalog')->getEscapedQueryText())){
+				$query = $this->_isbn;
 				$filterBy = "isbn:"; 
 			}
 			//$start = (float) array_sum(explode(' ', microtime()));
-			$results = $search->searchBook($this->getDecodedString($categoryPath),$filterBy.urldecode($this->helper('ekkitab_catalog')->getEscapedQueryText()), $this->getPageSize(), $this->getCurrentPageNumber());
+			$results = $search->searchBook($this->getDecodedString($categoryPath),$filterBy.$query, $this->getPageSize(), $this->getCurrentPageNumber());
 			//$start3= (float)microtime(true);
 
 			/*$end = (float) array_sum(explode(' ', microtime()));
@@ -399,13 +402,48 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
      */
     public function isIsbn($str)
     {
-		if(preg_match("/^[0-9]*$/",trim($str))){
-			return true;
+		$str=trim($str);
+		if(preg_match("/^[0-9]*$/",$str)){
+			if (strlen($str) == 12) {
+				$this->_isbn =  '0'.$str;
+				return true;
+			}else if (strlen($str) == 10) {
+				$this->_isbn = $this->isbn10to13($str);
+				return true;
+			}else if (strlen($str) == 13) {
+				$this->_isbn = $str;
+				return true;
+			}else{
+				return false;
+			}
 		}else{
 			return false;
 		}
 		
     }
+
+	public	function genchksum13($isbn) {
+			$isbn = trim($isbn);
+			if (strlen($isbn) != 12) {
+				return -1;
+			}
+			$sum = 0;
+			for ($i = 0; $i < 12; $i+=2) {
+				$sum += ($isbn[$i] * 1);
+				$sum += ($isbn[$i+1] * 3);
+			}
+			$sum = $sum % 10;
+			$sum = 10 - $sum;
+			return ($sum == 10 ? 0 : $sum);
+		}
+
+	public	function isbn10to13($isbn10) {
+			$isbn13 = "";
+			$isbn13 = substr("978" . $isbn10, 0, -1);
+			$chksum =  $this->genchksum13($isbn13);
+			$isbn13 = $isbn13.$chksum;
+			return ($isbn13);
+		}
 
 	/**
      * Retrieve search result count

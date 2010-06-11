@@ -2244,10 +2244,19 @@ a:hover {
 }
 
 .mainRight .tagoreHdr {
-	color:#CC6600;
+	color:#666666;
 	font-size:12px;
 	font-weight:normal;
 	line-height:1.6em;
+}
+
+.mainRight .rightHdr {
+	font-size: 1.3em;
+	font-weight:bold;
+	color: #cc6600;
+	margin-bottom: 6px;
+	padding-bottom: 6px;
+	border-bottom: 1px dotted #333333;
 }
 
 .searchResTop .pageNoField {
@@ -2256,4 +2265,16 @@ a:hover {
 	color: #000;
 	width: 45px;
 	margin-right: 8px;
+}
+
+.noStock {
+	line-height: 1.4em;
+	color: #FF0000;
+	font-weight: bold;
+}
+
+.inStock {
+	line-height: 1.4em;
+	color: #339900;
+	font-weight: bold;
 }
