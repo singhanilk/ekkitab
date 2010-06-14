@@ -14,6 +14,7 @@ if (not defined $oBook) {
 }
 my($iR, $iC, $oWkS, $oWkC);
 
+print  "ISBN\t" . "PRICE\t" . "CURRENCY\t" . "AVAILABILITY\t" . "IMPRINT\t" . "TITLE\t" . "AUTHOR\n" ;
 
 for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 
