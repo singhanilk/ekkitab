@@ -232,7 +232,6 @@ class Parser {
             $book['weight']          = trim($fields[9]);
             $book['dimension']       = trim($fields[10]);
             $book['shipping_region'] = trim($fields[11]);
-            $book['info_source']     = "Penguin";	
             $book['image']           = $book['isbn'].".jpg";
 
             $bisaccodes = array();
@@ -250,7 +249,7 @@ class Parser {
 		function getPrice($line, $book, $db, $logger){
             $fields = explode("\t", $line);
             $book['isbn'] = str_replace("\"", "", trim($fields[0]));
-            $book['distributor'] = "Penguin";
+            $book['distributor'] = trim($fields[4]);
             switch (str_replace("\"", "", strtoupper(trim($fields[1])))) {
                 case 'I'  : $book['currency'] = "INR";
                             break;
@@ -281,7 +280,7 @@ class Parser {
             if ($book['delivery_period'] == null) {
                 throw new exception("No delivery period data for " . $book['distributor']);
             }
-            $book['info_source']     = "Penguin";	
+            $book['info_source']     = strtoupper($book['distributor']);	
             $book['sourced_from']    = "India";
 
             return $book;

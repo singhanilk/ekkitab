@@ -85,7 +85,7 @@ function process($directory, $outputdir, $config, $books) {
                         fprintf($fh1, "%s\t%s\t%s\n", $isbn, $title, $author);
                     }
                     else {
-                        fprintf($fh2, "%s\t%s\t%s\t%s\n", $isbn, $currency, $listPrice, $availability);
+                        fprintf($fh2, "%s\t%s\t%s\t%s\t%s\n", $isbn, $currency, $listPrice, $availability, $plugin);
                     }
                 }
                 fclose($fh);
