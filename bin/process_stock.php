@@ -84,9 +84,7 @@ function process($directory, $outputdir, $config, $books) {
                     if (!isset($books[$isbn])) { // not in catalog
                         fprintf($fh1, "%s\t%s\t%s\n", $isbn, $title, $author);
                     }
-                    else {
-                        fprintf($fh2, "%s\t%s\t%s\t%s\t%s\n", $isbn, $currency, $listPrice, $availability, $plugin);
-                    }
+                    fprintf($fh2, "%s\t%s\t%s\t%s\t%s\n", $isbn, $currency, $listPrice, $availability, $plugin);
                 }
                 fclose($fh);
                 fclose($fh1);
