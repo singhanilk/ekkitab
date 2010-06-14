@@ -283,8 +283,10 @@ a:hover {
 	margin-left: 30px;
 	line-height: 22px;
 	text-align: left;
-	padding-top: 40px;
+	padding-top: 20px;
+	/*padding-top: 40px;*/
 	font-size: 1.2em;
+	vertical-align:bottom;
 	font-weight: bold;
 }
 .topSearchArea .searchText {
@@ -442,7 +444,11 @@ a:hover {
 	font-size: 11px;
 	line-height: 1.4em;
 }
-.youSave {
+.lineHeight14emIt {
+	font-style: Italic;
+	font-size: 11px;
+	line-height: 1.4em;
+}.youSave {
 	line-height: 1.4em;
 	color: #c60;
 	font-weight: bold;
@@ -2277,4 +2283,13 @@ a:hover {
 	line-height: 1.4em;
 	color: #339900;
 	font-weight: bold;
+}
+
+.filterSearch{
+	float:right;
+	margin-right: 250px;
+}
+
+.searchBar{
+	float:left;
 }

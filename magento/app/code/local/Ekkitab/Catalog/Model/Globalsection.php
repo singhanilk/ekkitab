@@ -39,19 +39,16 @@ class Ekkitab_Catalog_Model_Globalsection extends Mage_Core_Model_Abstract
      *
      * @return array
      */
-    public function getSectionProducts($random=false,$limit=0)
+    public function getSectionProducts($random=false,$pageNo=0,$limit=0)
     {
-        if (!$this->hasSectionProducts()) {
-            $products = array();
-            $collection = $this->getSectionProductCollection($random,$limit);
-            foreach ($collection as $product) {
-                $products[] = $product->getProductId();
-            }
-			$sectionProducts = Mage::getModel('ekkitab_catalog/product')->getCollection()
-				->addIdFilter($products);
-			$this->setSectionProducts($sectionProducts);
-        }
-        return $this->getData('section_products');
+		$products = array();
+		$collection = $this->getSectionProductCollection($random,$pageNo,$limit);
+		foreach ($collection as $product) {
+			$products[] = $product->getProductId();
+		}
+		$sectionProducts = Mage::getModel('ekkitab_catalog/product')->getCollection()
+			->addIdFilter($products);
+        return $sectionProducts;
     }
 
     /**
@@ -75,19 +72,22 @@ class Ekkitab_Catalog_Model_Globalsection extends Mage_Core_Model_Abstract
     /**
      * Retrieve collection related product
      */
-    public function getSectionProductCollection($random=false,$limit=0)
+    public function getSectionProductCollection($random=false,$pageNo,$limit=0)
     {
         $collection = $this->getSectionProductInstance()
 			->getProductCollection()
 			->setSection($this)
 			->addSectionIdFilter();
+		if($pageNo > 0){
+			$collection->setCurPage($pageNo);
+		}
 		if($random){
 			$collection->setRandomOrder();
-		}
+		}	
 		if($limit && $limit > 0 ){
-			$collection->setLimit($limit);
+			$collection->setPageSize($limit);
+			//$collection->setLimit($limit);
 		}
-
         return $collection;
     }
 
