@@ -13,8 +13,8 @@ if (not defined $oBook) {
     exit(1);
 }
 my($iR, $iC, $oWkS, $oWkC);
-
 print  "ISBN\t" . "PRICE\t" . "CURRENCY\t" . "AVAILABILITY\t" . "IMPRINT\t" . "TITLE\t" . "AUTHOR\n" ;
+
 
 for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 
@@ -34,32 +34,32 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             $oWkC = $oWkS->{Cells}[$iR][$iC];
             if (defined $oWkC) {
                 if ($isbncol == -1) {
-                    if ($oWkC->Value =~ /ISBN/) {
+                    if ($oWkC->Value =~ /ISBN-13/) {
                         $isbncol = $iC;
+#                         print $iC . 'I\n';
                         next;
                     }
                 }
                 if ($pricecol == -1) {
-                    if ($oWkC->Value =~ /Price/) {
+                    if ($oWkC->Value =~ /Trade\s$/) {
                         $pricecol = $iC;
-                        $currencycol = $iC+1;
                         next;
                     }
                 }
                 if ($availcol == -1) {
-                    if ($oWkC->Value =~ /Availability/) {
+                    if ($oWkC->Value =~ /Current/) {
                         $availcol = $iC;
                         next;
                     }
                 }
-    	        if ($imprintcol == -1) {
-    		        if ($oWkC->Value =~ /Sub-Group/) {
+                if ($imprintcol == -1) {
+    		        if ($oWkC->Value =~ /Series/) {
                         $imprintcol = $iC;
                         next;
     		        }
                 }
     	        if ($titlecol == -1) {
-    		        if ($oWkC->Value =~ /Title/) {
+    		        if ($oWkC->Value =~ /Stock\sList\sof\sScholastic\sBooks/) {
                         $titlecol = $iC;
                         next;
     		        }
@@ -78,41 +78,46 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             $startrow = $iR + 1;
             $endrow   = $oWkS->{MaxRow};
             last;
-        }
+            }
     }
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
-
-        my $value = $oWkS->{Cells}[$i][$isbncol];
+        my $currency = 'I';
+        my $value    = '';
+        eval { $value = $oWkS->{Cells}[$i][$isbncol]; };
+        if ($@) {
+           print STDERR "Unexpected read value. Line $i\n";
+	   last;
+	}
         my $isbn;
-
-        if (defined ($value)) {
-           $isbn = $value->Value;
-           chomp($isbn);
-           $isbn =~ s/[^0-9]+//g;
-        }
+	if (defined ($value)) {
+            $isbn = $value->Value;
+            chomp($isbn);
+            $isbn =~ s/[^0-9]+//g;
+        } 
         $value = $oWkS->{Cells}[$i][$pricecol];
         my $price;
         if (defined ($value)) {
            $price = $value->Value;
            $price =~ s/\n//g;
         }
-        $value = $oWkS->{Cells}[$i][$currencycol];
-        my $currency;
-        if (defined ($value)) {
-           $currency = $value->Value;
-           $currency =~ s/\n//g;
-        }
+        $value = $oWkS->{Cells}[$i][$availcol];
         $value = $oWkS->{Cells}[$i][$availcol];
         my $availability;
-        if(defined ($value)) {
+        if (defined ($value)) {
            $availability = $value->Value;
            $availability =~ s/\n//g;
+           if ($availability gt 0){
+	       $availability = 'Available';
+           }
+           else{
+               $availability = 'Not Available';
+           }
         }
         $value = $oWkS->{Cells}[$i][$imprintcol];
         my $imprint;
         if (defined ($value)) {
-           $imprint = $value->Value;
+           $imprint = 'Scholastic';
            $imprint =~ s/\n//g;
         }
         $value = $oWkS->{Cells}[$i][$titlecol];
@@ -128,17 +133,20 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            $author =~ s/\n//g;
         }
         if (defined ($isbn)  && 
-            defined ($price) && 
-            defined ($currency) && 
-            defined ($availability) && 
-            defined ($imprint) && 
-            defined ($title) && 
-            defined ($author)) {
-
-            print $isbn . "\t" . $price . "\t" . $currency . "\t"  
-    		       . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
-       
-        }
+             defined ($price) && 
+             defined ($currency) && 
+             defined ($availability) && 
+             defined ($imprint) && 
+             defined ($title) && 
+             defined ($author)) {
+             if ($isbn eq '' || $price eq ''){
+	         next;
+             }
+             elsif (length($isbn) == 10 || length($isbn) == 13){
+                  print $isbn . "\t" . $price . "\t" . $currency . "\t"  
+    		      . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
+             }
+         }
     }
 }
 
