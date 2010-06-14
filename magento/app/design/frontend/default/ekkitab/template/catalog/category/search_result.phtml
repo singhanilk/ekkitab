@@ -174,7 +174,7 @@ if(!is_null($results) && is_array($results)){
 			$isbn = $book->getIsbn();
 			$sourcedFrom =  $book->getSourcedFrom();
 			if($sourcedFrom && strlen(trim($sourcedFrom)) > 0 && strtolower($sourcedFrom)=='us'){
-				$isbn.= " <em>[ International Edition ]</em>";
+				$isbn.= " <em>[ Imported Edition ]</em>";
 			}
 			$shippingTimeMin = (int)$book->getDeliveryPeriod();
 			$shippingTimeMax = round($shippingTimeMin + (.5 * $shippingTimeMin) );

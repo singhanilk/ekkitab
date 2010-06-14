@@ -38,7 +38,7 @@
 		$isbn = $_product->getIsbn();
 		$sourcedFrom =  $_product->getSourcedFrom();
 		if($sourcedFrom && strlen(trim($sourcedFrom)) > 0 && strtolower($sourcedFrom)=='us'){
-			$isbn.= " <em>[ International Edition ]</em>";
+			$isbn.= " <em>[ Imported Edition ]</em>";
 		}
 
 		$authors = $_product->getAuthor();

@@ -24,7 +24,7 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
 	protected function _prepareLayout()
     {
 		if($this->getProduct()){
-			$title = $this->getProduct()->getName();
+			$title = $this->getProduct()->getTitle();
 			$authorArr= $this->getProduct()->getAuthor();
 			$author = !is_null($authorArr['a']) ? " by ".$authorArr['a'] :"";
 			$desc = $this->getProduct()->getDescription() ;
@@ -96,6 +96,8 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
 					));
 				}
 			}
+	
+			$title=htmlspecialchars_decode($title,ENT_QUOTES);
 			$breadcrumbs->addCrumb($title, array(
 				'label'=>$title,
 				'title'=>$title,
@@ -109,7 +111,13 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
 		
     }
 
-
+	public function htmlspecialchars_decode($string,$style=ENT_COMPAT)
+    {
+        $translation = array_flip(get_html_translation_table(HTML_SPECIALCHARS,$style));
+        if($style === ENT_QUOTES){ $translation['&#39;'] = '\''; }
+        return strtr($string,$translation);
+    }
+	
 	public function getPagerUrl($params=array(),$queryParams=array())
     {
 		$url = 'ekkitab_catalog/search/index/';
