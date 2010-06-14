@@ -40,40 +40,27 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                     }
                 }
                 if ($pricecol == -1) {
-                    if ($oWkC->Value =~ /SellRate/) {
+                    if ($oWkC->Value =~ /MRP/) {
                         $pricecol = $iC;
                         next;
                     }
                 }
-                if ($availcol == -1) {
-                    if ($oWkC->Value =~ /Net\sAvailability/) {
-                        $availcol = $iC;
-                        next;
-                    }
-                }
-    	        if ($imprintcol == -1) {
-    		        if ($oWkC->Value =~ /Publisher/) {
-                        $imprintcol = $iC;
-                        next;
-    		        }
-                }
-    	        if ($titlecol == -1) {
-    		        if ($oWkC->Value =~ /Title/) {
+                if ($titlecol == -1) {
+    		        if ($oWkC->Value =~ /Particulars/) {
                         $titlecol = $iC;
                         next;
     		        }
                 }
-    
-    	        if ($authorcol == -1) {
-    		        if ($oWkC->Value =~ /Author/) {
-                        $authorcol = $iC;
+                if ($availcol == -1) {
+                    if ($oWkC->Value =~ /CartonQty/) {
+                        $availcol = $iC;
                         next;
-    		        }
+                    }
                 }
             }
         }
 
-        if (($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($imprintcol >= 0) && ($titlecol >= 0) && ($authorcol >= 0)) {
+        if (($pricecol >= 0) && ($isbncol >= 0) && ($titlecol >= 0) && ($availcol >= 0)) {
             $startrow = $iR + 1;
             $endrow   = $oWkS->{MaxRow};
             last;
@@ -82,10 +69,11 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
         
-        my $currency;
+        my $currency = 'I';
+        my $imprint  = 'Parragon Books';
+        my $author   = 'Not Available';
         my $value = $oWkS->{Cells}[$i][$isbncol];
         my $isbn;
-
         if (defined ($value)) {
            $isbn = $value->Value;
            chomp($isbn);
@@ -96,35 +84,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if (defined ($value)) {
            $price = $value->Value;
            $price =~ s/\n//g;
-           if($price =~ /[0-9]/){
-	   $currency = 'I';	
-	   }
-	   if($price =~ /\$/){
-	   $currency = 'U';
-           $price =~ s/\$//g;
-	   }
-	   if($price =~ /\xa3/){
-	   $currency = 'P';
-           $price =~ s/\xa3//g;
-	   }
-        }
-        $value = $oWkS->{Cells}[$i][$availcol];
-        my $availability;
-        if(defined ($value)) {
-           $availability = $value->Value;
-           $availability =~ s/\n//g;
-           if ($availability gt 0){
-	       $availability = 'Available';
-           }
-           else{
-               $availability = 'Not Available';
-           }        
-        }
-        $value = $oWkS->{Cells}[$i][$imprintcol];
-        my $imprint;
-        if (defined ($value)) {
-           $imprint = $value->Value;
-           $imprint =~ s/\n//g;
+           $price =~ s/\sINR\s//g;#buggy code
         }
         $value = $oWkS->{Cells}[$i][$titlecol];
         my $title;
@@ -132,11 +92,17 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            $title = $value->Value;
            $title =~ s/\n//g;
         }
-        $value = $oWkS->{Cells}[$i][$authorcol];
-        my $author;
+        $value = $oWkS->{Cells}[$i][$availcol];
+        my $availability;
         if (defined ($value)) {
-           $author = $value->Value;
-           $author =~ s/\n//g;
+           $availability = $value->Value;
+           $availability =~ s/\n//g;
+           if ($availability gt 0){
+	       $availability = 'Available';
+           }
+           else{
+               $availability = 'Not Available';
+           }
         }
         if (defined ($isbn)  && 
             defined ($price) && 

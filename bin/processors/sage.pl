@@ -34,38 +34,46 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             $oWkC = $oWkS->{Cells}[$iR][$iC];
             if (defined $oWkC) {
                 if ($isbncol == -1) {
-                    if ($oWkC->Value =~ /ISBN/) {
+                    if ($oWkC->Value =~ /isbn/) {
                         $isbncol = $iC;
+#                         print $iC . 'I\n';
                         next;
                     }
                 }
                 if ($pricecol == -1) {
-                    if ($oWkC->Value =~ /SellRate/) {
+                    if ($oWkC->Value =~ /price/) {
                         $pricecol = $iC;
                         next;
                     }
                 }
                 if ($availcol == -1) {
-                    if ($oWkC->Value =~ /Net\sAvailability/) {
+                    if ($oWkC->Value =~ /statusnk/) {
                         $availcol = $iC;
                         next;
                     }
                 }
+                
+    	        if ($currencycol == -1) {
+    		        if ($oWkC->Value =~ /currency/) {
+                        $currencycol = $iC;
+                        next;
+    		        }
+                }
     	        if ($imprintcol == -1) {
-    		        if ($oWkC->Value =~ /Publisher/) {
+    		        if ($oWkC->Value =~ /imprint/) {
                         $imprintcol = $iC;
                         next;
     		        }
                 }
     	        if ($titlecol == -1) {
-    		        if ($oWkC->Value =~ /Title/) {
+    		        if ($oWkC->Value =~ /title/) {
                         $titlecol = $iC;
                         next;
     		        }
                 }
     
     	        if ($authorcol == -1) {
-    		        if ($oWkC->Value =~ /Author/) {
+    		        if ($oWkC->Value =~ /author/) {
                         $authorcol = $iC;
                         next;
     		        }
@@ -73,52 +81,57 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             }
         }
 
-        if (($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($imprintcol >= 0) && ($titlecol >= 0) && ($authorcol >= 0)) {
+        if (($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($imprintcol >= 0) && ($titlecol >= 0) && ($authorcol >= 0) &&
+              $currencycol >= 0) {
             $startrow = $iR + 1;
             $endrow   = $oWkS->{MaxRow};
             last;
-        }
+            }
     }
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
-        
-        my $currency;
-        my $value = $oWkS->{Cells}[$i][$isbncol];
-        my $isbn;
 
-        if (defined ($value)) {
-           $isbn = $value->Value;
-           chomp($isbn);
-           $isbn =~ s/[^0-9]+//g;
-        }
+        my $value = '';
+        eval { $value = $oWkS->{Cells}[$i][$isbncol]; };
+        if ($@) {
+           print STDERR "Unexpected read value. Line $i\n";
+	   last;
+	}
+        my $isbn;
+	if (defined ($value)) {
+            $isbn = $value->Value;
+            chomp($isbn);
+            $isbn =~ s/[^0-9]+//g;
+        } 
         $value = $oWkS->{Cells}[$i][$pricecol];
         my $price;
         if (defined ($value)) {
            $price = $value->Value;
            $price =~ s/\n//g;
-           if($price =~ /[0-9]/){
-	   $currency = 'I';	
-	   }
-	   if($price =~ /\$/){
-	   $currency = 'U';
-           $price =~ s/\$//g;
-	   }
-	   if($price =~ /\xa3/){
-	   $currency = 'P';
-           $price =~ s/\xa3//g;
-	   }
+        }
+        $value = $oWkS->{Cells}[$i][$currencycol];
+        my $currency;
+        if (defined ($value)) {
+           $currency = $value->Value;
+           $currency =~ s/\n//g;
+           if ($currency =~ /Rs./) {
+               $currency ='I';
+           }
+           elsif ($currency =~ /G.B.P/) {
+                  $currency = 'P';
+           }
+           elsif ($currency =~ /U.S.\$/) {
+                  $currency = 'U';
+           }
         }
         $value = $oWkS->{Cells}[$i][$availcol];
         my $availability;
         if(defined ($value)) {
            $availability = $value->Value;
-           $availability =~ s/\n//g;
-           if ($availability gt 0){
-	       $availability = 'Available';
-           }
-           else{
+           $availability =~ s/\n//g;   
+             if ($availability =~ /Non-available/) {
                $availability = 'Not Available';
-           }        
+         }
         }
         $value = $oWkS->{Cells}[$i][$imprintcol];
         my $imprint;
@@ -145,13 +158,10 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             defined ($imprint) && 
             defined ($title) && 
             defined ($author)) {
-            if ($isbn eq '' || $price eq ''){
-	         next;
-            }
-             elsif (length($isbn) == 10 || length($isbn) == 13){
-                  print $isbn . "\t" . $price . "\t" . $currency . "\t"  
-    		      . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
-             }
+
+            print $isbn . "\t" . $price . "\t" . $currency . "\t"  
+    		       . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
+       
         }
     }
 }

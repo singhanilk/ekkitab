@@ -48,8 +48,8 @@ function process($directory, $outputdir, $config, $books) {
             if ((strlen($file) > 4) && (substr($file, strlen($file) - 4, 4) == ".txt")) {
 
                 $plugin = substr($file, 0, strpos($file, "-"));
-                $missingisbnfile  = $outputdir . "/" . $plugin . "-" ."missingisbns.txt";
-                $pricefile        = $outputdir . "/" . $plugin . "-" ."prices.txt";
+                $missingisbnfile  = $outputdir . "/MissingISBNs/" . $plugin . "-" ."missingisbns.txt";
+                $pricefile        = $outputdir . "/Prices/" . $plugin . "-" ."prices.txt";
                 echo "Missing ISBN file: $missingisbnfile\n";
                 echo "Price file: $pricefile\n";
                 $fh1 = fopen($missingisbnfile, "w");
@@ -84,9 +84,7 @@ function process($directory, $outputdir, $config, $books) {
                     if (!isset($books[$isbn])) { // not in catalog
                         fprintf($fh1, "%s\t%s\t%s\n", $isbn, $title, $author);
                     }
-                    else {
-                        fprintf($fh2, "%s\t%s\t%s\t%s\n", $isbn, $currency, $listPrice, $availability);
-                    }
+                    fprintf($fh2, "%s\t%s\t%s\t%s\t%s\n", $isbn, $currency, $listPrice, $availability, $plugin);
                 }
                 fclose($fh);
                 fclose($fh1);

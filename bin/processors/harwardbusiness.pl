@@ -13,7 +13,6 @@ if (not defined $oBook) {
     exit(1);
 }
 my($iR, $iC, $oWkS, $oWkC);
-print  "ISBN\t" . "PRICE\t" . "CURRENCY\t" . "AVAILABILITY\t" . "IMPRINT\t" . "TITLE\t" . "AUTHOR\n" ;
 
 
 for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
@@ -34,13 +33,13 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             $oWkC = $oWkS->{Cells}[$iR][$iC];
             if (defined $oWkC) {
                 if ($isbncol == -1) {
-                    if ($oWkC->Value =~ /^ISBN/) {
+                    if ($oWkC->Value =~ /ISBN/) {
                         $isbncol = $iC;
                         next;
                     }
                 }
                 if ($pricecol == -1) {
-                    if ($oWkC->Value =~ /Unit Price/) {
+                    if ($oWkC->Value =~ /Spl Indian Price/) {
                         $pricecol = $iC;
                         next;
                     }
@@ -53,16 +52,10 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                 }
     
     	        if ($authorcol == -1) {
-    		    if ($oWkC->Value =~ /Author/) {
+    		    if ($oWkC->Value =~ /contributor/) {
                         $authorcol = $iC;
                         next;
     		        }
-                }
-                if ($availcol == -1) {
-                    if ($oWkC->Value =~ /Qty Phy/) {
-                        $availcol = $iC;
-                        next;
-                    }
                 }
             }
         }
@@ -76,8 +69,10 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
 	 my $currency = 'I';
-         my $imprint = 'Not Available';
+         my $availability = 'Available'; 
+         my $imprint = 'Harward';
          my $value = $oWkS->{Cells}[$i][$isbncol];
+         my $value1 = $oWkS->{Cells}[$i][$isbncol];
          my $isbn;
 	 if (defined ($value)) {
              $isbn = $value->Value;
@@ -89,11 +84,17 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
          if (defined ($value)) {
              $price = $value->Value;
              $price =~ s/\n//g;
+             $price =~ s/Rs.\s//; #Removes 'Rs.'{whitespace}
+             $price =~ s/,//;     #Removes ','
          }
-         $value = $oWkS->{Cells}[$i][$titlecol];
+         $value  = $oWkS->{Cells}[$i][$titlecol];
+         $value1 = $oWkS->{Cells}[$i+1][$titlecol];
          my $title;
-         if (defined ($value)) {
-             $title = $value->Value;
+         my $title1;
+         if (defined ($value) && ($value1)) {
+             $title  = $value->Value;
+             $title1 = $value1->Value;
+             $title  = $title . " "  . $title1 . "\n";
              $title =~ s/\n//g;
          }
          $value = $oWkS->{Cells}[$i][$authorcol];
@@ -102,18 +103,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
              $author = $value->Value;
              $author =~ s/\n//g;
          }
-         $value = $oWkS->{Cells}[$i][$availcol];
-        my $availability;
-        if (defined ($value)) {
-           $availability = $value->Value;
-           $availability =~ s/\n//g;
-           if ($availability gt 0){
-	       $availability = 'Available';
-           }
-           else{
-               $availability = 'Not Available';
-           }
-        }
          if (defined ($isbn)  && 
              defined ($price) && 
              defined ($currency) && 
@@ -121,12 +110,12 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
              defined ($imprint) && 
              defined ($title) && 
              defined ($author)) {
-             if ($isbn eq '' || $price eq ''){
-	         next;
-             }
-             elsif (length($isbn) == 10 || length($isbn) == 13){
-                  print $isbn . "\t" . $price . "\t" . $currency . "\t"  
-    		      . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
+             if ($isbn eq ''){
+	        next;
+         }
+             else{
+                print $isbn . "\t" . $price . "\t" . $currency . "\t"  
+    		       . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
              }
          }
      }
