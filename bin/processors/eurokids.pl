@@ -12,7 +12,7 @@ if (not defined $oBook) {
     print STDERR "Failed to parse input file: $ARGV[0]\n"; 
     exit(1);
 }
-print "ISBN \t PRICE \t CURRENCY \t AVAILABILITY \t IMPRINT \t TITLE \t AUTHOR \n";
+print "#ISBN \t PRICE \t CURRENCY \t AVAILABILITY \t IMPRINT \t TITLE \t AUTHOR \n";
 my($iR, $iC, $oWkS, $oWkC);
 
 
