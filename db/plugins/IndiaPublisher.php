@@ -4,7 +4,7 @@ ini_set("display_errors", 1);
 include(EKKITAB_HOME . "/" . "config" . "/" . "ekkitab.php");
 include(EKKITAB_HOME . "/" . "bin" . "/" . "convertisbn.php");
 define (REQUIRED_BASIC_FIELDS, 13);
-define (REQUIRED_PRICE_FIELDS, 4);
+define (REQUIRED_PRICE_FIELDS, 5);
 
 //  
 //
@@ -41,7 +41,11 @@ class Parser {
             elseif (($this->mode == MODE_PRICE) && (count($fields) != REQUIRED_PRICE_FIELDS)) {
                 return false;
             } 
-            return true;
+            if (preg_match("/^[0-9X]+$/", trim($fields[0]))) {
+                return true;
+            }
+            return false;
+            
         }
 
         /** 
