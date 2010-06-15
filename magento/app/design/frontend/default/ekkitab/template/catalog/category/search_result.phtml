@@ -153,18 +153,16 @@ if(!is_null($results) && is_array($results)){
 			$author = $authorArr['a'] ;
 			
 			$parsedAuthor = "";
-			if(!$author || trim($author)==''){
-				$editors=$authorArr['e'];
-				$translators=$authorArr['t'];
-				$illustrators=$authorArr['i'];
-				$photographers=$authorArr['p'];
-				$others=$authorArr['o'];
-			
-				$parsedAuthor.= strlen($editors) > 0 ?(strlen($parsedAuthor) > 0 ? " & ":"").$editors: "";
-				$parsedAuthor.= strlen($translators) > 0 ? (strlen($parsedAuthor) > 0 ? " & ":"").$translators: "";
-				$parsedAuthor.= strlen($illustrators) > 0 ? (strlen($parsedAuthor) > 0 ? " & ":"").$illustrators: "";
-				$parsedAuthor.= strlen($others) > 0 ? (strlen($parsedAuthor) > 0 ? " & ":"").$others: "";
-			}
+			$editors=$authorArr['e'];
+			$translators=$authorArr['t'];
+			$illustrators=$authorArr['i'];
+			$photographers=$authorArr['p'];
+			$others=$authorArr['o'];
+		
+			$parsedAuthor.= strlen($editors) > 0 ?(strlen($parsedAuthor) > 0 ? " & ":"").$editors: "";
+			$parsedAuthor.= strlen($translators) > 0 ? (strlen($parsedAuthor) > 0 ? " & ":"").$translators: "";
+			$parsedAuthor.= strlen($illustrators) > 0 ? (strlen($parsedAuthor) > 0 ? " & ":"").$illustrators: "";
+			$parsedAuthor.= strlen($others) > 0 ? (strlen($parsedAuthor) > 0 ? " & ":"").$others: "";
 			
 			$title = $book->getTitle();
 			$image = $book->getImage();
