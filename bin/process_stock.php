@@ -64,7 +64,7 @@ function process($directory, $outputdir, $config, $books) {
                     echo("Could not open file to write price information: " . $pricefile . "\n");
                     exit(1);
                 }
-                fprintf($fh2, "# ISBN\tCURRENCY\tLIST-PRICE\tAVAILABILITY\n");
+                fprintf($fh2, "# ISBN\tCURRENCY\tLIST-PRICE\tAVAILABILITY\tDISTRIBUTOR\n");
 
                 $fh = fopen($directory . "/" . $file,"r");
                 if (!$fh){
@@ -72,6 +72,9 @@ function process($directory, $outputdir, $config, $books) {
                     exit(1);
                 }
                 while($contents = fgets($fh)) {
+                    if (preg_match("/^#/", trim($contents))) {
+                        continue;
+                    }
                     $contents = str_replace("\n", "", $contents);
                     $fields = explode("\t", $contents);
                     $isbn = $fields[0];
