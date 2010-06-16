@@ -16,9 +16,8 @@ if [ $# -ne 1 ] ; then
 else 
     d1=10#$1
 fi;
-echo "Please input password 'ees695' when prompted."
+#echo "Please input password 'ees695' when prompted."
 ftp ftp1.ingrambook.com > $tmpfile <<!
-w20M0695
 passive
 binary
 cd Imageswk/j400w
