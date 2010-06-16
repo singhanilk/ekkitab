@@ -6,7 +6,11 @@ fi;
 tmpfile="./.newingramsimages"
 archivedir='/mnt4/publisherdata/archives'
 imagedir='/mnt4/publisherdata/images'
-logfile='/mnt2/scm/logs/ingramimages.log'
+if (( $# > 0 )) ; then
+    logfile=$1 ;
+else 
+    logfile="$EKKITAB_HOME/logs/ingramimages.log"
+fi
 if [ $# -ne 1 ] ; then
     a=10#`ls -lrt $archivedir/*j400*file*.zip | tail -1 | cut -d' ' -f9 | sed 's/.*\/\([0-9]*\)j400.*.zip/\1/g'`
     let a=a+100; if (( $a < 100000 )) ; then a=0$a; fi; 
