@@ -19,7 +19,7 @@ fi
 echo "Building search library ...."
 ( cd $EKKITAB_HOME/java/build; ant -f build.xml )
 echo "Copying search library to tomcat location ...."
-( cd $EKKITAB_HOME/java/bin; cp ekkitabsearch.jar $searchlib/ekkitabsearch.jar ) 
+( cd $EKKITAB_HOME/java/bin; sudo cp ekkitabsearch.jar $searchlib/ekkitabsearch.jar ) 
 echo "Deleting old lucene jar file that came with JavaBridge distribution..."
 rm -f $searchlib/lucene.jar 
 echo "Copying missing libraries to tomcat location ..."
@@ -30,7 +30,7 @@ echo "Copying missing libraries to tomcat location ..."
         if [ $f == "lucene" ] || [ $f == "log4j" ]; then 
             if [ ! -f $searchlib/$i ] ; then 
                 echo "Copying $i to Tomcat JavaBridge library."; 
-                cp $i $searchlib/$i
+                sudo cp $i $searchlib/$i
             fi 
         fi 
    done 
@@ -40,7 +40,7 @@ echo "Copying missing libraries to tomcat location ..."
    do 
       if [ ! -f $classesdir/$i ] ; then 
          echo "Copying $i to classes directory."; 
-         cp $i $classesdir/$i
+         sudo cp $i $classesdir/$i
       fi 
    done 
 )
