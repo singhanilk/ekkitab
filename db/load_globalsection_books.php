@@ -190,11 +190,11 @@ else {
         $db = initDatabases($config);
 
         if ($argc <= 1) {
-            echo "\nNo arguments. Please provide the 'ini' file path after ". EKKITAB_HOME."\n\n";
+            echo "No arguments. Please provide the 'ini' file path.\n";
             echo "Usage: ".$argv[0]."  <Data Source file path> \n";
             exit(1);
         } else{
-            $file = EKKITAB_HOME.$argv[1];
+            $file = $argv[1];
         }
 
         $fh = fopen($file, "r"); 
@@ -203,14 +203,19 @@ else {
         }
 
         $globalSectionConfig = getConfig($file);
+
         try {
             insertGlobalSectionBook($globalSectionConfig, $db);
         }
-        catch (Exception e) {
-            echo "Exception encountered during processing. " . e->getmessage() . "\n"; 
+        catch (Exception $e) {
+            echo "Exception encountered during processing. " . $e->getmessage() . "\n"; 
+            fclose($fh);
+            mysqli_close($db);
+            exit(1);
         }
         fclose($fh);
         mysqli_close($db);
+        echo "Successfully updated the global sections.\n"; 
     }
     start($argc, $argv);
 ?>
