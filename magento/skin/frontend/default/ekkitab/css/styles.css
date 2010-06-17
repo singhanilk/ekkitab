@@ -1451,12 +1451,12 @@ a:hover {
 	margin-bottom: 10px;
 }
 .aboutUsArea .abtTextArea {
-	width: 690px;
+	width: 670px;
 	float: left;
 	padding-top: 10px; 
 }
 .aboutUsArea .excerptArea {
-	width: 165px;
+	width: 185px;
 	float: right;
 	margin: 0 0 10px 10px;
 	padding-left: 10px;
@@ -2292,4 +2292,21 @@ a:hover {
 
 .searchBar{
 	float:left;
+}
+
+dt .hdr {
+	color:#CC6600;
+	font-size:12px;
+}
+
+.reviewLink {
+	font-size:11px;
+	font-weight:normal;
+	color:#0033cc;
+	line-height:90%;
+}
+
+.leftNavArea .linkHdr .reviewLink a {
+	text-decoration:none;
+	color:#0033cc;
 }

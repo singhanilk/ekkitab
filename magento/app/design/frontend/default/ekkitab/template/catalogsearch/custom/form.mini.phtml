@@ -31,10 +31,10 @@
            </div> 
 			<div class="filterSearch">
 			<div class="searchText"><?php echo $this->__('In') ?></div> <select name="<?php echo $this->helper('ekkitab_catalog')->getQueryFilterName() ?>" >
-			<option id="searchBy" value="" > All </option>
-			<option id="searchBy" value="author" <?php if($this->helper('ekkitab_catalog')->getQueryFilterByText()=='author'): ?> selected="selected"<?php endif ?>> Author </option>
-            <option id="searchBy"value="title" <?php if($this->helper('ekkitab_catalog')->getQueryFilterByText()=='title'): ?> selected="selected"<?php endif ?>> Title </option>
-            <option id="searchBy"value="isbn" <?php if($this->helper('ekkitab_catalog')->getQueryFilterByText()=='isbn'): ?> selected="selected"<?php endif ?>> ISBN </option>
+			<option id="searchBy" value="" selected> All </option>
+			<option id="searchBy" value="author" > Author </option>
+            <option id="searchBy"value="title" > Title </option>
+            <option id="searchBy"value="isbn" > ISBN </option>
 			</select></div>
 
 		</fieldset>

@@ -31,11 +31,16 @@
  * @see Mage_Customer_Block_Form_Login
  */
 ?>
+<?php
+$cookieName= $this->getLayout()->getArea();
+$cookieValue= Mage::getSingleton('core/cookie')->get($cookieName);
+?>
+
 <div class="pageHeader"><?php echo $this->__('Login or Create an Account') ?></div>
 <div class="clear">&nbsp;</div>
 <div class="myAccCopy">
 	<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-	<form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form">
+	<form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form" name="loginFrm" onSubmit="return validateCookie();">
 	<div class="leftCol">
 		<div class="accTop">
 			<div class="accHdr"><?php echo $this->__('Registered Customers') ?></div>
@@ -71,5 +76,58 @@
 	</form>
 	<script type="text/javascript">
 		var dataForm = new VarienForm('login-form', true);
+		var cookieName;
+		var cookieValue;
+
+		function  saveCookie(ckName,ckValue){
+			cookieName=ckName;
+			cookieValue=ckValue;
+		}
+		
+		function  validateCookie(){
+			if(!checkCookie(cookieName)){
+				setCookie(cookieName,cookieValue);
+			}
+			return true;
+		}
+		function checkCookie(ckName)
+		{
+			sessionId=getCookie(ckName);
+			if (sessionId!=null && sessionId!="")
+			{
+				return true;
+  		    }
+			else
+		    {
+				return false;
+			}
+		}
+
+		function getCookie(c_name)
+		{
+			if (document.cookie.length>0)
+			{
+				c_start=document.cookie.indexOf(c_name + "=");
+				if (c_start!=-1)
+				{
+					c_start=c_start + c_name.length+1;
+					c_end=document.cookie.indexOf(";",c_start);
+					if (c_end==-1) c_end=document.cookie.length;
+						return unescape(document.cookie.substring(c_start,c_end));
+					}
+			}
+			return "";
+		}
+
+		function setCookie(c_name,value)
+		{
+			var exdate=new Date();
+			exdate.setHours(exdate.getHours()+1);
+			var cookie=c_name+ "=" +escape(value)+ ";expires="+exdate.toUTCString()+";path=/";
+			document.cookie=cookie;
+
+		}
+		saveCookie('<?php echo $cookieName?>','<?php echo $cookieValue?>');
+
 	</script>
 </div>
