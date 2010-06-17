@@ -21,7 +21,6 @@ s=`grep "log4php.appender.DiskFile.File=" $EKKITAB_HOME/config/logger.properties
 logfile=${s#*=};
 if [ -f $logfile ] ; then
   mv $logfile "$logfile.old"
-  rm $logfile
 fi
 while read line;
 do 
