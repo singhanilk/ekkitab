@@ -206,8 +206,8 @@ if(!is_null($results) && is_array($results)){
 			<?php if($author && trim($author)!=''):?><div class="lineHeight14em">Author: <?php echo $author ?></div><?php endif; ?>
 			<?php if($parsedAuthor && trim($parsedAuthor)!=''): ?><div class="lineHeight14em">With Contributions from: <?php echo $parsedAuthor ?></div><?php endif; ?>
 			<div class="lineHeight14em">ISBN:  <?php echo $isbn ?></div>
-			<?php if(trim($binding)!=''): ?><div class="lineHeight14em">Binding: <?php echo $binding ?><?php endif; ?></div>
-			<?php if(trim($language)!=''): ?><div class="lineHeight14em">Language : <?php echo $language ?><?php endif; ?></div>
+			<?php if(trim($binding)!=''): ?><div class="lineHeight14em">Binding: <?php echo $binding ?></div><?php endif; ?>
+			<?php if(trim($language)!=''): ?><div class="lineHeight14em">Language : <?php echo $language ?></div><?php endif; ?>
 			<div class="synop"><?php echo $shortDesc ?>... <a href="<?php echo $this->getUrl($url)?>" title="<?php echo $title ?>">More details</a></div><!-- synop -->
 			</div><!-- detailsArea -->
 
