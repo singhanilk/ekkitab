@@ -23,6 +23,7 @@ include(EKKITAB_HOME . "/" . "config" . "/" . "ekkitab.php");
 class Parser {
 
         private $mode;
+        private $months = array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
 
         function __construct($mode) {
             $this->mode = $mode;
@@ -310,7 +311,15 @@ class Parser {
 		    //	}
 
 			//Extracting the Pub-Date
-			$pubdate = substr($line,188,8) ;
+            $pubyear = substr($line,188,4) ;
+            $pubmonth = (int)substr($line,192,2);
+            if ($pubmonth > 0) {
+                $nameofmonth = $this->months[$pubmonth - 1];
+            }
+            else {
+                $nameofmonth = "Jan";  // Default if month is uncertain
+            }
+            $pubdate = $nameofmonth . "-" . $pubyear;
 						
 			$book['list_price']		    = $listprice;
 			$book['suppliers_discount'] = $discount;
