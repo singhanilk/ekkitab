@@ -339,18 +339,19 @@ public class EkkitabSearch {
         			break;
         		default: break;
         	}
+       
+        	sb.append("( ");
+        	for (String term: terms) {
+        		if (searchfield != null) {
+        			sb.append(searchfield+":"+term+" ");
+        		}
+        		else {
+        			sb.append("title:"+term+"^2 ");
+        			sb.append("author:"+term+" ");
+        		}
+        	}
+        	sb.append(" ) ");
         }
-    	sb.append("( ");
-        for (String term: terms) {
-           if (searchfield != null) {
-              sb.append(searchfield+":"+term+" ");
-           }
-           else {
-              sb.append("title:"+term+"^2 ");
-              sb.append("author:"+term+" ");
-           }
-        }
-        sb.append(" ) ");
 
         if (categories != null) {
            String prelude = "";
