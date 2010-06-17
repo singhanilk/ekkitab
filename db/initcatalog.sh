@@ -15,6 +15,14 @@ if [[ $dbid != "NULL" ]] ; then
 else 
     let dbid=0;
 fi
+# Ready to process.
+# Delete logfile before starting.
+s=`grep "log4php.appender.DiskFile.File=" $EKKITAB_HOME/config/logger.properties`; 
+logfile=${s#*=};
+if [ -f $logfile ] ; then
+  mv $logfile "$logfile.old"
+  rm $logfile
+fi
 while read line;
 do 
   args=`echo $line | cut -d' ' -f1 | while read z; do echo $z; done | sed 's/\"//g'`; 
