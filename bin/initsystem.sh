@@ -13,4 +13,6 @@ echo "Updating Global Sections..."
 ( cd $EKKITAB_HOME/db; php load_globalsection_books.php ../data/globalsection.ini )
 echo "Building Left Hand Menu..."
 ( cd $EKKITAB_HOME/bin; ./makenewmenu.sh )
+echo "Building Categories Array for View All Categories..."
+( cd $EKKITAB_HOME/bin; ./create_categories_array.sh )
 
