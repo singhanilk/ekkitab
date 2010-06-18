@@ -42,6 +42,12 @@ if [ ! -d  $datadir ] ; then
   echo "Creating data directory..."
   mkdir $datadir
 fi
+# Create the magento directory
+magentodir=$EKKITAB_HOME/magento
+if [ ! -d  $magentodir ] ; then
+  echo "Creating magento directory..."
+  mkdir $magentodir
+fi
 
 #Get database access credentials from argument list.
 host=""
@@ -184,7 +190,7 @@ sed "s/LOGFILE/$home\/logs\/search.log/" ./log4j.properties > ./log4j.properties
 sed "s/EKKITAB_HOME/$home/" ./search.properties > ./search.properties.local
 if [ ! -d $tomcatdir/webapps/JavaBridge/WEB-INF/classes ] ; then
    echo "Creating the JavaBridge classes directory..."
-   mkdir $tomcatdir/webapps/JavaBridge/WEB-INF/classes
+   sudo mkdir $tomcatdir/webapps/JavaBridge/WEB-INF/classes
 fi
 sudo cp ./log4j.properties.local  $tomcatdir/webapps/JavaBridge/WEB-INF/classes/log4j.properties
 sudo cp ./search.properties.local  $tomcatdir/webapps/JavaBridge/WEB-INF/classes/search.properties
@@ -205,11 +211,17 @@ if [ ! -d /mnt3/mysql ] ; then
 fi
 
 # Update apparmor  settings to reflect mysql cnf changes
+
 sudo cp /etc/apparmor.d/usr.sbin.mysqld ./usr.sbin.mysqld.saved 
 sudo cp ./usr.sbin.mysqld.local /etc/apparmor.d/usr.sbin.mysqld 
 sudo /etc/init.d/apparmor reload
 
 # Update /etc/fstab
+
+# Create mount points first
+mkdir -p $magentodir/var/cache
+mkdir -p $magentodir/var/session
+
 if ( ! grep magento /etc/fstab >/dev/null ) ; then
   sudo echo "tmpfs $EKKITAB_HOME/magento/var/cache/ tmpfs size=256,mode=0744 0 0" >> /etc/fstab
   sudo echo "tmpfs $EKKITAB_HOME/magento/var/session/ tmpfs size=64,mode=0744 0 0" >> /etc/fstab
@@ -219,8 +231,9 @@ sudo mount -t tmpfs -o size=256M,mode=0744 tmpfs "$EKKITAB_HOME/magento/var/cach
 sudo mount -t tmpfs -o size=64M,mode=0744 tmpfs "$EKKITAB_HOME/magento/var/session/"
 
 # Copy other files to the bin,data and db directory
-cp $releasedir/syncrelease.sh $bindir
-cp $releasedir/synccatalog.sh $bindir
+releasedir=.
+cp $releasedir/synchrelease.sh $bindir
+cp $releasedir/synchcatalog.sh $bindir
 cp $releasedir/db.sh $bindir
 cp $releasedir/readdbconfig.pl $bindir
 cp $releasedir/reset_ekkitab_books.sh $dbdir
