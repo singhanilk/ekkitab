@@ -2,13 +2,13 @@
 
 currentdir=`pwd`
 
-if [ ! -d "/var/www/scm" ] ; then
-  echo "Creating scm directory..."
-  sudo mkdir "/var/www/scm"
-  sudo chown -R ubuntu:ubuntu /var/www/scm
-fi
+read -p "Please specify EKKITAB home directory: " EKKITAB_HOME 
 
-export EKKITAB_HOME="/var/www/scm"
+if [ ! -d "$EKKITAB_HOME" ] ; then
+  echo "Creating scm directory..."
+  sudo mkdir "$EKKITAB_HOME"
+  sudo chown -R ubuntu:ubuntu "$EKKITAB_HOME" 
+fi
 
 if [ -z $EKKITAB_HOME ] ; then
     echo "EKKITAB_HOME could not be set..."
@@ -82,45 +82,24 @@ fi
 home=`echo $EKKITAB_HOME | sed 's/\//\\\\\//g'`
 # Check for missing files in release
 
-if [ ! -f  ./db.sh ] ; then
-  echo "File missing in current directory: db.sh";
-  echo "Exiting..."
-  exit 1;
-fi
-if [ ! -f  ./readdbconfig.sh ] ; then
-  echo "File missing in current directory: readdbconfig.sh";
-  echo "Exiting..."
-  exit 1;
-fi
-if [ ! -f  ./JavaBridge.war ] ; then
-  echo "File missing in current directory: JavaBridge.war";
-  echo "Exiting..."
-  exit 1;
-fi
-if [ ! -f  ./log4j.properties ] ; then
-  echo "File missing in current directory: log4j.properties";
-  echo "Exiting..."
-  exit 1;
-fi
-if [ ! -f  ./search.properties ] ; then
-  echo "File missing in current directory: search.properties";
-  echo "Exiting..."
-  exit 1;
-fi
-if [ ! -f  ./my.cnf ] ; then
-  echo "File missing in current directory: my.cnf";
-  echo "Exiting..."
-  exit 1;
-fi
-if [ ! -f  ./syncrelease.sh ] ; then
-  echo "File missing in current directory: syncrelease.sh";
-  echo "Exiting..."
-  exit 1;
-fi
-if [ ! -f  ./synccatalog.sh ] ; then
-  echo "File missing in current directory: synccatalog.sh";
-  echo "Exiting..."
-  exit 1;
+if [ ! -f  ./db.sh ]                        || 
+   [ ! -f  ./readdbconfig.pl ]              ||
+   [ ! -f  ./JavaBridge.war ]               ||
+   [ ! -f  ./log4j.properties ]             ||
+   [ ! -f  ./search.properties ]            ||
+   [ ! -f  ./my.cnf ]                       ||
+   [ ! -f  ./default-000 ]                  ||
+   [ ! -f  ./synchrelease.sh ]              ||
+   [ ! -f  ./synchcatalog.sh ]              ||
+   [ ! -f  ./reset_ekkitab_book.sh ]        ||
+   [ ! -f  ./reset_ekkitab_books.sql]       ||
+   [ ! -f  ./backup.sh ]                    ||
+   [ ! -f  ./create_ekkitab_db.sql ]        ||
+   [ ! -f  ./ekkitab_books_categories.sql ] ||
+   [ ! -f  ./init_ekkitab_books_db.sql ] ; then
+
+   echo "FATAL: File missing in release directory. " 
+   exit 1;
 fi
 
 # Create configuration
@@ -213,6 +192,11 @@ mysqldir="/etc/mysql"
 sudo cp "$mysqldir/my.cnf" "$mysqldir/my.cnf.saved" 
 sudo cp "./my.cnf" "$mysqldir/my.cnf" 
 sed 's/\/var\/lib\/mysql/\/mnt3\/mysql/g' "/etc/apparmor.d/usr.sbin.mysqld" > "./usr.sbin.mysqld.local" 
+
+# Copy mysql data files over to the new location if target is empty
+if [ ! -d "/mnt3/mysql" ] ; then
+    sudo cp -r "/var/lib/mysql" "/mnt3/mysql"
+fi
 
 # Update apparmor  settings to reflect mysql cnf changes
 sudo cp "/etc/apparmor.d/usr.sbin.mysqld" "./usr.sbin.mysqld.saved" 
