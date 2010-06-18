@@ -41,7 +41,7 @@ else {
     */
     function fatal($message, $query = "") {
         global $logger;
-	    $logger->fatal("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
+        $logger->fatal("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
         exit(1);
     }
 
@@ -50,8 +50,8 @@ else {
     * Read and return the configuration data from file. 
     */
     function getConfig($file) {
-	    echo $config;
-		$config	= parse_ini_file($file, true);
+        echo $config;
+        $config    = parse_ini_file($file, true);
         if (! $config) {
             fatal("Configuration file missing or incorrect."); 
         }
@@ -66,16 +66,16 @@ else {
         if (! $config) 
             return NULL;
 
-	    $database_server = $config[database][server];
-	    $database_user   = $config[database][user];
-	    $database_psw    = $config[database][password];
-	    $ref_db		     = $config[database][ref_db];
-	    $ekkitab_db		 = $config[database][ekkitab_db];
+        $database_server = $config[database][server];
+        $database_user   = $config[database][user];
+        $database_psw    = $config[database][password];
+        $ref_db             = $config[database][ref_db];
+        $ekkitab_db         = $config[database][ekkitab_db];
 
         $db  = NULL;
  
         try  {
-	        $db     = mysqli_connect($database_server,$database_user,$database_psw,$ekkitab_db);
+            $db     = mysqli_connect($database_server,$database_user,$database_psw,$ekkitab_db);
         }
         catch (exception $e) {
            fatal($e->getmessage());
@@ -84,7 +84,7 @@ else {
         $query = "set autocommit = 0";
         
         try {
-	        $result = mysqli_query($db,$query);
+            $result = mysqli_query($db,$query);
             if (!$result) {
                fatal("Failed to set autocommit mode.");
             }
@@ -111,69 +111,69 @@ else {
     function insertGlobalSectionBook($globalSectionConfig, $db) {
 
         $today = date('Y-m-j'); 
-		//$query = "select section_id,display_name from ek_catalog_global_sections where (active_from_date <= '$today') AND (active_to_date >= '$today')";
-		
-		if ($globalSectionConfig) 
-		{
-			//for each section
-			foreach($globalSectionConfig as $globalSec=> $globalSecArr){
-				
-				//get the sectionId for the given section in the ini
-				$query = "select section_id from ek_catalog_global_sections where lower(display_name) = '".strtolower($globalSec)."'";
-				echo "\n".$query."\n";
-				$result  = mysqli_query($db, $query);
+        //$query = "select section_id,display_name from ek_catalog_global_sections where (active_from_date <= '$today') AND (active_to_date >= '$today')";
+        
+        if ($globalSectionConfig) 
+        {
+            //for each section
+            foreach($globalSectionConfig as $globalSec=> $globalSecArr){
+                
+                //get the sectionId for the given section in the ini
+                $query = "select section_id from ek_catalog_global_sections where lower(display_name) = '".strtolower($globalSec)."'";
+                //echo "\n".$query."\n";
+                $result  = mysqli_query($db, $query);
                 if (! $result)
                     throw new exception("Failed on query: $query");
-	            $row	 = mysqli_fetch_array($result);
-	            $sectonId = $row[0];
+                $row     = mysqli_fetch_array($result);
+                $sectonId = $row[0];
 
-				if ($sectonId > 0) {
-					//get all the isbns for that section
-					$isbns="";
-					$books = array();
-					foreach($globalSecArr as $secBooks){
-						$isbns =$isbns."'".trim($secBooks)."',";
-					}
-					$isbns =substr(trim($isbns), 0, -1);
+                if ($sectonId > 0) {
+                    //get all the isbns for that section
+                    $isbns="";
+                    $books = array();
+                    foreach($globalSecArr as $secBooks){
+                        $isbns =$isbns."'".trim($secBooks)."',";
+                    }
+                    $isbns =substr(trim($isbns), 0, -1);
 
-					//get the equivalent bookId for the given isbns
-					$i = 0;
-					$query = "select id from books where isbn in (".$isbns.")";
-					echo "\n".$query."\n";
-					$result  = mysqli_query($db, $query);
-					if (! $result)
-						throw new exception("Failed on query: $query");
-					$rowcount	 = mysqli_num_rows($result);
-					while($row = mysqli_fetch_array($result)){
-						$books[$i++] = $row['id'];
-					}
-					
-					//delete all the books from ek_catalog_global_section_products for this section Id 
-					$query = "delete from ek_catalog_global_section_products where section_id = ".$sectonId;
-					echo "\n".$query."\n";
-					$result  = mysqli_query($db, $query);
-					if (! $result)
-						throw new exception("Failed on query: $query");
-					
-					//insert the new books into ek_catalog_global_section_products for this section Id 
-					$query =  "Insert into ek_catalog_global_section_products (section_id,product_id) values ";
-					echo "\n".$query."\n";
-					$subQuery="";
-					foreach ($books as $book) {
-						$subQuery = $subQuery."(".$sectonId.",".$book."),";
-					}
-					$subQuery =substr(trim($subQuery), 0, -1);
-					echo "\n".$subQuery."\n";
-					$query = $query.$subQuery;
-					echo "\n".$query."\n";
-					$result  = mysqli_query($db, $query);
-					if (! $result)
-						throw new exception("Failed on query: $query");
+                    //get the equivalent bookId for the given isbns
+                    $i = 0;
+                    $query = "select id from books where isbn in (".$isbns.")";
+                    //echo "\n".$query."\n";
+                    $result  = mysqli_query($db, $query);
+                    if (! $result)
+                        throw new exception("Failed on query: $query");
+                    $rowcount     = mysqli_num_rows($result);
+                    while($row = mysqli_fetch_array($result)){
+                        $books[$i++] = $row['id'];
+                    }
+                    
+                    //delete all the books from ek_catalog_global_section_products for this section Id 
+                    $query = "delete from ek_catalog_global_section_products where section_id = ".$sectonId;
+                    //echo "\n".$query."\n";
+                    $result  = mysqli_query($db, $query);
+                    if (! $result)
+                        throw new exception("Failed on query: $query");
+                    
+                    //insert the new books into ek_catalog_global_section_products for this section Id 
+                    $query =  "Insert into ek_catalog_global_section_products (section_id,product_id) values ";
+                    //echo "\n".$query."\n";
+                    $subQuery="";
+                    foreach ($books as $book) {
+                        $subQuery = $subQuery."(".$sectonId.",".$book."),";
+                    }
+                    $subQuery =substr(trim($subQuery), 0, -1);
+                    //echo "\n".$subQuery."\n";
+                    $query = $query.$subQuery;
+                    //echo "\n".$query."\n";
+                    $result  = mysqli_query($db, $query);
+                    if (! $result)
+                        throw new exception("Failed on query: $query");
 
-				}
-			}
-		}
-		doCommit($db);
+                }
+            }
+        }
+        doCommit($db);
 
     }
 
@@ -186,26 +186,36 @@ else {
 
        // require_once(IMPORTBOOKS_PLUGINS_DIR . "/" . $argv[2] . ".php");
         $config = getConfig(CONFIG_FILE);
-//		$config = getConfig(IMPORTBOOKS_INI);
-		$db = initDatabases($config);
+//        $config = getConfig(IMPORTBOOKS_INI);
+        $db = initDatabases($config);
 
-		if ($argc <= 1) {
-			echo "\nNo arguments. Please provide the 'ini' file path after ". EKKITAB_HOME."\n\n";
-			echo "Usage: ".$argv[0]."  <Data Source file path> \n";
-			exit(1);
-		} else{
-			$file = EKKITAB_HOME.$argv[1];
-		}
+        if ($argc <= 1) {
+            echo "No arguments. Please provide the 'ini' file path.\n";
+            echo "Usage: ".$argv[0]."  <Data Source file path> \n";
+            exit(1);
+        } else{
+            $file = $argv[1];
+        }
 
-		$fh = fopen($file, "r"); 
-		if (!$fh) {
-			fatal("Could not open data file: $file");
-		}
+        $fh = fopen($file, "r"); 
+        if (!$fh) {
+            fatal("Could not open data file: $file");
+        }
 
-		$globalSectionConfig = getConfig($file);
-		insertGlobalSectionBook($globalSectionConfig, $db);
-		fclose($fh);
-		mysqli_close($db);
+        $globalSectionConfig = getConfig($file);
+
+        try {
+            insertGlobalSectionBook($globalSectionConfig, $db);
+        }
+        catch (Exception $e) {
+            echo "Exception encountered during processing. " . $e->getmessage() . "\n"; 
+            fclose($fh);
+            mysqli_close($db);
+            exit(1);
+        }
+        fclose($fh);
+        mysqli_close($db);
+        echo "Successfully updated the global sections.\n"; 
     }
     start($argc, $argv);
 ?>
