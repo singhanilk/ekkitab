@@ -11,6 +11,9 @@ if [ ! -d $releasedir ] ; then
 fi
 dt=`date +%d%b%y-%T`
 
+# Clean release directory first.
+rm -rf $releasedir/*
+
 # Copy the necessary scripts over to the release directory.
 
 bindir="$EKKITAB_HOME/bin"
