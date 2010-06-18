@@ -28,83 +28,81 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
 			$authorArr= $this->getProduct()->getAuthor();
 			$author = !is_null($authorArr['a']) ? " by ".$authorArr['a'] :"";
 			$desc = $this->getProduct()->getDescription() ;
-		}else{
-			$title = "unKnown";
-			$author = "unknown";
-			$desc ="";
-		}
-		if ($headBlock = $this->getLayout()->getBlock('head')) {
-			$headBlock->setTitle($title.$author." @ Ekkitab Educational Services");
-			$headBlock->setKeywords($title." @ Ekkitab Educational Services");
-			$headBlock->setDescription( $desc);
-		}
-		if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')){
-			$breadcrumbs->addCrumb('home', array(
-				'label'=>Mage::helper('ekkitab_catalog')->__('Home'),
-				'title'=>Mage::helper('ekkitab_catalog')->__('Go to Home Page'),
-				'link'=>Mage::getBaseUrl()
-			));
-   
-			$queryTextArr = Mage::getSingleton('core/session')->getCurrentQueryText();
-			if(is_array($queryTextArr) && count($queryTextArr) > 0 ){
-				$queryText	= $queryTextArr['current_query_text'];
-			}else{
-				$queryText ='';
+			if ($headBlock = $this->getLayout()->getBlock('head')) {
+				$headBlock->setTitle($title.$author." @ ");
+				$headBlock->setKeywords($title." @ ");
+				$headBlock->setDescription( $desc);
 			}
-			$curr_cp_arr = Mage::getSingleton('core/session')->getCurrentCategoryPath();
-			if(is_array($curr_cp_arr) && count($curr_cp_arr) > 0 ){
-				$curr_cp= $curr_cp_arr['current_category_path'];
-			}else{
-				$curr_cp='';
-			}
-			
-			$parentCatArr = array();
-			if(isset($curr_cp) && strlen($curr_cp) > 0 ){
-				$parentCatArr = explode("__",$curr_cp);
-			}
-
-		   if(isset($queryText) && strlen($queryText)>0){
-				$link=$this->getPagerUrl(array($this->helper('ekkitab_catalog')->getCategoryVarName()=>'',$this->helper('ekkitab_catalog')->getPageNoVarName()=>1),array($this->helper('ekkitab_catalog')->getQueryParamName()=>$queryText));
-				$searchText = $this->__("Search for '%s'", urldecode($queryText));
-				
-				$breadcrumbs->addCrumb('search', array(
-					'label'=>$searchText,
-					'title'=>$searchText,
-					'link'=>$link
+			if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')){
+				$breadcrumbs->addCrumb('home', array(
+					'label'=>Mage::helper('ekkitab_catalog')->__('Home'),
+					'title'=>Mage::helper('ekkitab_catalog')->__('Go to Home Page'),
+					'link'=>Mage::getBaseUrl()
 				));
-				
-			}
-
-			// This code is to break the category path inot a parent child hierarchy... for breadcrumb display.
-			if(!is_null($parentCatArr) && sizeof($parentCatArr) > 0){
-				$parentCatPath = ''; // The parent category of the current Category
-				$arrSize = sizeof($parentCatArr);
-				for($i=0;$i < $arrSize ; $i++){
-					$cat = $parentCatArr[$i];
-					
-					if(isset($parentCatPath) && strlen($parentCatPath) > 0 ){
-						$parentCatPath =  $parentCatPath."__". $cat;
-					}else{
-						$parentCatPath =  $cat;
-					}
-					$parentCatUrl = $this->getPagerUrl(array($this->helper('ekkitab_catalog')->getCategoryVarName()=>$parentCatPath,$this->helper('ekkitab_catalog')->getPageNoVarName()=>1),array($this->helper('ekkitab_catalog')->getQueryParamName()=>$queryText));
-					$cat = ucwords(urldecode($cat));
-					$breadcrumbs->addCrumb($cat, array(
-						'label'=>$cat,
-						'title'=>$cat,
-						'link'=>$parentCatUrl
-					));
+	   
+				$queryTextArr = Mage::getSingleton('core/session')->getCurrentQueryText();
+				if(is_array($queryTextArr) && count($queryTextArr) > 0 ){
+					$queryText	= $queryTextArr['current_query_text'];
+				}else{
+					$queryText ='';
 				}
-			}
-	
-			$title=htmlspecialchars_decode($title,ENT_QUOTES);
-			$breadcrumbs->addCrumb($title, array(
-				'label'=>$title,
-				'title'=>$title,
-				'link'=>''
-			));
+				$curr_cp_arr = Mage::getSingleton('core/session')->getCurrentCategoryPath();
+				if(is_array($curr_cp_arr) && count($curr_cp_arr) > 0 ){
+					$curr_cp= $curr_cp_arr['current_category_path'];
+				}else{
+					$curr_cp='';
+				}
+				
+				$parentCatArr = array();
+				if(isset($curr_cp) && strlen($curr_cp) > 0 ){
+					$parentCatArr = explode("__",$curr_cp);
+				}
 
+			   if(isset($queryText) && strlen($queryText)>0){
+					$link=$this->getPagerUrl(array($this->helper('ekkitab_catalog')->getCategoryVarName()=>'',$this->helper('ekkitab_catalog')->getPageNoVarName()=>1),array($this->helper('ekkitab_catalog')->getQueryParamName()=>$queryText));
+					$searchText = $this->__("Search for '%s'", urldecode($queryText));
+					
+					$breadcrumbs->addCrumb('search', array(
+						'label'=>$searchText,
+						'title'=>$searchText,
+						'link'=>$link
+					));
+					
+				}
+
+				// This code is to break the category path inot a parent child hierarchy... for breadcrumb display.
+				if(!is_null($parentCatArr) && sizeof($parentCatArr) > 0){
+					$parentCatPath = ''; // The parent category of the current Category
+					$arrSize = sizeof($parentCatArr);
+					for($i=0;$i < $arrSize ; $i++){
+						$cat = $parentCatArr[$i];
+						
+						if(isset($parentCatPath) && strlen($parentCatPath) > 0 ){
+							$parentCatPath =  $parentCatPath."__". $cat;
+						}else{
+							$parentCatPath =  $cat;
+						}
+						$parentCatUrl = $this->getPagerUrl(array($this->helper('ekkitab_catalog')->getCategoryVarName()=>$parentCatPath,$this->helper('ekkitab_catalog')->getPageNoVarName()=>1),array($this->helper('ekkitab_catalog')->getQueryParamName()=>$queryText));
+						$cat = ucwords(urldecode($cat));
+						$breadcrumbs->addCrumb($cat, array(
+							'label'=>$cat,
+							'title'=>$cat,
+							'link'=>$parentCatUrl
+						));
+					}
+				}
+		
+				$title=htmlspecialchars_decode($title,ENT_QUOTES);
+				$breadcrumbs->addCrumb($title, array(
+					'label'=>$title,
+					'title'=>$title,
+					'link'=>''
+				));
+
+			}
+		
 		}
+
 		Mage::getSingleton('core/session')->setCurrentQueryText('');
 		Mage::getSingleton('core/session')->setCurrentCategoryPath('');
         return parent::_prepareLayout();

@@ -289,9 +289,11 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
      * @param string ,string ,int
      * @return string
      */
-    public function getProductUrl($author,$title,$id)
+    public function getProductUrl($author,$title,$id,$urlPrefix=null)
     {
-		$urlPrefix='ekkitab_catalog/product/view/book/';
+		if(is_null($urlPrefix) || $urlPrefix=='' ){
+			$urlPrefix='ekkitab_catalog/product/view/book/';
+		}
 		$url='';
 		if(isset($author) && strlen(trim($author)) > 0)
 		{
@@ -312,6 +314,18 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
 		
 		$url=$urlPrefix.$url."__".$id.".html";
 		return $url;
+	}
+
+	
+    /**
+     * Retrieve HTML escaped search query
+     * @param string ,string ,int
+     * @return string
+     */
+    public function getSearchResultProductUrl($author,$title,$id)
+    {
+		$urlPrefix='ekkitab_catalog/product/show/book/';
+		return $this->getProductUrl($author,$title,$id,$urlPrefix);
 	}
 
 	
