@@ -95,7 +95,7 @@ if [ ! -f  ./db.sh ]                        ||
    [ ! -f  ./log4j.properties ]             ||
    [ ! -f  ./search.properties ]            ||
    [ ! -f  ./my.cnf ]                       ||
-   [ ! -f  ./default-000 ]                  ||
+   [ ! -f  ./000-default ]                  ||
    [ ! -f  ./synchrelease.sh ]              ||
    [ ! -f  ./synchcatalog.sh ]              ||
    [ ! -f  ./reset_ekkitab_book.sh ]        ||
@@ -232,4 +232,6 @@ cp $releasedir/init_ekkitab_books_db.sql $dbdir
 
 # Remove all local files
 rm *.local 
-echo "Server Initialization completed."
+echo "Server Initialization completed. Commencing database initialization."
+( cd $dbdir; ./reset_ekkitab_books.sh )
+echo "Server is ready for ekkitab application and catalog updates."
