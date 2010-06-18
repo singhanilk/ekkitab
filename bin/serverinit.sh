@@ -98,7 +98,7 @@ if [ ! -f  ./db.sh ]                        ||
    [ ! -f  ./000-default ]                  ||
    [ ! -f  ./synchrelease.sh ]              ||
    [ ! -f  ./synchcatalog.sh ]              ||
-   [ ! -f  ./reset_ekkitab_book.sh ]        ||
+   [ ! -f  ./reset_ekkitab_books.sh ]       ||
    [ ! -f  ./reset_ekkitab_books.sql]       ||
    [ ! -f  ./backup.sh ]                    ||
    [ ! -f  ./create_ekkitab_db.sql ]        ||
