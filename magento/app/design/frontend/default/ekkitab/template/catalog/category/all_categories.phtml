@@ -12,7 +12,10 @@
 <div class="pageHeader">Book categories on ekkitab</div>
 <br class="clear" />
 <?php
-	$categories = Mage::helper('catalog/category')->getStoreCategories();
+	global $categories;
+	require("categories.php");
+	sort($categories);
+	//$categories = Mage::helper('catalog/category')->getStoreCategories();
 	$_count = is_array($categories)?count($categories):$categories->count(); 
 	$_columns =3;
 	$_totalRows= intval($_count/ $_columns) ;
@@ -36,14 +39,12 @@
 <?php	endif; ?>
 			<ul>
 <?php endif; ?>
-
-			<?php if($category->getIsActive()):
-				$url = $this->helper('ekkitab_catalog')->getEncodedString($category->getName());
+			<?php 
+				$url = $this->helper('ekkitab_catalog')->getEncodedString($category);
 				$url = $this->helper('ekkitab_catalog')->getSearchResultByIndexUrl(null,array('category' => $url));
 			?>
 			 <li>
-				<a href="<?php echo $url ?>"<?php if ($this->isCategoryActive($category)): ?> class="active"<?php endif ?>><?php echo $this->htmlEscape($category->getName()) ?></a> </li>
-			<?php endif; ?>
+				<a href="<?php echo $url ?>"><?php echo $this->htmlEscape(ucwords($category))?></a> </li>
 <?php	$_counter= $_counter +1;
 		endforeach; ?>
 	</ul></div>

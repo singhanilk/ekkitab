@@ -23,7 +23,19 @@ class Ekkitab_Catalog_ProductController extends Mage_Core_Controller_Front_Actio
      */
     public function viewAction()
     {
-		//Mage::dispatchEvent('catalog_controller_product_init_before', array('controller_action'=>$this));
+		Mage::getSingleton('core/session')->setCurrentCategoryPath(array('current_category_path'=>''));
+        Mage::getSingleton('core/session')->setCurrentQueryText(array('current_query_text'=>''));
+		
+		$this->_forward('show');
+    }
+
+    /**
+     * Initialize requested product object
+     *
+     * @return Mage_Catalog_Model_Product
+     */
+    public function showAction()
+    {
 		$productUrl  = (String) $this->getRequest()->getParam('book');
 
 		// insert the split function here.....and get the product Id
@@ -33,30 +45,46 @@ class Ekkitab_Catalog_ProductController extends Mage_Core_Controller_Front_Actio
 		$productId = trim(urldecode(substr($productUrl,$productIdStartIndex,$productIdEndIndex)));
 
 		
-		if( $productId && strlen($productId)==13){
+		if( $productId && $this->isIsbn($productId)){
 			//this is isbn.....
-			//Mage::log("1 Product controller....product id is : ".$productId);
 			Mage::register('productId', $productId);
 			$this->loadLayout();
 			$this->renderLayout();
 		}else {
 			$productId = (int) $productId;
-			//Mage::log("2 Product controller....product id is : ".$productId);
 			if (!$productId || $productId <= 0) {
-				//Mage::log("3 Product controller....product id is : ".$productId);
 				$productId  = (int) $this->getRequest()->getParam('id');
 			}
 			if (!$productId || $productId <= 0) {
-				//Mage::log("4 Product controller....product id is : ".$productId);
 				$this->_forward('noRoute');
 			}
 			else{
-				//Mage::log("5 Product controller....product id is : ".$productId);
 				Mage::register('productId', (int)$productId);
 				$this->loadLayout();
 				$this->renderLayout();
 			}
 		}
     }
+
+	/**
+     * Retrieve search result count
+     *
+     * @return boolean
+     */
+    public function isIsbn($str)
+    {
+		$str=trim($str);
+		if(preg_match("/^[0-9]*$/",$str)){
+			if (strlen($str) == 12 || strlen($str) == 10 || strlen($str) == 13) {
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}
+		
+    }
+
 
 }
