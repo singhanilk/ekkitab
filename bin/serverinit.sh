@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 currentdir=`pwd`
 
 read -p "Please specify EKKITAB home directory: " EKKITAB_HOME 
@@ -47,6 +48,12 @@ magentodir=$EKKITAB_HOME/magento
 if [ ! -d  $magentodir ] ; then
   echo "Creating magento directory..."
   mkdir $magentodir
+fi
+# Create the db directory
+dbdir=$EKKITAB_HOME/db
+if [ ! -d  $dbdir ] ; then
+  echo "Creating db directory..."
+  mkdir $dbdir
 fi
 
 #Get database access credentials from argument list.
@@ -223,9 +230,14 @@ mkdir -p $magentodir/var/cache
 mkdir -p $magentodir/var/session
 
 if ( ! grep magento /etc/fstab >/dev/null ) ; then
-  sudo echo "tmpfs $EKKITAB_HOME/magento/var/cache/ tmpfs size=256,mode=0744 0 0" >> /etc/fstab
-  sudo echo "tmpfs $EKKITAB_HOME/magento/var/session/ tmpfs size=64,mode=0744 0 0" >> /etc/fstab
+  sudo rm -f ./fstab.local # Just in case there is a remnant file from a past run.
+  cat /etc/fstab > ./fstab.local
+  echo "tmpfs $EKKITAB_HOME/magento/var/cache/ tmpfs size=256,mode=0744 0 0" >> ./fstab.local 
+  echo "tmpfs $EKKITAB_HOME/magento/var/session/ tmpfs size=64,mode=0744 0 0" >> ./fstab.local
+  sudo cp /etc/fstab /etc/fstab.saved
+  sudo cp ./fstab.local /etc/fstab
 fi
+
 # Set up in memory file system for magento cache and session
 sudo mount -t tmpfs -o size=256M,mode=0744 tmpfs "$EKKITAB_HOME/magento/var/cache/"
 sudo mount -t tmpfs -o size=64M,mode=0744 tmpfs "$EKKITAB_HOME/magento/var/session/"
