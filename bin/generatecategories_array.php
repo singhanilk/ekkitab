@@ -65,11 +65,13 @@ fprintf($fhtml, "\n");
 $z = 0;
 fprintf($fhtml, "%s\n", '$categories = array();');
 
-foreach ($xml as $parentCategory) {
-    if ($parentCategory['name']!="") {
-		fprintf($fhtml, "%s\n", '$categories[\''.$z.'\']= "'.$parentCategory['name'] . '";');
-		$z ++;
-    }
+if($xml){
+	foreach ($xml as $parentCategory) {
+		if ($parentCategory['name']!="") {
+			fprintf($fhtml, "%s\n", '$categories[\''.$z.'\']= "'.$parentCategory['name'] . '";');
+			$z ++;
+		}
+	}
 }
 fprintf($fhtml, "%s\n", '?>');
 fclose($fhtml);
