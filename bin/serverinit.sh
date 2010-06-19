@@ -307,7 +307,7 @@ echo "done."
 
 sudo /etc/init.d/apparmor reload
 
-( cd /etc/init.d ; sudo ./mysql start )
+sudo service mysql start
 
 # Update /etc/fstab
 echo "Starting fstab configuration."
@@ -334,8 +334,10 @@ echo "done."
 
 # Set up in memory file system for magento cache and session
 echo -n "Setting up in-memory file systems for cache and session..."
-sudo mount -t tmpfs -o size=256M,mode=0744 tmpfs "$EKKITAB_HOME/magento/var/cache/"
-sudo mount -t tmpfs -o size=64M,mode=0744 tmpfs "$EKKITAB_HOME/magento/var/session/"
+if ! ( mount | grep magento >/dev/null ) ; then 
+    sudo mount -t tmpfs -o size=256M,mode=0744 tmpfs "$EKKITAB_HOME/magento/var/cache/"
+    sudo mount -t tmpfs -o size=64M,mode=0744 tmpfs "$EKKITAB_HOME/magento/var/session/"
+fi
 echo "done."
 
 # Copy other files to the bin,data and db directory
