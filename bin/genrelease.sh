@@ -36,6 +36,9 @@ cp -r $EKKITAB_HOME/java/lib  $releasedir
 cp $EKKITAB_HOME/java/bin/ekkitabsearch.jar  $releasedir
 cp $EKKITAB_HOME/java/bin/*.properties  $releasedir
 echo "done."
+echo -n "Copying synch file to synchronize release on server..."
+cp $EKKITAB_HOME/bin/synchrelease.sh  $releasedir
+echo "done."
 
 echo `date +%D' 'at' '%T` > $releasedir/releasedate
 echo "Release directory created on `date +%D' 'at' '%T`" 
