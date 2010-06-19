@@ -1,12 +1,28 @@
 #!/bin/bash
+
+# Get the Ekkitab Home Directory. Confirm with user.
+while (true) ; do
+    read -p "Please specify Ekkitab home directory: " EKKITAB_HOME 
+    read -p "You have specified $EKKITAB_HOME as the Ekkitab home directory. Ok to continue? (y/n) " ok
+    ok=`echo $ok | tr 'A-Z' 'a-z'`
+    if [ $ok == "y" ] ; then
+        break;
+    elif [ $ok != "n" ] ; then 
+        echo "Ambiguous reply...Exiting"
+        break; 
+    fi
+done
+
 if [ -z $EKKITAB_HOME ] ; then
-    echo "EKKITAB_HOME is not set..."
+    echo "Fatal: EKKITAB_HOME is not set..."
     exit 1;
 fi;
 
+export EKKITAB_HOME=$EKKITAB_HOME
+
 # First check if db credentials are available.
 if [ ! -f $EKKITAB_HOME/bin/db.sh ] ; then 
-    echo "Database credential not available. Cannot continue."
+    echo "Fatal: Database credentials not available. Cannot continue."
     exit 1
 fi
 
@@ -15,45 +31,57 @@ fi
 if (( $# > 0 )) ; then
   releasedir=$1
 else
-  echo "No release directory provided. Using $EKKITAB_HOME/release/update"
+  echo "No release directory provided. Using the default."
   releasedir="$EKKITAB_HOME/release/app"
 fi
-  
+
+read -p "You have specified - $releasedir - as the release directory. Ok to continue? (y/n) " ok
+ok=`echo $ok | tr 'A-Z' 'a-z'`
+if [ $ok == "y" ] ; then
+    break;
+else 
+   echo "Fatal: No release directory to process."
+   exit 1
+fi
+
 # First check if release directory exists. Create it if it does not.
 if [ ! -d $releasedir ] ; then 
-    echo "Release directory not available. Cannot continue."
+    echo "Fatal: Release directory not found."
     exit 1
 fi
 
-# Next check if magento directory is available.
-magentodir="$EKKITAB_HOME/magento"
 
 # Unzip the release
+echo -n "Unzipping application files..."
 ( cd $EKKITAB_HOME;  unzip -q "$releasedir/release-*.zip" )
+echo "done."
 
 # If the magento directory does not exist, we have a problem.
+magentodir="$EKKITAB_HOME/magento"
 if [ ! -d $magentodir ] ; then
   echo "FATAL: Could not create magento directory. Cannot continue."
   exit 1;
 fi
 
 # Set up maintenance page
-echo "Setting system to maintenance mode."
+echo -n "Setting system to maintenance mode..."
 ( cd $magentodir; cp ".htaccess.maintenance" ".htaccess" )
+echo "done."
 
 # Stop tomcat service
-echo "Stopping tomcat6 service"
 sudo service tomcat6 stop
 
 # Setting logfile
 if [ ! -d $EKKITAB_HOME/logs ] ; then
-   echo "Creating logs directory"
+   echo -n "Creating logs directory..."
    mkdir $EKKITAB_HOME/logs
    chmod a+wx $EKKITAB_HOME/logs
+   echo "done."
 fi
 logfile="$EKKITAB_HOME/logs/produpdate.log"
 
 #Setting Tomcat locations
+echo -n "Updating search related tomcat6 files..."
 if [ x${TOMCAT_HOME} == "x" ] ; then
    tomcathome="/var/lib/tomcat6"
 else
@@ -66,18 +94,15 @@ if [ ! -d $classesdir ] ; then
   mkdir $classesdir;
 fi
 
-echo "Updating search related files.."
 ( cd $releasedir; sudo cp ekkitabsearch.jar $searchlib/ekkitabsearch.jar ) 
-echo "Deleting old lucene jar file that came with JavaBridge distribution..."
 rm -f $searchlib/lucene.jar 
-echo "Copying missing libraries to tomcat location ..."
 ( 
    cd $releasedir/lib; for i in *.jar ; 
    do 
         f=${i%%-*};
         if [ $f == "lucene" ] || [ $f == "log4j" ]; then 
             if [ ! -f $searchlib/$i ] ; then 
-                echo "Copying $i to Tomcat JavaBridge library."; 
+                echo -n " [Added $i] "; 
                 sudo cp $i $searchlib/$i
             fi 
         fi 
@@ -87,20 +112,21 @@ echo "Copying missing libraries to tomcat location ..."
    cd $releasedir; for i in *.properties ; 
    do 
       if [ ! -f $classesdir/$i ] ; then 
-         echo "Copying $i to classes directory."; 
+         echo -n " [Added $i] "; 
          sudo cp $i $classesdir/$i
       fi 
    done 
 )
 
-echo "System update completed. Restarting services" 
+echo "done."
 
-echo "Starting tomcat6 service"
+echo "System update completed. Restarting services." 
 sudo service tomcat6 start
+
 #Removing maintenance page
-echo "Taking system off maintenance mode."
+echo -n "Taking system off maintenance mode..."
 cp $magentodir/.htaccess.prod $magentodir/.htaccess
-echo "Restarting apache2 service"
+echo "done."
 sudo service apache2 restart
 
 

@@ -19,8 +19,17 @@ rm -rf $releasedir/*
 echo -n "Zipping magento directory..."
 dt=`date +%d%b%y-%T`
 # Zip the full magento directory, except the search indexes and other misc directories.
-( cd "$EKKITAB_HOME" ; zip -rq "$releasedir/release-$dt.zip" magento -x magento/search_index_dir/\* -x magento/search_index_dir_spell_author/\* -x magento/search_index_dir_spell_title/\* -x magento/categories.xml -x magento/media/catalog/product/\* -x magento/var/cache/\* -x magento/var/session/\* -x magento/var/log/\* -x magento/downloader/\* ) 
-echo "done."
+#( cd "$EKKITAB_HOME" ; zip -rq "$releasedir/release-$dt.zip" magento -x magento/search_index_dir/\* -x magento/search_index_dir_spell_author/\* -x magento/search_index_dir_spell_title/\* -x magento/categories.xml -x magento/media/catalog/product/\* -x magento/var/cache/\* -x magento/var/session/\* -x magento/var/log/\* -x magento/downloader/\* ) 
+zipdirs=( "magento/app" "magento/404" "magento/js" "magento/lib" "magento/pear" "magento/pkginfo" "magento/report" "magento/skin" )
+zipdircount=${#zipdirs[@]} 
+for (( i=0; i<$zipdircount; i++ )) ; do
+   ( cd "$EKKITAB_HOME" ; zip -rq "$releasedir/release-$dt.zip" ${zipdirs[$i]} ) 
+   echo -n " [${zipdirs[$i]}] "
+done
+( cd "$EKKITAB_HOME" ; zip -q "$releasedir/release-$dt.zip" magento/* ) # Just the files in magento. Not recursive.
+( cd "$EKKITAB_HOME" ; zip -q "$releasedir/release-$dt.zip" magento/.htaccess* ) # Just the hidden files.
+echo -n " [magento] "
+echo "...done."
 
 echo -n "Copying search related files.."
 cp -r $EKKITAB_HOME/java/lib  $releasedir
