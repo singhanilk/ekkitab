@@ -13,6 +13,9 @@ if [ ! -d $releasedir ] ; then
 fi
 echo "done."
 
+# Clean release directory before start.
+rm -rf $releasedir/*
+
 echo -n "Zipping magento directory..."
 dt=`date +%d%b%y-%T`
 # Zip the full magento directory, except the search indexes and other misc directories.
