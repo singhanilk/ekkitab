@@ -17,7 +17,7 @@ echo "done."
 rm -rf $releasedir/*
 
 echo -n "Zipping magento directory..."
-dt=`date +%d%b%y-%T`
+dt=`date +%d%b%y`
 # Zip the full magento directory, except the search indexes and other misc directories.
 #( cd "$EKKITAB_HOME" ; zip -rq "$releasedir/release-$dt.zip" magento -x magento/search_index_dir/\* -x magento/search_index_dir_spell_author/\* -x magento/search_index_dir_spell_title/\* -x magento/categories.xml -x magento/media/catalog/product/\* -x magento/var/cache/\* -x magento/var/session/\* -x magento/var/log/\* -x magento/downloader/\* ) 
 zipdirs=( "magento/app" "magento/404" "magento/js" "magento/lib" "magento/pear" "magento/pkginfo" "magento/report" "magento/skin" )

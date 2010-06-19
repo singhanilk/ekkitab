@@ -28,32 +28,38 @@ fi
 
 . $EKKITAB_HOME/bin/db.sh
 
-if (( $# > 0 )) ; then
-  releasedir=$1
-else
-  echo "No release directory provided. Using the default."
-  releasedir="$EKKITAB_HOME/release/app"
-fi
+#if (( $# > 0 )) ; then
+#  releasedir=$1
+#else
+#  echo "No release directory provided. Using the default."
+#  releasedir="$EKKITAB_HOME/release/app"
+#fi
 
-read -p "You have specified - $releasedir - as the release directory. Ok to continue? (y/n) " ok
-ok=`echo $ok | tr 'A-Z' 'a-z'`
-if [ $ok == "y" ] ; then
-    break;
-else 
-   echo "Fatal: No release directory to process."
-   exit 1
-fi
+#read -p "You have specified - $releasedir - as the release directory. Ok to continue? (y/n) " ok
+#ok=`echo $ok | tr 'A-Z' 'a-z'`
+#if [ $ok == "y" ] ; then
+#    break;
+#else 
+#   echo "Fatal: No release directory to process."
+#   exit 1
+#fi
+
+releasedir=`pwd`
 
 # First check if release directory exists. Create it if it does not.
-if [ ! -d $releasedir ] ; then 
-    echo "Fatal: Release directory not found."
-    exit 1
-fi
+#if [ ! -d $releasedir ] ; then 
+#    echo "Fatal: Release directory not found."
+#    exit 1
+#fi
 
 
 # Unzip the release
 echo -n "Unzipping application files..."
-( cd $EKKITAB_HOME;  unzip -q "$releasedir/release-*.zip" )
+if ! ( cd $EKKITAB_HOME;  unzip -qo $releasedir/release-*.zip >/dev/null 2>&1 ) ; then
+    echo "failed."
+    echo "Fatal: Could not unzip application files."
+    exit 1;
+fi
 echo "done."
 
 # If the magento directory does not exist, we have a problem.
@@ -95,7 +101,7 @@ if [ ! -d $classesdir ] ; then
 fi
 
 ( cd $releasedir; sudo cp ekkitabsearch.jar $searchlib/ekkitabsearch.jar ) 
-rm -f $searchlib/lucene.jar 
+sudo rm -f $searchlib/lucene.jar 
 ( 
    cd $releasedir/lib; for i in *.jar ; 
    do 
