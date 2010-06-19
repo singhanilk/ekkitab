@@ -307,6 +307,8 @@ echo "done."
 
 sudo /etc/init.d/apparmor reload
 
+( cd /etc/init.d ; sudo ./mysql start )
+
 # Update /etc/fstab
 echo "Starting fstab configuration."
 
