@@ -1,0 +1,42 @@
+This is an abbreviated version of an eventual complete document on installing and deploying a new version of Ekkitab.
+
+There are three parts to a deployment.
+
+1. On a new server that has not seen an Ekkitab installation yet, there is need to initialize the server and basic Ekkitab directories and database.
+This step is usually doen exactly once for a server.
+
+2. Once a basic installation is done, it is necessary to deploy a new version of the software on the system. This process is repeated as often as there are new releases that are required to be pushed to production. In this step, the server is synchronized with new software changes but no catalog (or content) changes.  This script can be executed independent of the others but the first script must have run at least once on a new server.
+
+3. The third part of deploying a new system, is to deploy the data and associated index files to the new server. This is done as frequently as there are data updates to the system and this script can be run independent of the other two, provided that the previous two scripts have run at least once on a new server.
+
+There are three scripts in the ekkitab_home/bin directory which each executes one step of the above described process. 
+
+(1) bin/geninit.sh - generates a new initialization directory. Location is: release/init
+(2) bin/genrelease.sh - generates a new software release directory. Location is: release/app
+(3) bin/gencatalog.sh - generates a new catalog (or content) directory. Location is release/catalog
+
+Each of of the above scripts produces a release directory in the ekkitab_home/release directory with names as mentioned above. These directories mmust be copied to the target server and placed in a temporary location, say /tmp.
+
+Once copied, you will now have three directories in your target server in the location you have copied them to. That is, if you had copied them to /tmp, then you will have: /tmp/init, /tmp/app, /tmp/catalog.
+
+You have to install in a sequence. Before starting, please make sure that mysql, tomcat6 and apache2 are available and running.
+
+Steps to install: (Assuming /tmp as the location into which the three directories have been copied)
+
+1. Go into directory /tmp/int.
+2. Type: ./serverinit.sh -u <db username> -p <db password> -h <host>. For host, you can give localhost as the name if the db server is on the same machine.
+3. You will be asked a few install related questions (each of which is provided with a default). Type return to accept the default or type in a new value.
+4. The script is self sufficient and will run to completion without further assistance.
+
+5. Go into directory /tmp/app.
+6. Type: ./synchrelease.sh
+7. You will be queried for ekkitab_home directory and asked to confirm your input. The script will run to completion without firther assistance.
+8. Go into directory /tmp/catalog.
+9. Type: ./synchcatalog.sh
+10. You will be queried for ekkitab_home directory and asked to confirm your input. The script will run to completion without further assistance. This script will take a while to complete especially if you have a large books table.
+At the end of the execution of this third script, the system is ready for use.
+
+
+ 
+
+
