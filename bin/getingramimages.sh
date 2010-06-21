@@ -19,7 +19,7 @@ if [ $# -ne 2 ] ; then
     a=10#`ls -lrt $archivedir/*j400*file*.zip | tail -1 | cut -d' ' -f9 | sed 's/.*\/\([0-9]*\)j400.*.zip/\1/g'`
     let a=a+100; if (( $a < 100000 )) ; then a=0$a; fi; 
     d1=10#$a
-    echo "No date provided. Usage: $0 [ <date in MMDDYY format> ]" 
+    echo "No date provided. Usage: $0 [ logfile ] [ <date in MMDDYY format> ]" 
     echo "Using $a as start date instead. " 
 else 
     d1=10#$2
