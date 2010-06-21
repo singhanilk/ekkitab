@@ -62,11 +62,26 @@ if ! ( cd $EKKITAB_HOME;  unzip -qo $releasedir/release-*.zip >/dev/null 2>&1 ) 
 fi
 echo "done."
 
-# If the magento directory does not exist, we have a problem.
 magentodir="$EKKITAB_HOME/magento"
+# If the magento directory does not exist, we have a problem.
 if [ ! -d $magentodir ] ; then
   echo "FATAL: Could not create magento directory. Cannot continue."
   exit 1;
+fi
+
+# Create directories that have not been included in the zip and set permissions on them correctly
+logdir=$magentodir/var/log
+if [ ! -d $logdir ] ; then
+  echo -n "Creating logs directory..."
+  mkdir -p $logdir;
+  chmod a+rwx $logdir;
+  echo "done."
+fi
+catalogdir=$magentodir/media/catalog
+if [ ! -d $catalogdir ] ; then
+  echo -n "Creating media/catalog directory..."
+  mkdir -p $catalogdir;
+  echo "done."
 fi
 
 # Set up maintenance page
@@ -126,7 +141,10 @@ sudo rm -f $searchlib/lucene.jar
 
 echo "done."
 
-echo "System update completed. Restarting services." 
+# Copy this script to the bin directory.
+bindir=$EKKITAB_HOME/bin
+cp $releasedir/synchrelease.sh $bindir
+
 sudo service tomcat6 start
 
 #Removing maintenance page
@@ -134,5 +152,6 @@ echo -n "Taking system off maintenance mode..."
 cp $magentodir/.htaccess.prod $magentodir/.htaccess
 echo "done."
 sudo service apache2 restart
+echo "System update completed. All required services have been restarted." 
 
 

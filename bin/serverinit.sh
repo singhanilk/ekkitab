@@ -47,34 +47,54 @@ if [[ ("$host" == "") || ("$pass" == "") || ("$user" == "") ]] ; then
   exit 1
 fi
 
-# Get the Ekkitab Home Directory. Confirm with user.
-while (true) ; do
-    read -p "Please specify Ekkitab home directory: " EKKITAB_HOME 
-    read -p "You have specified $EKKITAB_HOME as the Ekkitab home directory. Ok to continue? (y/n) " ok
-    ok=`echo $ok | tr 'A-Z' 'a-z'`
-    if [ $ok == "y" ] ; then
-        break;
-    elif [ $ok != "n" ] ; then 
-        echo "Ambiguous reply...Exiting"
-        break; 
-    fi
-done
+
+# Get the Ekkitab home directory. 
+EKKITAB_HOME=/mnt2/scm
+read -p "Please specify Ekkitab home directory: ($EKKITAB_HOME) " READ_VAR 
+if [ "$READ_VAR" != "" ]  ; then
+  EKKITAB_HOME=$READ_VAR
+fi
+
+# Get the Mysql data directory. 
+MYSQL_DIR=/mnt2/mysql
+read -p "Please specify directory to hold Mysql database: ($MYSQL_DIR) " READ_VAR 
+if [ "$READ_VAR" != "" ]  ; then
+  MYSQL_DIR=$READ_VAR
+fi
+
+# Get the Magento product images directory. 
+IMAGES_DIR=/mnt3/magento-product-images
+read -p "Please specify Product Images directory for this installation: ($IMAGES_DIR) " READ_VAR 
+if [ "$READ_VAR" != "" ]  ; then
+  IMAGES_DIR=$READ_VAR
+fi
+
+# Get the Base Url for this installation. 
+BASE_URL=http://www.ekkitab.com/
+read -p "Please specify the base url for this installation: ($BASE_URL) " READ_VAR 
+if [ "$READ_VAR" != "" ]  ; then
+  BASE_URL=$READ_VAR
+fi
+
+# Summarise all user input and get confirmation.
+echo "Please confirm the following input values you have provided."
+echo "Ekkitab Home     = $EKKITAB_HOME"
+echo "MySql Directory  = $MYSQL_DIR"
+echo "Images Directory = $IMAGES_DIR"
+echo "Base Url         = $BASE_URL"
+
+read -p "Ok to continue? (y/n only) (Default is 'y') " ok
+if [ "$ok" == "" ] ; then
+   ok="y"
+fi
+ok=`echo $ok | tr 'A-Z' 'a-z'`
+if [[ $ok != "y" ]] ; then
+   echo "Ok. Please try again with correct inputs."
+   echo "Fatal: No user inputs to proceed. Exiting."
+   exit 1;
+fi
 
 export EKKITAB_HOME=$EKKITAB_HOME
-
-# Get the Mysql Data Directory. Confirm with user.
-while (true) ; do
-    read -p "Please specify directory to hold Mysql database: " MYSQL_DIR 
-    read -p "You have specified $MYSQL_DIR as the Mysql data directory. Ok to continue? (y/n) " ok
-    ok=`echo $ok | tr 'A-Z' 'a-z'`
-    if [ $ok == "y" ] ; then
-        break;
-    elif [ $ok != "n" ] ; then 
-        echo "Ambiguous reply...Exiting"
-        break; 
-    fi
-done
-
 
 # Create the Ekkitab Home Directory if it does not exist.
 # Change ownership to the identity running this script. 
@@ -314,8 +334,17 @@ echo "Starting fstab configuration."
 
 echo -n "Updating /etc/fstab with tmpfs file systems for cache and session..."
 # Create mount points first
-mkdir -p $magentodir/var/cache
-mkdir -p $magentodir/var/session
+cachedir=$magentodir/var/cache
+if [ ! -d $cachedir ] ; then
+    mkdir -p $cachedir
+    chmod a+rwx $cachedir
+fi
+sessiondir=$magentodir/var/session
+if [ ! -d $sessiondir ] ; then
+    mkdir -p $sessiondir
+    chown www-data:www-data $sessiondir
+    chmod a+rwx $sessiondir
+fi
 targetfile=/etc/fstab
 localfile=./fstab.local
 savefile=$targetfile.saved
@@ -323,7 +352,7 @@ savefile=$targetfile.saved
 if ( ! grep magento $targetfile >/dev/null ) ; then
   sudo rm -f $localfile # Just in case there is a remnant file from a past run.
   cat $targetfile > $localfile 
-  echo "tmpfs $EKKITAB_HOME/magento/var/cache/ tmpfs size=256,mode=0744 0 0" >> $localfile 
+  # echo "tmpfs $EKKITAB_HOME/magento/var/cache/ tmpfs size=256,mode=0744 0 0" >> $localfile 
   echo "tmpfs $EKKITAB_HOME/magento/var/session/ tmpfs size=64,mode=0744 0 0" >> $localfile 
   if [ ! -f $savefile ] ; then
     sudo cp $targetfile $savefile
@@ -335,7 +364,7 @@ echo "done."
 # Set up in memory file system for magento cache and session
 echo -n "Setting up in-memory file systems for cache and session..."
 if ! ( mount | grep magento >/dev/null ) ; then 
-    sudo mount -t tmpfs -o size=256M,mode=0744 tmpfs "$EKKITAB_HOME/magento/var/cache/"
+    # sudo mount -t tmpfs -o size=256M,mode=0744 tmpfs "$EKKITAB_HOME/magento/var/cache/"
     sudo mount -t tmpfs -o size=64M,mode=0744 tmpfs "$EKKITAB_HOME/magento/var/session/"
 fi
 echo "done."
@@ -356,9 +385,72 @@ cp $releasedir/ekkitab_books_categories.sql $datadir
 cp $releasedir/init_ekkitab_books_db.sql $dbdir
 echo "done."
 
+# Copy this script to the bin directory.
+cp $releasedir/serverinit.sh $bindir
+
 # Remove all local files
 rm *.local 
 
+# Introduce a small delay. Seems to help prevent an error message while executing
+# the  reset database script that follows.
+
+sleep 10
+
 echo "Server Initialization completed. Commencing Ekkitab database initialization."
 ( cd $dbdir; ./reset_ekkitab_books.sh )
+
+# Set base url.
+paths=( "web/unsecure/base_url" "web/secure/base_url" "billdesk/wps/return_url" "ccav/wps/return_url" );
+pathcount=${#paths[@]}
+
+echo -n "Setting Base Url for http access..."
+for (( i=0; i<$pathcount; i++ )) ; do
+    query="insert into core_config_data (scope, scope_id, path, value) values ('default', 0, '${paths[$i]}', '$BASE_URL') on duplicate key update value = '$BASE_URL'";
+    if ( ! mysql -u $user -p$pass -h $host ekkitab_books -e "$query" >/dev/null 2>&1 ) ; then
+        echo "\nSetting of path '${paths[$i]}' failed. Please set manually.\n"
+    else
+        echo -n " [${paths[$i]}] "
+    fi
+done
+echo "done."
+
+# Set image directory
+echo -n "Setting Image Directory for installation..."
+catalogdir=$magentodir/media/catalog
+if [ ! -d $catalogdir ] ; then
+    mkdir -p $catalogdir;
+fi
+
+# Check if the product images link exists. Else create it.
+if [ ! -h $catalogdir/product ] ; then
+    ( cd $catalogdir ; ln -s $IMAGES_DIR product )
+fi
+
+echo "done."
+
+# Set order id.
+# First determine current value of order-id
+query="select increment_last_id from eav_entity_store where entity_type_id = '11' and store_id = '1'"
+orderid=`mysql -u $user -p$pass -h $host ekkitab_books -e "$query"`
+if [ "$orderid" == "" ] ; then
+   orderid="0"
+else
+   orderid=`echo ${orderid##*_id}`
+fi
+read -p "Orders will start from number $orderid. [Type return to accept or type in a new value.] > " READ_VAR
+if [ "$READ_VAR" != "" ]  ; then
+  orderid=$READ_VAR
+fi
+if ! ( echo $orderid | grep "^[0-9]*$" >/dev/null ) ; then
+   echo "Value '$orderid' is not a number. Cannot set this value"
+   echo "Please set order id manually."
+else
+   echo -n "Setting order id to start from $orderid..."
+   query="delete from eav_entity_store where entity_type_id = '11' and store_id = '1'"
+   mysql -h $host -u $user -p$pass ekkitab_books -e "$query"
+   query="insert into eav_entity_store (entity_type_id, store_id, increment_prefix, increment_last_id) values ('11', '1', '1', '$orderid')"
+   mysql -h $host -u $user -p$pass ekkitab_books -e "$query"
+   echo "done"
+fi
+
 echo "Server is ready for ekkitab application and catalog updates."

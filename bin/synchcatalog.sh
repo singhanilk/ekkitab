@@ -94,6 +94,10 @@ cp -r $releasedir/search_index_dir_spell_title $magentodir
 cp $releasedir/categories.xml $magentodir
 echo "done."
 
+# Copy this script to the bin directory.
+bindir=$EKKITAB_HOME/bin
+cp $releasedir/synchcatalog.sh $bindir
+
 sudo service tomcat6 start
 
 # Removing maintenance page
