@@ -1,39 +1,39 @@
 <MENU>
     <SECTION title="New York Times BestSellers (Fiction)" type="collection" showall="yes" highlight="5" shuffle="yes">
-        <BOOK id="9780307473479" title="The Girl With The Dragon Tattoo" author="Stieg Larsson"/>
-        <BOOK id="9780307476159" title="The Girl Who Played With Fire" author="Stieg Larsson"/>
+        <BOOK id="9781847246929" title="The Girl With The Dragon Tattoo" author="Stieg Larsson"/>
+        <BOOK id="9781906694159" title="The Girl Who Played With Fire" author="Stieg Larsson"/>
         <BOOK id="9781416589648" title="Little Bee" author="Chris Cleave"/>
-        <BOOK id="9780743294300" title="Best Friends Forever" author="Jennifer Weiner"/>
+        <BOOK id="9781847390240" title="Best Friends Forever" author="Jennifer Weiner"/>
         <BOOK id="9780425233689" title="Savor the Moment (The Bride Quartet, Book 3)" author="Nora Roberts"/>
         <BOOK id="9780385344074" title="South of Broad" author="Pat Conroy"/>
-        <BOOK id="9780375714368" title="Cutting for Stone" author="Abraham Verghese"/>
+        <BOOK id="9788184000597" title="Cutting for Stone" author="Abraham Verghese"/>
         <BOOK id="9781594133831" title="A Reliable Wife" author="Robert Goolrick"/>
-        <BOOK id="9780061537967" title="The Art of Racing in the Rain" author="Garth Stein"/>
+        <BOOK id="9780007294596" title="The Art of Racing in the Rain" author="Garth Stein"/>
         <BOOK id="9781934137192" title="Tinkers" author="Paul Harding"/>
     </SECTION>
     <SECTION title="New York Times BestSellers (Non-Fiction)" type="collection" showall="yes" highlight="3" shuffle="yes">
         <BOOK id="9781594132667" title="Eat, Pray, Love: One Woman's Search for Everything Across Italy, India and Indonesia" author="Elizabeth Gilbert"/>
-        <BOOK id="9781597226240" title="Three Cups of Tea: One Man's Mission to Promote Peace . . . One School at a Time" author="Greg Mortenson and David Oliver Relin"/>
+        <BOOK id="9780143038252" title="Three Cups of Tea: One Man's Mission to Promote Peace . . . One School at a Time" author="Greg Mortenson and David Oliver Relin"/>
         <BOOK id="9781582346182" title="My Horizontal Life: A Collection of One-Night Stands" author="Chelsea Handler"/>
-        <BOOK id="9781416954125" title="Are You There, Vodka? It's Me, Chelsea" author="Chelsea Handler"/>
+        <BOOK id="9780099515029" title="Are You There, Vodka? It's Me, Chelsea" author="Chelsea Handler"/>
         <BOOK id="9780891419198" title="With the Old Breed: At Peleliu and Okinawa" author="E. B. Sledge"/>
-        <BOOK id="9781586217198" title="Blink: The Power of Thinking Without Thinking" author="Malcolm Gladwell"/>
+        <BOOK id="9780141014593" title="Blink: The Power of Thinking Without Thinking" author="Malcolm Gladwell"/>
         <BOOK id="9780805092257" title="Mennonite in a Little Black Dress: A Memoir of Going Home" author="Rhoda Janzen"/>
         <BOOK id="9780307387097" title="Half the Sky: Turning Oppression into Opportunity for Women Worldwide" author="Nicholas D. Kristof and Sheryl WuDunn"/>
-        <BOOK id="9780061238536" title="Freakonomics: A Rogue Economist Explores the Hidden Side of Everything" author="Steven D. Levitt and Stephen J. Dubner "/>
+        <BOOK id="9780141019017" title="Freakonomics: A Rogue Economist Explores the Hidden Side of Everything" author="Steven D. Levitt and Stephen J. Dubner "/>
         <BOOK id="9780553593310" title="Helmet For My Pillow: From Parris Island To The Pacific" author="Robert Leckie"/>
     </SECTION>
     <SECTION title="Popular in India" type="collection" showall="yes" highlight="5" shuffle="yes">
-        <BOOK id="9780061122415" title="The Alchemist" author="Paulo Coelho"/>
-        <BOOK id="9780307277671" title="The Da Vinci Code" author="Dan Brown"/>
-        <BOOK id="9780439554930" title="Harry Potter and the Sorcerer's Stone" author="J K Rowling"/>
-        <BOOK id="9780061120084" title="To Kill a Mockingbird" author="Harper Lee"/>
-        <BOOK id="9780316015844" title="Twilight" author="Stephenie Meyer"/>
-        <BOOK id="9781594480003" title="The Kite Runner" author="Khaled Hosseini"/>
-        <BOOK id="9780553296983" title="Anne Frank: The Diary of a Young Girl" author="Anne Frank"/>
-        <BOOK id="9780679783268" title="Pride and Prejudice" author="Jane Austen"/>
-        <BOOK id="9780141439600" title="A Tale of Two Cities" author="Charles Dickens"/>
-        <BOOK id="9780743477116" title="Romeo and Juliet" author="William Shakespeare"/>
+        <BOOK id="9788172234980" title="The Alchemist" author="Paulo Coelho"/>
+        <BOOK id="9780552161275" title="The Da Vinci Code" author="Dan Brown"/>
+        <BOOK id="9780590353427" title="Harry Potter and the Sorcerer's Stone" author="J K Rowling"/>
+        <BOOK id="9780099419785" title="To Kill a Mockingbird" author="Harper Lee"/>
+        <BOOK id="9781905654406" title="Twilight" author="Stephenie Meyer"/>
+        <BOOK id="9780747566533" title="The Kite Runner" author="Khaled Hosseini"/>
+        <BOOK id="9788190739146" title="Anne Frank: The Diary of a Young Girl" author="Anne Frank"/>
+        <BOOK id="9780140623215" title="Pride and Prejudice" author="Jane Austen"/>
+        <BOOK id="9780140623581" title="A Tale of Two Cities" author="Charles Dickens"/>
+        <BOOK id="9780140623383" title="Romeo and Juliet" author="William Shakespeare"/>
     </SECTION>
     <SECTION title="Prize Winning Books" type="links" showall="no">
         <LINK name="The Man Booker Prize" type="collection">
@@ -53,22 +53,22 @@
             <BOOK id="9780007150939" title="The Yiddish Policemen's Union" author="Michael Chabon"/>
             <BOOK id="9780812536362" title="Rainbows End" author="Vernor Vinge"/>
             <BOOK id="9780765348258" title="Spin" author="Robert Charles Wilson"/>
-            <BOOK id="9780765356154" title="Jonathan Strange &amp; Mr. Norrell" author="Susanna Clarke"/>
+            <BOOK id="9781582346038" title="Jonathan Strange &amp; Mr. Norrell" author="Susanna Clarke"/>
             <BOOK id="9780380818617" title="Paladin of Souls" author="Lois McMaster Bujold"/>
             <BOOK id="9780765345004" title="Hominids" author="Robert J. Sawyer"/>
-            <BOOK id="9780747263746" title="American Gods" author="Neil Gaiman"/>
+            <BOOK id="9780380789030" title="American Gods" author="Neil Gaiman"/>
             <BOOK id="9780747582380" title="Harry Potter and the goblet of fire" author="J K Rowling"/>
             <BOOK id="9780812536355" title="A Deepness in the Sky" author="Vernor Vinge"/>
         </LINK>
         <LINK name="The Pulitzer Prize" type="collection"> 
-            <BOOK id="9780374153892" title="Gilead" author="Marilynne Robinson"/>
+            <BOOK id="9781844081486" title="Gilead" author="Marilynne Robinson"/>
             <BOOK id="9780060557553" title="The Known World" author="Edward P. Jones"/>
             <BOOK id="9780312422158" title="Middlesex" author="Jeffrey Eugenides"/>
             <BOOK id="9780679432470" title="Empire Falls" author="Richard Russo"/>
-            <BOOK id="9780312282998" title="The Amazing Adventures of Kavalier &amp; Clay" author="Michael Chabon"/>
+            <BOOK id="9781841154930" title="The Amazing Adventures of Kavalier &amp; Clay" author="Michael Chabon"/>
             <BOOK id="9780395927205" title="Interpreter of Maladies" author="Jhumpa Lahiri"/>
             <BOOK id="9781934137123" title="Tinkers" author="Paul Harding"/>
-            <BOOK id="9780812971835" title="Olive Kitteridge" author="Elizabeth Strout"/>
+            <BOOK id="9780743467728" title="Olive Kitteridge" author="Elizabeth Strout"/>
             <BOOK id="9781594483295" title="The Brief Wondrous Life of Oscar Wao" author="Junot Diaz"/>
             <BOOK id="9780330448628" title="The Road" author="Cormac McCarthy"/>
             <BOOK id="9780143036661" title="March" author="Geraldine Brooks"/>
@@ -105,9 +105,9 @@
     <SECTION title="Random Picks (Thrillers)" type="collection" showall="no" highlight="2" shuffle="yes">
             <BOOK id="9780440241027" title="One Shot" author="Lee Child"/>
             <BOOK id="9780330352888" title="Invasion" author="Robin Cook"/>
-            <BOOK id="9780446539685" title="The Whole Truth" author="David Baldacci"/>
+            <BOOK id="9780330456524" title="The Whole Truth" author="David Baldacci"/>
             <BOOK id="9780345402875" title="Airframe" author="Michael Crichton"/>
-            <BOOK id="9780451188465" title="Desperation" author="Stephen King"/>
+            <BOOK id="9780340952658" title="Desperation" author="Stephen King"/>
     </SECTION>
     <SECTION title="Top Categories" type="links" showall="yes" showall_url="ekkitab_catalog/category/viewAll">
         <LINK name="Autobiographies" type="search"> 
@@ -195,4 +195,3 @@
         </LINK>
     </SECTION>
 </MENU>
-

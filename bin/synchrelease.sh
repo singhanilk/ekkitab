@@ -141,6 +141,11 @@ sudo rm -f $searchlib/lucene.jar
 
 echo "done."
 
+# Change admin access url 
+echo -n "Resetting admin access url..."
+( cd $magentodir/app/etc ; sed 's/<frontName><.*><\/frontName>/<frontName><!\[CDATA\[ek1671ad9591\]\]><\/frontName>/g' local.xml > local.xml.tmp && mv local.xml.tmp local.xml )
+echo "done."
+
 # Copy this script to the bin directory.
 bindir=$EKKITAB_HOME/bin
 cp $releasedir/synchrelease.sh $bindir

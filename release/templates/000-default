@@ -48,13 +48,14 @@
 
     CustomLog /var/log/apache2/access.log combined
 
-    Alias /doc/ "/usr/share/doc/"
-    <Directory "/usr/share/doc/">
-        Options Indexes MultiViews FollowSymLinks
-        AllowOverride None
+    <Location ~ "/ek1671ad9591(/|$)">
         Order deny,allow
         Deny from all
-        Allow from 127.0.0.0/255.0.0.0 ::1/128
-    </Directory>
+        AuthName "Restricted"
+        AuthType Basic
+        AuthUserFile EKKITAB_HOME/.htpasswd
+        Require valid-user
+        Satisfy Any
+    </Location>
 
 </VirtualHost>
