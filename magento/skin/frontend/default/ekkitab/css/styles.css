@@ -2310,3 +2310,27 @@ dt .hdr {
 	text-decoration:none;
 	color:#0033cc;
 }
+
+.finDetOtherEdition {
+	width: 492px;
+	height: 30px;
+	background-image: url(../images/review_title_bg.png);
+	background-position: left top;
+	background-repeat: no-repeat;
+	color: #fff;
+	line-height: 30px;
+	padding: 0 10px;
+}
+.editions {
+	color: #666;
+	line-height: 18px;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+
+.thmbImage {
+	width: 72px;
+	height: 72px;
+	overflow:hidden;
+	border:1px solid #cacaca;
+}

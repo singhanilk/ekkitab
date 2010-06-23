@@ -21,6 +21,9 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
    
     private $_product;
 
+    const XML_PATH_SEARCH_INDEX_FILE = 'global/search_index/path';
+	const JAVA_BRIDGE_INC_FILE = 'global/java_inc/path';
+
 	protected function _prepareLayout()
     {
 		if($this->getProduct()){
@@ -157,7 +160,57 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
 		return $this->_product;
 	}
 
-	    /**
+	protected function getIndianBooks() 
+    {
+		$indexFilePathArray;
+		$javaIncFilePathArray;
+		$indexFilePath;
+		$javaIncFile;
+		$books=null;
+		$book=$this->getProduct();
+		if (!($indexFilePathArray = Mage::getConfig()->getNode(self::XML_PATH_SEARCH_INDEX_FILE))) {
+			$indexFilePath = 'search_index_dir';
+		}else {
+			$indexFilePath = (string) $indexFilePathArray[0];
+		}
+		$indexFilePath =  Mage::getRoot().DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR.$indexFilePath;
+		if (!($javaIncFilePathArray = Mage::getConfig()->getNode(self::JAVA_BRIDGE_INC_FILE))) {
+			$javaIncFile = 'Java.inc';
+		}else {
+			$javaIncFile = (string) $javaIncFilePathArray[0];
+		}
+		try{
+			require($javaIncFile);
+			$search = new java("com.ekkitab.search.BookSearch",$indexFilePath );
+
+			$authorArr=$book->getAuthor();
+			$author = $authorArr['a'] ;
+
+			$title=$book->getTitle();
+			$results = $search->lookup($author, $title);
+
+			if(!is_null($results)){
+  				$productIds = java_values($results->getBookIds());
+				if(!is_null($productIds) && is_array($productIds) && count($productIds) > 0 ){
+					$books = Mage::getModel('ekkitab_catalog/product')->getCollection()
+					->addIdFilter($productIds)
+					->addNotInIdFilter($book->getId());
+				}
+			}
+
+		}
+		catch(Exception $e)
+		{
+			Mage::logException($e);
+			Mage::log($e->getMessage());
+			Mage::log("OR Exception in Product View.php : Could not include Java.inc file @ http://localhost:8080/JavaBridge/java/Java.inc");
+		}
+		unset($search);
+		return $books;
+    }
+
+	
+	/**
      * Get product reviews summary
      *
      * @param Mage_Catalog_Model_Product $product
@@ -170,6 +223,7 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
         $this->_initReviewsHelperBlock();
         return $this->_reviewsHelperBlock->getSummaryHtml($product, $templateType, $displayIfNoReviews);
     }
+
 
     /**
      * Add/replace reviews summary template by type

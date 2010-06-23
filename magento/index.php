@@ -62,7 +62,7 @@ Mage::setIsDeveloperMode(true);
 #Mage::log("Hey! This is fun.");
 
 #ini_set('display_errors', 1);
-ini_set("memory_limit","128M"); 
+ini_set("memory_limit","1024M"); 
 
 umask(0);
 Mage::run();
