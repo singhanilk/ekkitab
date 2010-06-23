@@ -58,13 +58,24 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                         next;
     		        }
                 }
+		if ($imprintcol == -1) {
+    		        if ($oWkC->Value =~ /PUBLISHERNAME/) {
+                        $imprintcol = $iC;
+                        next;
+    		        }
+                }
     	        if ($titlecol == -1) {
     		        if ($oWkC->Value =~ /TITLE/) {
                         $titlecol = $iC;
                         next;
     		        }
                 }
-    
+		if ($authorcol == -1) {
+    		        if ($oWkC->Value =~ /FIRST NAME/) {
+                        $authorcol = $iC;
+                        next;
+    		        }
+                }
     	        if ($authorcol == -1) {
     		        if ($oWkC->Value =~ /AUTHOR/) {
                         $authorcol = $iC;
@@ -83,14 +94,18 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
 
-        my $value = $oWkS->{Cells}[$i][$isbncol];
-        my $isbn;
-
-        if (defined ($value)) {
-           $isbn = $value->Value;
-           chomp($isbn);
-           $isbn =~ s/[^0-9]+//g;
-        }
+        my $value = '';
+         eval { $value = $oWkS->{Cells}[$i][$isbncol]; };
+         if ($@) {
+            print STDERR "Unexpected read value. Line $i\n";
+	    last;
+	 }
+         my $isbn;
+	 if (defined ($value)) {
+             $isbn = $value->Value;
+             chomp($isbn);
+             $isbn =~ s/[^0-9]+//g;
+         }
         $value = $oWkS->{Cells}[$i][$pricecol];
         my $price;
         if (defined ($value)) {
