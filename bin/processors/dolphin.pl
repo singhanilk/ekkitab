@@ -131,7 +131,13 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         my $availability;
         if(defined ($value)) {
            $availability = $value->Value;
-           $availability =~ s/\n//g;        
+           $availability =~ s/\n//g;
+	   if ($availability gt 0){
+	       $availability = 'Available';
+           }
+           else{
+               $availability = 'Not Available';
+           }        
         }
         $value = $oWkS->{Cells}[$i][$imprintcol];
         my $imprint;
