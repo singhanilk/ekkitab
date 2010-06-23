@@ -15,9 +15,9 @@ if (cd $targetdir; wget -O $localtargetfile ftp://w20M0695:ees695@ftp1.ingramboo
         echo "# -z Ingrams $targetdir/$savedfilename" >> $catalogfile
     fi
 else
-    ( cd $targetdir; rm -f $localtargetfile )
     echo "Failed to transfer $ftptargetfile from Ingram ftp server."
 fi
+( cd $targetdir; rm -f $localtargetfile )
 
 
 
