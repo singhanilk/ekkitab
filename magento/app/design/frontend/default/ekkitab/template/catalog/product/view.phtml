@@ -35,6 +35,7 @@
     $_product = $this->getProduct();
 	if(!is_null($_product)){
 		
+		$otherEditions = $this->getIndianBooks();
 		$isbn = $_product->getIsbn();
 		$sourcedFrom =  $_product->getSourcedFrom();
 		if($sourcedFrom && strlen(trim($sourcedFrom)) > 0 && strtolower($sourcedFrom)=='us'){
@@ -74,7 +75,7 @@
 <div class="searchArea">
 	<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
 		<div class="bigImage">
-           <img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'image',false,null, 200); ?>">
+           <img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'image',false,null, 200); ?>"><br/>
         </div>
 		<div class="midArea">
 			<div class="finDetBkTitle"><?php echo $_product->getTitle() ?> <?php echo (strlen($author) > 0 )? "<br/><span class=\"lineHeight14em\"> by ".$author ."</span>" :""?></div><!-- authorEtc -->
@@ -111,7 +112,63 @@
 			<div class="finDetSynop">
 				<?php echo $_product->getDescription() ?>
 			</div><!-- finDetSynop -->
-			
+			<?php if (count($otherEditions)): ?>
+				<div class="finDetOtherEdition">
+					<div class="userRevText">
+						Other Edition<?php if (count($otherEditions)>1): ?>s<?php endif;?>
+					</div><!--userRevText -->
+				</div><!-- finDetOtherEdition -->
+				<div class="editions">
+					<table class="custom-data-table box-table" id="my-reviews-table" cellspacing="0">
+						<col width="70"/>
+						<col width="120"/>
+						<col width="75"/>
+						<col width="45"/>
+						<col width="100"/>
+						<tbody>
+					<?php foreach($otherEditions as $otherBook):
+							$authArr = $otherBook->getAuthor();
+							$auth = trim($authArr['a']) ;
+							$name = trim($otherBook->getTitle());
+							$bookId = $otherBook->getId();
+							$thmbImage = $otherBook->getImage();
+							$url=$this->helper('ekkitab_catalog')->getSearchResultProductUrl($auth,$name,$bookId);	
+							$bind=strlen($otherBook->getBinding()) > 0 ? ucfirst($otherBook->getBinding()) : "" ;
+							$lang=strlen($otherBook->getLanguage()) > 0 ? $otherBook->getLanguage() : "";
+							$listPr = $otherBook->getListPrice() ;
+							$discPr = $otherBook->getDiscountPrice();
+							$publshr= $otherBook->getPublisher();
+							$publDt= $otherBook->getPublishingDate();
+							$pubDtArr= (!is_null($publDt))? date_parse($publDt):null;
+							$pubYr ="";
+							if($pubDtArr){
+								$pubYr = $pubDtArr["year"];
+							}
+							$caption =$bind;
+							if($pubYr!="" && $bind!=""){
+								$caption= $bind ." (".$pubYr.") ";
+							} else if ($pubYr!=""){
+								$caption =$pubYr;
+							}
+							$sourcedFrom =  $otherBook->getSourcedFrom();
+							$edition="";
+							if($sourcedFrom && strlen(trim($sourcedFrom)) > 0 && strtolower($sourcedFrom)=='us'){
+								$edition.= " <em>Imported Edition</em>";
+							}
+					?>
+							<tr>
+								<td><div class="thmbImage"><a href="<?php echo $this->getUrl($url)?>" title="<?php  echo $name?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($thmbImage,'thumbnail',false,null, 50); ?>" alt="<?php echo $name?>"></a></div></td>
+								<td><a href="<?php echo $this->getUrl($url)?>" title="<?php  echo $name?>"><?php echo	$caption ?></a></td>
+								<td><?php echo Mage::helper('core')->currency($discPr,true,false) ?></td>
+								<td><?php echo	$lang?></td>
+								<td class="last a-center"><?php echo	$edition?>	</td>
+							</tr>
+					<?php endforeach; ?>
+						</tbody>
+						</table>
+					</div>
+			<?php endif;?>
+			<br/>
 			 <?php echo $this->getChildHtml('review_list')?>
 			<br class="clear"/>
 		</div><!-- midArea -->

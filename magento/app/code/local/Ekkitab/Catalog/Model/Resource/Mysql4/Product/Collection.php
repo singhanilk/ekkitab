@@ -38,6 +38,18 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Product_Collection extends Mage_Core
 		return $this;
 	}
 	
+	public function addSourcedFromFilter($sourcedFrom){
+		//Mage::log("Called addIdFilter");
+		$this->addFieldToFilter('main_table.sourced_from', array('eq'=>$sourcedFrom));
+		return $this;
+	}
+	
+	public function addNotInIdFilter($id){
+		//Mage::log("Called addIdFilter");
+		$this->addFieldToFilter('main_table.id', array('nin'=>$id));
+		return $this;
+	}
+	
 	public function addIdRangeFilter($startId,$endId){
 		$this->addFieldToFilter('main_table.id', array('gt'=>$startId));
 		$this->addFieldToFilter('main_table.id', array('lt'=>$endId));
