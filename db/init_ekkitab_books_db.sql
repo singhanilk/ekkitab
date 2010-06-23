@@ -321,6 +321,7 @@ INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 ('default',0, 'sales/identity/logo_html', 'default/logo_email.png'),
 ('default', 0, 'catalog/placeholder/image_placeholder', 'stores/1/image.png'),
 ('default', 0, 'catalog/placeholder/small_image_placeholder', 'stores/1/small_image.png'),
+('default', 0, 'catalog/placeholder/thumbnail_placeholder','default/thumbnail.png'),
 ('default', 0, 'google/analytics/active', '1'),
 ('default',	0, 'web/browser_capabilities/cookies','1'),
 ('default',	0, 'web/browser_capabilities/javascript','1'),
