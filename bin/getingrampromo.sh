@@ -1,9 +1,9 @@
 #!/bin/bash
 datestr=`date +%B%Y`
 targetdir="/mnt4/publisherdata/Ingram"
-localtargetfile="pmmnthy-13-$datestr.zip"
-ftptargetfile="pmmnthy-13.zip"
-filename="pmmnthy-13.txt"
+localtargetfile="ingmmthy-13-$datestr.zip"
+ftptargetfile="ingmmthy-13.zip"
+filename="INGMMTHY-13.TXT"
 savedfilename=${filename%.*}-$datestr.txt
 catalogfile="/mnt2/scm/config/catalog.cfg"
 
