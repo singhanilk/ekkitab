@@ -8,5 +8,6 @@ rm $logfile;
 ( cd $EKKITAB_HOME/bin; ./getingramtitles.sh )
 ( cd $EKKITAB_HOME/bin; ./getingramstocklist.sh )
 ( cd $EKKITAB_HOME/bin; ./getingramannt.sh )
+( cd $EKKITAB_HOME/bin; ./getingrampromo.sh )
 ( cd $EKKITAB_HOME/bin; ./getingramimages.sh $logfile )
 
