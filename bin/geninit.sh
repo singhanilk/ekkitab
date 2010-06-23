@@ -22,6 +22,7 @@ datadir="$EKKITAB_HOME/data"
 templatedir="$EKKITAB_HOME/release/templates"
 
 cp $templatedir/*  $releasedir
+cp $templatedir/.htpasswd  $releasedir
 cp "$bindir/serverinit.sh" $releasedir
 cp "$bindir/db.sh" $releasedir
 cp "$bindir/readdbconfig.pl" $releasedir

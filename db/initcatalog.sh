@@ -24,12 +24,14 @@ if [ -f $logfile ] ; then
 fi
 while read line;
 do 
-  args=`echo $line | cut -d' ' -f1 | while read z; do echo $z; done | sed 's/\"//g'`; 
-  plugin=`echo $line | cut -d' ' -f2 | while read z; do echo $z; done | sed 's/\"//g'`;
-  filename=`echo $line | cut -d' ' -f3 | while read z; do echo $z; done | sed 's/\"//g'`;
-  #echo php importbooks.php $args $plugin $filename
-  if [[ ! $args =~ \#+ ]] ; then
-    (cd $EKKITAB_HOME/db; php importbooks.php $args $plugin $filename) ;
+  line=`echo $line`
+  if ! [ "$line" == "" ] ; then 
+    args=`echo $line | cut -d' ' -f1 | while read z; do echo $z; done | sed 's/\"//g'`; 
+    plugin=`echo $line | cut -d' ' -f2 | while read z; do echo $z; done | sed 's/\"//g'`;
+    filename=`echo $line | cut -d' ' -f3 | while read z; do echo $z; done | sed 's/\"//g'`;
+    if [[ ! $args =~ \#+ ]] ; then
+        (cd $EKKITAB_HOME/db; php importbooks.php $args $plugin $filename) ;
+    fi
   fi
 done < $1  
 if [ $# -gt 1 ] && [ $2 == '-n' ] ; then

@@ -150,6 +150,15 @@ if [ ! -d  $magentodir ] ; then
   echo  "done."
 fi
 
+# Create the magento/var directory and make it writable by all
+vardir=$magentodir/var
+if [ ! -d  $vardir ] ; then
+  echo -n "Creating magento/var directory..."
+  mkdir $vardir
+  chmod a+rwx $vardir
+  echo  "done."
+fi
+
 # Create the db directory
 dbdir=$EKKITAB_HOME/db
 if [ ! -d  $dbdir ] ; then
@@ -164,7 +173,7 @@ home=`echo $EKKITAB_HOME | sed 's/\//\\\\\//g'`
 # Check for missing files in release
 # If new files are required to be checked add them to this array
 
-REQ_FILES=( "db.sh" "readdbconfig.pl" "JavaBridge.war" "log4j.properties" "search.properties" "my.cnf" "000-default" "synchrelease.sh" "synchcatalog.sh" "reset_ekkitab_books.sh" "reset_ekkitab_books.sql" "backup.sh" "create_ekkitab_db.sql" "ekkitab_books_categories.sql" "init_ekkitab_books_db.sql" )
+REQ_FILES=( "db.sh" "readdbconfig.pl" "JavaBridge.war" "log4j.properties" "search.properties" "my.cnf" "000-default" "synchrelease.sh" "synchcatalog.sh" "reset_ekkitab_books.sh" "reset_ekkitab_books.sql" "backup.sh" "create_ekkitab_db.sql" "ekkitab_books_categories.sql" "init_ekkitab_books_db.sql" ".htpasswd" )
 filecount=${#REQ_FILES[@]}
 
 for ((i=0; i < $filecount; i++)) ; do
@@ -383,6 +392,7 @@ cp $releasedir/backup.sh $dbdir
 cp $releasedir/create_ekkitab_db.sql $dbdir
 cp $releasedir/ekkitab_books_categories.sql $datadir
 cp $releasedir/init_ekkitab_books_db.sql $dbdir
+cp $releasedir/.htpasswd $EKKITAB_HOME
 echo "done."
 
 # Copy this script to the bin directory.
@@ -401,11 +411,12 @@ echo "Server Initialization completed. Commencing Ekkitab database initializatio
 
 # Set base url.
 paths=( "web/unsecure/base_url" "web/secure/base_url" "billdesk/wps/return_url" "ccav/wps/return_url" );
+pathvalues=( "$BASE_URL" "$BASE_URL" "${BASE_URL}billdesk/standard/response" "${BASE_URL}ccav/standard/ccavresponse" );
 pathcount=${#paths[@]}
 
 echo -n "Setting Base Url for http access..."
 for (( i=0; i<$pathcount; i++ )) ; do
-    query="insert into core_config_data (scope, scope_id, path, value) values ('default', 0, '${paths[$i]}', '$BASE_URL') on duplicate key update value = '$BASE_URL'";
+    query="insert into core_config_data (scope, scope_id, path, value) values ('default', 0, '${paths[$i]}', '${pathvalues[$i]}') on duplicate key update value = '${pathvalues[$i]}'";
     if ( ! mysql -u $user -p$pass -h $host ekkitab_books -e "$query" >/dev/null 2>&1 ) ; then
         echo "\nSetting of path '${paths[$i]}' failed. Please set manually.\n"
     else
