@@ -28,6 +28,8 @@ fi;
 if [ -f $priceFile ] ; then
 	echo "moving $priceFile to backup directory";
         mv $priceFile $savedFile
+else
+    echo "$priceFile does not exist";
 fi;
 (
 	echo "Concatenating new Price Files";
