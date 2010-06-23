@@ -7,8 +7,10 @@ excelConverter=$EKKITAB_HOME/bin/prepare_stock.php
 stockProcessor=$EKKITAB_HOME/bin/process_stock.php
 priceDirectory=/mnt4/publisherdata/India/Prices
 stockList=/mnt4/publisherdata/stock/stocklists
-priceFile=/mnt4/publisherdata/stock/stocklists/india-prices.txt
-savedFile=/mnt4/publisherdata/stock/stocklists/saved-indiaprices.txt
+priceFile=/mnt4/publisherdata/India/Prices/india-prices.txt
+timestamp=$(date +%d%m%y)
+savedFile=/mnt4/publisherdata/India/Prices/saved/$timestamp-indiaprices.txt
+echo $savedFile;
 if [ -f $excelConverter ] ; then
     echo "Converting excel stocklist files to text..."; 
     php $excelConverter
