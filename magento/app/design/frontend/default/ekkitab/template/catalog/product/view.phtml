@@ -158,10 +158,11 @@
 					?>
 							<tr>
 								<td><div class="thmbImage"><a href="<?php echo $this->getUrl($url)?>" title="<?php  echo $name?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($thmbImage,'thumbnail',false,null, 74); ?>" alt="<?php echo $name?>"></a></div></td>
-								<td><a href="<?php echo $this->getUrl($url)?>" title="<?php  echo $name?>"><?php echo	$caption ?></a></td>
+								<td><a href="<?php echo $this->getUrl($url)?>" title="<?php  echo $name?>"><?php echo	$caption ?></a>	<br/><?php echo	$publshr?></td>
 								<td><?php echo Mage::helper('core')->currency($discPr,true,false) ?></td>
 								<td><?php echo	$lang?></td>
-								<td class="last a-center"><?php echo	$edition?>	</td>
+								<td class="last a-left"><?php echo	$edition?>
+								</td>
 							</tr>
 					<?php endforeach; ?>
 						</tbody>
