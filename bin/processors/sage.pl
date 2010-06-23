@@ -132,6 +132,9 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
              if ($availability =~ /Non-available/) {
                $availability = 'Not Available';
          }
+	     else{
+		$availability = 'Available';
+	}
         }
         $value = $oWkS->{Cells}[$i][$imprintcol];
         my $imprint;
