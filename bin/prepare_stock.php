@@ -70,7 +70,8 @@ else {
 			   process($directory."/".$file, $archivedir, $config); 
 			}
 			else {
-               if ((strlen($file) > 4) && (substr($file, strlen($file) - 4, 4) == ".xls")) {
+               $extn = substr($file, strlen($file) - 4, 4);
+               if ((strlen($file) > 4) && (($extn == ".xls") || ($extn == ".RPT"))) {
                    $lower_directory = strtolower(basename($directory));
                    $plugin = str_replace(" ","",$lower_directory);
                    if ($config[$plugin]['concatfiles'] == 1) {
