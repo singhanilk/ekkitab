@@ -37,6 +37,7 @@ do
     filename=`echo $line | cut -d' ' -f3`;
     if [[ ! $args =~ \#+ ]] ; then
         if ( $pricemode && [ "$args" == "-p" ] ) || ( ! $pricemode && [ "$args" != "-p" ] ) ; then
+            echo "Running $filename ..."
             ( cd $EKKITAB_HOME/db; php importbooks.php $args $plugin $filename ) ;
         fi
     fi
