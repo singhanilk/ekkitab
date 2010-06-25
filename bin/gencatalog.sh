@@ -25,6 +25,11 @@ if [ ! -f $releasedir/books.zip ] ; then
     exit 1
 fi
 
+echo -n "Exporting global sections..."
+mysqldump -h $host -u $user -p$password ekkitab_books ek_catalog_global_sections > $releasedir/ek_catalog_global_sections.sql
+mysqldump -h $host -u $user -p$password ekkitab_books ek_catalog_global_section_products > $releasedir/ek_catalog_global_section_products.sql
+echo "done."
+
 echo -n "Copying search related files.."
 cp -r $EKKITAB_HOME/magento/search_index_dir $releasedir
 cp -r $EKKITAB_HOME/magento/search_index_dir_spell_author $releasedir
