@@ -111,7 +111,7 @@
     </SECTION>
     <SECTION title="Top Categories" type="links" showall="yes" showall_url="ekkitab_catalog/category/viewAll">
         <LINK name="Autobiographies" type="search"> 
-            <SEARCH field="category">autobiographies</SEARCH>
+            <SEARCH field="category">autobiography</SEARCH>
         </LINK>
         <LINK name="Philiosophy" type="search"> 
             <SEARCH field="category">philosophy</SEARCH>
@@ -146,7 +146,7 @@
             <SEARCH field="author">Jawaharlal Nehru</SEARCH>
         </LINK>
         <LINK name="Gurcharan Das" type ="search">
-            <SEARCH field="author">Gurucharan Das</SEARCH>
+            <SEARCH field="author">Gurcharan Das</SEARCH>
         </LINK>
         <LINK name="Deepak Chopra" type ="search">
             <SEARCH field="author">Deepak Chopra</SEARCH>

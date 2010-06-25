@@ -4,8 +4,8 @@ if [ -z $EKKITAB_HOME ] ; then
     exit 1;
 fi;
 . $EKKITAB_HOME/bin/db.sh 
-if [ $# -lt 1 ] ; then
-    echo "Not enough arguments...."; echo "Usage: $0 <config-file> [ -n ]" 
+if [ $# -lt 2 ] ; then
+    echo "Not enough arguments...."; echo "Usage: $0 <config-file> <type> [ -n ]" 
     exit 1;
 fi;
 dbid=`mysql -e "select max(id) from books" -h $host -u $user -p$password reference`
@@ -22,26 +22,42 @@ logfile=${s#*=};
 if [ -f $logfile ] ; then
   mv $logfile "$logfile.old"
 fi
+
+if [ "$2" == "-p" ] ; then
+   pricemode=true;
+else 
+   pricemode=false;
+fi
+
 while read line;
 do 
-  line=`echo $line`
   if ! [ "$line" == "" ] ; then 
-    args=`echo $line | cut -d' ' -f1 | while read z; do echo $z; done | sed 's/\"//g'`; 
-    plugin=`echo $line | cut -d' ' -f2 | while read z; do echo $z; done | sed 's/\"//g'`;
-    filename=`echo $line | cut -d' ' -f3 | while read z; do echo $z; done | sed 's/\"//g'`;
+    args=`echo $line | cut -d' ' -f1`; 
+    plugin=`echo $line | cut -d' ' -f2`;
+    filename=`echo $line | cut -d' ' -f3`;
     if [[ ! $args =~ \#+ ]] ; then
-        (cd $EKKITAB_HOME/db; php importbooks.php $args $plugin $filename) ;
+        if ( $pricemode && [ "$args" == "-p" ] ) || ( ! $pricemode && [ "$args" != "-p" ] ) ; then
+            ( cd $EKKITAB_HOME/db; php importbooks.php $args $plugin $filename ) ;
+        fi
     fi
   fi
 done < $1  
-if [ $# -gt 1 ] && [ $2 == '-n' ] ; then
+
+if ( ! $pricemode ) ; then 
+    echo "Deleting banned books from database..."
+    ( cd $EKKITAB_HOME/db ; ./deletebannedbooks.sh ../data/banned.txt )
+fi
+
+if [ $# -gt 2 ] && [ $3 == '-n' ] ; then
     echo "Not indexing or loading books to production ..." 
 else 
    ( cd $EKKITAB_HOME/db; ./loadbooks.sh )
-   if [[ $dbid == 0 ]] ; then
+   if ( ! $pricemode ) ; then 
+      if [[ $dbid == 0 ]] ; then
         ( cd $EKKITAB_HOME/bin; ./create_index.sh )
-   else 
+      else 
         ( cd $EKKITAB_HOME/bin; ./update_index.sh $dbid )
+      fi
    fi
 fi
 
