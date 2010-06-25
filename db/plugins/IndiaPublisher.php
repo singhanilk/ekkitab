@@ -32,20 +32,37 @@ class Parser {
         }
 
         function isBook($line) {
+
+            $isbn = "";
+
             if ($line[0] == '#')
-                return false;
+                return $isbn;
+
             $fields = explode("\t", $line);
-            if (($this->mode == MODE_BASIC) && (count($fields) != REQUIRED_BASIC_FIELDS)) {
-                return false;
+
+            if (($this->mode & MODE_BASIC) && (count($fields) != REQUIRED_BASIC_FIELDS)) {
+                return $isbn;
             } 
-            elseif (($this->mode == MODE_PRICE) && (count($fields) != REQUIRED_PRICE_FIELDS)) {
-                return false;
+            elseif (($this->mode &  MODE_PRICE) && (count($fields) != REQUIRED_PRICE_FIELDS)) {
+                return $isbn;
             } 
-            if (preg_match("/^[0-9X]+$/", trim($fields[0]))) {
-                return true;
+
+            $isbn = trim($fields[0]); 
+
+            if (!preg_match("/^[0-9X]+$/", $isbn)) {
+                $isbn = "";
+                return $isbn;
             }
-            return false;
-            
+
+            if (strlen($isbn) != 13) {
+                if (strlen($isbn) == 10) {
+                    $isbn = convertisbn($isbn);
+                }
+                else {
+                    $isbn = "";
+                }
+            } 
+            return $isbn;
         }
 
         /** 
@@ -194,9 +211,16 @@ class Parser {
         }
 
         function getBook($line, $book, $db, $logger) {
-            if (!$this->isBook($line)) { 
+
+            $isbn = $this->isBook($line);
+
+            if ($isbn == "") { 
                 return null;
             }
+
+            $book = array();
+            $book['isbn'] = $isbn;
+
             if ($this->mode & MODE_BASIC) { 
                $book = $this->getBasic($line, $book, $db, $logger);
                if ($book == null)
@@ -217,15 +241,8 @@ class Parser {
 
         function getBasic($line, $book, $db, $logger) {
             $fields = explode("\t", $line);
-            $isbn = trim($fields[0]);
-            if (strlen($isbn) == 13) {
-                $book['isbn']        = $isbn;
-                $book['isbn10']      = convertisbn($isbn);
-            }
-            else {
-                $book['isbn10']      = $isbn;
-                $book['isbn']        = convertisbn($isbn);
-            }
+
+            $book['isbn10']          = convertisbn($book['isbn']);
             $book['title']           = $this->escape(trim($fields[1]));
             $book['author']          = $this->escape(trim($fields[2]));
             $book['binding']         = trim($fields[3]);
@@ -252,7 +269,7 @@ class Parser {
 
 		function getPrice($line, $book, $db, $logger){
             $fields = explode("\t", $line);
-            $book['isbn'] = str_replace("\"", "", trim($fields[0]));
+
             $book['distributor'] = trim($fields[4]);
             switch (str_replace("\"", "", strtoupper(trim($fields[1])))) {
                 case 'I'  : $book['currency'] = "INR";
@@ -294,7 +311,6 @@ class Parser {
             $fields = explode("\t", $line);
 			$description  = trim($fields[4]);
 			$book['description'] = str_replace("'", "\'", $description);
-            $book['isbn'] = trim($fields[0]);
             return $book;
         }
 
