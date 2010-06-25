@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Save some useful operating values.
-currentdir=`pwd`
+releasedir=`pwd`
 me=`id -un`
 mygroup=`id -gn`
 
@@ -308,7 +308,7 @@ fi
 # Create mysqldatadir variable for use in sed commands. Forward slash escaped.
 mysqldatadir=`echo $MYSQL_DIR | sed 's/\//\\\\\//g'`
 
-sed "s/EKKITAB_DB/$mysqldatadir/" $targetfile > $localfile 
+sed "s/EKKITAB_DB/$mysqldatadir/" $releasedir/my.cnf > $localfile 
 sudo cp $localfile $targetfile 
 echo "done."
 
@@ -316,7 +316,7 @@ echo -n "Updating mysql data directory..."
 # Copy mysql data files over to the new location if target is empty
 oldmysqldatadir=/var/lib/mysql
 if [ ! -d $MYSQL_DIR ] ; then
-    sudo cp -r $oldmysqldatadir $MYSQL_DIR 
+    sudo cp -p -r $oldmysqldatadir $MYSQL_DIR 
 fi
 echo "done."
 
@@ -324,7 +324,7 @@ echo "done."
 echo -n "Updating apparmor files to correspond to mysql config changes..."
 targetfile=/etc/apparmor.d/usr.sbin.mysqld
 localfile=./usr.sbin.mysqld.local
-savefile=$targetfile.saved
+savefile=$releasedir/usr.sbin.mysqld.saved
 
 sed "s/\/var\/lib\/mysql/$mysqldatadir/g" $targetfile > $localfile 
 
@@ -381,7 +381,6 @@ echo "done."
 # Copy other files to the bin,data and db directory
 echo "Starting Ekkitab setup."
 echo -n "Copying files to correct locations..."
-releasedir=.
 cp $releasedir/synchrelease.sh $bindir
 cp $releasedir/synchcatalog.sh $bindir
 cp $releasedir/db.sh $bindir
