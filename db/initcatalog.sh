@@ -52,6 +52,8 @@ fi
 if [ $# -gt 2 ] && [ $3 == '-n' ] ; then
     echo "Not indexing or loading books to production ..." 
 else 
+   # Set System to maintenance
+   ( cd $EKKITAB_HOME/magento ; cp .htaccess.maintenance .htaccess )
    ( cd $EKKITAB_HOME/db; ./loadbooks.sh )
    if ( ! $pricemode ) ; then 
       if [[ $dbid == 0 ]] ; then
@@ -60,5 +62,7 @@ else
         ( cd $EKKITAB_HOME/bin; ./update_index.sh $dbid )
       fi
    fi
+   # take System off maintenance
+   ( cd $EKKITAB_HOME/magento ; cp .htaccess.prod .htaccess )
 fi
 
