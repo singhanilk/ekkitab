@@ -28,20 +28,6 @@ fi
 . $EKKITAB_HOME/bin/db.sh
 releasedir=`pwd`
 
-#if (( $# > 0 )) ; then
-#  releasedir=$1
-#else
-#  echo "No release directory provided. Using $EKKITAB_HOME/release/update"
-#  releasedir="$EKKITAB_HOME/release/catalog"
-#fi
-  
-# First check if release directory exists. Create it if it does not.
-#if [ ! -d $releasedir ] ; then 
-#    echo "FATAL: Release directory not available. Cannot continue."
-#    exit 1
-#fi
-# Next check if magento directory is available.
-
 magentodir="$EKKITAB_HOME/magento"
 if [ ! -d $magentodir ] ; then
   echo "Fatal: Magento directory does not exist...Cannot continue."
@@ -65,9 +51,9 @@ if [ ! -d $EKKITAB_HOME/logs ] ; then
 fi
 logfile="$EKKITAB_HOME/logs/catalogsynch.log"
 
-echo -n "Unzipping books data..."
-( cd $releasedir; unzip -qo books.zip )
-echo "done."
+#echo -n "Unzipping books data..."
+#( cd $releasedir; unzip -qo books.zip )
+#echo "done."
 
 # Check if books.sql is present.
 if [ ! -f $releasedir/books.sql ] ; then

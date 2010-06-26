@@ -15,15 +15,21 @@ fi
 rm -rf $releasedir/*
 
 echo -n "Exporting books..."
-mysqldump -h $host -u $user -p$password ekkitab_books books > $releasedir/books.sql
+echo "SET AUTOCOMMIT = 0;" > $releasedir/books.sql
+echo "SET FOREIGN_KEY_CHECKS = 0;" >> $releasedir/books.sql
+mysqldump -h $host -u $user -p$password --opt ekkitab_books books >> $releasedir/books.sql
+echo "SET FOREIGN_KEY_CHECKS = 1;" >> $releasedir/books.sql
+echo "COMMIT;" >> $releasedir/books.sql
+echo "SET AUTOCOMMIT = 1;" >> $releasedir/books.sql
+
 echo "done."
-echo -n "Zipping books data..."
-( cd $releasedir ; zip -q books.zip books.sql && rm books.sql )
-echo "done."
-if [ ! -f $releasedir/books.zip ] ; then
-    echo "FATAL: Zip process appears to have failed. No books.zip file found."
-    exit 1
-fi
+#echo -n "Zipping books data..."
+#( cd $releasedir ; zip -q books.zip books.sql && rm books.sql )
+#echo "done."
+#if [ ! -f $releasedir/books.zip ] ; then
+#    echo "FATAL: Zip process appears to have failed. No books.zip file found."
+#    exit 1
+#fi
 
 echo -n "Exporting global sections..."
 mysqldump -h $host -u $user -p$password ekkitab_books ek_catalog_global_sections > $releasedir/ek_catalog_global_sections.sql
