@@ -53,13 +53,13 @@ function printCollectionLink($fh, $z, $name, $ids) {
     }
 }
 
-function printSearchLink($fh, $z, $name, $field) {
+function printSearchLink($fh, $z, $name, $displayname, $field) {
    
     $key = strtolower(preg_replace('/\W+/', '_', $name));;
     $url = "ekkitab_catalog/search/index/" . $field . "/" . urlencode($name);
 
     fprintf($fh, "%s\n", '$sections[\''.$z.'\'][\'' . $key . '\'] = array();');
-    fprintf($fh, "%s\n", '$sections[\''.$z.'\'][\'' . $key . '\'][\'name\'] = "'. $name . '";');
+    fprintf($fh, "%s\n", '$sections[\''.$z.'\'][\'' . $key . '\'][\'name\'] = "'. $displayname . '";');
     fprintf($fh, "%s\n", '$sections[\''.$z.'\'][\'' . $key . '\'][\'url\'] = "' . $url . '";');
 }
 
@@ -294,11 +294,12 @@ foreach ($xml as $section) {
             }
             elseif ($link['type'] == "search") {
                 $name = (string)$link->SEARCH;
+                $displayname = $link['name'];
                 $field = "";
                 foreach ($link as $search) {
                    $field = $search['field'];
                 }
-                printSearchLink($fhtml, $key, $name, $field);
+                printSearchLink($fhtml, $key, $name, $displayname, $field);
             }
         }
     }
