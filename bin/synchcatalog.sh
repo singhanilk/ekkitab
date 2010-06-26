@@ -79,6 +79,17 @@ echo -n "Updating books table [logging at $logfile] ..."
 mysql -h $host -u $user -p$password ekkitab_books < $releasedir/books.sql > $logfile 
 echo "done."
 
+# Check if the global section sql files are present.
+if [ ! -f $releasedir/ek_catalog_global_sections.sql ] || 
+   [ ! -f $releasedir/ek_catalog_global_section_products.sql ] ; then
+    echo "Fatal: Release directory does not contain data for global sections."
+    exit 1;
+fi
+echo -n "Updating global sections [logging at $logfile] ..."
+mysql -h $host -u $user -p$password ekkitab_books < $releasedir/ek_catalog_global_sections.sql >> $logfile 
+mysql -h $host -u $user -p$password ekkitab_books < $releasedir/ek_catalog_global_section_products.sql >> $logfile 
+echo "done."
+
 # Removing existing indexes.
 echo -n "Removing existing index files..."
 rm -rf $magentodir/search_index_dir
