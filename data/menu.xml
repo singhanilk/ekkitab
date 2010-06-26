@@ -110,8 +110,8 @@
             <BOOK id="9780340952658" title="Desperation" author="Stephen King"/>
     </SECTION>
     <SECTION title="Top Categories" type="links" showall="yes" showall_url="ekkitab_catalog/category/viewAll">
-        <LINK name="Autobiographies" type="search"> 
-            <SEARCH field="category">autobiographies</SEARCH>
+        <LINK name="Autobiography" type="search"> 
+            <SEARCH field="category">biography &amp; autobiography</SEARCH>
         </LINK>
         <LINK name="Philiosophy" type="search"> 
             <SEARCH field="category">philosophy</SEARCH>

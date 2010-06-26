@@ -67,9 +67,12 @@
 				$bookName="ekkitab_catalog/product/view/book/".$bookName.".html";
 				$image = $product->getImage();
 			?>
-				<div class="vColumns" style="width:<?php echo $width ?>%;" >
+				<div class="vColumns" style="width:<?php echo $width ?>%;" ><table>
+				<tr><td>
 					<a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" /></a>
-					<div class="titleEtc">
+				</td></tr>
+				<tr><td>
+				<div class="titleEtc">
 						<div class="bkTitle"><a href="<?php echo $this->getUrl($bookName)?>"  title="<?php echo $product->getTitle() ?>"><?php echo $title ?></a></div><!-- bkTitle -->
 						<div class="lineHeight14em"><?php echo $author?></div>
 						<div class="lineHeight14emIt"><?php echo $langNbind ?></div>
@@ -77,6 +80,7 @@
 						<div class="lineHeight14em"><span class="striked"><?php echo Mage::helper('core')->currency($product->getListPrice(),true,false) ?></span></div>
 						<?php if($savingsPerct > 0):?><div class="youSave">Save <?php echo number_format($savingsPerct,2,'.','') ?>%</div><?php endif; ?>-->
 					</div><!-- titleEtc -->
+				</td></tr></table>
 				</div>
 <?php			$firstTime =1;
 			}	//end of foreach...	?>

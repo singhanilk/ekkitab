@@ -30,6 +30,10 @@ function getShortenedString($str,$count){
 	}
 	return $resStr;
 }
+function stripChars($str){
+	$str = preg_replace("/:[a-z]:/", "", $str);
+	return $str;
+}
 $results=$this->getProductCollection();
 $start=microtime(true);
 $bookList = null;
@@ -40,6 +44,13 @@ if(!is_null($results) && is_array($results)){
   $subcats = $results["categories"];
   $curr_cp = $this->getCurrentCategoryPath();
   $suggest=trim($results["suggest"]);
+  //$suggest="Amartya Sen";
+  $othrSuggestions=trim($results["other_suggestions"]);
+  //$othrSuggestions=":e:Amartya K. Sen|Amrita Shah| :c:Amartya Sen|Amritha Venkatraman|";
+  $othrSuggestionsArr = null;
+  if(!is_null($othrSuggestions)){
+	$othrSuggestionsArr = explode("|",$othrSuggestions);
+ }
 }
 ?>
 <div class="leftNavArea">
@@ -99,7 +110,17 @@ if(!is_null($results) && is_array($results)){
 		<?php endif; ?>
 		<?php if(!is_null($suggest) && strlen($suggest)>0 ) : ?>
 		<div class="suggestResTop">
-			<span class="boldFont ">Your search query returned zero results. Did you mean <span class="orangeItTxt12"><?php echo  ucwords($suggest) ?></span> instead ?</span>
+			<span class="boldFont ">Your search query returned zero results. Did you mean <span class="orangeItTxt12"><?php echo  ucwords($suggest) ?></span> instead ?
+<?php if(!is_null($othrSuggestionsArr) && count($othrSuggestionsArr) > 0){
+?>			<br/> Other Suggestions:
+<?php	foreach($othrSuggestionsArr as $OthrSuggest): 
+			$OthrSuggest=trim(stripChars($OthrSuggest));
+?>
+			<a href="<?php echo $this->getPagerUrl(array($this->helper('ekkitab_catalog')->getQueryParamName()=>urlencode($OthrSuggest),$this->helper('ekkitab_catalog')->getCategoryVarName()=>$this->getCurrentCategoryPath())) ?>"><?php echo $OthrSuggest ?></a> &nbsp;
+<?php	endforeach;
+	  }
+?>
+			</span>
 		</div><!-- suggestResTop -->
 		<?php endif; ?>
 		<div class="searchResTop">
@@ -285,7 +306,7 @@ if(!is_null($results) && is_array($results)){
 		}
 ?>			<div class="inLeft">
 <?php		if(strlen($queryTxt) > 0 && strlen($queryTxt) < 4 ){ ?>
-				<div class="boldFont orangeTxt12">Too many results to be displayed for your search - "<?php echo $searchTxt ?>".</div> 
+				<div class="boldFont orangeTxt12">Too many results to be displayed for your search - "<?php echo urldecode($searchTxt) ?>".</div> 
 				<div class="clear"><br/></div>
 				<p> We suggest you:</p> 
 				<ul>
@@ -294,7 +315,7 @@ if(!is_null($results) && is_array($results)){
 				</ul>
 <?php		}	
 			else { ?>
-				<div class="boldFont orangeTxt12">Your search <?php echo $searchTxt ?> did not match any book.</div>
+				<div class="boldFont orangeTxt12">Your search <?php echo urldecode($searchTxt) ?> did not match any book.</div>
 				<div class="clear"><br/></div>
 				<p> We suggest you:</p> 
 				<ul>
