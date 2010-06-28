@@ -37,8 +37,8 @@
 	<div class="spSectionImage">
 	<img src="<?php echo $this->getSkinUrl("images/childrens_books_image.jpg") ?>" /></div>
 	<!-- spSectionImage -->
-	<div class="spHdrs">Browse from our wide range<br />
-	of the best in Children's books!
+	<div class="spHdrs">"The best years of life...", as they say of one's childhood. <br> Years packed  with energy and without too much care. In school <br>and outside. How much of your imagination is shaped during these years? How much of what you read shapes your imagination? In an age of cell-phones, 40 character tweets, facebook and a myriad other things to do, a good book is still the choicest way to get into the minds of those brilliant story-tellers who can make you sit spell bound hours on end. And feel good about it afterwards. Here are some of the best works for children over the years.....
+
 	</div><!-- spHdrs -->
 <?php if(!is_null($products) && $_count > 0){ ?>
 	<div class="hmScrollRow">
@@ -49,7 +49,7 @@
 					<div class="clear hmInScrollRowSep" id="sep_<?php echo $rowNo?>" ></div>
 <?php				$rowNo+=1;
 				}					?>
-				<div class="hmInScrollRow" id="gs_row_<?php echo $rowNo?>" ">
+				<div class="hmInScrollRow" id="gs_row_<?php echo $rowNo?>">
 <?php		}
 			$counter+=1;
 			$savingsPerct= ($product->getPrice() >0 )?	(($product->getPrice() - $product->getFinalPrice())/ $product->getPrice() ) * 100 : 0; 
@@ -72,11 +72,9 @@
 			$image = $product->getImage();
 			
 			?>
-				<div class="vColumns" style="width:<?php echo $width ?>%;"><table>
-				<tr><td>
+				<div class="vColumns" style="width:<?php echo $width ?>%;"><div class="image">
 					<a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" /></a>
-					</td></tr>
-				<tr><td>
+					</div>
 				<div class="titleEtc">
 						<div class="bkTitle"><a href="<?php echo $this->getUrl($bookName)?>"  title="<?php echo $product->getTitle() ?>"><?php echo $title ?></a></div><!-- bkTitle -->
 						<div class="lineHeight14em"><?php echo $author ?></div>
@@ -85,8 +83,7 @@
 						<div class="lineHeight14em"><span class="striked"><?php echo Mage::helper('core')->currency($product->getListPrice(),true,false) ?></span></div>
 						<?php if($savingsPerct > 0):?><div class="youSave">Save <?php echo number_format($savingsPerct,2,'.','') ?>%</div><?php endif; ?> -->
 					</div><!-- titleEtc -->
-				</td></tr></table>
-				</div>
+ 				</div>
 <?php		if($counter%$_columnSize==0){ 
 				
 				$firstRow =1;

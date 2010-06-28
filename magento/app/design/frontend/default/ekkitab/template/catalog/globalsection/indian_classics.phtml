@@ -37,9 +37,7 @@
 	<div class="spSectionImage">
 	<img src="<?php echo $this->getSkinUrl("images/ind_classic_image.jpg") ?>"/></div>
 	<!-- spSectionImage -->
-	<div class="spHdrs">Browse from the assorted<br />
-	  selection of Indian Classics!
-	</div><!-- spHdrs -->
+	<div class="spHdrsNoTopMargin">Classics do not die. They are forever. <br>Stories of love and war, of life and death, of epic moments in history that are told and retold over the centuries never to die but to always teach, inform, rejuvenate, enthrall and mesmerise...Here is a collection that you will enjoy, stories that you may have read but would like to read again and again and again..	</div><!-- spHdrs -->
 <?php if(!is_null($products) && $_count > 0){ ?>
 	<div class="hmScrollRow" >
 <?php 		foreach($products as $product){  ?>
@@ -71,11 +69,9 @@
 			$bookName="ekkitab_catalog/product/view/book/".$bookName.".html";
 			$image = $product->getImage();
 	?>
-				<div class="vColumns" style="width:<?php echo $width ?>%;" ><table>
-				<tr><td>
+				<div class="vColumns" style="width:<?php echo $width ?>%;" ><div class="image">
 					<a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" /></a>
-				</td></tr>
-				<tr><td>
+					</div>
 				<div class="titleEtc">
 						<div class="bkTitle"><a href="<?php echo $this->getUrl($bookName)?>"  title="<?php echo $product->getTitle() ?>"><?php echo $title ?></a></div><!-- bkTitle -->
 						<div class="lineHeight14em"><?php echo $author?></div>
@@ -84,8 +80,7 @@
 						<div class="lineHeight14em"><span class="striked"><?php echo Mage::helper('core')->currency($product->getListPrice(),true,false) ?></span></div>
 						<?php if($savingsPerct > 0):?><div class="youSave">Save <?php echo number_format($savingsPerct,2,'.','') ?>%</div><?php endif; ?>-->
 					</div><!-- titleEtc -->
-				</td></tr></table>
-				</div>
+ 				</div>
 <?php		if($counter%$_columnSize==0){ 
 				$firstRow =1;
 			}

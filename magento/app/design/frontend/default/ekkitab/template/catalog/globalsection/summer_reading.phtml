@@ -37,8 +37,7 @@
 	<div class="spSectionImage">
 	<img src="<?php echo $this->getSkinUrl("images/summer_image.jpg") ?>" /></div>
 	<!-- spSectionImage -->
-	<div class="spHdrs">Our editors recommended<br />
-  list for the summer!</div>
+	<div class="spHdrs">Summer is the time when you sweat in the heat with your throat parched, <br> and you yearn for that cool something to slake your thirst.  Summer is the time when you discover how cool <br> your home is when you come in from the sun. Summer is just the time when you realize how much you can enjoy yourself <br> by just having the right book to read, oblivious to the heat and late into the night. No mid-summer madness here... Here is our collection of some of the most enjoyable titles for your reading entertainment this summer....</div>
 <?php if(!is_null($products) && $_count > 0){ ?>
 	<div class="clear"></div>
 	<div class="hmScrollRow">
@@ -71,11 +70,9 @@
 			$bookName="ekkitab_catalog/product/view/book/".$bookName.".html";
 			$image = $product->getImage();
 	?>
-				<div class="vColumns" style="width:<?php echo $width ?>%;"><table>
-				<tr><td>
+				<div class="vColumns" style="width:<?php echo $width ?>%;"><div class="image">
 					<a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" /></a>
-					</td></tr>
-				<tr><td>
+					</div>
 				<div class="titleEtc">
 						<div class="bkTitle"><a href="<?php echo $this->getUrl($bookName)?>"  title="<?php echo $product->getTitle() ?>"><?php echo $title ?></a></div><!-- bkTitle -->
 						<div class="lineHeight14em"><?php echo $author?></div>
@@ -84,7 +81,6 @@
 						<div class="lineHeight14em"><span class="striked"><?php echo Mage::helper('core')->currency($product->getListPrice(),true,false) ?></span></div>
 						<?php if($savingsPerct > 0):?><div class="youSave">Save <?php echo number_format($savingsPerct,2,'.','') ?>%</div><?php endif; ?>-->
 					</div><!-- titleEtc -->
-				</td></tr></table>
 				</div>
 <?php		if($counter%$_columnSize==0){ 
 				

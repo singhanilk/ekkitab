@@ -345,17 +345,17 @@ a:hover {
 }
 .mainArea .topRow {
 	width: 550px;
-	background-image: url(../images/hm_top_bks.jpg);
-	background-position: right top;
-	background-repeat: no-repeat;
-	height: 185px;
-	line-height: 2em;
+	line-height: 1.8em;
 	padding-bottom: 8px;
 	border-bottom: 1px dotted #333;
 	margin-bottom: 8px;
 }
+.mainArea .topRow  img {
+	float:right;
+}
+
 .mainArea .topRow .textArea {
-	width: 380px;
+	width: 530px;
 }
 .mainArea .topRow .mainHdr {
 	font-size: 2.8em;
@@ -423,8 +423,13 @@ a:hover {
 	text-align: center;
 	margin-top: 8px;
 }
+.vColumns .image {
+	width:100px;
+	height:120px;
+	float:center;	
+	overflow:hidden;
+}
 .vColumns img {
-	width: 68px;
 	border:1px solid #cacaca;
 }
 .vMidColumn {
@@ -2030,12 +2035,22 @@ a:hover {
 
 .spSectionImage {
 	width: 720px;
-	margin-bottom: 16px;
 }
 .spHdrs {
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 32px;
-	line-height: 28px;
+	font-size: 13px;
+	line-height: 15px;
+	color: #3865b8;
+	margin-bottom: 30px;
+	margin-top: -25px;
+}
+.Hdrs {
+	font-weight:bold;
+}
+.spHdrsNoTopMargin {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	line-height: 15px;
 	color: #3865b8;
 	margin-bottom: 30px;
 }
@@ -2333,4 +2348,29 @@ dt .hdr {
 	height: 72px;
 	overflow:hidden;
 	border:1px solid #cacaca;
+}
+
+.donateArea {
+	border-bottom:1px dotted #333333;
+	margin:8px auto 10px;
+	padding-bottom:10px;
+	width:700px;
+	font-size: 11px;
+	line-height: 22px;
+}
+.donateArea .pageHeader {
+	float:none;
+	font-size: 2.8em;
+	color: #CC6600;
+	width:100%;
+}
+
+.donateArea .abtTextArea {
+	width: 670px;
+	float: left;
+	padding-top: 15px; 
+}
+
+.donateArea .abtTextArea  img {
+	float:right;
 }
