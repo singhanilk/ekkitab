@@ -23,6 +23,41 @@ function getConfig($file) {
    return $config;
 }
 
+function getDuplicates($file) {
+   $duplicates = array();
+
+   if ($file == "") {
+      return ($duplicates);
+   }
+   $fh = fopen($file,"r");
+   if (!$fh) {
+     return ($duplicates); 
+   }
+
+   $books = array();
+
+   while($contents = fgets($fh)) {
+      if (preg_match("/^#/", trim($contents))) {
+         continue;
+      }
+      $fields = explode("\t", $contents);
+      $isbn = $fields[0];
+      if (isset($books[$isbn])) {
+        $books[$isbn]++;
+      }
+      else {
+        $books[$isbn] = 1;;
+      } 
+   }
+   fclose($fh);
+   foreach ($books as $isbn => $count) {
+        if ($count > 1) {
+            $duplicates[$isbn] = 1;
+        }
+   }
+   return $duplicates;
+}
+
 function process($directory, $outputdir, $config, $books) {
 
    if (!is_dir($directory))
@@ -46,6 +81,8 @@ function process($directory, $outputdir, $config, $books) {
 		}
         else {
             if ((strlen($file) > 4) && (substr($file, strlen($file) - 4, 4) == ".txt")) {
+                
+                $duplicates = getDuplicates($directory . "/" . $file);
 
                 $plugin = substr($file, 0, strpos($file, "-"));
                 $missingisbnfile  = $outputdir . "/MissingISBNs/" . $plugin . "-" ."missingisbns.txt";
@@ -87,7 +124,9 @@ function process($directory, $outputdir, $config, $books) {
                     if (!isset($books[$isbn])) { // not in catalog
                         fprintf($fh1, "%s\t%s\t%s\n", $isbn, $title, $author);
                     }
-                    fprintf($fh2, "%s\t%s\t%s\t%s\t%s\n", $isbn, $currency, $listPrice, $availability, $plugin);
+                    if (!isset($duplicates[$isbn])) {
+                        fprintf($fh2, "%s\t%s\t%s\t%s\t%s\n", $isbn, $currency, $listPrice, $availability, $plugin);
+                    }
                 }
                 fclose($fh);
                 fclose($fh1);
