@@ -39,7 +39,7 @@ INSERT INTO `cms_page` (`page_id`, `title`, `root_template`, `meta_keywords`, `m
 
 (7, 'Terms and Conditions', 'one_column', '', '', 'terms', '{{block type="page/html" name="terms"  template="page/html/help.phtml" }}', '2009-10-15 09:35:23', '2009-10-15 09:35:23', 1, 0, NULL, NULL, NULL, NULL),
 
-(8, 'Ekkitab Donation Home', 'two_columns_left', '', '', 'ekkitab-donation-home', '{{block type="page/html" name="ekkitab_donation_home"  template="page/html/donate_home.phtml" }}', '2009-10-15 09:35:23', '2009-10-15 09:35:23', 1, 0, NULL, NULL, NULL, NULL);
+(8, 'Ekkitab Donation Home', 'two_columns_left', '', '', 'ekkitab-vision', '{{block type="page/html" name="ekkitab_donation_home"  template="page/html/donate_home.phtml" }}', '2009-10-15 09:35:23', '2009-10-15 09:35:23', 1, 0, NULL, NULL, NULL, NULL);
 
 --
 -- Update the `cms_page` table with about-ekkitab & coustomer service
