@@ -36,6 +36,13 @@ done
 #( cd "$EKKITAB_HOME" ; zip -q "$releasedir/release-$dt.zip" magento/.htaccess* ) # Just the hidden files.
 echo "...done."
 
+# Copy database update patches and execution scripts.
+echo -n "Copying database update scripts and patches..."
+cp -r $EKKITAB_HOME/db/patches $releasedir
+cp $EKKITAB_HOME/db/updatedb.sh $releasedir
+cp $EKKITAB_HOME/db/checkdbversion.php $releasedir
+echo "done."
+
 echo -n "Copying search related files.."
 cp -r $EKKITAB_HOME/java/lib  $releasedir
 cp $EKKITAB_HOME/java/bin/ekkitabsearch.jar  $releasedir

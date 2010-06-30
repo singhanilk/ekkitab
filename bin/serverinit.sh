@@ -173,7 +173,7 @@ home=`echo $EKKITAB_HOME | sed 's/\//\\\\\//g'`
 # Check for missing files in release
 # If new files are required to be checked add them to this array
 
-REQ_FILES=( "db.sh" "readdbconfig.pl" "JavaBridge.war" "log4j.properties" "search.properties" "my.cnf" "000-default" "synchrelease.sh" "synchcatalog.sh" "reset_ekkitab_books.sh" "reset_ekkitab_books.sql" "backup.sh" "create_ekkitab_db.sql" "ekkitab_books_categories.sql" "init_ekkitab_books_db.sql" ".htpasswd" )
+REQ_FILES=( "db.sh" "readdbconfig.pl" "JavaBridge.war" "log4j.properties" "search.properties" "my.cnf" "000-default" "synchrelease.sh" "synchcatalog.sh" "reset_ekkitab_books.sh" "reset_ekkitab_books.sql" "backup.sh" "create_ekkitab_db.sql" "version.sql" "ekkitab_books_categories.sql" "init_ekkitab_books_db.sql" ".htpasswd" )
 filecount=${#REQ_FILES[@]}
 
 for ((i=0; i < $filecount; i++)) ; do
@@ -389,6 +389,7 @@ cp $releasedir/reset_ekkitab_books.sh $dbdir
 cp $releasedir/reset_ekkitab_books.sql $dbdir
 cp $releasedir/backup.sh $dbdir
 cp $releasedir/create_ekkitab_db.sql $dbdir
+cp $releasedir/version.sql $dbdir
 cp $releasedir/ekkitab_books_categories.sql $datadir
 cp $releasedir/init_ekkitab_books_db.sql $dbdir
 cp $releasedir/.htpasswd $EKKITAB_HOME
@@ -407,6 +408,7 @@ sleep 10
 
 echo "Server Initialization completed. Commencing Ekkitab database initialization."
 ( cd $dbdir; ./reset_ekkitab_books.sh )
+( cd $dbdir; mysql -h $host -u $user -p$pass ekkitab_books < version.sql )
 
 # Set base url.
 paths=( "web/unsecure/base_url" "web/secure/base_url" "billdesk/wps/return_url" "ccav/wps/return_url" );

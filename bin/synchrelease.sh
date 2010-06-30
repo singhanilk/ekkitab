@@ -146,6 +146,18 @@ echo -n "Resetting admin access url..."
 ( cd $magentodir/app/etc ; sed 's/<frontName><.*><\/frontName>/<frontName><!\[CDATA\[ek1671ad9591\]\]><\/frontName>/g' local.xml > local.xml.tmp && mv local.xml.tmp local.xml )
 echo "done."
 
+# Copy the patch scripts to their correct place as well as the dbupdate script.
+dbdir=$EKKITAB_HOME/db
+if [ ! -d $dbdir/patches ] ; then
+   mkdir $dbdir/patches;
+fi
+cp -r $releasedir/patches $dbdir
+cp $releasedir/updatedb.sh $dbdir
+cp $releasedir/checkdbversion.php $dbdir
+
+# Run the db patch update
+( cd $dbdir; ./updatedb.sh )
+
 # Copy this script to the bin directory.
 bindir=$EKKITAB_HOME/bin
 cp $releasedir/synchrelease.sh $bindir

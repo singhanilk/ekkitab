@@ -33,6 +33,7 @@ cp "$dbdir/reset_ekkitab_books.sh" $releasedir
 cp "$dbdir/reset_ekkitab_books.sql" $releasedir
 cp "$dbdir/backup.sh" $releasedir
 cp "$dbdir/create_ekkitab_db.sql" $releasedir
+cp "$dbdir/version.sql" $releasedir
 cp "$datadir/ekkitab_books_categories.sql" $releasedir
 cp "$dbdir/init_ekkitab_books_db.sql" $releasedir
 
