@@ -128,6 +128,11 @@ function process($directory, $outputdir, $config, $books) {
                         fprintf($fh2, "%s\t%s\t%s\t%s\t%s\n", $isbn, $currency, $listPrice, $availability, $plugin);
                     }
                 }
+
+                foreach ($duplicates as $isbn => $value) {
+                    echo "Warning:  ISBN $isbn is ignored because of duplicate entries.\n";
+                }
+
                 fclose($fh);
                 fclose($fh1);
                 fclose($fh2);
