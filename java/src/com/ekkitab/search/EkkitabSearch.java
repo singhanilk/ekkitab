@@ -146,20 +146,23 @@ public class EkkitabSearch {
         		}
         	}
         	
-        	if ((docs == null) && (!exitsearch)) {
-        		matchmode = MATCH_MODE.MATCH_WORDS;
-        		searchQuery = createSearchQuery(query, categories, searchfield, matchmode);
+            if ((docs == null) && (!exitsearch)) {
+                if ((query != null) && (query.trim().split(" ").length > 1)) {
+        		    matchmode = MATCH_MODE.MATCH_WORDS;
+        		    searchQuery = createSearchQuery(query, categories, searchfield, matchmode);
             	
-                if ((searchQuery != null) && (!searchQuery.equals(""))) {
-            		luceneQuery = new QueryParser("title", new StandardAnalyzer()).parse(searchQuery);
-            		//logger.debug("DEBUG: Lucene Query is: '" + luceneQuery.toString() + "'");
+                    if ((searchQuery != null) && (!searchQuery.equals(""))) {
+            		    luceneQuery = new QueryParser("title", new StandardAnalyzer()).parse(searchQuery);
+            		    //logger.debug("DEBUG: Lucene Query is: '" + luceneQuery.toString() + "'");
+                    }
+            	    docs = search(luceneQuery, instanceId);
                 }
-            	docs = search(luceneQuery, instanceId);
         	}
         	
         	if ((docs == null) && (!exitsearch)) {
         		suggestQueries  = getSuggestQuery(query, searchfield);
     			if (suggestQueries.length > 0) {
+                    matchmode = MATCH_MODE.MATCH_PHRASE;
     				searchQuery = createSearchQuery(suggestQueries[0], categories, searchfield, matchmode);
                 	
                     if ((searchQuery != null) && (!searchQuery.equals(""))) {
