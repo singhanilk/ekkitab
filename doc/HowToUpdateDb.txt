@@ -1,0 +1,11 @@
+
+This is the procedure to update the production version of the database.
+
+1. Create a patch file and name it patch-<ver>.sql. It is important that the patch file has this exact name. The patch version should be 1 more than the last patch number.
+
+2. Put the patch file in the db/patches directory.
+
+3. If you update create_ekkitab_db.sql with the same patch, then it is extremely important that you update the version file at db/version.sql. You should setthe version number to exactly the same number as the patch.
+
+4. Your patch should ideally be executable any number of times. This means that the SQL in the patch ensures that data that is being added or deleted or modified is first checked before the action is done.
+
