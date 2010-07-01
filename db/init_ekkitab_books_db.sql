@@ -39,7 +39,7 @@ INSERT INTO `cms_page` (`page_id`, `title`, `root_template`, `meta_keywords`, `m
 
 (7, 'Terms and Conditions', 'one_column', '', '', 'terms', '{{block type="page/html" name="terms"  template="page/html/help.phtml" }}', '2009-10-15 09:35:23', '2009-10-15 09:35:23', 1, 0, NULL, NULL, NULL, NULL),
 
-(8, 'Ekkitab Donation Home', 'two_columns_left', '', '', 'ekkitab-donation-home', '{{block type="page/html" name="ekkitab_donation_home"  template="page/html/donate_home.phtml" }}', '2009-10-15 09:35:23', '2009-10-15 09:35:23', 1, 0, NULL, NULL, NULL, NULL);
+(8, 'Ekkitab Donation Home', 'two_columns_left', '', '', 'ekkitab-vision', '{{block type="page/html" name="ekkitab_donation_home"  template="page/html/donate_home.phtml" }}', '2009-10-15 09:35:23', '2009-10-15 09:35:23', 1, 0, NULL, NULL, NULL, NULL);
 
 --
 -- Update the `cms_page` table with about-ekkitab & coustomer service
@@ -280,7 +280,7 @@ INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 ('default',0, 'carriers/ups/active', '0'),
 ('default',0, 'carriers/fedex/active', '0'),
 ('default',0, 'carriers/usps/active', '0'),
-( 'default', 0, 'payment/paypal_standard/active', '1'),
+( 'default', 0, 'payment/paypal_standard/active', '0'),
 ( 'default', 0, 'payment/paypal_standard/title', 'Paypal'),
 ( 'default', 0, 'payment/paypal_standard/payment_action', 'AUTHORIZATION'),
 ( 'default', 0, 'payment/paypal_standard/types', 'IPN'),
@@ -306,7 +306,7 @@ INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 ('default',0, 'ccav/wps/logo_url', ''),
 ('default',0, 'ccav/wps/sandbox_flag', '0'),
 ('default',0, 'ccav/wps/debug_flag', '0'),
-('default',0, 'payment/billdesk/title', 'American Express / Diners Card'),
+('default',0, 'payment/billdesk/title', 'American Express'),
 ('default',0, 'payment/billdesk/payment_action', 'AUTHORIZATION'),
 ('default',0, 'payment/billdesk/order_status', 'processing'),
 ('default',0, 'payment/billdesk/transaction_type', 'O'),

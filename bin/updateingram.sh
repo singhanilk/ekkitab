@@ -4,7 +4,7 @@ if [ -z $EKKITAB_HOME ] ; then
     exit 1;
 fi;
 logfile="$EKKITAB_HOME/logs/ingramimages.log"
-rm $logfile;
+rm -f $logfile;
 ( cd $EKKITAB_HOME/bin; ./getingramtitles.sh )
 ( cd $EKKITAB_HOME/bin; ./getingramstocklist.sh )
 ( cd $EKKITAB_HOME/bin; ./getingramannt.sh )
