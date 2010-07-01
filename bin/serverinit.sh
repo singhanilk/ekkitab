@@ -173,7 +173,7 @@ home=`echo $EKKITAB_HOME | sed 's/\//\\\\\//g'`
 # Check for missing files in release
 # If new files are required to be checked add them to this array
 
-REQ_FILES=( "db.sh" "readdbconfig.pl" "JavaBridge.war" "log4j.properties" "search.properties" "my.cnf" "000-default" "synchrelease.sh" "synchcatalog.sh" "reset_ekkitab_books.sh" "reset_ekkitab_books.sql" "backup.sh" "create_ekkitab_db.sql" "version.sql" "ekkitab_books_categories.sql" "init_ekkitab_books_db.sql" ".htpasswd" )
+REQ_FILES=( "db.sh" "readdbconfig.pl" "JavaBridge.war" "log4j.properties" "search.properties" "my.cnf" "000-default" "synchrelease.sh" "synchcatalog.sh" "reset_ekkitab_books.sh" "reset_ekkitab_books.sql" "backup.sh" "create_ekkitab_db.sql" "version.sql" "ekkitab_books_categories.sql" "init_ekkitab_books_db.sql" ".htpasswd" "sendsms" "sendsms.php" )
 filecount=${#REQ_FILES[@]}
 
 for ((i=0; i < $filecount; i++)) ; do
@@ -398,8 +398,6 @@ echo "done."
 # Copy this script to the bin directory.
 cp $releasedir/serverinit.sh $bindir
 
-# Remove all local files
-rm *.local 
 
 # Introduce a small delay. Seems to help prevent an error message while executing
 # the  reset database script that follows.
@@ -464,5 +462,30 @@ else
    mysql -h $host -u $user -p$pass ekkitab_books -e "$query"
    echo "done"
 fi
+
+# Set up sms daemon
+
+echo -n "Initializing sms daemon..."
+cp $releasedir/sendsms.php $bindir
+targetfile=/etc/init.d/sendsms
+localfile=./sendsms.local
+
+sed "s/EKKITAB_HOME/$home/g" $releasedir/sendsms > $localfile 
+sudo cp $localfile $targetfile 
+sudo chmod a+x $targetfile
+
+# Create the log directory if required.
+
+smslogdir=/var/log/ekkitab/sms
+if [ ! -d $smslogdir ] ; then
+   sudo mkdir -p $smslogdir; 
+   sudo chmod a+rwx $smslogdir;
+fi
+   
+echo "done. Starting service."
+sudo service sendsms start
+
+# Remove all local files
+rm *.local 
 
 echo "Server is ready for ekkitab application and catalog updates."

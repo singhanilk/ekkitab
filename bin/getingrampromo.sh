@@ -37,7 +37,7 @@ else
        echo "unzipping received zip file..."
        ( cd $targetdir; unzip $localtargetfile && mv $filename $savedfilename )
        if ( ! grep "$targetdir/$savedfilename" $catalogfile >/dev/null 2>&1 ) ; then
-            echo "# -z Ingrams $targetdir/$savedfilename" >> $catalogfile
+            echo "-z Ingrams $targetdir/$savedfilename" >> $catalogfile
        fi
     else
        echo "Failed to transfer $ftptargetfile from Ingram ftp server."

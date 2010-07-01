@@ -36,6 +36,7 @@ cp "$dbdir/create_ekkitab_db.sql" $releasedir
 cp "$dbdir/version.sql" $releasedir
 cp "$datadir/ekkitab_books_categories.sql" $releasedir
 cp "$dbdir/init_ekkitab_books_db.sql" $releasedir
+cp "$bindir/sendsms.php" $releasedir
 
 echo "Creating release date file"
 echo `date +%D' 'at' '%T` > $releasedir/releasedate
