@@ -130,7 +130,7 @@ function process($directory, $outputdir, $config, $books) {
                 }
 
                 foreach ($duplicates as $isbn => $value) {
-                    echo "Warning:  ISBN $isbn is ignored because of duplicate entries.\n";
+                    echo "Warning:  ISBN $isbn is ignored because of duplicate entries in file: $file [processed by $plugin]\n";
                 }
 
                 fclose($fh);
