@@ -36,7 +36,6 @@ else {
     $unclassified = array();
     $equivalents = array();
 
-    // global logger
     $logger =& LoggerManager::getLogger("loadbooks");
 
    /** 
@@ -265,17 +264,34 @@ else {
        }
        return($discountrates);
     }
-
    /** 
+    * Insert Promo material from Ingrams into books_promo table in the reference database.  
+    */
+    function insertPromo($book, $db){
+	    if($book['promo'] != "" ){
+	        $isbn  = $book['isbn'];
+	        $promo = $book['promo'];
+	        $query = "insert into books_promo ( isbn , promo_desc ) values ('$isbn','$promo')";
+            if (!$result = mysqli_query($db, $query)) {
+           	    	warn("Failed to write to Books: ". mysqli_error($db), $query);
+           		    return(0); 
+       	    }
+	    }
+        
+        return(1);
+    } 
+   /**
     * Insert or Update the book in the database. 
     */
     function insertBook($book, $db, $mode) {
 
+       if ($mode & MODE_PROMO) {
+	    return insertPromo($book,$db);
+       }
        if (!empty($book['image'])) {
             $book['image'] = getHashedPath($book['image']);
        }
 
-       #$updatestatement = "update ";
        $insertfields = "";
        $insertvalues = "";
        $conjunct = "";
@@ -371,12 +387,14 @@ else {
            for ($i = 1; $i < strlen($argv[1]) ; $i++) {
              switch ($argv[1][$i]) {
                 case 'a':  $pgm_mode |= (MODE_BASIC | MODE_PRICE | MODE_DESC);
-                           break;
+			   break;
                 case 'b':  $pgm_mode |= MODE_BASIC;
                            break;
                 case 'p':  $pgm_mode |= MODE_PRICE;
                            break;
                 case 'd':  $pgm_mode |= MODE_DESC;
+                           break;
+		case 'z':  $pgm_mode |= MODE_PROMO;
                            break;
                 default:   fatal("Unknown option: " . $argv[1][$i]);
                            break;
@@ -384,7 +402,7 @@ else {
            }
         }
         if ($argc != 4) {
-            echo "Usage: $argv[0] [-abpd] <Data Source> <Data File>\n";
+            echo "Usage: $argv[0] [-abpdz] <Data Source> <Data File>\n";
             fatal("Not enough arguments."); 
         }
 
@@ -405,9 +423,6 @@ else {
         $errorcount   = 0;
         $unclassified = 0;
         $filenotfound = 0;
-    
-        //$startid = getStartId($db);
-        //debug("Start Id: $startid");
     
         while ($line = fgets($fh)) {
             $book = array();
@@ -460,9 +475,10 @@ else {
                         unset($book['distributor']);
                     }
                 }
+	      
                 if (!insertBook($book, $db, $pgm_mode)){
-                    $errorcount++;
-                }
+                  $errorcount++;
+               }
             }
         
             if (++$i % 100000 == 0) {
