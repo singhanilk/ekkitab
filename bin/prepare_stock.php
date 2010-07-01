@@ -54,7 +54,7 @@ else {
         if (!is_dir($directory))
             return;
 
-        echo "Processing directory: $directory\n";
+        //echo "Processing directory: $directory\n";
         $count = 0;
 
         $dir = opendir($directory);
@@ -97,7 +97,7 @@ else {
                    if (($processor != "") && is_executable($processorhome . "/" . $processor)) {
                         echo "Running... " . $processor . " on '" . $file . "'\n";
                         $outputfile = str_replace(".pl","", $processor) . "-stocklist.txt";
-                        $commandline = $processorhome . "/" . $processor . " '" . $directory . "/" . $file . "' " . $filewritemode . "  " . $outputdir . "/" . $outputfile;
+                        $commandline = $processorhome . "/" . $processor . " '" . $directory . "/" . $file . "' " . $filewritemode . "  " . $outputdir . "/" . $outputfile . " 2>/dev/null";
                         $success = system($commandline, $returnvalue);
                         if ($returnvalue != 0) {
                              echo "  ...failed.\n";
@@ -128,7 +128,7 @@ else {
                    }
                }
                else {
-                   echo "File $file is not an excel file and is being ignored.\n";
+                   //echo "File $file is not an excel file and is being ignored.\n";
                    $files_ignored++;
                }
 			}
