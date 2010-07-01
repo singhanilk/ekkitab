@@ -23,18 +23,17 @@ function getConfig($file) {
    return $config;
 }
 
-function getDuplicates($file) {
-   $duplicates = array();
+function getBookPrices($file) {
+
+   $books = array();
 
    if ($file == "") {
-      return ($duplicates);
+      return ($books);
    }
    $fh = fopen($file,"r");
    if (!$fh) {
-     return ($duplicates); 
+     return ($books); 
    }
-
-   $books = array();
 
    while($contents = fgets($fh)) {
       if (preg_match("/^#/", trim($contents))) {
@@ -42,20 +41,37 @@ function getDuplicates($file) {
       }
       $fields = explode("\t", $contents);
       $isbn = $fields[0];
+      $currency = $fields[2];
+      $listPrice = $fields[1];
       if (isset($books[$isbn])) {
-        $books[$isbn]++;
+        // Rule: If currencies are different, go with Indian currency.
+        // Rule: If currencies are both Indian, go with higher value.
+        $book = $books[$isbn];
+        if ($book['currency'] == $currency) {
+            if ($listPrice < $book['list_price']) {
+                $book['list_price'] = $listPrice;
+            }
+        }
+        else {
+            if ($currency == "I") {
+                $book['list_price'] = $listPrice;
+                $book['currency'] = $currency;
+            }
+            elseif ($book['currency'] != "I") {
+                $book['discard'] = "true";
+            }
+        }
+        $books[$isbn] = $book;
       }
       else {
-        $books[$isbn] = 1;;
+        $book = array();
+        $book['list_price'] = $listPrice;
+        $book['currency'] = $currency;
+        $books[$isbn] = $book;
       } 
    }
    fclose($fh);
-   foreach ($books as $isbn => $count) {
-        if ($count > 1) {
-            $duplicates[$isbn] = 1;
-        }
-   }
-   return $duplicates;
+   return $books;
 }
 
 function process($directory, $outputdir, $config, $books) {
@@ -82,7 +98,7 @@ function process($directory, $outputdir, $config, $books) {
         else {
             if ((strlen($file) > 4) && (substr($file, strlen($file) - 4, 4) == ".txt")) {
                 
-                $duplicates = getDuplicates($directory . "/" . $file);
+                $bookprices = getBookPrices($directory . "/" . $file);
 
                 $plugin = substr($file, 0, strpos($file, "-"));
                 $missingisbnfile  = $outputdir . "/MissingISBNs/" . $plugin . "-" ."missingisbns.txt";
@@ -117,20 +133,22 @@ function process($directory, $outputdir, $config, $books) {
                     $isbn = $fields[0];
                     $title = $fields[5];
                     $author = $fields[6];
-                    $currency = $fields[2];
-                    $listPrice = $fields[1];
+                    $currency = $bookprices[$isbn]['currency'];
+                    $listPrice = $bookprices[$isbn]['list_price'];
                     $availability = $fields[3];
 
                     if (!isset($books[$isbn])) { // not in catalog
                         fprintf($fh1, "%s\t%s\t%s\n", $isbn, $title, $author);
                     }
-                    if (!isset($duplicates[$isbn])) {
+                    if (!isset($bookprices[$isbn]['discard'])) {
                         fprintf($fh2, "%s\t%s\t%s\t%s\t%s\n", $isbn, $currency, $listPrice, $availability, $plugin);
                     }
                 }
 
-                foreach ($duplicates as $isbn => $value) {
-                    echo "Warning:  ISBN $isbn is ignored because of duplicate entries in file: $file [processed by $plugin]\n";
+                foreach ($bookprices as $k => $b) {
+                    if (isset($b['discard'])) {
+                        echo "Warning:  ISBN $k is ignored because of duplicate entries in file: $file [processed by $plugin]\n";
+                    }
                 }
 
                 fclose($fh);

@@ -227,6 +227,19 @@ do
     fi
 done
 echo "done."
+
+# Update php memory limit for apache.
+echo -n "Updating php5 memory limit for apache..."
+targetfile=/etc/php5/apache2/php.ini 
+savefile=/etc/php5/apache2/php.ini.saved 
+localfile=./php.ini.local
+if [ ! -f $savefile ] ; then
+    sudo cp $targetfile $savefile
+fi
+sed 's/memory_limit.*$/memory_limit = 128M ; Maximum amount of memory a script may consume (128MB)/g' $targetfile > $localfile 
+sudo cp $localfile $targetfile
+echo "done."
+
 sudo service apache2 start
 
 # Set up Tomcat config

@@ -19,6 +19,11 @@ else
     exit 1;
 fi;
 
+if (($? > 0)) ; then
+    echo "Excel stocklist file conversion failed..."
+    exit 1;
+fi
+
 if [ -f $stockProcessor ] ; then
      echo "Finding Missing Isbn's and Creating Price File...";
      php $stockProcessor $stockList
@@ -26,6 +31,11 @@ else
     echo "$stockProcessor Not Found";
     exit 1;
 fi;
+
+if (($? > 0)) ; then
+    echo "Price file generation failed..."
+    exit 1;
+fi
 
 if [ -f $priceFile ] ; then
 	echo "moving $priceFile to backup directory";
