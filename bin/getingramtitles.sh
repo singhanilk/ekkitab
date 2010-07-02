@@ -27,13 +27,19 @@ targetfile="ttlingv2.zip"
 datafile="ttlingv2.txt"
 checkfilesizes $targetdir $datafile
 if (( $? == 0 )) ; then
-   echo "File $datafile is uptodate"
+   echo "[Get Titles] File $datafile is uptodate"
 else 
-   echo "getting file $targetfile ...."
-   (cd $targetdir; wget -O $targetfile ftp://w20M0695:ees695@ftp1.ingrambook.com/titleswk/$targetfile)
-   echo "unzipping file $targetfile ..."
-   (cd $targetdir; rm -f $datafile; unzip $targetfile; chmod a+r $datafile)
+   echo -n "[Get Titles] Getting file $targetfile..."
+   if (cd $targetdir; wget -O $targetfile ftp://w20M0695:ees695@ftp1.ingrambook.com/titleswk/$targetfile >/dev/null 2>&1) ; then
+        echo "done."
+   else
+        echo "failed."
+   fi
+   echo -n "[Get Titles] Unzipping file $targetfile..."
+   (cd $targetdir; rm -f $datafile; unzip $targetfile >/dev/null 2>&1; chmod a+r $datafile)
+   echo "done."
 fi
+echo "[Get Titles] Completed."
 
 
 

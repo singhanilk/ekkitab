@@ -30,11 +30,17 @@ catalogfile="/mnt2/scm/config/catalog.cfg"
 
 checkfilesizes $targetdir $localtargetfile $ftptargetfile
 if (( $? == 0 )) ; then
-   echo "File $localtargetfile is uptodate"
+   echo "[Get Annotations] File $localtargetfile is uptodate"
 else 
-   echo "getting file $ftptargetfile ...."
-   (cd $targetdir; wget -O $localtargetfile ftp://w20M0695:ees695@ftp1.ingrambook.com/titleswk/$ftptargetfile)
+   echo -n "[Get Annotations] Getting file $ftptargetfile ...."
+   if (cd $targetdir; wget -O $localtargetfile ftp://w20M0695:ees695@ftp1.ingrambook.com/titleswk/$ftptargetfile >/dev/null 2>&1) ; then
+       echo "done."
+   else
+       echo "failed."
+   fi
    if ( ! grep "$targetdir/$localtargetfile" $catalogfile >/dev/null 2>&1 ) ; then
         echo "-d Ingrams $targetdir/$localtargetfile" >> $catalogfile
+        echo "[Get Annotations] Updated catalog file with entry for $localtargetfile."
    fi
 fi
+echo "[Get Annotations] Completed."

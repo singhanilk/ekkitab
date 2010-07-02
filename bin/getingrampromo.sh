@@ -30,20 +30,24 @@ catalogfile="/mnt2/scm/config/catalog.cfg"
 
 checkfilesizes $targetdir $savedfilename $filename
 if (( $? == 0 )) ; then
-   echo "File $localtargetfile is uptodate"
+   echo "[Get Promotions] File $localtargetfile is uptodate"
 else 
-   echo "getting file $ftptargetfile ...."
-   if (cd $targetdir; wget -O $localtargetfile ftp://w20M0695:ees695@ftp1.ingrambook.com/PubDescripi/$ftptargetfile) ; then
-       echo "unzipping received zip file..."
-       ( cd $targetdir; unzip $localtargetfile && mv $filename $savedfilename )
+   echo -n "[Get Promotions] Getting file $ftptargetfile ...."
+   if (cd $targetdir; wget -O $localtargetfile ftp://w20M0695:ees695@ftp1.ingrambook.com/PubDescripi/$ftptargetfile >/dev/null 2>&1 ) ; then
+       echo "done.";
+       echo -n "[Get Promotions] Unzipping received zip file..."
+       ( cd $targetdir; unzip $localtargetfile >/dev/null 2>&1 && mv $filename $savedfilename )
+       echo "done."
        if ( ! grep "$targetdir/$savedfilename" $catalogfile >/dev/null 2>&1 ) ; then
             echo "-z Ingrams $targetdir/$savedfilename" >> $catalogfile
+            echo "[Get Promotions] Updated catalog configuration file with entry for $savedfilename."
        fi
     else
-       echo "Failed to transfer $ftptargetfile from Ingram ftp server."
+       echo "failed."
     fi
     ( cd $targetdir; rm -f $localtargetfile )
 fi
+echo "[Get Promotions] Completed."
 
 
 
