@@ -129,14 +129,13 @@ else {
                         $files_failed++;
                    }
                }
-            }
-            else {
-                //echo "File $file is not an excel file and is being ignored.\n";
-                $files_ignored++;
-            }
-		}
+               else {
+                    //echo "File $file is not an excel file and is being ignored.\n";
+                    $files_ignored++;
+               }
+		    }
+        }
     }
-
 
     $files_processed = 0;
     $files_failed    = 0;
