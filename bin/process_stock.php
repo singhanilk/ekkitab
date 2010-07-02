@@ -80,7 +80,7 @@ function process($directory, $outputdir, $config, $books) {
    if (!is_dir($directory))
        return;
 
-   echo "Processing directory: $directory\n";
+   //echo "Processing directory: $directory\n";
    $count = 0;
 
    $dir = opendir($directory);
@@ -93,7 +93,7 @@ function process($directory, $outputdir, $config, $books) {
         if (($file == ".") || ($file == ".."))
 	        continue;
 		if (is_dir($directory."/".$file)) {
-            echo "Found subdirectory $file. Ignoring....\n";
+            echo "[Process Stock] [Warning] Found subdirectory $file. Ignored.\n";
 		    // process($directory."/".$file, $config, $books); 
 		}
         else {
@@ -108,7 +108,7 @@ function process($directory, $outputdir, $config, $books) {
                 //echo "Price file: $pricefile\n";
                 $fh1 = fopen($missingisbnfile, "w");
                 if (!$fh1){
-                    echo("Could not open file to write missing isbns: " . $missingisbnfile . "\n");
+                    echo("[Process Stock] Could not open file to write missing isbns: " . $missingisbnfile . "\n");
                     exit(1);
                 }
                 fprintf($fh1, "# ISBN\tTITLE\tAUTHOR\n");
@@ -148,7 +148,7 @@ function process($directory, $outputdir, $config, $books) {
 
                 foreach ($bookprices as $k => $b) {
                     if (isset($b['discard'])) {
-                        echo "Warning:  ISBN $k is ignored because of duplicate entries in file: $file [processed by $plugin]\n";
+                        echo "[Process Stock] [Warning]  ISBN $k is ignored because of conflicting duplicate entries in file: $file [processed by $plugin]\n";
                     }
                 }
 
@@ -169,11 +169,11 @@ $stocklistdir = $argv[1];
 $config = getConfig(STOCK_PROCESS_CONFIG_FILE);
 
 if (!isset($config['general']['catalog'])) {
-    echo "Catalog file is not defined in the configuration. Cannot continue.\n";
+    echo "[Process Stock] Catalog file is not defined in the configuration. Cannot continue.\n";
     exit(1);
 }
 if (!isset($config['general']['outputdir'])) {
-    echo "Output directory is not defined in the configuration. Cannot continue.\n";
+    echo "[Process Stock] Output directory is not defined in the configuration. Cannot continue.\n";
     exit(1);
 }
 
@@ -183,7 +183,7 @@ $targetdir = $config['general']['outputdir'];
 $books = array();
 $fhandle = fopen($catalogfile,"r");
 if (!$fhandle){
-    echo("Could not open data file: " . $catalogfile . "\n");
+    echo("[Process Stock] Could not open data file: " . $catalogfile . "\n");
     exit(1);
 }
 
@@ -194,7 +194,7 @@ while($contents = fgets($fhandle)){
    $fields = explode("\t", $contents);
    $isbn = $fields[0]; 
    if (isset($books[$isbn])){
-      echo "Duplicate ISBN $isbn found in catalog file.\n";
+      echo "[Process Stock] Duplicate ISBN $isbn found in catalog file.\n";
    }
    else{
 	  $books[$isbn] = 1;

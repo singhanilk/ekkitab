@@ -3,13 +3,14 @@ if [ -z $EKKITAB_HOME ] ; then
     echo "EKKITAB_HOME is not set..."
     exit 1;
 fi;
+datadir=/mnt4/publisherdata
 excelConverter=$EKKITAB_HOME/bin/prepare_stock.php
 stockProcessor=$EKKITAB_HOME/bin/process_stock.php
-priceDirectory=$EKKITAB_HOME/chris/output/Prices
-stockList=$EKKITAB_HOME/chris/stocklists
-priceFile=$EKKITAB_HOME/chris/output/Prices/india-prices.txt
+priceDirectory=$datadir/India/Prices
+stockList=$datadir/stock/stocklists
+priceFile=$priceDirectory/india-prices.txt
 timestamp=$(date +%d%m%y)
-savedFile=$EKKITAB_HOME/chris/output/Prices/saved/$timestamp-indiaprices.txt
+savedFile=$priceDirectory/saved/$timestamp-indiaprices.txt
 echo $savedFile;
 if [ -f $excelConverter ] ; then
     echo "Converting excel stocklist files to text..."; 
