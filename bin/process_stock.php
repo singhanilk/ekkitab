@@ -59,6 +59,7 @@ function getBookPrices($file) {
             }
             elseif ($book['currency'] != "I") {
                 $book['discard'] = "true";
+                echo "-->$isbn\n";
             }
         }
         $books[$isbn] = $book;
@@ -103,8 +104,8 @@ function process($directory, $outputdir, $config, $books) {
                 $plugin = substr($file, 0, strpos($file, "-"));
                 $missingisbnfile  = $outputdir . "/MissingISBNs/" . $plugin . "-" ."missingisbns.txt";
                 $pricefile        = $outputdir . "/Prices/" . $plugin . "-" ."prices.txt";
-                echo "Missing ISBN file: $missingisbnfile\n";
-                echo "Price file: $pricefile\n";
+                //echo "Missing ISBN file: $missingisbnfile\n";
+                //echo "Price file: $pricefile\n";
                 $fh1 = fopen($missingisbnfile, "w");
                 if (!$fh1){
                     echo("Could not open file to write missing isbns: " . $missingisbnfile . "\n");

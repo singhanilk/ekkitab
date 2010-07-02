@@ -86,7 +86,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         my $value    = '';
         eval { $value = $oWkS->{Cells}[$i][$isbncol]; };
         if ($@) {
-           print STDERR "Unexpected read value. Line $i\n";
+           #print STDERR "Unexpected read value. Line $i\n";
 	   last;
 	}
         my $isbn;
