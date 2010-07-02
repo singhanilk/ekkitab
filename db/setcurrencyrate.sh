@@ -5,7 +5,7 @@ if [ -z $EKKITAB_HOME ] ; then
 fi;
 . $EKKITAB_HOME/bin/db.sh 
 if [ $# -ne 2 ] ; then
-    echo "Not enough arguments...."; echo "Usage: $0 <orderid>" 
+    echo "Not enough arguments...."; echo "Usage: $0 <currency> <rate>" 
     exit 1;
 fi;
 currency=$1;
