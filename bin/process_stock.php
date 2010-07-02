@@ -59,7 +59,6 @@ function getBookPrices($file) {
             }
             elseif ($book['currency'] != "I") {
                 $book['discard'] = "true";
-                echo "-->$isbn\n";
             }
         }
         $books[$isbn] = $book;
