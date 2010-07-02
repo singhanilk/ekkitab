@@ -1434,19 +1434,39 @@ a:hover {
 	font-size: 11px;
 	line-height: 22px;
 }
-.aboutUsArea .pageHeader {
+.aboutUsArea .pageHeader,.policyArea .pageHeader {
 	color:#CC6600;
 	float:none;
 	font-size:20px;
 	width:100%;
 }
-.aboutUsArea ul {
+.policyArea{
+	background-image: url(../images/scroll.jpg);
+	background-image: url(../images/scroll_quill.jpg);
+	background-position: 400px top ;
+	background-repeat: no-repeat;
+	border-bottom:1px dotted #333333;
+	font-size:11px;
+	line-height:22px;
+	margin:0px auto 10px;
+	padding-top:26px;
+	padding-bottom:10px;
+	width:880px;
+}
+.aboutUsArea ul ,.policyArea ul{
 	margin: 0;
 	padding: 0;
 	margin-left: 20px;
 	
 }
-.aboutUsArea em {
+.aboutUsArea li,.policyArea  li{
+	margin: 0;
+	padding: 0;
+	margin-left: 20px;
+	margin-top: 4px;
+	
+}
+.aboutUsArea em ,.policyArea em {
 	font-size: 14px;
 	line-height: 20px;
 }
