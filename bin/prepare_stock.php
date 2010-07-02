@@ -71,7 +71,7 @@ else {
 			}
 			else {
                $extn = substr($file, strlen($file) - 4, 4);
-               if ((strlen($file) > 4) && (($extn == ".xls") || ($extn == ".RPT"))) {
+               if ((strlen($file) > 4) && ((strtolower($extn) == ".xls") || ($extn == ".RPT"))) {
                    $lower_directory = strtolower(basename($directory));
                    $plugin = str_replace(" ","",$lower_directory);
                    if ($config[$plugin]['concatfiles'] == 1) {
@@ -130,7 +130,7 @@ else {
                    }
                }
                else {
-                    //echo "File $file is not an excel file and is being ignored.\n";
+                    echo "[Prepare Stock] [Warning] File $file is not an excel file and is being ignored.\n";
                     $files_ignored++;
                }
 		    }
