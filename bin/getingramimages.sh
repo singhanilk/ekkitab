@@ -21,8 +21,8 @@ if [ $# -ne 2 ] ; then
     a=10#`echo $a | sed 's/.*\/\([0-9]*\)j400.*.zip/\1/g'`
     let a=a+100; if (( $a < 100000 )) ; then a=0$a; fi; 
     d1=10#$a
-    echo "No date provided. Usage: $0 [ logfile ] [ <date in MMDDYY format> ]" 
-    echo "Using $a as start date instead. " 
+    echo "[Get Images] No date provided. Usage: $0 [ logfile ] [ <date in MMDDYY format> ]" 
+    echo "[Get Images] Using $a as start date instead. " 
 else 
     d1=10#$2
 fi;
@@ -42,10 +42,10 @@ do
             dir=`echo $i | sed 's/^\([0-9]*\).*\([0-9]of[0-9]\).*/\1-\2/'`
             echo -n "[Get Images] Starting ftp for file $i"
             let filestransferred=$filestransferred+1;
-            if (cd $imagedir; wget -O $i ftp://w20M0695:ees695@ftp1.ingrambook.com/Imageswk/j400w/$i >/dev/null 2>&1); then
+            if (cd $imagedir; wget -O $i ftp://w20M0695:ees695@ftp1.ingrambook.com/Imageswk/j400w/$i >$logfile 2>&1); then
                echo "done."
                echo -n "[Get Images] Unzipping file $i..."
-               if (cd $imagedir; mkdir $dir; cd $dir; unzip ../$i >/dev/null 2>&1) ; then
+               if (cd $imagedir; mkdir $dir; cd $dir; unzip ../$i >$logfile 2>&1) ; then
                    echo "done."
                    echo -n "[Get Images] Archiving file $i"
                    (cd $imagedir; mv $i $archivedir)
