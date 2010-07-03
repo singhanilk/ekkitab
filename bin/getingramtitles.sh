@@ -40,7 +40,7 @@ else
         echo "failed."
    fi
    echo -n "[Get Titles] Unzipping file $targetfile..."
-   (cd $targetdir; rm -f $datafile; unzip $targetfile >/dev/null 2>&1; chmod a+r $datafile)
+   (cd $targetdir; rm -f $datafile; unzip $targetfile >/dev/null 2>&1 && chmod a+r $datafile)
    echo "done."
 fi
 echo "[Get Titles] Completed."
