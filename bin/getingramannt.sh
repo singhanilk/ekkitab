@@ -13,7 +13,11 @@ checkfilesizes() {
 !
     size1=`cat $tmpfile | sed 's/ \+/ /g' | cut -d' ' -f5`
     size1=`echo $size1`
-    size2=`ls -l $localfile | sed 's/ \+/ /g' | cut -d' ' -f5`
+    if [ -f $localfile ] ; then
+        size2=`ls -l $localfile | sed 's/ \+/ /g' | cut -d' ' -f5`
+    else
+        size2=0
+    fi
     rm $tmpfile
     if [ "$size1" == "$size2" ] ; then
        return 0;
@@ -35,12 +39,12 @@ else
    echo -n "[Get Annotations] Getting file $ftptargetfile ...."
    if (cd $targetdir; wget -O $localtargetfile ftp://w20M0695:ees695@ftp1.ingrambook.com/titleswk/$ftptargetfile >/dev/null 2>&1) ; then
        echo "done."
+       if ( ! grep "$targetdir/$localtargetfile" $catalogfile >/dev/null 2>&1 ) ; then
+            echo "-d Ingrams $targetdir/$localtargetfile" >> $catalogfile
+            echo "[Get Annotations] Updated catalog file with entry for $localtargetfile."
+       fi
    else
        echo "failed."
-   fi
-   if ( ! grep "$targetdir/$localtargetfile" $catalogfile >/dev/null 2>&1 ) ; then
-        echo "-d Ingrams $targetdir/$localtargetfile" >> $catalogfile
-        echo "[Get Annotations] Updated catalog file with entry for $localtargetfile."
    fi
 fi
 echo "[Get Annotations] Completed."
