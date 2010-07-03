@@ -9,7 +9,7 @@ function sendmail($to,$body){
     $sender = "support@ekkitab.com";
     $headers = "From:$sender" . "\r\n" .
     'X-Mailer: PHP/' . phpversion();
-    echo "Sending update orices logs to $receiver\n";
+    echo "Sending update prices logs to $receiver\n";
     if (mail($receiver, $subject, $body, $headers)) {
         echo("Message successfully sent!\n");
     } else {
