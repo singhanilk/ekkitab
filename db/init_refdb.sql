@@ -55,5 +55,4 @@ insert into ek_supplier_params (`info_source`, `publisher`, `supplier_discount`,
                                ('EuroKids', 'Any', 25, 3),
                                ('BookWorldEnterprises', 'Any', 25, 3),
                                ('TBH', 'Any', 25, 3),
-                               ('EuroKids', 'Any', 25, 3),
                                ('Unknown', 'Any', 25, 5);
