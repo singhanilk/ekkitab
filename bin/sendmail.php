@@ -3,6 +3,7 @@
 define (DEFAULT_ADDRESSEE, "christopher@ekkitab.com");
 define (SENDER, "support@ekkitab.com");
 define (DEFAULT_SUBJECT, "Email from Ekkitab");
+define (MAXLINES_IN_BODY, 100);
 
     function sendmail($to, $subject, $body){
 
@@ -41,8 +42,16 @@ define (DEFAULT_SUBJECT, "Email from Ekkitab");
 
    $fh = fopen ("php://stdin","r") or die ("Failed: Could not read from standard input.\n");
    $body = "";
+
+   $lines = 0;
    while ($contents = fgets($fh)){
-        $body .= $contents;
+        $lines++;
+        if ($lines <= MAXLINES_IN_BODY) {
+            $body .= $contents;
+        }
+   }
+   if ($lines > MAXLINES_IN_BODY) {
+        $body .= "\n ..... more .....\n";
    }
    sendmail($to, $subject, $body)
 ?>

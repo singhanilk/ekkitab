@@ -45,6 +45,7 @@ else {
     function fatal($message, $query = "") {
         global $logger;
 	    $logger->fatal("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
+        echo "[Fatal] $message\n";
         exit(1);
     }
 
@@ -55,6 +56,7 @@ else {
     function warn($message, $query = "") {
         global $logger;
 	    $logger->error("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
+        echo "[Warning] $message\n";
     }
 
    /** 
@@ -64,6 +66,16 @@ else {
     function debug($message, $query = "") {
         global $logger;
 	    $logger->debug("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
+    }
+
+   /** 
+    * This function will log an info message.
+    * Optionally, will accept the query that failed.
+    */
+    function info($message, $query = "") {
+        global $logger;
+	    $logger->info("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
+        echo "[Info] $message\n";
     }
 
    /** 
@@ -484,13 +496,13 @@ else {
             if (++$i % 100000 == 0) {
                 doCommit($db);
                 $inserted = $i - ($errorcount + $unresolved + $filenotfound + $ignored);
-                echo "Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.\n";
+                debug("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.");
             }
         }
         doCommit($db);
         $inserted = $i - ($errorcount + $unresolved + $filenotfound + $ignored);
         writeUnclassifiedCodesToFile($infosource);
-        debug("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.\n");
+        info("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.\n");
     
         fclose($fh);
         mysqli_close($db);
@@ -499,5 +511,5 @@ else {
     $start = (float) array_sum(explode(' ', microtime()));
     start($argc, $argv);
     $end = (float) array_sum(explode(' ', microtime()));
-    debug("Processing time: " . sprintf("%.2f", ($end - $start)/60) . " minutes.\n");
+    info("Processing time: " . sprintf("%.2f", ($end - $start)/60) . " minutes.");
 ?>

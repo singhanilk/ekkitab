@@ -36,7 +36,7 @@ else {
     function getConfig($file) {
         $config = parse_ini_file($file, true);
         if (! $config) {
-            echo "Configuration file missing or incorrect.\n";
+            echo "Fatal: Configuration file missing or incorrect.\n";
             exit(1);
         }
         return $config;
@@ -59,7 +59,7 @@ else {
 
         $dir = opendir($directory);
         if (! $dir) {
-            echo "Failed to open source directory. $directory\n";
+            echo "Warning: Failed to open source directory. $directory\n";
             return;
         }
 
@@ -154,7 +154,7 @@ else {
     }
     process($startdir, $archivedir, $config); 
 
-	echo "[Process Stock] Processed: $files_processed  Failed: $files_failed  Ignored: $files_ignored.\n";
+	echo "[Prepare Stock] Processed: $files_processed  Failed: $files_failed  Ignored: $files_ignored.\n";
 
 ?>
 
