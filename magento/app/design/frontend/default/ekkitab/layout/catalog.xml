@@ -73,8 +73,8 @@ Default layout, loads most of the pages
         </reference>
         <reference name="footer_links">
             <action method="addLink" translate="label title" module="catalog" ><label>Catalog</label><url helper="ekkitab_catalog/getFullCatalogUrl"/><title>Catalog</title></action>
-            <action method="addLink" translate="label title" module="catalog" ifconfig="catalog/seo/site_map"><label>Site Map</label><url>sitemap.html</url>
-			<!--url helper="catalog/map/getCategoryUrl" /--><title>Site Map</title></action>
+            <!--action method="addLink" translate="label title" module="catalog" ifconfig="catalog/seo/site_map"><label>Site Map</label><url>sitemap.html</url-->
+			<!--url helper="catalog/map/getCategoryUrl" /--><!--title>Site Map</title></action-->
         </reference>
     </default>
 

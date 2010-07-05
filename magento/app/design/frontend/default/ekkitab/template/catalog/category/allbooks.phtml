@@ -33,12 +33,7 @@ function getShortenedString($str,$count){
 
 $bookList=$this->getProductCollection();
 ?>
-<div class="leftNavArea">
-	<?php echo $this->getDonateBlurbHtml(); ?>
-	<?php echo $this->getChildHtml('leftlink_menu'); ?>
-</div><!-- leftNavArea inside checks -->
-
-<div class="mainArea">
+<div class="fullCatalogMainArea">
 <?php 
   if (!is_null($bookList) && $bookList->count() > 0) {
  ?>
@@ -143,7 +138,7 @@ $bookList=$this->getProductCollection();
 			$savings= $listPrice - $discPrice;
 			$savingsPerct= round(($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 0);
 			$savingsPerct= $savingsPerct > 5 ? $savingsPerct : 0; 
-			$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Ships in ".$shippingTimeMin." - ".$shippingTimeMax." days":"";
+			$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Delivers in ".$shippingTimeMin." - ".$shippingTimeMax." days":"";
 			$shortDesc= ($shortDesc =="Not Available") ? "" : $shortDesc;
 			
 			$shortDesc = getShortenedString($shortDesc,30);
