@@ -47,6 +47,7 @@
 		$inStock = $_product->getInStock();
 		$publishers=$_product->getPublisher();
 		$publishDate=$_product->getPublishingDate();
+		$noPages=$_product->getPages();
 		
 		$author = $authors['a'];
 		$editors=$authors['e']	;
@@ -68,7 +69,7 @@
 		$savingsPerct= round(($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 0);
 		$shippingTimeMin = (int)$_product->getDeliveryPeriod();
 		$shippingTimeMax = round($shippingTimeMin + (.5 * $shippingTimeMin) );
-		$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Ships in ".$shippingTimeMin." - ".$shippingTimeMax." days":"";
+		$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Delivers in ".$shippingTimeMin." - ".$shippingTimeMax." days":"";
 		$publishers=strlen($publishers)>0 ? ucwords($publishers):"NA";
 		$image = $_product->getImage();
 ?>
@@ -104,6 +105,7 @@
 			<div class="lineHeight14em"><span class="boldFont">Publisher:  <?php echo $publishers ?></span></div>
 			<div class="lineHeight14em"><span class="boldFont">Publishing Date:  <?php echo $publishDate ?></span></div>
 			<div class="lineHeight14em"><span class="boldFont">Language : <?php echo ucwords($_product->getLanguage()) ?></span></div>
+			<?php if($noPages):?><div class="lineHeight14em"><span class="boldFont">Number of Pages : <?php echo $noPages ?></span></div><?php endif;?>
 			
 			<?php if(!$inStock || $_product->getListPrice() <= 0):?>
 			  <div class="marginTop5px"><img src="<?php echo $this->getSkinUrl('images/out_of_stock_image.png')?>" align="absmiddle"> &nbsp; <a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($_product->getId()) ?>">Add to Wishlist</a> </div>

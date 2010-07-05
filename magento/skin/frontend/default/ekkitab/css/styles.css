@@ -22,7 +22,7 @@ a:hover {
 	background-repeat: no-repeat;
 	width: 1000px;
 	margin: 0 auto;
-	padding: 0 0 0px 0;
+	padding: 0 0 0px 0;	
 }
 .header {
 	width: 960px;
@@ -133,6 +133,13 @@ a:hover {
 	width: 735px;
 	float: left;
 	font-size: 1.1em;
+
+}
+.fullCatalogMainArea {
+	width: 920px;
+	float: left;
+	font-size: 1.1em;
+	padding: 0px 0px 0px 10px;
 
 }
 .inMainArea {
@@ -1437,8 +1444,9 @@ a:hover {
 .aboutUsArea .pageHeader,.policyArea .pageHeader {
 	color:#CC6600;
 	float:none;
-	font-size:20px;
+	font-size: 2.5em;
 	width:100%;
+	margin:0px auto 10px;
 }
 .policyArea{
 	background-image: url(../images/scroll.jpg);
@@ -1449,7 +1457,7 @@ a:hover {
 	font-size:11px;
 	line-height:22px;
 	margin:0px auto 10px;
-	padding-top:26px;
+	padding-top:16px;
 	padding-bottom:10px;
 	width:880px;
 }
@@ -2057,22 +2065,25 @@ a:hover {
 	width: 720px;
 }
 .spHdrs {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 13px;
-	line-height: 15px;
-	color: #3865b8;
-	margin-bottom: 30px;
-	margin-top: -25px;
+ font-size: 12px;
+ line-height: 18px;
+ font-style: italic;
+ color: #717476;
+ padding-bottom: 8px;
+ border-bottom: 1px dotted #666;
+ margin-top: -25px;
 }
 .Hdrs {
 	font-weight:bold;
 }
 .spHdrsNoTopMargin {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 13px;
-	line-height: 15px;
-	color: #3865b8;
-	margin-bottom: 30px;
+ font-size: 12px;
+ line-height: 18px;
+ font-style: italic;
+ color: #717476;
+ padding-bottom: 8px;
+ border-bottom: 1px dotted #666;
+ margin-bottom: 30px;
 }
 .spSlider {
 	width: 720px;
@@ -2372,21 +2383,22 @@ dt .hdr {
 
 .donateArea {
 	border-bottom:1px dotted #333333;
-	margin:8px auto 10px;
+	margin:10px auto 10px;
 	padding-bottom:10px;
-	width:700px;
+	width:880px;
 	font-size: 11px;
 	line-height: 22px;
+	padding-top:16px;
+
 }
 .donateArea .pageHeader {
 	float:none;
 	font-size: 2.8em;
 	color: #CC6600;
-	width:100%;
+	width:95%;
 }
 
 .donateArea .abtTextArea {
-	width: 670px;
 	float: left;
 	padding-top: 15px; 
 }

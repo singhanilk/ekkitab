@@ -95,7 +95,7 @@ Default layout, loads most of the pages
             <block type="page/html_footer" name="footer" as="footer" template="page/html/footer.phtml">
                 <block type="page/switch" name="store_switcher" as="store_switcher" template="page/switch/stores.phtml"/>
                 <block type="page/template_links" name="footer_links" as="footer_links" template="page/template/footer_links.phtml">
-					<action method="addLink" translate="label title" ><label>About Us</label><url>about-ekkitab</url><title>About Us</title><prepare>true</prepare></action>
+					<action method="addLink" translate="label title" ><label>About Us</label><url>ekkitab-vision</url><title>About Us</title><prepare>true</prepare></action>
 					<action method="addLink" translate="label title" ><label>Help</label><url>help</url><title>Help</title><prepare>true</prepare></action>
 					<action method="addLink" translate="label title" ><label>Privacy Policy</label><url>privacy-policy</url><title>Privacy Policy</title><prepare>true</prepare></action>
 					<action method="addLink" translate="label title" ><label>Terms and Conditions</label><url>terms</url><title>Terms of Use</title><prepare>true</prepare></action>
