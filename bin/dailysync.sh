@@ -16,10 +16,10 @@ echo "Resetting reference database..."
 ( cd $EKKITAB_HOME/db ; ./reset_refdb.sh ) 
 echo "Initializing catalog..."
 rundate=$(date +"%D-%T")
-( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -c | php ../sendmail.php -s "Daily Sync Report: [$rundate] Init Catalog - books" vijay@ekkitab.com ) 
+( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -c | php ../bin/sendmail.php -s "Daily Sync Report: [$rundate] Init Catalog - books" vijay@ekkitab.com ) 
 echo "Initializing prices..."
 rundate=$(date +"%D-%T")
-( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -p | php ../sendmail.php -s "Daily Sync Report: [$rundate] Init Catalog - prices" vijay@ekkitab.com ) 
+( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -p | php ../bin/sendmail.php -s "Daily Sync Report: [$rundate] Init Catalog - prices" vijay@ekkitab.com ) 
 echo "Indexing and updating production database..."
 ( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -u ) 
 echo "Completed daily sync routine."
