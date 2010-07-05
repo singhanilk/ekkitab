@@ -280,6 +280,8 @@ class Parser {
                             break;
                 case 'C'  : $book['currency'] = "CAN";
                             break;
+                case 'E'  : $book['currency'] = "EUR";
+                            break;
                 default:    $book['currency'] = "XXX";
                             throw new exception("Unknown currency " . str_replace("\"", "", strtoupper(trim($fields[1]))));
                             break;
