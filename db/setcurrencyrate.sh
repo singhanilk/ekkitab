@@ -5,7 +5,7 @@ if [ -z $EKKITAB_HOME ] ; then
 fi;
 . $EKKITAB_HOME/bin/db.sh 
 if [ $# -ne 2 ] ; then
-    echo "Not enough arguments...."; echo "Usage: $0 <orderid>" 
+    echo "Not enough arguments...."; echo "Usage: $0 <currency> <rate>" 
     exit 1;
 fi;
 currency=$1;
@@ -15,8 +15,9 @@ case $currency in
     "USD") ;;
     "BRI") ;;
     "CAN") ;;
+    "EUR") ;;
     *) echo "Fatal: $1 is not a valid currency name."
-       echo "Valid currencies are: 'USD', 'BRI' and 'CAN' only."
+       echo "Valid currencies are: 'USD', 'BRI', "EUR" and 'CAN' only."
        exit 1;;
 esac
 

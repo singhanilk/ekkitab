@@ -22,7 +22,8 @@ insert into ek_discount_setting (`info_source`, `discount_percent`) values ('Ing
                                                                            ('ResearchPress', 70), ('Rupa', 70),
                                                                            ('Vinayaka', 70), ('Westland', 70),
                                                                            ('CambridgeUniversityPress', 70), ('IndiaBooks', 70),
-                                                                           ('Sage', 70), ('EuroKids', 70);
+                                                                           ('Sage', 70), ('EuroKids', 70),
+                                                                           ('TBH', 70), ('BookWorldEnterprises', 70);
 
 --
 -- Seed data for table `ek_supplier_params`
@@ -51,5 +52,8 @@ insert into ek_supplier_params (`info_source`, `publisher`, `supplier_discount`,
                                ('Westland', 'Any', 30, 3),
                                ('CambridgeUniversityPress', 'Any', 30, 3),
                                ('IndiaBooks', 'Any', 33, 3),
+                               ('EuroKids', 'Any', 25, 3),
+                               ('BookWorldEnterprises', 'Any', 25, 3),
+                               ('TBH', 'Any', 25, 3),
                                ('EuroKids', 'Any', 25, 3),
                                ('Unknown', 'Any', 25, 5);

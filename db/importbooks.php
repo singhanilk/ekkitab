@@ -45,6 +45,7 @@ else {
     function fatal($message, $query = "") {
         global $logger;
 	    $logger->fatal("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
+        echo "[Fatal] $message\n";
         exit(1);
     }
 
@@ -55,6 +56,7 @@ else {
     function warn($message, $query = "") {
         global $logger;
 	    $logger->error("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
+        echo "[Warning] $message\n";
     }
 
    /** 
@@ -64,6 +66,16 @@ else {
     function debug($message, $query = "") {
         global $logger;
 	    $logger->debug("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
+    }
+
+   /** 
+    * This function will log an info message.
+    * Optionally, will accept the query that failed.
+    */
+    function info($message, $query = "") {
+        global $logger;
+	    $logger->info("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
+        echo "[Info] $message\n";
     }
 
    /** 
@@ -373,6 +385,56 @@ else {
             return $row[0] + 1;
     }
 
+    function getSellingPrice($source, $listprice, $costprice) {
+
+        // Calculate expenditure on book, assuming single book purchase
+        // Expenditure = cost price + shipping + packing + credit card commission
+
+        $shippingcost = 40;
+        if (strtolower($source) != "india") {
+            $shippingcost = 200;
+        }
+        $creditcardcost = 0.03 * $listprice;
+        $othercost = 10;
+
+        $ourmargin = 0;
+        if ($listprice > 800) {
+            $ourmargin = 0.1 * $listprice;
+        }
+        elseif ($listprice > 500) {
+            $ourmargin = 0.08 * $listprice;
+        }
+        elseif ($listprice > 200) {
+            $ourmargin = 0.06 * $listprice;
+        }
+        else {
+            $ourmargin = 0.04 * $listprice;
+        }
+
+        $collectshipping = 0;
+        if ($listprice <= 200) {
+            $collectshipping = 30;
+        }
+
+        $sellingprice = $costprice + $shippingcost + $othercost + $ourmargin + $creditcardcost - $collectshipping;
+
+        if ($sellingprice >= $listprice) { // No margin. selling price = list price
+            if (strtolower($source) != "india") {
+                $listprice = $sellingprice;
+            }
+            else {
+                $sellingprice = $listprice;
+            }
+        }
+        elseif (round((($listprice - $sellingprice)/ $listprice) * 100) < 5) {
+            $sellingprice = $listprice;
+        }
+
+        //$ourmargin = $sellingprice + $collectshipping - ($costprice + $othercost + $shippingcost + $creditcardcost);
+
+        return round($sellingprice);
+    }
+
    /** 
     * The main program. 
     */
@@ -468,8 +530,12 @@ else {
                     if (empty($disc_rate)) {
                         fatal("No discount rate available for supplier " . $distributor);
                     }
-                    $discount =  ($book['list_price'] - $book['suppliers_price']) * $disc_rate / 100 ;
-                    $book['discount_price'] = round($book['list_price'] - $discount);
+                    $book['discount_price'] = getSellingPrice($book['sourced_from'], $book['list_price'], $book['suppliers_price']);
+                    if ($book['discount_price'] > $book['list_price']) { // Raise the list price
+                        $book['list_price'] = $book['discount_price'];
+                    }
+                    //$discount =  ($book['list_price'] - $book['suppliers_price']) * $disc_rate / 100 ;
+                    //$book['discount_price'] = round($book['list_price'] - $discount);
                     if (isset($book['distributor'])) {
                         updateBookAvailability($book, $db);
                         unset($book['distributor']);
@@ -484,13 +550,13 @@ else {
             if (++$i % 100000 == 0) {
                 doCommit($db);
                 $inserted = $i - ($errorcount + $unresolved + $filenotfound + $ignored);
-                echo "Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.\n";
+                debug("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.");
             }
         }
         doCommit($db);
         $inserted = $i - ($errorcount + $unresolved + $filenotfound + $ignored);
         writeUnclassifiedCodesToFile($infosource);
-        debug("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.\n");
+        info("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.\n");
     
         fclose($fh);
         mysqli_close($db);
@@ -499,5 +565,5 @@ else {
     $start = (float) array_sum(explode(' ', microtime()));
     start($argc, $argv);
     $end = (float) array_sum(explode(' ', microtime()));
-    debug("Processing time: " . sprintf("%.2f", ($end - $start)/60) . " minutes.\n");
+    info("Processing time: " . sprintf("%.2f", ($end - $start)/60) . " minutes.");
 ?>

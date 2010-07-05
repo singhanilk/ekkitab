@@ -12,7 +12,11 @@ checkfilesizes() {
 !
     size1=`cat $tmpfile | sed 's/ \+/ /g' | cut -d' ' -f5`
     size1=`echo $size1`
-    size2=`ls -l $localfile | sed 's/ \+/ /g' | cut -d' ' -f5`
+    if [ -f $localfile ] ; then
+        size2=`ls -l $localfile | sed 's/ \+/ /g' | cut -d' ' -f5`
+    else
+        size2=0
+    fi
     rm $tmpfile
     if [ "$size1" == "$size2" ] ; then
        return 0;

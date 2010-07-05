@@ -403,7 +403,7 @@ public class BookIndex {
                 if (books != null) { 
                     addDocument(books);
                 }
-                if ((i % 10000) == 0) {
+                if ((i % 1000000) == 0) {
                     timer10kend = System.currentTimeMillis();
                     System.out.println("Indexed: "+i+" books in "+(timer10kend - timer10kstart)/1000+" sec. ");
                 }

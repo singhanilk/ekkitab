@@ -36,7 +36,7 @@ else {
     function getConfig($file) {
         $config = parse_ini_file($file, true);
         if (! $config) {
-            echo "Configuration file missing or incorrect.\n";
+            echo "Fatal: Configuration file missing or incorrect.\n";
             exit(1);
         }
         return $config;
@@ -59,7 +59,7 @@ else {
 
         $dir = opendir($directory);
         if (! $dir) {
-            echo "Failed to open source directory. $directory\n";
+            echo "Warning: Failed to open source directory. $directory\n";
             return;
         }
 
@@ -71,7 +71,7 @@ else {
 			}
 			else {
                $extn = substr($file, strlen($file) - 4, 4);
-               if ((strlen($file) > 4) && (($extn == ".xls") || ($extn == ".RPT"))) {
+               if ((strlen($file) > 4) && ((strtolower($extn) == ".xls") || ($extn == ".RPT"))) {
                    $lower_directory = strtolower(basename($directory));
                    $plugin = str_replace(" ","",$lower_directory);
                    if ($config[$plugin]['concatfiles'] == 1) {
@@ -95,16 +95,17 @@ else {
                         $processor = "";
                    }
                    if (($processor != "") && is_executable($processorhome . "/" . $processor)) {
-                        echo "Running... " . $processor . " on '" . $file . "'\n";
+                        // echo "Running... " . $processor . " on '" . $file . "'\n";
                         $outputfile = str_replace(".pl","", $processor) . "-stocklist.txt";
                         $commandline = $processorhome . "/" . $processor . " '" . $directory . "/" . $file . "' " . $filewritemode . "  " . $outputdir . "/" . $outputfile . " 2>/dev/null";
                         $success = system($commandline, $returnvalue);
                         if ($returnvalue != 0) {
-                             echo "  ...failed.\n";
+                             // echo "  ...failed.\n";
+                             echo "[Prepare Stock] Processor $processor failed on file $file.\n";
                              $files_failed++;
                         }
                         else {
-                             echo "  ...passed.\n";
+                             // echo "  ...passed.\n";
                              // move the processed file to archive
                              if ($archivedir != "") {
                                 $outputdir = $archivedir . "/" . $plugin;
@@ -120,21 +121,21 @@ else {
                    }
                    else {
                         if ($processor == "") {
-                            echo "Processor for file $file in directory $directory is not available.\n";
+                            echo "[Prepare Stock] Processor for file $file in directory $directory is not available.\n";
                         }
                         else {
-                            echo "Processor $processor is not executable or could not be found.\n";
+                            echo "[Prepare Stock] Processor $processor is not executable or could not be found.\n";
                         }
+                        $files_failed++;
                    }
                }
                else {
-                   //echo "File $file is not an excel file and is being ignored.\n";
-                   $files_ignored++;
+                    echo "[Prepare Stock] [Warning] File $file is not an excel file and is being ignored.\n";
+                    $files_ignored++;
                }
-			}
-		}
+		    }
+        }
     }
-
 
     $files_processed = 0;
     $files_failed    = 0;
@@ -146,14 +147,14 @@ else {
     $startdir = $config['general']['home'];
     $archivedir = "";
     if (!isset($config['general']['archive'])) {
-       echo "No archive directory set. Will not archive files.\n";
+       echo "[Prepare Stock] No archive directory set. Will not archive files.\n";
     }
     else {
        $archivedir = $config['general']['archive'];
     }
     process($startdir, $archivedir, $config); 
 
-	echo "Processed: $files_processed  Failed: $files_failed  Ignored: $files_ignored.\n";
+	echo "[Prepare Stock] Processed: $files_processed  Failed: $files_failed  Ignored: $files_ignored.\n";
 
 ?>
 
