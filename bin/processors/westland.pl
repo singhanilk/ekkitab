@@ -32,9 +32,9 @@ while (my $line = <FILE>) {
         chomp($currency);
         
         SWITCH: {
-            ($currency == "USD") && do { $currency = "U"; last SWITCH; };
-            ($currency == "GBP") && do { $currency = "P"; last SWITCH; };
-            ($currency == "INR") && do { $currency = "I"; last SWITCH; };
+            ($currency eq "USD") && do { $currency = "U"; last SWITCH; };
+            ($currency eq "GBP") && do { $currency = "P"; last SWITCH; };
+            ($currency eq "INR") && do { $currency = "I"; last SWITCH; };
         }
 
         my $stock = substr($line, 103, 3);
