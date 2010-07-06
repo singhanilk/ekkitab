@@ -57,13 +57,7 @@ if [ "$mode" == "update" ] ; then
    ( cd $EKKITAB_HOME/magento ; cp .htaccess.maintenance .htaccess )
    echo "Starting load of books to production database..." 
    ( cd $EKKITAB_HOME/db; ./loadbooks.sh )
-   if ( ! $pricemode ) ; then 
-      if [[ $dbid == 0 ]] ; then
-        ( cd $EKKITAB_HOME/bin; ./create_index.sh )
-      else 
-        ( cd $EKKITAB_HOME/bin; ./update_index.sh $dbid )
-      fi
-   fi
+   ( cd $EKKITAB_HOME/bin; ./create_index.sh )
    # take System off maintenance
    ( cd $EKKITAB_HOME/magento ; cp .htaccess.prod .htaccess )
 fi

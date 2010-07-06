@@ -22,5 +22,7 @@ rundate=$(date +"%D-%T")
 ( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -p | php ../bin/sendmail.php -s "Daily Sync Report: [$rundate] Init Catalog - prices" vijay@ekkitab.com ) 
 echo "Indexing and updating production database..."
 ( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -u ) 
+# Restart Tomcat
+sudo service tomcat6 restart
 echo "Completed daily sync routine."
 
