@@ -35,6 +35,7 @@ while (my $line = <FILE>) {
             ($currency eq "USD") && do { $currency = "U"; last SWITCH; };
             ($currency eq "GBP") && do { $currency = "P"; last SWITCH; };
             ($currency eq "INR") && do { $currency = "I"; last SWITCH; };
+            ($currency eq "SGD") && do { $currency = "S"; last SWITCH; };
         }
 
         my $stock = substr($line, 103, 3);

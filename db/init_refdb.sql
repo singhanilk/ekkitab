@@ -23,6 +23,8 @@ insert into ek_discount_setting (`info_source`, `discount_percent`) values ('Ing
                                                                            ('Vinayaka', 70), ('Westland', 70),
                                                                            ('CambridgeUniversityPress', 70), ('IndiaBooks', 70),
                                                                            ('Sage', 70), ('EuroKids', 70),
+                                                                           ('SChand', 70), ('ParagonBooks', 70),
+                                                                           ('Wiley', 70), ('Harvard', 70),
                                                                            ('TBH', 70), ('BookWorldEnterprises', 70);
 
 --
@@ -55,4 +57,8 @@ insert into ek_supplier_params (`info_source`, `publisher`, `supplier_discount`,
                                ('EuroKids', 'Any', 25, 3),
                                ('BookWorldEnterprises', 'Any', 25, 3),
                                ('TBH', 'Any', 25, 3),
+                               ('Wiley', 'Any', 25, 3),
+                               ('ParagonBooks', 'Any', 25, 3),
+                               ('SChand', 'Any', 25, 3),
+                               ('Harvard', 'Any', 25, 3),
                                ('Unknown', 'Any', 25, 5);

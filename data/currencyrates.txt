@@ -2,3 +2,4 @@ USD   50
 CAN   49
 BRI   75
 EUR   65
+SGD   34
