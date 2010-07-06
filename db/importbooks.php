@@ -385,10 +385,15 @@ else {
             return $row[0] + 1;
     }
 
-    function getSellingPrice($source, $listprice, $costprice) {
+    function getSellingPrice($source, $listprice, $costprice, $disc_rate) {
+
+        if ($listprice <= 0) {
+            return 0;
+        }
 
         // Calculate expenditure on book, assuming single book purchase
         // Expenditure = cost price + shipping + packing + credit card commission
+        define ("FREE_SHIPPING_THRESHOLD", 200);
 
         $shippingcost = 40;
         if (strtolower($source) != "india") {
@@ -397,42 +402,26 @@ else {
         $creditcardcost = 0.03 * $listprice;
         $othercost = 10;
 
-        $ourmargin = 0;
-        if ($listprice > 800) {
-            $ourmargin = 0.1 * $listprice;
-        }
-        elseif ($listprice > 500) {
-            $ourmargin = 0.08 * $listprice;
-        }
-        elseif ($listprice > 200) {
-            $ourmargin = 0.06 * $listprice;
-        }
-        else {
-            $ourmargin = 0.04 * $listprice;
-        }
-
         $collectshipping = 0;
-        if ($listprice <= 200) {
+        if ($listprice < FREE_SHIPPING_THRESHOLD) {
             $collectshipping = 30;
         }
 
-        $sellingprice = $costprice + $shippingcost + $othercost + $ourmargin + $creditcardcost - $collectshipping;
-
-        if ($sellingprice >= $listprice) { // No margin. selling price = list price
-            if (strtolower($source) != "india") {
-                $listprice = $sellingprice;
-            }
-            else {
-                $sellingprice = $listprice;
-            }
-        }
-        elseif (round((($listprice - $sellingprice)/ $listprice) * 100) < 5) {
-            $sellingprice = $listprice;
+        $expenses = $shippingcost + $creditcardcost + $othercost - $collectshipping; 
+        if (($costprice + $expenses) > $listprice) {
+            $listprice = $costprice + $expenses;
         }
 
-        //$ourmargin = $sellingprice + $collectshipping - ($costprice + $othercost + $shippingcost + $creditcardcost);
+        $margin = $listprice - ($costprice + $expenses); 
+        $discount = ($disc_rate/100) * $margin;
 
-        return round($sellingprice);
+        if ((($discount / $listprice) * 100) < 5) {
+            $discount = 0;
+        }
+
+        $sellingprice =  round($listprice  - $discount);
+
+        return $sellingprice;
     }
 
    /** 
@@ -530,7 +519,7 @@ else {
                     if (empty($disc_rate)) {
                         fatal("No discount rate available for supplier " . $distributor);
                     }
-                    $book['discount_price'] = getSellingPrice($book['sourced_from'], $book['list_price'], $book['suppliers_price']);
+                    $book['discount_price'] = getSellingPrice($book['sourced_from'], $book['list_price'], $book['suppliers_price'], $disc_rate);
                     if ($book['discount_price'] > $book['list_price']) { // Raise the list price
                         $book['list_price'] = $book['discount_price'];
                     }
