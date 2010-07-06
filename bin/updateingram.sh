@@ -3,7 +3,7 @@ if [ -z $EKKITAB_HOME ] ; then
     echo "EKKITAB_HOME is not set..."
     exit 1;
 fi;
-logfile="$EKKITAB_HOME/logs/ingramimages.log"
+logfile="$EKKITAB_HOME/logs/updateingramimages.log"
 rm -f $logfile;
 ( cd $EKKITAB_HOME/bin; ./getingramtitles.sh )
 ( cd $EKKITAB_HOME/bin; ./getingramstocklist.sh )
