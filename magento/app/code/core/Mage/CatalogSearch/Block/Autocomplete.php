@@ -56,8 +56,11 @@ class Mage_CatalogSearch_Block_Autocomplete extends Mage_Core_Block_Abstract
                 $item['row_class'] .= ' last';
             }
 
-            $html .=  '<li title="'.$this->htmlEscape($item['title']).'" class="'.$item['row_class'].'">'
-                . '<span class="amount">'.$item['num_of_results'].'</span>'.$this->htmlEscape($item['title']).'</li>';
+            /** EKKITAB CHANGES: removed '<span class="amount">'.$item['num_of_results'].'</span>' from <li> tag because this is confusing.
+			* Don't know if it denotes the number of books returned by the search or the number of times this qeury was searched for.
+			*/
+			$html .=  '<li title="'.$this->htmlEscape($item['title']).'" class="'.$item['row_class'].'">'
+                . $this->htmlEscape($item['title']).'</li>';
         }
 
         $html.= '</ul>';
