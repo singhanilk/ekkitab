@@ -84,6 +84,9 @@ if [ ! -d $catalogdir ] ; then
   echo "done."
 fi
 
+# Create production site file marker.
+touch $magentodir/productionsite
+
 # Set up maintenance page
 echo -n "Setting system to maintenance mode..."
 ( cd $magentodir; cp ".htaccess.maintenance" ".htaccess" )
