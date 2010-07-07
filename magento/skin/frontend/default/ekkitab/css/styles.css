@@ -813,7 +813,7 @@ a:hover {
 	font-size: 11px;
 	color: #c60;
 }
-.topLinksOut .version          { width:130px; color:#ff0000; font-weight:bold; font-size:12px; }
+.topLinksOut .version          { width:300px; color:#ff0000; font-weight:bold; font-size:14px;padding:8px }
 
 .paginationAreaOut{
 	float:right;

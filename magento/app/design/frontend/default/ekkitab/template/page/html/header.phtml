@@ -31,7 +31,10 @@
 		<div class="topLinksOut">
 			<?php echo $this->getChildHtml('buildVersion') ?>
 			<div class="topLinksArea">
-				<div class="welcomeMsgArea"> <?php echo $this->getWelcome() ?></div>
+			<?php $file = 'production-site';
+				if(file_exists($file)){ ?> 			
+				<div class="welcomeMsgArea"><?php echo $this->getWelcome() ?></div><?php } ?>
+				
 				<div class="linkAreaLeft"></div>
 				<div class="linkAreaMain">
 					<?php echo $this->getChildHtml('topLinks')?>
