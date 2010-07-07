@@ -4,10 +4,10 @@ if [ -z $EKKITAB_HOME ] ; then
     exit 1;
 fi;
 . $EKKITAB_HOME/bin/db.sh 
-echo "generating globalsection links...."
+echo "generating betacustomer insertqueries...."
 cd $EKKITAB_HOME/bin; 
-php generate_globalsections.php -i ../data/globalsections.xml
+php generate_customer_entity.php -i ../data/allusers.txt
 echo "generated the sql file... updating the database...."
 mysql -s -h $host -u $user -p$password <<!
-source $EKKITAB_HOME/db/globalsections.sql;
+source $EKKITAB_HOME/db/beta_customers.sql;
 !

@@ -110,7 +110,7 @@ INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 ('default', 0, 'design/header/logo_src', 'images/logo.png'),
 ('default', 0, 'design/header/logo_alt', 'Ekkitab Education Services Pvt Ltd'),
 ('default', 0, 'design/header/welcome', ''),
-('default', 0, 'design/footer/copyright', '&copy; 2009 Ekkitab Educational Services Pvt Ltd. All Rights Reserved.'),
+('default', 0, 'design/footer/copyright', '&copy; 2009-10 Ekkitab Educational Services Pvt Ltd. All Rights Reserved.'),
 ('default', 0, 'dev/log/active', '1'),
 ('default', 0, 'dev/log/file', 'system.log'),
 ('default', 0, 'dev/log/exception_file', 'exception.log'),
@@ -163,11 +163,12 @@ INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 ('default',0, 'carriers/freeshipping/active', '1'),
 ('default',0, 'carriers/freeshipping/title', 'Free Shipping'),
 ('default',0, 'carriers/freeshipping/name', 'Free'),
-('default',0, 'carriers/freeshipping/free_shipping_subtotal', '100'),
+('default',0, 'carriers/freeshipping/free_shipping_subtotal', '200'),
 ('default',0, 'carriers/freeshipping/specificerrmsg', 'This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.'),
 ('default',0, 'carriers/freeshipping/sallowspecific', '0'),
 ('default',0, 'carriers/freeshipping/showmethod', '0'),
 ('default',0, 'carriers/freeshipping/sort_order', ''),
+('default',0, 'carriers/freeshipping/specificcountry', 'IN'),
 ('default',0, 'carriers/flatrate/active', '1'),
 ('default',0, 'carriers/flatrate/title', 'Flat Rate'),
 ('default',0, 'carriers/flatrate/name', 'Fixed'),
@@ -180,7 +181,7 @@ INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 ('default',0, 'carriers/flatrate/showmethod', '0'),
 ('default',0, 'carriers/flatrate/sort_order', ''),
 ('default',0, 'carriers/flatrate/specificcountry', 'IN'),
-('default',0, 'carriers/flatrate/free_shipping_subtotal', '100'),
+('default',0, 'carriers/flatrate/free_shipping_subtotal', '200'),
 ('default', 0, 'carriers/dhl/active', '0'),
 ('default', 0, 'payment/ccsave/active', '0'),
 ('default', 0, 'payment/free/title', 'No Payment Information Required'),
@@ -294,7 +295,7 @@ INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 ( 'default', 0, 'paypal/wps/sandbox_flag', '0'),
 ( 'default', 0, 'paypal/wps/debug_flag', '1'),
 ('default',0, 'payment/ccav/active', '1'),
-('default',0, 'payment/ccav/title', 'Master / Visa / NetBanking/ Paymate / ITZ'),
+('default',0, 'payment/ccav/title', 'Master / Visa / Debit Cards / NetBanking'),
 ('default',0, 'payment/ccav/payment_action', 'AUTHORIZATION'),
 ('default',0, 'payment/ccav/order_status', 'processing'),
 ('default',0, 'payment/ccav/transaction_type', 'O'),
@@ -329,8 +330,6 @@ INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 ('default',	0, 'web/browser_capabilities/cookies','1'),
 ('default',	0, 'web/browser_capabilities/javascript','1'),
 ('default', 0, 'web/cookie/cookie_lifetime', '7200');
-
-
 
 --
 -- Dumping data for table `ek_catalog_global_sections`
