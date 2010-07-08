@@ -47,7 +47,7 @@ sub sendmail {
    #                  Disposition => 'attachment'); 
    #}
 
-   $msg->send('smtp', 'mailhub.ltp.soft.net', AuthUser=>'vijay', AuthPass=>'ri8loveu');
+   $msg->send('smtp', 'mailhub.ltp.soft.net', AuthUser=>'vijay', AuthPass=>'');
 }
 
 if (scalar(@ARGV) < 3) {
