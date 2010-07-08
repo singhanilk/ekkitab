@@ -7,6 +7,7 @@ my $oExcel = new Spreadsheet::ParseExcel;
 die "Usage $0 <Excel File> \n Redirect output to required file from stdout" unless @ARGV;
 my $FH = "filehandle";
 my $FilePath;
+my $currency;
 my $oBook = $oExcel->Parse($ARGV[0]);
 if (not defined $oBook) {
     print STDERR "Failed to parse input file: $ARGV[0]\n"; 
@@ -45,14 +46,32 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                         next;
                     }
                 }
+                if ($pricecol == -1) {
+                    if ($oWkC->Value =~ /PRICE/) {
+                        $pricecol = $iC;
+                        next;
+                    }
+                }
                 if ($titlecol == -1) {
     		        if ($oWkC->Value =~ /Title/) {
                         $titlecol = $iC;
                         next;
     		        }
                 }
+                if ($titlecol == -1) {
+    		        if ($oWkC->Value =~ /TITLE/) {
+                        $titlecol = $iC;
+                        next;
+    		        }
+                }
                 if ($authorcol == -1) {
     		        if ($oWkC->Value =~ /Author/) {
+                        $authorcol = $iC;
+                        next;
+    		        }
+                }
+                if ($authorcol == -1) {
+    		        if ($oWkC->Value =~ /AUTHOR/) {
                         $authorcol = $iC;
                         next;
     		        }
@@ -68,16 +87,25 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     }
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
-        
-        my $currency = 'I';
+        if($pricecol eq 3){
+        $currency = 'I';
+        }
+        elsif($pricecol eq 7){
+        $currency = 'U';
+        }
         my $availability = 'Available';
         my $imprint = 'Pearson';
-        my $value = $oWkS->{Cells}[$i][$isbncol];
+        my $value = '';
+        eval { $value = $oWkS->{Cells}[$i][$isbncol]; };
+        if ($@) {
+           print STDERR "Unexpected read value. Line $i\n";
+           last;
+        }
         my $isbn;
-        if (defined ($value)) {
-           $isbn = $value->Value;
-           chomp($isbn);
-           $isbn =~ s/[^0-9]+//g;
+    if (defined ($value)) {
+            $isbn = $value->Value;
+            chomp($isbn);
+            $isbn =~ s/[^0-9]+//g;
         }
         $value = $oWkS->{Cells}[$i][$pricecol];
         my $price;
@@ -111,6 +139,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
              elsif (length($isbn) == 10 || length($isbn) == 13){
                   print $isbn . "\t" . $price . "\t" . $currency . "\t"  
     		      . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
+                  #print "$pricecol\n";
              }
         }
     }
