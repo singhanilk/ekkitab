@@ -290,9 +290,9 @@ class Parser {
 
             		//If list price is less the 15 dollars, reduce discount to 0
             		//so that our discount to customer will be 0.
-            		if ($listprice < 15) {
-                		$discount = 0;
-           	 	}
+            		//if ($listprice < 15) {
+                	//	$discount = 0;
+           	 	//}
 			
 			//Extracting the Stock Info
 			$stock = 0;
