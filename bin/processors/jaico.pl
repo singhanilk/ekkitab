@@ -8,12 +8,60 @@ die "Usage $0 <Excel File> \n Redirect output to required file from stdout" unle
 my $FH = "filehandle";
 my $FilePath;
 my $oBook = $oExcel->Parse($ARGV[0]);
+my %allowedcurrencies;
+   $allowedcurrencies{'singapore'}= "S";
+   $allowedcurrencies{'$'}= "U";
+   $allowedcurrencies{'rs'}= "I";
 if (not defined $oBook) {
     print STDERR "Failed to parse input file: $ARGV[0]\n"; 
     exit(1);
 }
 my($iR, $iC, $oWkS, $oWkC);
 print "#ISBN\t" . "PRICE\t" . "CURRENCY\t" . "AVAILABILITY\t" . "IMPRINT\t" . "TITLE\t" . "AUTHOR\n" ;
+
+sub getimprint {
+    my ($s) = @_;
+    $s =~ m/^([^(]+)/g;
+    my $publisher = $1;
+    return $publisher;
+}
+sub getcurrency {
+    my ($s) = @_;
+    $s =~ m/^([^(]+)/g;
+    my $publisher = $1;
+    #print ">> $publisher\n";
+    my @z = $s =~ m/\((.*?)\)/g;
+
+    my $currency = "";
+
+    if (scalar(@z) > 1) {
+        my $c = $z[scalar(@z) - 2];
+        if (defined($allowedcurrencies{lc($c)})) {
+            $currency = $allowedcurrencies{lc($c)};
+        }
+        else {
+            my $index = scalar(@z) - 1;
+            my $c = lc($z[$index]);
+            $c =~ s/[^a-z\$]//g;
+
+            if (defined($allowedcurrencies{$c})) {
+                $currency = $allowedcurrencies{$c};
+            }
+            else {
+                print "Unknown currency\n";
+            }
+        }
+    }
+    elsif (scalar(@z) == 1) {
+        my $c = lc($z[0]);
+        $c =~ s/[^a-z\$]//g;
+        $currency = $allowedcurrencies{$c};
+    }
+    else {
+        $currency = "I";
+    }
+    return $currency;
+}
 
 
 for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
@@ -64,6 +112,12 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                         next;
                     }
                 }
+    	        if ($imprintcol == -1) {
+    		    if ($oWkC->Value =~ /Publisher/) {
+                        $imprintcol = $iC;
+                        next;
+    		        }
+                }
             }
         }
 
@@ -75,7 +129,8 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     }
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
-	 my $currency = 'I';
+                                         
+	     my $currency = 'I';
          my $imprint = 'Not Available';
          my $value = $oWkS->{Cells}[$i][$isbncol];
          my $isbn;
@@ -89,6 +144,16 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
          if (defined ($value)) {
              $price = $value->Value;
              $price =~ s/\n//g;
+         }
+         if($imprintcol gt 0){
+         $value = $oWkS->{Cells}[$i][$imprintcol];
+         if (defined ($value)) {
+             $imprint = $value->Value;
+             $imprint =~ s/\n//g;
+             $currency = getcurrency($imprint);
+             $imprint = getimprint($imprint);
+             #print $imprint . "\t" . "Currency is: " . $currency . "\n";
+         }
          }
          $value = $oWkS->{Cells}[$i][$titlecol];
          my $title;
@@ -125,8 +190,8 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 	         next;
              }
              elsif (length($isbn) == 10 || length($isbn) == 13){
-                  print $isbn . "\t" . $price . "\t" . $currency . "\t"  
-    		      . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
+                 print $isbn . "\t" . $price . "\t" . $currency . "\t"  
+    		     . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
              }
          }
      }
