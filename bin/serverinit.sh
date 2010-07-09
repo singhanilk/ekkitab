@@ -476,6 +476,16 @@ else
    echo "done"
 fi
 
+# Enable google analytics
+GOOGLE_ID="UA-16918022-1"
+echo -n "Enabling google analytics..."
+query="insert into core_config_data (scope, scope_id, path, value) values ('default', 0, 'google/analytics/active', '1') on duplicate key update value = '1'"
+mysql -h $host -u $user -p$pass ekkitab_books -e "$query"
+query="insert into core_config_data (scope, scope_id, path, value) values ('default', 0, 'google/analytics/account', '$GOOGLE_ID') on duplicate key update value = '$GOOGLE_ID'" ;
+mysql -h $host -u $user -p$pass ekkitab_books -e "$query"
+echo "done"
+
+
 # Set up sms daemon
 
 echo -n "Initializing sms daemon..."
