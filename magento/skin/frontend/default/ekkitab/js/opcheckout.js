@@ -552,7 +552,10 @@ ShippingMethod.prototype = {
             return false;
         }
 
-        for (var i=0; i<methods.length; i++) {
+        if(methods.length==1){
+			return true;
+		}
+		for (var i=0; i<methods.length; i++) {
             if (methods[i].checked) {
                 return true;
             }
@@ -673,7 +676,7 @@ Payment.prototype = {
             return false;
         }
         for (var i=0; i<methods.length; i++) {
-            if (methods[i].checked) {
+			if (methods[i].checked) {
                 return true;
             }
         }
