@@ -36,6 +36,10 @@ mysqldump -h $host -u $user -p$password ekkitab_books ek_catalog_global_sections
 mysqldump -h $host -u $user -p$password ekkitab_books ek_catalog_global_section_products > $releasedir/ek_catalog_global_section_products.sql
 echo "done."
 
+echo -n "Exporting books availability..."
+mysqldump -h $host -u $user -p$password reference book_availability > $releasedir/book_availability.sql
+echo "done."
+
 echo -n "Copying search related files.."
 cp -r $EKKITAB_HOME/magento/search_index_dir $releasedir
 cp -r $EKKITAB_HOME/magento/search_index_dir_spell_author $releasedir

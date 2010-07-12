@@ -65,6 +65,10 @@ echo -n "Updating books table [logging at $logfile] ..."
 mysql -h $host -u $user -p$password ekkitab_books < $releasedir/books.sql > $logfile 
 echo "done."
 
+echo -n "Updating book_availability table [logging at $logfile] ..."
+mysql -h $host -u $user -p$password ekkitab_books < $releasedir/book_availability.sql > $logfile 
+echo "done."
+
 # Check if the global section sql files are present.
 if [ ! -f $releasedir/ek_catalog_global_sections.sql ] || 
    [ ! -f $releasedir/ek_catalog_global_section_products.sql ] ; then
