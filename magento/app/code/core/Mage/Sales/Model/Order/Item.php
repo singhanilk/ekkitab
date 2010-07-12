@@ -516,4 +516,48 @@ class Mage_Sales_Model_Order_Item extends Mage_Core_Model_Abstract
         }
         return false;
     }
+
+		/*
+		//Added below method by Anisha@ekkitab, to enable extraction of books details from the export order csv.
+		*/
+	/**
+     * Setup product for quote item
+     *
+     * @param   Mage_Catalog_Model_Product $product
+     * @return  Mage_Sales_Model_Quote_Item
+     */
+    public function setProduct($product)
+    {
+        if ($this->getOrder()) {
+            $product->setStoreId($this->getOrder()->getStoreId());
+        }
+        $this->setData('product', $product);
+/*          ->setProductId($product->getId())
+            ->setProductType($product->getTypeId())
+            ->setSku($this->getProduct()->getSku())
+            ->setName($product->getName())
+            ->setWeight($this->getProduct()->getWeight())
+            ->setTaxClassId($product->getTaxClassId())
+            ->setCost($product->getCost())
+            ->setIsQtyDecimal($product->getIsQtyDecimal());*/
+        return $this;
+    }
+
+    /**
+     * Retrieve product model object associated with item
+     *
+     * @return Mage_Catalog_Model_Product
+     */
+    public function getProduct()
+    {
+        $product = $this->_getData('product');
+        if (($product === null) && $this->getProductId()) {
+            $product = Mage::getModel('ekkitab_catalog/product')
+                ->setStoreId($this->getOrder()->getStoreId())
+                ->load($this->getProductId());
+            $this->setProduct($product);
+        }
+        return $product;
+    }
+
 }

@@ -6,7 +6,7 @@ fi;
 . $EKKITAB_HOME/bin/db.sh 
 echo "generating betacustomer insertqueries...."
 cd $EKKITAB_HOME/bin; 
-php generate_customer_entity.php -i ../data/betausers.txt
+php generate_customer_entity.php -i ../data/betausers2.txt
 echo "generated the sql file... updating the database...."
 mysql -s -h $host -u $user -p$password <<!
 source $EKKITAB_HOME/db/beta_customers.sql;
