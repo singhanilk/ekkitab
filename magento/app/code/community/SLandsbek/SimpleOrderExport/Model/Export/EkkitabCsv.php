@@ -193,7 +193,7 @@ class SLandsbek_SimpleOrderExport_Model_Export_EkkitabCsv extends SLandsbek_Simp
 		$availDist="";
 		$distributors="";
 		if(strtolower(trim($product->getSourcedFrom()))!=='us'){
-			$distributorsList = Mage::getModel('ekkitab_catalog/product_stockstatus')->getDistributorsStatus($isbn);
+			$distributorsList = Mage::getModel('ekkitab_catalog/product_stockStatus')->getDistributorsStatus($isbn);
 			foreach($distributorsList as  $dist){
 				$distributors.= $dist->getDistributor().";";
 				if($dist->getInStock()){
