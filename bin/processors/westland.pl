@@ -124,6 +124,9 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            elsif ($currency =~ /EUR/) {
                   $currency = 'E';
          }
+           elsif ($currency =~ /SGD/) {
+                  $currency = 'S';
+         }
         }
         my $availability;
         if(defined ($value)) {
