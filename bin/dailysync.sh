@@ -23,6 +23,7 @@ rundate=$(date +"%D-%T")
 echo "Indexing and updating production database..."
 ( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -u ) 
 # Restart Tomcat
-sudo service tomcat6 restart
+sudo service tomcat6 stop
+sudo service tomcat6 start
 echo "Completed daily sync routine."
 
