@@ -65,6 +65,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                 if ($availcol == -1) {
                     if ($oWkC->Value =~ /STOCK/) {
                         $availcol = $iC;
+                        print "availcol-->" . $availcol . "\n";
                         next;
                     }
                 }
@@ -152,11 +153,13 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                   $currency = 'S';
          }
         }
+        $value = $oWkS->{Cells}[$i][$availcol];
         my $availability;
         if(defined ($value)) {
            $availability = $value->Value;
            $availability =~ s/\n//g;
-           if ($availability gt 3){
+           print "availability -->" . $availability . "\n";
+           if ($availability gt 2){
            $availability = 'Available';
            }
            else{
