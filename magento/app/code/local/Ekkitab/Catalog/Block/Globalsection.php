@@ -35,7 +35,7 @@ class Ekkitab_Catalog_Block_Globalsection extends Mage_Core_Block_Template
     {
 		//$this->setDefaultTemplate('catalog/globalsection/home_page.phtml');
 		if(is_null($this->_homeSection)){
-           $this->_homeSection = $this->getHomePageSection();
+           $this->_homeSection = $this->getHomePageSection(true,1);
 		}
 
 		if($this->_homeSection && $this->_homeSection->getId() && trim($this->_homeSection->getHomepageTemplatePath())!="" ){
@@ -50,16 +50,19 @@ class Ekkitab_Catalog_Block_Globalsection extends Mage_Core_Block_Template
      * Get popular catagories of current store
      *
      */
-    public function getHomePageSection()
+    public function getHomePageSection($randomize=true,$count=1)
     {
+		$sectionArr;
 		if(is_null($this->_homeSection)){
 			$sections = Mage::getModel('ekkitab_catalog/globalsection')->getCollection()
 									->addHomePageFilter();
 			if(!is_null($sections)){
 				foreach($sections as $section){
-					if($section){
-						$this->_homeSection=$section;
-					}
+					$sectionArr[]=$section;
+				}
+					
+				if(shuffle($sectionArr)){
+					$this->_homeSection=$sectionArr[0];
 				}
 			}
 		}

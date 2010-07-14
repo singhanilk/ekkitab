@@ -69,7 +69,7 @@
 		$savingsPerct= round(($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 0);
 		$shippingTimeMin = (int)$_product->getDeliveryPeriod();
 		$shippingTimeMax = round($shippingTimeMin + (.5 * $shippingTimeMin) );
-		$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Delivers in ".$shippingTimeMin." - ".$shippingTimeMax." days":"";
+		$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Delivers in ".$shippingTimeMin." - ".$shippingTimeMax." business days":"";
 		$publishers=strlen($publishers)>0 ? ucwords($publishers):"NA";
 		$image = $_product->getImage();
 ?>

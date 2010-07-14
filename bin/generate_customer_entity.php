@@ -161,10 +161,16 @@ function format($id)
 
 
 if ($argc < 2) {
-   echo "Usage: $argv[0] -i <Input comma seperated text file> \n";
+   echo "Usage: $argv[0] -i <Input comma seperated text file>  [<max_entityId>]  [<max_entityId>]\n";
    exit(1);
 }
 
+if($argc > 2 ){
+	$entityId = (int)$argv[3];
+}
+if($argc > 3 ){
+	$incrementId = (int)$argv[4];
+}
 $inputfile = "";
 
 for ($i = 1; $i < $argc; $i+=2) {
@@ -228,8 +234,12 @@ catch (exception $e) {
 }
 
 if($fh){
-	$entityId=getMaxCustomerEntityId($db);
-	$incrementId=getNextIncrementId($db);
+	if(!$entityId || !is_int($entityId)){
+		$entityId=getMaxCustomerEntityId($db);
+	}
+	if(!$incrementId || !is_int($incrementId)){
+		$incrementId=getNextIncrementId($db);
+	}
 	fprintf($fsql, "use `ekkitab_books`;\n");
 	while ($contents = fgets($fh)){
 		$customer = explode(",", $contents);

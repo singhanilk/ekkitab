@@ -2267,6 +2267,45 @@ a:hover {
 	padding-top: 85px;
 	line-height: 1.6em;
 }
+.hmIndClassRow {
+	background-image: url(../images/hm_ind_classics_vis.jpg);
+	background-position:right top;
+	background-repeat:no-repeat;
+	margin-bottom:8px;
+	padding-bottom:8px;
+}
+.hmIndClassTextImage {
+	background-image: url(../images/hm_ind_classics_text.png);
+	background-position:left top;
+	background-repeat:no-repeat;
+	line-height:1.6em;
+	padding-top:95px;
+}
+.hmFictionRow {
+	background-image: url(../images/hm_fiction_vis.jpg);
+	background-position:right top;
+	background-repeat:no-repeat;
+	margin-bottom:8px;
+	padding-bottom:8px;
+}
+.hmFictionTextImage {
+	line-height:1.6em;
+	padding-top:95px;
+}
+.hmChildrenRow {
+	background-image: url(../images/hm_childrens_vis.jpg);
+	background-position:right top;
+	background-repeat:no-repeat;
+	margin-bottom:8px;
+	padding-bottom:8px;
+}
+.hmChildrenTextImage {
+	background-image: url(../images/hm_childrens_text.jpg);
+	background-position:left top;
+	background-repeat:no-repeat;
+	line-height:1.6em;
+	padding-top:95px;
+}
 
 
 .mainArea .hmSummerRow .readMore {
