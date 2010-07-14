@@ -44,6 +44,12 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                         next;
                     }
                 }
+                if ($pricecol == -1) {
+                    if ($oWkC->Value =~ /PRICE/) {
+                         $pricecol = $iC;
+                        next;
+                    }
+                }
                 if ($currencycol == -1) {
                     if ($oWkC->Value =~ /CUR/) {
                          $currencycol = $iC;
@@ -56,8 +62,21 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                         next;
                     }
                 }
+                if ($availcol == -1) {
+                    if ($oWkC->Value =~ /STOCK/) {
+                        $availcol = $iC;
+                        print "availcol-->" . $availcol . "\n";
+                        next;
+                    }
+                }
                 if ($titlecol == -1) {
                     if ($oWkC->Value =~ /name/) {
+                        $titlecol = $iC;
+                        next;
+                    }
+                }
+                if ($titlecol == -1) {
+                    if ($oWkC->Value =~ /TITLE/) {
                         $titlecol = $iC;
                         next;
                     }
@@ -71,6 +90,12 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                 }
                 if ($imprintcol == -1) {
                     if ($oWkC->Value =~ /PUBLISHER/) {
+                        $imprintcol = $iC;
+                        next;
+                    }
+                }
+                if ($imprintcol == -1) {
+                    if ($oWkC->Value =~ /PUB/) {
                         $imprintcol = $iC;
                         next;
                     }
@@ -128,11 +153,13 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                   $currency = 'S';
          }
         }
+        $value = $oWkS->{Cells}[$i][$availcol];
         my $availability;
         if(defined ($value)) {
            $availability = $value->Value;
            $availability =~ s/\n//g;
-           if ($availability gt 0){
+           print "availability -->" . $availability . "\n";
+           if ($availability gt 2){
            $availability = 'Available';
            }
            else{
