@@ -65,7 +65,7 @@
 				$savings= $listPrice - $discPrice;
 				$savingsPerct= round(($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 0);
 				$savingsPerct= $savingsPerct > 5 ? $savingsPerct : 0; 
-				$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Delivers in ".$shippingTimeMin." - ".$shippingTimeMax." days":"";
+				$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Delivers in ".$shippingTimeMin." - ".$shippingTimeMax." business days":"";
 				$shortDesc= ($shortDesc =="Not Available") ? "" : $shortDesc;
 				
 				$shortDesc = getShortenedString($shortDesc,30);
