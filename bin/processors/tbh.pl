@@ -135,7 +135,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if(defined ($value)) {
            $availability = $value->Value;
            $availability =~ s/\n//g;
-           if ($availability gt 2){
+           if ($availability >  2){
 	       $availability = 'Available';
            }
            else{
