@@ -7,6 +7,8 @@ my $oExcel = new Spreadsheet::ParseExcel;
 die "Usage $0 <Excel File> \n Redirect output to required file from stdout" unless @ARGV;
 my $FH = "filehandle";
 my $FilePath;
+my $enteredcount = 0;
+my $printedcount = 0;
 my $oBook = $oExcel->Parse($ARGV[0]);
 if (not defined $oBook) {
     print STDERR "Failed to parse input file: $ARGV[0]\n"; 
@@ -79,9 +81,13 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             last;
         }
     }
+    if (!(($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($imprintcol >= 0) && ($titlecol >= 0) && ($authorcol >= 0))) {
+            print STDERR "[Warning] Incomplete information in excel sheet. Cannot parse. Continuing to next sheet.\n";
+            last;
+    }
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
-        
+        $enteredcount++;
         my $currency;
         my $value = $oWkS->{Cells}[$i][$isbncol];
         my $isbn;
@@ -113,11 +119,11 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if(defined ($value)) {
            $availability = $value->Value;
            $availability =~ s/\n//g;
-           if ($availability gt 0){
+           if ($availability gt 2){
 	       $availability = 'Available';
            }
            else{
-               $availability = 'Not Available';
+               $availability = 'Not Available' . '[' . $availability . ']';
            }        
         }
         $value = $oWkS->{Cells}[$i][$imprintcol];
@@ -149,10 +155,15 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 	         next;
             }
              elsif (length($isbn) == 10 || length($isbn) == 13){
+		  $printedcount++;
                   print $isbn . "\t" . $price . "\t" . $currency . "\t"  
     		      . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
              }
         }
+    }
+    my $ratio = ($printedcount/$enteredcount)*100;
+    if (int($ratio) lt 70){
+        warn "[WARNING] Values printed less than 70% \n";
     }
 }
 
