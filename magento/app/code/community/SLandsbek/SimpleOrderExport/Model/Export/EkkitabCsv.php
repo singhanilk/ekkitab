@@ -107,6 +107,7 @@ class SLandsbek_SimpleOrderExport_Model_Export_EkkitabCsv extends SLandsbek_Simp
             'Order Id',
             'Customer Name',
             'Address 1',
+            'Address 2',
             'City',
             'State',
             'Pincode',
@@ -152,7 +153,8 @@ class SLandsbek_SimpleOrderExport_Model_Export_EkkitabCsv extends SLandsbek_Simp
 			Mage::helper('core')->formatDate($order->getCreatedAt(), 'medium', true),
 			$order->getRealOrderId(),
       
-			$shippingAddress ? $shippingAddress->getName().($shippingAddress->getData("company")!='' ? ("(".$shippingAddress->getData("company").")"):'') : '',
+			$shippingAddress ? $shippingAddress->getName() : '',
+            $shippingAddress ? $shippingAddress->getData("company") : '',
             $shippingAddress ? $shippingAddress->getData("street") : '',
             $shippingAddress ? $shippingAddress->getData("city") : '',
             $shippingAddress ? $shippingAddress->getRegion() : '',
