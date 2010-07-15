@@ -75,7 +75,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             last;
         }
     }
-    if (!(($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($titlecol >= 0) && ($authorcol >= 0) && ($currencycol >= 0) && ($imprintcol >= 0))) {
+    if (!(($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($titlecol >= 0) && ($authorcol >= 0))) {
             print STDERR "[Warning] Incomplete information in excel sheet. Cannot parse. Continuing to next sheet.\n";
             last;
     }
@@ -107,7 +107,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if(defined ($value)) {
            $availability = $value->Value;
            $availability =~ s/\n//g;
-           if ($availability gt 2){
+           if ($availability > 2){
 	       $availability = 'Available';
            }
            else{
@@ -144,7 +144,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         }
     }
     my $ratio = ($printedcount/$enteredcount)*100;
-    if (int($ratio) lt 70){
+    if (int($ratio) < 70){
         warn "[WARNING] Values printed less than 70% \n";
     }
 }

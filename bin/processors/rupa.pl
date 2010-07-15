@@ -35,6 +35,12 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         for(my $iC = $oWkS->{MinCol} ; defined $oWkS->{MaxCol} && $iC <= $oWkS->{MaxCol} ; $iC++) {
             $oWkC = $oWkS->{Cells}[$iR][$iC];
             if (defined $oWkC) {
+    	        if ($imprintcol == -1) {
+    		        if ($oWkC->Value =~ /Imprint/) {
+                        $imprintcol = $iC;
+                        next;
+    		        }
+                }
                 if ($isbncol == -1) {
                     if ($oWkC->Value =~ /Isbn/) {
                         $isbncol = $iC;
@@ -44,7 +50,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                 if ($pricecol == -1) {
                     if ($oWkC->Value =~ /Price/) {
                         $currencycol = $iC;
-                         $pricecol = $iC+1;
+                        $pricecol = $iC+1;
                         next;
                     }
                 }
@@ -60,7 +66,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                         next;
     		        }
                 }
-    
     	        if ($authorcol == -1) {
     		        if ($oWkC->Value =~ /Author/) {
                         $authorcol = $iC;
@@ -70,20 +75,18 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             }
         }
 
-        if (($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($titlecol >= 0) && ($authorcol >= 0)) {
+        if (($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($titlecol >= 0) && ($authorcol >= 0)&& ($imprintcol >= 0) ) {
             $startrow = $iR + 1;
             $endrow   = $oWkS->{MaxRow};
             last;
         }
     }
-    if (!(($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($imprintcol >= 0) && ($titlecol >= 0) && ($authorcol >= 0))) {
+    if (!(($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($titlecol >= 0) && ($authorcol >= 0))) {
             print STDERR "[Warning] Incomplete information in excel sheet. Cannot parse. Continuing to next sheet.\n";
             last;
     }
-
     for (my $i = $startrow; $i <= $endrow; $i++) {
 	$enteredcount++;
-        my $imprint = 'Rupa';
         my $value = '';
         eval { $value = $oWkS->{Cells}[$i][$isbncol]; };
         if ($@) {
@@ -95,6 +98,12 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             $isbn = $value->Value;
             chomp($isbn);
             $isbn =~ s/[^0-9]+//g;
+        }
+        $value = $oWkS->{Cells}[$i][$imprintcol];
+        my $imprint;
+        if (defined ($value)) {
+           $imprint = $value->Value;
+           $imprint =~ s/\n//g;
         }
         $value = $oWkS->{Cells}[$i][$pricecol];
         my $price;
@@ -122,7 +131,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if(defined ($value)) {
            $availability = $value->Value;
            $availability =~ s/\n//g;
-           if ($availability gt 2){
+           if ($availability > 2){
 	       $availability = 'Available';
            }
            else{
@@ -159,7 +168,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         }
     }
     my $ratio = ($printedcount/$enteredcount)*100;
-    if (int($ratio) lt 70){
+    if (int($ratio) < 70){
         warn "[WARNING] Values printed less than 70% \n";
     }
 }
