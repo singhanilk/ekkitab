@@ -65,7 +65,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                 if ($availcol == -1) {
                     if ($oWkC->Value =~ /STOCK/) {
                         $availcol = $iC;
-                        print "availcol-->" . $availcol . "\n";
                         next;
                     }
                 }
@@ -108,6 +107,10 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             $endrow   = $oWkS->{MaxRow};
             last;
         }
+        else {
+            print STDERR "Incomplete information in excel file. Cannot parse.\n";
+            exit 1;
+        }
     }
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
@@ -118,7 +121,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            last;
         }
         my $isbn;
-    if (defined ($value)) {
+        if (defined ($value)) {
             $isbn = $value->Value;
             chomp($isbn);
             $isbn =~ s/[^0-9]+//g;
@@ -158,12 +161,11 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if(defined ($value)) {
            $availability = $value->Value;
            $availability =~ s/\n//g;
-           print "availability -->" . $availability . "\n";
            if ($availability gt 2){
            $availability = 'Available';
            }
            else{
-               $availability = 'Not Available';
+               $availability = 'Not Available' . '[' . $availability . ']'  ;
            }        
         }
         $value = $oWkS->{Cells}[$i][$titlecol];

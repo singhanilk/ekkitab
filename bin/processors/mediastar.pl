@@ -34,13 +34,13 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             $oWkC = $oWkS->{Cells}[$iR][$iC];
             if (defined $oWkC) {
                 if ($isbncol == -1) {
-                    if ($oWkC->Value =~ /BAR CODE/) {
+                    if ($oWkC->Value =~ /BAR\sCODE/) {
                         $isbncol = $iC;
                         next;
                     }
                 }
                 if ($pricecol == -1) {
-                    if ($oWkC->Value =~ /RETAIL PRICE/) {
+                    if ($oWkC->Value =~ /RETAIL\sPRICE/) {
                         $pricecol = $iC;
                         next;
                     }
@@ -79,7 +79,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             }
         }
 
-        if (($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($imprintcol >= 0) && ($titlecol >= 0) && ($authorcol >= 0)) {
+        if (($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($imprintcol >= 0) && ($titlecol >= 0) && ($authorcol >= 0) && ($currencycol >= 0)) {
             $startrow = $iR + 1;
             $endrow   = $oWkS->{MaxRow};
             last;
@@ -122,7 +122,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if(defined ($value)) {
            $availability = $value->Value;
            $availability =~ s/\n//g;
-           if ($availability gt 0){
+           if ($availability gt 3){
 	       $availability = 'Available';
            }
            else{

@@ -98,12 +98,12 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            $price =~ s/\[89\]//g;
 	   }
         }
-        $value = $oWkS->{Cells}[$i][$currencycol];
+        $value = $oWkS->{Cells}[$i][$availcol];
         my $availability;
         if(defined ($value)) {
            $availability = $value->Value;
            $availability =~ s/\n//g;
-           if ($availability gt 0){
+           if ($availability gt 3){
 	       $availability = 'Available';
            }
            else{
