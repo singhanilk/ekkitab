@@ -7,6 +7,8 @@ my $oExcel = new Spreadsheet::ParseExcel;
 die "Usage $0 <Excel File> \n Redirect output to required file from stdout" unless @ARGV;
 
 my $actualPrice;
+my $enteredcount = 0;
+my $printedcount = 0;
 my $oBook = $oExcel->Parse($ARGV[0]);
 if (not defined $oBook) {
     print STDERR "Failed to parse input file: $ARGV[0]\n"; 
@@ -44,7 +46,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                         next;
                     }
                 }
-		if ($pricecol1 == -1) {
+		        if ($pricecol1 == -1) {
                     if ($oWkC->Value =~ /RATE\sRs./) {
                         $pricecol1 = $iC;
                         next;
@@ -84,9 +86,14 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             last;
         }
     }
+    if (!(($currencycol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($imprintcol >= 0) && ($titlecol >= 0) && ($authorcol >= 0) && ($pricecol1 >= 0))) {
+            print STDERR "[Warning] Incomplete information in excel sheet. Cannot parse. Continuing to next sheet.\n";
+            last;
+    }
+
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
-
+        $enteredcount++;
         my $value = $oWkS->{Cells}[$i][$isbncol];
         my $isbn;
 
@@ -101,7 +108,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            $price = $value->Value;
            $price =~ s/\n//g;
         }
-	$value = $oWkS->{Cells}[$i][$pricecol1];
+	    $value = $oWkS->{Cells}[$i][$pricecol1];
         my $price1;
         if (defined ($value)) {
            $price1 = $value->Value;
@@ -147,18 +154,20 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 	    elsif (length($isbn) == 10 || length($isbn) == 13){
 		    if (int($price) gt 0){
 			$actualPrice = $price;
-			#print $isbn . "\t" .$actualPrice . "\n";
-			
 		    }
 		    if (int($price1) gt 0){
 			$actualPrice = $price1;
 			$currency = "I";
-			#print $isbn . "\t" .$actualPrice . "\n";
 		    }
+            $printedcount++;
                   print $isbn . "\t" . $actualPrice . "\t" . $currency . "\t"  
     		      . "Available" . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
              }
         }
+    }
+    my $ratio = ($printedcount/$enteredcount)*100;
+    if (int($ratio) < 70){
+        warn "[WARNING] Values printed less than 70% \n";
     }
 }
 exit(0);

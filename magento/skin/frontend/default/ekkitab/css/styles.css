@@ -1002,6 +1002,7 @@ a:hover {
 	color:#CC6600;
 	float:none;
 	font-size:20px;
+	margin-bottom: 8px;
 	width:74%;
 }
 .allCategoriesLists, .allCategoriesListsFirst {
@@ -1057,6 +1058,7 @@ a:hover {
 	color:#CC6600;
 	float:none;
 	font-size:20px;
+	margin-bottom: 8px;
 	width:74%;
 }
 .authorsButArea {
@@ -1777,9 +1779,11 @@ a:hover {
 
 .pageHeader {
 	width: 74%;
+	margin-bottom: 8px;
 	font-size: 20px;
 	color: #c60;
 	float: left;
+	line-height:25px
 }
 
 /* Data Table */
@@ -2098,10 +2102,6 @@ a:hover {
 	text-align: right;
 	margin-top: 30px;
 
-}
-
-.delete {
-	clear: both
 }
 
 .vColumns, .vMidColumn {
