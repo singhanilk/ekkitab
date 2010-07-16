@@ -106,7 +106,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            $isbn =~ s/[^0-9]+//g;
            if(length($isbn) gt 10){
               $enteredcount++;
-              print "ISBN--> $isbn  Count --> $enteredcount\n";
            }
         }
         $value = $oWkS->{Cells}[$i][$pricecol];
@@ -114,7 +113,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if (defined ($value)) {
            $price = $value->unformatted();
            $price =~ s/\n//g;
-           print "Price unformatted --> $price\n";
            my @z = $price =~ m/([A-Z]{2,})/g;
            foreach my $name (@z) {
                 foreach my $currencyname (keys(%currencynames)) {
