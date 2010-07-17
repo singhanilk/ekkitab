@@ -94,7 +94,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 	if (($isbncol >= 0) && ($titlecol >= 0) && ($pricecol >= 0)) {
             $startrow = $iR + 1;
             $endrow   = $oWkS->{MaxRow};
-            print "ISBNCOL-->$isbncol \t TITLECOL-->$titlecol \t IMPRINTCOL-->$imprintcol \n";
             last;
         }
     }
