@@ -91,9 +91,10 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                   }
               }
 	  }
-	if (($isbncol >= 0) && ($titlecol >= 0) && ($imprintcol >= 0)) {
+	if (($isbncol >= 0) && ($titlecol >= 0) && ($pricecol >= 0)) {
             $startrow = $iR + 1;
             $endrow   = $oWkS->{MaxRow};
+            print "ISBNCOL-->$isbncol \t TITLECOL-->$titlecol \t IMPRINTCOL-->$imprintcol \n";
             last;
         }
     }
@@ -106,6 +107,9 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     for (my $i = $startrow; $i <= $endrow; $i++) {
         my $author = 'Not Available';
         my $value = '';
+        my $currency = '';
+        my $availability = '';
+        my $imprint = '';
         eval { $value = $oWkS->{Cells}[$i][$isbncol]; };
         if ($@) {
            print STDERR "Unexpected read value. Line $i\n";
@@ -120,41 +124,49 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                 $enteredcount++;
             }
         }
-	    $value = $oWkS->{Cells}[$i][$currencycol];
-        my $currency;
-        if (defined ($value)) {
-           $currency = $value->Value;
-           $currency =~ s/\n//g;
-           if ($currency =~ /RS/) {
-               $currency ='I';
-         }
-           elsif ($currency =~ /UKP/) {
-                  $currency = 'P';
-         }
-           elsif ($currency =~ /USD/) {
-                  $currency = 'U';
-         }
-           elsif ($currency =~ /EUR/) {
-                  $currency = 'E';
-         }
-	        elsif ($currency =~ /DM/) {
-                  $currency = 'E';
-         }
-	        else {
-                 print $currency . "\n";
-         }
+        if ($currencycol == -1){
+            $currency = 'I'; 
         }
-	    $value = $oWkS->{Cells}[$i][$availcol];
-        my $availability;
-        if(defined ($value)) {
-           $availability = $value->Value;
-           $availability =~ s/\n//g;
-           if ($availability >  2){
-	       $availability = 'Available';
-           }
-           else{
-               $availability = 'Not Available' . '[' . $availability . ']';
-           }        
+        else{
+	        $value = $oWkS->{Cells}[$i][$currencycol];
+            if (defined ($value)) {
+                $currency = $value->Value;
+                $currency =~ s/\n//g;
+                if ($currency =~ /RS/) {
+                    $currency ='I';
+                }
+                elsif ($currency =~ /UKP/) {
+                       $currency = 'P';
+                }
+                elsif ($currency =~ /USD/) {
+                       $currency = 'U';
+                }
+                elsif ($currency =~ /EUR/) {
+                       $currency = 'E';
+                }
+	            elsif ($currency =~ /DM/) {
+                       $currency = 'E';
+                }
+	            else {
+                      print $currency . "\n";
+                }
+            }
+        }
+        if ($availcol == -1){
+            $availability = 'Available'; 
+        }
+        else{
+	        $value = $oWkS->{Cells}[$i][$availcol];
+            if(defined ($value)) {
+                $availability = $value->Value;
+                $availability =~ s/\n//g;
+                if ($availability >  2){
+	                $availability = 'Available';
+                }
+                else{
+                    $availability = 'Not Available' . '[' . $availability . ']';
+                }        
+            }
         }
         $value = $oWkS->{Cells}[$i][$pricecol];
         my $price;
@@ -168,11 +180,15 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            $title = $value->Value;
            $title =~ s/\n//g;
         }
-        $value = $oWkS->{Cells}[$i][$imprintcol];
-        my $imprint;
-        if (defined ($value)) {
-           $imprint = $value->Value;
-           $imprint =~ s/\n//g;
+        if ($imprintcol == -1){
+            $imprint = 'Not Available'; 
+        }
+        else{
+            $value = $oWkS->{Cells}[$i][$imprintcol];
+            if (defined ($value)) {
+                $imprint = $value->Value;
+                $imprint =~ s/\n//g;
+            }
         }
         if (defined ($isbn)  && 
             defined ($price) && 
@@ -184,11 +200,11 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             if ($isbn eq '' || $price eq ''){
 	         next;
             }
-             elsif (length($isbn) == 10 || length($isbn) == 13){
-                    $printedcount++;
-		            print $isbn . "\t" . $price . "\t" . $currency . "\t"  
-    		      . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
-             }
+            elsif (length($isbn) == 10 || length($isbn) == 13){
+                   $printedcount++;
+		           print $isbn . "\t" . $price . "\t" . $currency . "\t"  
+    		     . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
+            }
         }
     }
 }
@@ -196,6 +212,5 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     if (int($ratio) < 70){
         warn "[WARNING] Values printed less than 70% \n";
     }
-    print "Entered --> $enteredcount\n Printed Count --> $printedcount\n";
 
 exit(0);
