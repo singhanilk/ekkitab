@@ -39,8 +39,20 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                         next;
                     }
                 }
+                if ($isbncol == -1) {
+                    if ($oWkC->Value =~ /ISBN/) {
+                        $isbncol = $iC;
+                        next;
+                    }
+                }
                 if ($pricecol == -1) {
                     if ($oWkC->Value =~ /PRICE/) {
+                         $pricecol = $iC;
+                        next;
+                    }
+                }
+                if ($pricecol == -1) {
+                    if ($oWkC->Value =~ /Price/) {
                          $pricecol = $iC;
                         next;
                     }
@@ -51,15 +63,32 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                         next;
     		        }
                 }
-    
+    	        if ($titlecol == -1) {
+    		        if ($oWkC->Value =~ /Title/) {
+                        $titlecol = $iC;
+                        next;
+    		        }
+                }
     	        if ($authorcol == -1) {
     		        if ($oWkC->Value =~ /AUTHOR/) {
                         $authorcol = $iC;
                         next;
     		        }
                 }
+    	        if ($authorcol == -1) {
+    		        if ($oWkC->Value =~ /Author/) {
+                        $authorcol = $iC;
+                        next;
+    		        }
+                }
     	        if ($imprintcol == -1) {
     		        if ($oWkC->Value =~ /BRAND/) {
+                        $imprintcol = $iC;
+                        next;
+    		        }
+                }
+    	        if ($imprintcol == -1) {
+    		        if ($oWkC->Value =~ /Publisher/) {
                         $imprintcol = $iC;
                         next;
     		        }
@@ -152,10 +181,10 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
              }
         }
     }
+}
     my $ratio = ($printedcount/$enteredcount)*100;
     if (int($ratio) < 70){
         warn "[WARNING] Values printed less than 70% \n";
     }
-}
 
 exit(0);

@@ -42,8 +42,13 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                 }
                 if ($pricecol == -1) {
                     if ($oWkC->Value =~ /PRICE/) {
-                        $currencycol = $iC+1;
                          $pricecol = $iC;
+                        next;
+                    }
+                }
+                if ($currencycol == -1) {
+                    if ($oWkC->Value =~ /CURR/) {
+                        $currencycol = $iC;
                         next;
                     }
                 }

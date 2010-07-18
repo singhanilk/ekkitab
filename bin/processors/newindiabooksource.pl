@@ -87,7 +87,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     }
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
-        $enteredcount++;
         my $currency;
         my $value = $oWkS->{Cells}[$i][$isbncol];
         my $isbn;
@@ -96,6 +95,9 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            $isbn = $value->Value;
            chomp($isbn);
            $isbn =~ s/[^0-9]+//g;
+            if (length($isbn) > 10 ){
+                $enteredcount++;
+            }
         }
         $value = $oWkS->{Cells}[$i][$pricecol];
         my $price;
@@ -103,16 +105,16 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            $price = $value->Value;
            $price =~ s/\n//g;
            if($price =~ /[0-9]/){
-	   $currency = 'I';	
-	   }
-	   if($price =~ /\$/){
-	   $currency = 'U';
-           $price =~ s/\$//g;
-	   }
-	   if($price =~ /\xa3/){
-	   $currency = 'P';
-           $price =~ s/\xa3//g;
-	   }
+	        $currency = 'I';	
+	       }
+	       if($price =~ /\$/){
+	        $currency = 'U';
+            $price =~ s/\$//g;
+	       }    
+	       if($price =~ /\xa3/){
+	         $currency = 'P';
+             $price =~ s/\xa3//g;
+	       }
         }
         $value = $oWkS->{Cells}[$i][$availcol];
         my $availability;
@@ -161,10 +163,10 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
              }
         }
     }
+}
     my $ratio = ($printedcount/$enteredcount)*100;
     if (int($ratio) < 70){
         warn "[WARNING] Values printed less than 70% \n";
     }
-}
 
 exit(0);

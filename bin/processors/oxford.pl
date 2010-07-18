@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 use Spreadsheet::ParseExcel;
+use Spreadsheet::ParseExcel::FmtDefault;
 
 my $oExcel = new Spreadsheet::ParseExcel;
 
@@ -42,7 +43,20 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                     }
                 }
                 if ($pricecol == -1) {
-                    if ($oWkC->Value =~ /INR Price/) {
+                    if ($oWkC->Value =~ /INR\sPrice/) {
+                        $pricecol = $iC;
+                       # print "INR PRICE -- $pricecol [" . $oWkS->get_name() . "]\n";
+                        next;
+                    }
+                }
+                if ($pricecol == -1) {
+                    if ($oWkC->Value =~ /INR/) {
+                        $pricecol = $iC;
+                        next;
+                    }
+                }
+                if ($pricecol == -1) {
+                    if ($oWkC->Value =~ /Price/) {
                         $pricecol = $iC;
                         next;
                     }
@@ -72,26 +86,60 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             print STDERR "[Warning] Incomplete information in excel sheet. Cannot parse. Continuing to next sheet.\n";
             last;
     }
+   my $fmt = new  Spreadsheet::ParseExcel::FmtDefault;
+   my %currencynames = ("IN" => "I", 
+                        "INR" => "I", 
+                        "GB" => "P", 
+                        "GBP" => "P", 
+                        "US" => "U", 
+                        "USD" => "U");
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
-        $enteredcount++;
-        my $currency = 'I';
+        my $currency = "";
         my $availability = 'Available';
         my $imprint = 'Oxford';
-        $enteredcount++;
         my $value = $oWkS->{Cells}[$i][$isbncol];
         my $isbn;
         if (defined ($value)) {
            $isbn = $value->Value;
            chomp($isbn);
            $isbn =~ s/[^0-9]+//g;
+           if(length($isbn) gt 10){
+              $enteredcount++;
+           }
         }
         $value = $oWkS->{Cells}[$i][$pricecol];
         my $price;
         if (defined ($value)) {
-           $price = $value->Value;
+           $price = $value->unformatted();
            $price =~ s/\n//g;
-           $price =~ s/\sINR\s//g;#buggy code
+           my @z = $price =~ m/([A-Z]{2,})/g;
+           foreach my $name (@z) {
+                foreach my $currencyname (keys(%currencynames)) {
+                    if ($currencyname eq $name) {
+                        $currency = $currencynames{$currencyname};
+                        last;
+                    }
+                }
+                if ($currency ne "") {
+                    last;
+                }
+           }
+           $price =~ s/[^0-9\.]//g;
+           if ($currency eq "") {
+                my $fmtstring = $fmt->FmtString($value, $oBook);
+                $fmtstring =~ s/[^A-Z]//g;
+                SWITCH: {
+                        $fmtstring eq "INR" && do { $currency = "I"; last SWITCH; };
+                        $fmtstring eq "USD" && do { $currency = "U"; last SWITCH; };
+                        $fmtstring eq "GBP" && do { $currency = "P"; last SWITCH; };
+                        $fmtstring eq "" && do { last SWITCH; };
+                        $currency = "UNKNOWN";
+                }
+           }
+           if ($currency eq "") {
+                $currency = "I";
+           }
         }
         $value = $oWkS->{Cells}[$i][$titlecol];
         my $title;
@@ -117,15 +165,15 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             }
              elsif (length($isbn) == 10 || length($isbn) == 13){
                   $printedcount++;
-                  print $isbn . "\t" . $price . "\t" . $currency . "\t"  
+                  print $isbn  .  "\t" . $price . "\t" . $currency . "\t"  
     		      . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
              }
         }
     }
+}
     my $ratio = ($printedcount/$enteredcount)*100;
     if (int($ratio) < 70){
         warn "[WARNING] Values printed less than 70% \n";
     }
-}
 
 exit(0);

@@ -70,6 +70,12 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                         next;
                     }
                 }
+                if ($availcol == -1) {
+                    if ($oWkC->Value =~ /BLR/) {
+                        $availcol = $iC;
+                        next;
+                    }
+                }
                 if ($titlecol == -1) {
                     if ($oWkC->Value =~ /name/) {
                         $titlecol = $iC;
@@ -116,7 +122,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     }
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
-        $enteredcount++;
         my $value = '';
         eval { $value = $oWkS->{Cells}[$i][$isbncol]; };
         if ($@) {
@@ -128,6 +133,9 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             $isbn = $value->Value;
             chomp($isbn);
             $isbn =~ s/[^0-9]+//g;
+            if(length($isbn) ge 10){
+                $enteredcount++;
+            }
         }
         $value = $oWkS->{Cells}[$i][$pricecol];
         my $price;
@@ -164,6 +172,9 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if(defined ($value)) {
            $availability = $value->Value;
            $availability =~ s/\n//g;
+           if($availability eq ""){
+                next;
+           }
            if ($availability > 2){
            $availability = 'Available';
            }
@@ -206,12 +217,12 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
              }
         }
     }
+}
     my $ratio = ($printedcount/$enteredcount)*100;
     if (int($ratio) < 70)
     {
         warn "[WARNING] Values printed less than 70% \n";
     }
-}
 
 exit(0);
 
