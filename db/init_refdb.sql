@@ -32,7 +32,7 @@ insert into ek_discount_setting (`info_source`, `discount_percent`) values ('Ing
 --
 
 insert into ek_supplier_params (`info_source`, `publisher`, `supplier_discount`, `delivery_period`) values 
-                               ('Penguin', 'Any', 33, 3),
+                               ('Penguin', 'Any', 33, 5),
                                ('Jaico', 'Any', 33, 3),
                                ('Amit', 'Any', 30, 3),
                                ('Dolphin', 'Any', 35, 3),
