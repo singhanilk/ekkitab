@@ -3,10 +3,10 @@ use Net::POP3;
 use MIME::Parser;
 
 my $validsuppliers = "-westland-indiabooks-rupa-amit-bookworldenterprises-dolphin-";
-my $validsuppliers .= "-eurokids-hachette-harpercollins-harvard-harvardbusiness-jaico-";
-my $validsuppliers .= "-mediastar-newindiabooksource-orientblackswan-oxford-paragonbooks-pearsoneducation-";
-my $validsuppliers .= "-penguin-philearning-popularprakasham-prakash-prism-pustak-randomhouse-researchpress-sage-schand-";
-my $validsuppliers .= "-scholasticindia-tarladalalbooks-tbh-vinayaka-wiley-";
+$validsuppliers .= "-eurokids-hachette-harpercollins-harvard-harvardbusiness-jaico-";
+$validsuppliers .= "-mediastar-newindiabooksource-orientblackswan-oxford-paragonbooks-pearsoneducation-";
+$validsuppliers .= "-penguin-philearning-popularprakasham-prakash-prism-pustak-randomhouse-researchpress-sage-schand-";
+$validsuppliers .= "-scholasticindia-tarladalalbooks-tbh-vinayaka-wiley-";
 my $validextns = "zip xls";
 
 my $tmpdir = "/mnt4/publisherdata/stock/autoprocess";
@@ -21,6 +21,7 @@ if ($pop->login('autostockprocess@ekkitab.com', 'eki22Ab') > 0) {
         my $header = join "", @$headerarray;
         my ($supplier) = $header =~ /Subject: (.*)/m;
         $supplier =~ s/[\[\]]//g;
+        $supplier =~ s/\s//g;
         if (!($validsuppliers =~ /-$supplier-/i)) {
             print "[Warning] Unrecognized supplier: '$supplier'. Ignoring.\n";
             next; 
@@ -40,7 +41,7 @@ if ($pop->login('autostockprocess@ekkitab.com', 'eki22Ab') > 0) {
             my $extn = $1; 
             next unless $extn;
             # we only continue if our extension is correct.
-            unless ($validextns =~ /$extn/) {
+            unless ($validextns =~ /$extn/i) {
                # print "[Info] Removing unexpected filetype ($extn): $path\n";
                unlink $path or print "[Error] Cannot remove file at $path: $!.";
                next; 
@@ -50,7 +51,7 @@ if ($pop->login('autostockprocess@ekkitab.com', 'eki22Ab') > 0) {
             $targetfile =~ s/\s/\\ /g;
             $command = "cp $targetfile $destdir";
             if ($extn eq "zip") {
-                $command = "unzip -f -o -d  $destdir $targetfile >/dev/null 2>&1";
+                $command = "unzip -u -o -d  $destdir $targetfile >/dev/null 2>&1";
             }
             eval { system($command); }; 
             if ($@) {
