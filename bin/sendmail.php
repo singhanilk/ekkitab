@@ -17,7 +17,7 @@ define (MAXLINES_IN_BODY, 100);
     }
 
     $subject = DEFAULT_SUBJECT;
-    $to = DEFAULT_ADDRESSEE;
+    $to = "";
 
     for ($i=1; $i<$argc; $i++) {
 
@@ -25,7 +25,7 @@ define (MAXLINES_IN_BODY, 100);
             case "-s":
                    if ($i+1 >= $argc) {
                       echo "Fatal: Subject specified but no value supplied.\n";
-                      echo "Usage: " . $argv[0] . " [ -s <subject> ] [ email address [, email address]... ]\n" ;
+                      echo "Usage: " . $argv[0] . " [ -s <subject> ] [ email address [email address]... ]\n" ;
                       exit(1);
                    }
                    else {
@@ -35,9 +35,16 @@ define (MAXLINES_IN_BODY, 100);
                    break;
 
             default:   
-                   $to = $argv[$i];
+                   $to .= $argv[$i] . ",";
                    break;
        }
+   }
+
+   if ($to == "") {
+        $to = DEFAULT_ADDRESSEE;
+   }
+   else {
+        $to = preg_replace("/,$/", "", $to);
    }
 
    $fh = fopen ("php://stdin","r") or die ("Failed: Could not read from standard input.\n");
