@@ -12,8 +12,8 @@ sub trim {
 sub sendmail {
    my ($replace, $template, $subject) = @_;
    my $to = trim($$replace[0]);
-   my $to_email = trim($$replace[1]);
-   my $password = trim($$replace[2]);
+   my $to_email = trim($$replace[2]);
+   my $password = trim($$replace[6]);
    my $from_email = trim($$replace[3]);
    my $from = trim($$replace[4]);
    my $from_name = trim($$replace[5]);
@@ -24,9 +24,11 @@ sub sendmail {
    $params{'Password'} = $password;
    $params{'Sender'} = $from;
    my %options;
-   $options{'INCLUDE_PATH'} = "/home/vijay/tmp";
+   $options{'INCLUDE_PATH'} = "./data";
        
    my $msg = MIME::Lite::TT::HTML->new(
+                'Encoding'    => "quoted-printable",
+                'Charset'     => "utf8",
                 'From'        => "\"$from_name\" <$from_email>",
                 'To'          => $to_email, 
                 'Subject'     => $subject,
@@ -47,7 +49,7 @@ sub sendmail {
    #                  Disposition => 'attachment'); 
    #}
 
-   $msg->send('smtp', 'mailhub.ltp.soft.net', AuthUser=>'vijay', AuthPass=>'');
+   $msg->send('smtp', 'smtpout.secureserver.net', AuthUser=>'support@ekkitab.com', AuthPass=>'eki22Ab');
 }
 
 if (scalar(@ARGV) < 3) {
