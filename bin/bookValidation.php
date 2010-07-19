@@ -43,7 +43,7 @@ function checkValidity($db, $fh){
                         return (1);
                     }
                     $ratio = (($row[2]+0)/($row[1]+0))*100;
-                    if($ratio > 95){
+                    if($ratio > 60){
                        print "[Warning] We are loosing too Much Money!! Discount Greater than 35% $row[2]\n";
                        return (1); 
                     }
