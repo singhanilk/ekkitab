@@ -28,7 +28,7 @@ function getConfig($file) {
 
 function checkValidity($db, $fh){
     while ($data = fgets($fh)){
-        $details[] = explode("\t", $data);
+        $details = explode("\t", $data);
         $isbn = $details[0];
         $listprice = $details[1];
         $discountprice = $details[2];
@@ -37,6 +37,7 @@ function checkValidity($db, $fh){
 	        $result = mysqli_query($db, $query);
 		    if ($result && (mysqli_num_rows($result) > 0)) {
                 while( $row=mysqli_fetch_row($result)){
+                    print "$row[0]\t$row[1]\t$row[2]\n";
                     if(strcmp(trim($listprice), trim($row[1])) != 0){
                         print "[Warning] Listprice in file->$listprice is different from that of Database->$row[1]\n"; 
                         return (1);
@@ -63,7 +64,7 @@ function checkBookCount($db, $fh){
        $result = mysqli_query($db, $query);
 	   if ($result && (mysqli_num_rows($result) > 0)) {
            while( $row=mysqli_fetch_row($result)){
-             if (($row[0]+0) < 3000000){
+             if (($row[0]+0) < 1000){
                 print "[Warning] Number of books less than estimated amount\n";
                 return (1);
             }
