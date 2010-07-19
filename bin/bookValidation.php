@@ -67,6 +67,7 @@ function checkBookCount($db, $fh){
                 print "[Warning] Number of books less than estimated amount\n";
                 return (1);
             }
+            print "Number of books --> $row[0]\n";
           } 
        }
     }
