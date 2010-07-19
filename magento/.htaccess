@@ -137,6 +137,7 @@
 ## always send 404 on missing files in these folders
 
     RewriteCond %{REQUEST_URI} !^/(media|skin|js)/
+    RewriteCond %{REQUEST_URI} !^/bugzilla/
 
 ############################################
 ## never rewrite for existing files, directories and links
