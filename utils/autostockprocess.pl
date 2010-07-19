@@ -53,6 +53,7 @@ if ($pop->login('autostockprocess@ekkitab.com', 'eki22Ab') > 0) {
             if ($extn eq "zip") {
                 $command = "unzip -u -o -d  $destdir $targetfile >/dev/null 2>&1";
             }
+            print "[Info] Executing command: $command\n";
             eval { system($command); }; 
             if ($@) {
                print "[Error] $@\n";
