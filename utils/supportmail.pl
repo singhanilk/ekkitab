@@ -17,7 +17,7 @@ sub sendmail {
    $params{'Sender'} = "Ekkitab Customer Support"; 
    $params{'Content'} = $body; 
    my %options;
-   $options{'INCLUDE_PATH'} = "/var/www/scm/tmp";
+   $options{'INCLUDE_PATH'} = "./data";
        
    my $msg = MIME::Lite::TT::HTML->new(
                 'Encoding'    => "quoted-printable",
@@ -56,7 +56,7 @@ my $name      = $ARGV[0];
 my $fullname  = $ARGV[1];
 my $email     = $ARGV[2];
 my $subject   = $ARGV[3];
-my $template  = "../tmp/support.html";
+my $template  = "./data/support.html";
 my @attachments = ();
 for (my $i = 3; $i<=$#ARGV; $i++) {
     $attachments[$i-3] = $ARGV[$i];
