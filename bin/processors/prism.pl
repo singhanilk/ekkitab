@@ -144,10 +144,10 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                        $currency = 'E';
                 }
 	            elsif ($currency =~ /DM/) {
-                       $currency = 'E';
+                       $currency = undef;
                 }
 	            else {
-                      print $currency . "\n";
+                      $currency = undef;
                 }
             }
         }

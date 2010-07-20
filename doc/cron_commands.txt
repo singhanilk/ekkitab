@@ -1,0 +1,3 @@
+00 21   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./dailysync.sh
+00 *   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./stockstatusimport.sh
+

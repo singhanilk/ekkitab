@@ -150,22 +150,25 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            $currency =~ s/\n//g;
            if ($currency =~ /INR/) {
                $currency ='I';
-         }
+           }
            elsif ($currency =~ /GBP/) {
                   $currency = 'P';
-         }
+           }
            elsif ($currency =~ /USD/) {
                   $currency = 'U';
-         }
+           }
            elsif ($currency =~ /SD/) {
                   $currency = 'U';
-         }
+           }
            elsif ($currency =~ /EUR/) {
                   $currency = 'E';
-         }
+           }
            elsif ($currency =~ /SGD/) {
                   $currency = 'S';
-         }
+           }
+           else {
+                  $currency = undef;
+           }
         }
         $value = $oWkS->{Cells}[$i][$availcol];
         my $availability;
@@ -218,11 +221,9 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         }
     }
 }
-    my $ratio = ($printedcount/$enteredcount)*100;
-    if (int($ratio) < 70)
-    {
-        warn "[WARNING] Values printed less than 70% \n";
-    }
-
+my $ratio = ($printedcount/$enteredcount)*100;
+if (int($ratio) < 70) {
+  warn "[WARNING] Values printed less than 70% \n";
+}
 exit(0);
 
