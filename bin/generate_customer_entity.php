@@ -70,12 +70,12 @@ function warn($message, $query = "") {
 
 function writeCustomerInsertStatements($fh,$custLine,$entityId,$incrementId) {
 
-	$name = explode(" ",$custLine[0]);
+	$name = explode(" ",$custLine[1]);
 
 	$firstName = trim(ucwords($name[0]));
 	$lastName = trim(ucwords($name[1]));
-	$email = trim($custLine[1]);
-	$password = getHash(trim($custLine[2]));
+	$email = trim($custLine[2]);
+	$password = getHash(trim($custLine[6]));
 	
 	$query1 = "INSERT INTO `customer_entity` (`entity_id`, `entity_type_id`, `attribute_set_id`, `website_id`, `email`, `group_id`, `increment_id`, `store_id`, `created_at`, `updated_at`, `is_active`) VALUE (".$entityId.",1, 0, 1, '".$email."', 1, '".$incrementId."', 1, '2010-07-07 06:42:03', '2010-07-07 09:56:03', 1);\n";
 	$query2 = "INSERT INTO `customer_entity_varchar` (`entity_type_id`, `attribute_id`, `entity_id`, `value`) VALUES (1,5,".$entityId.",'".$firstName."'),(1,7,".$entityId.",'".$lastName."'),(1,3,".$entityId.",'Ekkitab'),(1,12,".$entityId.",'".$password."');\n";
@@ -242,11 +242,13 @@ if($fh){
 	}
 	fprintf($fsql, "use `ekkitab_books`;\n");
 	while ($contents = fgets($fh)){
-		$customer = explode(",", $contents);
-		if (is_array($customer)) {
-			if(writeCustomerInsertStatements($fsql,$customer,$entityId,format($incrementId))){
-				$incrementId++;
-				$entityId++;
+		if(substr(trim($contents), 0, 1)!='#'){
+			$customer = explode(",", $contents);
+			if (is_array($customer)) {
+				if(writeCustomerInsertStatements($fsql,$customer,$entityId,format($incrementId))){
+					$incrementId++;
+					$entityId++;
+				}
 			}
 		}
 	}

@@ -1,0 +1,110 @@
+#Latha,Latha Iyer,latha@reactmedia.com,anisha@ekkitab.com,Anisha,Anisha,latha992
+#Guns,Ganeshan Srinivasan,guns.srinivasan@gmail.com,anisha@ekkitab.com,Anisha,Anisha,guns.srinivasan405
+#Anshu,Anshu Chaturvedi,anshuchaturvedi05@yahoo.co.in,anisha@ekkitab.com,Anisha,Anisha,anshuchaturvedi05507
+#Ganesh,Ganesh Padmanabhan,ganesh.padmanabhan@convergys.com,anisha@ekkitab.com,Anisha,Anisha,ganesh.padmanabhan409
+#Vijay,Vijay Kumar,vijay@reactmedia.com,anisha@ekkitab.com,Anisha,Anisha,vijay409
+#Satya,Satya Moorthy,satyamoorthy@gmail.com,anisha@ekkitab.com,Anisha,Anisha,satyamoorthy63
+#Ranju,Ranjani Chandrashekar,ranjanisekar@gmail.com,anisha@ekkitab.com,Anisha,Anisha,ranjanisekar335
+#Aunty,Alamelu Narayan,alamelu_narayan@yahoo.co.in,anisha@ekkitab.com,Anisha,Anisha,alamelu_narayan339
+#Sowms,Sowmya Hariharan,sowmyah@gmail.com,anisha@ekkitab.com,Anisha,Anisha,sowmyah499
+#Pravir,Pravir K Roy,pravirkroy@bogidhola.com,me_anisha@yahoo.com,Anisha,Anisha,pravirkroy71
+#Shikha,Shikha Mittal, ar.shikhamittal@gmail.com, christopher@ekkitab.com, Nemo, Nimil Christopher, ar.shikhamittal422
+#Ashik,Ashik Aziz, va.ashik@gmail.com, christopher@ekkitab.com, Nimil, Nimil Christopher, va.ashik7
+#Ashish,Ashish Kirori, ashishkirori@gmail.com, christopher@ekkitab.com, Christopher, Nimil Christopher, ashishkirori525
+#Sir,Pravin Kumar, rpravinmaxus@yahoo.com, christopher@ekkitab.com, Chris, Nimil Christopher, rpravinmaxus265
+#Anne,Job Anandam, jobanandam@yahoo.com, christopher@ekkitab.com, Nimil, Nimil Christopher, jobanandam715
+#Bobby,Bobby Cherian, cherian.bob@gmail.com, christopher@ekkitab.com, Chris, Nimil Christopher, cherian.bob709
+#Glax,Glackson Bobby, glackson@gmail.com, christopher@ekkitab.com, Chris, Nimil Christopher, glackson905
+#Daddy,Cyril Christopher, cyril.christopher@gmail.com, christopher@ekkitab.com, Monu, Nimil Christopher, cyril.christopher481
+#Thala,Shankar Palaniappan, c.ji.mail@gmail.com, christopher@ekkitab.com, Chris, Nimil Christopher, c.ji.mail810
+#Mamta,Mamta Christopher, mamta.christopher@gmail.com, christopher@ekkitab.com, Monu, Nimil Christopher, mamta.christopher670
+#MJ,Manoj Mathew, mjm.max@googlemail.com, christopher@ekkitab.com, Chris, Nimil Christopher, mjm.max580
+#Shishyan,Dheeraj Shyamprasad, dheeru666@gmail.com, christopher@ekkitab.com, Guru, Nimil Christopher, dheeru666162
+#Jithin,Jithin Ramadas, jithincr@gmail.com, christopher@ekkitab.com, Nimil, Nimil Christopher, jithincr654
+#Periya Kutty Thala,Sandeep Kishore, wallopse@gmail.com, christopher@ekkitab.com, Chris, Nimil Christopher, wallopse679
+#Nilu,Nilesh Singh, mr.nileshkumarsingh@gmail.com, christopher@ekkitab.com, Chris, Nimil Christopher, mr.nileshkumarsingh559
+#Vijish,Vijish Vasu, vijishtvasu@gmail.com, christopher@ekkitab.com, Nimil, Nimil Christopher, vijishtvasu677
+#Malaka,Gunjeet Hattar, rahul.hh@gmail.com, christopher@ekkitab.com, Chris, Nimil Christopher, rahul.hh551
+#Akka,Priscilla Samuel, primeshack@gmail.com, christopher@ekkitab.com, Chlis, Nimil Christopher, primeshack167
+#Tama,Tessa Moses, tessa.moses@gmail.com, christopher@ekkitab.com, Chris, Nimil Christopher, tessa.moses152
+#Zach,Raul Zachariah, zachlord@gmail.com, christopher@ekkitab.com, Christy, Nimil Christopher, zachlord603
+#Maya,Maddali Dharanidhar, mdharanidhar@gmail.com, christopher@ekkitab.com, Chris, Nimil Christopher, mdharanidhar153
+#Abhi,Abhilasha Shaw, insatibledesire83@gmail.com, christopher@ekkitab.com, Chris, Nimil Christopher, insatibledesire83876
+#Ritu,Ritu Kruthika, kruthika.ritu@gmail.com, christopher@ekkitab.com, Chris, Nimil Christopher, kruthika.ritu365
+#Martini,Martina Anandam, tiaralael@gmail.com, christopher@ekkitab.com, Nimil, Nimil Christopher, tiaralael674
+#Vishal,Vishal Vijayan, vishalkvijayan@gmail.com, christopher@ekkitab.com, Nimil, Nimil Christopher, vishalkvijayan257
+#Ayyappa,Vaishnav Ramesh, vaish1703@gmail.com, christopher@ekkitab.com, Christy, Nimil Christopher, vaish170379
+#Mama,Jesman Xavier, jesman.chechu@gmail.com, christopher@ekkitab.com, Nimil, Nimil Christopher, jesman.chechu558
+#Kund's,Ajay Menon, kajaym2005@gmail.com, christopher@ekkitab.com, Christy, Nimil Christopher, kajaym2005975
+#Kaush,Kaushik Ravindran, kaurav@gmail.com, christopher@ekkitab.com, Christy, Nimil Christopher, kaurav267
+#Amma, Neena Christopher, neena.christopher@gmail.com, christopher@ekkitab.com, Monu, Nimil Christopher, neena.christopher391
+#Adarsh, Adarsh Arora, aarora@athenasecurity.net, vijay@ekkitab.com, Vijay, Vijaya Raghavan, aarora210
+#Raghu, M. Raghuram, mraghura@ltp.soft.net, vijay@ekkitab.com, Vijay, Vijaya Raghavan, mraghura976
+#Madhavi, M. Madhavi, madhavi_m@ltp.soft.net, vijay@ekkitab.com, Vijay, Vijaya Raghavan, madhavi_m917
+#Krishnan, P.R. Krishnan, prk@athenasecurity.net, vijay@ekkitab.com, Vijay, Vijaya Raghavan, prk156
+#Dilli, Dilli Babu, ndbabu@ltp.soft.net, vijay@ekkitab.com, Vijay, Vijaya Raghavan, ndbabu798
+#Ananth, Anantha Krishnan, ananth@athenasecurity.net, vijay@ekkitab.com, Vijay, Vijaya Raghavan, ananth804
+#Naveen, J. Naveen, jnaveen@ltp.soft.net, vijay@ekkitab.com, Vijay, Vijaya Raghavan, jnaveen813
+#Sylvester, Sylvester Thomas, sylvester@ltp.soft.net, vijay@ekkitab.com, Vijay, Vijaya Raghavan, sylvester772
+#Venki, Venkatakrishna Tirumala, venki@tumri.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, venki196
+#Lakshmi, Lakshmi Athreya, lakshmi@tumri.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, lakshmi62
+#Dinesh, Dinesh Murthy, dinesh@tumri.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, dinesh976
+#Janesh, Janesh, janesh@tumri.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, janesh781
+#Mohan, Mohan Gopalakrishna, mohan.gopalakrishna@gmail.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, mohan.gopalakrishna210
+#Sreenivas, Sreenivas Gunturi, sreenivas.gunturi@tcs.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, sreenivas.gunturi426
+#Susan, Susan Alexander, susana@write-concept.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, susana371
+#Ramakant, Ramakant Jawalkar, ramakant.jawalkar@yukthi.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, ramakant.jawalkar743
+#Hari, Hari Menon, hmenon@tumri.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, hmenon760
+#Sandeep, Sandeep Nawathe, snawathe@tumri.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, snawathe51
+#Ramki, Ramakrishnan, ramki@tumri.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, ramki321
+#Srini, V. Srinivasan, socro19@gmail.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, socro19149
+#Ramkumar, Ramkumar Giri, ramkumargiri@rediffmail.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, ramkumargiri860
+#Shuba, Shuba Raghavan, shuba.raghavan@gmail.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, shuba.raghavan105
+#Vivek, Vivekanandan, scanvivek@hotmail.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, scanvivek961
+#Shashi, P. Shashikant, pshashi@yahoo.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, pshashi757
+#Sabu, Sabu Pappachan, sabu@straightforward.in, vijay@ekkitab.com, Vijay, Vijaya Raghavan, sabu765
+#Unnietta, Velayudhan Menon, velamenon@gmail.com, vijay@ekkitab.com, Vijayan, Vijaya Raghavan, velamenon161
+#Ammu, Anjali Ramdas, anjam88@emirates.net.ae, vijay@ekkitab.com, Vijay, Vijaya Raghavan, anjam88218
+#Achu, Ashwin Menon, czar3.menon@gmail.com, vijay@ekkitab.com, Papa, Vijaya Raghavan, czar3.menon327
+#Prasad, Krishna Prasad, varottil@yahoo.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, varottil681
+#Gautama, Gautama P., datapacket@yahoo.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, datapacket546
+#Sudhish, Sudhish U., sudhish@athenasecurity.net, vijay@ekkitab.com, Vijay, Vijaya Raghavan, sudhish806
+#Ajey, Ajey K, ajey@athenasecurity.net, vijay@ekkitab.com, Vijay, Vijaya Raghavan, ajey751
+#Anil,Anil Singh,singhanilk@gmail.com,anil@ekkitab.com,anil,Anil Singh,singhanilk417
+#Anita,Anita Singh,anitas3791@gmail.com,anil@ekkitab.com,anil,Anil Singh,anitas379153
+#Aditya,Aditya Singh,adityas76@gmail.com,anil@ekkitab.com,anil,Anil Singh,adityas76668
+#Aloke,Aloke Ghosh,alo165@yahoo.com,anil@ekkitab.com,anil,Anil Singh,alo165301
+#Sudip,Sudip Nandy,ssuuddiipp@gmail.com,anil@ekkitab.com,anil,Anil Singh,ssuuddiipp847
+#Rajeev,Rajeev Warrier,warrier.rajeev@yahoo.com,anil@ekkitab.com,anil,Anil Singh,warrier.rajeev127
+#Ramesh,Ramesh Kumar,rkumarblr@gmail.com,anil@ekkitab.com,anil,Anil Singh,rkumarblr789
+#Kashi,Kashinath Joshi,kmjoshi2000@yahoo.com,anil@ekkitab.com,anil,Anil Singh,kmjoshi2000489
+#Nitin,Nitin Panchmal,nitin_panchmal@hotmail.com,anil@ekkitab.com,anil,Anil Singh,nitin_panchmal535
+#Vidya,Vidya Panchmal,vidyapanchmal@yahoo.com,anil@ekkitab.com,anil,Anil Singh,vidyapanchmal161
+#Satish,Satish Menon,satishking15@yahoo.com,anil@ekkitab.com,anil,Anil Singh,satishking15951
+#Srini,Srini Batula,srini.battula@gmail.com,anil@ekkitab.com,anil,Anil Singh,srini.battula425
+#Rajendra,Rajendra Misra,rajendra.misra@gmail.com,anil@ekkitab.com,anil,Anil Singh,rajendra.misra472
+#Sree,Sreevathsava.c,sreevathsava.c@gmail.com,anil@ekkitab.com,anil,Anil Singh,sreevathsava.c463
+#Anuradha,Anuradha Ghosh,anuradha_ghosh2001@yahoo.com,anil@ekkitab.com,anil,Anil Singh,anuradha_ghosh2001744
+#Srini,Srinivas M,msrini@computer.org,anil@ekkitab.com,anil,Anil Singh,msrini412
+#Devashis,Devashis Srangi,sarangi@devashis.com,anil@ekkitab.com,anil,Anil Singh,sarangi220
+#Prakash,Prakash Mysore,kash_ms@hotmail.com,anil@ekkitab.com,anil,Anil Singh,kash_ms302
+#Chitharanjan,Chitharanjan Das,chits@gmail.com,anil@ekkitab.com,anil,Anil Singh,chits330
+#Ramesh,Ramesh,ramesh@ltp.soft.net,vijay@ekkitab.com,Vijaya Raghavan,ramesh770
+#Christopher, Nimil Christopher, christopher@ekkitab.com, saran@ekkitab.com, Saran, Saran Raj, nimil123
+#Saran,Saran Raj, saran@ekkitab.com, christopher@ekkitab.com, Nimil, Nimil Christopher, saran1984
+#Rajan,Rajan T.Das,rajantdas@gmail.com,saran@ekkitab.com,Saran,Saran Raj,rajan123
+#Sunil,Sunil Janardhanan,v_janardhanan@yahoo.com,vijay@ekkitab.com,Vijay,Vijaya Raghavan,v_janardhanan0100
+#Vinod,Vinod Janardhanan,vjanardhanan@gmail.com,vijay@ekkitab.com,Vijay,Vijaya Raghavan,vjanardhanan16
+#Shubha Aunty, Shubha Ramaswamy, shubhashri1@yahoo.co.in, christopher@ekkitab,com, Monu, Nimil Christopher,shubhashri1098
+#Dudu Uncle, Leslie Heman, leslie.heman@gmail.com, christopher@ekkitab.com, Monu, Nimil Christopher,leslie.heman099
+#Prasad, Prasad Potula, prasad.potula@gmail.com, christopher@ekkitab.com, Nimil, Nimil Christopher, prasad.potula231
+#Francisco,Francisco Saldanha, francisco@thescribble.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, francisco771
+#Vijay,Vijaya Raghavan, vijay@ekkitab.com, anisha@ekkitab.com, Anisha, Anisha Srinivasan, vijay007
+Anisha, Anisha Srinivasan, anisha@ekkitab.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, anisha882
+#Anil, Anil Menon, ani_seven@yahoo.co.in,support@ekkitab.com, Ekkitab Support, Ekkitab Support, anil301
+#Bhagya,Bhagya Lakshmi, jbagyalakshmi@yahoo.com,anisha@ekkitab.com, Anisha, Anisha Srinivasan, bagya302	
+#Anne,Job Anandam, jobmca@gmail.com, christopher@ekkitab.com, Nimil, Nimil Christopher, jobca107
+#Thala,Shankar Palaniappan, c.ji.mails@gmail.com, christopher@ekkitab.com, Nimil, Nimil Christopher, c.ji.mails108
+#Kadu,Kadambari Balu, iris_7@rocketmail.com, christopher@ekkitab.com, Nimil, Nimil Christopher, iris710
+#Raghu, Raghunandan SK, raghu@tumri.com, vijay@ekkitab.com, Vijay, Vijaya Raghavan, raghu452
+#Amit, Amit, amit@ltp.soft.net, vijay@ekkitab.com, Vijay, Vijaya Raghavan, amit922
