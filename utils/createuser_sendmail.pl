@@ -68,9 +68,9 @@ for (my $i = 3; $i<=$#ARGV; $i++) {
 
 open ($fh, $tolist) or die "Cannot open file $tolist.";
 my @args = $ARGV[0];
-chdir "/mnt2/scm/bin/";
+chdir "/var/www/scm/bin/";
 if(system("./betacustomers.sh",\@args)){
-	
+chdir "/var/www/scm/utils/";
 	while (<$fh>) {
 		if (!($_ =~ /^#/)) {
 			chomp;
