@@ -145,6 +145,27 @@ function getNextIncrementId($db)
 	return ($last+1);
 }
 
+function checkUserExists($db,$email)
+{
+    if ($db == null) { 
+       fprintf($ferr,  "Fatal: Could not connect to database.");
+       exit(1);
+    }
+
+	$query = "select email from `customer_entity` where email='".$email."' ;";
+	try {
+	   $result = mysqli_query($db, $query);
+		if ($result && (mysqli_num_rows($result) > 0)) {
+			return false;
+		}
+	}
+	catch (Exception $e) {
+	   fprintf($ferr, "Fatal: SQL Exception. $e->getMessage()\n"); 
+	   exit(1);
+	} 
+	return true;
+}
+
 function setNextIncrementIdQuery($fh,$last)
 {
 	$query = "update eav_entity_store set increment_last_id='".$last."' where entity_type_id =1 and store_id=0 ;\n";
@@ -244,7 +265,7 @@ if($fh){
 	while ($contents = fgets($fh)){
 		if(substr(trim($contents), 0, 1)!='#'){
 			$customer = explode(",", $contents);
-			if (is_array($customer)) {
+			if (is_array($customer) && checkUserExists($db,trim($customer[2]))) {
 				if(writeCustomerInsertStatements($fsql,$customer,$entityId,format($incrementId))){
 					$incrementId++;
 					$entityId++;
