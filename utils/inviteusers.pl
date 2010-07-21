@@ -74,7 +74,7 @@ for (my $i = 3; $i<=$#ARGV; $i++) {
 }
 
 open ($fh, $tolist) or die "Cannot open file $tolist.";
-system("sh $baseDir/../bin/betacustomers.sh $baseDir/$tolist");
+system("sh $baseDir/bin/betacustomers.sh $baseDir/utils/$tolist");
 while (<$fh>) {
 	if (!($_ =~ /^#/)) {
 		chomp;

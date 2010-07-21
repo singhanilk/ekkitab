@@ -24,10 +24,12 @@ class Ekkitab_Catalog_Block_Globalsection extends Mage_Core_Block_Template
      * Get popular catagories of current store
      *
      */
-    public function getAllItems()
+    public function getAllItems($randomize=true,$count=0)
     {
 		$sections = Mage::getModel('ekkitab_catalog/globalsection')->getCollection()
-			->addActiveDateFilter();
+			->addActiveDateFilter()
+			->setLimit($count)
+			->setRandomOrder($randomize);
 		return $sections;
 	}
 	
