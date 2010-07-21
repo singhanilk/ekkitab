@@ -83,10 +83,10 @@ function checkBookCount($db, $fh){
 		exit (1);
 	}
     $textFile = BOOK_VALIDATION;
-if (!file_exists($textFile)){
-    echo "Fatal: Text file Missing!!\n";
-    exit (1);
-} 
+    if (!file_exists($textFile)){
+        echo "Fatal: Text file Missing!!\n";
+        exit (1);
+    } 
 
 	$config = getConfig($configinifile);
 	$host   = $config[database][server];
