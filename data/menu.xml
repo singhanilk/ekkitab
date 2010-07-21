@@ -121,9 +121,6 @@
         </LINK>
     </SECTION>
     <SECTION title="Top Authors" type="links" showall="no">
-        <LINK name="A.P.J Abdul Kalam" type ="search">
-            <SEARCH field="author">A.P.J Abdul Kalam</SEARCH>
-        </LINK>
         <LINK name="Amartya Sen" type ="search">
             <SEARCH field="author">Amartya Sen</SEARCH>
         </LINK>
@@ -136,23 +133,14 @@
         <LINK name="Amitav Ghosh" type ="search">
             <SEARCH field="author">Amitav Ghosh</SEARCH>
         </LINK>
-        <LINK name="Nandan Nilkeni" type ="search">
-            <SEARCH field="author">Nandan Nilkeni</SEARCH>
-        </LINK>
         <LINK name="Subroto Bagchi" type ="search">
             <SEARCH field="author">Subroto Bagchi</SEARCH>
-        </LINK>
-        <LINK name="Jawaharlal Nehru" type ="search">
-            <SEARCH field="author">Jawaharlal Nehru</SEARCH>
         </LINK>
         <LINK name="Gurcharan Das" type ="search">
             <SEARCH field="author">Gurcharan Das</SEARCH>
         </LINK>
         <LINK name="Deepak Chopra" type ="search">
             <SEARCH field="author">Deepak Chopra</SEARCH>
-        </LINK>
-        <LINK name="J K Rowling" type ="search">
-            <SEARCH field="author">J K Rowling</SEARCH>
         </LINK>
         <LINK name="Pamuk Orhan" type ="search">
             <SEARCH field="author">Pamuk Orhan</SEARCH>
@@ -172,9 +160,6 @@
         <LINK name="Sashi Tharoor" type ="search">
             <SEARCH field="author">Sashi Tharoor</SEARCH>
         </LINK>
-        <LINK name="Satyajit Ray" type ="search">
-            <SEARCH field="author">Satyajit Ray</SEARCH>
-        </LINK>
         <LINK name="Thomas Friedman" type ="search">
             <SEARCH field="author">Thomas Friedman</SEARCH>
         </LINK>
@@ -183,12 +168,6 @@
         </LINK>
         <LINK name="Khushwant Singh" type ="search">
             <SEARCH field="author">Khushwant Singh</SEARCH>
-        </LINK>
-        <LINK name="Mark Tully" type ="search">
-            <SEARCH field="author">Mark Tully</SEARCH>
-        </LINK>
-        <LINK name="Sobha Dee" type ="search">
-            <SEARCH field="author">Sobha Dee</SEARCH>
         </LINK>
         <LINK name="Robin Sharma" type="search"> 
             <SEARCH field="author">robin sharma</SEARCH>
