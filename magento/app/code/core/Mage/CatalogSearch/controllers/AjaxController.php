@@ -35,6 +35,8 @@ class Mage_CatalogSearch_AjaxController extends Mage_Core_Controller_Front_Actio
 {
     public function suggestAction()
     {
-        $this->getResponse()->setBody($this->getLayout()->createBlock('catalogsearch/autocomplete')->toHtml());
+		if($this->getRequest()->getParam('hidden') && $this->getRequest()->getParam('hidden')=='leg!t!m@te'){
+			$this->getResponse()->setBody($this->getLayout()->createBlock('catalogsearch/autocomplete')->toHtml());
+		}
     }
 }

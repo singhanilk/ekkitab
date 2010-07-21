@@ -325,6 +325,7 @@ Varien.searchForm.prototype = {
             {
                 paramName: this.field.name,
                 minChars: 2,
+				parameters:'hidden=leg!t!m@te',
                 updateElement: this._selectAutocompleteItem.bind(this),
                 onShow : function(element, update) { 
                     if(!update.style.position || update.style.position=='absolute') {

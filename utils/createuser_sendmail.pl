@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 use MIME::Lite::TT::HTML;
 use File::Basename;
+use MIME::Base64;
+use Authen::SASL;
 
 sub trim {
     my ($field) = @_;
@@ -67,15 +69,11 @@ for (my $i = 3; $i<=$#ARGV; $i++) {
 }
 
 open ($fh, $tolist) or die "Cannot open file $tolist.";
-my @args = $ARGV[0];
-chdir "/var/www/scm/bin/";
-if(system("./betacustomers.sh",\@args)){
-chdir "/var/www/scm/utils/";
-	while (<$fh>) {
-		if (!($_ =~ /^#/)) {
-			chomp;
-			my @params = split(/,/);
-			sendmail(\@params, $template, $subject) ;
-		}
+system("sh /var/www/scm/bin/betacustomers.sh /var/www/scm/utils/$tolist");
+while (<$fh>) {
+	if (!($_ =~ /^#/)) {
+		chomp;
+		my @params = split(/,/);
+		sendmail(\@params, $template, $subject) ;
 	}
 }

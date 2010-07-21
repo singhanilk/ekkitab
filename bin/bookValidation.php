@@ -29,10 +29,11 @@ function getConfig($file) {
 
 function checkValidity($db, $fh){
     while ($data = fgets($fh)){
-        $details = explode("\t", $data);
+        $details = explode(",", $data);
         $isbn = $details[0];
         $listprice = $details[1];
         $discountprice = $details[2];
+        //print "Isbn-> $isbn,listprice-> $listprice,discprice-> $discountprice\n";
 	    $query = "SELECT isbn, list_price, discount_price FROM  `books` WHERE isbn = '$isbn'";
 	    try {
 	        $result = mysqli_query($db, $query);
@@ -64,7 +65,7 @@ function checkBookCount($db, $fh){
        $result = mysqli_query($db, $query);
 	   if ($result && (mysqli_num_rows($result) > 0)) {
            while( $row=mysqli_fetch_row($result)){
-             if (($row[0]+0) < 3000000){
+             if (($row[0]+0) < 100 ){
                 print "[Catalog Validation] [Warning] Number of books less than estimated amount\n";
                 return (1);
             }
