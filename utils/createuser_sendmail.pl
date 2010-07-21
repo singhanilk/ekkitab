@@ -3,6 +3,8 @@ use MIME::Lite::TT::HTML;
 use File::Basename;
 use MIME::Base64;
 use Authen::SASL;
+use Cwd;
+use File::Basename;
 
 sub trim {
     my ($field) = @_;
@@ -56,10 +58,13 @@ sub sendmail {
 
 if (scalar(@ARGV) < 3) {
     print "Argument count is not correct! Exiting.\n";
-    print "Usage: $0 tolist-file subject template-file\n";
+    print "Usage: $0 <tolist-file> <subject> <template-file> \n";
     exit 0;
 }
 
+
+my $cwd  = getcwd();
+$baseDir = dirname($cwd);
 $tolist = $ARGV[0];
 $subject = $ARGV[1];
 $template = $ARGV[2];
@@ -69,7 +74,7 @@ for (my $i = 3; $i<=$#ARGV; $i++) {
 }
 
 open ($fh, $tolist) or die "Cannot open file $tolist.";
-system("sh /var/www/scm/bin/betacustomers.sh /var/www/scm/utils/$tolist");
+system("sh $baseDir/../bin/betacustomers.sh $baseDir/$tolist");
 while (<$fh>) {
 	if (!($_ =~ /^#/)) {
 		chomp;
