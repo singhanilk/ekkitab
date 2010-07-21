@@ -1,5 +1,7 @@
 #ISBN(13 or 10)	BookTitle	Author	Binding	Description	Date-Of-Publication	Publisher	Pages	Language	Weight	Dimension	ShippingRegion	BisacCode
 
+Fields = 13;
+
 Author: Multiple authors should be specified by using the '&' as a separator. For other contributors, if you can determine role, the role must be specified as follows and prefixed to the authorname.
 Editor => :e:
 Illustrator => :i: 
