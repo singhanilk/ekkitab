@@ -13,6 +13,10 @@ my $tmpdir = "/mnt4/publisherdata/stock/autoprocess";
 my $targetdir = "/mnt4/publisherdata/stock/xl";
 
 $pop = Net::POP3->new('pop.secureserver.net', Timeout => 60);
+if (! defined($pop)) {
+    print "[Error] Cannot connect to email server. Timed Out. Will try in next run.\n";
+    exit 1;
+}
 
 if ($pop->login('autostockprocess@ekkitab.com', 'eki22Ab') > 0) {
     my $msgnums = $pop->list; # hashref of msgnum => size

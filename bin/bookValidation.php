@@ -21,7 +21,8 @@ $checks[] = "checkValidity";
 function getConfig($file) {
     $config = parse_ini_file($file, true);
     if (! $config) {
-        fatal("Configuration file missing or incorrect."); 
+        print("[Catalog Validation] [Fatal] Configuration file missing or incorrect."); 
+        exit(1);
     }
     return $config;
 }
@@ -38,19 +39,19 @@ function checkValidity($db, $fh){
 		    if ($result && (mysqli_num_rows($result) > 0)) {
                 while( $row=mysqli_fetch_row($result)){
                     if(strcmp(trim($listprice), trim($row[1])) != 0){
-                        print "[Warning] Listprice in file->$listprice is different from that of Database->$row[1]\n"; 
+                        print "[Catalog Validation] [Warning] Listprice in file->$listprice is different from that of Database->$row[1]\n"; 
                         return (1);
                     }
                     $ratio =round(100 -  ((($row[2]+0)/($row[1]+0))*100));
                     if($ratio > 35){
-                       print "[Warning] We are loosing too Much Money!! Discount Greater than 35% on isbn --> $row[0] $row[2]\n";
+                       print "[Catalog Validation] [Warning] We are loosing too Much Money!! Discount Greater than 35% on isbn --> $row[0] $row[2]\n";
                        return (1); 
                     }
                 }
             }
         } 
 	    catch (Exception $e) {
-	        echo  "Fatal: SQL Exception. $e->getMessage()\n"; 
+	        echo  "[Catalog Validation] Fatal: SQL Exception. $e->getMessage()\n"; 
 	        return(1);
 	    }
     }
@@ -64,14 +65,14 @@ function checkBookCount($db, $fh){
 	   if ($result && (mysqli_num_rows($result) > 0)) {
            while( $row=mysqli_fetch_row($result)){
              if (($row[0]+0) < 3000000){
-                print "[Warning] Number of books less than estimated amount\n";
+                print "[Catalog Validation] [Warning] Number of books less than estimated amount\n";
                 return (1);
             }
           } 
        }
     }
 	catch (Exception $e) {
-	   echo  "Fatal: SQL Exception. $e->getMessage()\n"; 
+	   echo  "[Catalog Validation] [Fatal] SQL Exception. $e->getMessage()\n"; 
 	   return(1);
 	}
     return (0);
@@ -79,14 +80,14 @@ function checkBookCount($db, $fh){
 
     $configinifile = CONFIG_FILE;
 	if (!file_exists($configinifile)) {
-		echo "Fatal: Configuration file is missing.\n";
+		echo "[Catalog Validation] [Fatal] Configuration file is missing.\n";
 		exit (1);
 	}
     $textFile = BOOK_VALIDATION;
-if (!file_exists($textFile)){
-    echo "Fatal: Text file Missing!!\n";
-    exit (1);
-} 
+    if (!file_exists($textFile)){
+        echo "[Catalog Validation] [Fatal] Book check reference missing.\n";
+        exit (1);
+    } 
 
 	$config = getConfig($configinifile);
 	$host   = $config[database][server];
@@ -101,7 +102,7 @@ if (!file_exists($textFile)){
     }
 
     if ($db == null) { 
-       fprintf($ferr,  "Fatal: Could not connect to database.");
+       fprintf($ferr,  "[Catalog Validation] [Fatal] Could not connect to database.");
        exit(1);
     }
     $fh = fopen($textFile,"r");
@@ -112,11 +113,14 @@ if (!file_exists($textFile)){
        $testnumber++;
        $failed = $check($db, $fh);
        if ($failed) {
-          echo "Failed: $testnumber\n";
+          echo "[Catalog Validation] [Failed] Error number: $testnumber\n";
           $exitvalue = $testnumber;
           break;
        }
     }
     fclose($fh);
+    if ($exitvalue == 0) {
+       echo "[Catalog Validation] [Passed] Number of checks run: " . count($checks) . "\n";
+    }
     exit($exitvalue);
 ?>
