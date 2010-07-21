@@ -14,6 +14,7 @@ stockList=$datadir/stock/stocklists
 priceFile=$priceDirectory/india-prices.txt
 timestamp=$(date +%d%m%y)
 savedFile=$priceDirectory/saved/$timestamp-indiaprices.txt
+savedDir=$priceDirectory/saved
 
 starttime=$(date +"%D [%T]")
 echo "[Update Prices] started at: $starttime"
@@ -46,6 +47,9 @@ fi
 
 if [ -f $priceFile ] ; then
 	echo "[Update Prices] Moving $priceFile to backup directory";
+    if [ ! -d $savedDir ] ; then
+        mkdir -p $savedDir;
+    fi
     mv $priceFile $savedFile
 fi;
 (
