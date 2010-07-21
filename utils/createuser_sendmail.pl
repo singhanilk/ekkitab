@@ -60,6 +60,7 @@ if (scalar(@ARGV) < 3) {
     exit 0;
 }
 
+$baseDir = '/var/www/scm';
 $tolist = $ARGV[0];
 $subject = $ARGV[1];
 $template = $ARGV[2];
@@ -69,7 +70,7 @@ for (my $i = 3; $i<=$#ARGV; $i++) {
 }
 
 open ($fh, $tolist) or die "Cannot open file $tolist.";
-system("sh /var/www/scm/bin/betacustomers.sh /var/www/scm/utils/$tolist");
+system("sh $baseDir/bin/betacustomers.sh $baseDir/utils/$tolist");
 while (<$fh>) {
 	if (!($_ =~ /^#/)) {
 		chomp;
