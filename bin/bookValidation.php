@@ -37,14 +37,13 @@ function checkValidity($db, $fh){
 	        $result = mysqli_query($db, $query);
 		    if ($result && (mysqli_num_rows($result) > 0)) {
                 while( $row=mysqli_fetch_row($result)){
-                    print "$row[0]\t$row[1]\t$row[2]\n";
                     if(strcmp(trim($listprice), trim($row[1])) != 0){
                         print "[Warning] Listprice in file->$listprice is different from that of Database->$row[1]\n"; 
                         return (1);
                     }
-                    $ratio = (($row[2]+0)/($row[1]+0))*100;
-                    if($ratio > 65){
-                       print "[Warning] We are loosing too Much Money!! Discount Greater than 35% $row[2]\n";
+                    $ratio =round(100 -  ((($row[2]+0)/($row[1]+0))*100));
+                    if($ratio > 35){
+                       print "[Warning] We are loosing too Much Money!! Discount Greater than 35% on isbn --> $row[0] $row[2]\n";
                        return (1); 
                     }
                 }
@@ -64,7 +63,7 @@ function checkBookCount($db, $fh){
        $result = mysqli_query($db, $query);
 	   if ($result && (mysqli_num_rows($result) > 0)) {
            while( $row=mysqli_fetch_row($result)){
-             if (($row[0]+0) < 1000){
+             if (($row[0]+0) < 3000000){
                 print "[Warning] Number of books less than estimated amount\n";
                 return (1);
             }
@@ -78,15 +77,16 @@ function checkBookCount($db, $fh){
     return (0);
 }
 
-if (!isset($argv[1])){
-    echo "Error! Not enough Parameters... <Usage> $argv[0] <textfilename>\n";
-    exit (1);
-} 
-    $configinifile = EKKITAB_HOME."/config/ekkitab.ini" ;
+    $configinifile = CONFIG_FILE;
 	if (!file_exists($configinifile)) {
 		echo "Fatal: Configuration file is missing.\n";
 		exit (1);
 	}
+    $textFile = BOOK_VALIDATION;
+if (!file_exists($textFile)){
+    echo "Fatal: Text file Missing!!\n";
+    exit (1);
+} 
 
 	$config = getConfig($configinifile);
 	$host   = $config[database][server];
@@ -104,7 +104,7 @@ if (!isset($argv[1])){
        fprintf($ferr,  "Fatal: Could not connect to database.");
        exit(1);
     }
-    $fh = fopen($argv[1],"r");
+    $fh = fopen($textFile,"r");
 
     $testnumber = 0;
     $exitvalue = 0;
