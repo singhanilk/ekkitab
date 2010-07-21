@@ -288,7 +288,7 @@ class Parser {
                             throw new exception("Unknown currency " . str_replace("\"", "", strtoupper(trim($fields[1]))));
                             break;
             }
-			$book['list_price'] = str_replace("\"", "", trim($fields[2]));
+			$book['list_price'] = preg_replace("/[\",]/", "", trim($fields[2]));
 			$book['suppliers_discount'] = $this->getSuppliersDiscount($db, $book['distributor'], "Any");
             if ($book['suppliers_discount'] == null) {
                 throw new exception("No supplier discount data for " . $book['distributor']);
