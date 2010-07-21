@@ -6,7 +6,10 @@ fi;
 datadir=/mnt4/publisherdata
 excelConverter=$EKKITAB_HOME/bin/prepare_stock.php
 stockProcessor=$EKKITAB_HOME/bin/process_stock.php
-priceDirectory=$datadir/India/Prices
+inifile=$EKKITAB_HOME/config/stockprocess.ini
+basedir=`cat $inifile | grep outputdir`
+basedir=${basedir#*=}
+priceDirectory=$basedir/prices
 stockList=$datadir/stock/stocklists
 priceFile=$priceDirectory/india-prices.txt
 timestamp=$(date +%d%m%y)
