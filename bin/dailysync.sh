@@ -25,5 +25,27 @@ echo "Indexing and updating production database..."
 # Restart Tomcat
 sudo service tomcat6 stop
 sudo service tomcat6 start
+( cd $EKKITAB_HOME/bin; php bookValidation.php )
+success=$?
+if (( $success > 0 )) ; then
+    echo "Catalog validation failed. Will not continue."
+    exit 1;
+fi
+echo "Creating release..."
+( cd $EKKITAB_HOME/bin; ./gencatalog.sh )
+echo "Ensuring catalog transfer location on production server is empty..."
+ssh prod <<!
+cd /tmp
+rm -rf catalog
+exit
+!
+echo "Transferring new catalog to production server..."
+( cd $EKKITAB_HOME/release; scp -r catalog prod:/tmp ) 
+#echo "Deploying new catalog on production server..."
+#ssh prod <<!
+#cd /tmp/catalog
+#./synchcatalog.sh
+#exit
+#!
 echo "Completed daily sync routine."
 

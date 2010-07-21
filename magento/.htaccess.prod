@@ -137,6 +137,7 @@
 ## always send 404 on missing files in these folders
 
     RewriteCond %{REQUEST_URI} !^/(media|skin|js)/
+    RewriteCond %{REQUEST_URI} !^/bugzilla/
 
 ############################################
 ## never rewrite for existing files, directories and links
@@ -160,15 +161,14 @@
     AddDefaultCharset Off
     #AddDefaultCharset UTF-8
 
-<IfModule mod_expires.c>
-
+#<IfModule mod_expires.c>
 ############################################
 ## Add default Expires header
 ## http://developer.yahoo.com/performance/rules.html#expires
 
-    ExpiresDefault "access plus 1 year"
+#    ExpiresDefault "access plus 1 year"
 
-</IfModule>
+#</IfModule>
 
 ############################################
 ## By default allow all access
