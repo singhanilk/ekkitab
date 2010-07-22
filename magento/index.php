@@ -58,7 +58,7 @@ require_once $mageFilename;
 
 #Varien_Profiler::enable();
 
-Mage::setIsDeveloperMode(true);
+Mage::setIsDeveloperMode(false);
 #Mage::log("Hey! This is fun.");
 
 #ini_set('display_errors', 1);
