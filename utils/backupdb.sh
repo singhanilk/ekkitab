@@ -5,6 +5,8 @@ if [ -z $EKKITAB_HOME ] ; then
 fi;
 . $EKKITAB_HOME/bin/db.sh
 
+outputdir=./saved
+
 if [ ! -d $outputdir ] ; then
     mkdir -p $outputdir;
 fi
