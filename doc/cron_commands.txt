@@ -1,3 +1,7 @@
+# Execute daily data pull, data import, catalog and index build and transfer to production.
 00 21   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./dailysync.sh
+# Execute hourly processing of stocklists coming in as email attachments.
 00 *   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./stockstatusimport.sh
+# Backup production database tables hourly.
+00 *   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/utils && ./backupdb.sh
 
