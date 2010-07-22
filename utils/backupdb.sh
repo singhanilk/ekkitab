@@ -5,11 +5,13 @@ if [ -z $EKKITAB_HOME ] ; then
 fi;
 . $EKKITAB_HOME/bin/db.sh
 
-outputdir=./saved
+outputdir=$EKKITAB_HOME/db_backup
 
 if [ ! -d $outputdir ] ; then
     mkdir -p $outputdir;
 fi
+
+startbackuptime=$(date +"%D [%T]")
 
 TABLES=( "billdesk_api_debug" 
          "catalogsearch_query" 
@@ -78,5 +80,7 @@ for ((i=0; i < $count; i++)) ; do
      echo "WARNING: table - ${TABLES[$i]} - could not be backed up. "
    fi
 done
-exit 1
+
+endbackuptime=$(date +"%D [%T]")
+echo "Started: $startbackuptime, Finished: $endbackuptime" > $outputdir/backupdatetime.txt
 
