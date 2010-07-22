@@ -19,6 +19,7 @@ rm -rf $releasedir/*
 bindir="$EKKITAB_HOME/bin"
 dbdir="$EKKITAB_HOME/db"
 datadir="$EKKITAB_HOME/data"
+utilsdir="$EKKITAB_HOME/utils"
 templatedir="$EKKITAB_HOME/release/templates"
 
 cp $templatedir/*  $releasedir
@@ -37,6 +38,7 @@ cp "$dbdir/version.sql" $releasedir
 cp "$datadir/ekkitab_books_categories.sql" $releasedir
 cp "$dbdir/init_ekkitab_books_db.sql" $releasedir
 cp "$bindir/sendsms.php" $releasedir
+cp "$utilsdir/backupdb.sh" $releasedir
 
 echo "Creating release date file"
 echo `date +%D' 'at' '%T` > $releasedir/releasedate

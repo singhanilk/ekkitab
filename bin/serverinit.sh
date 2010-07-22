@@ -142,6 +142,14 @@ if [ ! -d  $datadir ] ; then
   echo  "done."
 fi
 
+# Create the utils directory
+utilsdir=$EKKITAB_HOME/utils
+if [ ! -d  $utilsdir ] ; then
+  echo -n "Creating utils directory..."
+  mkdir $utilsdir
+  echo  "done."
+fi
+
 # Create the magento directory
 magentodir=$EKKITAB_HOME/magento
 if [ ! -d  $magentodir ] ; then
@@ -173,7 +181,7 @@ home=`echo $EKKITAB_HOME | sed 's/\//\\\\\//g'`
 # Check for missing files in release
 # If new files are required to be checked add them to this array
 
-REQ_FILES=( "db.sh" "readdbconfig.pl" "JavaBridge.war" "log4j.properties" "search.properties" "my.cnf" "000-default" "synchrelease.sh" "synchcatalog.sh" "reset_ekkitab_books.sh" "reset_ekkitab_books.sql" "backup.sh" "create_ekkitab_db.sql" "version.sql" "ekkitab_books_categories.sql" "init_ekkitab_books_db.sql" ".htpasswd" "sendsms" "sendsms.php" )
+REQ_FILES=( "db.sh" "readdbconfig.pl" "JavaBridge.war" "log4j.properties" "search.properties" "my.cnf" "000-default" "synchrelease.sh" "synchcatalog.sh" "reset_ekkitab_books.sh" "reset_ekkitab_books.sql" "backup.sh" "create_ekkitab_db.sql" "version.sql" "ekkitab_books_categories.sql" "init_ekkitab_books_db.sql" ".htpasswd" "sendsms" "sendsms.php" "backupdb.sh" )
 filecount=${#REQ_FILES[@]}
 
 for ((i=0; i < $filecount; i++)) ; do
@@ -406,6 +414,7 @@ cp $releasedir/version.sql $dbdir
 cp $releasedir/ekkitab_books_categories.sql $datadir
 cp $releasedir/init_ekkitab_books_db.sql $dbdir
 cp $releasedir/.htpasswd $EKKITAB_HOME
+cp $releasedir/backupdb.sh $utilsdir
 echo "done."
 
 # Copy this script to the bin directory.

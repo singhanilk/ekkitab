@@ -25,6 +25,7 @@ echo "Indexing and updating production database..."
 # Restart Tomcat
 sudo service tomcat6 stop
 sudo service tomcat6 start
+echo "Running smoke test on new catalog..."
 ( cd $EKKITAB_HOME/bin; php bookValidation.php )
 success=$?
 if (( $success > 0 )) ; then

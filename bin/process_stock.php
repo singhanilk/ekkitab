@@ -101,8 +101,8 @@ function process($directory, $outputdir, $config, $books) {
                 $bookprices = getBookPrices($directory . "/" . $file);
 
                 $plugin = substr($file, 0, strpos($file, "-"));
-                $missingisbnfile  = $outputdir . "/MissingISBNs/" . $plugin . "-" ."missingisbns.txt";
-                $pricefile        = $outputdir . "/Prices/" . $plugin . "-" ."prices.txt";
+                $missingisbnfile  = $outputdir . "/missingisbns/" . $plugin . "-" ."missingisbns.txt";
+                $pricefile        = $outputdir . "/prices/" . $plugin . "-" ."prices.txt";
                 //echo "Missing ISBN file: $missingisbnfile\n";
                 //echo "Price file: $pricefile\n";
                 $fh1 = fopen($missingisbnfile, "w");
