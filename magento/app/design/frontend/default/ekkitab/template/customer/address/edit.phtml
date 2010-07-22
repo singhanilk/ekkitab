@@ -45,7 +45,7 @@
 		<ul>
 		<?php if($this->isDefaultBilling() && $this->isDefaultShipping() ): ?>
 			<li><?php echo $this->__('This is your Default Billing & Shipping Address') ?></li>
-		<?php elseif($this->isDefaultBilling() || $this->isDefaultShipping() ): ?>
+		<?php elseif($this->isDefaultBilling()): ?>
 			<li><?php echo $this->__('This is your Default Billing Address') ?></li>
 		<?php elseif($this->isDefaultShipping()): ?>
 			<li><?php echo $this->__('This is your Default Shipping Address') ?></li>

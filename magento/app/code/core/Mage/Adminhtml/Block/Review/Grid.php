@@ -43,7 +43,7 @@ class Mage_Adminhtml_Block_Review_Grid extends Mage_Adminhtml_Block_Widget_Grid
 
     protected function _prepareCollection()
     {
-        $model = Mage::getModel('review/review');
+        $model = Mage::getModel('ekkitab_review/review');
         $collection = $model->getProductCollection();
 
         if ($this->getProductId() || $this->getRequest()->getParam('productId', false)) {
