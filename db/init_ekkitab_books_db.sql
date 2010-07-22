@@ -165,7 +165,7 @@ INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 ('default',0, 'carriers/freeshipping/name', 'Free'),
 ('default',0, 'carriers/freeshipping/free_shipping_subtotal', '200'),
 ('default',0, 'carriers/freeshipping/specificerrmsg', 'This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.'),
-('default',0, 'carriers/freeshipping/sallowspecific', '0'),
+('default',0, 'carriers/freeshipping/sallowspecific', '1'),
 ('default',0, 'carriers/freeshipping/showmethod', '0'),
 ('default',0, 'carriers/freeshipping/sort_order', ''),
 ('default',0, 'carriers/freeshipping/specificcountry', 'IN'),
