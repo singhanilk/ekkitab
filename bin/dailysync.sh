@@ -34,6 +34,7 @@ echo "Indexing and updating production database..."
 ( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -u ) 
 # Restart Tomcat
 sudo service tomcat6 stop
+sleep 10
 sudo service tomcat6 start
 echo "Running smoke test on new catalog..."
 ( cd $EKKITAB_HOME/bin; php bookValidation.php )
