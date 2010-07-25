@@ -27,46 +27,17 @@ else {
 
 // This script will create category information in the ekkitab database. 
 
-ini_set(include_path, ${include_path}.PATH_SEPARATOR.EKKITAB_HOME."/"."config");
-include("ekkitab.php");
-
-require_once(LOG4PHP_DIR . '/LoggerManager.php');
-
-
-// global logger
-$logger =& LoggerManager::getLogger("create_categories");
-
 /** 
 * Read and return the configuration data from file. 
 */
 function getConfig($file) {
 	$config	= parse_ini_file($file, true);
 	if (! $config) {
-		fatal("Configuration file missing or incorrect."); 
+		echo "Configuration file missing or incorrect."; 
+		exit(1);
 	}
 	return $config;
 }
-
-/** 
-* Log the error and terminate the program.
-* Optionally, will accept the query that failed.
-*/
-function fatal($message, $query = "") {
-	global $logger;
-	$logger->fatal("$message " . "[ $query ]" . "\n");
-	exit(1);
-}
-
-/** 
-* This function will log the error.
-* Optionally, will accept the query that failed.
-*/
-function warn($message, $query = "") {
-	global $logger;
-	$logger->error("$message " . "[ $query ]" . "\n");
-}
-
-
 
 function writeCustomerInsertStatements($fh,$custLine,$entityId,$incrementId) {
 
@@ -181,18 +152,19 @@ function format($id)
 }
 
 
-if ($argc < 2) {
-   echo "Usage: $argv[0] -i <Input comma seperated text file>  [<max_entityId>]  [<max_entityId>]\n";
+if ($argc < 5) {
+   echo "Usage: $argv[0] -i <Input comma seperated text file>  -o <Output sql file> [<entityId>]  [<max_entityId>]\n";
    exit(1);
 }
 
-if($argc > 2 ){
-	$entityId = (int)$argv[3];
+if($argc > 5 ){
+	$entityId = (int)$argv[5];
 }
-if($argc > 3 ){
-	$incrementId = (int)$argv[4];
+if($argc > 6 ){
+	$incrementId = (int)$argv[6];
 }
 $inputfile = "";
+$outputfile = "";
 
 for ($i = 1; $i < $argc; $i+=2) {
     if ($argv[$i][0] == '-') {
@@ -202,6 +174,8 @@ for ($i = 1; $i < $argc; $i+=2) {
         }
         switch($argv[$i][1]) {
             case 'i': $inputfile = $argv[$i+1];
+                      break;
+            case 'o': $outputfile = $argv[$i+1];
                       break;
             default:  break;
         }
@@ -216,13 +190,15 @@ if (!strcmp($inputfile, "")) {
     echo "No input file provided....\n";
     exit(1);
 } 
+if (!strcmp($outputfile, "")) {
+    echo "No output file provided....\n";
+    exit(1);
+} 
 
 $fh = fopen($inputfile, "r")or die("Error opening input file.");
 
 
-$sqlFile = $EKKITAB_HOME."/db/beta_customers.sql";
-
-$fsql = fopen($sqlFile, "w");
+$fsql = fopen($outputfile, "w");
 if (!$fsql) {
     echo "Could not open file to create sql output for globalsections.\n";
     exit(1);
