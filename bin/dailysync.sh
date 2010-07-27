@@ -70,6 +70,8 @@ echo "Transferring new catalog to production server..."
 #./synchcatalog.sh;
 #php $EKKITAB_HOME/bin/samplesearch.php
 #fi;
+#echo "Deleting image cache...";
+#rm -rf $EKKITAB_HOME/magento/media/catalog/product/cache/1/*
 #exit \$activesessions;
 #!
 if (( $? <= 2 )) ; then
