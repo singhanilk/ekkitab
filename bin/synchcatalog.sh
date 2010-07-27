@@ -100,6 +100,8 @@ echo "done."
 # Copy this script to the bin directory.
 bindir=$EKKITAB_HOME/bin
 cp $releasedir/synchcatalog.sh $bindir
+# Copy sample search script to the bin directory.
+cp $releasedir/samplesearch.php $bindir
 
 sudo service tomcat6 start
 
