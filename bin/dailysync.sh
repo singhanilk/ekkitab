@@ -55,9 +55,26 @@ echo "Transferring new catalog to production server..."
 ( cd $EKKITAB_HOME/release; scp -r catalog prod:/tmp ) 
 #echo "Deploying new catalog on production server..."
 #ssh prod <<!
-#cd /tmp/catalog
-#./synchcatalog.sh
-#exit
+#export EKKITAB_HOME=/mnt2/scm;
+#activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
+#tries=0;
+#MAXTRIES=30;
+#while (( \$activesessions > 2 )) && (( \$tries < \$MAXTRIES )) ; do
+#(( tries++ ));
+#echo "Sleeping. \$activesessions sessions are active."
+#sleep 60;
+#activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
+#done;
+#if (( \$activesessions <= 2 )) ; then
+#cd /tmp/catalog;
+#./synchcatalog.sh;
+#fi;
+#exit \$activesessions;
 #!
-echo "Completed daily sync routine. New catalog transferred to production." 
+if (( $? <= 2 )) ; then
+    echo "Completed daily sync routine. New catalog pushed into production." 
+else
+    echo "Production system has active sessions. New catalog transferred but NOT pushed to production." 
+fi
+
 
