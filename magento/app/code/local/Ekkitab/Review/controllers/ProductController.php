@@ -27,19 +27,32 @@ class Ekkitab_Review_ProductController extends Mage_Review_ProductController
 	protected function _initProduct()
     {
         Mage::dispatchEvent('review_controller_product_init_before', array('controller_action'=>$this));
-        $productId  = (int) $this->getRequest()->getParam('id');
+        $productId  = trim($this->getRequest()->getParam('id'));
+		Mage::log("Product id is : $productId");
+		if($productId){
+			if($this->isIsbn($productId)){
+				//this is isbn.....
+				$products = Mage::getModel('ekkitab_catalog/product')->getCollection()
+							->addFieldToFilter('main_table.isbn',$productId);
+				foreach($products as $prod){
+					$product = $prod;
+				}
 
-        if (!$productId) {
+			}else {
+				$productId = (int) $productId;
+				$product = Mage::getModel('ekkitab_catalog/product')
+					->setStoreId(Mage::app()->getStore()->getId())
+					->load($productId);
+			}
+		} else {
             return false;
         }
 
-        $product = Mage::getModel('ekkitab_catalog/product')
-            ->setStoreId(Mage::app()->getStore()->getId())
-            ->load($productId);
         /* @var $product Mage_Catalog_Model_Product */
         if (!$product->getId() || !$product->isVisibleInCatalog() || !$product->isVisibleInSiteVisibility()) {
             return false;
         }
+
         Mage::register('current_product', $product);
         Mage::register('product', $product);
 
@@ -55,7 +68,27 @@ class Ekkitab_Review_ProductController extends Mage_Review_ProductController
     }
 
 
-    public function listAction()
+	/**
+     * Retrieve search result count
+     *
+     * @return boolean
+     */
+    public function isIsbn($str)
+    {
+		$str=trim($str);
+		if(preg_match("/^[0-9]*$/",$str)){
+			if (strlen($str) == 12 || strlen($str) == 10 || strlen($str) == 13) {
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}
+		
+    }
+
+	public function listAction()
     {
 		if ($product = $this->_initProduct()) {
             Mage::register('productId', $product->getId());
