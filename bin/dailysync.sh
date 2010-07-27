@@ -53,27 +53,27 @@ exit
 !
 echo "Transferring new catalog to production server..."
 ( cd $EKKITAB_HOME/release; scp -r catalog prod:/tmp ) 
-#echo "Deploying new catalog on production server..."
-#ssh prod <<!
-#export EKKITAB_HOME=/mnt2/scm;
-#activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
-#tries=0;
-#MAXTRIES=30;
-#while (( \$activesessions > 2 )) && (( \$tries < \$MAXTRIES )) ; do
-#(( tries++ ));
+echo "Deploying new catalog on production server..."
+ssh prod <<!
+export EKKITAB_HOME=/mnt2/scm;
+activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
+tries=0;
+MAXTRIES=30;
+while (( \$activesessions > 4 )) && (( \$tries < \$MAXTRIES )) ; do
+(( tries++ ));
 #echo "Sleeping. \$activesessions sessions are active."
-#sleep 60;
-#activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
-#done;
-#if (( \$activesessions <= 2 )) ; then
-#cd /tmp/catalog;
-#./synchcatalog.sh;
-#php $EKKITAB_HOME/bin/samplesearch.php
-#fi;
-#echo "Deleting image cache...";
-#rm -rf $EKKITAB_HOME/magento/media/catalog/product/cache/1/*
-#exit \$activesessions;
-#!
+sleep 60;
+activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
+done;
+if (( \$activesessions <= 4 )) ; then
+cd /tmp/catalog;
+./synchcatalog.sh;
+php $EKKITAB_HOME/bin/samplesearch.php
+fi;
+echo "Deleting image cache...";
+rm -rf $EKKITAB_HOME/magento/media/catalog/product/cache/1/*
+exit \$activesessions;
+!
 if (( $? <= 2 )) ; then
     echo "Completed daily sync routine. New catalog pushed into production." 
 else
