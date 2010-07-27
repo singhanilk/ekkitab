@@ -50,6 +50,7 @@ cp $EKKITAB_HOME/java/bin/*.properties  $releasedir
 echo "done."
 echo -n "Copying other misc files.."
 cp $EKKITAB_HOME/bin/getactivesessions.sh $releasedir
+cp $EKKITAB_HOME/bin/checkreviews.sh $releasedir
 echo "done."
 echo -n "Copying synch file to synchronize release on server..."
 cp $EKKITAB_HOME/bin/synchrelease.sh  $releasedir
