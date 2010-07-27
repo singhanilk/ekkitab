@@ -106,7 +106,7 @@ INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 ( 'default', 0, 'catalog/category/root_id', '2'),
 ('default', 0, 'design/theme/default', 'ekkitab'),
 ('default', 0, 'design/head/default_title', 'Ekkitab Education Services Pvt Ltd'),
-('default', 0, 'design/head/default_keywords', 'Ekkitab, online bookstore'),
+('default', 0, 'design/head/default_keywords', 'Ekkitab, Online Bookstore India, Online Bookstore, Donate a Book,Donate a book to your school'),
 ('default', 0, 'design/header/logo_src', 'images/logo.png'),
 ('default', 0, 'design/header/logo_alt', 'Ekkitab Education Services Pvt Ltd'),
 ('default', 0, 'design/header/welcome', ''),
