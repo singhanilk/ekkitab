@@ -18,6 +18,8 @@ rundate=$(date +"%D-%T")
 pendingreviewcount=`mysql -u $user -p$password -h $host ekkitab_books -e  "select count(*) from review where status_id=2"` ; 
 pendingreviewcount=`echo ${pendingreviewcount##count(*)}`
 z="Hi \n Below are the reviews which need your attention. Please login to admin to view and approve them.\n"
-reviews=`mysql -u $user -p$password -h $host ekkitab_books -e  "select rd.title,rd.nickname from review r, review_detail rd where r.review_id=rd.review_id and r.status_id=2"` ; 
-z= "$z \n Regards"
-echo "$z"
+reviews=`mysql -u $user -p$password -h $host ekkitab_books -e  "select rd.title,rd.nickname from review r, review_detail rd where r.review_id=rd.review_id and r.status_id=2"` ;
+if [ ! "$reviews" == "" ] ; then
+    ( cd $EKKITAB_HOME/bin ; echo "$z" | php sendmail.php -s "$pendingreviewcount Book Reviews awaiting approval : [$rundate]" $tomail )
+fi
+
