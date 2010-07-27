@@ -14,7 +14,7 @@ if (( $pendingreviewcount > 0 )) ; then
      review=`echo ${review##*nickname}`;
      title=`echo ${review%%->*}`
      name=`echo ${review##*->}`
-     echo "Review: '$title'  BY '$name'"
+     echo "Review: '$title'  by '$name'"
   done
   echo "-----------------------------------------------------------------------------"
 fi
