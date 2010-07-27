@@ -68,6 +68,7 @@ echo "Transferring new catalog to production server..."
 #if (( \$activesessions <= 2 )) ; then
 #cd /tmp/catalog;
 #./synchcatalog.sh;
+#php $EKKITAB_HOME/bin/samplesearch.php
 #fi;
 #exit \$activesessions;
 #!

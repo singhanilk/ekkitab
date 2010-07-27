@@ -50,6 +50,9 @@ echo "done."
 echo -n "Copying synch file to synchronize release on server..."
 cp $EKKITAB_HOME/bin/synchcatalog.sh  $releasedir
 echo "done."
+echo -n "Copying sample search script..."
+cp $EKKITAB_HOME/bin/samplesearch.php  $releasedir
+echo "done."
 
 echo -n "Creating release date file..."
 echo `date +%D' 'at' '%T` > $releasedir/releasedate
