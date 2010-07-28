@@ -104,8 +104,8 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            $isbn = $value->Value;
            chomp($isbn);
            $isbn =~ s/[^0-9]+//g;
-           if(length($isbn) gt 10){
-              $enteredcount++;
+           if(length($isbn) == 10 || length($isbn) == 13){
+              $enteredcount++; 
            }
         }
         $value = $oWkS->{Cells}[$i][$pricecol];

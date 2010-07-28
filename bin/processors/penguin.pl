@@ -5,8 +5,6 @@ use Spreadsheet::ParseExcel;
 my $oExcel = new Spreadsheet::ParseExcel;
 
 die "Usage $0 <Excel File> \n Redirect output to required file from stdout" unless @ARGV;
-my $FH = "filehandle";
-my $FilePath;
 my $enteredcount = 0;
 my $printedcount = 0;
 my $oBook = $oExcel->Parse($ARGV[0]);
@@ -88,7 +86,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     }
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
-	$enteredcount++;
         my $value = $oWkS->{Cells}[$i][$isbncol];
         my $isbn;
 
@@ -96,6 +93,9 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            $isbn = $value->Value;
            chomp($isbn);
            $isbn =~ s/[^0-9]+//g;
+            if (length($isbn) == 10 || length($isbn) == 13){
+	            $enteredcount++;
+            }
         }
         $value = $oWkS->{Cells}[$i][$pricecol];
         my $price;

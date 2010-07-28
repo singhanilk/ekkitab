@@ -95,9 +95,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            $isbn = $value->Value;
            chomp($isbn);
            $isbn =~ s/[^0-9]+//g;
-            if (length($isbn) > 10 ){
-                $enteredcount++;
-            }
         }
         $value = $oWkS->{Cells}[$i][$pricecol];
         my $price;
@@ -123,8 +120,12 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            $availability =~ s/\n//g;
            if ($availability > 2){
 	       $availability = 'Available';
+            if (length($isbn) == 10 || length($isbn) == 13){
+                $enteredcount++;
+            }
            }
            else{
+		  $printedcount++;
                $availability = 'Not Available' . '[' . $availability . ']';
            }        
         }
@@ -157,7 +158,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 	         next;
             }
              elsif (length($isbn) == 10 || length($isbn) == 13){
-		  $printedcount++;
                   print $isbn . "\t" . $price . "\t" . $currency . "\t"  
     		      . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
              }
@@ -168,5 +168,5 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     if (int($ratio) < 70){
         warn "[WARNING] Values printed less than 70% \n";
     }
-
+print "Available --> $enteredcount Not Available --> $printedcount Total -->" . ($enteredcount+$printedcount) . "\n";
 exit(0);

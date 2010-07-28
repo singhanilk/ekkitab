@@ -5,8 +5,6 @@ use Spreadsheet::ParseExcel;
 my $oExcel = new Spreadsheet::ParseExcel;
 
 die "Usage $0 <Excel File> \n Redirect output to required file from stdout" unless @ARGV;
-my $FH = "filehandle";
-my $FilePath;
 my $enteredcount = 0;
 my $printedcount = 0;
 my $oBook = $oExcel->Parse($ARGV[0]);
@@ -42,7 +40,13 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                     }
                 }
                 if ($pricecol == -1) {
-                    if ($oWkC->Value =~ /Spl Indian Price/) {
+                    if ($oWkC->Value =~ /Spl\sIndian\sPrice/) {
+                        $pricecol = $iC;
+                        next;
+                    }
+                }
+                if ($pricecol == -1) {
+                    if ($oWkC->Value =~ /Cover\sPrice/) {
                         $pricecol = $iC;
                         next;
                     }
@@ -53,9 +57,14 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                         next;
     		        }
                 }
-    
     	        if ($authorcol == -1) {
     		    if ($oWkC->Value =~ /contributor/) {
+                        $authorcol = $iC;
+                        next;
+    		        }
+                }
+    	        if ($authorcol == -1) {
+    		    if ($oWkC->Value =~ /Author/) {
                         $authorcol = $iC;
                         next;
     		        }
@@ -75,7 +84,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     }
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
-	 $enteredcount++;
 	 my $currency = 'I';
          my $availability = 'Available'; 
          my $imprint = 'Harward';
@@ -86,14 +94,16 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
              $isbn = $value->Value;
              chomp($isbn);
              $isbn =~ s/[^0-9]+//g;
+           if (length($isbn) == 10 || length($isbn) == 13){
+	            $enteredcount++;
+           }
          }
          $value = $oWkS->{Cells}[$i][$pricecol];
          my $price;
          if (defined ($value)) {
              $price = $value->Value;
              $price =~ s/\n//g;
-             $price =~ s/Rs.\s//; #Removes 'Rs.'{whitespace}
-             $price =~ s/,//;     #Removes ','
+             $price =~ s/[^0-9]//g;
          }
          $value  = $oWkS->{Cells}[$i][$titlecol];
          $value1 = $oWkS->{Cells}[$i+1][$titlecol];
