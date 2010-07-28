@@ -1,5 +1,5 @@
 <MENU>
-    <SECTION title="New York Times BestSellers (Fiction)" type="collection" showall="yes" highlight="5" shuffle="yes">
+    <!--SECTION title="New York Times BestSellers (Fiction)" type="collection" showall="yes" highlight="5" shuffle="yes">
         <BOOK id="9781847246929" title="The Girl With The Dragon Tattoo" author="Stieg Larsson"/>
         <BOOK id="9781906694159" title="The Girl Who Played With Fire" author="Stieg Larsson"/>
         <BOOK id="9781416589648" title="Little Bee" author="Chris Cleave"/>
@@ -22,7 +22,7 @@
         <BOOK id="9780307387097" title="Half the Sky: Turning Oppression into Opportunity for Women Worldwide" author="Nicholas D. Kristof and Sheryl WuDunn"/>
         <BOOK id="9780141019017" title="Freakonomics: A Rogue Economist Explores the Hidden Side of Everything" author="Steven D. Levitt and Stephen J. Dubner "/>
         <BOOK id="9780553593310" title="Helmet For My Pillow: From Parris Island To The Pacific" author="Robert Leckie"/>
-    </SECTION>
+    </SECTION-->
     <SECTION title="Popular in India" type="collection" showall="yes" highlight="5" shuffle="yes">
         <BOOK id="9788172234980" title="The Alchemist" author="Paulo Coelho"/>
         <BOOK id="9780552161275" title="The Da Vinci Code" author="Dan Brown"/>
