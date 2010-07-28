@@ -27,6 +27,25 @@ function getConfig($file) {
     return $config;
 }
 
+function percentage($listprice, $dbprice){
+#convert string to double
+    $listprice += 0;
+    $dbprice   += 0;
+    $listprice = round($listprice);
+    $dbprice   = round($dbprice);
+        if($dbprice < $listprice){
+            $percentage =round(100-(($dbprice/$listprice)*100));
+        }
+        else{
+            $percentage =round(100-(($listprice/$dbprice)*100));
+        }
+    if ($percentage >= 5){
+        return 0;
+    }
+    else{
+        return 1;
+    }
+}
 function checkValidity($db, $fh){
     while ($data = fgets($fh)){
         $details = explode(",", $data);
@@ -39,8 +58,8 @@ function checkValidity($db, $fh){
 	        $result = mysqli_query($db, $query);
 		    if ($result && (mysqli_num_rows($result) > 0)) {
                 while( $row=mysqli_fetch_row($result)){
-                    if(strcmp(trim($listprice), trim($row[1])) != 0){
-                        print "[Catalog Validation] [Warning] Listprice in file->$listprice is different from that of Database->$row[1]\n"; 
+                    if(percentage(trim($listprice), trim($row[1])) == 0){
+                        print "[Catalog Validation] [Warning] Listprice in file->$listprice is different from that of Database->$row[1] by more than 5%\n"; 
                         return (1);
                     }
                     $ratio =round(100 -  ((($row[2]+0)/($row[1]+0))*100));
