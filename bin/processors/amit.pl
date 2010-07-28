@@ -1,6 +1,16 @@
 #!/usr/bin/perl -w
 use strict;
 use Spreadsheet::ParseExcel;
+use Config::Abstract::Ini;
+
+my $ekkitab_home = $ENV{EKKITAB_HOME};
+if (!($ekkitab_home)){
+print "Not Defined" . "\n";
+}
+my $Settingsfile = $ekkitab_home . "/config/stockprocess.ini";
+my $settings     = new Config::Abstract::Ini($Settingsfile);
+my %values       = $settings -> get_entry('availability');
+my $threshold    = $values{'threshold'};
 
 my $oExcel = new Spreadsheet::ParseExcel;
 
@@ -71,7 +81,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
-	$enteredcount++;
         my $imprint      = 'Not Available';
         my $currency;
         my $value = '';
@@ -86,6 +95,9 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             $isbn = $value->Value;
             chomp($isbn);
             $isbn =~ s/[^0-9]+//g;
+             if (length($isbn) == 10 || length($isbn) == 13){
+	             $enteredcount++;
+             }
         }
         $value = $oWkS->{Cells}[$i][$pricecol];
         my $price;
@@ -112,7 +124,8 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if(defined ($value)) {
            $availability = $value->Value;
            $availability =~ s/\n//g;
-           if ($availability gt 2){
+           $availability =~ s/[^0-9]//g;
+           if ($availability > $threshold){
 	       $availability = 'Available';
            }
            else{

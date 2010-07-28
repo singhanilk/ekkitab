@@ -1,6 +1,16 @@
 #!/usr/bin/perl -w
 use strict;
 use Spreadsheet::ParseExcel;
+use Config::Abstract::Ini;
+
+my $ekkitab_home = $ENV{EKKITAB_HOME};
+if (!($ekkitab_home)){
+print "Not Defined" . "\n";
+}
+my $Settingsfile = $ekkitab_home . "/config/stockprocess.ini";
+my $settings     = new Config::Abstract::Ini($Settingsfile);
+my %values       = $settings -> get_entry('availability');
+my $threshold    = $values{'threshold'};
 
 my $oExcel = new Spreadsheet::ParseExcel;
 
@@ -178,7 +188,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            if($availability eq ""){
                 next;
            }
-           if ($availability > 2){
+           if ($availability > $threshold){
            $availability = 'Available';
            }
            else{

@@ -5,8 +5,6 @@ use Spreadsheet::ParseExcel;
 my $oExcel = new Spreadsheet::ParseExcel;
 
 die "Usage $0 <Excel File> \n Redirect output to required file from stdout" unless @ARGV;
-my $FH = "filehandle";
-my $FilePath;
 my $enteredcount = 0;
 my $printedcount = 0;
 my $oBook = $oExcel->Parse($ARGV[0]);
