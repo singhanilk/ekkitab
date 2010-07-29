@@ -43,7 +43,7 @@ class Parser {
             if (($this->mode & MODE_BASIC) && (count($fields) != REQUIRED_BASIC_FIELDS)) {
                 return $isbn;
             } 
-            elseif (($this->mode &  MODE_PRICE) && (count($fields) >= REQUIRED_PRICE_FIELDS)) {
+            elseif (($this->mode &  MODE_PRICE) && (count($fields) < REQUIRED_PRICE_FIELDS)) {
                 return $isbn;
             } 
 
