@@ -117,7 +117,7 @@ function process($directory, $outputdir, $config, $books) {
                     echo("Could not open file to write price information: " . $pricefile . "\n");
                     exit(1);
                 }
-                fprintf($fh2, "# ISBN\tCURRENCY\tLIST-PRICE\tAVAILABILITY\tDISTRIBUTOR\n");
+                fprintf($fh2, "# ISBN\tCURRENCY\tLIST-PRICE\tAVAILABILITY\tDISTRIBUTOR\t[DELIVERY DAYS]\n");
 
                 $fh = fopen($directory . "/" . $file,"r");
                 if (!$fh){
@@ -136,12 +136,20 @@ function process($directory, $outputdir, $config, $books) {
                     $currency = $bookprices[$isbn]['currency'];
                     $listPrice = $bookprices[$isbn]['list_price'];
                     $availability = $fields[3];
+                    $deliverydays = 0;
+                    if(isset($fields[7])){
+                        $deliverydays = $fields[7];
+                    }
 
                     if (!isset($books[$isbn])) { // not in catalog
                         fprintf($fh1, "%s\t%s\t%s\n", $isbn, $title, $author);
                     }
                     if (!isset($bookprices[$isbn]['discard'])) {
-                        fprintf($fh2, "%s\t%s\t%s\t%s\t%s\n", $isbn, $currency, $listPrice, $availability, $plugin);
+                        fprintf($fh2, "%s\t%s\t%s\t%s\t%s", $isbn, $currency, $listPrice, $availability, $plugin);
+                        if ($deliverydays > 0) {
+                            fprintf($fh2, "\t%s", $deliverydays);
+                        }
+                        fprintf($fh2, "\n");
                     }
                 }
 

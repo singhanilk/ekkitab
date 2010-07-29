@@ -310,9 +310,16 @@ a:hover {
 .topSearchArea .textField {
 	padding: 3px 0px 0px 2px;
 	font-size: 12px;
-	width: 300px;
+	width: 250px;
 	float: left;
 	height:17px;
+}
+.topSearchArea .selectField {
+	padding-left:2px;
+	margin-left:5px;
+	font-size: 12px;
+	border:1px inset #000;
+	height:20px;
 }
 .topSearchArea .searchBut {
 	width: 21px;
@@ -737,12 +744,6 @@ a:hover {
 	color: #666;
 	line-height: 18px;
 	margin-top: 10px;
-}
-.hideReviewForm {
-	display:none;
-}
-.showReviewForm {
-	display:block;
 }
 .reviewee {
 	text-align: right;
@@ -2445,4 +2446,17 @@ dt .hdr {
 
 .donateArea .abtTextArea  img {
 	float:right;
+}
+
+.hideContent {
+	display:none;
+}
+.showContent {
+	display:block;
+}
+
+.bookPromoContent {
+	margin: 16px 0;
+	line-height: 18px;
+	color: #666;
 }

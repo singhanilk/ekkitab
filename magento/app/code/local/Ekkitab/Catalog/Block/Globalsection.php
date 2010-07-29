@@ -54,17 +54,28 @@ class Ekkitab_Catalog_Block_Globalsection extends Mage_Core_Block_Template
      */
     public function getHomePageSection($randomize=true,$count=1)
     {
-		$sectionArr;
 		if(is_null($this->_homeSection)){
-			$sections = Mage::getModel('ekkitab_catalog/globalsection')->getCollection()
-									->addHomePageFilter();
-			if(!is_null($sections)){
-				foreach($sections as $section){
-					$sectionArr[]=$section;
-				}
-					
-				if(shuffle($sectionArr)){
-					$this->_homeSection=$sectionArr[0];
+			$sectionId =-1;
+			$sectionArr = Mage::getSingleton('core/session')->getHomePageGlobalSection();
+			if(is_array($sectionArr) && count($sectionArr) > 0 ){
+				$sectionId	= $sectionArr['section_id'];
+			}
+
+			if(!is_null($sectionId) && $sectionId > 0 ){
+				$this->_homeSection= Mage::getModel('ekkitab_catalog/globalsection')->load($sectionId);
+			} 
+			else{
+				$sections = Mage::getModel('ekkitab_catalog/globalsection')->getCollection()
+										->addHomePageFilter();
+				if(!is_null($sections)){
+					foreach($sections as $section){
+						$sectionArr[]=$section;
+					}
+						
+					if(shuffle($sectionArr)){
+						$this->_homeSection=$sectionArr[0];
+						Mage::getSingleton('core/session')->setHomePageGlobalSection(array('section_id'=>$this->_homeSection->getId()));
+					}
 				}
 			}
 		}
