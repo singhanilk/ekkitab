@@ -10,7 +10,9 @@ define (IMPORTBOOKS_PLUGINS_DIR, EKKITAB_HOME . "/db/" . "plugins");
 define (MODE_BASIC, 0x01);
 define (MODE_PRICE, 0x02);
 define (MODE_DESC, 0x04);
+define (MODE_PROMO, 0x08);
 define (MAX_DESCRIPTION_LENGTH, 1024);
 define (UNKNOWN_INFO_SOURCE, "Unknown");
-define("IMAGE_TARGET", EKKITAB_HOME . "/magento/media/catalog/product");
+define ("IMAGE_TARGET", EKKITAB_HOME . "/magento/media/catalog/product");
+define (BOOK_VALIDATION, EKKITAB_HOME . "/data/bookValidation.txt");
 ?>
