@@ -133,15 +133,15 @@ if(!is_null($results) && is_array($results)){
 
 					<?php endif; ?>
 				<?php elseif($this->getTotalNum()==1): ?>
-					<?php echo $this->__('Showing the only book', $this->getTotalNum()) ?>
+					<?php echo $this->__('Showing %s book', $this->getTotalNum()) ?>
 				<?php else: ?>
 					<?php echo $this->__('Showing all %s books', $this->getTotalNum()) ?>
 				<?php endif; ?><?php if(!is_null($suggest) && strlen($suggest)>0 ) : ?> for ' <?php echo  ucwords($suggest) ?> '<?php endif; ?>
 			</div><!-- leftArea -->
 
+			<?php if($this->getLastPageNumber()>1): ?>
 			<div class="rightArea">
 				<div class="topPaginationArea">
-					<?php if($this->getLastPageNumber()>1): ?>
 					<ul>
 						<?php if (!$this->isFirstPage()): ?>
 							<li><a href="<?php echo $this->getPreviousPageUrl() ?>" id="prev"><?php echo $this->__('Prev') ?></a></li>
@@ -164,9 +164,9 @@ if(!is_null($results) && is_array($results)){
 						<?php endif; ?>
 
 					</ul>
-					<?php endif; ?>
 				</div>
 			</div><!-- rightArea -->
+			<?php endif; ?>
 			<div class="clear"></div>
 		</div><!-- searchResTop -->
 <?php 	foreach($bookList as $book):	

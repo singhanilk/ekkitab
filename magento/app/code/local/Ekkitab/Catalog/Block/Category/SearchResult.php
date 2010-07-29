@@ -403,6 +403,9 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
     public function isIsbn($str)
     {
 		$str=trim($str);
+		if (preg_match("/^[0-9\-_]+$/", $str)) {
+			$str = preg_replace("/[-_]/", "", $str);
+		}
 		if(preg_match("/^[0-9]*$/",$str)){
 			if (strlen($str) == 12) {
 				$this->_isbn =  '0'.$str;
@@ -416,7 +419,7 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 			}else{
 				return false;
 			}
-		}else{
+		}else {
 			return false;
 		}
 		

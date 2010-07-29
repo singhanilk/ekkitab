@@ -20,6 +20,7 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
     private $_reviewsHelperBlock;
    
     private $_product;
+    private $_productPromo;
 
     const XML_PATH_SEARCH_INDEX_FILE = 'global/search_index/path';
 	const JAVA_BRIDGE_INC_FILE = 'global/java_inc/path';
@@ -210,6 +211,26 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
     }
 
 	
+	/**
+     * Get product reviews summary
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @param bool $templateType
+     * @param bool $displayIfNoReviews
+     * @return string
+     */
+    public function getPromoContent()
+    {
+        $product = $this->getProduct();
+		if(is_null($this->_productPromo)){
+			$this->_productPromo = Mage::getModel('ekkitab_catalog/product_promo')->getCollection()
+					->addFieldToFilter('main_table.isbn',$product->getIsbn());
+		}
+		return $this->_productPromo;
+		
+    }
+
+
 	/**
      * Get product reviews summary
      *

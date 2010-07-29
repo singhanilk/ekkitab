@@ -47,18 +47,18 @@
 				$counter+=1;
 				$savingsPerct= ($product->getPrice() >0 )?	(($product->getPrice() - $product->getFinalPrice())/ $product->getPrice() ) * 100 : 0; 
 				$authorArr = $product->getAuthor();
-				$author = (($author = $authorArr['a'])!='')? "by <a href=\"".$this->getUrl('ekkitab_catalog/search/index/author/'.$author)."\">".$author."</a>":"" ;
-				$binding = trim($product->getBinding());
-				$lang = trim($product->getLanguage());
-				$langNbind=strlen($lang) > 0 ? ("[".ucfirst($lang).(strlen($binding) > 0 ?" - ".ucfirst($binding)."]":"]")):(strlen($binding) > 0 ?"[".ucfirst($binding)."]":"");
+			$author = (($author = $authorArr['a'])!='')? "by <a href=\"".$this->getUrl('ekkitab_catalog/search/index/author/'.$author)."\">".$author."</a>":"" ;
+			$binding = trim($product->getBinding());
+			$lang = trim($product->getLanguage());
+			$langNbind=strlen($lang) > 0 ? ("[".ucfirst($lang).(strlen($binding) > 0 ?" - ".ucfirst($binding)."]":"]")):(strlen($binding) > 0 ?"[".ucfirst($binding)."]":"");
 
-				$title= $this->htmlEscape($product->getName());
-				if(isset($author) && strlen(trim($author)) > 0)
-				{
-					$bookName=$author."__";
-				}else{
-					$bookName="";
-				}
+			$title= $this->htmlEscape($product->getName());
+			if(isset($authorArr['a']) && strlen(trim($authorArr['a'])) > 0)
+			{
+				$bookName=trim($authorArr['a'])."__";
+			}else{
+				$bookName="";
+			}
 				$bookName=$bookName.$title."__".$product->getId();
 				$bookName = preg_replace('#[^A-Za-z0-9\_]+#', '-', $bookName);//($repArr2, "-", $urlKey);
 				$bookName="ekkitab_catalog/product/view/book/".$bookName.".html";
