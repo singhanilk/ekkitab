@@ -281,7 +281,7 @@ INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 ('default',0, 'carriers/ups/active', '0'),
 ('default',0, 'carriers/fedex/active', '0'),
 ('default',0, 'carriers/usps/active', '0'),
-( 'default', 0, 'payment/paypal_standard/active', '1'),
+( 'default', 0, 'payment/paypal_standard/active', '0'),
 ( 'default', 0, 'payment/paypal_standard/title', 'Paypal'),
 ( 'default', 0, 'payment/paypal_standard/payment_action', 'AUTHORIZATION'),
 ( 'default', 0, 'payment/paypal_standard/types', 'IPN'),
