@@ -23,6 +23,18 @@
         <BOOK id="9780141019017" title="Freakonomics: A Rogue Economist Explores the Hidden Side of Everything" author="Steven D. Levitt and Stephen J. Dubner "/>
         <BOOK id="9780553593310" title="Helmet For My Pillow: From Parris Island To The Pacific" author="Robert Leckie"/>
     </SECTION-->
+    <SECTION title="New Releases" type="collection" showall="yes" highlight="5" shuffle="yes">
+        <BOOK id="9781439184301" title="The Overton Window" author="Glenn Beck"/>
+        <BOOK id="9780307269997" title="The Girl Who Kicked the Hornet's Nest" author="Stieg Larsson"/>
+        <BOOK id="9780446563048" title="Delivering Happiness: A Path To Profits, Passion, And Purpose" author="Tony Hsieh"/>
+        <BOOK id="9780316125581" title="The Short Second Life of Bree Tanner" author="Stephenie Meyer"/>
+        <BOOK id="9780345504968" title="The Passage" author="Justin Cronin"/>
+        <BOOK id="9781594202537" title="Cognitive Surplus: Creativity and Generosity in a Connected Age" author="Clay Shirky"/>
+        <BOOK id="9780307378705" title="Extra Lives: Why Video Games Matter" author="Tom Bissell"/>
+        <BOOK id="9780307272829" title="Nine Lives: In Search of the Sacred in Modern India" author="William Dalrymple"/>
+        <BOOK id="9780385522861" title="Welcome to Utopia: Notes from a Small Town" author="Karen Valby"/>
+        <BOOK id="9780307387097" title="Half the Sky: Turning Oppression Into Opportunity for Women Worldwide" author="Nicholas D. Kristof &amp; Sheryl WuDunn"/>
+    </SECTION>
     <SECTION title="Popular in India" type="collection" showall="yes" highlight="5" shuffle="yes">
         <BOOK id="9788172234980" title="The Alchemist" author="Paulo Coelho"/>
         <BOOK id="9780552161275" title="The Da Vinci Code" author="Dan Brown"/>
@@ -74,18 +86,6 @@
             <BOOK id="9780143036661" title="March" author="Geraldine Brooks"/>
         </LINK>
     </SECTION>
-    <SECTION title="New Releases" type="collection" showall="yes" highlight="5" shuffle="yes">
-        <BOOK id="9781439184301" title="The Overton Window" author="Glenn Beck"/>
-        <BOOK id="9780307269997" title="The Girl Who Kicked the Hornet's Nest" author="Stieg Larsson"/>
-        <BOOK id="9780446563048" title="Delivering Happiness: A Path To Profits, Passion, And Purpose" author="Tony Hsieh"/>
-        <BOOK id="9780316125581" title="The Short Second Life of Bree Tanner" author="Stephenie Meyer"/>
-        <BOOK id="9780345504968" title="The Passage" author="Justin Cronin"/>
-        <BOOK id="9781594202537" title="Cognitive Surplus: Creativity and Generosity in a Connected Age" author="Clay Shirky"/>
-        <BOOK id="9780307378705" title="Extra Lives: Why Video Games Matter" author="Tom Bissell"/>
-        <BOOK id="9780307272829" title="Nine Lives: In Search of the Sacred in Modern India" author="William Dalrymple"/>
-        <BOOK id="9780385522861" title="Welcome to Utopia: Notes from a Small Town" author="Karen Valby"/>
-        <BOOK id="9780307387097" title="Half the Sky: Turning Oppression Into Opportunity for Women Worldwide" author="Nicholas D. Kristof &amp; Sheryl WuDunn"/>
-    </SECTION>
     <SECTION title="Pick Of the Week" type="collection" showall="yes" highlight="1" shuffle="yes">
         <BOOK id="9781408808863" title="Alex's Adventures In Numberland" author="Alex Bellos"/>
         <BOOK id="9781423113386" title="The Kane Chronicles: Red Pyramid" author="Rick Riordan"/>
@@ -120,7 +120,7 @@
             <SEARCH field="category">self-help</SEARCH>
         </LINK>
     </SECTION>
-    <SECTION title="Top Authors" type="links" showall="no">
+    <!--SECTION title="Top Authors" type="links" showall="no">
         <LINK name="Amartya Sen" type ="search">
             <SEARCH field="author">Amartya Sen</SEARCH>
         </LINK>
@@ -172,5 +172,5 @@
         <LINK name="Robin Sharma" type="search"> 
             <SEARCH field="author">robin sharma</SEARCH>
         </LINK>
-    </SECTION>
+    </SECTION-->
 </MENU>
