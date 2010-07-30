@@ -332,10 +332,13 @@ a:hover {
 	line-height: 25px;
 	text-align: center;
 	margin: 0 auto 10px;
+	margin:0 auto;
 	font-size: 1.1em;
 	font-weight: bold;
 	padding-top: 3px;
 }
+
+
 .globalLinks a, .globalLinks a:visited {
 	color: #666;
 	margin: 0 8px;
@@ -783,15 +786,6 @@ a:hover {
 	border-bottom: 1px dotted #333;
 }
 
-.globalLinks {
-	font-size:1.1em;
-	font-weight:bold;
-	line-height:25px;
-	margin:0 auto;
-	padding-top:3px;
-	text-align:center;
-	width:960px;
-}
 .breadCrumbs {
 	line-height: 24px;
 	border-bottom: 1px dotted #333;
@@ -2399,7 +2393,7 @@ dt .hdr {
 }
 
 .finDetOtherEdition {
-	width: 492px;
+	width: 496px;
 	height: 30px;
 	background-image: url(../images/review_title_bg.png);
 	background-position: left top;
@@ -2455,8 +2449,32 @@ dt .hdr {
 	display:block;
 }
 
+.bookPromoContentTop {
+	background-image: url(../images/read_more_top.png);
+	width:496px;
+	height: 25px;
+	line-height: 25px;
+	background-position: left top;
+	background-repeat: no-repeat;
+	text-align: right;
+	padding-right: 8px;
+	padding-left: 8px;
+}
+
 .bookPromoContent {
-	margin: 16px 0;
+	width:496px;
 	line-height: 18px;
-	color: #666;
+	color: #666666;
+	padding-right: 8px;
+	padding-left: 8px;
+}
+.bookPromoContentBot {
+	width:496px;
+	background-image: url(../images/read_more_bot.png);
+	height: 25px;
+	background-position: left top;
+	background-repeat: no-repeat;
+	margin-bottom: 12px;
+	padding-right: 8px;
+	padding-left: 8px;
 }

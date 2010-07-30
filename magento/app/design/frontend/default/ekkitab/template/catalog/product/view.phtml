@@ -117,20 +117,25 @@
 			</div><!-- finDetSynop -->
 <!-- Promo text  -->
 			<?php $promoCollection = $this->getPromoContent();
+			$foundPromo = 0;
 			if(!is_null($promoCollection) && count($promoCollection) > 0 ){
 			?>	
-				<div id="promoLink"><p><a href="javascript:showContent('promoContent');hideLink('promoLink')">...click here to read more</a></p></div>
-				<div class="bookPromoContent hideContent" id="promoContent">
-				<div id="promoLinkClose"><p><a href="javascript:hideContent('promoContent');showLink('promoLink')">close X </a></p></div>
-			<?php		foreach($promoCollection as $promo): ?>
-				<p><?php echo $promo->getPromoDesc()?></p>
-			<?php		endforeach;?>
-				<p ><a href="javascript:hideContent('promoContent');showLink('promoLink');goto('home')">close X </a></p>
-
+				<div id="promoLink" class="bookPromoContentTop" ><a href="javascript:showContent('promoContent');hideLink('promoLink')">...click here to read more</a></div>
+				<div class="hideContent" id="promoContent">
+					<div class="bookPromoContentTop" id="promoLinkClose"><a href="javascript:hideContent('promoContent');showLink('promoLink')">Close</a></div>
+					<div class="bookPromoContent">
+				<?php	foreach($promoCollection as $promo): 
+							if(strlen(trim($promo->getPromoDesc())) != strlen(trim($_product->getDescription())) ){
+				?>						<p><?php echo preg_replace('/\<br(\s*)?\/?\>/i','<p>',$promo->getPromoDesc())?></p>
+				<?php			$foundPromo =1;						
+							}
+						endforeach;?>
+					</div>
+					<div class="bookPromoContentBot"></div>
+			
 				</div><!-- Promo -->
-			<?php	}
-			?>
-
+<?php		}	?>
+				<div class="clear"><br/></div>
 <!-- Other Editions  -->
 			<?php if (count($otherEditions)): ?>
 				<div class="finDetOtherEdition">
@@ -292,4 +297,5 @@ function showLink(id){
 		contentDiv.style.display="block";
 	}
 }
+<?php	if($foundPromo==0) {  echo	"hideLink('promoLink');" ; }?>
 </script>
