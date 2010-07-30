@@ -54,18 +54,19 @@ exit
 echo "Transferring new catalog to production server..."
 ( cd $EKKITAB_HOME/release; scp -r catalog prod:/tmp ) 
 echo "Deploying new catalog on production server..."
+ZERO_SESSIONS_THRESHOLD=4
 ssh prod <<!
 export EKKITAB_HOME=/mnt2/scm;
 activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
 tries=0;
 MAXTRIES=30;
-while (( \$activesessions > 4 )) && (( \$tries < \$MAXTRIES )) ; do
+while (( \$activesessions > $ZERO_SESSIONS_THRESHOLD )) && (( \$tries < \$MAXTRIES )) ; do
 (( tries++ ));
 #echo "Sleeping. \$activesessions sessions are active."
 sleep 60;
 activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
 done;
-if (( \$activesessions <= 4 )) ; then
+if (( \$activesessions <= $ZERO_SESSIONS_THRESHOLD )) ; then
 cd /tmp/catalog;
 ./synchcatalog.sh;
 php $EKKITAB_HOME/bin/samplesearch.php
@@ -74,7 +75,7 @@ echo "Deleting image cache...";
 rm -rf $EKKITAB_HOME/magento/media/catalog/product/cache/1/*
 exit \$activesessions;
 !
-if (( $? <= 2 )) ; then
+if (( $? <= $ZERO_SESSIONS_THRESHOLD )) ; then
     echo "Completed daily sync routine. New catalog pushed into production." 
 else
     echo "Production system has active sessions. New catalog transferred but NOT pushed to production." 
