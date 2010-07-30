@@ -58,7 +58,12 @@ require_once $mageFilename;
 
 #Varien_Profiler::enable();
 
-Mage::setIsDeveloperMode(false);
+$file = 'productionsite';
+if(file_exists($file)){ 			
+	Mage::setIsDeveloperMode(false);
+}else{
+	Mage::setIsDeveloperMode(true);
+}
 #Mage::log("Hey! This is fun.");
 
 #ini_set('display_errors', 1);
