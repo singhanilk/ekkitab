@@ -5,6 +5,16 @@ use Spreadsheet::ParseExcel;
 my $oExcel = new Spreadsheet::ParseExcel;
 
 die "Usage $0 <Excel File> \n Redirect output to required file from stdout" unless @ARGV;
+use Config::Abstract::Ini;
+
+my $ekkitab_home = $ENV{EKKITAB_HOME};
+if (!($ekkitab_home)){
+print "Not Defined" . "\n";
+}
+my $Settingsfile = $ekkitab_home . "/config/stockprocess.ini";
+my $settings     = new Config::Abstract::Ini($Settingsfile);
+my %values       = $settings -> get_entry('availability');
+my $threshold    = $values{'threshold'};
 
 my $actualPrice;
 my $enteredcount = 0;
@@ -29,6 +39,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     my $imprintcol = -1;
     my $titlecol = -1;
     my $authorcol = -1;
+    my $availcol = -1;
 
     for(my $iR = $oWkS->{MinRow} ; defined $oWkS->{MaxRow} && $iR <= $oWkS->{MaxRow} ; $iR++) {
         for(my $iC = $oWkS->{MinCol} ; defined $oWkS->{MaxCol} && $iC <= $oWkS->{MaxCol} ; $iC++) {
@@ -61,6 +72,12 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     	        if ($imprintcol == -1) {
     		        if ($oWkC->Value =~ /PUBLISHER/) {
                         $imprintcol = $iC;
+                        next;
+    		        }
+                }
+    	        if ($availcol == -1) {
+    		        if ($oWkC->Value =~ /QTY/) {
+                        $availcol = $iC-1;
                         next;
     		        }
                 }
@@ -135,6 +152,19 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            $title = $value->Value;
            $title =~ s/\n//g;
         }
+        $value = $oWkS->{Cells}[$i][$availcol];
+        my $availability;
+        if(defined ($value)) {
+           $availability = $value->Value;
+           $availability =~ s/\n//g;
+           $availability =~ s/[^0-9]//g;
+           if ($availability > $threshold){
+           $availability = 'Available';
+           }
+           else{
+               $availability = 'Not Available' . '[' . $availability . ']';
+           }        
+        }
         $value = $oWkS->{Cells}[$i][$authorcol];
         my $author;
         if (defined ($value)) {
@@ -161,7 +191,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 		    }
             $printedcount++;
                   print $isbn . "\t" . $actualPrice . "\t" . $currency . "\t"  
-    		      . "Available" . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
+    		      . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
              }
         }
     }
