@@ -32,6 +32,8 @@ rundate=$(date +"%D-%T")
 ( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -p | php ../bin/sendmail.php -s "Daily Sync Report: [$rundate] Init Catalog - prices" $tomail ) 
 echo "Indexing and updating production database..."
 ( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -u ) 
+echo "Updating global section product ids..."
+( cd $EKKITAB_HOME/db ; php ./load_globalsection_books.php ../data/globalsection.ini )
 # Restart Tomcat
 sudo service tomcat6 stop
 sleep 10
