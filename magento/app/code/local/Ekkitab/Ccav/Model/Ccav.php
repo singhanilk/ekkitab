@@ -381,6 +381,8 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
         $grand_total = $total_amount ;
         $Checksum = $this->getcheckSum($Merchant_Id,$grand_total,$Order_Id ,$Redirect_Url,$WorkingKey);
   
+      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."grandtotalaks\n".print_r($this->getQuote()->getGrandtotal(),true)) ;
+        
         
         $sArr = array_merge($sArr, array(
                     'Amount' => $grand_total,
