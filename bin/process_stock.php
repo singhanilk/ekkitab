@@ -13,6 +13,8 @@ ini_set(“memory_limit”,"1024M");
 
 ini_set(include_path, ${include_path}.PATH_SEPARATOR.EKKITAB_HOME."/"."config");
 include("ekkitab.php");
+ini_set(include_path, ${include_path}.PATH_SEPARATOR.EKKITAB_HOME."/"."bin");
+include("convertisbn.php");
 
 function getConfig($file) {
    $config	= parse_ini_file($file, true);
@@ -41,6 +43,10 @@ function getBookPrices($file) {
       }
       $fields = explode("\t", $contents);
       $isbn = $fields[0];
+      // convert isbn to 13 digits if required.
+      if (strlen($isbn) == 10) {
+         $isbn = convertisbn($isbn);
+      } 
       $currency = $fields[2];
       $listPrice = $fields[1];
       if (isset($books[$isbn])) {
@@ -48,7 +54,7 @@ function getBookPrices($file) {
         // Rule: If currencies are both Indian, go with higher value.
         $book = $books[$isbn];
         if ($book['currency'] == $currency) {
-            if ($listPrice < $book['list_price']) {
+            if ($listPrice > $book['list_price']) {
                 $book['list_price'] = $listPrice;
             }
         }
@@ -131,6 +137,10 @@ function process($directory, $outputdir, $config, $books) {
                     $contents = str_replace("\n", "", $contents);
                     $fields = explode("\t", $contents);
                     $isbn = $fields[0];
+                    // convert isbn to 13 digits if required.
+                    if (strlen($isbn) == 10) {
+                        $isbn = convertisbn($isbn);
+                    } 
                     $title = $fields[5];
                     $author = $fields[6];
                     $currency = $bookprices[$isbn]['currency'];
