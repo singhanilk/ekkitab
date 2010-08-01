@@ -38,7 +38,10 @@ var payment = new Payment('co-payment-form', '<?php echo $this->getUrl('checkout
         </div>
     </div>
 </form>
-<div class="block-content note">* All Credit/Debit card payments are processed using very secured payment gateways.</div>
+<div class="block-content note">
+		* All Credit/Debit card payments are processed using very secured payment gateways and we do not save your Credit/Debit card details in any of our servers.<br/>
+		  
+</div>
 <div class="button-set">
     <div id="payment-buttons-container">
         <a href="#" class="left" onclick="checkout.back(); return false;">&laquo; <?php echo $this->__('Back') ?></a>

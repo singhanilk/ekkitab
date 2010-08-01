@@ -43,7 +43,7 @@ class Parser {
             if (($this->mode & MODE_BASIC) && (count($fields) != REQUIRED_BASIC_FIELDS)) {
                 return $isbn;
             } 
-            elseif (($this->mode &  MODE_PRICE) && (count($fields) != REQUIRED_PRICE_FIELDS)) {
+            elseif (($this->mode &  MODE_PRICE) && (count($fields) < REQUIRED_PRICE_FIELDS)) {
                 return $isbn;
             } 
 
@@ -288,7 +288,7 @@ class Parser {
                             throw new exception("Unknown currency " . str_replace("\"", "", strtoupper(trim($fields[1]))));
                             break;
             }
-			$book['list_price'] = str_replace("\"", "", trim($fields[2]));
+			$book['list_price'] = preg_replace("/[\",]/", "", trim($fields[2]));
 			$book['suppliers_discount'] = $this->getSuppliersDiscount($db, $book['distributor'], "Any");
             if ($book['suppliers_discount'] == null) {
                 throw new exception("No supplier discount data for " . $book['distributor']);
@@ -300,8 +300,12 @@ class Parser {
             else {
 			    $book['in_stock'] = 0;
             }
-
-            $book['delivery_period'] = $this->getDeliveryPeriod($db, $book['distributor'], "Any");
+            if(count($fields) > REQUIRED_PRICE_FIELDS){
+                $book['delivery_period'] = $fields[5];
+            }
+            else{
+                $book['delivery_period'] = $this->getDeliveryPeriod($db, $book['distributor'], "Any");
+            }
             if ($book['delivery_period'] == null) {
                 throw new exception("No delivery period data for " . $book['distributor']);
             }

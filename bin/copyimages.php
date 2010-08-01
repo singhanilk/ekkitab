@@ -44,6 +44,22 @@ else {
          return ("/" . $firstchar . "/" . $secondchar);
    }
 
+   function deleteCache($imagePath) {
+        $cacheBase = IMAGE_TARGET . "/cache/1";
+        $imageCache = $cacheBase . "/image/5e06319eda06f020e43594a9c230972d/" . $imagePath;
+        if (file_exists($imageCache)) {
+            unlink($imageCache);
+        }
+        $smallImageCache = $cacheBase . "/small_image/5e06319eda06f020e43594a9c230972d/" . $imagePath;
+        if (file_exists($smallImageCache)) {
+            unlink($smallImageCache);
+        }
+        $thumbnailImageCache = $cacheBase . "/thumbnail/5e06319eda06f020e43594a9c230972d/" . $imagePath;
+        if (file_exists($thumbnailImageCache)) {
+            unlink($thumbnailImageCache);
+        }
+   }
+
    function copyfiles($directory) {
         global $files_copied;
         global $files_failed;
@@ -60,49 +76,50 @@ else {
             echo "Failed to open source directory. $directory\n";
             return;
         }
-		$pfile = $directory."/.processed";
-		if(file_exists($pfile)){
-			return;
-		}
-		else {
-			while ($file = readdir($dir)) {
-				if (($file == ".") || ($file == ".."))
-					continue;
-				if (is_dir($directory."/".$file)) {
-					copyfiles($directory."/".$file); 
-				}
-				else {
-					$newfile = str_replace(".JPG", ".jpg", $file);
-					if ((strlen($newfile) > 4) && (substr($newfile, strlen($newfile) - 4, 4) == ".jpg")) {
+        $pfile = $directory."/.processed";
+        if(file_exists($pfile)){
+            return;
+        }
+        else {
+            while ($file = readdir($dir)) {
+                if (($file == ".") || ($file == ".."))
+                    continue;
+                if (is_dir($directory."/".$file)) {
+                    copyfiles($directory."/".$file); 
+                }
+                else {
+                    $newfile = str_replace(".JPG", ".jpg", $file);
+                    if ((strlen($newfile) > 4) && (substr($newfile, strlen($newfile) - 4, 4) == ".jpg")) {
                         $isbn = substr($newfile, 0, strpos($newfile, ".jpg"));
                         if (strlen($isbn) == 10) {
                             echo "converting $newfile\n";
                             $newfile = convertisbn($isbn) . ".jpg";
                         } 
                         if (strlen($newfile) == 17) { //13 isbn digits and 4 for the suffix
-						    $imagePath = getHashedPath($newfile);
-						    if (!is_dir(dirname(IMAGE_TARGET . "/" . $imagePath)))
-							    mkdir(dirname(IMAGE_TARGET . "/" . $imagePath), 0755, true); 
-						    $success = copy($directory . "/" . $file, IMAGE_TARGET . "/" . $imagePath);
-						    if (! $success) {
-							    $files_failed++;
-						    }
-						    else {
-						        $files_copied++;
-						    }
+                            $imagePath = getHashedPath($newfile);
+                            if (!is_dir(dirname(IMAGE_TARGET . "/" . $imagePath)))
+                                mkdir(dirname(IMAGE_TARGET . "/" . $imagePath), 0755, true); 
+                            $success = copy($directory . "/" . $file, IMAGE_TARGET . "/" . $imagePath);
+                            deleteCache($imagePath);
+                            if (! $success) {
+                                $files_failed++;
+                            }
+                            else {
+                                $files_copied++;
+                            }
                         }
-					}
-					else 
-						$files_ignored++;
-					
-				}
-				
-			}
-			$pfile = $directory."/.processed";
-			$fh = fopen($pfile,"w");
-			fclose($fh);
-			echo "Copied: $files_copied  Failed: $files_failed  Ignored: $files_ignored.\n";
-		}
+                    }
+                    else 
+                        $files_ignored++;
+                    
+                }
+                
+            }
+            $pfile = $directory."/.processed";
+            $fh = fopen($pfile,"w");
+            fclose($fh);
+            echo "Copied: $files_copied  Failed: $files_failed  Ignored: $files_ignored.\n";
+        }
    }
 
   if ($argc < 2) {

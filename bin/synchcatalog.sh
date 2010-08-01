@@ -1,16 +1,18 @@
 #!/bin/bash
 # Get the Ekkitab Home Directory. Confirm with user.
-while (true) ; do
-    read -p "Please specify Ekkitab home directory: " EKKITAB_HOME 
-    read -p "You have specified $EKKITAB_HOME as the Ekkitab home directory. Ok to continue? (y/n) " ok
-    ok=`echo $ok | tr 'A-Z' 'a-z'`
-    if [ $ok == "y" ] ; then
-        break;
-    elif [ $ok != "n" ] ; then 
-        echo "Ambiguous reply...Exiting"
-        break; 
-    fi
-done
+if [ -z $EKKITAB_HOME ] ; then
+    while (true) ; do
+        read -p "Please specify Ekkitab home directory: " EKKITAB_HOME 
+        read -p "You have specified $EKKITAB_HOME as the Ekkitab home directory. Ok to continue? (y/n) " ok
+        ok=`echo $ok | tr 'A-Z' 'a-z'`
+        if [ $ok == "y" ] ; then
+            break;
+        elif [ $ok != "n" ] ; then 
+            echo "Ambiguous reply...Exiting"
+            break; 
+        fi
+    done
+fi
 
 if [ -z $EKKITAB_HOME ] ; then
     echo "Fatal: EKKITAB_HOME is not set..."
@@ -65,6 +67,14 @@ echo -n "Updating books table [logging at $logfile] ..."
 mysql -h $host -u $user -p$password ekkitab_books < $releasedir/books.sql > $logfile 
 echo "done."
 
+echo -n "Updating book_availability table [logging at $logfile] ..."
+mysql -h $host -u $user -p$password ekkitab_books < $releasedir/book_availability.sql >> $logfile 
+echo "done."
+
+echo -n "Updating books_promo table [logging at $logfile] ..."
+mysql -h $host -u $user -p$password ekkitab_books < $releasedir/books_promo.sql >> $logfile 
+echo "done."
+
 # Check if the global section sql files are present.
 if [ ! -f $releasedir/ek_catalog_global_sections.sql ] || 
    [ ! -f $releasedir/ek_catalog_global_section_products.sql ] ; then
@@ -94,6 +104,8 @@ echo "done."
 # Copy this script to the bin directory.
 bindir=$EKKITAB_HOME/bin
 cp $releasedir/synchcatalog.sh $bindir
+# Copy sample search script to the bin directory.
+cp $releasedir/samplesearch.php $bindir
 
 sudo service tomcat6 start
 

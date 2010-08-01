@@ -26,7 +26,10 @@
 
 define('CONFIG_FILE', 'config.xml');
 
-$baseUrl    = dirname(dirname($_SERVER['SCRIPT_NAME'])) . '/';
+//$baseUrl    = dirname(dirname($_SERVER['SCRIPT_NAME'])) . '/';
+$host    = $_SERVER['HTTP_HOST'];
+$baseUrl    = "http://".$host."/";
+
 $reportId   = 0;
 
 /**

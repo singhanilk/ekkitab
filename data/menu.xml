@@ -1,5 +1,5 @@
 <MENU>
-    <SECTION title="New York Times BestSellers (Fiction)" type="collection" showall="yes" highlight="5" shuffle="yes">
+    <!--SECTION title="New York Times BestSellers (Fiction)" type="collection" showall="yes" highlight="5" shuffle="yes">
         <BOOK id="9781847246929" title="The Girl With The Dragon Tattoo" author="Stieg Larsson"/>
         <BOOK id="9781906694159" title="The Girl Who Played With Fire" author="Stieg Larsson"/>
         <BOOK id="9781416589648" title="Little Bee" author="Chris Cleave"/>
@@ -22,6 +22,18 @@
         <BOOK id="9780307387097" title="Half the Sky: Turning Oppression into Opportunity for Women Worldwide" author="Nicholas D. Kristof and Sheryl WuDunn"/>
         <BOOK id="9780141019017" title="Freakonomics: A Rogue Economist Explores the Hidden Side of Everything" author="Steven D. Levitt and Stephen J. Dubner "/>
         <BOOK id="9780553593310" title="Helmet For My Pillow: From Parris Island To The Pacific" author="Robert Leckie"/>
+    </SECTION-->
+    <SECTION title="New Releases" type="collection" showall="yes" highlight="5" shuffle="yes">
+        <BOOK id="9781439184301" title="The Overton Window" author="Glenn Beck"/>
+        <BOOK id="9780307269997" title="The Girl Who Kicked the Hornet's Nest" author="Stieg Larsson"/>
+        <BOOK id="9780446563048" title="Delivering Happiness: A Path To Profits, Passion, And Purpose" author="Tony Hsieh"/>
+        <BOOK id="9780316125581" title="The Short Second Life of Bree Tanner" author="Stephenie Meyer"/>
+        <BOOK id="9780345504968" title="The Passage" author="Justin Cronin"/>
+        <BOOK id="9781594202537" title="Cognitive Surplus: Creativity and Generosity in a Connected Age" author="Clay Shirky"/>
+        <BOOK id="9780307378705" title="Extra Lives: Why Video Games Matter" author="Tom Bissell"/>
+        <BOOK id="9780307272829" title="Nine Lives: In Search of the Sacred in Modern India" author="William Dalrymple"/>
+        <BOOK id="9780385522861" title="Welcome to Utopia: Notes from a Small Town" author="Karen Valby"/>
+        <BOOK id="9780307387097" title="Half the Sky: Turning Oppression Into Opportunity for Women Worldwide" author="Nicholas D. Kristof &amp; Sheryl WuDunn"/>
     </SECTION>
     <SECTION title="Popular in India" type="collection" showall="yes" highlight="5" shuffle="yes">
         <BOOK id="9788172234980" title="The Alchemist" author="Paulo Coelho"/>
@@ -74,18 +86,6 @@
             <BOOK id="9780143036661" title="March" author="Geraldine Brooks"/>
         </LINK>
     </SECTION>
-    <SECTION title="New Releases" type="collection" showall="yes" highlight="5" shuffle="yes">
-        <BOOK id="9781439184301" title="The Overton Window" author="Glenn Beck"/>
-        <BOOK id="9780307269997" title="The Girl Who Kicked the Hornet's Nest" author="Stieg Larsson"/>
-        <BOOK id="9780446563048" title="Delivering Happiness: A Path To Profits, Passion, And Purpose" author="Tony Hsieh"/>
-        <BOOK id="9780316125581" title="The Short Second Life of Bree Tanner" author="Stephenie Meyer"/>
-        <BOOK id="9780345504968" title="The Passage" author="Justin Cronin"/>
-        <BOOK id="9781594202537" title="Cognitive Surplus: Creativity and Generosity in a Connected Age" author="Clay Shirky"/>
-        <BOOK id="9780307378705" title="Extra Lives: Why Video Games Matter" author="Tom Bissell"/>
-        <BOOK id="9780307272829" title="Nine Lives: In Search of the Sacred in Modern India" author="William Dalrymple"/>
-        <BOOK id="9780385522861" title="Welcome to Utopia: Notes from a Small Town" author="Karen Valby"/>
-        <BOOK id="9780307387097" title="Half the Sky: Turning Oppression Into Opportunity for Women Worldwide" author="Nicholas D. Kristof &amp; Sheryl WuDunn"/>
-    </SECTION>
     <SECTION title="Pick Of the Week" type="collection" showall="yes" highlight="1" shuffle="yes">
         <BOOK id="9781408808863" title="Alex's Adventures In Numberland" author="Alex Bellos"/>
         <BOOK id="9781423113386" title="The Kane Chronicles: Red Pyramid" author="Rick Riordan"/>
@@ -120,10 +120,7 @@
             <SEARCH field="category">self-help</SEARCH>
         </LINK>
     </SECTION>
-    <SECTION title="Top Authors" type="links" showall="no">
-        <LINK name="A.P.J Abdul Kalam" type ="search">
-            <SEARCH field="author">A.P.J Abdul Kalam</SEARCH>
-        </LINK>
+    <!--SECTION title="Top Authors" type="links" showall="no">
         <LINK name="Amartya Sen" type ="search">
             <SEARCH field="author">Amartya Sen</SEARCH>
         </LINK>
@@ -136,23 +133,14 @@
         <LINK name="Amitav Ghosh" type ="search">
             <SEARCH field="author">Amitav Ghosh</SEARCH>
         </LINK>
-        <LINK name="Nandan Nilkeni" type ="search">
-            <SEARCH field="author">Nandan Nilkeni</SEARCH>
-        </LINK>
         <LINK name="Subroto Bagchi" type ="search">
             <SEARCH field="author">Subroto Bagchi</SEARCH>
-        </LINK>
-        <LINK name="Jawaharlal Nehru" type ="search">
-            <SEARCH field="author">Jawaharlal Nehru</SEARCH>
         </LINK>
         <LINK name="Gurcharan Das" type ="search">
             <SEARCH field="author">Gurcharan Das</SEARCH>
         </LINK>
         <LINK name="Deepak Chopra" type ="search">
             <SEARCH field="author">Deepak Chopra</SEARCH>
-        </LINK>
-        <LINK name="J K Rowling" type ="search">
-            <SEARCH field="author">J K Rowling</SEARCH>
         </LINK>
         <LINK name="Pamuk Orhan" type ="search">
             <SEARCH field="author">Pamuk Orhan</SEARCH>
@@ -172,26 +160,17 @@
         <LINK name="Sashi Tharoor" type ="search">
             <SEARCH field="author">Sashi Tharoor</SEARCH>
         </LINK>
-        <LINK name="Satyajit Ray" type ="search">
-            <SEARCH field="author">Satyajit Ray</SEARCH>
-        </LINK>
         <LINK name="Thomas Friedman" type ="search">
             <SEARCH field="author">Thomas Friedman</SEARCH>
         </LINK>
         <LINK name="Vikram Seth" type ="search">
             <SEARCH field="author">Vikram Seth</SEARCH>
         </LINK>
-        <LINK name="Kushwant Singh" type ="search">
-            <SEARCH field="author">Kushwant Singh</SEARCH>
-        </LINK>
-        <LINK name="Mark Tully" type ="search">
-            <SEARCH field="author">Mark Tully</SEARCH>
-        </LINK>
-        <LINK name="Sobha Dee" type ="search">
-            <SEARCH field="author">Sobha Dee</SEARCH>
+        <LINK name="Khushwant Singh" type ="search">
+            <SEARCH field="author">Khushwant Singh</SEARCH>
         </LINK>
         <LINK name="Robin Sharma" type="search"> 
             <SEARCH field="author">robin sharma</SEARCH>
         </LINK>
-    </SECTION>
+    </SECTION-->
 </MENU>

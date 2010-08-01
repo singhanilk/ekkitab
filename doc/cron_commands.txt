@@ -1,0 +1,21 @@
+# Execute daily data pull, data import, catalog and index build and transfer to production.
+00 15   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./dailysync.sh vijay@ekkitab.com anil@ekkitab.com | php /mnt2/scm/bin/sendmail.php -s "Daily Sync Summary" vijay@ekkitab.com anil@ekkitab.com
+# Execute hourly processing of stocklists coming in as email attachments.
+00 *   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./stockstatusimport.sh christopher@ekkitab.com anil@ekkitab.com saran@ekkitab.com
+# Backup production database tables hourly. (Production)
+00 *   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/utils && ./backupdb.sh
+# Check for user reviews and inform administrator. (Production)
+10 1   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./checkreviews.sh | php $EKKITAB_HOME/bin/sendmail.php -s "User Reviews for Moderation" anisha@ekkitab.com  vijay@ekkitab.com
+# Backup /mnt2/ on the server (Production)
+00 5   * * *   ubuntu  cd /mnt2/tools && ./bkmnt2.sh
+# Backup /mnt3/ on the server  (Images) (Production)
+00 2   * * 0   ubuntu  cd /mnt2/tools && ./bkmnt3.sh
+# Backup /mnt2/ on the server (Staging)
+00 5   * * *   ubuntu  cd /mnt2/tools && ./bkmnt2.sh
+# Backup /mnt3/ on the server  (Images) (Staging)
+00 2   * * 0   ubuntu  cd /mnt2/tools && ./bkmnt3.sh
+# Backup /mnt4/ on the server  (Archives) (Staging)
+00 7   1 * *   ubuntu  cd /mnt2/tools && ./bkmnt4.sh
+
+
+

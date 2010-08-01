@@ -310,9 +310,16 @@ a:hover {
 .topSearchArea .textField {
 	padding: 3px 0px 0px 2px;
 	font-size: 12px;
-	width: 300px;
+	width: 250px;
 	float: left;
 	height:17px;
+}
+.topSearchArea .selectField {
+	padding-left:2px;
+	margin-left:5px;
+	font-size: 12px;
+	border:1px inset #000;
+	height:20px;
 }
 .topSearchArea .searchBut {
 	width: 21px;
@@ -325,10 +332,13 @@ a:hover {
 	line-height: 25px;
 	text-align: center;
 	margin: 0 auto 10px;
+	margin:0 auto;
 	font-size: 1.1em;
 	font-weight: bold;
 	padding-top: 3px;
 }
+
+
 .globalLinks a, .globalLinks a:visited {
 	color: #666;
 	margin: 0 8px;
@@ -738,12 +748,6 @@ a:hover {
 	line-height: 18px;
 	margin-top: 10px;
 }
-.hideReviewForm {
-	display:none;
-}
-.showReviewForm {
-	display:block;
-}
 .reviewee {
 	text-align: right;
 	font-weight: bold;	
@@ -782,15 +786,6 @@ a:hover {
 	border-bottom: 1px dotted #333;
 }
 
-.globalLinks {
-	font-size:1.1em;
-	font-weight:bold;
-	line-height:25px;
-	margin:0 auto;
-	padding-top:3px;
-	text-align:center;
-	width:960px;
-}
 .breadCrumbs {
 	line-height: 24px;
 	border-bottom: 1px dotted #333;
@@ -880,6 +875,7 @@ a:hover {
 	line-height:24px;
 	margin-bottom:8px;
 	padding-right:0px;
+	padding-bottom:3px;
 	text-align:left;
 	border-bottom: 1px dotted #333;
 }
@@ -1002,6 +998,7 @@ a:hover {
 	color:#CC6600;
 	float:none;
 	font-size:20px;
+	margin-bottom: 8px;
 	width:74%;
 }
 .allCategoriesLists, .allCategoriesListsFirst {
@@ -1057,6 +1054,7 @@ a:hover {
 	color:#CC6600;
 	float:none;
 	font-size:20px;
+	margin-bottom: 8px;
 	width:74%;
 }
 .authorsButArea {
@@ -1777,9 +1775,11 @@ a:hover {
 
 .pageHeader {
 	width: 74%;
+	margin-bottom: 8px;
 	font-size: 20px;
 	color: #c60;
 	float: left;
+	line-height:25px
 }
 
 /* Data Table */
@@ -2100,10 +2100,6 @@ a:hover {
 
 }
 
-.delete {
-	clear: both
-}
-
 .vColumns, .vMidColumn {
 	float:left;
 	margin-top:8px;
@@ -2267,6 +2263,45 @@ a:hover {
 	padding-top: 85px;
 	line-height: 1.6em;
 }
+.hmIndClassRow {
+	background-image: url(../images/hm_ind_classics_vis.jpg);
+	background-position:right top;
+	background-repeat:no-repeat;
+	margin-bottom:8px;
+	padding-bottom:8px;
+}
+.hmIndClassTextImage {
+	background-image: url(../images/hm_ind_classics_text.png);
+	background-position:left top;
+	background-repeat:no-repeat;
+	line-height:1.6em;
+	padding-top:95px;
+}
+.hmFictionRow {
+	background-image: url(../images/hm_fiction_vis.jpg);
+	background-position:right top;
+	background-repeat:no-repeat;
+	margin-bottom:8px;
+	padding-bottom:8px;
+}
+.hmFictionTextImage {
+	line-height:1.6em;
+	padding-top:95px;
+}
+.hmChildrenRow {
+	background-image: url(../images/hm_childrens_vis.jpg);
+	background-position:right top;
+	background-repeat:no-repeat;
+	margin-bottom:8px;
+	padding-bottom:8px;
+}
+.hmChildrenTextImage {
+	background-image: url(../images/hm_childrens_text.jpg);
+	background-position:left top;
+	background-repeat:no-repeat;
+	line-height:1.6em;
+	padding-top:95px;
+}
 
 
 .mainArea .hmSummerRow .readMore {
@@ -2358,7 +2393,7 @@ dt .hdr {
 }
 
 .finDetOtherEdition {
-	width: 492px;
+	width: 496px;
 	height: 30px;
 	background-image: url(../images/review_title_bg.png);
 	background-position: left top;
@@ -2405,4 +2440,41 @@ dt .hdr {
 
 .donateArea .abtTextArea  img {
 	float:right;
+}
+
+.hideContent {
+	display:none;
+}
+.showContent {
+	display:block;
+}
+
+.bookPromoContentTop {
+	background-image: url(../images/read_more_top.png);
+	width:496px;
+	height: 25px;
+	line-height: 25px;
+	background-position: left top;
+	background-repeat: no-repeat;
+	text-align: right;
+	padding-right: 8px;
+	padding-left: 8px;
+}
+
+.bookPromoContent {
+	width:496px;
+	line-height: 18px;
+	color: #666666;
+	padding-right: 8px;
+	padding-left: 8px;
+}
+.bookPromoContentBot {
+	width:496px;
+	background-image: url(../images/read_more_bot.png);
+	height: 25px;
+	background-position: left top;
+	background-repeat: no-repeat;
+	margin-bottom: 12px;
+	padding-right: 8px;
+	padding-left: 8px;
 }

@@ -349,8 +349,8 @@ public class EkkitabSearch {
         			sb.append(searchfield+":"+term+" ");
         		}
         		else {
-        			sb.append("title:"+term+"^2 ");
-        			sb.append("author:"+term+" ");
+        			sb.append("title:"+term+" ");
+        			sb.append("author:"+term+"^2 ");
         		}
         	}
         	sb.append(" ) ");

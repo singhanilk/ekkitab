@@ -133,15 +133,15 @@ if(!is_null($results) && is_array($results)){
 
 					<?php endif; ?>
 				<?php elseif($this->getTotalNum()==1): ?>
-					<?php echo $this->__('Showing the only book', $this->getTotalNum()) ?>
+					<?php echo $this->__('Showing %s book', $this->getTotalNum()) ?>
 				<?php else: ?>
 					<?php echo $this->__('Showing all %s books', $this->getTotalNum()) ?>
 				<?php endif; ?><?php if(!is_null($suggest) && strlen($suggest)>0 ) : ?> for ' <?php echo  ucwords($suggest) ?> '<?php endif; ?>
 			</div><!-- leftArea -->
 
+			<?php if($this->getLastPageNumber()>1): ?>
 			<div class="rightArea">
 				<div class="topPaginationArea">
-					<?php if($this->getLastPageNumber()>1): ?>
 					<ul>
 						<?php if (!$this->isFirstPage()): ?>
 							<li><a href="<?php echo $this->getPreviousPageUrl() ?>" id="prev"><?php echo $this->__('Prev') ?></a></li>
@@ -164,9 +164,9 @@ if(!is_null($results) && is_array($results)){
 						<?php endif; ?>
 
 					</ul>
-					<?php endif; ?>
 				</div>
 			</div><!-- rightArea -->
+			<?php endif; ?>
 			<div class="clear"></div>
 		</div><!-- searchResTop -->
 <?php 	foreach($bookList as $book):	
@@ -210,7 +210,7 @@ if(!is_null($results) && is_array($results)){
 			$savings= $listPrice - $discPrice;
 			$savingsPerct= round(($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 0);
 			$savingsPerct= $savingsPerct > 5 ? $savingsPerct : 0; 
-			$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Delivers in ".$shippingTimeMin." - ".$shippingTimeMax." days":"";
+			$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Delivers in ".$shippingTimeMin." - ".$shippingTimeMax." business days":"";
 			$shortDesc= ($shortDesc =="Not Available") ? "" : $shortDesc;
 			
 			$shortDesc = getShortenedString($shortDesc,30);
@@ -224,7 +224,7 @@ if(!is_null($results) && is_array($results)){
 			<!-- skuImage -->
 			<div class="detailsArea">
 			<div class="bkTitle"><a href="<?php echo $this->getUrl($url)?>" title="<?php echo $title ?>"><?php echo $title ?></a></div><!-- bkTitle -->
-			<?php if($author && trim($author)!=''):?><div class="lineHeight14em">Author: <?php echo $author ?></div><?php endif; ?>
+			<?php if($author && trim($author)!=''):?><div class="lineHeight14em">Author: <a href="<?php echo $this->getUrl('ekkitab_catalog/search/index/author/'.$author)?>"><?php echo $author ?></a></div><?php endif; ?>
 			<?php if($parsedAuthor && trim($parsedAuthor)!=''): ?><div class="lineHeight14em">With Contributions from: <?php echo $parsedAuthor ?></div><?php endif; ?>
 			<div class="lineHeight14em">ISBN:  <?php echo $isbn ?></div>
 			<?php if(trim($binding)!=''): ?><div class="lineHeight14em">Binding: <?php echo $binding ?></div><?php endif; ?>

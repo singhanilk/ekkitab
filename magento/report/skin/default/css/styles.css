@@ -1,0 +1,332 @@
+	body {
+		margin: 0;
+		padding: 0;
+		background:#ffffff;
+		background-image: url('../images/mainbg.png');
+		background-position: center top;
+		background-repeat: repeat-x;
+		font-family: Georgia, "Times New Roman", Times, serif;
+		font-size: 65%;
+		text-align:left;
+	}
+	.header {
+		width: 960px;
+		background-image: url('../images/header_1.png');
+		background-position: center top;
+		background-repeat: no-repeat;
+		height: 104px;
+		margin: 3px auto 0;
+	}
+	.whiteBg {
+		background-image: url(../images/whitebg.png);
+		background-position: center top;
+		background-repeat: no-repeat;
+		width: 1000px;
+		margin: 0 auto;
+		padding: 0 0 0px 0;	
+	}
+
+	.footerTop, .footerBot {
+		background-image: url(../images/footer_top.png);
+		background-position: center top;
+		background-repeat: no-repeat;
+		width: 960px;
+		height: 7px;
+		margin: 0 auto;
+	}
+	.footerBot {
+		background-image: url(../images/footer_bot.png);
+	}
+	.footerMid {
+		width: 918px;
+		background-color: #f4f4f4;
+		border-left: 1px solid #d8d8d8;
+		border-right: 1px solid #d8d8d8;
+		text-align: center;
+		padding: 10px 20px;
+		margin: 0 auto;
+	}
+	.footerHdr {
+		font-size: 1.2em;
+		font-weight: bold;
+		color: #c60;
+		padding: 0;
+	}
+	.dottedLine {
+		height: 10px;
+		border-bottom: 1px dotted #999;
+		margin-bottom: 5px;
+	}
+
+
+	.wrapper {
+		width: 940px;
+		margin: 0 auto;
+	}
+    .header-top-container {
+        background:transparent url('../images/header_top_container_bg.jpg') repeat-x scroll 50% 0pt;
+        border-bottom:1px solid #415966;
+    }
+    .header-top {
+        padding:10px;
+        margin:0pt auto;
+        position:relative;
+        width:930px;
+    }
+	.logo {
+		width: 284px;
+		height: 89px;
+		float: left;
+		margin: 11px 0 0 5px;
+	}
+	.logo a{
+		width: 284px;
+		height: 89px;
+		background-image: url(../images/ekkitab_logo.png);
+		background-position: left top;
+		background-repeat: no-repeat;
+		display: block;
+	}
+    h1, h2, h3, h4, h5, h6, .head {
+        color:#0A263C;
+        line-height:1.3em;
+        margin-bottom:0.4em;
+    }
+    a {
+        color:#1E7EC8;
+        text-decoration:underline;
+    }
+    a img {
+        border:0pt none;
+    }
+	.reportArea {
+		margin:25px auto 10px;
+		padding-bottom:10px;
+		width:880px;
+		height:250px;
+		font-size: 11px;
+		line-height: 22px;
+        text-align:left;
+	}
+	.reportArea .pageHeader {
+		color:#CC6600;
+		float:none;
+		margin:0px auto 10px;
+		font-size:20px;
+	}
+	.reportArea p {
+		margin: 0;
+		padding: 0;
+		margin-left: 20px;
+		list-style-type:circle;
+	}
+	.middle-container {
+        background:#FBFAF6 url('../images/main_container_bg.gif') no-repeat scroll 50% 0pt;
+    }
+    .middle {
+        background:#FFFFFE url('../images/main_bg.gif') no-repeat scroll 0% 0%;
+        padding:25px 25px 80px;
+        margin:0pt auto;
+        min-height:400px;
+        position:relative;
+        text-align:left;
+        width:900px;
+    }
+    .col-1-layout .col-main {
+        float:none;
+        margin:0pt;
+    }
+    .col-main {
+        float:left;
+    }
+    .page-head, .page-head-alt {
+        text-align:right;
+    }
+    .page-head {
+        border-bottom:1px solid #CCCCCC;
+        margin:0pt 0pt 25px;
+    }
+    .page-head h3, .page-head-alt h3 {
+        font-size:1.7em !important;
+        font-weight:normal !important;
+        margin:0pt;
+        text-align:left;
+        text-transform:none !important;
+    }
+    form {
+        display:inline;
+    }
+    .group-select {
+        background:#FBFAF6 none repeat scroll 0% 0%;
+        border:1px solid #BBAFA0;
+        margin:28px 0pt;
+        padding:22px 25px 12px;
+    }
+    fieldset {
+        border:medium none;
+    }
+    input, select, button {
+        vertical-align:middle;
+    }
+    .group-select .legend {
+        background:#F9F3E3 none repeat scroll 0% 0%;
+        border:1px solid #F19900;
+        color:#E76200;
+        float:left;
+        font-size:1.1em;
+        font-weight:bold;
+        margin-top:-33px;
+        padding:0pt 8px;
+    }
+    .group-select li {
+        padding:4px 8px !important;
+    }
+    li {
+        list-style-image:none;
+        list-style-position:outside;
+        list-style-type:none;
+    }
+    .group-select li .input-box {
+        float:left;
+        width:275px;
+    }
+    .group-select label, .form-list label, .payment-methods label {
+        font-weight:bold;
+    }
+    label {
+        color:#666666;
+        font-weight:bold;
+    }
+    .required {
+        color:#EB340A;
+    }
+    .group-select li .input-box .input-text, .group-select li .input-box textarea {
+        width:250px;
+    }
+    input.input-text, textarea {
+        padding:2px;
+    }
+    input.input-text, select, textarea {
+        -x-system-font:none;
+        border:1px solid #B6B6B6;
+        font-family:arial,helvetica,sans-serif;
+        font-size:12px;
+        font-size-adjust:none;
+        font-stretch:normal;
+        font-style:normal;
+        font-variant:normal;
+        font-weight:normal;
+        line-height:normal;
+    }
+    .button-set {
+        border-top:1px solid #E4E4E4;
+        clear:both;
+        margin-top:4em;
+        padding-top:8px;
+        text-align:right;
+    }
+    p.required {
+        font-size:0.95em;
+        text-align:right;
+    }
+    p {
+        margin-bottom:0.8em;
+    }
+    .form-button, .form-button-alt {
+        -x-system-font:none !important;
+        background:#F18200 none repeat scroll 0% 0%;
+        border:1px solid #DE5400;
+        color:#FFFFFF;
+        cursor:pointer;
+        font-family:arial,sans-serif !important;
+        font-size:12px !important;
+        font-size-adjust:none !important;
+        font-stretch:normal !important;
+        font-style:normal !important;
+        font-variant:normal !important;
+        font-weight:bold !important;
+        line-height:normal !important;
+        overflow:visible;
+        padding:1px 8px;
+        text-align:center;
+        vertical-align:middle;
+        width:auto;
+    }
+    .form-button span, .form-button-alt span {
+        white-space:nowrap;
+    }
+    .footer-container {
+        border-top:15px solid #B6D1E2;
+    }
+    .footer {
+        margin:0pt auto;
+        padding:1em 1em 4em;
+        position:relative;
+        width:930px;
+    }
+    .footer .legality {
+        color:#ECF3F6;
+        padding:13px 0pt;
+        text-align:center;
+    }
+	.clear5 {
+		clear: both;
+		height: 5px;
+	}
+    .clear:after,
+    .head:after,
+    .header-top:after,
+    #nav:after,
+    .middle:after,
+    .button-set:after,
+    .legend:after,
+    .button-container:after,
+    .group-select li:after,
+    .side-col li:after,
+    .listing-type-list .listing-item:after,
+    .listing-type-list .product-info .product-reviews:after {
+        content:".";
+        display:block;
+        clear:both;
+        height:0;
+        font-size:0;
+        line-height:0em;
+        visibility:hidden;
+        overflow:hidden;
+    }
+    .messages {
+        overflow:hidden;
+        width:100%;
+    }
+    .error-msg {
+        background-color:#FAEBE7;
+        background-image:url('../images/error_msg_icon.gif');
+        border-color:#F16048;
+        color:#DF280A;
+    } .success-msg {
+        border-color:#446423;
+        color:#3d6611;
+        background-color:#eff5ea;
+        background-image:url('../images/success_msg_icon.gif');
+    } .note-msg {
+        border-color:#fcd344;
+        color:#3d6611;
+        background-color:#fafaec;
+        background-image:url('../images/note_msg_icon.gif');
+    }
+
+    .error-msg, .success-msg, .note-msg, .note-msg {
+        background-position:10px 10px !important;
+        background-repeat:no-repeat !important;
+        border-style:solid !important;
+        border-width:1px !important;
+        font-size:0.95em !important;
+        font-weight:bold !important;
+        margin-bottom:1em !important;
+        min-height:23px !important;
+        padding:8px 8px 8px 32px !important;
+    }
+    .error-msg li, .success-msg li, .notice-msg li {
+        margin-bottom:0.2em;
+    }
+

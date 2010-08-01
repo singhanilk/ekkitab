@@ -42,7 +42,9 @@
                 <div class="input-box">
                 <label for="billing:email"><?php echo $this->__('Email Address') ?> <span class="required">*</span></label><br/>
                 <input type="text" name="billing[email]" id="billing:email" value="<?php echo $this->htmlEscape($this->getAddress()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="validate-email required-entry input-text"/></div>
-    <?php endif ?>
+    <?php else: ?>
+                <input type="hidden" name="billing[email]" id="billing:email" value="<?php echo $this->getCustomer()->getEmail() ?>"/>
+    <?php endif ;?>
                 </li>
             <li><label for="billing:street1"><?php echo $this->__('Address') ?> <span class="required">*</span></label><br/>
                 <input type="text" title="<?php echo $this->__('Street Address') ?>" name="billing[street][]" id="billing:street1" value="<?php echo $this->htmlEscape($this->getAddress()->getStreet(1)) ?>" class="required-entry input-text"/></li>

@@ -149,6 +149,17 @@ echo -n "Resetting admin access url..."
 ( cd $magentodir/app/etc ; sed 's/<frontName><.*><\/frontName>/<frontName><!\[CDATA\[ek1671ad9591\]\]><\/frontName>/g' local.xml > local.xml.tmp && mv local.xml.tmp local.xml )
 echo "done."
 
+# Check if the global section sql files are present.
+if [ ! -f $releasedir/ek_catalog_global_sections.sql ] || 
+   [ ! -f $releasedir/ek_catalog_global_section_products.sql ] ; then
+    echo "Fatal: Release directory does not contain data for global sections."
+    exit 1;
+fi
+echo -n "Updating global sections..."
+mysql -h $host -u $user -p$password ekkitab_books < $releasedir/ek_catalog_global_sections.sql >/dev/null 
+mysql -h $host -u $user -p$password ekkitab_books < $releasedir/ek_catalog_global_section_products.sql >/dev/null 
+echo "done."
+
 # Copy the patch scripts to their correct place as well as the dbupdate script.
 dbdir=$EKKITAB_HOME/db
 if [ ! -d $dbdir/patches ] ; then
@@ -164,6 +175,9 @@ cp $releasedir/checkdbversion.php $dbdir
 # Copy this script to the bin directory.
 bindir=$EKKITAB_HOME/bin
 cp $releasedir/synchrelease.sh $bindir
+# Copy other scripts to the bin directory.
+cp $releasedir/getactivesessions.sh $bindir
+cp $releasedir/checkreviews.sh $bindir
 
 sudo service tomcat6 start
 

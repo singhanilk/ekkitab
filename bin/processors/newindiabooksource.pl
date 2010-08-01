@@ -7,6 +7,8 @@ my $oExcel = new Spreadsheet::ParseExcel;
 die "Usage $0 <Excel File> \n Redirect output to required file from stdout" unless @ARGV;
 my $FH = "filehandle";
 my $FilePath;
+my $enteredcount = 0;
+my $printedcount = 0;
 my $oBook = $oExcel->Parse($ARGV[0]);
 if (not defined $oBook) {
     print STDERR "Failed to parse input file: $ARGV[0]\n"; 
@@ -79,9 +81,12 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             last;
         }
     }
+    if (!(($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($imprintcol >= 0) && ($titlecol >= 0) && ($authorcol >= 0))) {
+            print STDERR "[Warning] Incomplete information in excel sheet. Cannot parse. Continuing to next sheet.\n";
+            last;
+    }
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
-        
         my $currency;
         my $value = $oWkS->{Cells}[$i][$isbncol];
         my $isbn;
@@ -97,27 +102,31 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            $price = $value->Value;
            $price =~ s/\n//g;
            if($price =~ /[0-9]/){
-	   $currency = 'I';	
-	   }
-	   if($price =~ /\$/){
-	   $currency = 'U';
-           $price =~ s/\$//g;
-	   }
-	   if($price =~ /\xa3/){
-	   $currency = 'P';
-           $price =~ s/\xa3//g;
-	   }
+	        $currency = 'I';	
+	       }
+	       if($price =~ /\$/){
+	        $currency = 'U';
+            $price =~ s/\$//g;
+	       }    
+	       if($price =~ /\xa3/){
+	         $currency = 'P';
+             $price =~ s/\xa3//g;
+	       }
         }
         $value = $oWkS->{Cells}[$i][$availcol];
         my $availability;
         if(defined ($value)) {
            $availability = $value->Value;
            $availability =~ s/\n//g;
-           if ($availability gt 0){
+           if ($availability > 2){
 	       $availability = 'Available';
+            if (length($isbn) == 10 || length($isbn) == 13){
+                $enteredcount++;
+            }
            }
            else{
-               $availability = 'Not Available';
+		  $printedcount++;
+               $availability = 'Not Available' . '[' . $availability . ']';
            }        
         }
         $value = $oWkS->{Cells}[$i][$imprintcol];
@@ -155,5 +164,9 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         }
     }
 }
-
+    my $ratio = ($printedcount/$enteredcount)*100;
+    if (int($ratio) < 70){
+        warn "[WARNING] Values printed less than 70% \n";
+    }
+print "Available --> $enteredcount Not Available --> $printedcount Total -->" . ($enteredcount+$printedcount) . "\n";
 exit(0);

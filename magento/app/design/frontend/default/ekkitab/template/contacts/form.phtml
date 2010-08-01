@@ -25,12 +25,14 @@
  */
 ?>
 <div class="pageHeader"><?php echo Mage::helper('contacts')->__('Contact Us') ?></div>
-<div class="clear">&nbsp;</div>
+<div class="clear"></div>
 <div class="myAccCopy">
 	<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
 	<form action="<?php echo $this->getFormAction(); ?>" id="contactForm" method="post">
+		<ul><li>Please visit our <a href="<?php echo $this->getHelper()->getUrl('help')?>">help</a> section to find an answer to your question.</li>
+		<li>If our help section did not answer to your question, please use the form below.</li> <p></p></ul>
 		<div class="accTop">
-			<div class="accHdr"><?php echo Mage::helper('contacts')->__('Contact Information') ?></div>
+			<div class="accHdr"><?php echo Mage::helper('contacts')->__('Query Form') ?></div>
 			<div class="clear"></div>
 		</div>	
 		<div class="content">
@@ -60,7 +62,7 @@
 			</li>
 			<li>
                 <div class="input-box">
-                    <label for="comment"><?php echo Mage::helper('contacts')->__('Comment') ?> <span class="required">*</span></label><br />
+                    <label for="comment"><?php echo Mage::helper('contacts')->__('Your Question / Feedback ') ?> <span class="required">*</span></label><br />
                     <textarea name="comment" id="comment" title="<?php echo Mage::helper('contacts')->__('Comment') ?>" class="required-entry input-text" style="height:150px;width:525px;" cols="50" rows="5"></textarea>
                 </div>
 			</li>
@@ -70,7 +72,29 @@
 		</ul>
 		</fieldset>
 	</div>
-    </div>
+	<br/>
+	<div class="accTop">
+		<div class="accHdr"><?php echo Mage::helper('contacts')->__('Contact Information') ?></div>
+		<div class="clear">	<br/></div>
+	</div>	
+	<br/>
+	<ul>
+		<li><strong>Office Address:</strong></li>
+		<li>#1134, 4th Floor, 100 ft. Road,</li>
+		 <li>HAL II Stage,</li>
+		 <li>Bangalore - 560008<br/></li>
+	</ul>
+	<br/>
+	<ul>
+		<li><strong>Telephone:</strong></li>
+		<li> +91 80 41732016 (Reachable between: 10:00AM and 5:00PM IST, Monday to Friday, except on holidays.)</li>
+	</ul>
+	<br/>
+	<ul>
+		<li><strong>Email Address:</strong></li>
+		<li><a href="mailto:support@ekkitab.com">support@ekkitab.com</a> </li>
+	</ul>
+	</div>
 </form>
 <script type="text/javascript">
     var contactForm = new VarienForm('contactForm', true);

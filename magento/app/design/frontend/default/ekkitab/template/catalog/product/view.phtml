@@ -30,7 +30,7 @@
  * @see Ekkitab_Catalog_Block_Product_View
  */
 ?>
-<?php
+<a name="home" ></a><?php
     $_helper = $this->helper('catalog/output');
     $_product = $this->getProduct();
 	if(!is_null($_product)){
@@ -69,7 +69,7 @@
 		$savingsPerct= round(($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 0);
 		$shippingTimeMin = (int)$_product->getDeliveryPeriod();
 		$shippingTimeMax = round($shippingTimeMin + (.5 * $shippingTimeMin) );
-		$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Delivers in ".$shippingTimeMin." - ".$shippingTimeMax." days":"";
+		$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Delivers in ".$shippingTimeMin." - ".$shippingTimeMax." business days":"";
 		$publishers=strlen($publishers)>0 ? ucwords($publishers):"NA";
 		$image = $_product->getImage();
 ?>
@@ -79,7 +79,7 @@
            <img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'image',false,null, 200); ?>"><br/>
         </div>
 		<div class="midArea">
-			<div class="finDetBkTitle"><?php echo $_product->getTitle() ?> <?php echo (strlen($author) > 0 )? "<br/><span class=\"lineHeight14em\"> by ".$author ."</span>" :""?></div><!-- authorEtc -->
+			<div class="finDetBkTitle"><?php echo $_product->getTitle() ?> <?php echo (strlen($author) > 0 )?( "<br/><span class=\"lineHeight14em\"> by <a href=\"".$this->getUrl('ekkitab_catalog/search/index/author/'.$author)."\">".$author ."</a></span>" ):""?></div><!-- authorEtc -->
 			<?php if($editors && trim($editors)!=''):?>
 			  <div class="lineHeight14em"><span class="boldFont">Editor(s) : <?php echo ucwords($editors) ?></span></div>
 			<?php endif;?>
@@ -111,9 +111,32 @@
 			  <div class="marginTop5px"><img src="<?php echo $this->getSkinUrl('images/out_of_stock_image.png')?>" align="absmiddle"> &nbsp; <a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($_product->getId()) ?>">Add to Wishlist</a> </div>
 
 			<?php endif;?>
+			<a name="promo-content"></a>
 			<div class="finDetSynop">
 				<?php echo $_product->getDescription() ?>
 			</div><!-- finDetSynop -->
+<!-- Promo text  -->
+			<?php $promoCollection = $this->getPromoContent();
+			$foundPromo = 0;
+			if(!is_null($promoCollection) && count($promoCollection) > 0 ){
+			?>	
+				<div id="promoLink" class="bookPromoContentTop" ><a href="javascript:showContent('promoContent');hideLink('promoLink')">...click here to read more</a></div>
+				<div class="hideContent" id="promoContent">
+					<div class="bookPromoContentTop" id="promoLinkClose"><a href="javascript:hideContent('promoContent');showLink('promoLink')">Close</a></div>
+					<div class="bookPromoContent">
+				<?php	foreach($promoCollection as $promo): 
+							if(strlen(trim($promo->getPromoDesc())) != strlen(trim($_product->getDescription())) ){
+				?>						<p><?php echo preg_replace('/\<br(\s*)?\/?\>/i','<p>',$promo->getPromoDesc())?></p>
+				<?php			$foundPromo =1;						
+							}
+						endforeach;?>
+					</div>
+					<div class="bookPromoContentBot"></div>
+			
+				</div><!-- Promo -->
+<?php		}	?>
+				<div class="clear"><br/></div>
+<!-- Other Editions  -->
 			<?php if (count($otherEditions)): ?>
 				<div class="finDetOtherEdition">
 					<div class="userRevText">
@@ -235,3 +258,44 @@
 		</p>
 	</div><!-- notFoundArea -->
 <?php }?>
+<script language="javascript">
+
+function showContent(id){
+	var divId = id;
+	var contentDiv =document.getElementById(divId);
+	if(contentDiv){
+		contentDiv.style.display="block";
+	}
+}
+
+function goto(id){
+	var divId = id;
+	obj =document.getElementsByName(divId);
+	if(obj){
+		location.href='#'+divId;
+	}
+}
+
+function hideContent(id){
+	var divId = id;
+	var contentDiv =document.getElementById(divId);
+	if(contentDiv){
+		contentDiv.style.display="none";
+	}
+}
+function hideLink(id){
+	var divId = id;
+	var contentDiv =document.getElementById(divId);
+	if(contentDiv){
+		contentDiv.style.display="none";
+	}
+}
+function showLink(id){
+	var divId = id;
+	var contentDiv =document.getElementById(divId);
+	if(contentDiv){
+		contentDiv.style.display="block";
+	}
+}
+<?php	if($foundPromo==0) {  echo	"hideLink('promoLink');" ; }?>
+</script>

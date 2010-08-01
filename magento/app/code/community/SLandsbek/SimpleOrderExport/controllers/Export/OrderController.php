@@ -43,7 +43,7 @@ class SLandsbek_SimpleOrderExport_Export_OrderController extends Mage_Adminhtml_
     public function csvExportAction()
     {
         $orders = $this->getRequest()->getPost('order_ids', array());
-        $file = Mage::getModel('slandsbek_simpleorderexport/export_csv')->exportOrders($orders);
+        $file = Mage::getModel('slandsbek_simpleorderexport/export_ekkitabCsv')->exportOrders($orders);
         $this->_prepareDownloadResponse($file, file_get_contents(Mage::getBaseDir('export').'/'.$file));
     }
 }

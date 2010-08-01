@@ -22,6 +22,12 @@
 						<product>
 							<table>books</table>
 						</product>
+						<product_promo>
+							<table>books_promo</table>
+						</product_promo>
+						<product_stockStatus>
+							<table>book_availability</table>
+						</product_stockStatus>
 						<author_topAuthors>
 							<table>ek_catalog_top_authors</table>
 						</author_topAuthors>

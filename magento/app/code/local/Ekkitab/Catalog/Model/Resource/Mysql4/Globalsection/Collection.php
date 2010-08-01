@@ -41,6 +41,31 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Globalsection_Collection extends Mag
 		return $this;
 	}
 	
+    /**
+     * Add randomness to filter
+     *
+     * @return Ekkitab_Catalog_Model_Resource_Mysql4_Globalsection_Collection
+     */
+    public function setRandomOrder()
+    {
+		$this->getSelect()->order('rand()');
+        return $this;
+    }
+   
+	/**
+     * Add section to filter
+     *
+     * @return Ekkitab_Catalog_Model_Resource_Mysql4_Globalsection_Collection
+     */
+    public function setLimit($limit)
+    {
+		if($limit >0){
+			$this->getSelect()->limit($limit);
+		}
+        return $this;
+    }
+    
+
 	public function addHomePageFilter(){
 		$this->addFieldToFilter('is_homepage_display', '1');
 		return $this;

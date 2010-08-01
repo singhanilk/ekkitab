@@ -1,12 +1,21 @@
 #!/usr/bin/perl -w
 use strict;
 use Spreadsheet::ParseExcel;
+use Config::Abstract::Ini;
 
+my $ekkitab_home = $ENV{EKKITAB_HOME};
+if (!($ekkitab_home)){
+print "Not Defined" . "\n";
+}
+my $Settingsfile = $ekkitab_home . "/config/stockprocess.ini";
+my $settings     = new Config::Abstract::Ini($Settingsfile);
+my %values       = $settings -> get_entry('availability');
+my $threshold    = $values{'threshold'};
 my $oExcel = new Spreadsheet::ParseExcel;
 
 die "Usage $0 <Excel File> \n Redirect output to required file from stdout" unless @ARGV;
-my $FH = "filehandle";
-my $FilePath;
+my $enteredcount = 0;
+my $printedcount = 0;
 my $oBook = $oExcel->Parse($ARGV[0]);
 if (not defined $oBook) {
     print STDERR "Failed to parse input file: $ARGV[0]\n"; 
@@ -33,6 +42,12 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             $oWkC = $oWkS->{Cells}[$iR][$iC];
             if (defined $oWkC) {
                 if ($isbncol == -1) {
+                    if ($oWkC->Value =~ /PUBLISHER\/ISBN/) {
+                        $isbncol = $iC;
+                        next;
+                    }
+                }
+                if ($isbncol == -1) {
                     if ($oWkC->Value =~ /PUBLISHERS\/ISBN/) {
                         $isbncol = $iC;
                         next;
@@ -40,8 +55,13 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                 }
                 if ($pricecol == -1) {
                     if ($oWkC->Value =~ /PRICE/) {
-                        $currencycol = $iC+1;
                          $pricecol = $iC;
+                        next;
+                    }
+                }
+                if ($currencycol == -1) {
+                    if ($oWkC->Value =~ /CURR/) {
+                        $currencycol = $iC;
                         next;
                     }
                 }
@@ -73,11 +93,15 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             }
         }
 
-        if (($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($titlecol >= 0) && ($authorcol >= 0) && ($imprintcol >= 0) ) {
+        if (($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($titlecol >= 0) && ($authorcol >= 0) && ($imprintcol >= 0)) {
             $startrow = $iR + 1;
             $endrow   = $oWkS->{MaxRow};
             last;
         }
+    }
+    if (!(($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($titlecol >= 0) && ($authorcol >= 0) && ($imprintcol >= 0))) {
+            print STDERR "[Warning] Incomplete information in excel sheet. Cannot parse. Continuing to next sheet.\n";
+            last;
     }
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
@@ -87,6 +111,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            print STDERR "Unexpected read value. Line $i\n";
            last;
         }
+	$enteredcount++;
         my $isbn;
 	if (defined ($value)) {
             $isbn = $value->Value;
@@ -123,15 +148,16 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                   $currency = 'E';
          }
         }
+        $value = $oWkS->{Cells}[$i][$availcol];
         my $availability;
         if(defined ($value)) {
            $availability = $value->Value;
            $availability =~ s/\n//g;
-           if ($availability gt 0){
+           if ($availability >  $threshold){
 	       $availability = 'Available';
            }
            else{
-               $availability = 'Not Available';
+               $availability = 'Not Available' . '[' . $availability . ']';
            }        
         }
         $value = $oWkS->{Cells}[$i][$titlecol];
@@ -157,10 +183,15 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 	         next;
             }
              elsif (length($isbn) == 10 || length($isbn) == 13){
-                  print $isbn . "\t" . $price . "\t" . $currency . "\t"  
+		    $printedcount++;
+		    print $isbn . "\t" . $price . "\t" . $currency . "\t"  
     		      . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
              }
         }
+    }
+    my $ratio = ($printedcount/$enteredcount)*100;
+    if (int($ratio) < 70){
+        warn "[WARNING] Values printed less than 70% \n";
     }
 }
 

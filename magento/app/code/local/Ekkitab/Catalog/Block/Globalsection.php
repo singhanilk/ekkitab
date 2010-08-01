@@ -24,10 +24,12 @@ class Ekkitab_Catalog_Block_Globalsection extends Mage_Core_Block_Template
      * Get popular catagories of current store
      *
      */
-    public function getAllItems()
+    public function getAllItems($randomize=true,$count=0)
     {
 		$sections = Mage::getModel('ekkitab_catalog/globalsection')->getCollection()
-			->addActiveDateFilter();
+			->addActiveDateFilter()
+			->setLimit($count)
+			->setRandomOrder($randomize);
 		return $sections;
 	}
 	
@@ -35,7 +37,7 @@ class Ekkitab_Catalog_Block_Globalsection extends Mage_Core_Block_Template
     {
 		//$this->setDefaultTemplate('catalog/globalsection/home_page.phtml');
 		if(is_null($this->_homeSection)){
-           $this->_homeSection = $this->getHomePageSection();
+           $this->_homeSection = $this->getHomePageSection(true,1);
 		}
 
 		if($this->_homeSection && $this->_homeSection->getId() && trim($this->_homeSection->getHomepageTemplatePath())!="" ){
@@ -50,15 +52,29 @@ class Ekkitab_Catalog_Block_Globalsection extends Mage_Core_Block_Template
      * Get popular catagories of current store
      *
      */
-    public function getHomePageSection()
+    public function getHomePageSection($randomize=true,$count=1)
     {
 		if(is_null($this->_homeSection)){
-			$sections = Mage::getModel('ekkitab_catalog/globalsection')->getCollection()
-									->addHomePageFilter();
-			if(!is_null($sections)){
-				foreach($sections as $section){
-					if($section){
-						$this->_homeSection=$section;
+			$sectionId =-1;
+			$sectionArr = Mage::getSingleton('core/session')->getHomePageGlobalSection();
+			if(is_array($sectionArr) && count($sectionArr) > 0 ){
+				$sectionId	= $sectionArr['section_id'];
+			}
+
+			if(!is_null($sectionId) && $sectionId > 0 ){
+				$this->_homeSection= Mage::getModel('ekkitab_catalog/globalsection')->load($sectionId);
+			} 
+			else{
+				$sections = Mage::getModel('ekkitab_catalog/globalsection')->getCollection()
+										->addHomePageFilter();
+				if(!is_null($sections)){
+					foreach($sections as $section){
+						$sectionArr[]=$section;
+					}
+						
+					if(shuffle($sectionArr)){
+						$this->_homeSection=$sectionArr[0];
+						Mage::getSingleton('core/session')->setHomePageGlobalSection(array('section_id'=>$this->_homeSection->getId()));
 					}
 				}
 			}

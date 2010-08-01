@@ -43,10 +43,19 @@ cp $EKKITAB_HOME/db/updatedb.sh $releasedir
 cp $EKKITAB_HOME/db/checkdbversion.php $releasedir
 echo "done."
 
+echo -n "Exporting global sections..."
+mysqldump -h $host -u $user -p$password ekkitab_books ek_catalog_global_sections > $releasedir/ek_catalog_global_sections.sql
+mysqldump -h $host -u $user -p$password ekkitab_books ek_catalog_global_section_products > $releasedir/ek_catalog_global_section_products.sql
+echo "done."
+
 echo -n "Copying search related files.."
 cp -r $EKKITAB_HOME/java/lib  $releasedir
 cp $EKKITAB_HOME/java/bin/ekkitabsearch.jar  $releasedir
 cp $EKKITAB_HOME/java/bin/*.properties  $releasedir
+echo "done."
+echo -n "Copying other misc files.."
+cp $EKKITAB_HOME/bin/getactivesessions.sh $releasedir
+cp $EKKITAB_HOME/bin/checkreviews.sh $releasedir
 echo "done."
 echo -n "Copying synch file to synchronize release on server..."
 cp $EKKITAB_HOME/bin/synchrelease.sh  $releasedir

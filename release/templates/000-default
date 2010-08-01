@@ -28,7 +28,7 @@
         AllowOverride All
         Order allow,deny
         allow from all
-        ExpiresDefault A300
+        #ExpiresDefault A300
     </Directory>
 
     ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/

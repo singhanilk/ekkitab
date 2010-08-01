@@ -25,7 +25,7 @@
  */
 ?>
 <?php if (!($_shippingRateGroups = $this->getShippingRates())): ?>
-    <strong><?php echo $this->__('Sorry, no quotes are available for this order at this time.') ?></strong>
+    <strong><?php echo $this->__('Sorry, your order can not be completed at this time as there is no shipping methods available for international shipping. Please make neccessary changes in your shipping address.') ?></strong>
 <?php else: ?>
 <dl class="shipment-methods">
 <?php 

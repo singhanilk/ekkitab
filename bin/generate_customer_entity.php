@@ -27,55 +27,26 @@ else {
 
 // This script will create category information in the ekkitab database. 
 
-ini_set(include_path, ${include_path}.PATH_SEPARATOR.EKKITAB_HOME."/"."config");
-include("ekkitab.php");
-
-require_once(LOG4PHP_DIR . '/LoggerManager.php');
-
-
-// global logger
-$logger =& LoggerManager::getLogger("create_categories");
-
 /** 
 * Read and return the configuration data from file. 
 */
 function getConfig($file) {
 	$config	= parse_ini_file($file, true);
 	if (! $config) {
-		fatal("Configuration file missing or incorrect."); 
+		echo "Configuration file missing or incorrect."; 
+		exit(1);
 	}
 	return $config;
 }
 
-/** 
-* Log the error and terminate the program.
-* Optionally, will accept the query that failed.
-*/
-function fatal($message, $query = "") {
-	global $logger;
-	$logger->fatal("$message " . "[ $query ]" . "\n");
-	exit(1);
-}
-
-/** 
-* This function will log the error.
-* Optionally, will accept the query that failed.
-*/
-function warn($message, $query = "") {
-	global $logger;
-	$logger->error("$message " . "[ $query ]" . "\n");
-}
-
-
-
 function writeCustomerInsertStatements($fh,$custLine,$entityId,$incrementId) {
 
-	$name = explode(" ",$custLine[0]);
+	$name = explode(" ",$custLine[1]);
 
 	$firstName = trim(ucwords($name[0]));
 	$lastName = trim(ucwords($name[1]));
-	$email = trim($custLine[1]);
-	$password = getHash(trim($custLine[2]));
+	$email = trim($custLine[2]);
+	$password = getHash(trim($custLine[6]));
 	
 	$query1 = "INSERT INTO `customer_entity` (`entity_id`, `entity_type_id`, `attribute_set_id`, `website_id`, `email`, `group_id`, `increment_id`, `store_id`, `created_at`, `updated_at`, `is_active`) VALUE (".$entityId.",1, 0, 1, '".$email."', 1, '".$incrementId."', 1, '2010-07-07 06:42:03', '2010-07-07 09:56:03', 1);\n";
 	$query2 = "INSERT INTO `customer_entity_varchar` (`entity_type_id`, `attribute_id`, `entity_id`, `value`) VALUES (1,5,".$entityId.",'".$firstName."'),(1,7,".$entityId.",'".$lastName."'),(1,3,".$entityId.",'Ekkitab'),(1,12,".$entityId.",'".$password."');\n";
@@ -145,6 +116,27 @@ function getNextIncrementId($db)
 	return ($last+1);
 }
 
+function checkUserExists($db,$email)
+{
+    if ($db == null) { 
+       fprintf($ferr,  "Fatal: Could not connect to database.");
+       exit(1);
+    }
+
+	$query = "select email from `customer_entity` where email='".$email."' ;";
+	try {
+	   $result = mysqli_query($db, $query);
+		if ($result && (mysqli_num_rows($result) > 0)) {
+			return false;
+		}
+	}
+	catch (Exception $e) {
+	   fprintf($ferr, "Fatal: SQL Exception. $e->getMessage()\n"); 
+	   exit(1);
+	} 
+	return true;
+}
+
 function setNextIncrementIdQuery($fh,$last)
 {
 	$query = "update eav_entity_store set increment_last_id='".$last."' where entity_type_id =1 and store_id=0 ;\n";
@@ -160,12 +152,19 @@ function format($id)
 }
 
 
-if ($argc < 2) {
-   echo "Usage: $argv[0] -i <Input comma seperated text file> \n";
+if ($argc < 5) {
+   echo "Usage: $argv[0] -i <Input comma seperated text file>  -o <Output sql file> [<entityId>]  [<max_entityId>]\n";
    exit(1);
 }
 
+if($argc > 5 ){
+	$entityId = (int)$argv[5];
+}
+if($argc > 6 ){
+	$incrementId = (int)$argv[6];
+}
 $inputfile = "";
+$outputfile = "";
 
 for ($i = 1; $i < $argc; $i+=2) {
     if ($argv[$i][0] == '-') {
@@ -175,6 +174,8 @@ for ($i = 1; $i < $argc; $i+=2) {
         }
         switch($argv[$i][1]) {
             case 'i': $inputfile = $argv[$i+1];
+                      break;
+            case 'o': $outputfile = $argv[$i+1];
                       break;
             default:  break;
         }
@@ -189,13 +190,15 @@ if (!strcmp($inputfile, "")) {
     echo "No input file provided....\n";
     exit(1);
 } 
+if (!strcmp($outputfile, "")) {
+    echo "No output file provided....\n";
+    exit(1);
+} 
 
 $fh = fopen($inputfile, "r")or die("Error opening input file.");
 
 
-$sqlFile = $EKKITAB_HOME."/db/beta_customers.sql";
-
-$fsql = fopen($sqlFile, "w");
+$fsql = fopen($outputfile, "w");
 if (!$fsql) {
     echo "Could not open file to create sql output for globalsections.\n";
     exit(1);
@@ -228,15 +231,21 @@ catch (exception $e) {
 }
 
 if($fh){
-	$entityId=getMaxCustomerEntityId($db);
-	$incrementId=getNextIncrementId($db);
+	if(!$entityId || !is_int($entityId)){
+		$entityId=getMaxCustomerEntityId($db);
+	}
+	if(!$incrementId || !is_int($incrementId)){
+		$incrementId=getNextIncrementId($db);
+	}
 	fprintf($fsql, "use `ekkitab_books`;\n");
 	while ($contents = fgets($fh)){
-		$customer = explode(",", $contents);
-		if (is_array($customer)) {
-			if(writeCustomerInsertStatements($fsql,$customer,$entityId,format($incrementId))){
-				$incrementId++;
-				$entityId++;
+		if(substr(trim($contents), 0, 1)!='#'){
+			$customer = explode(",", $contents);
+			if (is_array($customer) && checkUserExists($db,trim($customer[2]))) {
+				if(writeCustomerInsertStatements($fsql,$customer,$entityId,format($incrementId))){
+					$incrementId++;
+					$entityId++;
+				}
 			}
 		}
 	}

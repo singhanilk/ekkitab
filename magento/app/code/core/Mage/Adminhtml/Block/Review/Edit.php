@@ -63,7 +63,7 @@ class Mage_Adminhtml_Block_Review_Edit extends Mage_Adminhtml_Block_Widget_Form_
         }
 
         if( $this->getRequest()->getParam($this->_objectId) ) {
-            $reviewData = Mage::getModel('review/review')
+            $reviewData = Mage::getModel('ekkitab_review/review')
                 ->load($this->getRequest()->getParam($this->_objectId));
             Mage::register('review_data', $reviewData);
         }

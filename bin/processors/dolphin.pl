@@ -1,19 +1,45 @@
 #!/usr/bin/perl -w
 use strict;
 use Spreadsheet::ParseExcel;
-
+use Config::Abstract::Ini;
+use File::Basename;
+my $ekkitab_home = $ENV{EKKITAB_HOME};
+if (!($ekkitab_home)){
+print "Not Defined" . "\n";
+}
+my $Settingsfile = $ekkitab_home . "/config/stockprocess.ini";
+my $settings     = new Config::Abstract::Ini($Settingsfile);
+my %values       = $settings -> get_entry('availability');
+my $threshold    = $values{'threshold'};
+my $bangalore    = $values{'bangalore'}; 
+my $kolkata      = $values{'kolkata'};
+my $delhi        = $values{'delhi'};
+my $mumbai       = $values{'mumbai'};
+my $deliverydays;
+my $city = $ARGV[0];
+$city = basename($ARGV[0]);
+$city =~ s/^STK//gi;
+$city =~ s/stock//gi;
+$city =~ s/stck//gi;
+$city =~ s/list//gi;
+$city =~ s/[0-9]//g;
+$city =~ s/\.xls//gi;
+$city =~ s/-//g;
+$city =~ s/\s+//g;
+my %assumptions = ('delhi' => $delhi,'DEL' => $delhi,'DLHI' => $delhi, 'Delhi' => $delhi,'BLR' => $bangalore, 'banglore' => $bangalore,
+                        'bangalore' => $bangalore, 'Bangalore' => $bangalore, 'Banglore' => $bangalore,
+                    'MBMI' => $mumbai, 'mumbai' => $mumbai, 'Mumbai' => $mumbai, 'KLKTA' => $kolkata, 'KOL' => $kolkata, 'Kolkata' => $kolkata);
+$deliverydays =  $assumptions{$city};
 my $oExcel = new Spreadsheet::ParseExcel;
-
 die "Usage $0 <Excel File> \n Redirect output to required file from stdout" unless @ARGV;
-my $FH = "filehandle";
-my $FilePath;
+my $enteredcount = 0;
+my $printedcount = 0;
 my $oBook = $oExcel->Parse($ARGV[0]);
 if (not defined $oBook) {
     print STDERR "Failed to parse input file: $ARGV[0]\n"; 
     exit(1);
 }
 my($iR, $iC, $oWkS, $oWkC);
-
 print "#ISBN\t" . "PRICE\t" . "CURRENCY\t" . "AVAILABILITY\t" . "IMPRINT\t" . "TITLE\t" . "AUTHOR\n" ;
 
 for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
@@ -34,50 +60,50 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             $oWkC = $oWkS->{Cells}[$iR][$iC];
             if (defined $oWkC) {
                 if ($isbncol == -1) {
-                    if ($oWkC->Value =~ /ISBN/) {
+                    if ($oWkC->Value =~ /ISBN/i) {
                         $isbncol = $iC;
                         next;
                     }
                 }
                 if ($pricecol == -1) {
-                    if ($oWkC->Value =~ /PRICE/) {
+                    if ($oWkC->Value =~ /PRICE/i) {
                         $pricecol = $iC;
                         $currencycol = $iC+1;
                         next;
                     }
                 }
                 if ($availcol == -1) {
-                    if ($oWkC->Value =~ /QTY/) {
+                    if ($oWkC->Value =~ /QTY/i) {
                         $availcol = $iC;
                         next;
                     }
                 }
     	        if ($imprintcol == -1) {
-    		        if ($oWkC->Value =~ /PUBLISHER/) {
+    		        if ($oWkC->Value =~ /PUBLISHER/i) {
                         $imprintcol = $iC;
                         next;
     		        }
                 }
-		if ($imprintcol == -1) {
-    		        if ($oWkC->Value =~ /PUBLISHERNAME/) {
+		        if ($imprintcol == -1) {
+    		        if ($oWkC->Value =~ /PUBLISHERNAME/i) {
                         $imprintcol = $iC;
                         next;
     		        }
                 }
     	        if ($titlecol == -1) {
-    		        if ($oWkC->Value =~ /TITLE/) {
+    		        if ($oWkC->Value =~ /TITLE/i) {
                         $titlecol = $iC;
                         next;
     		        }
                 }
-		if ($authorcol == -1) {
-    		        if ($oWkC->Value =~ /FIRST NAME/) {
+		        if ($authorcol == -1) {
+    		        if ($oWkC->Value =~ /FIRST\sNAME/i) {
                         $authorcol = $iC;
                         next;
     		        }
                 }
     	        if ($authorcol == -1) {
-    		        if ($oWkC->Value =~ /AUTHOR/) {
+    		        if ($oWkC->Value =~ /AUTHOR/i) {
                         $authorcol = $iC;
                         next;
     		        }
@@ -91,21 +117,29 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             last;
         }
     }
+    if (!(($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($imprintcol >= 0) && ($titlecol >= 0) && ($authorcol >= 0))) {
+            print STDERR "[Warning] Incomplete information in excel sheet. Cannot parse. Continuing to next sheet.\n";
+            last;
+    }
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
-
+        if(defined($assumptions{$oWkS->get_name()})){
+            $deliverydays = $assumptions{$oWkS->get_name()};
+        }
+	    $enteredcount++;
         my $value = '';
-         eval { $value = $oWkS->{Cells}[$i][$isbncol]; };
-         if ($@) {
+        eval { $value = $oWkS->{Cells}[$i][$isbncol]; };
+        if ($@) {
            # print STDERR "Unexpected read value. Line $i\n";
-	    last;
-	 }
-         my $isbn;
-	 if (defined ($value)) {
-             $isbn = $value->Value;
-             chomp($isbn);
-             $isbn =~ s/[^0-9]+//g;
-         }
+	        last;
+	    }
+        my $isbn;
+	    if (defined ($value)) {
+            $isbn = $value->Value;
+            chomp($isbn);
+            $isbn =~ s/\.00$//g;
+            $isbn =~ s/[^0-9]+//g;
+        }
         $value = $oWkS->{Cells}[$i][$pricecol];
         my $price;
         if (defined ($value)) {
@@ -115,29 +149,29 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         $value = $oWkS->{Cells}[$i][$currencycol];
         my $currency;
         if (defined ($value)) {
-           $currency = $value->Value;
-           $currency =~ s/\n//g;
-           if ($currency =~ /INR/) {
-               $currency ='I';
-         }
-           elsif ($currency =~ /GBP/) {
-                  $currency = 'P';
-         }
-           elsif ($currency =~ /USD/) {
-                  $currency = 'U';
-         }
+            $currency = $value->Value;
+            $currency =~ s/\n//g;
+            if ($currency =~ /INR/) {
+                $currency ='I';
+            }
+            elsif ($currency =~ /GBP/) {
+                   $currency = 'P';
+            }
+            elsif ($currency =~ /USD/) {
+                   $currency = 'U';
+            }
         }
         $value = $oWkS->{Cells}[$i][$availcol];
         my $availability;
-        if(defined ($value)) {
-           $availability = $value->Value;
-           $availability =~ s/\n//g;
-	   if ($availability gt 0){
-	       $availability = 'Available';
-           }
-           else{
-               $availability = 'Not Available';
-           }        
+            if(defined ($value)) {
+                $availability = $value->Value;
+                $availability =~ s/\n//g;
+	        if ($availability > $threshold){
+	            $availability = 'Available';
+            }
+            else{
+                $availability = 'Not Available' . '[' . $availability . ']';
+            }        
         }
         $value = $oWkS->{Cells}[$i][$imprintcol];
         my $imprint;
@@ -163,16 +197,23 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             defined ($availability) && 
             defined ($imprint) && 
             defined ($title) && 
+            defined ($deliverydays) &&
             defined ($author)) {
             if ($isbn eq '' || $price eq ''){
 	         next;
             }
-             elsif (length($isbn) == 10 || length($isbn) == 13){
-                  print $isbn . "\t" . $price . "\t" . $currency . "\t"  
-    		      . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
+            elsif (length($isbn) == 10 || length($isbn) == 13){
+		    $printedcount++;
+		    print $isbn . "\t" . $price . "\t" . $currency . "\t"  
+    		      . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\t" . "$deliverydays" . "\n" ;
              }
         }
+    }
+    my $ratio = ($printedcount/$enteredcount)*100;
+    if (int($ratio) < 70){
+        warn "[WARNING] Values printed less than 70% \n";
     }
 }
 
 exit(0);
+
