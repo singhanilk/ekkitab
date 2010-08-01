@@ -246,7 +246,8 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     
 //	$Merchant_Param="" ;     // this is optional, you can fill up with any value, we are using it for checkout type
 
-    
+          Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."grandtotalaks0\n".print_r($this->getQuote()->getGrandTotal(),true)) ;
+    	  		
           if ($this->getQuote()->getIsMultiShipping()){
                      $Merchant_Param="M" ; 
                       Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Multishipping\n") ;
