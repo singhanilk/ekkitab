@@ -263,8 +263,8 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
      		 $Order_Id =  $this->getCheckout()->getLastRealOrderId();  // for single shipment order 
 	  	   	 $order = Mage::getModel('sales/order');
      	     $order->loadByIncrementId($Order_Id);  
-             //$total_amount = $order->getGrandTotal();
-             $total_amount = $order->getSubtotal();
+            $total_amount = $order->getGrandTotal();
+             //$total_amount = $order->getSubtotal();
 
              Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Single Address Checkout\n".print_r($total_amount,true)) ;
                   
@@ -275,8 +275,8 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 	  		foreach( $Order_Ids as $key => $orid) {
 	  	 				  $order = Mage::getModel('sales/order');
      			 		  $order->loadByIncrementId($orid);  
-     					  //$total_amount = $total_amount + $order->getGrandTotal() ;
-     					  $total_amount = $total_amount + $order->getSubtotal() ;
+     					  $total_amount = $total_amount + $order->getGrandTotal() ;
+     					  //$total_amount = $total_amount + $order->getSubtotal() ;
       	  
 	  	         }
 
