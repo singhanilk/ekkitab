@@ -246,7 +246,8 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
     
 //	$Merchant_Param="" ;     // this is optional, you can fill up with any value, we are using it for checkout type
 
-    
+          Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."grandtotalaks0\n".print_r($this->getQuote()->getGrandTotal(),true)) ;
+    	  		
           if ($this->getQuote()->getIsMultiShipping()){
                      $Merchant_Param="M" ; 
                       Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Mage_Checkout_Model_Type_Multishipping\n") ;
@@ -262,8 +263,8 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
      		 $Order_Id =  $this->getCheckout()->getLastRealOrderId();  // for single shipment order 
 	  	   	 $order = Mage::getModel('sales/order');
      	     $order->loadByIncrementId($Order_Id);  
-             //$total_amount = $order->getGrandTotal();
-             $total_amount = $order->getSubtotal();
+            $total_amount = $order->getGrandTotal();
+             //$total_amount = $order->getSubtotal();
 
              Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."Single Address Checkout\n".print_r($total_amount,true)) ;
                   
@@ -274,8 +275,8 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
 	  		foreach( $Order_Ids as $key => $orid) {
 	  	 				  $order = Mage::getModel('sales/order');
      			 		  $order->loadByIncrementId($orid);  
-     					  //$total_amount = $total_amount + $order->getGrandTotal() ;
-     					  $total_amount = $total_amount + $order->getSubtotal() ;
+     					  $total_amount = $total_amount + $order->getGrandTotal() ;
+     					  //$total_amount = $total_amount + $order->getSubtotal() ;
       	  
 	  	         }
 
@@ -381,6 +382,8 @@ class Ekkitab_Ccav_Model_Ccav extends Mage_Payment_Model_Method_Abstract
         $grand_total = $total_amount ;
         $Checksum = $this->getcheckSum($Merchant_Id,$grand_total,$Order_Id ,$Redirect_Url,$WorkingKey);
   
+      Mage::log("/n".__FILE__."(".__LINE__.")".__METHOD__."grandtotalaks\n".print_r($this->getQuote()->getGrandTotal(),true)) ;
+        
         
         $sArr = array_merge($sArr, array(
                     'Amount' => $grand_total,
