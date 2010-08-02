@@ -1,5 +1,5 @@
-USD   49
-CAN   49
-BRI   75
-EUR   65
-SGD   34
+USD   50
+CAN   48
+BRI   76
+EUR   64
+SGD   36
