@@ -337,7 +337,7 @@ public class EkkitabSearch {
         		case MATCH_WORDS:
         			String[] words = query.split(" ");
         			for (String word: words) {
-        				terms.add(word);
+        				terms.add("\"" + word + "\"");
         			}
         			break;
         		default: break;
