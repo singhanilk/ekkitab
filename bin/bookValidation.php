@@ -39,7 +39,7 @@ function percentage($listprice, $dbprice){
         else{
             $percentage =round(100-(($listprice/$dbprice)*100));
         }
-    if ($percentage >= 7){
+    if ($percentage >= 5){
         return 0;
     }
     else{
@@ -59,7 +59,7 @@ function checkValidity($db, $fh){
 		    if ($result && (mysqli_num_rows($result) > 0)) {
                 while( $row=mysqli_fetch_row($result)){
                     if(percentage(trim($listprice), trim($row[1])) == 0){
-                        print "[Catalog Validation] [Warning] Listprice in file->$listprice for isbn-> $isbn is different from that of Database->$row[1] by more than 7%\n"; 
+                        print "[Catalog Validation] [Warning] Listprice in file->$listprice for isbn-> $isbn is different from that of Database->$row[1] by more than 5%\n"; 
                         return (1);
                     }
                     $ratio =round(100 -  ((($row[2]+0)/($row[1]+0))*100));
