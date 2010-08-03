@@ -84,7 +84,7 @@ function checkBookCount($db, $fh){
        $result = mysqli_query($db, $query);
 	   if ($result && (mysqli_num_rows($result) > 0)) {
            while( $row=mysqli_fetch_row($result)){
-             if (($row[0]+0) < 100 ){
+             if (($row[0]+0) < 3000000 ){
                 print "[Catalog Validation] [Warning] Number of books less than estimated amount\n";
                 return (1);
             }
