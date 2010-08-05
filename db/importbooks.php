@@ -30,6 +30,7 @@ else {
     require_once(LOG4PHP_DIR . '/LoggerManager.php');
     ini_set(include_path, ${include_path}.PATH_SEPARATOR.EKKITAB_HOME."/"."bin");
     include("imagehash.php");
+    include("processdiscount.php");
 
     define(UNCLASSIFIED, "ZZZ000000");
 
@@ -229,29 +230,6 @@ else {
       return ($book);
     }
 
-    /**
-     * This function will return all the currency conversion rates. 
-     */
-    function getCurrencyConversionRates($db) {
-        $currencyrates = array();
-        $query    = "select * from ek_currency_conversion"; 
-        try {
-            $result = mysqli_query($db, $query);
-            if (($result) && (mysqli_num_rows($result) > 0)) {
-                while($row = mysqli_fetch_array($result)) {
-                    $type = strtoupper($row[1]);
-                    $currencyrates[$type] = $row[2];
-                }
-            }
-            else {
-                throw new exception("Failed to get currency data from database");
-            }
-        }
-        catch(exception $e) {
-           fatal($e->getmessage());
-        }
-        return ($currencyrates);
-    }
 
    /** 
     *  Get the discount computation value from the reference database.  
@@ -467,7 +445,19 @@ else {
         $config = getConfig(CONFIG_FILE);
         $db = initDatabases($config);
 
-        $parser       = new Parser($pgm_mode);
+        //Get the file that controls how much discount we give to customers.
+        $discountfile = "";
+        if (isset($config['files']['discountdatafile'])) {
+            $discountfile = $config['files']['discountdatafile'];
+        }
+        else {
+            fatal("No discount data file found. ");
+        }
+        $discountmodel = getDiscountData($argv[2], $discountfile);
+        if ($discountmodel == null) {
+           fatal("Could not get discount information from file."); 
+        }
+        $parser       = new Parser($pgm_mode, $db, $logger, $discountmodel);
         $i            = 0;
         $unresolved   = 0;
         $ignored      = 0;
@@ -478,10 +468,9 @@ else {
         while ($line = fgets($fh)) {
             $book = array();
             try {
-                $book = $parser->getBook($line, $book, $db, $logger);
+                $book = $parser->getBook($line);
             }
             catch(exception $e) {
-                //fatal($e->getmessage());
                 warn($e->getmessage());
                 $book = null;
             }
@@ -501,28 +490,25 @@ else {
                     unset($book['unclassified']);
                 }
                 if ($pgm_mode & MODE_PRICE) {
-                    if (empty($currencyrates)) {
-                        $currencyrates = getCurrencyConversionRates($db);
-                    }
-                    if (empty($discountrates)) {
-                        $discountrates = getDiscountSettings($db);
-                    }
+                    //if (empty($discountrates)) {
+                    //    $discountrates = getDiscountSettings($db);
+                    //}
 
-                    $conv_rate = $currencyrates[strtoupper($book['currency'])];
-                    if (empty($conv_rate)) {
-                        fatal("No currency conversion rate available for " . $book['currency']);
-                    }
-                    $book['list_price'] = round($book['list_price'] * $conv_rate);
-                    $book['suppliers_price'] = round($book['list_price'] * ((100 - $book['suppliers_discount'])/100));
+                    //$conv_rate = $currencyrates[strtoupper($book['currency'])];
+                    //if (empty($conv_rate)) {
+                    //    fatal("No currency conversion rate available for " . $book['currency']);
+                    //}
+                    //$book['list_price'] = round($book['list_price'] * $conv_rate);
+                    //$book['suppliers_price'] = round($book['list_price'] * ((100 - $book['suppliers_discount'])/100));
                     $distributor = isset($book['info_source']) ? $book['info_source'] : $book['distributor'];
-                    $disc_rate = $discountrates[strtolower($distributor)];
-                    if (empty($disc_rate)) {
-                        fatal("No discount rate available for supplier " . $distributor);
-                    }
-                    $book['discount_price'] = getSellingPrice($book['sourced_from'], $book['list_price'], $book['suppliers_price'], $disc_rate);
-                    if ($book['discount_price'] > $book['list_price']) { // Raise the list price
-                        $book['list_price'] = $book['discount_price'];
-                    }
+                    //$disc_rate = $discountrates[strtolower($distributor)];
+                    //if (empty($disc_rate)) {
+                    //    fatal("No discount rate available for supplier " . $distributor);
+                    //}
+                    //$book['discount_price'] = getSellingPrice($book['sourced_from'], $book['list_price'], $book['suppliers_price'], $disc_rate);
+                    //if ($book['discount_price'] > $book['list_price']) { // Raise the list price
+                    //    $book['list_price'] = $book['discount_price'];
+                    //}
                     //$discount =  ($book['list_price'] - $book['suppliers_price']) * $disc_rate / 100 ;
                     //$book['discount_price'] = round($book['list_price'] - $discount);
                     if (isset($book['distributor'])) {

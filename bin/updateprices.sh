@@ -12,8 +12,8 @@ basedir=${basedir#*=}
 priceDirectory=$basedir/prices
 stockList=$datadir/stock/stocklists
 priceFile=$priceDirectory/india-prices.txt
-timestamp=$(date +%d%m%y)
-savedFile=$priceDirectory/saved/$timestamp-indiaprices.txt
+timestamp=$(date +%d)
+savedFile=$priceDirectory/saved/indiaprices-$timestamp.txt
 savedDir=$priceDirectory/saved
 
 starttime=$(date +"%D [%T]")
