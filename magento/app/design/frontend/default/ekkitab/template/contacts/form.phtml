@@ -29,7 +29,7 @@
 <div class="myAccCopy">
 	<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
 	<form action="<?php echo $this->getFormAction(); ?>" id="contactForm" method="post">
-		<ul><li>Please visit our <a href="<?php echo $this->getHelper()->getUrl('help')?>">help</a> section to find an answer to your question.</li>
+		<ul><li>Please visit our <a href="<?php echo $this->getUrl('help')?>">help</a> section to find an answer to your question.</li>
 		<li>If our help section did not answer to your question, please use the form below.</li> <p></p></ul>
 		<div class="accTop">
 			<div class="accHdr"><?php echo Mage::helper('contacts')->__('Query Form') ?></div>

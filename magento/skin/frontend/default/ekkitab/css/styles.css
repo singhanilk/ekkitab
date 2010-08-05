@@ -2478,3 +2478,19 @@ dt .hdr {
 	padding-right: 8px;
 	padding-left: 8px;
 }
+
+.hmDefScrollRow {
+	padding-bottom: 8px;
+	margin: 8px 0px 8px 0px;
+	background-color: #fff;
+}
+.hmDefScrollRow .hdr{
+	font-size: 1.6em;
+	color: #c60;
+	margin: 16px 0px 6px 0px;
+	padding-bottom: 6px;
+}
+.hmDefScrollRow .notAvail{
+	margin: 5px;
+	padding: 5px;
+}

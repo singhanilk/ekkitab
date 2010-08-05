@@ -46,9 +46,11 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Globalsection_Collection extends Mag
      *
      * @return Ekkitab_Catalog_Model_Resource_Mysql4_Globalsection_Collection
      */
-    public function setRandomOrder()
+    public function setRandomOrder($randomize)
     {
-		$this->getSelect()->order('rand()');
+		if($randomize){
+			$this->getSelect()->order('rand()');
+		}
         return $this;
     }
    
