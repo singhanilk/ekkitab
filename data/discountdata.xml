@@ -8,8 +8,11 @@
             <Price min="10" max="20">
                 <Discount low="15" high="18"/>
             </Price>
-            <Price min="20" max="100000">
-                <Discount low="15" high="18"/>
+            <Price min="20" max="100">
+                <Discount low="18" high="22"/>
+            </Price>
+            <Price min="100" max="100000">
+                <Discount low="22" high="22"/>
             </Price>
         </DiscountLevel>
         <DiscountLevel value="35">
@@ -22,8 +25,11 @@
             <Price min="20" max="25">
                 <Discount low="15" high="18"/>
             </Price>
-            <Price min="25" max="100000">
+            <Price min="25" max="100">
                 <Discount low="18" high="20"/>
+            </Price>
+            <Price min="100" max="100000">
+                <Discount low="20" high="20"/>
             </Price>
         </DiscountLevel>
         <DiscountLevel value="30">
@@ -33,8 +39,11 @@
             <Price min="10" max="20">
                 <Discount low="5" high="10"/>
             </Price>
-            <Price min="20" max="100000">
+            <Price min="20" max="100">
                 <Discount low="10" high="15"/>
+            </Price>
+            <Price min="100" max="100000">
+                <Discount low="15" high="15"/>
             </Price>
         </DiscountLevel>
         <DiscountLevel value="25">
@@ -44,8 +53,11 @@
             <Price min="15" max="25">
                 <Discount low="2" high="10"/>
             </Price>
-            <Price min="25" max="100000">
+            <Price min="25" max="100">
                 <Discount low="10" high="12"/>
+            </Price>
+            <Price min="100" max="10000">
+                <Discount low="12" high="12"/>
             </Price>
         </DiscountLevel>
     </Supplier>
@@ -60,8 +72,11 @@
             <Price min="400" max="600">
                 <Discount low="15" high="18"/>
             </Price>
-            <Price min="600" max="100000">
+            <Price min="600" max="2000">
                 <Discount low="18" high="20"/>
+            </Price>
+            <Price min="2000" max="100000">
+                <Discount low="20" high="20"/>
             </Price>
         </DiscountLevel>
     </Supplier>

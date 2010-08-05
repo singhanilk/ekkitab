@@ -1,10 +1,7 @@
 <?php
-error_reporting(E_ALL  & ~E_NOTICE);
-ini_set("display_errors", 1); 
-include(EKKITAB_HOME . "/" . "config" . "/" . "ekkitab.php");
-include(EKKITAB_HOME . "/" . "bin" . "/" . "convertisbn.php");
 define (REQUIRED_BASIC_FIELDS, 13);
 define (REQUIRED_PRICE_FIELDS, 5);
+require_once(dirname(__FILE__) . "/" . "BaseParser.php");
 
 //  
 //
@@ -23,71 +20,12 @@ define (REQUIRED_PRICE_FIELDS, 5);
 
 // This script will import books into the reference database from a vendor file......
 
-class Parser {
-        private $mode;
+
+class Parser extends BaseParser {
         private $supplierparams;
 
-        function __construct($mode) {
-            $this->mode = $mode;
-        }
-
-        function isBook($line) {
-
-            $isbn = "";
-
-            if ($line[0] == '#')
-                return $isbn;
-
-            $fields = explode("\t", $line);
-
-            if (($this->mode & MODE_BASIC) && (count($fields) != REQUIRED_BASIC_FIELDS)) {
-                return $isbn;
-            } 
-            elseif (($this->mode &  MODE_PRICE) && (count($fields) < REQUIRED_PRICE_FIELDS)) {
-                return $isbn;
-            } 
-
-            $isbn = trim($fields[0]); 
-
-            if (!preg_match("/^[0-9X]+$/", $isbn)) {
-                $isbn = "";
-                return $isbn;
-            }
-
-            if (strlen($isbn) != 13) {
-                if (strlen($isbn) == 10) {
-                    $isbn = convertisbn($isbn);
-                }
-                else {
-                    $isbn = "";
-                }
-            } 
-            return $isbn;
-        }
-
-        /** 
-          * Ensure that characters in a string are SQL safe. 
-          */
-        function escape($str) {
-            $pattern[0] = "/[~\\\\]*'/";
-            #$pattern[1] = "/\(/"; 
-            #$pattern[1] = "/\)/"; 
-            $replace[0] = "\'";
-            #$replace[1] = "\\\(";
-            #$replace[1] = "\\\)";
-            return(preg_replace($pattern, $replace, $str));
-        }
-
-        function correctName($name) {
-           $tmp = explode(",", $name);
-           switch (count($tmp)) {
-               case 1: $name = trim($name);
-                       break;
-               case 2: $name = trim($tmp[1]) . " " . trim($tmp[0]);
-                       break;
-               default: break;
-           }
-           return $name;
+        function __construct($mode, $db, $logger, $discountmodel) {
+            parent::__construct($mode, $db, $logger, $discountmodel);
         }
 
         function getBisacCodes($db, $subjects) {
@@ -210,33 +148,38 @@ class Parser {
             */
         }
 
-        function getBook($line, $book, $db, $logger) {
+        function isBook($line) {
 
-            $isbn = $this->isBook($line);
+            $isbn = "";
 
-            if ($isbn == "") { 
-                return null;
+            if ($line[0] == '#')
+                return $isbn;
+
+            $fields = explode("\t", $line);
+
+            if (($this->mode & MODE_BASIC) && (count($fields) != REQUIRED_BASIC_FIELDS)) {
+                return $isbn;
+            } 
+            elseif (($this->mode &  MODE_PRICE) && (count($fields) < REQUIRED_PRICE_FIELDS)) {
+                return $isbn;
+            } 
+
+            $isbn = trim($fields[0]); 
+
+            if (!preg_match("/^[0-9X]+$/", $isbn)) {
+                $isbn = "";
+                return $isbn;
             }
 
-            $book = array();
-            $book['isbn'] = $isbn;
-
-            if ($this->mode & MODE_BASIC) { 
-               $book = $this->getBasic($line, $book, $db, $logger);
-               if ($book == null)
-                  return null;
-            }
-            if ($this->mode & MODE_DESC) {
-               $book = $this->getDesc($line, $book, $db, $logger);
-               if ($book == null)
-                  return null;
-            }
-            if ($this->mode & MODE_PRICE) {
-               $book = $this->getPrice($line, $book, $db, $logger);
-               if ($book == null)
-                  return null;
-            }
-            return $book;
+            if (strlen($isbn) != 13) {
+                if (strlen($isbn) == 10) {
+                    $isbn = convertisbn($isbn);
+                }
+                else {
+                    $isbn = "";
+                }
+            } 
+            return $isbn;
         }
 
         function getBasic($line, $book, $db, $logger) {
@@ -288,11 +231,14 @@ class Parser {
                             throw new exception("Unknown currency " . str_replace("\"", "", strtoupper(trim($fields[1]))));
                             break;
             }
-			$book['list_price'] = preg_replace("/[\",]/", "", trim($fields[2]));
-			$book['suppliers_discount'] = $this->getSuppliersDiscount($db, $book['distributor'], "Any");
-            if ($book['suppliers_discount'] == null) {
+            $listprice = preg_replace("/[\",]/", "", trim($fields[2]));
+			//$book['list_price'] = preg_replace("/[\",]/", "", trim($fields[2]));
+			//$book['suppliers_discount'] = $this->getSuppliersDiscount($db, $book['distributor'], "Any");
+			$suppliersdiscount = $this->getSuppliersDiscount($db, $book['distributor'], "Any");
+            if ($suppliersdiscount == null) {
                 throw new exception("No supplier discount data for " . $book['distributor']);
             }
+            $book = array_merge($book, $this->getSellingPrice($book['currency'], $listprice, $suppliersdiscount)); 
             $availability = trim(str_replace("\"", "", $fields[3]));
             if (!strcmp(strtoupper($availability), "AVAILABLE")) {
 			    $book['in_stock'] = 1;

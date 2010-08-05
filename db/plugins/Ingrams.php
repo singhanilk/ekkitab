@@ -1,7 +1,5 @@
 <?php
-error_reporting(E_ALL  & ~E_NOTICE);
-ini_set("display_errors", 1); 
-include(EKKITAB_HOME . "/" . "config" . "/" . "ekkitab.php");
+require_once(dirname(__FILE__) . "/" . "BaseParser.php");
 
 //  
 //
@@ -20,93 +18,44 @@ include(EKKITAB_HOME . "/" . "config" . "/" . "ekkitab.php");
 
 // This script will import books into the reference database from a vendor file......
 
-class Parser {
+class Parser extends BaseParser {
 
-        private $mode;
         private $months = array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
 
-        function __construct($mode) {
-            $this->mode = $mode;
+        function __construct($mode, $db, $logger, $discountmodel) {
+            parent::__construct($mode, $db, $logger, $discountmodel);
         }
 
         function isBook($line) {
 
+            $isbn = "";
+
             if ($this->mode & MODE_BASIC) {
                 switch(substr($line, 412, 1)) {
                    case 'B':
-                   case 'N':  break;
-                   default:   return false;
+                   case 'N':  $isbn = trim(substr($line, 442, 17));
+                              break;
+                   default:   break;
                 }
                 if (strcmp(strtoupper(substr($line, 834,3)), "ENG")){
-                   return false;
+                   $isbn = ""; 
                 }
-                return true;
             }
-            if ($this->mode & MODE_PRICE) {
+            elseif ($this->mode & MODE_PRICE) {
                 switch(substr($line,220,1)) {
                    case 'P':
                    case 'Q':
-                   case 'R':  return true;
-                   default:   return false;
+                   case 'R':  $isbn = substr($line,1,13);
+                              break;
+                   default:   break;
                 }
             }
-            if ($this->mode & (MODE_DESC | MODE_PROMO)) {
-                return true;
+            elseif ($this->mode & (MODE_DESC | MODE_PROMO)) {
+                $isbn  = substr($line,0,13);
             }
-            return false;
+            return $isbn;
         }
 
-        /** 
-          * Ensure that characters in a string are SQL safe. 
-          */
-        function escape($str) {
-            $pattern[0] = "/[~\\\\]*'/";
-            //$pattern[1] = "/\(/"; 
-            //$pattern[1] = "/\)/"; 
-            $replace[0] = "\'";
-            //$replace[1] = "\\\(";
-            //$replace[1] = "\\\)";
-            return(preg_replace($pattern, $replace, $str));
-        }
-
-        function correctName($name) {
-           $tmp = explode(",", $name);
-           switch (count($tmp)) {
-               case 1: $name = trim($name);
-                       break;
-               case 2: $name = trim($tmp[1]) . " " . trim($tmp[0]);
-                       break;
-               default: break;
-           }
-           return $name;
-        }
-
-        function getBook($line, $book, $db, $logger) {
-            if (!$this->isBook($line)) { 
-                return null;
-            }
-            if ($this->mode & MODE_BASIC) { 
-               $book = $this->getBasic($line, $book, $db, $logger);
-               if ($book == null)
-                  return null;
-            }
-            if ($this->mode & MODE_DESC) {
-               $book = $this->getDesc($line, $book, $db, $logger);
-               if ($book == null)
-                  return null;
-            }
-            if ($this->mode & MODE_PRICE) {
-               $book = $this->getPrice($line, $book, $db, $logger);
-               if ($book == null)
-                  return null;
-	    }
-	    if ($this->mode & MODE_PROMO){
-               $book = $this->getPromo($line, $book, $db, $logger);
-               if ($book == null)
-                  return null;
-	    }
-            return $book;
-        }
 
         function getContributionPrefix($role) {
             $prefix = "";
@@ -252,7 +201,6 @@ class Parser {
             $author = preg_replace("/^ & /", "", $author);
             $book['author'] = $this->escape($author);
             $book['publisher'] = $this->escape(trim(substr($line, 351, 45)));
-            $book['isbn'] = trim(substr($line, 442, 17));
             $binding = substr($line, 410, 2);
             $book['binding'] = $this->getBinding($binding);
             $book['bisac'][0] = trim(substr($line, 463, 9));
@@ -263,105 +211,96 @@ class Parser {
             $book['dimension'] = (trim(substr($line, 804, 5)) / 100)*2.54 . "x" . (trim(substr($line, 809, 5))/100)*2.54 . "x" . (trim(substr($line, 814, 5))/100)*2.54;
             //$book['pubcode'] = trim(substr($line, 827,  4));
             $book['image'] = $book['isbn'].".jpg";
-            $book['language'] = "English";	
+            $book['language'] = "English";    
             return($book);
         }
 
-		function getPrice($line, $book, $db, $logger){
+        function getPrice($line, $book, $db, $logger){
             
-			$isbn = substr($line,1,13);
-			
-			$listprice    = substr($line,150,7)/100;
-			$discount     = substr($line,165,3);
-			
-			//Extracting the Supplier Discount Info
-            		if (!strcmp($discount, "REG")){
-                		$discount = 40;
-            		}
-            		elseif (!strcmp($discount, "NET")){
-                		$discount = 0;
-            		}
-            		elseif (!strcmp($discount, "LOW")){
-                		$discount = 20;
-            		}
-			else{
-				$discount = str_replace("%", "", $discount);
-			}
+            $listprice    = substr($line,150,7)/100;
+            $discount     = substr($line,165,3);
+            
+            //Extracting the Supplier Discount Info
+            if (!strcmp($discount, "REG")){
+                $discount = 40;
+            }
+            elseif (!strcmp($discount, "NET")){
+                $discount = 0;
+            }
+            elseif (!strcmp($discount, "LOW")){
+                $discount = 20;
+            }
+            else{
+                $discount = str_replace("%", "", $discount);
+            }
 
-            		//If list price is less the 15 dollars, reduce discount to 0
-            		//so that our discount to customer will be 0.
-            		//if ($listprice < 15) {
-                	//	$discount = 0;
-           	 	//}
-			
-			//Extracting the Stock Info
-			$stock = 0;
-			$distCenterStk = array();
-			$pos = 38;
+            $currency = "USD";
 
-			while($pos <= 60){
-				$distCenterStk[] = substr($line,$pos,7) ;
-				$pos = $pos + 7;
-			}
+            $book = array_merge($book, $this->getSellingPrice($currency, $listprice, $discount));
 
-			foreach($distCenterStk as $value){
-				if($value > 0){
-					$stock = 1;
-                    	break;
-				}
-			}
-			
+            //Extracting the Stock Info
+            $stock = 0;
+            $distCenterStk = array();
+            $pos = 38;
 
-			//Extracting the Pub-Date
-            		$pubyear = substr($line,188,4) ;
-            		$pubmonth = (int)substr($line,192,2);
-            		if ($pubmonth > 0) {
-                		$nameofmonth = $this->months[$pubmonth - 1];
-            		}
-            		else {
-                		$nameofmonth = "Jan";  // Default if month is uncertain
-            		}
-            		$pubdate = $nameofmonth . "-" . $pubyear;
-			$book['list_price']		    = $listprice;
-			$book['suppliers_discount'] = $discount;
-			$book['currency']           = "USD" ;
-			$book['in_stock']           = $stock ;
-            		$book['isbn']               = $isbn ;
-			$book['publishing_date']    = $pubdate ;
-            		$book['info_source']        = "Ingrams";	
-			$book['delivery_period']    = 14 ;
-            		$book['sourced_from']       = "US";
-            		$book['info_source']        = "Ingrams";	
-            		$book['shipping_region']    = 0;	
-			return($book);
-		}
-		
-		function getDesc($line, $book, $db, $logger) {
-			$book['isbn']  = substr($line,0,13);
-			$description  = substr($line,15);
-			$description = str_replace("'", "", $description);
-            		if (strlen($description) > MAX_DESCRIPTION_LENGTH) {
-                		$description = substr($description, 0, MAX_DESCRIPTION_LENGTH - 4);
-                		$description .= " ...";
-            		}
-		    	$book['description'] = $description;
-            		return($book);
-		}
+            while($pos <= 60){
+                $distCenterStk[] = substr($line,$pos,7) ;
+                $pos = $pos + 7;
+            }
 
-		function getPromo($line, $book, $db, $logger) {
-			$isbn	       = substr($line,0,13);
-			$book['isbn']  = substr($line,0,13);
-			$length        = substr($line,13,5);
-			$promo	       = substr($line,18,$length);
-			$promo         = str_replace("'", "", $promo);
-			if(preg_match('/[^(\x20-\x7f)]/',$promo)){
-	        		$book = null; 
-			}
-			else{
-			$book['promo'] = $promo;
-				
-			}
-			return($book);
-		}
+            foreach($distCenterStk as $value){
+                if($value > 0){
+                    $stock = 1;
+                        break;
+                }
+            }
+            
+
+            //Extracting the Pub-Date
+            $pubyear = substr($line,188,4) ;
+            $pubmonth = (int)substr($line,192,2);
+            if ($pubmonth > 0) {
+                $nameofmonth = $this->months[$pubmonth - 1];
+            }
+            else {
+                $nameofmonth = "Jan";  // Default if month is uncertain
+            }
+            $pubdate = $nameofmonth . "-" . $pubyear;
+            //$book['list_price']            = $listprice;
+            //$book['suppliers_discount'] = $discount;
+            $book['currency']           = $currency ;
+            $book['in_stock']           = $stock ;
+            $book['publishing_date']    = $pubdate ;
+            $book['info_source']        = "Ingrams";    
+            $book['delivery_period']    = 14 ;
+            $book['sourced_from']       = "US";
+            $book['info_source']        = "Ingrams";    
+            $book['shipping_region']    = 0;    
+            return($book);
+        }
+        
+        function getDesc($line, $book, $db, $logger) {
+            $description  = substr($line,15);
+            $description = str_replace("'", "", $description);
+            if (strlen($description) > MAX_DESCRIPTION_LENGTH) {
+                $description = substr($description, 0, MAX_DESCRIPTION_LENGTH - 4);
+                $description .= " ...";
+            }
+            $book['description'] = $description;
+                return($book);
+        }
+
+        function getPromo($line, $book, $db, $logger) {
+            $length        = substr($line,13,5);
+            $promo         = substr($line,18,$length);
+            $promo         = str_replace("'", "", $promo);
+            if(preg_match('/[^(\x20-\x7f)]/',$promo)){
+                $book = null; 
+            }
+            else{
+                $book['promo'] = $promo;
+            }
+            return($book);
+        }
 }
 ?>
