@@ -60,5 +60,7 @@ define (MAXLINES_IN_BODY, 100);
    if ($lines > MAXLINES_IN_BODY) {
         $body .= "\n ..... more .....\n";
    }
-   sendmail($to, $subject, $body)
+   if ($body != "") {
+        sendmail($to, $subject, $body)
+   }
 ?>
