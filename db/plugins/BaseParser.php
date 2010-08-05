@@ -189,7 +189,7 @@ class BaseParser  {
             $result['discount_price'] = $ourprice;
             $result['suppliers_discount'] = $suppliersdiscount;
 
-            echo "List Price: $originallistprice --  Discount: $ourdiscount -- Discount Price: $ourprice  -- Suppliers Discount: $suppliersdiscount\n";
+            // echo "List Price: $originallistprice --  Discount: $ourdiscount -- Discount Price: $ourprice  -- Suppliers Discount: $suppliersdiscount\n";
 
             return $result;
         }
