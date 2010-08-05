@@ -42,7 +42,6 @@ else {
         return $config;
     }
 
-
     function process($directory, $archivedir, $config) {
 
         global $files_processed;
@@ -63,15 +62,37 @@ else {
             return;
         }
 
-		while ($file = readdir($dir)) {
-		    if (($file == ".") || ($file == ".."))
-			   continue;
-			if (is_dir($directory."/".$file)) {
-			   process($directory."/".$file, $archivedir, $config); 
-			}
-			else {
-               $extn = substr($file, strlen($file) - 4, 4);
-               if ((strlen($file) > 4) && ((strtolower($extn) == ".xls") || ($extn == ".RPT"))) {
+        while ($file = readdir($dir)) {
+            if (($file == ".") || ($file == ".."))
+               continue;
+            if (is_dir($directory."/".$file)) {
+               process($directory."/".$file, $archivedir, $config); 
+            }
+            else {
+               $extn = strtolower(substr($file, strlen($file) - 4, 4));
+               if ((strlen($file) > 4) && (($extn == ".xls") || ($extn == ".pdf"))) {
+                   if ($extn == ".pdf") {
+                        $shell_safe_file = escapeshellarg($file);
+                        $pdf_file = "$directory/$shell_safe_file";
+                        $command = 'pdftohtml -noframes ' . $pdf_file . '>/dev/null';
+                        $returnvalue = -1;
+                        $success = system($command, &$returnvalue);
+                        if ($returnvalue != 0) { // failure
+                            echo "[Prepare Stock] Could not convert $file to html for further processing.\n";
+                            $files_failed++;
+                            continue;
+                        }
+                        if ($archivedir != "") {
+                            $outputdir = $archivedir . "/" . $plugin;
+                            if (!file_exists($outputdir)) {
+                                mkdir($outputdir, 0755, true);
+                            }
+                            $sourcefile = $directory . "/" . $file;
+                            $targetfile = $outputdir . "/" . $file;
+                            rename($sourcefile, $targetfile);
+                         }
+                         $file = substr($file, 0, strlen($file) - 4) . ".html";
+                   }
                    $lower_directory = strtolower(basename($directory));
                    $plugin = str_replace(" ","",$lower_directory);
                    if ($config[$plugin]['concatfiles'] == 1) {
@@ -97,8 +118,8 @@ else {
                    if (($processor != "") && is_executable($processorhome . "/" . $processor)) {
                         // echo "Running... " . $processor . " on '" . $file . "'\n";
                         $outputfile = str_replace(".pl","", $processor) . "-stocklist.txt";
-                        $commandline = $processorhome . "/" . $processor . " '" . $directory . "/" . $file . "' " . $filewritemode . "  " . $outputdir . "/" . $outputfile . " 2>/dev/null";
-                        $success = system($commandline, $returnvalue);
+                        $commandline = $processorhome . "/" . $processor . " '" . $directory . "/" . $file . "' " . $filewritemode . "  " . $outputdir . "/" . $outputfile . '2>/dev/null';
+                        $success = system($commandline, &$returnvalue);
                         if ($returnvalue != 0) {
                              // echo "  ...failed.\n";
                              echo "[Prepare Stock] Processor $processor failed on file $file.\n";
@@ -130,10 +151,10 @@ else {
                    }
                }
                else {
-                    echo "[Prepare Stock] [Warning] File $file is not an excel file and is being ignored.\n";
+                    echo "[Prepare Stock] [Warning] File $file is not a proper input file and is being ignored.\n";
                     $files_ignored++;
                }
-		    }
+            }
         }
     }
 
@@ -153,8 +174,8 @@ else {
        $archivedir = $config['general']['archive'];
     }
     process($startdir, $archivedir, $config); 
-
-	echo "[Prepare Stock] Processed: $files_processed  Failed: $files_failed  Ignored: $files_ignored.\n";
+    
+    echo "[Prepare Stock] Processed: $files_processed  Failed: $files_failed  Ignored: $files_ignored.\n";
 
 ?>
 
