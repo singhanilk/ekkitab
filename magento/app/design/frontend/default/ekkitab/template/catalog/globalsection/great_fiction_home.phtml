@@ -19,7 +19,7 @@
 	  $_deziredRows= 2;
 ?>
 <?php if(!is_null($section) && $section->getId() >0 ):
-		$randomize = true;
+		$randomize = false;
 		$limit = $_columnSize * $_deziredRows;
 		$pageNo = 1;
 		$products= $section->getSectionProducts($randomize,$pageNo,$limit);

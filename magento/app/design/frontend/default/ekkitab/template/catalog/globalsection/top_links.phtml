@@ -19,19 +19,76 @@
  * @see Ekkitab_Catalog_Block_Globalsection
  */
 ?>
-<div class="globalLinks">
-<?php $_links = $this->getAllItems(true,4); ?>
-<?php $count = count($_links);	?>
-<?php if($count >0):	?>
-<?php	$i = 1;	?>
-<?php	foreach($_links as $_link): ?>
-			<a href="<?php echo Mage::helper('ekkitab_catalog')->getGlobalSectionViewUrl($_link->getSectionId()) ?>"><?php echo $_link->getDisplayName() ?></a>
-<?php		if($i < $count): ?> 
-				|
-<?php		endif; ?> 
-<?php	$i++;	?>
-<?php	endforeach; ?>
+<?php 
+$_links = $this->getAllItems(false); 
+$count = count($_links);	
+$scrollSize = 4;
+$scrollSize =( $count > $scrollSize )? $scrollSize :$count;
+if($scrollSize):	
+	$totalScrolls= intval($count/ $scrollSize) ;
+	$totalScrolls= ($count % $scrollSize) > 0 ? $totalScrolls +1 : $totalScrolls  ;
+?>
+	<script language="javascript">
+
+		var totalScrollCount=<?php echo $totalScrolls ?>;
+		var scrollSize=<?php echo $scrollSize ?>;
+		var totalSections=<?php echo $count ?>;
+		
+		var sections = new Array(3);
+		sections[0] = new Array(<?php echo ($count) ?>);
+		sections[1] = new Array(<?php echo ($count) ?>);
+		sections[2] = new Array(<?php echo ($count) ?>);
+		var counter=0;
+<?php 	foreach($_links as $_link){ 
+		  $counter = 0; ?>	
+			sections[0][counter] = '<?php echo $_link->getSectionId()?>';
+			sections[1][counter] = '<?php echo Mage::helper("ekkitab_catalog")->getGlobalSectionViewUrl($_link->getSectionId())?>';
+			sections[2][counter] = "<?php echo $_link->getDisplayName()?>";
+			counter++;
+<?php		
+		} ?>
+</script>
+	<div class="globalLinks" id="globalsection_scroll"></div>
 <?php else: ?>
-&nbsp;
+	<div class="globalLinks" >
+	&nbsp; </div>
 <?php endif; ?>
-</div>
+<script language="javascript">
+	function showSection(scrollNum){
+		var obj = document.getElementById('globalsection_scroll');
+		start=(scrollNum-1)*scrollSize;
+		end=(end = ((start+scrollSize)-1) ) > totalSections ? (totalSections-1): end ;
+		if( (diff= ((end - start) +1))< scrollSize){
+			start= start - (scrollSize - diff);		
+		}
+		if(obj){
+			var html ='';
+			if(scrollNum > 1){
+				html+='<a href="javascript:showSection(\''+(scrollNum-1)+'\')">';
+				html+='<img src="<?php echo $this->getSkinUrl("images/pager_arrow_left.gif") ?>" />';
+				html+='</a>';
+			}else{
+				html+='<img src="<?php echo $this->getSkinUrl("images/nav_parent_left_arrow.gif") ?>" />';
+
+			}
+			for(var i = start ; i <= end ; i++){
+				html+='<a href="'+sections[1][i]+'">'+sections[2][i]+'</a>';
+				if(i < end){
+					html+=' | ' ;
+				}
+			}
+			if(scrollNum < totalScrollCount ){
+				html+='<a href="javascript:showSection(\''+(parseInt(scrollNum)+1)+'\')">';
+				html+='<img src="<?php echo $this->getSkinUrl("images/pager_arrow_right.gif") ?>" />';
+				html+='</a>';
+			}else{
+				html+='<img src="<?php echo $this->getSkinUrl("images/nav_parent_arrow.gif") ?>" />';
+			}
+			obj.innerHTML= html;
+		}
+		
+	}
+	showSection(1);
+</script>
+
+

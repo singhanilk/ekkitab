@@ -116,7 +116,7 @@ else {
         if ($globalSectionConfig) 
         {
             //for each section
-            foreach($globalSectionConfig as $globalSec=> $globalSecArr){
+            foreach($globalSectionConfig as $globalSec=> $globalSecIsbns){
                 
                 //get the sectionId for the given section in the ini
                 $query = "select section_id from ek_catalog_global_sections where lower(display_name) = '".strtolower($globalSec)."'";
@@ -131,44 +131,51 @@ else {
                     //get all the isbns for that section
                     $isbns="";
                     $books = array();
-                    foreach($globalSecArr as $secBooks){
-                        $isbns =$isbns."'".trim($secBooks)."',";
-                    }
-                    $isbns =substr(trim($isbns), 0, -1);
+                    if(is_array($globalSecIsbns) && array_key_exists('isbns',$globalSecIsbns)){
+						$globalSecArr = explode(',',$globalSecIsbns['isbns']);
+						if($globalSecArr){
+							foreach($globalSecArr as $secBooks){
+								$isbns =$isbns."'".trim($secBooks)."',";
+							}
+							$isbns =substr(trim($isbns), 0, -1);
 
-                    //get the equivalent bookId for the given isbns
-                    $i = 0;
-                    $query = "select id from books where isbn in (".$isbns.")";
-                    //echo "\n".$query."\n";
-                    $result  = mysqli_query($db, $query);
-                    if (! $result)
-                        throw new exception("Failed on query: $query");
-                    $rowcount     = mysqli_num_rows($result);
-                    while($row = mysqli_fetch_array($result)){
-                        $books[$i++] = $row['id'];
-                    }
-                    
-                    //delete all the books from ek_catalog_global_section_products for this section Id 
-                    $query = "delete from ek_catalog_global_section_products where section_id = ".$sectonId;
-                    //echo "\n".$query."\n";
-                    $result  = mysqli_query($db, $query);
-                    if (! $result)
-                        throw new exception("Failed on query: $query");
-                    
-                    //insert the new books into ek_catalog_global_section_products for this section Id 
-                    $query =  "Insert into ek_catalog_global_section_products (section_id,product_id) values ";
-                    //echo "\n".$query."\n";
-                    $subQuery="";
-                    foreach ($books as $book) {
-                        $subQuery = $subQuery."(".$sectonId.",".$book."),";
-                    }
-                    $subQuery =substr(trim($subQuery), 0, -1);
-                    //echo "\n".$subQuery."\n";
-                    $query = $query.$subQuery;
-                    //echo "\n".$query."\n";
-                    $result  = mysqli_query($db, $query);
-                    if (! $result)
-                        throw new exception("Failed on query: $query");
+							//get the equivalent bookId for the given isbns
+							$i = 0;
+							$query = "select id from books where isbn in (".$isbns.")";
+							//echo "\n".$query."\n";
+							$result  = mysqli_query($db, $query);
+							if (! $result)
+								throw new exception("Failed on query: $query");
+							$rowcount     = mysqli_num_rows($result);
+							while($row = mysqli_fetch_array($result)){
+								$books[$i++] = $row['id'];
+							}
+						
+							//delete all the books from ek_catalog_global_section_products for this section Id 
+							$query = "delete from ek_catalog_global_section_products where section_id = ".$sectonId;
+							//echo "\n".$query."\n";
+							$result  = mysqli_query($db, $query);
+							if (! $result)
+								throw new exception("Failed on query: $query");
+							
+							//insert the new books into ek_catalog_global_section_products for this section Id 
+							$query =  "Insert into ek_catalog_global_section_products (section_id,product_id) values ";
+							//echo "\n".$query."\n";
+							$subQuery="";
+							foreach ($books as $book) {
+								$subQuery = $subQuery."(".$sectonId.",".$book."),";
+							}
+							$subQuery =substr(trim($subQuery), 0, -1);
+							//echo "\n".$subQuery."\n";
+							$query = $query.$subQuery;
+							//echo "\n".$query."\n";
+							if($subQuery!=''){
+								$result  = mysqli_query($db, $query);
+								if (! $result)
+									throw new exception("Failed on query: $query");
+							}
+						}
+					}
 
                 }
             }
