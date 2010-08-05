@@ -7,7 +7,7 @@ $validsuppliers .= "-eurokids-hachette-harpercollins-harvard-harvardbusiness-jai
 $validsuppliers .= "-mediastar-newindiabooksource-orientblackswan-oxford-paragonbooks-pearsoneducation-";
 $validsuppliers .= "-penguin-philearning-popularprakasham-prakash-prism-pustak-randomhouse-researchpress-sage-schand-";
 $validsuppliers .= "-scholasticindia-tarladalalbooks-tbh-vinayaka-wiley-";
-my $validextns = "zip xls";
+my $validextns = "zip xls pdf";
 
 my $tmpdir = "/mnt4/publisherdata/stock/autoprocess";
 my $targetdir = "/mnt4/publisherdata/stock/xl";
