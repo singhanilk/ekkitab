@@ -118,7 +118,7 @@ else {
                    if (($processor != "") && is_executable($processorhome . "/" . $processor)) {
                         // echo "Running... " . $processor . " on '" . $file . "'\n";
                         $outputfile = str_replace(".pl","", $processor) . "-stocklist.txt";
-                        $commandline = $processorhome . "/" . $processor . " '" . $directory . "/" . $file . "' " . $filewritemode . "  " . $outputdir . "/" . $outputfile . '2>/dev/null';
+                        $commandline = $processorhome . "/" . $processor . " '" . $directory . "/" . $file . "' " . $filewritemode . "  " . $outputdir . "/" . $outputfile . " 2>/dev/null";
                         $success = system($commandline, &$returnvalue);
                         if ($returnvalue != 0) {
                              // echo "  ...failed.\n";
