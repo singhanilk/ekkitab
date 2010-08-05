@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<DiscountData>
+    <Supplier name="Ingrams">
+        <DiscountLevel value="40">
+            <Price min="0" max="10">
+                <Discount low="10" high="15"/>
+            </Price>
+            <Price min="10" max="20">
+                <Discount low="15" high="18"/>
+            </Price>
+            <Price min="20" max="100000">
+                <Discount low="15" high="18"/>
+            </Price>
+        </DiscountLevel>
+        <DiscountLevel value="35">
+            <Price min="0" max="10">
+                <Discount low="5" high="10"/>
+            </Price>
+            <Price min="10" max="20">
+                <Discount low="10" high="15"/>
+            </Price>
+            <Price min="20" max="25">
+                <Discount low="15" high="18"/>
+            </Price>
+            <Price min="25" max="100000">
+                <Discount low="18" high="20"/>
+            </Price>
+        </DiscountLevel>
+        <DiscountLevel value="30">
+            <Price min="0" max="10">
+                <Discount low="0" high="0"/>
+            </Price>
+            <Price min="10" max="20">
+                <Discount low="5" high="10"/>
+            </Price>
+            <Price min="20" max="100000">
+                <Discount low="10" high="15"/>
+            </Price>
+        </DiscountLevel>
+        <DiscountLevel value="25">
+            <Price min="0" max="15">
+                <Discount low="0" high="0"/>
+            </Price>
+            <Price min="15" max="25">
+                <Discount low="2" high="10"/>
+            </Price>
+            <Price min="25" max="100000">
+                <Discount low="10" high="12"/>
+            </Price>
+        </DiscountLevel>
+    </Supplier>
+    <Supplier name="IndiaPublisher">
+        <DiscountLevel value="Any">
+            <Price min="0" max="200">
+                <Discount low="0" high="0"/>
+            </Price>
+            <Price min="200" max="400">
+                <Discount low="10" high="15"/>
+            </Price>
+            <Price min="400" max="600">
+                <Discount low="15" high="18"/>
+            </Price>
+            <Price min="600" max="100000">
+                <Discount low="18" high="20"/>
+            </Price>
+        </DiscountLevel>
+    </Supplier>
+</DiscountData>

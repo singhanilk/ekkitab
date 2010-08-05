@@ -110,12 +110,28 @@ cp $releasedir/samplesearch.php $bindir
 sudo service tomcat6 start
 
 # Removing maintenance page
-echo "Taking system off maintenance mode..."
+echo -n "Taking system off maintenance mode..."
 cp $magentodir/.htaccess.prod $magentodir/.htaccess
 echo "done."
 
 #echo "Restarting apache2 service"
 #sudo service apache2 restart
+
+# Archive this catalog update (for backup use)
+# Create the archive directory if it does not exist.
+echo -n "Archiving this release..."
+archivedir=$EKKITAB_HOME/catalogarchive
+if [ ! -d  $archivedir ] ; then
+  echo -n "Creating archive directory..."
+  mkdir $archivedir
+  echo  "done."
+fi
+fileindex=`date +%d`
+let fileindex=$fileindex%7
+target=`basename $releasedir`.$fileindex
+rm -rf $archivedir/$target
+cp -r $releasedir $archivedir/$target
+
 
 echo "Catalog update completed." 
 

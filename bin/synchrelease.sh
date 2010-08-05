@@ -178,6 +178,7 @@ cp $releasedir/synchrelease.sh $bindir
 # Copy other scripts to the bin directory.
 cp $releasedir/getactivesessions.sh $bindir
 cp $releasedir/checkreviews.sh $bindir
+cp $releasedir/sendmail.php $bindir
 
 sudo service tomcat6 start
 

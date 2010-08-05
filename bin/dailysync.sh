@@ -71,6 +71,7 @@ done;
 if (( \$activesessions <= $ZERO_SESSIONS_THRESHOLD )) ; then
 cd /tmp/catalog;
 ./synchcatalog.sh;
+sleep 10;
 php $EKKITAB_HOME/bin/samplesearch.php
 fi;
 echo "Deleting image cache...";
