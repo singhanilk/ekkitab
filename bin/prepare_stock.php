@@ -70,7 +70,8 @@ else {
             }
             else {
                $extn = strtolower(substr($file, strlen($file) - 4, 4));
-               if ((strlen($file) > 4) && (($extn == ".xls") || ($extn == ".pdf"))) {
+               $extn_html = strtolower(substr($file, strlen($file) - 5, 5));
+               if ((strlen($file) > 4) && (($extn == ".xls") || ($extn == ".pdf") || ($extn_html == ".html"))) {
                    if ($extn == ".pdf") {
                         $shell_safe_file = escapeshellarg($file);
                         $pdf_file = "$directory/$shell_safe_file";
