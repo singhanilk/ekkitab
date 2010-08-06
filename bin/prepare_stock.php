@@ -187,6 +187,6 @@ else {
     process($startdir, $archivedir, $config); 
     
     echo "[Prepare Stock] Processed: $files_processed  Failed: $files_failed  Ignored: $files_ignored.\n";
-
+    exit ($files_failed);
 ?>
 

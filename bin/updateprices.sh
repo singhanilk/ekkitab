@@ -20,7 +20,7 @@ starttime=$(date +"%D [%T]")
 echo "[Update Prices] started at: $starttime"
 
 if [ -f $excelConverter ] ; then
-    echo "[Update Prices] Converting excel stocklist files to text..."; 
+    echo "[Update Prices] Converting stocklist files to text..."; 
     php $excelConverter
 else
     echo "[Update Prices] [Fatal] $excelConverter Not Found";
