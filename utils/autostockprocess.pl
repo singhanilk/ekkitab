@@ -5,7 +5,7 @@ use MIME::Parser;
 my $validsuppliers = "-westland-indiabooks-rupa-amit-bookworldenterprises-dolphin-";
 $validsuppliers .= "-eurokids-hachette-harpercollins-harvard-harvardbusiness-jaico-";
 $validsuppliers .= "-mediastar-newindiabooksource-orientblackswan-oxford-paragonbooks-pearsoneducation-";
-$validsuppliers .= "-penguin-philearning-popularprakasham-prakash-prism-pustak-randomhouse-researchpress-sage-schand-";
+$validsuppliers .= "-penguin-philearning-popularprakasham-prakash-prism-pustak-randomhouse-researchpress-sage-schand-ubs-";
 $validsuppliers .= "-scholasticindia-tarladalalbooks-tbh-vinayaka-wiley-";
 my $validextns = "zip xls pdf";
 
