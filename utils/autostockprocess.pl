@@ -51,6 +51,9 @@ if ($pop->login('autostockprocess@ekkitab.com', 'eki22Ab') > 0) {
                next; 
             }
             my $destdir = $targetdir . "/" . lc($supplier);
+            if (not -d $destdir) {
+                mkdir $destdir;
+            }
             my $targetfile = $path;
             $targetfile =~ s/\s/\\ /g;
             $command = "cp $targetfile $destdir";
