@@ -84,7 +84,7 @@ Layout for customer login page
         <remove name="left"/>
         <reference name="root">
 			<reference name="head">
-				<remove name="auth-redirect"/>
+				<!--remove name="auth-redirect"/-->
 			</reference>
             <action method="setTemplate"><template>page/1column.phtml</template></action>
         </reference>
@@ -102,7 +102,7 @@ Layout for customer log out page
         <remove name="left"/>
         <reference name="root">
            	<reference name="head">
-				<remove name="auth-redirect"/>
+				<!--remove name="auth-redirect"/-->
 			</reference>
 			<action method="setTemplate"><template>page/1column.phtml</template></action>
         </reference>
