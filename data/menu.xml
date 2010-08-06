@@ -35,7 +35,7 @@
         <BOOK id="9780385522861" title="Welcome to Utopia: Notes from a Small Town" author="Karen Valby"/>
         <BOOK id="9780307387097" title="Half the Sky: Turning Oppression Into Opportunity for Women Worldwide" author="Nicholas D. Kristof &amp; Sheryl WuDunn"/>
     </SECTION>
-    <SECTION title="Popular in India" type="collection" showall="yes" highlight="5" shuffle="yes">
+    <SECTION title="Popular Books" type="collection" showall="yes" highlight="5" shuffle="yes">
         <BOOK id="9788172234980" title="The Alchemist" author="Paulo Coelho"/>
         <BOOK id="9780552161275" title="The Da Vinci Code" author="Dan Brown"/>
         <BOOK id="9780590353427" title="Harry Potter and the Sorcerer's Stone" author="J K Rowling"/>
