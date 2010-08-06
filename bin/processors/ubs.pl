@@ -1,13 +1,4 @@
 #!/usr/bin/perl
-use Config::Abstract::Ini;
-my $ekkitab_home = $ENV{EKKITAB_HOME};
-if (!($ekkitab_home)){
-print "Not Defined" . "\n";
-}
-my $Settingsfile = $ekkitab_home . "/config/stockprocess.ini";
-my $settings     = new Config::Abstract::Ini($Settingsfile);
-my %values       = $settings -> get_entry('availability');
-my $threshold    = $values{'threshold'};
 print "#ISBN\tPRICE\tCURRENCY\tAVAILABILITY\tIMPRINT\tTITLE\tAUTHOR\n";
 $/=undef;
 open(FILE, $ARGV[0]) or die "cannot open input file";
@@ -41,7 +32,7 @@ for (my $i=0; $i<=$#isbns; $i++) {
         }
         my $availability = '';
         my $stock = $fields[$end];
-        if ($stock <= $threshold){
+        if ($stock <= 3){
            $availability = 'Not Available' . '[' . $stock . ']';
         }
         else{
