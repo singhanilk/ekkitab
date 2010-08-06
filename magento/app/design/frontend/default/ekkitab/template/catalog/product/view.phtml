@@ -33,6 +33,7 @@
 <a name="home" ></a><?php
     $_helper = $this->helper('catalog/output');
     $_product = $this->getProduct();
+	$foundPromo = 0;
 	if(!is_null($_product)){
 		
 		$otherEditions = $this->getIndianBooks();
@@ -117,7 +118,6 @@
 			</div><!-- finDetSynop -->
 <!-- Promo text  -->
 			<?php $promoCollection = $this->getPromoContent();
-			$foundPromo = 0;
 			if(!is_null($promoCollection) && count($promoCollection) > 0 ){
 			?>	
 				<div id="promoLink" class="bookPromoContentTop" ><a href="javascript:showContent('promoContent');hideLink('promoLink')">...click here to read more</a></div>
@@ -297,5 +297,5 @@ function showLink(id){
 		contentDiv.style.display="block";
 	}
 }
-<?php	if($foundPromo==0) {  echo	"hideLink('promoLink');" ; }?>
+<?php	if($foundPromo && $foundPromo==0) {  echo	"hideLink('promoLink');" ; }?>
 </script>
