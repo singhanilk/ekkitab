@@ -69,7 +69,7 @@ for (my $i=0; $i<=$#isbns; $i++) {
             next;
         }
         else{
-            print "$isbn\t$currency\t$price\t$availability\t$imprint\t$Title\t$author\n";
+            print "$isbn\t$price\t$currency\t$availability\t$imprint\t$Title\t$author\n";
         }
     }
 }
