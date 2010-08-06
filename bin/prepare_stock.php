@@ -174,6 +174,16 @@ else {
     else {
        $archivedir = $config['general']['archive'];
     }
+
+    if ($argc > 1) {
+       $startdir .= "/" . $argv[1]; 
+    }
+
+    if (!file_exists($startdir)) {
+        echo "[Prepare Stock] [Fatal] Directory $startdir does not exist or is not readable. \n";
+        exit(1);
+    }
+
     process($startdir, $archivedir, $config); 
     
     echo "[Prepare Stock] Processed: $files_processed  Failed: $files_failed  Ignored: $files_ignored.\n";
