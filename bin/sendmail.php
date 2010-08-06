@@ -61,6 +61,6 @@ define (MAXLINES_IN_BODY, 100);
         $body .= "\n ..... more .....\n";
    }
    if ($body != "") {
-        sendmail($to, $subject, $body)
+        sendmail($to, $subject, $body);
    }
 ?>
