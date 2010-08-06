@@ -255,7 +255,7 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
     public function getAuthorQueryText()
     {
         if (is_null($this->_queryText) || strlen($this->_queryText) <=0 ) {
-            $this->_queryText = $this->_getRequest()->getParam($this->getAuthorQueryName());
+            $this->_queryText = urldecode($this->_getRequest()->getParam($this->getAuthorQueryName()));
 			if ($this->_queryText === null) {
                 $this->_queryText = '';
             } else {

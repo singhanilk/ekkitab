@@ -59,12 +59,6 @@ a:hover {
 	padding-right: 10px;
 	margin-right: 10px;
 }
-.leftNavArea .linkHdr, .mainRight .linkHdr {
-	font-size: 1.2em;
-	font-weight: bold;
-	color: #c60;
-	margin-top: 10px;
-}
 .leftNavArea ul {
 	list-style-type: none;
 	padding: 0;
@@ -500,10 +494,31 @@ a:hover {
 	border-bottom: 1px dotted #666;
 }
 
-.leftNavArea .linkHdr {
-	font-size: 1.2em;
+.leftNavArea .linkHdr, .mainRight .linkHdr{
+	margin-top: 3px;
+	font-size: 12px;
 	font-weight: bold;
 	color: #c60;
+}
+
+.mainRight ul li a {
+	display: block;
+	font-size: 1.1em;
+	margin-top: 4px;
+	margin-right: 0pt;
+	margin-bottom: 4px;
+	margin-left: 0pt;
+	line-height: normal;
+}
+
+.mainRight ul li a {
+	display: block;
+	line-height: normal;
+	margin-top: 4px;
+	margin-right: 0pt;
+	margin-bottom: 0px;
+	margin-left: 0pt;
+	font-size: 11px;
 }
 
 .leftNavArea .linkHdr a 
@@ -2494,3 +2509,4 @@ dt .hdr {
 	margin: 5px;
 	padding: 5px;
 }
+
