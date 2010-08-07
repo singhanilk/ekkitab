@@ -9,9 +9,10 @@ fi;
 #    exit 1;
 #fi;
 echo "Backing up customer and order data..."
-(cd $EKKITAB_HOME/db; $EKKITAB_HOME/db/backup.sh $host $user $password)
+backupfile=/tmp/backup.sql
+(cd $EKKITAB_HOME/db; $EKKITAB_HOME/db/backup.sh -o $backupfile)
 echo "Resetting database and restoring backed up data..."
 mysql -s -h $host -u $user -p$password <<!
 source $EKKITAB_HOME/db/reset_ekkitab_books.sql;
-source $EKKITAB_HOME/data/backup.sql;
+source $backupfile;
 !
