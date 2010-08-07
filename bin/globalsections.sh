@@ -4,10 +4,16 @@ if [ -z $EKKITAB_HOME ] ; then
     exit 1;
 fi;
 . $EKKITAB_HOME/bin/db.sh 
-echo "generating globalsection links...."
+echo "Generating globalsection links..."
 cd $EKKITAB_HOME/bin; 
-php generate_globalsections.php -i ../data/globalsections.xml
-echo "generated the sql file... updating the database...."
+sqlfile=/tmp/globalsections.sql
+xmlfile=../data/globalsections.xml
+php generate_globalsections.php -i $xmlfile -o $sqlfile 
+if (( $? > 0 )) ; then
+    echo "[Fatal] Could not generate sql file for global sections."
+    exit 1;
+fi
+echo "Loading globalsection links..."
 mysql -s -h $host -u $user -p$password <<!
-source $EKKITAB_HOME/db/globalsections.sql;
+source $sqlfile;
 !

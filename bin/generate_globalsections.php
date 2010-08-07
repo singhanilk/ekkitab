@@ -150,12 +150,13 @@ function section_exists($id) {
 	return false;
 }
 
-if ($argc < 2) {
-   echo "Usage: $argv[0] -i <Input XML file> \n";
+if ($argc < 5) {
+   echo "Usage: $argv[0] -i <Input XML file> -o <SQL File>\n";
    exit(1);
 }
 
 $inputfile = "";
+$outputfile = "";
 
 for ($i = 1; $i < $argc; $i+=2) {
     if ($argv[$i][0] == '-') {
@@ -165,6 +166,8 @@ for ($i = 1; $i < $argc; $i+=2) {
         }
         switch($argv[$i][1]) {
             case 'i': $inputfile = $argv[$i+1];
+                      break;
+            case 'o': $outputfile = $argv[$i+1];
                       break;
             default:  break;
         }
@@ -182,11 +185,12 @@ if (!strcmp($inputfile, "")) {
 
 $xml = initXML($inputfile);
 
-$sqlFile = $EKKITAB_HOME."/db/globalsections.sql";
+//$sqlFile = $EKKITAB_HOME."/db/globalsections.sql";
+$sqlFile = $outputfile;
 
 $fhtml = fopen($sqlFile, "w");
 if (!$fhtml) {
-    echo "Could not open file to create sql output for globalsections.\n";
+    echo "Could not open file '$sqlfile' to create sql output for globalsections.\n";
     exit(1);
 }
 
