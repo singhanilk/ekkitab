@@ -305,11 +305,12 @@ else {
        elseif ($mode & MODE_PRICE) {
             $bookavailable = $book['in_stock'];
             $discountprice = $book['discount_price']; 
+            $delivery_period = $book['delivery_period'];
             if ($bookavailable == '0') {
               $whereclause = "(isbn = '$isbn') and ((discount_price is null) or ((in_stock = '0') and discount_price > '$discountprice'))";
             }
             else {
-              $whereclause = "(isbn = '$isbn') and ((discount_price is null) or (in_stock = '0') or ((in_stock = '1') and discount_price > '$discountprice'))";
+              $whereclause = "(isbn = '$isbn') and ((discount_price is null) or (in_stock = '0') or ((in_stock = '1') and ((discount_price > '$discountprice') or (delivery_period > '$delivery_period'))))";
             }
             $query = "update books set " . $updatestatement . " where $whereclause";
        }

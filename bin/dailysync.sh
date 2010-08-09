@@ -18,7 +18,7 @@ echo "Updating Ingram content..."
 rundate=$(date +"%D-%T")
 ( cd $EKKITAB_HOME/bin ; ./updateingram.sh | php sendmail.php -s "Daily Sync Report: [$rundate] Update Ingram" $tomail )
 echo "Rsync'ing images with production server..."
-rsync -av --exclude=cache/* /mnt3/magento-product-images/ prod:/mnt3/magento-product-images > /mnt2/scm/logs/rsync.log
+rsync -azv --delete --exclude=cache/* /mnt3/magento-product-images/ prod:/mnt3/magento-product-images > /mnt2/scm/logs/rsync.log
 echo "Updating prices..."
 rundate=$(date +"%D-%T")
 ( cd $EKKITAB_HOME/bin ; ./updateprices.sh | php sendmail.php -s "Daily Sync Report: [$rundate] Update Prices" $tomail )
