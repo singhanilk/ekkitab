@@ -127,6 +127,7 @@ if [ ! -d  $archivedir ] ; then
   echo  "done."
 fi
 fileindex=`date +%d`
+fileindex=`echo $fileindex | sed 's/^0//'`
 let fileindex=$fileindex%7
 target=`basename $releasedir`.$fileindex
 rm -rf $archivedir/$target
