@@ -9,6 +9,7 @@ if [ -z $EKKITAB_HOME ] ; then
             break;
         elif [ $ok != "n" ] ; then 
             echo "Ambiguous reply...Exiting"
+            unset EKKITAB_HOME
             break; 
         fi
     done

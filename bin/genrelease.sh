@@ -65,4 +65,42 @@ echo "done."
 echo `date +%D' 'at' '%T` > $releasedir/releasedate
 echo "Release directory created on `date +%D' 'at' '%T`" 
 
+echo "Transferring release to production server."
+echo -n "Deleting tranfer target on production server..."
+ssh prod <<!
+cd /tmp
+rm -rf app
+exit
+!
+echo "done."
+echo -n "Transferring new release to production server..."
+( cd $releasedir/..; scp -r app prod:/tmp )
+echo "done."
+echo "Deploying new release on production server."
+ZERO_SESSIONS_THRESHOLD=4
+ssh prod <<!
+export EKKITAB_HOME=/mnt2/scm;
+activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
+tries=0;
+MAXTRIES=30;
+while (( \$activesessions > $ZERO_SESSIONS_THRESHOLD )) && (( \$tries < \$MAXTRIES )) ; do
+(( tries++ ));
+echo "Sleeping. \$activesessions sessions are active."
+sleep 60;
+activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
+done;
+if (( \$activesessions <= $ZERO_SESSIONS_THRESHOLD )) ; then
+cd /tmp/app;
+./synchrelease.sh;
+sleep 10;
+php $EKKITAB_HOME/bin/samplesearch.php
+fi;
+exit \$activesessions;
+!
+if (( $? <= $ZERO_SESSIONS_THRESHOLD )) ; then
+    echo "Completed. New release is now in production." 
+else
+    echo "Production system has active sessions. New release transferred but NOT pushed to production." 
+fi
+
 
