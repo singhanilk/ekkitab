@@ -38,6 +38,7 @@
 		
 		$otherEditions = $this->getIndianBooks();
 		$isbn = $_product->getIsbn();
+		$isbn10 = $_product->getIsbn10();
 		$sourcedFrom =  $_product->getSourcedFrom();
 		if($sourcedFrom && strlen(trim($sourcedFrom)) > 0 && strtolower($sourcedFrom)=='us'){
 			$isbn.= " <em>[ Imported Edition ]</em>";
@@ -102,6 +103,9 @@
 			  <div class="lineHeight14em"><span class="boldFont">Other Contributor(s) : <?php echo ucwords($others) ?></span></div>
 			<?php endif;?>
 			<div class="lineHeight14em"><span class="boldFont">ISBN:  <?php echo $isbn ?></span></div>
+			<?php if($isbn10 && $isbn10!=''):?>
+			<div class="lineHeight14em"><span class="boldFont">ISBN-10:  <?php echo $isbn10 ?></span></div>
+			<?php endif;?>
 			<div class="lineHeight14em"><span class="boldFont">Binding: <?php echo ucwords($_product->getBinding()) ?></span></div>
 			<div class="lineHeight14em"><span class="boldFont">Publisher:  <?php echo $publishers ?></span></div>
 			<div class="lineHeight14em"><span class="boldFont">Publishing Date:  <?php echo $publishDate ?></span></div>

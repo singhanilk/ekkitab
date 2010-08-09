@@ -28,14 +28,22 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
 	protected function _prepareLayout()
     {
 		if($this->getProduct()){
-			$title = $this->getProduct()->getTitle();
+			$isbn = $this->getProduct()->getIsbn();
+			$isbn10 = $this->getProduct()->getIsbn10();
+			$price = $this->getProduct()->getDiscountPrice();
 			$authorArr= $this->getProduct()->getAuthor();
 			$author = !is_null($authorArr['a']) ? " by ".$authorArr['a'] :"";
-			$desc = $this->getProduct()->getDescription() ;
+			$shippingTimeMin = (int)$this->getProduct()->getDeliveryPeriod();
+			$shippingTimeMax = round($shippingTimeMin + (.5 * $shippingTimeMin) );
+			$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Delivers in ".$shippingTimeMin." - ".$shippingTimeMax." business days":"";
+			$title = $this->getProduct()->getTitle();
+			
+			$desc = "Ekkitab.com : Buy ".$title."(".$isbn.")".$author." at Rs.".$price.". ".$shippingTime;
+
 			if ($headBlock = $this->getLayout()->getBlock('head')) {
-				$headBlock->setTitle($title.$author." @ ");
-				$headBlock->setKeywords($title." @ ");
-				$headBlock->setDescription( $desc);
+				$headBlock->setTitle($title.$author." | ".$isbn." |");
+				$headBlock->setKeywords($title.$author." at Ekkitab, Buy online ". $title.$author." at Ekkitab, ".$isbn.", ".$isbn10);
+				$headBlock->setDescription($desc);
 			}
 			if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')){
 				$breadcrumbs->addCrumb('home', array(

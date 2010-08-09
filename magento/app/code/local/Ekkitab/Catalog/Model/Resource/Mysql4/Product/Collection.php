@@ -44,6 +44,12 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Product_Collection extends Mage_Core
 		return $this;
 	}
 	
+	public function addStockFilter($status){
+		//Mage::log("Called addStockFilter");
+		$this->addFieldToFilter('main_table.in_stock', array('eq'=>$status));
+		return $this;
+	}
+	
 	public function addNotInIdFilter($id){
 		//Mage::log("Called addIdFilter");
 		$this->addFieldToFilter('main_table.id', array('nin'=>$id));
