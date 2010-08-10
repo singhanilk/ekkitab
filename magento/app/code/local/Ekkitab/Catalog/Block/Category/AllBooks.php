@@ -27,7 +27,7 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
 
 	protected $_productCollection;
 	protected $_productCollectionCount;
-	protected $_pageSize = 5;
+	protected $_pageSize = 100;
 	protected $_slotSize = 200;
 	protected $_pageNo;
 	protected $_slotNo;
