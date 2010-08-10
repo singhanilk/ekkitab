@@ -1,17 +1,19 @@
 #!/bin/bash
-
 # Get the Ekkitab Home Directory. Confirm with user.
-while (true) ; do
-    read -p "Please specify Ekkitab home directory: " EKKITAB_HOME 
-    read -p "You have specified $EKKITAB_HOME as the Ekkitab home directory. Ok to continue? (y/n) " ok
-    ok=`echo $ok | tr 'A-Z' 'a-z'`
-    if [ $ok == "y" ] ; then
-        break;
-    elif [ $ok != "n" ] ; then 
-        echo "Ambiguous reply...Exiting"
-        break; 
-    fi
-done
+if [ -z $EKKITAB_HOME ] ; then
+    while (true) ; do
+        read -p "Please specify Ekkitab home directory: " EKKITAB_HOME 
+        read -p "You have specified $EKKITAB_HOME as the Ekkitab home directory. Ok to continue? (y/n) " ok
+        ok=`echo $ok | tr 'A-Z' 'a-z'`
+        if [ $ok == "y" ] ; then
+            break;
+        elif [ $ok != "n" ] ; then 
+            echo "Ambiguous reply...Exiting"
+            unset EKKITAB_HOME
+            break; 
+        fi
+    done
+fi
 
 if [ -z $EKKITAB_HOME ] ; then
     echo "Fatal: EKKITAB_HOME is not set..."

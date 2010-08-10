@@ -516,6 +516,8 @@ fi
    
 echo "done. Starting service."
 sudo service sendsms start
+# Update the rc.d links.
+sudo update-rc.d sendsms defaults
 
 # Remove all local files
 rm *.local 
