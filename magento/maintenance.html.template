@@ -20,6 +20,16 @@
 <link rel="stylesheet" type="text/css" href="skin/frontend/default/ekkitab/css/clears.css" media="all" />
 <link rel="stylesheet" type="text/css" href="skin/frontend/default/ekkitab/css/styles.css" media="all" />
 <link rel="stylesheet" type="text/css" href="skin/frontend/default/ekkitab/css/print.css" media="print" />
+<style>
+.purpleTxt {
+ color: #CC3399;
+ font-size: 1.3em;
+}
+.orangeTxt {
+ color: #CC6600;
+ font-size: 1.5em;
+}
+</style>
 <body class=" cms-index-index cms-home">
 	<div class="header">
 	<div class="logo"><a href="index.php/" title="ekkitab homepage"></a></div>
@@ -30,7 +40,7 @@
 		<div class="globalLinks">&nbsp;</div>
 		<div class="clear"></div>
 		<div class="wrapper">
-			<div class="maintenance"><h2>We are sorry. Our site is under maintenance. Please try again later.</h2></div>
+			<div class="maintenance"><h2>We are sorry. Our site is under maintenance.</h2><br><span class="purpleTxt">The site will be down between DOWNTIME_START and DOWNTIME_END Indian Standard Time (GMT +5:30)<br>Please try again when we are up.</span></div>
 		</div><!-- wrapper -->
 		<!-- footer section  -->
 		<div class="footerTop"></div><!-- footerTop -->

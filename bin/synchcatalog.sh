@@ -37,8 +37,11 @@ if [ ! -d $magentodir ] ; then
   exit 1;
 fi
 
+bindir=$EKKITAB_HOME/bin
+
 # Setting up maintenance page
 echo -n "Setting system to maintenance mode..."
+( cd $bindir; ./setdowntime.sh 30 )
 ( cd $magentodir; cp ".htaccess.maintenance" .htaccess )
 echo "done."
 
@@ -103,7 +106,6 @@ cp $releasedir/categories.xml $magentodir
 echo "done."
 
 # Copy this script to the bin directory.
-bindir=$EKKITAB_HOME/bin
 cp $releasedir/synchcatalog.sh $bindir
 # Copy sample search script to the bin directory.
 cp $releasedir/samplesearch.php $bindir

@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title> Maintenance page Ekkitab Education Services Pvt Ltd</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="description" content="Default Description" />
+<meta name="keywords" content="Ekkitab, online bookstore" />
+<meta name="robots" content="INDEX,FOLLOW" />
+<link rel="icon" href="skin/frontend/default/ekkitab/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="skin/frontend/default/ekkitab/favicon.ico" type="image/x-icon" />
+<script type="text/javascript">
+//<![CDATA[
+    var BLANK_URL = '/js/blank.html';
+    var BLANK_IMG = '/js/spacer.gif';
+//]]>
+</script>
+<link rel="stylesheet" type="text/css" href="skin/frontend/default/ekkitab/css/reset.css" media="all" />
+<link rel="stylesheet" type="text/css" href="skin/frontend/default/ekkitab/css/boxes.css" media="all" />
+<link rel="stylesheet" type="text/css" href="skin/frontend/default/ekkitab/css/menu.css" media="all" />
+<link rel="stylesheet" type="text/css" href="skin/frontend/default/ekkitab/css/clears.css" media="all" />
+<link rel="stylesheet" type="text/css" href="skin/frontend/default/ekkitab/css/styles.css" media="all" />
+<link rel="stylesheet" type="text/css" href="skin/frontend/default/ekkitab/css/print.css" media="print" />
+<body class=" cms-index-index cms-home">
+	<div class="header">
+	<div class="logo"><a href="index.php/" title="ekkitab homepage"></a></div>
+	<div class="headerRight">	</div>
+</div>
+<div class="whiteBg">
+		<!-- globalLinks -->
+		<div class="globalLinks">&nbsp;</div>
+		<div class="clear"></div>
+		<div class="wrapper">
+			<div class="maintenance"><h2>We are sorry. Our site is under maintenance.</h2></div>
+		</div><!-- wrapper -->
+		<!-- footer section  -->
+		<div class="footerTop"></div><!-- footerTop -->
+			<div class="footerMid">
+				<p>&copy; 2009 Ekkitab Educational Services Pvt Ltd. All Rights Reserved.</p>
+			</div><!-- footerMid -->
+		<div class="footerBot"></div>
+		<!-- footerBot -->
+		<!-- footer section ends  -->
+	</div><!-- whiteBg -->
+</body>
+</html>

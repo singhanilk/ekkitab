@@ -89,8 +89,14 @@ fi
 # Create production site file marker.
 touch $magentodir/productionsite
 
+bindir=$EKKITAB_HOME/bin
 # Set up maintenance page
 echo -n "Setting system to maintenance mode..."
+if [ -x $EKKITAB_HOME/bin/setdowntime.sh ] ; then
+    ( cd $bindir; ./setdowntime.sh 10 )
+else 
+    ( cd $magentodir; cp maintenance.html.default maintenance.html )
+fi
 ( cd $magentodir; cp ".htaccess.maintenance" ".htaccess" )
 echo "done."
 
@@ -175,12 +181,12 @@ cp $releasedir/checkdbversion.php $dbdir
 ( cd $dbdir; ./updatedb.sh )
 
 # Copy this script to the bin directory.
-bindir=$EKKITAB_HOME/bin
 cp $releasedir/synchrelease.sh $bindir
 # Copy other scripts to the bin directory.
 cp $releasedir/getactivesessions.sh $bindir
 cp $releasedir/checkreviews.sh $bindir
 cp $releasedir/sendmail.php $bindir
+cp $releasedir/setdowntime.sh $bindir
 
 sudo service tomcat6 start
 
