@@ -20,6 +20,8 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
 
     const QUERY_PAGE_NO = 'p';
   
+    const CATALOG_SLOT_NO = 's';
+  
     const QUERY_CATEGORY_PATH = 'category';
 
     const QUERY_FILTER_NAME = 'filterby';
@@ -35,6 +37,14 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
      * @var int
      */
     protected $_pageNo;
+
+	/**
+     * Slot Number
+
+     *
+     * @var int
+     */
+    protected $_slotNo;
 
 
 	/**
@@ -91,6 +101,17 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
      *
      * @return string
      */
+    public function getSlotNoVarName()
+    {
+        return self::CATALOG_SLOT_NO;
+    }
+	
+	
+	/**
+     * Retrieve search query parameter name
+     *
+     * @return string
+     */
     public function getCategoryVarName()
     {
         return self::QUERY_CATEGORY_PATH;
@@ -117,7 +138,7 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
      */
     public function getFullCatalogUrl()
     {
-        return $this->_getUrl('ekkitab_catalog/search/fullcatalog', array());
+        return $this->_getUrl('all-books', array());
     }
 
     /**
@@ -206,6 +227,25 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
             }
         }
         return $this->_pageNo;
+    }
+
+	/**
+     * Retrieve search query text
+     *
+     * @return string
+     */
+    public function getCurrentSlotNumber()
+    {
+        if (is_null($this->_slotNo)) {
+            $this->_slotNo = $this->_getRequest()->getParam($this->getSlotNoVarName());
+            Mage::log("slot in helper is... ".$this->_slotNo);
+			if (isset($this->_slotNo)) {
+                $this->_slotNo = (int)trim($this->_slotNo);
+            } else {
+                $this->_slotNo = 1;
+            }
+        }
+        return $this->_slotNo;
     }
 
 

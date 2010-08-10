@@ -27,18 +27,51 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
 
 	protected $_productCollection;
 	protected $_productCollectionCount;
-	protected $_pageSize = 15;
+	protected $_pageSize = 100;
+	protected $_slotSize = 200;
 	protected $_pageNo;
+	protected $_slotNo;
 	protected $_lastPageNo;
-	protected $_displayPages = 5;
+	protected $_lastSlotNo;
+//	protected $_displayPages = 200;
+//	protected $_displaySlots = 200;
 
     const XML_PATH_SEARCH_INDEX_FILE = 'global/search_index/path';
 	const JAVA_BRIDGE_INC_FILE = 'global/java_inc/path';
 
-   protected function _prepareLayout()
+    
+	public function setPageSize($count)
+    {
+        if (intval($count) > 0) {
+            $this->_pageSize = intval($count);
+        }
+        return $this;
+    }
+
+    public function getPageSize()
+    {
+        return $this->_pageSize;
+    }
+
+    public function getSlotSize()
+    {
+        return $this->_slotSize;
+    }
+
+    public function getPageNo()
+    {
+        return $this->_pageNo;
+    }
+
+    public function getSlotNo()
+    {
+        return $this->_slotNo;
+    }
+
+	protected function _prepareLayout()
     {
 	   
-		$title ='Full Catalog';
+		$title ='All Books :';
 		
 		if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
 
@@ -57,24 +90,6 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
 		}
 		
         return parent::_prepareLayout();
-    }
-
-	public function setPageSize($count)
-    {
-        if (intval($count) > 0) {
-            $this->_pageSize = intval($count);
-        }
-        return $this;
-    }
-
-    public function getPageSize()
-    {
-        return $this->_pageSize;
-    }
-
-    public function getPageNo()
-    {
-        return $this->_pageNo;
     }
 
 		
@@ -100,7 +115,11 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
 			require($javaIncFile);
 			$search = new java("com.ekkitab.search.BookSearch",$indexFilePath );
 			
-			$results = $search->searchSequential($this->getPageSize(), $this->getCurrentPageNumber());
+			Mage::log("Current Page Number is : ". $this->getCurrentPageNumber());
+			Mage::log("Current Slot Number is : ". $this->getCurrentSlotNumber());
+			$pageNo = ( ($this->getCurrentPageNumber() -1) * $this->getSlotSize() ) + $this->getCurrentSlotNumber(); 
+			Mage::log("Lucene Page Number is : ". $pageNo);
+			$results = $search->searchSequential($this->getPageSize(),$pageNo);
 			if(!is_null($results)){
   				$productIds = java_values($results->getBookIds());
 				if(!is_null($productIds) && is_array($productIds) && count($productIds) > 0 ){
@@ -178,12 +197,190 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
     public function getLastPageNumber()
     {
 		if(is_null($this->_lastPageNo)){
-			$this->_lastPageNo = ceil((int)$this->getTotalResultCount() / $this->_pageSize);
+			$this->_lastPageNo = ceil((int)$this->getTotalResultCount() /($this->getPageSize()*$this->getSlotSize()));
 		}
 		return $this->_lastPageNo;
     }
 
-    public function isFirstPage()
+	/**
+     * Retrieve search result count
+     *
+     * @return string
+     */
+    public function getLastSlotNumber()
+    {
+		if(is_null($this->_lastSlotNo)){
+			$this->_lastPageNo = ceil((int)$this->getTotalResultCount() /$this->getPageSize());
+		}
+		return $this->_lastPageNo;
+    }
+
+
+    public function getPageUrl($page)
+    {
+		$params=array($this->helper('ekkitab_catalog')->getPageNoVarName()=>$page);
+		$url = 'ekkitab_catalog/search/folder/';
+        return $this->getPagerUrl($url,$params);
+
+    }
+
+    public function getSlotPageUrl($page,$slot)
+    {
+        $params=array($this->helper('ekkitab_catalog')->getPageNoVarName()=>$page,$this->helper('ekkitab_catalog')->getSlotNoVarName()=>$slot);
+		$url = 'ekkitab_catalog/search/books/';
+		return $this->getPagerUrl($url,$params);
+    }
+
+	 public function getPagerUrl($url,$params=array())
+    {
+		if(is_array($params)){
+			foreach ($params as $param => $value) {
+               if(isset($value) && strlen($value) > 0){
+				  $url  = $url.$param."/".$value."/";
+			   }
+            }
+        }
+        $urlParams = array();
+		$url = $this->getUrl($url,$urlParams);
+        return $url;
+    }
+
+
+
+	/**
+     * Retrieve search result count
+     *
+     * @return string
+     */
+    public function getCurrentPageNumber()
+    {
+		if(is_null($this->_pageNo)){
+			$this->_pageNo = $this->helper('ekkitab_catalog')->getCurrentPageNumber();
+		}
+		return $this->_pageNo;
+    }
+
+
+	/**
+     * Retrieve search result count
+     *
+     * @return string
+     */
+    public function getCurrentSlotNumber()
+    {
+		if(is_null($this->_slotNo)){
+			$this->_slotNo = $this->helper('ekkitab_catalog')->getCurrentSlotNumber();
+		}
+		return $this->_slotNo;
+    }
+
+
+  	public function getPages()
+    {
+        $pages = array();
+		$pages = range(1,$this->getLastPageNumber());
+
+        /*if ($this->getLastPageNumber() <= $this->_displayPages) {
+            $pages = range(1,$this->getLastPageNumber());
+        }
+        else {
+            $half = ceil($this->_displayPages / 2);
+            if ($this->_pageNo >= $half && $this->_pageNo <= $this->getLastPageNumber() - $half) {
+                $start  = ($this->_pageNo - $half) + 1;
+                $finish = ($start + $this->_displayPages) - 1;
+            }
+            elseif ($this->_pageNo < $half) {
+                $start  = 1;
+                $finish = $this->_displayPages;
+            }
+            elseif ($this->_pageNo > ($this->getLastPageNumber() - $half)) {
+                $finish = $this->getLastPageNumber();
+                $start  = $finish - $this->_displayPages + 1;
+            }
+
+            $pages = range($start, $finish);
+        }*/
+        return $pages;
+
+    }
+
+	public function getSlots()
+    {
+        $slots = array();
+		$servedSlots = ($this->getCurrentPageNumber()-1)* $this->getSlotSize();
+		$currentPageSlotSize = min(200,$this->getLastSlotNumber() - $servedSlots);
+		$pages = range(1,$currentPageSlotSize);
+
+        /*if ($this->getLastSlotNumber() <= $this->_displayPages) {
+            $slots = range(1,$this->getLastPageNumber());
+        }
+        else {
+            $half = ceil($this->_displayPages / 2);
+            if ($this->_pageNo >= $half && $this->_pageNo <= $this->getLastPageNumber() - $half) {
+                $start  = ($this->_pageNo - $half) + 1;
+                $finish = ($start + $this->_displayPages) - 1;
+            }
+            elseif ($this->_pageNo < $half) {
+                $start  = 1;
+                $finish = $this->_displayPages;
+            }
+            elseif ($this->_pageNo > ($this->getLastPageNumber() - $half)) {
+                $finish = $this->getLastPageNumber();
+                $start  = $finish - $this->_displayPages + 1;
+            }
+
+            $pages = range($start, $finish);
+        }*/
+        return $pages;
+
+    }
+
+    /**
+     * Retrieve Note messages
+     *
+     * @return array
+     */
+    public function getNoteMessages()
+    {
+        return Mage::helper('ekkitab_catalog')->getNoteMessages();
+    }
+
+
+    /**
+	public function getDonateBlurbHtml()
+    {
+        return $this->getChildHtml('donate_book_blurb');
+    }
+
+     */
+
+
+	  /**
+     * Enter description here...
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @return string
+    public function getAddToWishlistUrl($productId)
+    {
+        return $this->getUrl('ekkitab_wishlist/index/add',array('product'=>$productId));
+    }
+     */
+
+    /**
+     * Retrieve url for add product to cart
+     * Will return product view page URL if product has required options
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @param array $additional
+     * @return string
+    public function getAddToCartUrl($productId)
+    {
+        return $this->helper('ekkitab_catalog')->getCartUrl($productId,$this->helper('core/url')->getCurrentUrl());
+    }
+
+     */
+
+    /* public function isFirstPage()
     {
         return $this->getCurrentPageNumber() == 1;
     }
@@ -197,6 +394,9 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
     {
         return $this->getCurrentPageNumber() >= $this->getLastPageNumber();
     }
+	*/
+
+	/*
 
     public function getFirstPageUrl()
     {
@@ -217,48 +417,13 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
     {
         return $this->getPageUrl($this->getLastPageNumber());
     }
-
-    public function getPageUrl($page)
+*/
+   /* public function getSubCategorySearchUrl($categoryPath,$page)
     {
         return $this->getPagerUrl(array($this->helper('ekkitab_catalog')->getPageNoVarName()=>$page));
-    }
+    }*/
 
-    public function getSubCategorySearchUrl($categoryPath,$page)
-    {
-        return $this->getPagerUrl(array($this->helper('ekkitab_catalog')->getPageNoVarName()=>$page));
-    }
-
-	 public function getPagerUrl($params=array(),$queryParams=null)
-    {
-		$url = '*/*/*/';
-		if(is_array($params)){
-			foreach ($params as $param => $value) {
-               if(isset($value) && strlen($value) > 0){
-				  $url  = $url.$param."/".$value."/";
-			   }
-            }
-        }
-        $urlParams = array();
-		$url = $this->getUrl($url,$urlParams);
-        return $url;
-    }
-
-
-	/**
-     * Retrieve search result count
-     *
-     * @return string
-     */
-    public function getCurrentPageNumber()
-    {
-		if(is_null($this->_pageNo)){
-			$this->_pageNo = $this->helper('ekkitab_catalog')->getCurrentPageNumber();
-		}
-		return $this->_pageNo;
-    }
-
-
-    public function getFirstNum()
+	 /* public function getFirstNum()
     {
         return $this->getPageSize()*($this->getCurrentPageNumber()-1)+1;
     }
@@ -272,76 +437,8 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
     public function getTotalNum()
     {
         return $this->getTotalResultCount();
-    }
-	
-	public function getPages()
-    {
-        $pages = array();
+    }*/
 
-        if ($this->getLastPageNumber() <= $this->_displayPages) {
-            $pages = range(1,$this->getLastPageNumber());
-        }
-        else {
-            $half = ceil($this->_displayPages / 2);
-            if ($this->_pageNo >= $half && $this->_pageNo <= $this->getLastPageNumber() - $half) {
-                $start  = ($this->_pageNo - $half) + 1;
-                $finish = ($start + $this->_displayPages) - 1;
-            }
-            elseif ($this->_pageNo < $half) {
-                $start  = 1;
-                $finish = $this->_displayPages;
-            }
-            elseif ($this->_pageNo > ($this->getLastPageNumber() - $half)) {
-                $finish = $this->getLastPageNumber();
-                $start  = $finish - $this->_displayPages + 1;
-            }
-
-            $pages = range($start, $finish);
-        }
-        return $pages;
-
-    }
-
-	public function getDonateBlurbHtml()
-    {
-        return $this->getChildHtml('donate_book_blurb');
-    }
-
-
-
-    /**
-     * Retrieve Note messages
-     *
-     * @return array
-     */
-    public function getNoteMessages()
-    {
-        return Mage::helper('ekkitab_catalog')->getNoteMessages();
-    }
-
-	  /**
-     * Enter description here...
-     *
-     * @param Mage_Catalog_Model_Product $product
-     * @return string
-     */
-    public function getAddToWishlistUrl($productId)
-    {
-        return $this->getUrl('ekkitab_wishlist/index/add',array('product'=>$productId));
-    }
-
-    /**
-     * Retrieve url for add product to cart
-     * Will return product view page URL if product has required options
-     *
-     * @param Mage_Catalog_Model_Product $product
-     * @param array $additional
-     * @return string
-     */
-    public function getAddToCartUrl($productId)
-    {
-        return $this->helper('ekkitab_catalog')->getCartUrl($productId,$this->helper('core/url')->getCurrentUrl());
-    }
-
-
+  
   }
+

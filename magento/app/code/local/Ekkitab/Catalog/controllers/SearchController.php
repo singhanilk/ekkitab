@@ -83,7 +83,15 @@ class Ekkitab_Catalog_SearchController extends Mage_Core_Controller_Front_Action
     }
 
 
-	public function fullcatalogAction()
+	public function folderAction()
+    {
+		$this->loadLayout();
+		$this->_initLayoutMessages('catalog/session');
+		$this->_initLayoutMessages('checkout/session');
+		$this->renderLayout();
+	}
+
+	public function booksAction()
     {
 		$this->loadLayout();
 		$this->_initLayoutMessages('catalog/session');

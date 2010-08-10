@@ -159,22 +159,27 @@ Category Lecene search layout
 			</reference>
 	</ekkitab_catalog_search_index>
 
-	<ekkitab_catalog_search_fullcatalog>
+	<ekkitab_catalog_search_folder>
+			<!-- Mage_Catalogsearch -->
+			<reference name="root">
+				<action method="setTemplate"><template>page/1column.phtml</template></action>
+			</reference>
+			<reference name="content">
+				<block type="ekkitab_catalog/category_allBooks" name="catalog_category_searchresult" template="catalog/category/page_slots.phtml" />
+			</reference>
+	</ekkitab_catalog_search_folder>
+
+	<ekkitab_catalog_search_books>
 			<!-- Mage_Catalogsearch -->
 			<reference name="root">
 				<action method="setTemplate"><template>page/1column.phtml</template></action>
 			</reference>
 			<reference name="content">
 				<block type="ekkitab_catalog/category_allBooks" name="catalog_category_searchresult" template="catalog/category/allbooks.phtml" >
-					<!--action method="setDefaultTemplate"><value>catalog/category/search_result.phtml</value></action>
-					<action method="chooseTemplate"/-->
-					<block type="page/html" name="donate_book_blurb" before="leftlink_menu" template="page/html/donate_blurb.phtml" />
-					<action method="setPageNo"><count>1</count></action>
-					<action method="setPageSize"><count>15</count></action>
-					<block type="ekkitab_catalog/leftlinks" name="leftlink_menu" template="catalog/leftlinks/menu.phtml"/>
-					</block>
+					<action method="setPageSize"><count>100</count></action>
+				</block>
 			</reference>
-	</ekkitab_catalog_search_fullcatalog>
+	</ekkitab_catalog_search_books>
 
 <!--
 Category layered navigation layout

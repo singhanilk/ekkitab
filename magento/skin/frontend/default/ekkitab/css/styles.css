@@ -2510,3 +2510,12 @@ dt .hdr {
 	padding: 5px;
 }
 
+.searchResTop .pages {
+	text-decoration:underline;
+	line-height:1.2em;
+}
+
+.searchResTop .slots {
+	text-decoration:underline;
+	line-height:1.2em;
+}
