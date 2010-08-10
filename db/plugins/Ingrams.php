@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__FILE__) . "/" . "BaseParser.php");
+define (MIN_STOCK_LEVEL, 5);
 
 //  
 //
@@ -243,6 +244,13 @@ class Parser extends BaseParser {
             $distCenterStk = array();
             $pos = 38;
 
+            // Consider only the Tennessee Distribution Center.
+            $distCenterStk[0] = substr($line,$pos,7) ;
+            if ($distCenterStk[0] >= MIN_STOCK_LEVEL) {
+                $stock = 1;
+            }
+
+            /*  Consider all Stock Distribution Centers.
             while($pos <= 60){
                 $distCenterStk[] = substr($line,$pos,7) ;
                 $pos = $pos + 7;
@@ -254,6 +262,7 @@ class Parser extends BaseParser {
                         break;
                 }
             }
+            */
             
 
             //Extracting the Pub-Date
