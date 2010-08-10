@@ -29,6 +29,7 @@ public class BookSearch {
     private static final String PROP_XMLFILE   = "categoriesfile.path";
     private static final String PROP_INDEXFILE = "searchdir.path";
     private static final String PROPERTIESFILE = "search.properties";
+    private static final String SEARCHINDEX_MODE = "searchindex.mode";
 
     private static EkkitabSearch searcher = null;
 
@@ -46,7 +47,9 @@ public class BookSearch {
         	InputStream is = BookSearch.class.getClassLoader().getResourceAsStream(PROPERTIESFILE);
             properties.load(is);
             catTree = new EkkitabCategoryTree(properties.getProperty(PROP_XMLFILE));
-            searcher = new EkkitabSearch(properties.getProperty(PROP_INDEXFILE));
+            String indexmode = properties.getProperty(SEARCHINDEX_MODE);
+            indexmode = indexmode == null ? "file" : indexmode;
+            searcher = new EkkitabSearch(properties.getProperty(PROP_INDEXFILE), indexmode);
             //bookSearch = new BookSearch("");
             initSuccessful = true;
         }
