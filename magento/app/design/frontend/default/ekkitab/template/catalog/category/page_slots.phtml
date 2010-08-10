@@ -33,11 +33,9 @@
 			</div>
 		<?php endif; ?>
 		<div class="searchResTop">
-			<div class="leftArea">
-				<?php foreach ($slots as $_slot): ?>
-						<a class="slots" href="<?php echo $this->getSlotPageUrl($_page,$_slot) ?>"><?php echo $_slot ?></a>&nbsp;
-				<?php endforeach; ?>
-			</div><!-- leftArea -->
+			<?php foreach ($slots as $_slot): ?>
+					<a class="slots" href="<?php echo $this->getSlotPageUrl($_page,$_slot) ?>"><?php echo $_slot ?></a>&nbsp;
+			<?php endforeach; ?>
 			<div class="clear"></div>
 		</div><!-- searchResTop -->
 	</div><!-- inLeft-->
