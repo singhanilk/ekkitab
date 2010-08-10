@@ -54,6 +54,15 @@ releasedir=`pwd`
 #    exit 1
 #fi
 
+magentodir=$EKKITAB_HOME/magento
+savedir=$EKKITAB_HOME/magento.saved
+
+# Save the previous release, if it exists
+if [ -d $magentodir ] ; then
+    echo -n "Saving present version of release..."
+    ( cd $EKKITAB_HOME; rm -rf $savedir; mv $magentodir $savedir ) 
+    echo "done."
+fi
 
 # Unzip the release
 echo -n "Unzipping application files..."
@@ -64,7 +73,6 @@ if ! ( cd $EKKITAB_HOME;  unzip -qo $releasedir/release-*.zip >/dev/null 2>&1 ) 
 fi
 echo "done."
 
-magentodir="$EKKITAB_HOME/magento"
 # If the magento directory does not exist, we have a problem.
 if [ ! -d $magentodir ] ; then
   echo "FATAL: Could not create magento directory. Cannot continue."
