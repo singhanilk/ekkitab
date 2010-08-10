@@ -27,7 +27,7 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
 
 	protected $_productCollection;
 	protected $_productCollectionCount;
-	protected $_pageSize = 100;
+	protected $_pageSize = 5;
 	protected $_slotSize = 200;
 	protected $_pageNo;
 	protected $_slotNo;
@@ -115,10 +115,7 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
 			require($javaIncFile);
 			$search = new java("com.ekkitab.search.BookSearch",$indexFilePath );
 			
-			Mage::log("Current Page Number is : ". $this->getCurrentPageNumber());
-			Mage::log("Current Slot Number is : ". $this->getCurrentSlotNumber());
 			$pageNo = ( ($this->getCurrentPageNumber() -1) * $this->getSlotSize() ) + $this->getCurrentSlotNumber(); 
-			Mage::log("Lucene Page Number is : ". $pageNo);
 			$results = $search->searchSequential($this->getPageSize(),$pageNo);
 			if(!is_null($results)){
   				$productIds = java_values($results->getBookIds());
