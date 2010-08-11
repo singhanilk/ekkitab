@@ -17,7 +17,6 @@ $checks = array();
 $checks[] = "checkBookCount";
 $checks[] = "checkValidity";
 
-
 function getConfig($file) {
     $config = parse_ini_file($file, true);
     if (! $config) {
@@ -47,8 +46,11 @@ function percentage($listprice, $dbprice){
     }
 }
 function checkValidity($db, $fh){
+    $num_errors = 0;
+    $num_books = 0;
     $source = "India";
     while ($data = fgets($fh)){
+        $num_books++;
         $details = explode(",", $data);
         $isbn = $details[0];
         $listprice = $details[1];
@@ -66,12 +68,12 @@ function checkValidity($db, $fh){
                     if($source == $row1[0] && $localsource == $db_localsource){
                         if(percentage(trim($listprice), trim($row[1])) == 0){
                             print "[Catalog Validation] [Warning] Listprice in file->$listprice for isbn-> $isbn is different from that of Database->$row[1] by more than 5%\n"; 
-                            return (1);
+                            $num_errors++;
                         }
                         $ratio =round(100 -  ((($row[2]+0)/($row[1]+0))*100));
                         if($ratio > 35){
                             print "[Catalog Validation] [Warning] We are loosing too Much Money!! Discount Greater than 35% on isbn --> $row[0] $row[2]\n";
-                            return (1); 
+                            $num_errors++; 
                         }
                     }
                 }
@@ -83,18 +85,27 @@ function checkValidity($db, $fh){
 	        return(1);
 	    }
     }
-    return (0);
+    print "[Catalog Validation] [Info] $num_errors out of $num_books books failed validation.\n";
+    if ($num_errors > 0){ 
+        return (1);
+    }
+    else{
+        return ($num_errors);
+    }
+        
 }
 
 function checkBookCount($db, $fh){
+    $num_errors = 0;
     $query = "SELECT COUNT(*) from `books`";
     try {
        $result = mysqli_query($db, $query);
 	   if ($result && (mysqli_num_rows($result) > 0)) {
            while( $row=mysqli_fetch_row($result)){
-             if (($row[0]+0) < 3000000 ){
+                $books_in_db = ($row[0]+0);
+             if ($books_in_db < 3000000 ){
                 print "[Catalog Validation] [Warning] Number of books less than estimated amount\n";
-                return (1);
+                $num_errors++;
             }
           } 
        }
@@ -103,7 +114,13 @@ function checkBookCount($db, $fh){
 	   echo  "[Catalog Validation] [Fatal] SQL Exception. $e->getMessage()\n"; 
 	   return(1);
 	}
-    return (0);
+    if($num_errors > 0){
+        print "[Catalog Validation] [Info] Expected atleast 3,000,000 books in catalog, only $books_in_db found\n";
+        return (1);
+    }
+    else{
+        return ($num_errors);
+    }
 }
 
     $configinifile = CONFIG_FILE;
@@ -151,4 +168,5 @@ function checkBookCount($db, $fh){
        echo "[Catalog Validation] [Passed] Number of checks run: " . count($checks) . "\n";
     }
     exit($exitvalue);
+
 ?>
