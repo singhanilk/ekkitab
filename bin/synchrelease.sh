@@ -61,6 +61,9 @@ savedir=$EKKITAB_HOME/magento.saved
 if [ -d $magentodir ] ; then
     echo -n "Saving present version of release..."
     ( cd $EKKITAB_HOME; rm -rf $savedir; mv $magentodir $savedir ) 
+    ( cd $EKKITAB_HOME; mkdir $magentodir && mv $savedir/search_index_dir $magentodir )
+    ( cd $EKKITAB_HOME; mv $savedir/search_index_dir_spell_author $magentodir )
+    ( cd $EKKITAB_HOME; mv $savedir/search_index_dir_spell_title $magentodir )
     echo "done."
 fi
 
