@@ -237,8 +237,13 @@ if(!is_null($results) && is_array($results)){
 			<?php if($listPrice > 0):?><div class="lineHeight14em">MRP Price : <?php echo Mage::helper('core')->currency($listPrice,true,false) ?></div><?php endif; ?>
 			<div class="youSave"><?php if($savings > 0):?>Save <?php echo Mage::helper('core')->currency($savings,true,false) ?><?php endif; ?>
 			<?php if($savingsPerct > 0):?>(<?php echo $savingsPerct?>%)<?php endif; ?></div>
-			<div class="lineHeight14em"><?php echo $shippingTime ?></div>
-			<?php if($stock && $listPrice >0) : ?><div class="youSave">In Stock</div><?php else:?><div class="noStock">Out of Stock </div><?php endif;?> <a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($id)?>"><?php echo $this->__('Add to Wishlist') ?></a><br/>	
+			<?php if($stock && $listPrice >0) : ?>
+				<div class="lineHeight14em"><?php echo $shippingTime ?></div>
+				<div class="youSave">In Stock</div>
+			<?php else:?>
+				<div class="noStock">Out of Stock </div>
+			<?php endif;?>
+			<a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($id)?>"><?php echo $this->__('Add to Wishlist') ?></a><br/>	
 			
 			</div><!-- priceArea -->
 			<div class="clear"></div>
