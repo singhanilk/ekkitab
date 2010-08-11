@@ -45,17 +45,18 @@ public class EkkitabSearch {
     private enum MATCH_MODE {MATCH_PHRASE, MATCH_WORDS};
     
 
-    public EkkitabSearch(String indexDir) throws EkkitabSearchException {
+    public EkkitabSearch(String indexDir, String indexmode) throws EkkitabSearchException {
         this.indexDir = indexDir;
         try {
-        	if (Runtime.getRuntime().maxMemory() < 3000000000L) { // not enough memory for RAM directory
-        		this.searchDir =  FSDirectory.getDirectory(this.indexDir);
-        		logger.info("Inadequate memory for RAM Directory. Using disk based index.");
+        	//if (Runtime.getRuntime().maxMemory() < 3000000000L) { // not enough memory for RAM directory
+        	if (indexmode.equalsIgnoreCase("memory")) {
+        		this.searchDir = new RAMDirectory(FSDirectory.getDirectory(this.indexDir));
+        		logger.info("Using memory based index.");
         	}
         	else {
-        		this.searchDir = new RAMDirectory(FSDirectory.getDirectory(this.indexDir));
-        		logger.info("Adequate memory for RAM Directory. Using memory based index.");
-        	}
+            	this.searchDir =  FSDirectory.getDirectory(this.indexDir);
+            	logger.info("Using disk based index.");
+            }
     	    this.reader    = IndexReader.open(this.searchDir, true);
     		this.searcher  = new IndexSearcher(reader);
     		this.sorter = new Sort();	
