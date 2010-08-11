@@ -176,7 +176,6 @@ Category Lecene search layout
 			</reference>
 			<reference name="content">
 				<block type="ekkitab_catalog/category_allBooks" name="catalog_category_searchresult" template="catalog/category/allbooks.phtml" >
-					<action method="setPageSize"><count>100</count></action>
 				</block>
 			</reference>
 	</ekkitab_catalog_search_books>
