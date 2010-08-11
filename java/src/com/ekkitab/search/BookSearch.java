@@ -141,6 +141,10 @@ public class BookSearch {
     	return searcher.getSequential(instanceId, page, pageSz);
     }
     
+    public long getCatalogSize() throws Exception {
+    	return searcher.getMaxDocId(instanceId);
+    }
+    
     public SearchResult lookup(String author, String title) throws Exception {
     	String query = "";
     	String[] authors = author.split("&");
