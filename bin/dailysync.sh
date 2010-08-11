@@ -73,15 +73,13 @@ cd /tmp/catalog;
 ./synchcatalog.sh;
 sleep 10;
 php $EKKITAB_HOME/bin/samplesearch.php
+echo "New catalog pushed into production." ;
+else 
+echo "Production system has active sessions. Wait timed out. New catalog is NOT pushed to production." 
 fi;
 echo "Deleting image cache...";
 rm -rf $EKKITAB_HOME/magento/media/catalog/product/cache/1/*
-exit \$activesessions;
 !
-if (( $? <= $ZERO_SESSIONS_THRESHOLD )) ; then
-    echo "Completed daily sync routine. New catalog pushed into production." 
-else
-    echo "Production system has active sessions. New catalog transferred but NOT pushed to production." 
-fi
+echo "Completed daily sync routine."
 
 

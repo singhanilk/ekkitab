@@ -75,7 +75,7 @@ exit
 !
 echo "done."
 echo -n "Transferring new release to production server..."
-( cd $releasedir/..; scp -r app prod:/tmp )
+( cd $releasedir/..; scp -r app prod:/tmp >/dev/null )
 echo "done."
 echo "Deploying new release on production server."
 ZERO_SESSIONS_THRESHOLD=4
@@ -95,13 +95,9 @@ cd /tmp/app;
 ./synchrelease.sh;
 sleep 10;
 php $EKKITAB_HOME/bin/samplesearch.php
-fi;
-exit \$activesessions;
-!
-if (( $? <= $ZERO_SESSIONS_THRESHOLD )) ; then
-    echo "Completed. New release is now in production." 
+echo "New release is now in production.";
 else
-    echo "Production system has active sessions. New release transferred but NOT pushed to production." 
-fi
-
-
+echo "Production system has active sessions. Wait timed out. New release is NOT pushed to production." 
+fi;
+!
+echo "Completed."
