@@ -29,6 +29,7 @@ if [ ! -f $EKKITAB_HOME/bin/db.sh ] ; then
 fi
 
 . $EKKITAB_HOME/bin/db.sh
+magentodir=$EKKITAB_HOME/magento
 
 #if (( $# > 0 )) ; then
 #  releasedir=$1
