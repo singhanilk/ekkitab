@@ -118,7 +118,9 @@
 			<?php endif;?>
 			<a name="promo-content"></a>
 			<div class="finDetSynop">
-				<?php echo $_product->getDescription() ?>
+				<?php $desc = $_product->getDescription();
+					  $desclen = strlen(trim($desc));
+					  if($desclen > 10){ echo $desc; }?>
 			</div><!-- finDetSynop -->
 <!-- Promo text  -->
 			<?php $promoCollection = $this->getPromoContent();
@@ -129,7 +131,7 @@
 					<div class="bookPromoContentTop" id="promoLinkClose"><a href="javascript:hideContent('promoContent');showLink('promoLink')">Close</a></div>
 					<div class="bookPromoContent">
 				<?php	foreach($promoCollection as $promo): 
-							if(strlen(trim($promo->getPromoDesc())) != strlen(trim($_product->getDescription())) ){
+							if(strlen(trim($promo->getPromoDesc())) != $desclen ){
 				?>						<p><?php echo preg_replace('/\<br(\s*)?\/?\>/i','<p>',$promo->getPromoDesc())?></p>
 				<?php			$foundPromo =1;						
 							}
