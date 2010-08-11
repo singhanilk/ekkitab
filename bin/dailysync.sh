@@ -59,7 +59,7 @@ echo "Deploying new catalog on production server..."
 ZERO_SESSIONS_THRESHOLD=4
 ssh prod <<!
 export EKKITAB_HOME=/mnt2/scm;
-activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
+activesessions=\`$EKKITAB_HOME/bin/getactivesessions.sh\`;
 tries=0;
 MAXTRIES=30;
 while (( \$activesessions > $ZERO_SESSIONS_THRESHOLD )) && (( \$tries < \$MAXTRIES )) ; do
