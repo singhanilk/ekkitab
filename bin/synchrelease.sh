@@ -212,5 +212,3 @@ target=`basename $releasedir`.$fileindex
 rm -rf $archivedir/$target
 cp -r $releasedir $archivedir/$target
 echo  "done."
-
-
