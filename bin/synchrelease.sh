@@ -54,19 +54,6 @@ releasedir=`pwd`
 #    exit 1
 #fi
 
-magentodir=$EKKITAB_HOME/magento
-savedir=$EKKITAB_HOME/magento.saved
-
-# Save the previous release, if it exists
-if [ -d $magentodir ] ; then
-    echo -n "Saving present version of release..."
-    ( cd $EKKITAB_HOME; rm -rf $savedir; mv $magentodir $savedir ) 
-    ( cd $EKKITAB_HOME; mkdir $magentodir && mv $savedir/search_index_dir $magentodir )
-    ( cd $EKKITAB_HOME; mv $savedir/search_index_dir_spell_author $magentodir )
-    ( cd $EKKITAB_HOME; mv $savedir/search_index_dir_spell_title $magentodir )
-    echo "done."
-fi
-
 # Unzip the release
 echo -n "Unzipping application files..."
 if ! ( cd $EKKITAB_HOME;  unzip -qo $releasedir/release-*.zip >/dev/null 2>&1 ) ; then
@@ -207,5 +194,22 @@ cp $magentodir/.htaccess.prod $magentodir/.htaccess
 echo "done."
 sudo service apache2 restart
 echo "System update completed. All required services have been restarted." 
+
+# Archive this release (for backup use)
+# Create the archive directory if it does not exist.
+echo -n "Archiving this release...."
+archivedir=$EKKITAB_HOME/releasearchive
+if [ ! -d  $archivedir ] ; then
+  echo -n "Creating archive directory..."
+  mkdir $archivedir
+  echo  "done."
+fi
+fileindex=`date +%d`
+fileindex=`echo $fileindex | sed 's/^0//'`
+let fileindex=$fileindex%7
+target=`basename $releasedir`.$fileindex
+rm -rf $archivedir/$target
+cp -r $releasedir $archivedir/$target
+echo  "done."
 
 
