@@ -71,14 +71,28 @@ public class EkkitabSearch {
         logger.info("Success:  Singleton instance of EkkitabSearch has been initialized.");
     }
     
+    public long getMaxDocId(long instanceId) {
+    	return reader.numDocs();
+    }
+    
     public SearchResult  getSequential(long instanceId, int page, int pagesz) throws EkkitabSearchException {
     	
     	int start = (page - 1)* pagesz;
     	int end   = start + pagesz;
     	List<String> books = new ArrayList<String>();
-    	BitSet processed = new BitSet(reader.maxDoc());
-    	
+    	//BitSet processed = new BitSet(reader.maxDoc());
     	try {
+    		int max = reader.numDocs();
+    		if ((start >= 0) && (start < max)) {
+    			for (int i = start; (i < max) && (i <= end); i++)	{
+					Document doc = reader.document(i);
+					String id = doc.get("entityId");
+					books.add(id);	
+    			}
+    		}
+		}
+    	
+    	/*try {
     		if ((start >= 0) && (start < reader.numDocs())) {
     			int index = 0;
     			int max = reader.numDocs();
@@ -98,7 +112,7 @@ public class EkkitabSearch {
     				}
     			}
     		}
-    	}
+    	}*/
     	catch (Exception e) {
     		logger.fatal("["+instanceId+"] Lucene sequential search failed with exception" + e.getMessage());
         	throw new EkkitabSearchException(e);
