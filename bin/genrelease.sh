@@ -78,7 +78,7 @@ echo -n "Transferring new release to production server..."
 ( cd $releasedir/..; scp -r app prod:/tmp >/dev/null )
 echo "done."
 echo "Deploying new release on production server."
-ZERO_SESSIONS_THRESHOLD=4
+ZERO_SESSIONS_THRESHOLD=2
 ssh prod <<!
 export EKKITAB_HOME=/mnt2/scm;
 activesessions=\`$EKKITAB_HOME/bin/getactivesessions.sh\`;

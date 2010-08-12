@@ -56,7 +56,7 @@ exit
 echo "Transferring new catalog to production server..."
 ( cd $EKKITAB_HOME/release; scp -r catalog prod:/tmp ) 
 echo "Deploying new catalog on production server..."
-ZERO_SESSIONS_THRESHOLD=4
+ZERO_SESSIONS_THRESHOLD=2
 ssh prod <<!
 export EKKITAB_HOME=/mnt2/scm;
 activesessions=\`$EKKITAB_HOME/bin/getactivesessions.sh\`;
