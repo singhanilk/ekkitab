@@ -28,7 +28,7 @@
     <li>
         <div class="input-box">
             <?php if ($this->getMethod()->getPayableTo()): ?>
-                <?php echo Mage::helper('payment')->__('<label>Make Check payable to:</label> %s', $this->getMethod()->getPayableTo()) ?><br />
+                <?php echo Mage::helper('payment')->__('<label>Make Check payable to:</label> %s', $this->htmlEscape($this->getMethod()->getPayableTo())) ?><br />
             <?php endif; ?>
             <?php if ($this->getMethod()->getMailingAddress()): ?>
                 <label><?php echo Mage::helper('payment')->__('Send Check to:') ?></label>

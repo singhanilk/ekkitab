@@ -2292,6 +2292,18 @@ a:hover {
 	line-height:1.6em;
 	padding-top:95px;
 }
+.hmIndpDayRow {
+	background-image: url(../images/hm_independence_vis.jpg);
+	background-position:right top;
+	background-repeat:no-repeat;
+	margin-bottom:8px;
+	padding-bottom:8px;
+}
+.hmIndpDayTextImage {
+	line-height:1.6em;
+	padding-top:140px;
+	padding-left:10px;
+}
 .hmFictionRow {
 	background-image: url(../images/hm_fiction_vis.jpg);
 	background-position:right top;
