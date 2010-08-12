@@ -57,7 +57,7 @@ activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
 done;
 if (( \$activesessions <= $ZERO_SESSIONS_THRESHOLD )) ; then
 cd /tmp/$entity;
-#./$runcommand;
+./$runcommand;
 sleep 10;
 php \$EKKITAB_HOME/bin/samplesearch.php
 echo "New $entity is now in production.";
