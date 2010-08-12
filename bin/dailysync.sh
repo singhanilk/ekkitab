@@ -45,38 +45,11 @@ if (( $success > 0 )) ; then
     echo "Catalog validation failed. Will not continue."
     exit 1;
 fi
-echo "Creating release..."
-( cd $EKKITAB_HOME/bin; ./gencatalog.sh )
-echo "Ensuring catalog transfer location on production server is empty..."
-ssh prod <<!
-cd /tmp
-rm -rf catalog
-exit
-!
-echo "Transferring new catalog to production server..."
-( cd $EKKITAB_HOME/release; scp -r catalog prod:/tmp ) 
-echo "Deploying new catalog on production server..."
-ZERO_SESSIONS_THRESHOLD=2
+# Release the new catalog
+( cd $EKKITAB_HOME/bin; ./release catalog )
+# Delete magento image cache on production server. 
 ssh prod <<!
 export EKKITAB_HOME=/mnt2/scm;
-activesessions=\`$EKKITAB_HOME/bin/getactivesessions.sh\`;
-tries=0;
-MAXTRIES=30;
-while (( \$activesessions > $ZERO_SESSIONS_THRESHOLD )) && (( \$tries < \$MAXTRIES )) ; do
-(( tries++ ));
-#echo "Sleeping. \$activesessions sessions are active."
-sleep 60;
-activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
-done;
-if (( \$activesessions <= $ZERO_SESSIONS_THRESHOLD )) ; then
-cd /tmp/catalog;
-./synchcatalog.sh;
-sleep 10;
-php $EKKITAB_HOME/bin/samplesearch.php
-echo "New catalog pushed into production." ;
-else 
-echo "Production system has active sessions. Wait timed out. New catalog is NOT pushed to production." 
-fi;
 echo "Deleting image cache...";
 rm -rf $EKKITAB_HOME/magento/media/catalog/product/cache/1/*
 !
