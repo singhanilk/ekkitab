@@ -1,0 +1,68 @@
+#!/bin/bash
+if [ -z $EKKITAB_HOME ] ; then
+    echo "EKKITAB_HOME is not set..."
+    exit 1;
+fi;
+if (( $# < 1 )) ; then
+    echo "Require entity name. (catalog or app)"
+    echo "Usage: $0 <entity>"
+    exit 1;
+fi
+entity=`echo $1 | tr A-Z a-z`
+releasedir=$EKKITAB_HOME/release 
+runcommand="";
+case "$entity" in 
+    catalog ) ( cd $EKKITAB_HOME/bin; ./gencatalog.sh );
+              success=$?;
+              runcommand=synchcatalog.sh;
+              ;;
+    app )     ( cd $EKKITAB_HOME/bin; ./genrelease.sh );
+              success=$?;
+              runcommand=synchrelease.sh;
+              ;;
+    * )       echo "[Fatal] Unknown entity '$entity'";
+              exit 1;
+              ;;
+esac
+
+if (( $success > 0 )) ; then
+   echo "[Fatal] Generation of $entity failed."
+   exit 1;
+fi
+
+cd $releasedir;
+
+echo "Transferring $entity to production server."
+echo -n "Deleting tranfer target on production server..."
+ssh prod <<!
+cd /tmp
+rm -rf $entity 
+!
+echo "done."
+echo -n "Transferring new $entity to production server..."
+( cd $releasedir; scp -r $entity prod:/tmp >/dev/null )
+echo "done."
+echo "Deploying new $entity on production server."
+ZERO_SESSIONS_THRESHOLD=2
+ssh prod <<!
+export EKKITAB_HOME=/mnt2/scm;
+activesessions=\`$EKKITAB_HOME/bin/getactivesessions.sh\`;
+tries=0;
+MAXTRIES=30;
+while (( \$activesessions > $ZERO_SESSIONS_THRESHOLD )) && (( \$tries < \$MAXTRIES )) ; do
+(( tries++ ));
+echo "Sleeping. \$activesessions sessions are active."
+sleep 60;
+activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
+done;
+if (( \$activesessions <= $ZERO_SESSIONS_THRESHOLD )) ; then
+cd /tmp/$entity;
+./$runcommand;
+sleep 10;
+php \$EKKITAB_HOME/bin/samplesearch.php
+echo "New $entity is now in production.";
+else
+echo "Production system has active sessions. Wait timed out. New $entity is NOT pushed to production." 
+fi;
+!
+echo "Completed."
