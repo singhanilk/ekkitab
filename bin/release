@@ -13,15 +13,22 @@ releasedir=$EKKITAB_HOME/release
 runcommand="";
 case "$entity" in 
     catalog ) ( cd $EKKITAB_HOME/bin; ./gencatalog.sh );
+              success=$?;
               runcommand=synchcatalog.sh;
               ;;
     app )     ( cd $EKKITAB_HOME/bin; ./genrelease.sh );
+              success=$?;
               runcommand=synchrelease.sh;
               ;;
     * )       echo "[Fatal] Unknown entity '$entity'";
               exit 1;
               ;;
 esac
+
+if (( $success > 0 )) ; then
+   echo "[Fatal] Generation of $entity failed."
+   exit 1;
+fi
 
 cd $releasedir;
 
