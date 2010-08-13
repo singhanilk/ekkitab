@@ -28,7 +28,7 @@ $city =~ s/-//g;
 $city =~ s/\s+//g;
 my %assumptions = ('delhi' => $delhi,'DEL' => $delhi,'DLHI' => $delhi, 'Delhi' => $delhi,'BLR' => $bangalore, 'banglore' => $bangalore,
                         'bangalore' => $bangalore, 'Bangalore' => $bangalore, 'Banglore' => $bangalore,
-                    'MBMI' => $mumbai, 'mumbai' => $mumbai, 'Mumbai' => $mumbai, 'KLKTA' => $kolkata, 'KOL' => $kolkata, 'Kolkata' => $kolkata);
+                    'MBMI' => $mumbai, 'mumbai' => $mumbai, 'Mumbai' => $mumbai, 'KLKTA' => $kolkata, 'KOL' => $kolkata, 'Kolkata' => $kolkata, 'KLKT' => $kolkata);
 $deliverydays =  $assumptions{$city};
 my $oExcel = new Spreadsheet::ParseExcel;
 die "Usage $0 <Excel File> \n Redirect output to required file from stdout" unless @ARGV;
@@ -40,7 +40,7 @@ if (not defined $oBook) {
     exit(1);
 }
 my($iR, $iC, $oWkS, $oWkC);
-print "#ISBN\t" . "PRICE\t" . "CURRENCY\t" . "AVAILABILITY\t" . "IMPRINT\t" . "TITLE\t" . "AUTHOR\n" ;
+print "#ISBN\t" . "PRICE\t" . "CURRENCY\t" . "AVAILABILITY\t" . "IMPRINT\t" . "TITLE\t" . "AUTHOR\t" . "DELIVERYDAYS\n" ;
 
 for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 
