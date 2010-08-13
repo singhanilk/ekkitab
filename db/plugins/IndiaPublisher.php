@@ -1,6 +1,9 @@
 <?php
 define (REQUIRED_BASIC_FIELDS, 13);
 define (REQUIRED_PRICE_FIELDS, 5);
+define (LOCAL_DELIVERY_PERIOD, 3);
+define (NON_LOCAL_SOURCING_COST, 40);
+
 require_once(dirname(__FILE__) . "/" . "BaseParser.php");
 
 //  
@@ -254,6 +257,20 @@ class Parser extends BaseParser {
             }
             if ($book['delivery_period'] == null) {
                 throw new exception("No delivery period data for " . $book['distributor']);
+            }
+
+            // Alter discount based on location of book source.
+            // Ensure that altered discount is at least 5%. If not, zero out discount.
+
+            if ($book['delivery_period'] > LOCAL_DELIVERY_PERIOD) {
+                $tmp = $book['discount_price'] + NON_LOCAL_SOURCING_COST;
+                if ($tmp > $book['list_price']){
+                    $tmp = $book['list_price'];
+                }
+                elseif ((($book['list_price'] - $tmp) / $book['list_price']) < 0.05){
+                    $tmp = $book['list_price'];
+                }
+                $book['discount_price'] = $tmp;
             }
             $book['info_source']     = strtoupper($book['distributor']);	
             $book['sourced_from']    = "India";
