@@ -62,7 +62,10 @@ class Ekkitab_Catalog_Block_Globalsection extends Mage_Core_Block_Template
 			}
 
 			if(!is_null($sectionId) && $sectionId > 0 ){
-				$this->_homeSection= Mage::getModel('ekkitab_catalog/globalsection')->load($sectionId);
+				//$this->_homeSection= Mage::getModel('ekkitab_catalog/globalsection')->load($sectionId);
+
+				//hardcoding this to independence day section for now.... 
+				$this->_homeSection= Mage::getModel('ekkitab_catalog/globalsection')->load(1);
 			} 
 			else{
 				$sections = Mage::getModel('ekkitab_catalog/globalsection')->getCollection()
