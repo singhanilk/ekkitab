@@ -43,7 +43,7 @@ function missingBindingInfo($db, $filePrefix, $fileExt){
 				if($counter > $ISBNS_PER_FILE){
 					fclose($fh);
 					$fileNo+=1;
-					$file="missing_data_".$fileNo.".".$fileExt;
+					$file= $filePrefix."_".$fileNo.".".$fileExt;
 					$fh = fopen($file, "w"); 
 					if (!$fh) {
 						fatal("Could not open file: $file");
