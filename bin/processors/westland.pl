@@ -50,69 +50,81 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                         next;
                     }
                 }
-                if ($pricecol == -1) {
-                    if ($oWkC->Value =~ /price/) {
-                         $pricecol = $iC;
+                if ($isbncol == -1) {
+                    if ($oWkC->Value =~ /ISBN/) {
+                        $isbncol = $iC;
                         next;
                     }
                 }
                 if ($pricecol == -1) {
-                    if ($oWkC->Value =~ /PRICE/) {
+                    if ($oWkC->Value =~ /PRICE/i) {
                          $pricecol = $iC;
                         next;
                     }
                 }
                 if ($currencycol == -1) {
-                    if ($oWkC->Value =~ /CUR/) {
+                    if ($oWkC->Value =~ /CUR/i) {
                          $currencycol = $iC;
                         next;
                     }
                 }
                 if ($availcol == -1) {
-                    if ($oWkC->Value =~ /QTY/) {
+                    if ($oWkC->Value =~ /QTY/i) {
                         $availcol = $iC;
                         next;
                     }
                 }
                 if ($availcol == -1) {
-                    if ($oWkC->Value =~ /STOCK/) {
+                    if ($oWkC->Value =~ /STOCK/i) {
                         $availcol = $iC;
                         next;
                     }
                 }
                 if ($availcol == -1) {
-                    if ($oWkC->Value =~ /BLR/) {
+                    if ($oWkC->Value =~ /BLR/i) {
                         $availcol = $iC;
                         next;
                     }
                 }
                 if ($titlecol == -1) {
-                    if ($oWkC->Value =~ /name/) {
+                    if ($oWkC->Value =~ /name/i) {
                         $titlecol = $iC;
                         next;
                     }
                 }
                 if ($titlecol == -1) {
-                    if ($oWkC->Value =~ /TITLE/) {
+                    if ($oWkC->Value =~ /TITLE/i) {
+                        $titlecol = $iC;
+                        next;
+                    }
+                }
+                if ($titlecol == -1) {
+                    if ($oWkC->Value =~ /TITLES/i) {
                         $titlecol = $iC;
                         next;
                     }
                 }
     
                 if ($authorcol == -1) {
-                    if ($oWkC->Value =~ /AUTHOR1/) {
+                    if ($oWkC->Value =~ /AUTHOR1/i) {
+                        $authorcol = $iC;
+                        next;
+                    }
+                }
+                if ($authorcol == -1) {
+                    if ($oWkC->Value =~ /AUTHOR/i) {
                         $authorcol = $iC;
                         next;
                     }
                 }
                 if ($imprintcol == -1) {
-                    if ($oWkC->Value =~ /PUBLISHER/) {
+                    if ($oWkC->Value =~ /PUBLISHER/i) {
                         $imprintcol = $iC;
                         next;
                     }
                 }
                 if ($imprintcol == -1) {
-                    if ($oWkC->Value =~ /PUB/) {
+                    if ($oWkC->Value =~ /PUB/i) {
                         $imprintcol = $iC;
                         next;
                     }

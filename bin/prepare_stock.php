@@ -176,7 +176,7 @@ else {
     }
 
     if ($argc > 1) {
-       $startdir .= "/" . $argv[1]; 
+       $startdir .= "/" . strtolower($argv[1]); 
     }
 
     if (!file_exists($startdir)) {
