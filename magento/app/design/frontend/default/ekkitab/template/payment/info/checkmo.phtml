@@ -31,7 +31,7 @@
         <br /><?php echo Mage::helper('payment')->__('Send Check to:') ?>
         <br />
         <span class="checkmo-mailing-address">
-            <?php echo nl2br($this->htmlEscape($this->getMailingAddress())) ?>
+            <?php echo $this->getMailingAddress() ?>
         </span>
     <?php endif; ?>
 <?php endif; ?>

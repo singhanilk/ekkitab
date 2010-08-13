@@ -76,16 +76,65 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
 		if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
 
 			$breadcrumbs->addCrumb('home', array(
-				'label'=>Mage::helper('catalogsearch')->__('Home'),
-				'title'=>Mage::helper('catalogsearch')->__('Go to Home Page'),
+				'label'=>Mage::helper('ekkitab_catalog')->__('Home'),
+				'title'=>Mage::helper('ekkitab_catalog')->__('Go to Home Page'),
 				'link'=>Mage::getBaseUrl()
 			));
 
-			$breadcrumbs->addCrumb('allBooks', array(
-				'label'=>Mage::helper('catalogsearch')->__('All Books'),
-				'title'=>Mage::helper('catalogsearch')->__('All Books'),
+
+			$bookParamArr = Mage::getSingleton('core/session')->getAllBooksParam();
+			if(is_array($bookParamArr) && count($bookParamArr) > 0 ){
+				if(array_key_exists('page_no', $bookParamArr)){
+					$page	= $bookParamArr['page_no'];
+				}else {
+					$page ='';
+				}
+				if(array_key_exists('slot_no', $bookParamArr)){
+					$slot	= $bookParamArr['slot_no'];
+				}else {
+					$slot ='';
+				}
+			}else{
+				$page ='';
+				$slot ='';
+			}
+ 		    if(isset($page) && $page !=''){
+				
+				$breadcrumbs->addCrumb('allBooks', array(
+					'label'=>Mage::helper('ekkitab_catalog')->__('All Books'),
+					'title'=>Mage::helper('ekkitab_catalog')->__('All Books'),
+					'link'=>Mage::helper('ekkitab_catalog')->getFullCatalogUrl()
+				));
+
+				if(isset($slot) && $slot !=''){
+					$breadcrumbs->addCrumb($page, array(
+						'label'=>Mage::helper('ekkitab_catalog')->__($page),
+						'title'=>Mage::helper('ekkitab_catalog')->__($page),
+						'link'=>$this->getPageUrl($page)
+					));
+				
+					$breadcrumbs->addCrumb($slot, array(
+						'label'=>Mage::helper('ekkitab_catalog')->__($slot),
+						'title'=>Mage::helper('ekkitab_catalog')->__($slot),
+						'link'=>''
+					));
+					
+				}else{
+					$breadcrumbs->addCrumb($page, array(
+						'label'=>Mage::helper('ekkitab_catalog')->__($page),
+						'title'=>Mage::helper('ekkitab_catalog')->__($page),
+						'link'=>''
+					));
+				}
+			}else{
+				$breadcrumbs->addCrumb('allBooks', array(
+				'label'=>Mage::helper('ekkitab_catalog')->__('All Books'),
+				'title'=>Mage::helper('ekkitab_catalog')->__('All Books'),
 				'link'=>''
 			));
+
+			}
+
 			$this->getLayout()->getBlock('head')->setTitle($title);
 		}
 		
@@ -213,6 +262,27 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
         return $size;
     }
 
+    /**
+     * Retrieve search result count
+     *
+     * @return string
+     */
+    public function getTotalResultCount_old()
+    {
+        $countArr = Mage::getSingleton('core/session')->getFullCatalogResultCount();
+        if(is_array($countArr) && count($countArr) > 0 ){
+            $size   = $countArr['total'];
+        }else{
+            $size ='';
+        }
+        if (!$size || $size=='') {
+            $size =  Mage::getResourceSingleton('ekkitab_catalog/product')
+                    ->getMaxBookId();
+            Mage::getSingleton('core/session')->setFullCatalogResultCount(array('total'=>$size));
+        }
+        return $size;
+    }
+
 	/**
      * Retrieve search result count
      *
@@ -302,7 +372,9 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
   	public function getPages()
     {
         $pages = array();
-		$pages = range(1,$this->getLastPageNumber());
+		if($this->getLastPageNumber() > 0){
+			$pages = range(1,$this->getLastPageNumber());
+		}
 
         /*if ($this->getLastPageNumber() <= $this->_displayPages) {
             $pages = range(1,$this->getLastPageNumber());
@@ -333,7 +405,10 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
         $slots = array();
 		$servedSlots = ($this->getCurrentPageNumber()-1)* $this->getSlotSize();
 		$currentPageSlotSize = min(200,$this->getLastSlotNumber() - $servedSlots);
-		$pages = range(1,$currentPageSlotSize);
+		
+		if($currentPageSlotSize > 0){
+			$pages = range(1,$currentPageSlotSize);
+		}
 
         /*if ($this->getLastSlotNumber() <= $this->_displayPages) {
             $slots = range(1,$this->getLastPageNumber());

@@ -35,7 +35,7 @@
     <?php if($this->getMailingAddress()): ?>
         <?php echo Mage::helper('payment')->__('Send Check to:') ?>
         {{pdf_row_separator}}
-        <?php echo nl2br($this->htmlEscape($this->getMailingAddress())) ?>
+        <?php echo $this->getMailingAddress() ?>
         {{pdf_row_separator}}
     <?php endif; ?>
 <?php endif; ?>

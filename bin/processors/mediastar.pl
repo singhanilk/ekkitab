@@ -62,7 +62,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                 }
                 if ($availcol == -1) {
                     if ($oWkC->Value =~ /BANGALORE/) {
-                        $availcol = $iC;
+                        $availcol = 6;
                         next;
                     }
                 }
