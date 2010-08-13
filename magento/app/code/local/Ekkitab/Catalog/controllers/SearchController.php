@@ -85,6 +85,14 @@ class Ekkitab_Catalog_SearchController extends Mage_Core_Controller_Front_Action
 
 	public function folderAction()
     {
+		$pageNo = Mage::helper('ekkitab_catalog')->getCurrentPageNumber();
+
+		if (isset($pageNo)) {
+			Mage::getSingleton('core/session')->setAllBooksParam(array('page_no'=>$pageNo));
+		}else{
+			Mage::getSingleton('core/session')->setAllBooksParam(array('page_no'=>''));
+		}
+
 		$this->loadLayout();
 		$this->_initLayoutMessages('catalog/session');
 		$this->_initLayoutMessages('checkout/session');
@@ -93,6 +101,14 @@ class Ekkitab_Catalog_SearchController extends Mage_Core_Controller_Front_Action
 
 	public function booksAction()
     {
+		$pageNo = Mage::helper('ekkitab_catalog')->getCurrentPageNumber();
+		$slotNo = Mage::helper('ekkitab_catalog')->getCurrentSlotNumber();
+
+		if (isset($pageNo) && isset($slotNo) ) {
+			Mage::getSingleton('core/session')->setAllBooksParam(array('page_no'=>$pageNo,'slot_no'=>$slotNo));
+		}else{
+			Mage::getSingleton('core/session')->setAllBooksParam(array('page_no'=>'','slot_no'=>''));
+		}
 		$this->loadLayout();
 		$this->_initLayoutMessages('catalog/session');
 		$this->_initLayoutMessages('checkout/session');
