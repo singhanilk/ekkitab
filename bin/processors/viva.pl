@@ -12,7 +12,7 @@ print "Not Defined" . "\n";
 my $Settingsfile = $ekkitab_home . "/config/stockprocess.ini";
 my $settings     = new Config::Abstract::Ini($Settingsfile);
 my %values       = $settings -> get_entry('availability');
-my $threshold    = $values{'threshold'};
+my $threshold    = $values{'vivaThreshold'};
 my $imprint      = 'Not Available';
 my $author       = 'Not Available';
 
