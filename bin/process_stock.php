@@ -17,7 +17,7 @@ ini_set(include_path, ${include_path}.PATH_SEPARATOR.EKKITAB_HOME."/"."bin");
 include("convertisbn.php");
 
 function getConfig($file) {
-   $config	= parse_ini_file($file, true);
+   $config  = parse_ini_file($file, true);
    if (! $config) {
       echo "Configuration file missing. $file\n";
       exit (1); 
@@ -80,13 +80,13 @@ function getBookPrices($file) {
    return $books;
 }
 
-function process($directory, $outputdir, $config, $books) {
-
+function process($directory, $outputdir, $config, $db) {
+global $duplicatebook;
    if (!is_dir($directory))
        return;
 
    //echo "Processing directory: $directory\n";
-   $count = 0;
+   $duplicatecount = 0;
 
    $dir = opendir($directory);
    if (! $dir) {
@@ -96,14 +96,14 @@ function process($directory, $outputdir, $config, $books) {
 
    while ($file = readdir($dir)) {
         if (($file == ".") || ($file == ".."))
-	        continue;
-		if (is_dir($directory."/".$file)) {
+            continue;
+        if (is_dir($directory."/".$file)) {
             echo "[Process Stock] [Warning] Found subdirectory $file. Ignored.\n";
-		    // process($directory."/".$file, $config, $books); 
-		}
+            // process($directory."/".$file, $config, $books); 
+        }
         else {
             if ((strlen($file) > 4) && (substr($file, strlen($file) - 4, 4) == ".txt")) {
-                
+                $count = 0;                
                 $bookprices = getBookPrices($directory . "/" . $file);
 
                 $plugin = substr($file, 0, strpos($file, "-"));
@@ -150,18 +150,46 @@ function process($directory, $outputdir, $config, $books) {
                     if(isset($fields[7])){
                         $deliverydays = $fields[7];
                     }
-
-                    if (!isset($books[$isbn])) { // not in catalog
-                        fprintf($fh1, "%s\t%s\t%s\n", $isbn, $title, $author);
-                    }
-                    if (!isset($bookprices[$isbn]['discard'])) {
-                        fprintf($fh2, "%s\t%s\t%s\t%s\t%s", $isbn, $currency, $listPrice, $availability, $plugin);
-                        if ($deliverydays > 0) {
-                            fprintf($fh2, "\t%s", $deliverydays);
+                    $query = "select count(1) from books where isbn = '$isbn'";
+                    try{
+                    $result = mysqli_query($db, $query);
+                        while ($row = mysqli_fetch_row($result)){
+                            $available = $row[0] + 0;
+                            if(!$available){
+                                if(!isset($duplicatebook[$isbn])){
+                                    $duplicatebook[$isbn] = 1;
+                                    fprintf($fh1, "%s\t%s\t%s\n", $isbn, $title, $author);
+                                }
+                                else{
+                                   $duplicatecount++;
+                                }
+                            }
+                            if (!isset($bookprices[$isbn]['discard'])) {
+                                fprintf($fh2, "%s\t%s\t%s\t%s\t%s", $isbn, $currency, $listPrice, $availability, $plugin);
+                                if ($deliverydays > 0) {
+                                    fprintf($fh2, "\t%s", $deliverydays);
+                                }
+                                fprintf($fh2, "\n");
+                            }
                         }
-                        fprintf($fh2, "\n");
-                    }
+                    }   
+                
+                  catch (Exception $e) {
+                  echo  "[Catalog Validation] Fatal: SQL Exception. $e->getMessage()\n";
+                  return(1);
+                  }
                 }
+                    //if (!isset($books[$isbn])) { // not in catalog
+                        //#fprintf($fh1, "%s\t%s\t%s\n", $isbn, $title, $author);
+                    //}
+                    //#if (!isset($bookprices[$isbn]['discard'])) {
+                      //  #fprintf($fh2, "%s\t%s\t%s\t%s\t%s", $isbn, $currency, $listPrice, $availability, $plugin);
+                      //  #if ($deliverydays > 0) {
+                      //      #fprintf($fh2, "\t%s", $deliverydays);
+                      //  #}
+                      //  #fprintf($fh2, "\n");
+                    //#}
+               
 
                 foreach ($bookprices as $k => $b) {
                     if (isset($b['discard'])) {
@@ -175,49 +203,46 @@ function process($directory, $outputdir, $config, $books) {
             }
         }
    }
+//print $duplicatecount . "total number of duplicates\n";
 }
+
+$dbconfig = getConfig(CONFIG_FILE);
+$host   = $dbconfig[database][server];
+$user   = $dbconfig[database][user];
+$psw    = $dbconfig[database][password];
+$db     = null;
+    
+    try  {
+        $db = mysqli_connect($host,$user,$psw,"reference");
+    }
+    catch (exception $e) {
+        $db = null;
+    }
+
+    if ($db == null) { 
+       #fprintf($ferr,  "[Fatal] Could not connect to database.");
+       exit(1);
+    }
 
 if($argc < 2) {
     echo "Usage: $argv[0] <stocklist directory>\n";
-	exit (1);
+    exit (1);
 }
+
 $stocklistdir = $argv[1];
 
 $config = getConfig(STOCK_PROCESS_CONFIG_FILE);
 
-if (!isset($config['general']['catalog'])) {
-    echo "[Process Stock] Catalog file is not defined in the configuration. Cannot continue.\n";
-    exit(1);
-}
+
 if (!isset($config['general']['outputdir'])) {
     echo "[Process Stock] Output directory is not defined in the configuration. Cannot continue.\n";
     exit(1);
 }
 
-$catalogfile  = $config['general']['catalog'];
 $targetdir = $config['general']['outputdir'];
+$duplicatebook = array();
 
-$books = array();
-$fhandle = fopen($catalogfile,"r");
-if (!$fhandle){
-    echo("[Process Stock] Could not open data file: " . $catalogfile . "\n");
-    exit(1);
-}
-
-while($contents = fgets($fhandle)){
-   if ($contents[0] == '#'){
-      continue;
-   }
-   $fields = explode("\t", $contents);
-   $isbn = $fields[0]; 
-   if (isset($books[$isbn])){
-      echo "[Process Stock] Duplicate ISBN $isbn found in catalog file.\n";
-   }
-   else{
-	  $books[$isbn] = 1;
-   }
-}
-fclose($fhandle);
-process($stocklistdir, $targetdir, $config, $books);
+process($stocklistdir, $targetdir, $config, $db);
 
 ?>
+
