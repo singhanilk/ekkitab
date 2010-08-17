@@ -86,7 +86,7 @@ function checkValidity($db, $fh){
 	    }
     }
     print "[Catalog Validation] [Info] $num_errors out of $num_books books failed validation.\n";
-    if ($num_errors < 15){ 
+    if (($num_errors > 0) && ($num_errors < 15)){ 
         return ("Changes in Prices. Please Check!!\n");
     }
     if ($num_errors > 15){
