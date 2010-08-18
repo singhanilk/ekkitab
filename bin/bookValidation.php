@@ -157,7 +157,7 @@ function checkBookCount($db, $fh){
     foreach ($checks as $check) {
        $testnumber++;
        $failed = $check($db, $fh);
-       ($failed) {
+       if($failed) {
           echo "[Catalog Validation] [Failed] Error number: $testnumber\n";
           $exitvalue = $testnumber;
           break;
