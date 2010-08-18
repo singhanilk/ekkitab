@@ -15,6 +15,10 @@ if (not defined $oBook) {
     exit(1);
 }
 my($iR, $iC, $oWkS, $oWkC);
+my $ekkitab_home = $ENV{EKKITAB_HOME};
+if (!($ekkitab_home)){
+print "Not Defined" . "\n";
+}
 
 my $Settingsfile = $ekkitab_home . "/config/stockprocess.ini";
 my $settings     = new Config::Abstract::Ini($Settingsfile);
