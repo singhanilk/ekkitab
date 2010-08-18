@@ -16,6 +16,11 @@ if (not defined $oBook) {
 }
 my($iR, $iC, $oWkS, $oWkC);
 
+my $Settingsfile = $ekkitab_home . "/config/stockprocess.ini";
+my $settings     = new Config::Abstract::Ini($Settingsfile);
+my %values       = $settings -> get_entry('vinayaka');
+my $threshold    = $values{'availability'};
+
 
 for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 
@@ -107,7 +112,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if(defined ($value)) {
            $availability = $value->Value;
            $availability =~ s/\n//g;
-           if ($availability > 2){
+           if ($availability > $threshold){
 	       $availability = 'Available';
            }
            else{

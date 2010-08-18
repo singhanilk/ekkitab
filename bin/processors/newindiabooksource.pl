@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 use Spreadsheet::ParseExcel;
-
+use Config::Abstract::Ini;
 my $oExcel = new Spreadsheet::ParseExcel;
 
 die "Usage $0 <Excel File> \n Redirect output to required file from stdout" unless @ARGV;
@@ -15,6 +15,11 @@ if (not defined $oBook) {
     exit(1);
 }
 my($iR, $iC, $oWkS, $oWkC);
+
+my $Settingsfile = $ekkitab_home . "/config/stockprocess.ini";
+my $settings     = new Config::Abstract::Ini($Settingsfile);
+my %values       = $settings -> get_entry('newindiabooksource');
+my $threshold    = $values{'availability'};
 
 print "#ISBN\t" . "PRICE\t" . "CURRENCY\t" . "AVAILABILITY\t" . "IMPRINT\t" . "TITLE\t" . "AUTHOR\n" ;
 
@@ -118,7 +123,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if(defined ($value)) {
            $availability = $value->Value;
            $availability =~ s/\n//g;
-           if ($availability > 2){
+           if ($availability > $threshold){
 	       $availability = 'Available';
             if (length($isbn) == 10 || length($isbn) == 13){
                 $enteredcount++;
