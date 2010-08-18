@@ -35,6 +35,17 @@
         <BOOK id="9780385522861" title="Welcome to Utopia: Notes from a Small Town" author="Karen Valby"/>
         <BOOK id="9780307387097" title="Half the Sky: Turning Oppression Into Opportunity for Women Worldwide" author="Nicholas D. Kristof &amp; Sheryl WuDunn"/>
     </SECTION>
+    <SECTION title="Top Categories" type="links" showall="yes" showall_url="ekkitab_catalog/category/viewAll">
+        <LINK name="Autobiography" type="search"> 
+            <SEARCH field="category">biography &amp; autobiography</SEARCH>
+        </LINK>
+        <LINK name="Philosophy" type="search"> 
+            <SEARCH field="category">philosophy</SEARCH>
+        </LINK>
+        <LINK name="Self-Help" type="search"> 
+            <SEARCH field="category">self-help</SEARCH>
+        </LINK>
+    </SECTION>
     <SECTION title="Popular Books" type="collection" showall="yes" highlight="5" shuffle="yes">
         <BOOK id="9788172234980" title="The Alchemist" author="Paulo Coelho"/>
         <BOOK id="9780552161275" title="The Da Vinci Code" author="Dan Brown"/>
@@ -108,17 +119,6 @@
             <BOOK id="9780330456524" title="The Whole Truth" author="David Baldacci"/>
             <BOOK id="9780345402875" title="Airframe" author="Michael Crichton"/>
             <BOOK id="9780340952658" title="Desperation" author="Stephen King"/>
-    </SECTION>
-    <SECTION title="Top Categories" type="links" showall="yes" showall_url="ekkitab_catalog/category/viewAll">
-        <LINK name="Autobiography" type="search"> 
-            <SEARCH field="category">biography &amp; autobiography</SEARCH>
-        </LINK>
-        <LINK name="Philiosophy" type="search"> 
-            <SEARCH field="category">philosophy</SEARCH>
-        </LINK>
-        <LINK name="Self-Help" type="search"> 
-            <SEARCH field="category">self-help</SEARCH>
-        </LINK>
     </SECTION>
     <!--SECTION title="Top Authors" type="links" showall="no">
         <LINK name="Amartya Sen" type ="search">
