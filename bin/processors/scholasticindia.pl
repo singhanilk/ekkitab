@@ -9,8 +9,8 @@ print "Not Defined" . "\n";
 }
 my $Settingsfile = $ekkitab_home . "/config/stockprocess.ini";
 my $settings     = new Config::Abstract::Ini($Settingsfile);
-my %values       = $settings -> get_entry('availability');
-my $threshold    = $values{'threshold'};
+my %values       = $settings -> get_entry('scholasticindia');
+my $threshold    = $values{'availability'};
 
 my $oExcel = new Spreadsheet::ParseExcel;
 

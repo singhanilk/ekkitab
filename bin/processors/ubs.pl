@@ -6,8 +6,8 @@ print "Not Defined" . "\n";
 }
 my $Settingsfile = $ekkitab_home . "/config/stockprocess.ini";
 my $settings     = new Config::Abstract::Ini($Settingsfile);
-my %values       = $settings -> get_entry('availability');
-my $threshold    = $values{'threshold'};
+my %values       = $settings -> get_entry('ubs');
+my $threshold    = $values{'availability'};
 print "#ISBN\tPRICE\tCURRENCY\tAVAILABILITY\tIMPRINT\tTITLE\tAUTHOR\n";
 $/=undef;
 open(FILE, $ARGV[0]) or die "cannot open input file";
