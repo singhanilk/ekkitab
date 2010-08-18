@@ -135,6 +135,9 @@ class BaseParser  {
             if (empty($conv_rate)) {
                  $this->fatal("No currency conversion rate available for " . $currency);
             }
+            $originallistprice = $listprice;
+            $listprice = round($listprice * $conv_rate);
+
             $discountlevel = null;
             if ((count($this->discountmodel) == 1) && (!strcmp(strtoupper($this->discountmodel[0]['level']), "ANY"))) {
                 $discountlevel = $this->discountmodel[0];
@@ -178,8 +181,6 @@ class BaseParser  {
             $ourdiscount = $offer['min'] + ($fraction * ($offer['max'] - $offer['min']));
 
 
-            $originallistprice = $listprice;
-            $listprice = round($listprice * $conv_rate);
             $suppliersprice = round($listprice * ((100 - $suppliersdiscount)/100));
             $ourprice = round($listprice * ((100 - $ourdiscount)/100));
 
