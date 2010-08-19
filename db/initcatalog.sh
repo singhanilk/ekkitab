@@ -49,11 +49,11 @@ done < $1
 if [ $mode == "catalog" ] ; then 
     echo "Deleting banned books from database..."
     ( cd $EKKITAB_HOME/db ; ./deletebannedbooks.sh ../data/banned.txt )
-    echo "Removing Penguin Books that are not available from Database"
-    ( cd $EKKITAB_HOME/db ; ./deletepenguinbooks.sh ../data/penguin.txt )
 fi
 
 if [ "$mode" == "update" ] ; then
+   echo "Removing Penguin Books from Database"
+   ( cd $EKKITAB_HOME/db ; ./deletepenguinbooks.sh ../data/penguin.txt )
    echo "Starting Indexing..." 
    # Set System to maintenance
    ( cd $EKKITAB_HOME/magento ; cp .htaccess.maintenance .htaccess )
