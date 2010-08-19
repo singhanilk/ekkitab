@@ -42,13 +42,19 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             $oWkC = $oWkS->{Cells}[$iR][$iC];
             if (defined $oWkC) {
                 if ($isbncol == -1) {
-                    if ($oWkC->Value =~ /PUBLISHER\/ISBN/) {
+                    if ($oWkC->Value =~ /PUBLISHER\/ISBN/i) {
                         $isbncol = $iC;
                         next;
                     }
                 }
                 if ($isbncol == -1) {
-                    if ($oWkC->Value =~ /PUBLISHERS\/ISBN/) {
+                    if ($oWkC->Value =~ /PUBLISHERS\/ISBN/i) {
+                        $isbncol = $iC;
+                        next;
+                    }
+                }
+                if ($isbncol == -1) {
+                    if ($oWkC->Value =~ /ISBN\/PUBLISHER/i) {
                         $isbncol = $iC;
                         next;
                     }
