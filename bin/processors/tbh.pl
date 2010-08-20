@@ -60,14 +60,8 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                     }
                 }
                 if ($pricecol == -1) {
-                    if ($oWkC->Value =~ /PRICE/) {
-                         $pricecol = $iC;
-                        next;
-                    }
-                }
-                if ($currencycol == -1) {
-                    if ($oWkC->Value =~ /CURR/) {
-                        $currencycol = $iC;
+                    if ($oWkC->Value =~ /CURR\sINR/) {
+                        $pricecol = $iC;
                         next;
                     }
                 }
@@ -112,6 +106,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
         my $value = '';
+        my $currency = 'I';
         eval { $value = $oWkS->{Cells}[$i][$isbncol]; };
         if ($@) {
            print STDERR "Unexpected read value. Line $i\n";
@@ -135,24 +130,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if (defined ($value)) {
            $imprint = $value->Value;
            $imprint =~ s/\n//g;
-        }
-        $value = $oWkS->{Cells}[$i][$currencycol];
-        my $currency;
-        if (defined ($value)) {
-           $currency = $value->Value;
-           $currency =~ s/\n//g;
-           if ($currency =~ /INR/) {
-               $currency ='I';
-         }
-           elsif ($currency =~ /UKP/) {
-                  $currency = 'P';
-         }
-           elsif ($currency =~ /USD/) {
-                  $currency = 'U';
-         }
-           elsif ($currency =~ /EUR/) {
-                  $currency = 'E';
-         }
         }
         $value = $oWkS->{Cells}[$i][$availcol];
         my $availability;
