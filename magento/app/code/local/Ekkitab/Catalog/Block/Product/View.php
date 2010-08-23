@@ -38,10 +38,10 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
 			$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Delivers in ".$shippingTimeMin." - ".$shippingTimeMax." business days":"";
 			$title = $this->getProduct()->getTitle();
 			
-			$desc = "Ekkitab.com : Buy ".$title."(".$isbn.")".$author." at Rs.".$price.". ".$shippingTime;
+			$desc = "Buy ".$title."(".$isbn.")".$author." at Rs.".$price.". ".$shippingTime."- Ekkitab.com";
 
 			if ($headBlock = $this->getLayout()->getBlock('head')) {
-				$headBlock->setTitle($title.$author." | ".$isbn." |");
+				$headBlock->setTitle($title.$author." | ".$isbn." | Buy ".$title." online India | ");
 				$headBlock->setKeywords($title.$author." at Ekkitab, Buy online ". $title.$author." at Ekkitab, ".$isbn.", ".$isbn10);
 				$headBlock->setDescription($desc);
 			}
