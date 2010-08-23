@@ -86,14 +86,11 @@ function checkValidity($db, $fh){
 	    }
     }
     print "[Catalog Validation] [Info] $num_errors out of $num_books books failed validation.\n";
-    if (($num_errors > 0) && ($num_errors < 15)){ 
-        return ("Changes in Prices. Please Check!!\n");
-    }
     if ($num_errors > 15){
         return (1);
     }
     else{
-        return ($num_errors);
+        return (0);
     }
         
 }
@@ -160,10 +157,7 @@ function checkBookCount($db, $fh){
     foreach ($checks as $check) {
        $testnumber++;
        $failed = $check($db, $fh);
-       if(gettype($failed) == 'string'){
-           echo "[Catalog Validation][Warning] The List prices of a few books have been changed!\n"; 
-        }
-       elseif ($failed) {
+       if($failed) {
           echo "[Catalog Validation] [Failed] Error number: $testnumber\n";
           $exitvalue = $testnumber;
           break;

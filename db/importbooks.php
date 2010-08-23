@@ -319,7 +319,9 @@ else {
        }
 
        if (! $result = mysqli_query($db, $query)) {
-           warn("Failed to write to Books: ". mysqli_error($db), $query);
+           if (mysqli_errno($db) != 1062) { // 1062 represents duplicate key
+                warn("Failed to write to Books: ". mysqli_error($db), $query);
+           }
            return(0); 
        }
        else {
