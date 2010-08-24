@@ -1,4 +1,5 @@
 #!/usr/bin/perl -w
+#comments at the Imprint Columns have been added because of discrapancies in the xls files.
 use strict;
 use Spreadsheet::ParseExcel;
 use Config::Abstract::Ini;
@@ -42,12 +43,12 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         for(my $iC = $oWkS->{MinCol} ; defined $oWkS->{MaxCol} && $iC <= $oWkS->{MaxCol} ; $iC++) {
             $oWkC = $oWkS->{Cells}[$iR][$iC];
             if (defined $oWkC) {
-    	        if ($imprintcol == -1) {
-    		        if ($oWkC->Value =~ /Imprint/) {
-                        $imprintcol = $iC;
-                        next;
-    		        }
-                }
+    	        #if ($imprintcol == -1) {
+    		    #    if ($oWkC->Value =~ /Imprint/) {
+                #        $imprintcol = $iC;
+                #        next;
+    		    #    }
+                #}
                 if ($isbncol == -1) {
                     if ($oWkC->Value =~ /Isbn/) {
                         $isbncol = $iC;
@@ -82,7 +83,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             }
         }
 
-        if (($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($titlecol >= 0) && ($authorcol >= 0)&& ($imprintcol >= 0) ) {
+        if (($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($titlecol >= 0) && ($authorcol >= 0)) {
             $startrow = $iR + 1;
             $endrow   = $oWkS->{MaxRow};
             last;
@@ -106,12 +107,13 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             chomp($isbn);
             $isbn =~ s/[^0-9]+//g;
         }
-        $value = $oWkS->{Cells}[$i][$imprintcol];
         my $imprint;
-        if (defined ($value)) {
-           $imprint = $value->Value;
-           $imprint =~ s/\n//g;
-        }
+        $imprint = 'Not Available';
+        #$value = $oWkS->{Cells}[$i][$imprintcol];
+        #if (defined ($value)) {
+        #   $imprint = $value->Value;
+        #   $imprint =~ s/\n//g;
+        #}
         $value = $oWkS->{Cells}[$i][$pricecol];
         my $price;
         if (defined ($value)) {
