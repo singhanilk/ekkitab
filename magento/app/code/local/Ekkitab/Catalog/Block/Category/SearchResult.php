@@ -69,7 +69,7 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 				if(!is_null($parentCatArr) && sizeof($parentCatArr) > 0){
 					$link=$this->getSubCategorySearchUrl('',1);
 				}
-				$title = $this->__("Search for '%s'", urldecode($queryText));
+				$title = $this->__("Buy Books on '%s' Online @ Ekkitab.com", urldecode($queryText));
 				
 				$breadcrumbs->addCrumb('search', array(
 					'label'=>$title,
