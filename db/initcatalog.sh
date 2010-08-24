@@ -56,6 +56,7 @@ if [ "$mode" == "update" ] ; then
    ( cd $EKKITAB_HOME/db ; ./deletepenguinbooks.sh ../data/penguin.txt )
    echo "Starting Indexing..." 
    # Set System to maintenance
+   ( cd $EKKITAB_HOME/bin; ./setdowntime.sh 30 )
    ( cd $EKKITAB_HOME/magento ; cp .htaccess.maintenance .htaccess )
    echo "Starting load of books to production database..." 
    ( cd $EKKITAB_HOME/db; ./loadbooks.sh )
