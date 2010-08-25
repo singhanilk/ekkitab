@@ -160,3 +160,16 @@ CREATE TABLE IF NOT EXISTS `books_promo`(
 PRIMARY KEY (`id`),
 KEY `isbn_key`(`isbn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 1;
+
+--
+-- Table Structure for table missing_isbns
+--
+CREATE TABLE IF NOT EXISTS `missing_isbns` (
+  `id` int(12) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `supplier` VARCHAR(50) NOT NULL,
+  `isbn` VARCHAR(20) NOT NULL,
+  `title` VARCHAR(255) default NULL,
+  `author` VARCHAR(120) default NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `ISBN` (`isbn`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
