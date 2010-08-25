@@ -81,36 +81,36 @@
            <img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'image',false,null, 200); ?>"><br/>
         </div>
 		<div class="midArea">
-			<div class="finDetBkTitle"><?php echo $_product->getTitle() ?> <?php echo (strlen($author) > 0 )?( "<br/><span class=\"lineHeight14em\"> by <a href=\"".$this->getUrl('ekkitab_catalog/search/index/author/'.$author)."\">".$author ."</a></span>" ):""?></div><!-- authorEtc -->
+			<div class="finDetBkTitle"><?php echo $_product->getTitle() ?> <?php echo (strlen($author) > 0 )?( "<br/><span class=\"lineHeight14em\"> by <span class=\"boldFont\"><a href=\"".$this->getUrl('ekkitab_catalog/search/index/author/'.$author)."\">".$author ."</a></span></span>" ):""?></div><!-- authorEtc -->
 			<?php if($editors && trim($editors)!=''):?>
-			  <div class="lineHeight14em"><span class="boldFont">Editor(s) : <?php echo ucwords($editors) ?></span></div>
+			  <div class="lineHeight14em">Editor(s) : <?php echo ucwords($editors) ?></div>
 			<?php endif;?>
 			
 			<?php if($illustrators && trim($illustrators)!=''):?>
-			  <div class="lineHeight14em"><span class="boldFont">Illustrator(s) : <?php echo ucwords($illustrators) ?></span></div>
+			  <div class="lineHeight14em">Illustrator(s) : <?php echo ucwords($illustrators) ?></div>
 			<?php endif;?>
 			
 			<?php if($translators && trim($translators)!=''):?>
-			  <div class="lineHeight14em"><span class="boldFont">Translator(s) : <?php echo ucwords($translators) ?></span></div>
+			  <div class="lineHeight14em">Translator(s) : <?php echo ucwords($translators) ?></div>
 			<?php endif;?>
 			
 			<?php if($photographers && trim($photographers)!=''):?>
-			  <div class="lineHeight14em"><span class="boldFont">Photographer(s) : <?php echo ucwords($photographers) ?></span></div>
+			  <div class="lineHeight14em">Photographer(s) : <?php echo ucwords($photographers) ?></div>
 			<?php endif;?>
 			
 			
 			<?php if($others && trim($others)!=''):?>
-			  <div class="lineHeight14em"><span class="boldFont">Other Contributor(s) : <?php echo ucwords($others) ?></span></div>
+			  <div class="lineHeight14em">Other Contributor(s) : <?php echo ucwords($others) ?></div>
 			<?php endif;?>
-			<div class="lineHeight14em"><span class="boldFont">ISBN:  <?php echo $isbn ?></span></div>
+			<div class="lineHeight14em">ISBN:  <?php echo $isbn ?></div>
 			<?php if($isbn10 && $isbn10!=''):?>
-			<div class="lineHeight14em"><span class="boldFont">ISBN-10:  <?php echo $isbn10 ?></span></div>
+			<div class="lineHeight14em">ISBN-10:  <?php echo $isbn10 ?></div>
 			<?php endif;?>
-			<div class="lineHeight14em"><span class="boldFont">Binding: <?php echo ucwords($_product->getBinding()) ?></span></div>
-			<div class="lineHeight14em"><span class="boldFont">Publisher:  <?php echo $publishers ?></span></div>
-			<div class="lineHeight14em"><span class="boldFont">Publishing Date:  <?php echo $publishDate ?></span></div>
-			<div class="lineHeight14em"><span class="boldFont">Language : <?php echo ucwords($_product->getLanguage()) ?></span></div>
-			<?php if($noPages):?><div class="lineHeight14em"><span class="boldFont">Number of Pages : <?php echo $noPages ?></span></div><?php endif;?>
+			<div class="lineHeight14em">Binding: <?php echo ucwords($_product->getBinding()) ?></div>
+			<div class="lineHeight14em">Publisher:  <?php echo $publishers ?></div>
+			<div class="lineHeight14em">Publishing Date:  <?php echo $publishDate ?></div>
+			<div class="lineHeight14em">Language : <?php echo ucwords($_product->getLanguage()) ?></div>
+			<?php if($noPages):?><div class="lineHeight14em">Number of Pages : <?php echo $noPages ?></div><?php endif;?>
 			
 			<?php if(!$inStock || $listPrice <= 0):?>
 			  <div class="marginTop5px"><img src="<?php echo $this->getSkinUrl('images/out_of_stock_image.png')?>" align="absmiddle"> &nbsp; <a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($_product->getId()) ?>">Add to Wishlist</a> </div>
