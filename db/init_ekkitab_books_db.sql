@@ -26,7 +26,7 @@ Delete from `cms_page`;
 INSERT INTO `cms_page` (`page_id`, `title`, `root_template`, `meta_keywords`, `meta_description`, `identifier`, `content`, `creation_time`, `update_time`, `is_active`, `sort_order`, `layout_update_xml`, `custom_theme`, `custom_theme_from`, `custom_theme_to`) VALUES
 (1, 'Page Not Found', 'one_column', '', '', 'no-route', '<!-- notFoundArea -->{{block type="page/html" name="page_not_found"  template="page/html/404.phtml" }}', '2007-06-20 18:38:32', '2007-08-26 19:11:13', 1, 0, NULL, NULL, NULL, NULL),
 
-(2, 'Online Bookstore India | Buy books online | Donate Books to your school | Online Book Shopping India', 'three_columns', '', '', 'home', '{{block type="page/html" name="donate_book_blurb_home"  template="page/html/donate_blurb_home.phtml" }}{{block type="ekkitab_catalog/globalsection" name="globalsection_home" template="catalog/globalsection/home_page.phtml" }}', '', '', 1, 0, NULL, NULL,NULL,NULL),
+(2, 'Online Bookstore India | Buy books online | Donate Books | Online Book Shopping India', 'three_columns', '', '', 'home', '{{block type="page/html" name="donate_book_blurb_home"  template="page/html/donate_blurb_home.phtml" }}{{block type="ekkitab_catalog/globalsection" name="globalsection_home" template="catalog/globalsection/home_page.phtml" }}', '', '', 1, 0, NULL, NULL,NULL,NULL),
 
 (3, 'About  Us', 'one_column', '', '', 'about-ekkitab', '<!-- aboutUsArea -->{{block type="page/html" name="about_us"  template="page/html/about_us.phtml" }}', '2007-08-30 14:01:18', '2007-08-30 14:01:18', 1, 0, NULL, NULL, NULL, NULL),
 
@@ -108,11 +108,11 @@ INSERT INTO `ek_catalog_top_authors` (`id`, `author`, `order_no`, `is_active`, `
 INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 ( 'default', 0, 'catalog/category/root_id', '2'),
 ('default', 0, 'design/theme/default', 'ekkitab'),
-('default', 0, 'design/head/default_title', 'Online Bookstore India | Buy books online | Donate Books to your school | Online Book Shopping'),
-('default', 0, 'design/head/default_keywords', 'Ekkitab.com: Online Bookstore India, Buy Books online, Online Books Shopping,Donate Books,Donate book to your school'),
+('default', 0, 'design/head/default_title', 'Online Bookstore India | Buy books online | Donate Books | Online Book Shopping'),
+('default', 0, 'design/head/default_keywords', 'Ekkitab.com: Online Bookstore India, Buy Books online, Online Books Shopping,Donate Books to schools,colleges, library or any organization online.'),
 ('default', 0, 'design/head/title_prefix', ''),
 ('default', 0, 'design/head/title_suffix', '- Ekkitab.com'),
-('default', 0, 'design/head/default_description', 'Buy books online in India. Best Online Bookstore with Quick Delivery and Free Shipping* within India. Great Discounts on all Indian and International Books. Donate Books to your school online. Gift books to your close ones. Purchase books online in India. Convenient and Hassle Free.'),
+('default', 0, 'design/head/default_description', 'Buy books online in India. Best Online Bookstore with Quick Delivery and Free Shipping* within India. Great Discounts on all Indian and International Books. Donate Books to your school,college, library or any organization online. Gift books to your close ones - friends and relatives. Purchase books online in India. Convenient and Hassle Free.'),
 ('default', 0, 'design/head/default_robots', 'INDEX,FOLLOW'),
 ('default', 0, 'design/header/logo_src', 'images/logo.png'),
 ('default', 0, 'design/header/logo_alt', 'Ekkitab.com | Ekkitab Educational Services Pvt Ltd'),
