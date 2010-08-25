@@ -3,7 +3,7 @@
 define (DEFAULT_ADDRESSEE, "christopher@ekkitab.com");
 define (SENDER, "support@ekkitab.com");
 define (DEFAULT_SUBJECT, "Email from Ekkitab");
-define (MAXLINES_IN_BODY, 100);
+define (MAXLINES_IN_BODY, 200);
 
     function sendmail($to, $subject, $body){
 
