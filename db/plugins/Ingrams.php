@@ -237,9 +237,7 @@ class Parser extends BaseParser {
 
             // Add $3.00 to list price to recover shipping costs if we get zero discount from supplier. 
             if ($discount == 0) {
-                echo "DEBUG: Raise List Price: $listprice";
                 $listprice += 3.00;
-                echo " - $listprice\n";
             }
 
             $currency = "USD";
@@ -308,8 +306,7 @@ class Parser extends BaseParser {
 
         function getPromo($line, $book, $db, $logger) {
             $length        = substr($line,13,5);
-            $promo         = substr($line,18,$length);
-            $promo         = str_replace("'", "", $promo);
+            $promo         = addslashes(substr($line,18,$length));
             if(preg_match('/[^(\x20-\x7f)]/',$promo)){
                 $book = null; 
             }
