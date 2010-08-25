@@ -180,7 +180,7 @@ class Parser extends BaseParser {
             $author = "";
             $illustrator = "";
             $role = trim(substr($line, 265,2));
-            $author = trim(substr($line, 225, 40));
+            $author = stripslashes(trim(substr($line, 225, 40)));
             if (strlen($author) > 0) {
                 $cprefix = $this->getContributionPrefix($role);
                 $author = $cprefix . $this->correctName($author);
@@ -233,6 +233,11 @@ class Parser extends BaseParser {
             }
             else{
                 $discount = str_replace("%", "", $discount);
+            }
+
+            // Add $3.00 to list price to recover shipping costs if we get zero discount from supplier. 
+            if ($discount == 0) {
+                $listprice += 3.00;
             }
 
             $currency = "USD";
@@ -301,8 +306,7 @@ class Parser extends BaseParser {
 
         function getPromo($line, $book, $db, $logger) {
             $length        = substr($line,13,5);
-            $promo         = substr($line,18,$length);
-            $promo         = str_replace("'", "", $promo);
+            $promo         = addslashes(substr($line,18,$length));
             if(preg_match('/[^(\x20-\x7f)]/',$promo)){
                 $book = null; 
             }

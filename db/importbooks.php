@@ -45,7 +45,7 @@ else {
     */
     function fatal($message, $query = "") {
         global $logger;
-	    $logger->fatal("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
+        $logger->fatal("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
         echo "[Fatal] $message\n";
         exit(1);
     }
@@ -56,7 +56,7 @@ else {
     */
     function warn($message, $query = "") {
         global $logger;
-	    $logger->error("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
+        $logger->error("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
         echo "[Warning] $message\n";
     }
 
@@ -66,7 +66,7 @@ else {
     */
     function debug($message, $query = "") {
         global $logger;
-	    $logger->debug("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
+        $logger->debug("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
     }
 
    /** 
@@ -75,7 +75,7 @@ else {
     */
     function info($message, $query = "") {
         global $logger;
-	    $logger->info("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
+        $logger->info("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
         echo "[Info] $message\n";
     }
 
@@ -83,7 +83,7 @@ else {
     * Read and return the configuration data from file. 
     */
     function getConfig($file) {
-	    $config	= parse_ini_file($file, true);
+        $config    = parse_ini_file($file, true);
         if (! $config) {
             fatal("Configuration file missing or incorrect."); 
         }
@@ -98,15 +98,15 @@ else {
         if (! $config) 
             return NULL;
 
-	    $database_server = $config[database][server];
-	    $database_user   = $config[database][user];
-	    $database_psw    = $config[database][password];
-	    $ref_db		     = $config[database][ref_db];
+        $database_server = $config[database][server];
+        $database_user   = $config[database][user];
+        $database_psw    = $config[database][password];
+        $ref_db             = $config[database][ref_db];
 
         $db  = NULL;
  
         try  {
-	        $db     = mysqli_connect($database_server,$database_user,$database_psw,$ref_db);
+            $db     = mysqli_connect($database_server,$database_user,$database_psw,$ref_db);
         }
         catch (exception $e) {
            fatal($e->getmessage());
@@ -115,7 +115,7 @@ else {
         $query = "set autocommit = 0";
         
         try {
-	        $result = mysqli_query($db,$query);
+            $result = mysqli_query($db,$query);
             if (!$result) {
                fatal("Failed to set autocommit mode.");
             }
@@ -169,7 +169,7 @@ else {
             $lookup = "select category_id from ek_bisac_category_map where bisac_code = '".UNCLASSIFIED."'";
             $result = mysqli_query($db, $lookup);
             if (($result) && (mysqli_num_rows($result) > 0)){
-	            $row = mysqli_fetch_array($result);
+                $row = mysqli_fetch_array($result);
                 $book['catcode'] = $row[0];
             }
             else {
@@ -198,7 +198,7 @@ else {
                 $lookup = "select category_id from ek_bisac_category_map where bisac_code = '". $value . "'";
                 $result = mysqli_query($db, $lookup);
                 if (($result) && (mysqli_num_rows($result) > 0)){
-	                $row = mysqli_fetch_array($result);
+                    $row = mysqli_fetch_array($result);
                     $ids = explode(",", $row[0]);
                     foreach($ids as $id) {
                         $catIds[$id] = 1;
@@ -257,26 +257,26 @@ else {
    /** 
     * Insert Promo material from Ingrams into books_promo table in the reference database.  
     */
-    function insertPromo($book, $db){
-	    if($book['promo'] != "" ){
-	        $isbn  = $book['isbn'];
-	        $promo = $book['promo'];
-	        $query = "insert into books_promo ( isbn , promo_desc ) values ('$isbn','$promo')";
+    function insertPromo($book, $db, $linenumber){
+        if($book['promo'] != "" ){
+            $isbn  = $book['isbn'];
+            $promo = $book['promo'];
+            $query = "insert into books_promo ( isbn , promo_desc ) values ('$isbn','$promo')";
             if (!$result = mysqli_query($db, $query)) {
-           	    	warn("Failed to write to Books: ". mysqli_error($db), $query);
-           		    return(0); 
-       	    }
-	    }
+               warn("Failed to write to Books. [Line: $linenumber] ". mysqli_error($db), $query);
+               return(0); 
+            }
+        }
         
         return(1);
     } 
    /**
     * Insert or Update the book in the database. 
     */
-    function insertBook($book, $db, $mode) {
+    function insertBook($book, $db, $mode, $linenumber) {
 
        if ($mode & MODE_PROMO) {
-	    return insertPromo($book,$db);
+           return insertPromo($book,$db, $linenumber);
        }
        if (!empty($book['image'])) {
             $book['image'] = getHashedPath($book['image']);
@@ -320,7 +320,7 @@ else {
 
        if (! $result = mysqli_query($db, $query)) {
            if (mysqli_errno($db) != 1062) { // 1062 represents duplicate key
-                warn("Failed to write to Books: ". mysqli_error($db), $query);
+              warn("Failed to write to Books. [Line: $linenumber] ". mysqli_error($db), $query);
            }
            return(0); 
        }
@@ -359,7 +359,7 @@ else {
            fatal("Failed to get maximum count: ". mysqli_error($db), $query);
            return(0); 
         }
-	    $row = mysqli_fetch_array($result);
+        $row = mysqli_fetch_array($result);
         if ($row[0] == null)
             return 1;
         else
@@ -419,14 +419,14 @@ else {
            for ($i = 1; $i < strlen($argv[1]) ; $i++) {
              switch ($argv[1][$i]) {
                 case 'a':  $pgm_mode |= (MODE_BASIC | MODE_PRICE | MODE_DESC);
-			   break;
+                           break;
                 case 'b':  $pgm_mode |= MODE_BASIC;
                            break;
                 case 'p':  $pgm_mode |= MODE_PRICE;
                            break;
                 case 'd':  $pgm_mode |= MODE_DESC;
                            break;
-		case 'z':  $pgm_mode |= MODE_PROMO;
+                case 'z':  $pgm_mode |= MODE_PROMO;
                            break;
                 default:   fatal("Unknown option: " . $argv[1][$i]);
                            break;
@@ -467,8 +467,10 @@ else {
         $errorcount   = 0;
         $unclassified = 0;
         $filenotfound = 0;
+        $linenumber   = 0;
     
         while ($line = fgets($fh)) {
+            $linenumber++;
             $book = array();
             try {
                 $book = $parser->getBook($line);
@@ -519,8 +521,8 @@ else {
                         unset($book['distributor']);
                     }
                 }
-	      
-                if (!insertBook($book, $db, $pgm_mode)){
+          
+                if (!insertBook($book, $db, $pgm_mode, $linenumber)){
                   $errorcount++;
                }
             }
