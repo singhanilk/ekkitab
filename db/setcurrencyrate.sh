@@ -17,8 +17,9 @@ case $currency in
     "CAN") ;;
     "EUR") ;;
     "SGD") ;;
+    "AUD") ;;
     *) echo "Fatal: $1 is not a valid currency name."
-       echo "Valid currencies are: 'USD', 'BRI', "EUR", "SGD" and 'CAN' only."
+       echo "Valid currencies are: 'USD', 'BRI', "EUR", "SGD", "AUD" and 'CAN' only."
        exit 1;;
 esac
 
