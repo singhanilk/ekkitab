@@ -19,14 +19,14 @@ rundate=$(date +"%D-%T")
 ( cd $EKKITAB_HOME/bin ; ./updateingram.sh | php sendmail.php -s "Daily Sync Report: [$rundate] Update Ingram" $tomail )
 echo "Rsync'ing images with production server..."
 rsync -azv --delete --exclude=cache/* /mnt3/magento-product-images/ prod:/mnt3/magento-product-images > /mnt2/scm/logs/rsync.log
-echo "Updating prices..."
-rundate=$(date +"%D-%T")
-( cd $EKKITAB_HOME/bin ; ./updateprices.sh | php sendmail.php -s "Daily Sync Report: [$rundate] Update Prices" $tomail )
 echo "Resetting reference database..."
 ( cd $EKKITAB_HOME/db ; ./reset_refdb.sh ) 
 echo "Initializing catalog..."
 rundate=$(date +"%D-%T")
 ( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -c | php ../bin/sendmail.php -s "Daily Sync Report: [$rundate] Init Catalog - books" $tomail ) 
+echo "Updating prices..."
+rundate=$(date +"%D-%T")
+( cd $EKKITAB_HOME/bin ; ./updateprices.sh | php sendmail.php -s "Daily Sync Report: [$rundate] Update Prices" $tomail )
 echo "Initializing prices..."
 rundate=$(date +"%D-%T")
 ( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -p | php ../bin/sendmail.php -s "Daily Sync Report: [$rundate] Init Catalog - prices" $tomail ) 
