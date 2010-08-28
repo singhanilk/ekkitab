@@ -36,8 +36,7 @@ class BaseParser  {
         }
     
         function fatal($message, $query = "") {
-	        $this->logger->fatal("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
-            exit(1);
+	        throw new exception("$message " . (strlen($query) > 0 ? "[ $query ]" . "\n" : ""));
         }
 
         function warn($message, $query = "") {
