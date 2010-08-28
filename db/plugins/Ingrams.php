@@ -1,6 +1,6 @@
 <?php
 require_once(dirname(__FILE__) . "/" . "BaseParser.php");
-define (MIN_STOCK_LEVEL, 5);
+define (MIN_STOCK_LEVEL, 1);
 
 //  
 //
