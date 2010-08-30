@@ -3,3 +3,4 @@ CAN   48
 BRI   76
 EUR   64
 SGD   36
+AUD   42
