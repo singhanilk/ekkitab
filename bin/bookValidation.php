@@ -38,17 +38,13 @@ function percentage($listprice, $dbprice){
         else{
             $percentage =round(100-(($listprice/$dbprice)*100));
         }
-    if ($percentage >= 5){
-        return 0;
-    }
-    else{
-        return 1;
-    }
+    return $percentage;
 }
 function checkValidity($db, $fh){
     $num_errors = 0;
     $num_books = 0;
     $source = "India";
+    $catalog_validation_stopper = false;
     while ($data = fgets($fh)){
         $num_books++;
         $details = explode(",", $data);
@@ -67,7 +63,13 @@ function checkValidity($db, $fh){
                     // $db_localsource is the distributor/publisher from the database, row1[0] has the locale information eg : 'India' 
                     $db_localsource = strtoupper($row1[1]);
                     if($source == $row1[0] && $localsource == $db_localsource){
-                        if(percentage(trim($listprice), trim($row[1])) == 0){
+                        $percentage = percentage(trim($listprice), trim($row[1]));
+                        if($percentage >= 50){
+                            print "[Catalog Validation] [Fatal] Listprice in file->$listprice for isbn-> $isbn is different from that of Database->$row[1] by more than 50%\n"; 
+                            $num_errors++;
+                            $catalog_validation_stopper = true;
+                        }
+                        elseif($percentage >= 5 && $percentage < 50){
                             print "[Catalog Validation] [Warning] Listprice in file->$listprice for isbn-> $isbn is different from that of Database->$row[1] by more than 5%\n"; 
                             $num_errors++;
                         }
@@ -90,10 +92,12 @@ function checkValidity($db, $fh){
     if ($num_errors > 15){
         return (1);
     }
+    elseif($catalog_validation_stopper){
+        return (1);
+    }
     else{
         return (0);
     }
-        
 }
 
 
