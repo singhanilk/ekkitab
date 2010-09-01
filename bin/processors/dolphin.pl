@@ -41,7 +41,7 @@ if (not defined $oBook) {
     exit(1);
 }
 my($iR, $iC, $oWkS, $oWkC);
-print "#ISBN\t" . "PRICE\t" . "CURRENCY\t" . "AVAILABILITY\t" . "IMPRINT\t" . "TITLE\t" . "AUTHOR\t" . "DELIVERYDAYS\n" ;
+print "#ISBN\t" . "PRICE\t" . "CURRENCY\t" . "AVAILABILITY\t" . "SUPPLIER\t" . "TITLE\t" . "AUTHOR\t" . "DELIVERYDAYS\n" ;
 
 for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 
@@ -79,18 +79,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                         next;
                     }
                 }
-    	        if ($imprintcol == -1) {
-    		        if ($oWkC->Value =~ /PUBLISHER/i) {
-                        $imprintcol = $iC;
-                        next;
-    		        }
-                }
-		        if ($imprintcol == -1) {
-    		        if ($oWkC->Value =~ /PUBLISHERNAME/i) {
-                        $imprintcol = $iC;
-                        next;
-    		        }
-                }
     	        if ($titlecol == -1) {
     		        if ($oWkC->Value =~ /TITLE/i) {
                         $titlecol = $iC;
@@ -112,13 +100,13 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             }
         }
 
-        if (($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($imprintcol >= 0) && ($titlecol >= 0) && ($authorcol >= 0)) {
+        if (($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($titlecol >= 0) && ($authorcol >= 0)) {
             $startrow = $iR + 1;
             $endrow   = $oWkS->{MaxRow};
             last;
         }
     }
-    if (!(($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($imprintcol >= 0) && ($titlecol >= 0) && ($authorcol >= 0))) {
+    if (!(($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($titlecol >= 0) && ($authorcol >= 0))) {
             print STDERR "[Warning] Incomplete information in excel sheet. Cannot parse. Continuing to next sheet.\n";
             last;
     }
@@ -135,6 +123,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 	        last;
 	    }
         my $isbn;
+        my $imprint = 'Dolphin';
 	    if (defined ($value)) {
             $isbn = $value->Value;
             chomp($isbn);
@@ -173,12 +162,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             else{
                 $availability = 'Not Available' . '[' . $availability . ']';
             }        
-        }
-        $value = $oWkS->{Cells}[$i][$imprintcol];
-        my $imprint;
-        if (defined ($value)) {
-           $imprint = $value->Value;
-           $imprint =~ s/\n//g;
         }
         $value = $oWkS->{Cells}[$i][$titlecol];
         my $title;

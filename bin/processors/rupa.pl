@@ -108,7 +108,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             $isbn =~ s/[^0-9]+//g;
         }
         my $imprint;
-        $imprint = 'Not Available';
+        $imprint = 'Rupa';
         #$value = $oWkS->{Cells}[$i][$imprintcol];
         #if (defined ($value)) {
         #   $imprint = $value->Value;

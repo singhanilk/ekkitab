@@ -87,18 +87,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                         next;
     		        }
                 }
-    	        if ($imprintcol == -1) {
-    		        if ($oWkC->Value =~ /BRAND/) {
-                        $imprintcol = $iC;
-                        next;
-    		        }
-                }
-    	        if ($imprintcol == -1) {
-    		        if ($oWkC->Value =~ /Publisher/) {
-                        $imprintcol = $iC;
-                        next;
-    		        }
-                }
             }
         }
 

@@ -13,11 +13,11 @@ my $Settingsfile = $ekkitab_home . "/config/stockprocess.ini";
 my $settings     = new Config::Abstract::Ini($Settingsfile);
 my %values       = $settings -> get_entry('viva');
 my $threshold    = $values{'availability'};
-my $imprint      = 'Not Available';
+my $imprint      = 'Viva';
 my $author       = 'Not Available';
 
 
-print "#ISBN\tPRICE\tCURRENCY\tAVAILABILITY\tIMPRINT\tTITLE\tAUTHOR\n";
+print "#ISBN\tPRICE\tCURRENCY\tAVAILABILITY\tSUPPLIER\tTITLE\tAUTHOR\n";
 
 
 $/=undef;
