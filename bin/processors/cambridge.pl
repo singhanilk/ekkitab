@@ -150,6 +150,9 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             elsif($currency =~ /INR/){
                   $currency = 'I';
             }
+            elsif($currency =~ /AUD/){
+                  $currency = 'A';
+            }
             else{
                 print "[Warning]Unknown Currency in Cambridge Stocklist\n";
             }

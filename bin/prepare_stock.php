@@ -42,6 +42,30 @@ else {
         return $config;
     }
 
+    function checkresults($filename) {
+
+        $fd = fopen($filename, "r");
+        if (!$fd) {
+            return(0);
+        }
+        $comments = 0;
+        $linecount = 0;
+        while ($line = fgets($fd)) {
+            $line = trim($line);
+            if ($line[0] == "#") {
+                $comments++;
+            }
+            else {
+                $linecount++;
+            }
+        }
+        fclose($fd);
+        if (($linecount == 0) || ($linecount < $comments)) {
+            return(0);
+        }
+        return(1);
+    }
+
     function process($directory, $archivedir, $config) {
 
         global $files_processed;
@@ -120,6 +144,14 @@ else {
                         // echo "Running... " . $processor . " on '" . $file . "'\n";
                         $outputfile = str_replace(".pl","", $processor) . "-stocklist.txt";
                         $commandline = $processorhome . "/" . $processor . " '" . $directory . "/" . $file . "' " . $filewritemode . "  " . $outputdir . "/" . $outputfile . " 2>/dev/null";
+                        echo "Command: $commandline\n";
+                        if ($filewritemode == ">") { // save the old file if it exists.
+                            $savefilepath = $outputdir . "/" . $outputfile . ".saved";
+                            $outputfilepath = $outputdir . "/" . $outputfile;
+                            if (file_exists($outputfilepath)) {
+                                copy($outputfilepath, $savefilepath);
+                            }
+                        }
                         $success = system($commandline, &$returnvalue);
                         if ($returnvalue != 0) {
                              // echo "  ...failed.\n";
@@ -155,6 +187,18 @@ else {
                     echo "[Prepare Stock] [Warning] File $file is not a proper input file and is being ignored.\n";
                     $files_ignored++;
                }
+            }
+        }
+        if (isset($outputfilepath)) {
+            if (!checkresults($outputfilepath)) {
+                echo "[Prepare Stock] [Error] $plugin failed. Previous file is being restored if it exists.\n";
+                if (file_exists($savefilepath)) {
+                    copy($savefilepath, $outputfilepath);
+                    unlink($savefilepath);
+                }
+            }
+            else {
+                unlink($savefilepath);
             }
         }
     }

@@ -410,6 +410,8 @@ else {
     */
     function start($argc, $argv) {
 
+        global $logger;
+
         if ($argc == 1) {
            echo "Usage: $argv[0] [-abpd] <Data Source> <Data File>\n";
            exit(0);

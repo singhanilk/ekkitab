@@ -38,24 +38,20 @@ function percentage($listprice, $dbprice){
         else{
             $percentage =round(100-(($listprice/$dbprice)*100));
         }
-    if ($percentage >= 5){
-        return 0;
-    }
-    else{
-        return 1;
-    }
+    return $percentage;
 }
 function checkValidity($db, $fh){
     $num_errors = 0;
     $num_books = 0;
     $source = "India";
+    $catalog_validation_stopper = false;
     while ($data = fgets($fh)){
         $num_books++;
         $details = explode(",", $data);
         $isbn = $details[0];
         $listprice = $details[1];
+        // $localsource is the distributor/publisher from the file 
         $localsource = trim(strtoupper($details[2]));
-        //print "Isbn-> $isbn,listprice-> $listprice,discprice-> $discountprice\n";
 	    $query = "SELECT isbn, list_price, discount_price FROM  `books` WHERE isbn = '$isbn'";
         $sourced_from = "SELECT sourced_from,info_source FROM `books` WHERE isbn = '$isbn'";
 	    try {
@@ -64,9 +60,16 @@ function checkValidity($db, $fh){
 		    if ($result && (mysqli_num_rows($result) > 0) && (mysqli_num_rows($result_source) > 0)) {
                 while( $row=mysqli_fetch_row($result)){ 
                 while( $row1=mysqli_fetch_row($result_source)){
+                    // $db_localsource is the distributor/publisher from the database, row1[0] has the locale information eg : 'India' 
                     $db_localsource = strtoupper($row1[1]);
                     if($source == $row1[0] && $localsource == $db_localsource){
-                        if(percentage(trim($listprice), trim($row[1])) == 0){
+                        $percentage = percentage(trim($listprice), trim($row[1]));
+                        if($percentage >= 50){
+                            print "[Catalog Validation] [Fatal] Listprice in file->$listprice for isbn-> $isbn is different from that of Database->$row[1] by more than 50%\n"; 
+                            $num_errors++;
+                            $catalog_validation_stopper = true;
+                        }
+                        elseif($percentage >= 5 && $percentage < 50){
                             print "[Catalog Validation] [Warning] Listprice in file->$listprice for isbn-> $isbn is different from that of Database->$row[1] by more than 5%\n"; 
                             $num_errors++;
                         }
@@ -89,24 +92,32 @@ function checkValidity($db, $fh){
     if ($num_errors > 15){
         return (1);
     }
+    elseif($catalog_validation_stopper){
+        return (1);
+    }
     else{
         return (0);
     }
-        
 }
+
 
 function checkBookCount($db, $fh){
     $num_errors = 0;
     $query = "SELECT COUNT(*) from `books`";
+    $query1 = "SELECT COUNT(*) from `books` where sourced_from = 'India'";
     try {
-       $result = mysqli_query($db, $query);
-	   if ($result && (mysqli_num_rows($result) > 0)) {
-           while( $row=mysqli_fetch_row($result)){
+       $ingram = mysqli_query($db, $query);
+       $india  = mysqli_query($db, $query1);
+	   if ($ingram && $india && (mysqli_num_rows($ingram) > 0) && (mysqli_num_rows($india))) {
+           while( $row=mysqli_fetch_row($ingram)){
+           while( $row1=mysqli_fetch_row($india)){
                 $books_in_db = ($row[0]+0);
-             if ($books_in_db < 3000000 ){
+                $books_from_india = ($row1[0]+0);
+             if ($books_in_db < 3000000 || $books_from_india < 55950){
                 print "[Catalog Validation] [Warning] Number of books less than estimated amount\n";
                 $num_errors++;
             }
+          }
           } 
        }
     }
@@ -115,14 +126,13 @@ function checkBookCount($db, $fh){
 	   return(1);
 	}
     if($num_errors > 0){
-        print "[Catalog Validation] [Info] Expected atleast 3,000,000 books in catalog, only $books_in_db found\n";
+        print "[Catalog Validation] [Info] Expected atleast number of books not in catalog, Total book count-> $books_in_db(Expected 3,000,000)  Indian book count -> $books_from_india(Expected 55,950)\n";
         return (1);
     }
     else{
         return ($num_errors);
     }
 }
-
     $configinifile = CONFIG_FILE;
 	if (!file_exists($configinifile)) {
 		echo "[Catalog Validation] [Fatal] Configuration file is missing.\n";
