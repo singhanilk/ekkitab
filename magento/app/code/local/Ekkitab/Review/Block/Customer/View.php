@@ -21,9 +21,15 @@ class Ekkitab_Review_Block_Customer_View extends Mage_Catalog_Block_Product_Abst
     public function getProductData()
     {
         if( $this->getReviewId() && !$this->getProductCacheData() ) {
-            $product = Mage::getModel('ekkitab_catalog/product')
+            if(!is_null($this->getReviewData()->getIsbn())){
+				$product = Mage::getModel('ekkitab_catalog/product')
+                ->setStoreId(Mage::app()->getStore()->getId())
+                ->load($this->getReviewData()->getIsbn(),'isbn');
+			}else{
+				$product = Mage::getModel('ekkitab_catalog/product')
                 ->setStoreId(Mage::app()->getStore()->getId())
                 ->load($this->getReviewData()->getEntityPkValue());
+			}
             $this->setProductCacheData($product);
         }
         return $this->getProductCacheData();

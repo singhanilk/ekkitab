@@ -215,7 +215,6 @@ class Mage_Checkout_Model_Cart extends Varien_Object
         if ($product->getId()) {
 
             $result = $this->getQuote()->addProduct($product, $request);
-			Mage::log("Item was added...... quote item Id is :".$result->getId() );
             /**
              * String we can get if prepare process has error
              */
@@ -233,7 +232,6 @@ class Mage_Checkout_Model_Cart extends Varien_Object
         }
 
         Mage::dispatchEvent('checkout_cart_product_add_after', array('quote_item'=>$result, 'product'=>$product));
-		Mage::log("Item was added...... quote item Id is :".$result->getId() );
         $this->getCheckoutSession()->setLastAddedProductId($product->getId());
         return $this;
     }
@@ -293,7 +291,11 @@ class Mage_Checkout_Model_Cart extends Varien_Object
      */
     public function updateItems($data)
     {
-        Mage::dispatchEvent('checkout_cart_update_items_before', array('cart'=>$this, 'info'=>$data));
+        /* Ekkitab changes, To call ekkitab_wishlist/observer to add item by ISBN and not product Id */
+		/* original code : Mage::dispatchEvent('checkout_cart_update_items_before', array('cart'=>$this, 'info'=>$data));
+		   replaced with : Mage::dispatchEvent('ekkitab_checkout_cart_update_items_before', array('cart'=>$this, 'info'=>$data)); 
+		*/
+	    Mage::dispatchEvent('ekkitab_checkout_cart_update_items_before', array('cart'=>$this, 'info'=>$data)); 
 
         foreach ($data as $itemId => $itemInfo) {
             $item = $this->getQuote()->getItemById($itemId);

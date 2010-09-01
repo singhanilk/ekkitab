@@ -40,6 +40,7 @@
      
 	<div class="labelText"><label for="review_field"><?php echo $this->__('Write your review') ?><span class="required">*</span></label></div>
 	<textarea class="required-entry revTextField" name="detail" id="review_field" rows="12"><?php echo $this->htmlEscape($data->getDetail()) ?></textarea>
+	<input type="hidden" name="isbn" value="<?php echo $this->getProductInfo()->getIsbn() ?>" />
     <div class="buttonArea">
         <input type="image" src="<?php echo $this->getSkinUrl('images/review_save_button.png');?>" alt="<?php echo $this->__('Submit Review') ?>"/>
     </div>

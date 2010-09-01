@@ -544,7 +544,8 @@ class Mage_Sales_Model_Order_Item extends Mage_Core_Model_Abstract
     }
 
     /**
-     * Retrieve product model object associated with item
+     * Ekkitab Changes: Added new Method 
+	 * Retrieve product model object associated with item
      *
      * @return Mage_Catalog_Model_Product
      */
@@ -555,6 +556,24 @@ class Mage_Sales_Model_Order_Item extends Mage_Core_Model_Abstract
             $product = Mage::getModel('ekkitab_catalog/product')
                 ->setStoreId($this->getOrder()->getStoreId())
                 ->load($this->getProductId());
+            $this->setProduct($product);
+        }
+        return $product;
+    }
+
+    /**
+     * Ekkitab Changes: Added new Method 
+     * Retrieve product model object associated with item
+     *
+     * @return Mage_Catalog_Model_Product
+     */
+    public function getProductByIsbn()
+    {
+        $product = $this->_getData('product');
+        if (($product === null) && !is_null($this->getSku())) {
+            $product = Mage::getModel('ekkitab_catalog/product')
+                ->setStoreId($this->getOrder()->getStoreId())
+                ->load($this->getSku(),'isbn');
             $this->setProduct($product);
         }
         return $product;

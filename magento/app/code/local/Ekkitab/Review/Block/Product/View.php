@@ -21,10 +21,10 @@ class Ekkitab_Review_Block_Product_View extends Ekkitab_Catalog_Block_Product_Vi
     public function getReviewsCollection()
     {
         if (null === $this->_reviewsCollection) {
-            $this->_reviewsCollection = Mage::getModel('ekkitab_review/review')->getCollection()
+			$this->_reviewsCollection = Mage::getModel('ekkitab_review/review')->getCollection()
                 ->addStoreFilter(Mage::app()->getStore()->getId())
                 ->addStatusFilter('approved')
-                ->addEntityFilter('product', $this->getProduct()->getId())
+				->addEntityIsbnFilter('product', $this->getProduct()->getIsbn())
                 ->setDateOrder();
         }
         return $this->_reviewsCollection;

@@ -19,25 +19,25 @@ class Ekkitab_Review_Block_Form extends Mage_Review_Block_Form
 		$productIdEndIndex = $productIdEndIndex - $productIdStartIndex;  //.html/	
 		$productId = trim(urldecode(substr($productUrl,$productIdStartIndex,$productIdEndIndex)));
 
-		if($productId){
-			if($this->isIsbn($productId)){
-				//this is isbn.....
-				$products = Mage::getModel('ekkitab_catalog/product')->getCollection()
-							->addFieldToFilter('main_table.isbn',$productId);
-				foreach($products as $prod){
-					$product = $prod;
-				}
-
-			}else {
-				$productId = (int) $productId;
+		if( $productId && $this->isIsbn($productId)){
+			//this is isbn.....
+			$product = Mage::getModel('ekkitab_catalog/product')
+				->setStoreId(Mage::app()->getStore()->getId())
+				->load($productId,'isbn');
+		}else {
+			$productId = (int) $productId;
+			if (!$productId || $productId <= 0) {
+				$productId  = (int) $this->getRequest()->getParam('id');
+			}
+			if (!$productId || $productId <= 0) {
+				 return false;
+			}
+			else{
 				$product = Mage::getModel('ekkitab_catalog/product')
 					->setStoreId(Mage::app()->getStore()->getId())
 					->load($productId);
 			}
-		} else {
-            return false;
-        }
-
+		}
 		return $product;
     }
 

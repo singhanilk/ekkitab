@@ -53,6 +53,17 @@
                 </connection>
             </ekkitab_wishlist_read>
         </resources>
+		<events>
+            <ekkitab_checkout_cart_update_items_before>
+                <observers>
+					<ekkkitab_wishlist>
+						<type>singleton</type>
+						<class>ekkitab_wishlist/observer</class>
+						<method>processCartUpdateBefore</method>
+					</ekkkitab_wishlist>
+                </observers>
+            </ekkitab_checkout_cart_update_items_before>
+        </events>
     </global>
     <frontend>
         <routers>

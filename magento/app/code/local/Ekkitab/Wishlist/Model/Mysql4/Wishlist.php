@@ -14,6 +14,15 @@
 class Ekkitab_Wishlist_Model_Mysql4_Wishlist extends Mage_Wishlist_Model_Mysql4_Wishlist
 {
 
+    public function getWishListId($custId,$orgId=0){
+		$select = $this->_getReadAdapter()->select();
+        $select->from($this->getTable('ekkitab_wishlist/wishlist'), 'wishlist_id')
+            ->where('customer_id = ?', $custId)
+            ->where('organization_id = ?', $orgId);
+		$wishlistId = (int)$this->_getReadAdapter()->fetchOne($select);
+		return $wishlistId;
+	}
+
     public function fetchItemsCount(Mage_Wishlist_Model_Wishlist $wishlist)
     {
         if (is_null($this->_itemsCount)) {

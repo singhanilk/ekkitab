@@ -97,8 +97,8 @@ class Ekkitab_Wishlist_IndexController extends Mage_Wishlist_IndexController
         $item       = Mage::getModel('wishlist/item')->load($id);
 
         if($item->getWishlistId()==$wishlist->getId()) {
+			$product = Mage::getModel('ekkitab_catalog/product')->load($item->getIsbn(),'isbn')->setQty(1);
             try {
-                $product = Mage::getModel('ekkitab_catalog/product')->load($item->getProductId())->setQty(1);
                 $quote = Mage::getSingleton('checkout/cart')
                    ->addProduct($product)
                    ->save();
@@ -108,7 +108,7 @@ class Ekkitab_Wishlist_IndexController extends Mage_Wishlist_IndexController
                 Mage::getSingleton('checkout/session')->addError($e->getMessage());
                 $url = Mage::getSingleton('checkout/session')->getRedirectUrl(true);
                 if ($url) {
-					$url = Mage::getModel('core/url')->getUrl("ekkitab_catalog/product/view/book/unable-to-add-to__wishlist__".$item->getProductId().".html"
+					$url = Mage::getModel('core/url')->getUrl("ekkitab_catalog/product/view/book/unable-to-add-to__wishlist__".$product->getId().".html"
 					,array('wishlist_next'=>1));
                     Mage::getSingleton('checkout/session')->setSingleWishlistId($item->getId());
                     $this->getResponse()->setRedirect($url);
@@ -147,10 +147,10 @@ class Ekkitab_Wishlist_IndexController extends Mage_Wishlist_IndexController
         $wishlist->getItemCollection()->load();
 
         foreach ($wishlist->getItemCollection() as $item) {
-            try {
-                $product = Mage::getModel('ekkitab_catalog/product')
-                    ->load($item->getProductId())
+			$product = Mage::getModel('ekkitab_catalog/product')
+                    ->load($item->getIsbn(),'isbn')
                     ->setQty(1);
+            try {
                 if ($product->isSalable()) {
                     Mage::getSingleton('checkout/cart')->addProduct($product);
                     $item->delete();
@@ -162,7 +162,7 @@ class Ekkitab_Wishlist_IndexController extends Mage_Wishlist_IndexController
                 $url = Mage::getSingleton('checkout/session')
                     ->getRedirectUrl(true);
                 if ($url) {
-                    $url = Mage::getModel('core/url')->getUrl("ekkitab_catalog/product/view/book/unable-to-add-to__wishlist__".$item->getProductId().".html");
+                    $url = Mage::getModel('core/url')->getUrl("ekkitab_catalog/product/view/book/unable-to-add-to__wishlist__".$product->getId().".html");
                     $urls[]         = $url;
                     $messages[]     = $e->getMessage();
                     $wishlistIds[]  = $item->getId();

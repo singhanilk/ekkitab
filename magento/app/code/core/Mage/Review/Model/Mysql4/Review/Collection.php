@@ -38,6 +38,7 @@ class Mage_Review_Model_Mysql4_Review_Collection extends Varien_Data_Collection_
     protected $_reviewStatusTable;
     protected $_reviewEntityTable;
     protected $_reviewStoreTable;
+    protected $_productTable;	/* Ekkitab changes, Added new variable to access books table */
     protected $_addStoreDataFlag = false;
 
     public function __construct()
@@ -51,11 +52,23 @@ class Mage_Review_Model_Mysql4_Review_Collection extends Varien_Data_Collection_
         $this->_reviewStatusTable   = $resources->getTableName('review/review_status');
         $this->_reviewEntityTable   = $resources->getTableName('review/review_entity');
         $this->_reviewStoreTable   = $resources->getTableName('review/review_store');
+		
+		/* Ekkitab changes, Added new variable to access books table */
+        $this->_productTable   = $resources->getTableName('ekkitab_catalog/product');
 
-        $this->_select->from(array('main_table'=>$this->_reviewTable))
+		$this->_select->from(array('main_table'=>$this->_reviewTable))
             ->join(array('detail'=>$this->_reviewDetailTable), 'main_table.review_id=detail.review_id');
 
-        $this->setItemObjectClass(Mage::getConfig()->getModelClassName('review/review'));
+		$this->setItemObjectClass(Mage::getConfig()->getModelClassName('review/review'));
+    }
+
+	/* Ekkitab changes, Added new method to retreive collection based on ISBN*/
+
+	public function joinProduct()
+    {
+        $this->getSelect()->joinLeft(array('product'=>$this->_productTable), 'main_table.isbn=product.isbn', array('title as book_name'));
+		Mage::log($this->getSelect()->__toString());
+        return $this;
     }
 
     public function addCustomerFilter($customerId)
@@ -91,7 +104,39 @@ class Mage_Review_Model_Mysql4_Review_Collection extends Varien_Data_Collection_
         return $this;
     }
 
-    /**
+	/* Ekkitab changes, Added new method to retreive collection based on ISBN*/
+
+	/**
+     * Add entity filter
+     *
+     * @param   int|string $entity
+     * @param   int $pkValue
+     * @return  Varien_Data_Collection_Db
+     */
+    public function addEntityIsbnFilter($entity, $pkValue)
+    {
+        if (is_numeric($entity)) {
+            $this->addFilter('entity',
+                $this->getConnection()->quoteInto('main_table.entity_id=?', $entity),
+                'string');
+        }
+        elseif (is_string($entity)) {
+            $this->_select->join($this->_reviewEntityTable,
+                'main_table.entity_id='.$this->_reviewEntityTable.'.entity_id');
+
+            $this->addFilter('entity',
+                $this->getConnection()->quoteInto($this->_reviewEntityTable.'.entity_code=?', $entity),
+                'string');
+        }
+
+        $this->addFilter('isbn',
+            $this->getConnection()->quoteInto('main_table.isbn=?', $pkValue),
+            'string');
+
+        return $this;
+    }
+
+	/**
      * Add entity filter
      *
      * @param   int|string $entity
