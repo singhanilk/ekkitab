@@ -216,21 +216,21 @@
 		
 		
 	<div class="buyArea">
-		<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($_product->getFinalPrice(),true,false) ?></div>
+		<div class="ourPrice">Our Price: <?php echo Mage::helper('core')->currency($_product->getFinalPrice(),true,false) ?></div>
 		<?php if($listPrice > 0):?><div class="authorEtc">MRP : <?php echo Mage::helper('core')->currency($listPrice,true,false) ?></div><?php endif; ?>
 		<div class="youSave"><?php if($savings > 0):?>Save <?php echo Mage::helper('core')->currency($savings,true,false) ?><?php endif; ?>
 		<?php if($savingsPerct > 0):?>(<?php echo $savingsPerct?>%)<?php endif; ?></div>
 		<?php if($inStock && $listPrice > 0):?>
 			<div class="authorEtc"><?php echo $shippingTime ?></div>
+			<a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($_product->getId()) ?>">Add to Wishlist</a>
 			<form action="<?php echo $this->helper('ekkitab_catalog')->getCartUrl($_product->getId(),$this->helper('core/url')->getCurrentUrl()) ?>" method="post" id="product_addtocart_form">
-
 			<?php echo $this->getChildHtml('addtocart') ?>
 			<fieldset class="no-display">
 			  <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
 			  <input type="hidden" name="related_product" id="related-products-field" value="" />
 			</fieldset>
 			</form>
-		<?php endif;?>
+			<?php endif;?>
 		<div class="dottedLineBig"></div>
 		<!-- otherBut -->
 			<?php echo $this->getChildHtml('donate_book_blurb') ?>
