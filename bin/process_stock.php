@@ -173,7 +173,7 @@ global $duplicatebook, $newarrival;
                 $deliverydays = $fields[7];
             }
             $query = "select count(1) from books where isbn = '$isbn'";
-            $query1 = "INSERT INTO `missing_isbns` (isbn, title, author, supplier) VALUES ('$isbn', '$title','$author','$plugin')";
+            $query1 = "INSERT INTO `missing_isbns` (isbn, title, author, supplier) VALUES ('$isbn', '$title','$author','$distributor')";
             try{
             $result = mysqli_query($db, $query);
                 while ($row = mysqli_fetch_row($result)){
