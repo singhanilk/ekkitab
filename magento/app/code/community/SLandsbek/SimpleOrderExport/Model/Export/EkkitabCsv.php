@@ -180,7 +180,12 @@ class SLandsbek_SimpleOrderExport_Model_Export_EkkitabCsv extends SLandsbek_Simp
 	 */
     protected function getOrderItemValues($item, $order, $itemInc=1) 
     {
-		$product = $item->getProduct();
+		/*
+		Ekkitab Changes : Changed the method to fetch product by ISBN, since product id may change.
+			 original code : 		$product = $item->getProduct();
+		     replaced with : 		$product = $item->getProductByIsbn();
+		*/
+		$product = $item->getProductByIsbn();
 		$authorArr = $product->getAuthor();
 		$author = $authorArr['a'] ;
 		$isbn=$this->getItemSku($item);

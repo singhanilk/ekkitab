@@ -43,8 +43,18 @@ class Mage_Adminhtml_Block_Review_Grid extends Mage_Adminhtml_Block_Widget_Grid
 
     protected function _prepareCollection()
     {
-        $model = Mage::getModel('ekkitab_review/review');
-        $collection = $model->getProductCollection();
+        /* Ekkitab changes, To call ekkitab_review/review */
+		/* original code : $model = Mage::getModel('review/review');
+						   $collection = $model->getProductCollection();
+														
+		   replaced with : $model = Mage::getModel('ekkitab_review/review');
+						   $collection = $model->getCollection()
+								->joinProduct();
+		*/
+
+		$model = Mage::getModel('ekkitab_review/review');
+        $collection = $model->getCollection()
+			->joinProduct();
 
         if ($this->getProductId() || $this->getRequest()->getParam('productId', false)) {
             $this->setProductId(($this->getProductId() ? $this->getProductId() : $this->getRequest()->getParam('productId')));
@@ -87,12 +97,16 @@ class Mage_Adminhtml_Block_Review_Grid extends Mage_Adminhtml_Block_Widget_Grid
             'index'         => 'review_id',
         ));
 
-        $this->addColumn('created_at', array(
+        /* Ekkitab changes, */
+		/* original code : 'filter_index'  => 'rt.created_at',
+		   replaced with : 'filter_index'  => 'created_at',
+		*/
+		$this->addColumn('created_at', array(
             'header'        => Mage::helper('review')->__('Created On'),
             'align'         => 'left',
             'type'          => 'datetime',
             'width'         => '100px',
-            'filter_index'  => 'rt.created_at',
+            'filter_index'  => 'created_at',
             'index'         => 'created_at',
         ));
 
@@ -161,19 +175,42 @@ class Mage_Adminhtml_Block_Review_Grid extends Mage_Adminhtml_Block_Widget_Grid
             'renderer'  => 'adminhtml/review_grid_renderer_type'
         ));
 
-        $this->addColumn('name', array(
-            'header'    => Mage::helper('review')->__('Product Name'),
+        /* Ekkitab changes, */
+		/* original code : 
+
+			'header'    => Mage::helper('review')->__('Product Name'),
             'align'     =>'left',
             'type'      => 'text',
             'index'     => 'name',
+		   
+		   replaced with : 
+
+            'header'		=> Mage::helper('review')->__('Product Name'),
+            'align'			=>'left',
+            'type'			=> 'text',
+            'filter_index'  => 'product.title',
+            'index'			=> 'book_name',
+		*/
+
+        $this->addColumn('name', array(
+            'header'		=> Mage::helper('review')->__('Product Name'),
+            'align'			=>'left',
+            'type'			=> 'text',
+            'filter_index'  => 'product.title',
+            'index'			=> 'book_name',
         ));
 
-        $this->addColumn('sku', array(
+        /* Ekkitab changes, */
+		/* original code : 'index'     => 'sku',
+		   replaced with : 'index'     => 'isbn',
+		*/
+
+		$this->addColumn('sku', array(
             'header'    => Mage::helper('review')->__('Product SKU'),
             'align'     => 'right',
             'type'      => 'text',
             'width'     => '50px',
-            'index'     => 'sku',
+            'index'     => 'isbn',
         ));
 
         $this->addColumn('action',

@@ -464,8 +464,15 @@ a:hover {
 	font-style: Italic;
 	font-size: 11px;
 	line-height: 1.4em;
-}.youSave {
+}
+.youSave {
 	line-height: 1.4em;
+	color: #c60;
+	font-weight: bold;
+}
+.ourPrice {
+	font-size: 12px;
+	line-height: 1.5em;
 	color: #c60;
 	font-weight: bold;
 }

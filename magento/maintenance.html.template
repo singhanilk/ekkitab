@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="description" content="Default Description" />
 <meta name="keywords" content="Ekkitab, online bookstore" />
-<meta name="robots" content="INDEX,FOLLOW" />
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
 <link rel="icon" href="skin/frontend/default/ekkitab/favicon.ico" type="image/x-icon" />
 <link rel="shortcut icon" href="skin/frontend/default/ekkitab/favicon.ico" type="image/x-icon" />
 <script type="text/javascript">

@@ -20,7 +20,11 @@ class Ekkitab_Review_Block_View extends Mage_Catalog_Block_Product_Abstract
     public function getProductData()
     {
         if( $this->getReviewId() && !$this->getProductCacheData() ) {
-            $this->setProductCacheData(Mage::getModel('ekkitab_catalog/product')->load($this->getReviewData()->getEntityPkValue()));
+			if(!is_null($this->getReviewData()->getIsbn())){
+				$this->setProductCacheData(Mage::getModel('ekkitab_catalog/product')->load($this->getReviewData()->getIsbn(),'isbn'));
+			}else{
+				$this->setProductCacheData(Mage::getModel('ekkitab_catalog/product')->load($this->getReviewData()->getEntityPkValue()));
+			}
         }
         return $this->getProductCacheData();
     }

@@ -71,7 +71,7 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
 	protected function _prepareLayout()
     {
 	   
-		$title ='All Books :';
+		$title ='All Books';
 		
 		if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
 
@@ -112,30 +112,33 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
 						'title'=>Mage::helper('ekkitab_catalog')->__($page),
 						'link'=>$this->getPageUrl($page)
 					));
+					$title .=" : Page ".$page;
 				
 					$breadcrumbs->addCrumb($slot, array(
 						'label'=>Mage::helper('ekkitab_catalog')->__($slot),
 						'title'=>Mage::helper('ekkitab_catalog')->__($slot),
 						'link'=>''
 					));
-					
+					$title .=", Directory ".$slot;
+				
 				}else{
 					$breadcrumbs->addCrumb($page, array(
 						'label'=>Mage::helper('ekkitab_catalog')->__($page),
 						'title'=>Mage::helper('ekkitab_catalog')->__($page),
 						'link'=>''
 					));
+					$title .=" : Page ".$page;
 				}
+				Mage::getSingleton('core/session')->setAllBooksParam(array('page_no'=>'','slot_no'=>''));
 			}else{
 				$breadcrumbs->addCrumb('allBooks', array(
 				'label'=>Mage::helper('ekkitab_catalog')->__('All Books'),
 				'title'=>Mage::helper('ekkitab_catalog')->__('All Books'),
 				'link'=>''
-			));
-
+				));
 			}
-
 			$this->getLayout()->getBlock('head')->setTitle($title);
+
 		}
 		
         return parent::_prepareLayout();

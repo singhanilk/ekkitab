@@ -107,6 +107,7 @@ INSERT INTO `ek_catalog_top_authors` (`id`, `author`, `order_no`, `is_active`, `
 
 INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 ( 'default', 0, 'catalog/category/root_id', '2'),
+( 'default', 0, 'catalog/review/allow_guest', '0'),
 ('default', 0, 'design/theme/default', 'ekkitab'),
 ('default', 0, 'design/head/default_title', 'Online Bookstore India | Buy books online | Donate Books | Online Book Shopping'),
 ('default', 0, 'design/head/default_keywords', 'Ekkitab.com: Online Bookstore India, Buy Books online, Online Books Shopping,Donate Books to schools,colleges, library or any organization online.'),

@@ -5160,6 +5160,7 @@ CREATE TABLE IF NOT EXISTS `review` (
   `created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `entity_id` smallint(5) unsigned NOT NULL DEFAULT '0',
   `entity_pk_value` int(10) unsigned NOT NULL DEFAULT '0',
+  `isbn` varchar(20) NOT NULL,
   `status_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`review_id`),
   KEY `FK_REVIEW_ENTITY` (`entity_id`),
@@ -6169,10 +6170,11 @@ CREATE TABLE IF NOT EXISTS `weee_tax` (
 CREATE TABLE IF NOT EXISTS `wishlist` (
   `wishlist_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `customer_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `organization_id` int(10) unsigned DEFAULT '0',
   `shared` tinyint(1) unsigned DEFAULT '0',
   `sharing_code` varchar(32) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`wishlist_id`),
-  UNIQUE KEY `FK_CUSTOMER` (`customer_id`)
+  UNIQUE KEY `FK_CUSTOMER` (`customer_id`,`organization_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Wishlist main' AUTO_INCREMENT=1 ;
 
 --
@@ -6183,6 +6185,7 @@ CREATE TABLE IF NOT EXISTS `wishlist_item` (
   `wishlist_item_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `wishlist_id` int(10) unsigned NOT NULL DEFAULT '0',
   `product_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `isbn` varchar(20) NOT NULL ,
   `store_id` smallint(5) unsigned NOT NULL,
   `added_at` datetime DEFAULT NULL,
   `description` text,
@@ -6918,8 +6921,6 @@ CREATE TABLE IF NOT EXISTS `ek_catalog_search_log` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-
 
 
 

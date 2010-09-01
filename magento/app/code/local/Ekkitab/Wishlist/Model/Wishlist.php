@@ -25,6 +25,58 @@ class Ekkitab_Wishlist_Model_Wishlist extends Mage_Wishlist_Model_Wishlist
 
 
     /**
+     * Load wishlist by customer
+     *
+     * @param mixed $customer
+     * @param bool $create Create wishlist if don't exists
+     * @return Mage_Wishlist_Model_Wishlist
+     */
+    public function loadByCustomer($customer, $create = false)
+    {
+        if ($customer instanceof Mage_Customer_Model_Customer) {
+            $customer = $customer->getId();
+        }
+		$organizationId= Mage::helper('ekkitab_wishlist')->getCurrentLinkedOrganization();
+		$wishlistId =  $this->_getResource()->getWishListId($customer,$organizationId);
+        if(!is_null($wishlistId) && $wishlistId >0 ){
+		   $this->load($wishlistId);
+		}
+		if (!$this->getId() && $create) {
+            $this->setCustomerId($customer);
+            $this->setOrganizationId($organizationId);
+            $this->setSharingCode($this->_getSharingRandomCode());
+            $this->save();
+        }
+
+        return $this;
+    }
+
+	/**
+     * Add new item to wishlist
+     *
+     * @param int $productId
+     * @return Mage_Wishlist_Model_Item
+     */
+    public function addNewItem($productId)
+    {
+        $item = Mage::getModel('wishlist/item');
+        $item->loadByProductWishlist($this->getId(), $productId, $this->getSharedStoreIds());
+        $product = Mage::getModel('ekkitab_catalog/product')->load($productId);
+		$productIsbn = $product->getIsbn();
+        if (!$item->getId()) {
+            $item->setProductId($productId)
+                ->setIsbn($productIsbn)
+                ->setWishlistId($this->getId())
+                ->setAddedAt(now())
+                ->setStoreId($this->getStore()->getId())
+                ->save();
+        }
+
+        return $item;
+    }
+
+
+	/**
      * Retrieve wishlist item collection
      *
      * @return Mage_Wishlist_Model_Mysql4_Item_Collection

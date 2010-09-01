@@ -45,14 +45,16 @@
 		}
 
 		$authors = $_product->getAuthor();
-		$productUrl = $_product->getProductUrl();
+		$productUrl = trim($_product->getProductUrl());
 		$inStock = $_product->getInStock();
-		$publishers=$_product->getPublisher();
-		$publishDate=$_product->getPublishingDate();
-		$noPages=$_product->getPages();
-		
+		$publishers= ucwords(trim($_product->getPublisher()));
+		$publishDate= $_product->getPublishingDate();
+		if(!is_null($publishDate)){	$publishDate= date("F Y", strtotime($publishDate));}else{$publishDate="";}
+		$binding= trim($_product->getBinding());
+		$noPages= $_product->getPages()	;
+		$language = ucwords(trim($_product->getLanguage()));
 		$author = $authors['a'];
-		$editors=$authors['e']	;
+		$editors= $authors['e']	;
 		$translators=$authors['t'];
 		$illustrators=$authors['i'];
 		$photographers=$authors['p'];
@@ -72,7 +74,6 @@
 		$shippingTimeMin = (int)$_product->getDeliveryPeriod();
 		$shippingTimeMax = round($shippingTimeMin + (.5 * $shippingTimeMin) );
 		$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Delivers in ".$shippingTimeMin." - ".$shippingTimeMax." business days":"";
-		$publishers=strlen($publishers)>0 ? ucwords($publishers):"NA";
 		$image = $_product->getImage();
 ?>
 <div class="searchArea">
@@ -106,11 +107,19 @@
 			<?php if($isbn10 && $isbn10!=''):?>
 			<div class="lineHeight14em">ISBN-10:  <?php echo $isbn10 ?></div>
 			<?php endif;?>
-			<div class="lineHeight14em">Binding: <?php echo ucwords($_product->getBinding()) ?></div>
+			<?php if(!is_null($binding) && $binding !=''):?>
+			<div class="lineHeight14em">Binding: <?php echo ucwords($binding) ?></div>
+			<?php endif;?>
+			<?php if(!is_null($publishers) && $publishers !=''):?>
 			<div class="lineHeight14em">Publisher:  <?php echo $publishers ?></div>
+			<?php endif;?>
+			<?php if(!is_null($publishDate) && $publishDate !=''):?>
 			<div class="lineHeight14em">Publishing Date:  <?php echo $publishDate ?></div>
-			<div class="lineHeight14em">Language : <?php echo ucwords($_product->getLanguage()) ?></div>
-			<?php if($noPages):?><div class="lineHeight14em">Number of Pages : <?php echo $noPages ?></div><?php endif;?>
+			<?php endif;?>
+			<?php if(!is_null($publishers) && $publishers !=''):?>
+			<div class="lineHeight14em">Language : <?php echo  $language ?></div>
+			<?php endif;?>
+			<?php if($noPages >0):?><div class="lineHeight14em">Number of Pages : <?php echo $noPages ?></div><?php endif;?>
 			
 			<?php if(!$inStock || $listPrice <= 0):?>
 			  <div class="marginTop5px"><img src="<?php echo $this->getSkinUrl('images/out_of_stock_image.png')?>" align="absmiddle"> &nbsp; <a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($_product->getId()) ?>">Add to Wishlist</a> </div>
@@ -207,21 +216,21 @@
 		
 		
 	<div class="buyArea">
-		<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($_product->getFinalPrice(),true,false) ?></div>
+		<div class="ourPrice">Our Price: <?php echo Mage::helper('core')->currency($_product->getFinalPrice(),true,false) ?></div>
 		<?php if($listPrice > 0):?><div class="authorEtc">MRP : <?php echo Mage::helper('core')->currency($listPrice,true,false) ?></div><?php endif; ?>
 		<div class="youSave"><?php if($savings > 0):?>Save <?php echo Mage::helper('core')->currency($savings,true,false) ?><?php endif; ?>
 		<?php if($savingsPerct > 0):?>(<?php echo $savingsPerct?>%)<?php endif; ?></div>
 		<?php if($inStock && $listPrice > 0):?>
 			<div class="authorEtc"><?php echo $shippingTime ?></div>
+			<a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($_product->getId()) ?>">Add to Wishlist</a>
 			<form action="<?php echo $this->helper('ekkitab_catalog')->getCartUrl($_product->getId(),$this->helper('core/url')->getCurrentUrl()) ?>" method="post" id="product_addtocart_form">
-
 			<?php echo $this->getChildHtml('addtocart') ?>
 			<fieldset class="no-display">
 			  <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
 			  <input type="hidden" name="related_product" id="related-products-field" value="" />
 			</fieldset>
 			</form>
-		<?php endif;?>
+			<?php endif;?>
 		<div class="dottedLineBig"></div>
 		<!-- otherBut -->
 			<?php echo $this->getChildHtml('donate_book_blurb') ?>

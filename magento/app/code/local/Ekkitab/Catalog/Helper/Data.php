@@ -238,7 +238,6 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
     {
         if (is_null($this->_slotNo)) {
             $this->_slotNo = $this->_getRequest()->getParam($this->getSlotNoVarName());
-            Mage::log("slot in helper is... ".$this->_slotNo);
 			if (isset($this->_slotNo)) {
                 $this->_slotNo = (int)trim($this->_slotNo);
             } else {
