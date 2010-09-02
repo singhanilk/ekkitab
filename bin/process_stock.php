@@ -262,14 +262,14 @@ $host   = $dbconfig[database][server];
 $user   = $dbconfig[database][user];
 $psw    = $dbconfig[database][password];
 $db     = null;
-$truncatequery = "truncate missing_isbns";    
+$truncatequery = "delete missing_isbns.* from missing_isbns, books where missing_isbns.isbn = books.isbn";    
     try  {
         $db = mysqli_connect($host,$user,$psw,"reference");
     }
     catch (exception $e) {
         $db = null;
     }
-//truncate missing isbns table-- A new table will be created and populated
+//remove missing isbns from table if it exists in book table.
     try  {
         mysqli_query($db,$truncatequery);
     }
