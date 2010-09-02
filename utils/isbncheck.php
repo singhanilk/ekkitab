@@ -106,7 +106,7 @@ if ( $isbnno != '' ){
   // Check the reference books table.
   $booksResult = checkBooksTable($isbnno);
   if ( $booksResult != null ) {
-  $displayString = "<h5>Books from Reference.books table </h5>";
+  $displayString = "<h5>The book information exists. If the list price is 0 or empty, we have not received the price/stock information for the book.( Reference.books )</h5>";
   foreach ( $booksResult as $book ) {
     $displayString .= "<table border=1>";
     foreach ( $book as $key => $value ) {
@@ -115,13 +115,13 @@ if ( $isbnno != '' ){
     $displayString .= "</table>";
   }
  } else {
-  $displayString = '<h4>No records found in the catalog table</h4>';
+  $displayString = '<h5>The book information does not exists</h5>';
  }
 
   //Check the missing isbns table.
   $booksResult = checkMissingIsbnsTable($isbnno);
   if ( $booksResult != null ) {
-  $displayString .= "<h5>Books from Missing ISBN List</h5>";
+  $displayString .= "<h5>The book information does not exists but we are getting the price/stock information for the book. Missing ISBN(Reference.missing_isbns)</h5>";
   foreach ( $booksResult as $book ) {
     $displayString .= "<table border=1>";
     foreach ( $book as $key => $value ) {
@@ -130,7 +130,7 @@ if ( $isbnno != '' ){
     $displayString .= "</table>";
   }
  } else {
-  $displayString .= '<h4>No records found in the missing isbn list</h4>';
+  $displayString .= '<h5>The book is not listed under missing isbns</h5>';
  }
 }
 echo createForm($isbnno, $displayString);
