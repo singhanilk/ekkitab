@@ -171,5 +171,5 @@ CREATE TABLE IF NOT EXISTS `missing_isbns` (
   `title` VARCHAR(255) default NULL,
   `author` VARCHAR(120) default NULL,
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `ISBN` (`isbn`)
+  UNIQUE KEY `ISBN` (`isbn`, `supplier`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
