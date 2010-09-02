@@ -22,7 +22,7 @@ if (not defined $oBook) {
     exit(1);
 }
 my($iR, $iC, $oWkS, $oWkC);
-print "#ISBN\t" . "PRICE\t" . "CURRENCY\t" . "AVAILABILITY\t" . "IMPRINT\t" . "TITLE\t" . "AUTHOR\n" ;
+print "#ISBN\t" . "PRICE\t" . "CURRENCY\t" . "AVAILABILITY\t" . "SUPPLIER\t" . "TITLE\t" . "AUTHOR\n" ;
 
 
 for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
@@ -54,12 +54,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                          next;
                      }
                   }
-		          if ($imprintcol == -1) {
-		              if ($oWkC->Value =~ /Publisher/) {
-			              $imprintcol = $iC;
-			              next;
-		              }
-		          }
                   if ($currencycol == -1) {
                       if ($oWkC->Value =~ /Currency/) {
                           $currencycol = $iC;
@@ -115,7 +109,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         my $value = '';
         my $currency = '';
         my $availability = '';
-        my $imprint = '';
+        my $imprint = 'Prism';
         eval { $value = $oWkS->{Cells}[$i][$isbncol]; };
         if ($@) {
            print STDERR "Unexpected read value. Line $i\n";
@@ -185,16 +179,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if (defined ($value)) {
            $title = $value->Value;
            $title =~ s/\n//g;
-        }
-        if ($imprintcol == -1){
-            $imprint = 'Not Available'; 
-        }
-        else{
-            $value = $oWkS->{Cells}[$i][$imprintcol];
-            if (defined ($value)) {
-                $imprint = $value->Value;
-                $imprint =~ s/\n//g;
-            }
         }
         if (defined ($isbn)  && 
             defined ($price) && 

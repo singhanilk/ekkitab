@@ -16,7 +16,7 @@ if (not defined $oBook) {
 }
 my($iR, $iC, $oWkS, $oWkC);
 
-print "#ISBN\t" . "PRICE\t" . "CURRENCY\t" . "AVAILABILITY\t" . "IMPRINT\t" . "TITLE\t" . "AUTHOR\n" ;
+print "#ISBN\t" . "PRICE\t" . "CURRENCY\t" . "AVAILABILITY\t" . "SUPPLIER\t" . "TITLE\t" . "AUTHOR\n" ;
 
 for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 
@@ -78,7 +78,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
      $enteredcount++;
      my $currency = 'I';
      my $availability = 'Available'; 
-     my $imprint = 'Harward';
+     my $imprint = 'Harvard';
      my $value = $oWkS->{Cells}[$i][$isbncol];
      my $value1 = $oWkS->{Cells}[$i][$isbncol];
      my $isbn;

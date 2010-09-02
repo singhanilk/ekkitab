@@ -15,6 +15,7 @@ if (not defined $oBook) {
     exit(1);
 }
 my($iR, $iC, $oWkS, $oWkC);
+print "#ISBN\t" . "PRICE\t" . "CURRENCY\t" . "AVAILABILITY\t" . "SUPPLIER\t" . "TITLE\t" . "AUTHOR\n" ;
 my $ekkitab_home = $ENV{EKKITAB_HOME};
 if (!($ekkitab_home)){
 print "Not Defined" . "\n";
@@ -91,7 +92,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
         my $value = '';
-        my $imprint = 'TBH';
+        my $imprint = 'VINAYAKA';
         my $currency = 'I';
 	$enteredcount++;
         eval { $value = $oWkS->{Cells}[$i][$isbncol]; };

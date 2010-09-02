@@ -16,7 +16,7 @@ if (not defined $oBook) {
 }
 my($iR, $iC, $oWkS, $oWkC);
 
-print "#ISBN\t" . "PRICE\t" . "CURRENCY\t" . "AVAILABILITY\t" . "IMPRINT\t" . "TITLE\t" . "AUTHOR\n" ;
+print "#ISBN\t" . "PRICE\t" . "CURRENCY\t" . "AVAILABILITY\t" . "SUPPLIER\t" . "TITLE\t" . "AUTHOR\n" ;
 
 for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 
@@ -77,12 +77,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                         next;
     		        }
                 }
-    	        if ($imprintcol == -1) {
-    		        if ($oWkC->Value =~ /publisher/i) {
-                        $imprintcol = $iC;
-                        next;
-    		        }
-                }
                 if ($authorcol == -1) {
     		        if ($oWkC->Value =~ /AUTHOR1/i) {
                         $authorcol = $iC;
@@ -106,6 +100,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     for (my $i = $startrow; $i <= $endrow; $i++) {
         $enteredcount++;
         my $availability = 'Available';
+        my $imprint = 'Cambridge';
         my $value = '';
         eval { $value = $oWkS->{Cells}[$i][$isbncol]; };
         if ($@) {
@@ -129,12 +124,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if (defined ($value)) {
            $title = $value->Value;
            $title =~ s/\n//g;
-        }
-        $value = $oWkS->{Cells}[$i][$imprintcol];
-        my $imprint;
-        if (defined ($value)) {
-           $imprint = $value->Value;
-           $imprint =~ s/\n//g;
         }
         $value = $oWkS->{Cells}[$i][$currencycol];
         my $currency;

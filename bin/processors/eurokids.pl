@@ -21,7 +21,7 @@ if (not defined $oBook) {
     print STDERR "Failed to parse input file: $ARGV[0]\n"; 
     exit(1);
 }
-print "#ISBN \t PRICE \t CURRENCY \t AVAILABILITY \t IMPRINT \t TITLE \t AUTHOR \n";
+print "#ISBN \t PRICE \t CURRENCY \t AVAILABILITY \t SUPPLIER \t TITLE \t AUTHOR \n";
 my($iR, $iC, $oWkS, $oWkC);
 
 
@@ -105,7 +105,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                $availability = 'Not Available' . '[' . $availability . ']';
            }
         }
-        my $imprint = 'Not Available';
+        my $imprint = 'EUROKIDS';
         $value = $oWkS->{Cells}[$i][$titlecol];
         my $title;
         if (defined ($value)) {

@@ -8,7 +8,7 @@ my $Settingsfile = $ekkitab_home . "/config/stockprocess.ini";
 my $settings     = new Config::Abstract::Ini($Settingsfile);
 my %values       = $settings -> get_entry('ubs');
 my $threshold    = $values{'availability'};
-print "#ISBN\tPRICE\tCURRENCY\tAVAILABILITY\tIMPRINT\tTITLE\tAUTHOR\n";
+print "#ISBN\tPRICE\tCURRENCY\tAVAILABILITY\tSUPPLIER\tTITLE\tAUTHOR\n";
 $/=undef;
 open(FILE, $ARGV[0]) or die "cannot open input file";
 my $file = <FILE>;
@@ -62,7 +62,7 @@ for (my $i=0; $i<=$#isbns; $i++) {
             print STDERR "[ubs] Unknown currency '$currency' in input.\n";
             exit 1;
         }
-        my $imprint = 'Not Available';
+        my $imprint = 'UBS';
         my $Title = 'Not Available';
         my $author= 'Not Available';
         if( (not (length($isbn) != 10) or (length($isbn) != 13)) or  $currency !~ /[A-Z]/ or $price !~ /[0-9]/){

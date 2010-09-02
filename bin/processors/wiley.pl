@@ -13,6 +13,7 @@ if (not defined $oBook) {
     exit(1);
 }
 my($iR, $iC, $oWkS, $oWkC);
+print "#ISBN\t" . "PRICE\t" . "CURRENCY\t" . "AVAILABILITY\t" . "SUPPLIER\t" . "TITLE\t" . "AUTHOR\n" ;
 
 
 for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
@@ -84,18 +85,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     	        if ($authorcol == -1) {
     		        if ($oWkC->Value =~ /Author/) {
                         $authorcol = $iC;
-                        next;
-    		        }
-                }
-    	        if ($imprintcol == -1) {
-    		        if ($oWkC->Value =~ /BRAND/) {
-                        $imprintcol = $iC;
-                        next;
-    		        }
-                }
-    	        if ($imprintcol == -1) {
-    		        if ($oWkC->Value =~ /Publisher/) {
-                        $imprintcol = $iC;
                         next;
     		        }
                 }
