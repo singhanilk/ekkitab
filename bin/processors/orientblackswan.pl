@@ -5,6 +5,17 @@ use Spreadsheet::ParseExcel;
 my $oExcel = new Spreadsheet::ParseExcel;
 
 die "Usage $0 <Excel File> \n Redirect output to required file from stdout" unless @ARGV;
+
+use Config::Abstract::Ini;
+
+my $ekkitab_home = $ENV{EKKITAB_HOME};
+if (!($ekkitab_home)){
+print "Not Defined" . "\n";
+}
+my $Settingsfile = $ekkitab_home . "/config/stockprocess.ini";
+my $settings     = new Config::Abstract::Ini($Settingsfile);
+my %values       = $settings -> get_entry('orientblackswan');
+my $threshold    = $values{'availability'};
 my $enteredcount = 0;
 my $printedcount = 0;
 my $oBook = $oExcel->Parse($ARGV[0]);
@@ -57,6 +68,12 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                         next;
     		        }
                 }
+                if ($availcol == -1) {
+    		        if ($oWkC->Value =~ /availability/) {
+                        $availcol = $iC;
+                        next;
+    		        }
+                }
             }
         }
 
@@ -74,7 +91,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     for (my $i = $startrow; $i <= $endrow; $i++) {
         $enteredcount++;
         my $currency = 'I';
-        my $availability = 'Available';
         my $imprint = 'OrientBlackswan';
         my $value = '';
         eval { $value = $oWkS->{Cells}[$i][$isbncol]; };
@@ -105,6 +121,19 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if (defined ($value)) {
            $author = $value->Value;
            $author =~ s/\n//g;
+        }
+        $value = $oWkS->{Cells}[$i][$availcol];
+        my $availability;
+        if(defined ($value)) {
+           $availability = $value->Value;
+           $availability =~ s/\n//g;
+           $availability =~ s/[^0-9]//g;
+           if ($availability > $threshold){
+           $availability = 'Available';
+           }
+           else{
+               $availability = 'Not Available' . '[' . $availability . ']';
+           }        
         }
         if (defined ($isbn)  && 
             defined ($price) && 
