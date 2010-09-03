@@ -28,7 +28,6 @@ class Ekkitab_Review_ProductController extends Mage_Review_ProductController
     {
         Mage::dispatchEvent('review_controller_product_init_before', array('controller_action'=>$this));
         $productId  = trim($this->getRequest()->getParam('id'));
-		Mage::log("Product id is : $productId");
 		if($productId){
 			if($this->isIsbn($productId)){
 				//this is isbn.....

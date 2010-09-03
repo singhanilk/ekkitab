@@ -51,12 +51,21 @@ class Mage_Review_ProductController extends Mage_Core_Controller_Front_Action
         }
 
         $action = $this->getRequest()->getActionName();
-        if (!$allowGuest && $action == 'post' && $this->getRequest()->isPost()) {
-            if (!Mage::getSingleton('customer/session')->isLoggedIn()) {
+        if (!$allowGuest && $action == 'post' ) {
+			if (!Mage::getSingleton('customer/session')->isLoggedIn()) {
+				Mage::getSingleton('customer/session')->setBeforeAuthUrl(Mage::getUrl('*/*/*', array('_current' => true)));
                 $this->setFlag('', self::FLAG_NO_DISPATCH, true);
-                Mage::getSingleton('customer/session')->setBeforeAuthUrl(Mage::getUrl('*/*/*', array('_current' => true)));
-                Mage::getSingleton('review/session')->setFormData($this->getRequest()->getPost())
-                    ->setRedirectUrl($this->_getRefererUrl());
+				$data = $this->getRequest()->getPost();
+				if(empty($data) ){
+					$data = Mage::getSingleton('review/session')->getFormData(true);
+				}
+				if(isset($data['referrer'])){
+					Mage::getSingleton('review/session')->setFormData($data)
+						->setRedirectUrl($data['referrer']);
+				}else{
+					Mage::getSingleton('review/session')->setFormData($data)
+						->setRedirectUrl($this->_getRefererUrl());
+				}
                 $this->_redirectUrl(Mage::helper('customer')->getLoginUrl());
             }
         }
@@ -77,7 +86,6 @@ class Mage_Review_ProductController extends Mage_Core_Controller_Front_Action
         if (!$productId) {
             return false;
         }
-
         $product = Mage::getModel('catalog/product')
             ->setStoreId(Mage::app()->getStore()->getId())
             ->load($productId);
@@ -103,9 +111,10 @@ class Mage_Review_ProductController extends Mage_Core_Controller_Front_Action
         return $product;
     }
 
-    public function postAction()
+	public function postAction()
     {
-        if ($data = Mage::getSingleton('review/session')->getFormData(true)) {
+       
+		if ($data = Mage::getSingleton('review/session')->getFormData(true)) {
             $rating = array();
             if (isset($data['ratings']) && is_array($data['ratings'])) {
                 $rating = $data['ratings'];
