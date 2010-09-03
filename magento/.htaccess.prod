@@ -138,6 +138,7 @@
 
     RewriteCond %{REQUEST_URI} !^/(media|skin|js)/
     RewriteCond %{REQUEST_URI} !^/bugzilla/
+    RewriteCond %{REQUEST_URI} !^/twiki/
 
 ############################################
 ## never rewrite for existing files, directories and links
