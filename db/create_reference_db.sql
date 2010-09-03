@@ -173,3 +173,16 @@ CREATE TABLE IF NOT EXISTS `missing_isbns` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `ISBN` (`isbn`, `supplier`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+--
+-- Table Structure for table isbns to be ignored
+--
+CREATE TABLE IF NOT EXISTS `ignore_isbns` (
+  `id` int(12) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `isbn` VARCHAR(20) NOT NULL,
+  `title` VARCHAR(255) default NULL,
+  `author` VARCHAR(120) default NULL,
+  `supplier` VARCHAR(50) default NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `ISBN` (`isbn`, `supplier`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
