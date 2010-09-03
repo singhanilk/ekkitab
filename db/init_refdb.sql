@@ -26,6 +26,7 @@ insert into ek_discount_setting (`info_source`, `discount_percent`) values ('Ing
                                                                            ('SChand', 70), ('ParagonBooks', 70),
                                                                            ('Wiley', 70), ('Harvard', 70),
                                                                            ('TBH', 70), ('BookWorldEnterprises', 70),
+                                                                           ('PanMacmillan', 70),
                                                                            ('UBS', 70), ('Viva', 70), ('Cambridge', 70);
 
 --
@@ -65,4 +66,5 @@ insert into ek_supplier_params (`info_source`, `publisher`, `supplier_discount`,
                                ('UBS', 'Any', 30, 3),
                                ('Viva', 'Any', 30, 3),
                                ('Cambridge', 'Any', 30, 3),
+                               ('PanMacmillan', 'Any', 25, 3),
                                ('Unknown', 'Any', 25, 5);

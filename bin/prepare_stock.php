@@ -144,7 +144,6 @@ else {
                         // echo "Running... " . $processor . " on '" . $file . "'\n";
                         $outputfile = str_replace(".pl","", $processor) . "-stocklist.txt";
                         $commandline = $processorhome . "/" . $processor . " '" . $directory . "/" . $file . "' " . $filewritemode . "  " . $outputdir . "/" . $outputfile . " 2>/dev/null";
-                        echo "Command: $commandline\n";
                         if ($filewritemode == ">") { // save the old file if it exists.
                             $savefilepath = $outputdir . "/" . $outputfile . ".saved";
                             $outputfilepath = $outputdir . "/" . $outputfile;
