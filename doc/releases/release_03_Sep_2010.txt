@@ -1,0 +1,20 @@
+Enhancements
+1. Wishlist link in the book details page added.
+
+Issue Fixes
+Priority 1 ( P1 )
+1. 238: Home Page title must be changed
+2.259: Wishlist and Review changes for looking up using ISBN instead of Product Id
+
+Priority 1 ( P2 )
+None
+
+Priority 1 ( P3 )
+1. 244: In Book Details page, do not display those parameters for which we do not have information.
+2. 245: Please set no-crawl for our maintenance page
+3. 239: Only logged in users should be allowed to provide reviews
+4. 249: Pending Reviews Error
+5. 234: Remove Bolding of all book information on the details page.
+
+Priority 1 ( P4 )
+None
