@@ -2,61 +2,61 @@
 <DiscountData>
     <Supplier name="Ingrams">
         <DiscountLevel value="40">
-            <Price min="0" max="10">
+            <Price min="0" max="500">
                 <Discount low="10" high="15"/>
             </Price>
-            <Price min="10" max="20">
+            <Price min="500" max="1000">
                 <Discount low="15" high="18"/>
             </Price>
-            <Price min="20" max="100">
+            <Price min="1000" max="5000">
                 <Discount low="18" high="22"/>
             </Price>
-            <Price min="100" max="100000">
+            <Price min="5000" max="5000000">
                 <Discount low="22" high="22"/>
             </Price>
         </DiscountLevel>
         <DiscountLevel value="35">
-            <Price min="0" max="10">
+            <Price min="0" max="500">
                 <Discount low="5" high="10"/>
             </Price>
-            <Price min="10" max="20">
+            <Price min="500" max="1000">
                 <Discount low="10" high="15"/>
             </Price>
-            <Price min="20" max="25">
+            <Price min="1000" max="1250">
                 <Discount low="15" high="18"/>
             </Price>
-            <Price min="25" max="100">
+            <Price min="1250" max="5000">
                 <Discount low="18" high="20"/>
             </Price>
-            <Price min="100" max="100000">
+            <Price min="5000" max="5000000">
                 <Discount low="20" high="20"/>
             </Price>
         </DiscountLevel>
         <DiscountLevel value="30">
-            <Price min="0" max="10">
+            <Price min="0" max="500">
                 <Discount low="0" high="0"/>
             </Price>
-            <Price min="10" max="20">
+            <Price min="500" max="1000">
                 <Discount low="5" high="10"/>
             </Price>
-            <Price min="20" max="100">
+            <Price min="1000" max="5000">
                 <Discount low="10" high="15"/>
             </Price>
-            <Price min="100" max="100000">
+            <Price min="5000" max="5000000">
                 <Discount low="15" high="15"/>
             </Price>
         </DiscountLevel>
         <DiscountLevel value="25">
-            <Price min="0" max="15">
+            <Price min="0" max="750">
                 <Discount low="0" high="0"/>
             </Price>
-            <Price min="15" max="25">
+            <Price min="750" max="1250">
                 <Discount low="2" high="10"/>
             </Price>
-            <Price min="25" max="100">
+            <Price min="1250" max="5000">
                 <Discount low="10" high="12"/>
             </Price>
-            <Price min="100" max="10000">
+            <Price min="5000" max="5000000">
                 <Discount low="12" high="12"/>
             </Price>
         </DiscountLevel>
