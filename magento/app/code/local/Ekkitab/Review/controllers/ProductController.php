@@ -19,7 +19,39 @@ class Ekkitab_Review_ProductController extends Mage_Review_ProductController
      */
     protected $_cookieCheckActions = array('post');
 
-    /**
+    public function preDispatch()
+    {
+        parent::preDispatch();
+
+        $allowGuest = Mage::helper('review')->getIsGuestAllowToWrite();
+        if (!$this->getRequest()->isDispatched()) {
+            return;
+        }
+
+        $action = $this->getRequest()->getActionName();
+        if (!$allowGuest && $action == 'post' ) {
+			if (!Mage::getSingleton('customer/session')->isLoggedIn()) {
+                $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+				Mage::getSingleton('customer/session')->setBeforeAuthUrl(Mage::getUrl('*/*/*', array('_current' => true)));
+				$data = $this->getRequest()->getPost();
+				if(empty($data) ){
+					$data = Mage::getSingleton('review/session')->getFormData(true);
+				}
+				if(isset($data['referrer'])){
+					Mage::getSingleton('review/session')->setFormData($data)
+						->setRedirectUrl($data['referrer']);
+				}else{
+					Mage::getSingleton('review/session')->setFormData($data)
+						->setRedirectUrl($this->_getRefererUrl());
+				}
+                $this->_redirectUrl(Mage::helper('customer')->getLoginUrl());
+            }
+        }
+
+        return $this;
+    }
+
+	/**
      * Initialize and check product
      *
      * @return Mage_Catalog_Model_Product
@@ -28,7 +60,6 @@ class Ekkitab_Review_ProductController extends Mage_Review_ProductController
     {
         Mage::dispatchEvent('review_controller_product_init_before', array('controller_action'=>$this));
         $productId  = trim($this->getRequest()->getParam('id'));
-		Mage::log("Product id is : $productId");
 		if($productId){
 			if($this->isIsbn($productId)){
 				//this is isbn.....

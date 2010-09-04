@@ -93,7 +93,7 @@ class Mage_Adminhtml_Block_Review_Grid extends Mage_Adminhtml_Block_Widget_Grid
             'header'        => Mage::helper('review')->__('ID'),
             'align'         => 'right',
             'width'         => '50px',
-            'filter_index'  => 'rt.review_id',
+            'filter_index'  => 'review_id',
             'index'         => 'review_id',
         ));
 
@@ -117,7 +117,7 @@ class Mage_Adminhtml_Block_Review_Grid extends Mage_Adminhtml_Block_Widget_Grid
                 'type'          => 'options',
                 'options'       => $statuses,
                 'width'         => '100px',
-                'filter_index'  => 'rt.status_id',
+                'filter_index'  => 'status_id',
                 'index'         => 'status_id',
             ));
         }
