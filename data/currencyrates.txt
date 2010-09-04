@@ -1,6 +1,6 @@
 USD   50
 CAN   48
-BRI   76
+BRI   78
 EUR   64
-SGD   36
-AUD   42
+SGD   37
+AUD   45
