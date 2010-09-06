@@ -61,13 +61,11 @@
 			$title= $this->htmlEscape($product->getName());
 			if(isset($authorArr['a']) && strlen(trim($authorArr['a'])) > 0)
 			{
-				$bookName=trim($authorArr['a'])."__";
+				$auth=trim($authorArr['a'])."__";
 			}else{
-				$bookName="";
+				$auth="";
 			}
-			$bookName=$bookName.$title."__".$product->getId();
-			$bookName = preg_replace('#[^A-Za-z0-9\_]+#', '-', $bookName);//($repArr2, "-", $urlKey);
-			$bookName="ekkitab_catalog/product/view/book/".$bookName.".html";
+			$bookName=$this->helper('ekkitab_catalog')->getSearchResultProductUrl($auth,$title,$product->getIsbn());
 			$image = $product->getImage();
 	?>
 				<div class="vColumns" style="width:<?php echo $width ?>%;"><div class="image">

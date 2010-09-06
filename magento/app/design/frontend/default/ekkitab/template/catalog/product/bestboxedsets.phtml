@@ -44,15 +44,13 @@
 				$savingsPerct= ($product->getPrice() >0 )?	(($product->getPrice() - $product->getFinalPrice())/ $product->getPrice() ) * 100 : 0; 
 				$author = $product->getBoAuthor();
 				$title= $this->htmlEscape($product->getName());
-				if(isset($author) && strlen(trim($author)) > 0)
+				if(isset($authorArr['a']) && strlen(trim($authorArr['a'])) > 0)
 				{
-					$bookName=$author."__";
+					$auth=trim($authorArr['a'])."__";
 				}else{
-					$bookName="";
+					$auth="";
 				}
-				$bookName=$bookName.$title."__".$product->getId();
-				$bookName = preg_replace('#[^A-Za-z0-9\_]+#', '-', $bookName);//($repArr2, "-", $urlKey);
-				$bookName="ekkitab_catalog/product/view/book/".$bookName.".html";
+				$bookName=$this->helper('ekkitab_catalog')->getSearchResultProductUrl($auth,$title,$product->getIsbn());
 			
 			?>
 			<div class="vColumns">
