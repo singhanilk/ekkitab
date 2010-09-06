@@ -246,10 +246,11 @@ class Parser extends BaseParser {
             $book = array_merge($book, $this->getSellingPrice($book['currency'], $listprice, $suppliersdiscount)); 
             $availability = trim(str_replace("\"", "", $fields[3]));
             if (!strcmp(strtoupper($availability), "AVAILABLE")) {
-			    $book['in_stock'] = 1;
-            }
-            else {
-			    $book['in_stock'] = 0;
+			        $book['in_stock'] = 1;
+            }elseif (!strcmp(strtoupper($availability), "PREORDER")) {
+			        $book['in_stock'] = 2;
+            } else {
+			        $book['in_stock'] = 0;
             }
             if(count($fields) > REQUIRED_PRICE_FIELDS){
                 $book['delivery_period'] = $fields[5];
