@@ -9,7 +9,7 @@ use ekkitab_books;
 drop table if exists books;
 select "Copying books table from reference to ekkitab_books ...";
 create table books like reference.books;
-insert into books select * from reference.books where list_price is not null and author is not null and title is not null;
+insert into books select * from reference.books where title is not null;
 drop table if exists books_promo;
 select "Copying books_promo table from reference to ekkitab_books ...";
 create table books_promo like reference.books_promo;
