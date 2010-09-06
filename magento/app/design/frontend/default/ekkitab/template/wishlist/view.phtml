@@ -51,7 +51,7 @@
 			</thead>
 			<tbody>
 			<?php foreach($this->getWishlist() as $item): 
-					$listPrice = $item->getListPrice() ;
+					$listPrice = (!is_null($item->getListPrice()))? $item->getListPrice() : 0;
 					$discPrice = $item->getDiscountPrice();
 					$savings= $listPrice - $discPrice;
 					$savingsPerct= ($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 0;
@@ -70,7 +70,9 @@
 						<?php if($listPrice > 0):?>
 							<div class="lineHeight14em">MRP Price : <?php echo Mage::helper('core')->currency($listPrice,true,false) ?></div>
 						<?php endif; ?>
-						<div class="youSave"><?php if(!($stock && $listPrice >0)) : ?>Out of Stock<?php endif;?> </div><br/>		
+						<div class="youSave">
+						<?php if($stock==0 || $listPrice <=0) : ?>Out of Stock
+						<?php endif;?> </div><br/>		
 					</td>
 					<td>
 						<textarea name="description[<?php echo $item->getWishlistItemId() ?>]" rows="3" cols="3" style="width:95%;height:60px;" onfocus="focusComment(this)" onblur="focusComment(this)"><?php echo ( $item->getDescription() ) ? $item->getDescription() : $this->helper('ekkitab_wishlist')->defaultCommentString() ?><?php echo $item->getWishlistItemDescription()?></textarea>						

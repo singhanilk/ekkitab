@@ -90,7 +90,19 @@
 				<div class="youSave"><?php if($savings > 0):?>Save <?php echo Mage::helper('core')->currency($savings,true,false) ?><?php endif; ?>
 				<?php if($savingsPerct > 0):?>(<?php echo $savingsPerct?>%)<?php endif; ?></div>
 				<div class="lineHeight14em"><?php echo $shippingTime ?></div>
-				<div class="youSave"><?php if($stock && $listPrice >0) : ?>In Stock</div><?php else:?>Out of Stock </div><?php endif;?>	<a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($id)?>"><?php echo $this->__('Add to Wishlist') ?></a><br/>	
+				<div class="youSave">
+				<?php if($listPrice >0) : ?>
+					<?php if($stock==1) : ?>
+						In Stock</div>
+					<?php elseif($stock==2): ?>
+						Pre-order.</div>
+					<?php else : ?>
+						Out of Stock </div>
+					<?php endif;?>
+				<?php else:?>
+					Out of Stock </div>
+				<?php endif;?>
+
 				</div><!-- priceArea -->
 				<div class="clear"></div>
 

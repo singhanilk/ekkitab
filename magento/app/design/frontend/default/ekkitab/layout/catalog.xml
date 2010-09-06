@@ -275,6 +275,7 @@ Product view
                
 				<block type="ekkitab_catalog/product_view" name="product.info.addto" as="addto" template="catalog/product/view/addto.phtml" />
                 <block type="ekkitab_catalog/product_view" name="product.info.addtocart" as="addtocart" template="catalog/product/view/addtocart.phtml" />
+                <block type="ekkitab_catalog/product_view" name="product.info.preorder" as="preorder" template="catalog/product/view/preorder.phtml" />
 
                 <!--block type="core/text_list" name="alert.urls" as="alert_urls" />
                 <block type="catalog/product_view" name="product.tierprices" as="tierprices" template="catalog/product/view/tierprices.phtml"/-->

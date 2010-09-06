@@ -65,7 +65,7 @@ class Ekkitab_Wishlist_SharedController extends Mage_Wishlist_SharedController
                 catch (Exception $e) {
                     $url = Mage::getSingleton('checkout/session')->getRedirectUrl(true);
                     if ($url){
-                        $url = Mage::getModel('core/url')->getUrl("ekkitab_catalog/product/view/book/unable-to-add-to__wishlist__".$product->getId().".html"
+                        $url = Mage::getModel('core/url')->getUrl("ekkitab_catalog/product/view/book/unable-to-add-to__wishlist__".$product->getIsbn().".html"
 						,array('wishlist_next'=>1));
 
                         $urls[] = $url;
