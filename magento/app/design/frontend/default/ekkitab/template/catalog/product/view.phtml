@@ -48,8 +48,15 @@
 		$productUrl = trim($_product->getProductUrl());
 		$inStock = $_product->getInStock();
 		$publishers= ucwords(trim($_product->getPublisher()));
-		$publishDate= $_product->getPublishingDate();
-		if(!is_null($publishDate)){	$publishDate= date("F Y", strtotime($publishDate));}else{$publishDate="";}
+		$publishDate=  ucwords(trim($_product->getPublishingDate()));
+		if(!is_null($publishDate)){	
+			/*if(strtotime($publishDate)){
+				$publishDate= date("F Y", strtotime($publishDate));
+			}*/
+		}
+		else{
+			$publishDate="";
+		}
 		$binding= trim($_product->getBinding());
 		$noPages= $_product->getPages()	;
 		$language = ucwords(trim($_product->getLanguage()));
