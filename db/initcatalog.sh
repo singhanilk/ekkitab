@@ -52,8 +52,6 @@ if [ $mode == "catalog" ] ; then
 fi
 
 if [ "$mode" == "update" ] ; then
-   echo "Removing Penguin Books from Database"
-   ( cd $EKKITAB_HOME/db ; ./deletepenguinbooks.sh ../data/penguin.txt )
    echo "Starting Indexing..." 
    # Set System to maintenance
    ( cd $EKKITAB_HOME/bin; ./setdowntime.sh 30 )
