@@ -16,6 +16,11 @@
 00 2   * * 0   ubuntu  cd /mnt2/tools && ./bkmnt3.sh
 # Backup /mnt4/ on the server  (Archives) (Staging)
 00 7   1 * *   ubuntu  cd /mnt2/tools && ./bkmnt4.sh
+# TWiki Notifications (Staging)
+10 *   * * *   root  perl -I /mnt4/twiki/bin /mnt4/twiki/tools/mailnotify -q
+# Backup production DB saved data on staging. (Staging)
+15 *   * * *   ubuntu  cd /mnt2/scm/utils && ./save_db_backup.sh
+
 
 
 
