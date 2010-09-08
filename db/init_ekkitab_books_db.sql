@@ -26,7 +26,7 @@ Delete from `cms_page`;
 INSERT INTO `cms_page` (`page_id`, `title`, `root_template`, `meta_keywords`, `meta_description`, `identifier`, `content`, `creation_time`, `update_time`, `is_active`, `sort_order`, `layout_update_xml`, `custom_theme`, `custom_theme_from`, `custom_theme_to`) VALUES
 (1, 'Page Not Found', 'one_column', '', '', 'no-route', '<!-- notFoundArea -->{{block type="page/html" name="page_not_found"  template="page/html/404.phtml" }}', '2007-06-20 18:38:32', '2007-08-26 19:11:13', 1, 0, NULL, NULL, NULL, NULL),
 
-(2, 'Online Bookstore India | Buy books online | Donate Books | Online Book Shopping India', 'three_columns', '', '', 'home', '{{block type="page/html" name="donate_book_blurb_home"  template="page/html/donate_blurb_home.phtml" }}{{block type="ekkitab_catalog/globalsection" name="globalsection_home" template="catalog/globalsection/home_page.phtml" }}', '', '', 1, 0, NULL, NULL,NULL,NULL),
+(2, 'Online Bookstore India | Buy books online | Donate Books | Online Book Shopping India', 'three_columns', '', '', 'home', '{{block type="ekkitab_catalog/globalsection" name="globalsection_home" template="catalog/globalsection/home_page.phtml" }}', '', '', 1, 0, NULL, NULL,NULL,NULL),
 
 (3, 'About  Us', 'one_column', '', '', 'about-ekkitab', '<!-- aboutUsArea -->{{block type="page/html" name="about_us"  template="page/html/about_us.phtml" }}', '2007-08-30 14:01:18', '2007-08-30 14:01:18', 1, 0, NULL, NULL, NULL, NULL),
 
@@ -333,7 +333,8 @@ INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 ('default',0, 'sales/identity/logo_html', 'default/logo_email.png'),
 ('default', 0, 'catalog/placeholder/image_placeholder', 'stores/1/image.png'),
 ('default', 0, 'catalog/placeholder/small_image_placeholder', 'stores/1/small_image.png'),
-('default', 0, 'catalog/placeholder/thumbnail_placeholder','default/thumbnail.png'),
+('default', 0, 'catalog/placeholder/thumbnail_placeholder','stores/1/thumbnail.png'),
+('default', 0, 'catalog/placeholder/minithumb_placeholder','stores/1/minithumb.png'),
 ('default', 0, 'google/analytics/active', '1'),
 ('default',	0, 'web/browser_capabilities/cookies','1'),
 ('default',	0, 'web/browser_capabilities/javascript','1'),

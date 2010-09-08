@@ -23,7 +23,7 @@
         <BOOK id="9780141019017" title="Freakonomics: A Rogue Economist Explores the Hidden Side of Everything" author="Steven D. Levitt and Stephen J. Dubner "/>
         <BOOK id="9780553593310" title="Helmet For My Pillow: From Parris Island To The Pacific" author="Robert Leckie"/>
     </SECTION-->
-    <SECTION title="New Releases" type="collection" showall="yes" highlight="5" shuffle="yes">
+    <SECTION title="New Releases" type="collection" showall="yes" showThumbnails="yes" highlight="9" shuffle="yes">
         <BOOK id="9781439184301" title="The Overton Window" author="Glenn Beck"/>
         <BOOK id="9780307269997" title="The Girl Who Kicked the Hornet's Nest" author="Stieg Larsson"/>
         <BOOK id="9780446563048" title="Delivering Happiness: A Path To Profits, Passion, And Purpose" author="Tony Hsieh"/>
@@ -46,7 +46,7 @@
             <SEARCH field="category">self-help</SEARCH>
         </LINK>
     </SECTION>
-    <SECTION title="Popular Books" type="collection" showall="yes" highlight="5" shuffle="yes">
+    <SECTION title="Popular Books" type="collection" showall="yes" showThumbnails="yes" highlight="6" shuffle="no">
         <BOOK id="9788172234980" title="The Alchemist" author="Paulo Coelho"/>
         <BOOK id="9780552161275" title="The Da Vinci Code" author="Dan Brown"/>
         <BOOK id="9780590353427" title="Harry Potter and the Sorcerer's Stone" author="J K Rowling"/>
@@ -97,7 +97,7 @@
             <BOOK id="9780143036661" title="March" author="Geraldine Brooks"/>
         </LINK>
     </SECTION>
-    <SECTION title="Pick Of the Week" type="collection" showall="yes" highlight="1" shuffle="yes">
+    <!--SECTION title="Pick Of the Week" type="collection" showall="yes" highlight="3" shuffle="yes" showThumbnails="yes">
         <BOOK id="9781408808863" title="Alex's Adventures In Numberland" author="Alex Bellos"/>
         <BOOK id="9781423113386" title="The Kane Chronicles: Red Pyramid" author="Rick Riordan"/>
         <BOOK id="9780340920343" title="Arrows Of Fury: Empire II" author="Anthony Riches"/>
@@ -106,27 +106,27 @@
         <BOOK id="9781849162104" title="Gandhi: Naked Ambition" author="Jad Adams"/>
         <BOOK id="9781847670946" title="Dreams From My Father: A Story Of Race And Inheritance" author="Barack Obama"/>
     </SECTION>
-    <SECTION title="Young Adult Reading" type="collection" showall="no" highlight="2" shuffle="yes">
+    <SECTION title="Young Adult Reading" type="collection" showall="no" highlight="3" shuffle="yes" showThumbnails="yes">
             <BOOK id="9780385504225" title="The Lost Symbol" author="Dan Brown"/>
             <BOOK id="9781400066216" title="Strength in What Remains" author="Tracy Kidder"/>
             <BOOK id="9780316042673" title="Beautiful Creatures" author="Kami Garcia &amp; Margaret Stohl"/>
             <BOOK id="9780061730320" title="The Boy Who Harnessed the Wind: Creating Currents of Electricity and Hope" author="William Kamkwamba &amp; Bryan Mealer"/>
             <BOOK id="9780307476159" title="The Girl Who Played With Fire" author="Stieg Larsson"/>
     </SECTION>
-    <SECTION title="Random Picks (Thrillers)" type="collection" showall="no" highlight="2" shuffle="yes">
+    <SECTION title="Random Picks (Thrillers)" type="collection" showall="no" highlight="3" shuffle="yes" showThumbnails="yes">
             <BOOK id="9780440241027" title="One Shot" author="Lee Child"/>
             <BOOK id="9780330352888" title="Invasion" author="Robin Cook"/>
             <BOOK id="9780330456524" title="The Whole Truth" author="David Baldacci"/>
             <BOOK id="9780345402875" title="Airframe" author="Michael Crichton"/>
             <BOOK id="9780340952658" title="Desperation" author="Stephen King"/>
-    </SECTION>
-    <!--SECTION title="Top Authors" type="links" showall="no">
+    </SECTION-->
+    <SECTION title="Top Authors" type="links" showall="no">
         <LINK name="Amartya Sen" type ="search">
             <SEARCH field="author">Amartya Sen</SEARCH>
         </LINK>
-        <LINK name="Rabindrannath Tagore" type ="search">
+        <!--LINK name="Rabindrannath Tagore" type ="search">
             <SEARCH field="author">Rabindrannath Tagore</SEARCH>
-        </LINK>
+        </LINK-->
         <LINK name="Arundhati Roy" type ="search">
             <SEARCH field="author">Arundhati Roy</SEARCH>
         </LINK>
@@ -139,16 +139,16 @@
         <LINK name="Gurcharan Das" type ="search">
             <SEARCH field="author">Gurcharan Das</SEARCH>
         </LINK>
-        <LINK name="Deepak Chopra" type ="search">
+        <!--LINK name="Deepak Chopra" type ="search">
             <SEARCH field="author">Deepak Chopra</SEARCH>
-        </LINK>
+        </LINK-->
         <LINK name="Pamuk Orhan" type ="search">
             <SEARCH field="author">Pamuk Orhan</SEARCH>
         </LINK>
         <LINK name="Kiran Desai" type ="search">
             <SEARCH field="author">Kiran Desai</SEARCH>
         </LINK>
-        <LINK name="William Dalrymple" type ="search">
+        <!--LINK name="William Dalrymple" type ="search">
             <SEARCH field="author">William Dalrymple</SEARCH>
         </LINK>
         <LINK name="Kiran Desai" type ="search">
@@ -165,12 +165,12 @@
         </LINK>
         <LINK name="Vikram Seth" type ="search">
             <SEARCH field="author">Vikram Seth</SEARCH>
-        </LINK>
+        </LINK-->
         <LINK name="Khushwant Singh" type ="search">
             <SEARCH field="author">Khushwant Singh</SEARCH>
         </LINK>
         <LINK name="Robin Sharma" type="search"> 
             <SEARCH field="author">robin sharma</SEARCH>
         </LINK>
-    </SECTION-->
+    </SECTION>
 </MENU>

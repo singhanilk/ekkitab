@@ -81,7 +81,11 @@ Default layout, loads most of the pages
 
             <block type="core/text_list" name="left" as="left"/>
            
-			<block type="page/html" name="right" as="right" template="page/html/right.phtml" />
+			<block type="page/html" name="right" as="right" template="page/html/right.phtml" >
+				<block type="page/html" name="donate_book_blurb_home" as="donate_book_blurb_home" template="page/html/donate_blurb_home.phtml" />
+            </block>
+
+
 
             <block type="core/messages" name="global_messages" as="global_messages"/>
             <block type="core/messages" name="messages" as="messages"/>

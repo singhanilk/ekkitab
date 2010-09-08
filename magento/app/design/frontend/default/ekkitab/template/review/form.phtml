@@ -26,7 +26,7 @@
 ?>
 <form action="<?php echo $this->getAction() ?>" method="post" id="review-form">
 <div id="reviewForm" class="reviewArea hideContent"  >
-<div class="pageHeader"><?php echo $this->__("You're reviewing: %s", $this->htmlEscape($this->getProductInfo()->getName())) ?></div>
+<div class="pageHeader"><?php echo $this->__("You're reviewing: %s", $this->htmlEscape($this->getProductInfo()->getTitle())) ?></div>
 <fieldset>
 	<div class="labelArea">
 		<div class="labelText"><label for="nickname_field"><?php echo $this->__('Nickname') ?><span class="required">*</span></label></div>

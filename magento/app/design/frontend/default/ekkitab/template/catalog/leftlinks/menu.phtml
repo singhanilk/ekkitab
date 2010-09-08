@@ -25,17 +25,24 @@ if($sec_count):
 		$tagEnded = false;
 		$startTag="<ul>";
 		$endTag="</ul>";
+		$columnCount=3;
+		$count=0;
 		$showAllLink=getShowAllLink($key);
+		$showThumbnail=getIsShowThumnail($key);
 		$header = getHeader($key);
 	    if ($showAllLink !="" ) {
 			$header=$header." <span class='seeAllLink'> [<a href='".$this->getUrl($showAllLink)."' title='See All'  >See All</a>] </span>";
 		}
-
+	    if ($showThumbnail) {
+			$startTag='<table class="menu-data-table">';
+			$endTag="</table>";
+	    }
 ?>	
 		<div class="linkHdr"><?php echo $header?> </div><!-- linkHdr -->
 		<?php echo $startTag ?>
 <?php			
 		$links = getLinks($key);
+		$firstLink = 1;
 		foreach($links as $link){
 			$linkCaption = ucwords(trim($link['name'])) ;
 			if (preg_match("/__by__/", $linkCaption)) {
@@ -47,13 +54,19 @@ if($sec_count):
 			}
 			$linkUrl = $link['url'];
 			$linkUrl = $this->getUrl($linkUrl);
-			//if( substr($linkCaption, 0,1 )=='[' && substr($linkCaption, -1)==']') {
-				//$linkCaption = ucwords(substr($linkCaption,1,-1)) ;
-?>				<?php /*echo $endTag */ ?>
-<?php			//$tagEnded =true;
-			//} else { ?>
-				<li><a href="<?php echo $linkUrl ?>"><?php echo $this->htmlEscape($linkCaption) ?></a><?php  echo $linkAuthor ?></li>
-<?php		//}
+			if(array_key_exists('image',$link)){	
+				$image = $link['image'];
+				if($count==0 || $count > $columnCount){
+					if(!$firstLink){ echo "</tr>";}
+?>					<tr>
+<?php				$count=1;
+				}
+?>				 <td><a href="<?php echo $linkUrl ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'minithumb',false,null, 60); ?>" alt="<?php echo $linkCaption ?>" /></a></td>
+<?php			$count++;
+			}else {?>
+			<li><a href="<?php echo $linkUrl ?>"><?php echo $this->htmlEscape($linkCaption) ?></a><?php  echo $linkAuthor ?></li>
+<?php		}
+			$firstLink=0;
 		}
 		if(!$tagEnded){
 ?>			<?php echo $endTag ?>

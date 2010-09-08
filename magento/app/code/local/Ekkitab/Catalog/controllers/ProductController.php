@@ -16,7 +16,10 @@
 
 class Ekkitab_Catalog_ProductController extends Mage_Core_Controller_Front_Action
 {
-    /**
+    
+    private $_isbn;
+
+	/**
      * Initialize requested product object
      *
      * @return Mage_Catalog_Model_Product
@@ -39,23 +42,24 @@ class Ekkitab_Catalog_ProductController extends Mage_Core_Controller_Front_Actio
 		$productUrl  = (String) $this->getRequest()->getParam('book');
 
 		// insert the split function here.....and get the product Id
-		$productIdStartIndex = strrpos($productUrl, "__")+2; 	  
+		if(strrpos($productUrl, "__")){
+			$productIdStartIndex = strrpos($productUrl, "__")+2; 	 
+		}else{
+			$productIdStartIndex=0;
+		}
 		$productIdEndIndex = strpos($productUrl, ".html"); 	
 		$productIdEndIndex = $productIdEndIndex - $productIdStartIndex;  //.html/	
 		$productId = trim(urldecode(substr($productUrl,$productIdStartIndex,$productIdEndIndex)));
-
-		
 		if( $productId && $this->isIsbn($productId)){
 			//this is isbn.....
-			Mage::register('productId', $productId);
+			Mage::register('productId', $this->_isbn);
 			$this->loadLayout();
 			$this->renderLayout();
 		}else {
-			$productId = (int) $productId;
-			if (!$productId || $productId <= 0) {
-				$productId  = (int) $this->getRequest()->getParam('id');
+			if (is_null($productId) || $productId =='') {
+				$productId  = $this->getRequest()->getParam('id');
 			}
-			if (!$productId || $productId <= 0) {
+			if (!is_numeric($productId)) {
 				$this->_forward('noRoute');
 			}
 			else{
@@ -66,25 +70,51 @@ class Ekkitab_Catalog_ProductController extends Mage_Core_Controller_Front_Actio
 		}
     }
 
-	/**
-     * Retrieve search result count
-     *
-     * @return boolean
-     */
     public function isIsbn($str)
     {
 		$str=trim($str);
+		if (preg_match("/^[0-9\-_]+$/", $str)) {
+			$str = preg_replace("/[-_]/", "", $str);
+		}
 		if(preg_match("/^[0-9]*$/",$str)){
-			if (strlen($str) == 12 || strlen($str) == 10 || strlen($str) == 13) {
+			if (strlen($str) == 12) {
+				$this->_isbn =  '0'.$str;
+				return true;
+			}else if (strlen($str) == 10) {
+				$this->_isbn = $this->isbn10to13($str);
+				return true;
+			}else if (strlen($str) == 13) {
+				$this->_isbn = $str;
 				return true;
 			}else{
 				return false;
 			}
-		}else{
+		}else {
 			return false;
 		}
 		
     }
 
+	public	function genchksum13($isbn) {
+			$isbn = trim($isbn);
+			if (strlen($isbn) != 12) {
+				return -1;
+			}
+			$sum = 0;
+			for ($i = 0; $i < 12; $i+=2) {
+				$sum += ($isbn[$i] * 1);
+				$sum += ($isbn[$i+1] * 3);
+			}
+			$sum = $sum % 10;
+			$sum = 10 - $sum;
+			return ($sum == 10 ? 0 : $sum);
+		}
 
+	public	function isbn10to13($isbn10) {
+			$isbn13 = "";
+			$isbn13 = substr("978" . $isbn10, 0, -1);
+			$chksum =  $this->genchksum13($isbn13);
+			$isbn13 = $isbn13.$chksum;
+			return ($isbn13);
+		}
 }

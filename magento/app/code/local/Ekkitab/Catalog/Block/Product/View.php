@@ -20,6 +20,7 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
     private $_reviewsHelperBlock;
    
     private $_product;
+    private $_isbn;
     private $_productPromo;
 
     const XML_PATH_SEARCH_INDEX_FILE = 'global/search_index/path';
@@ -156,17 +157,18 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
 				//Mage::unregister('productId');
 				Mage::register('productId', Mage::helper('ekkitab_catalog/product_data')->getProductId());
 			}
-			if(!is_int(Mage::registry('productId')) && strlen(Mage::registry('productId'))==13 ){
-				$products = Mage::getModel('ekkitab_catalog/product')->getCollection()
-							->addFieldToFilter('main_table.isbn',Mage::registry('productId'));
-				foreach($products as $product){
-					$this->_product = $product;
-				}
+			if($this->isIsbn(Mage::registry('productId'))){
+				$isbn = $this->_isbn;
+				$this->_product= Mage::getModel('ekkitab_catalog/product')->load($isbn,'isbn');
 			}else{
 				$this->_product = Mage::getModel('ekkitab_catalog/product')->load(Mage::registry('productId'));
 			}
 		}
-		return $this->_product;
+		if($this->_product->getId() > 0){
+			return $this->_product;
+		} else {
+			return null;
+		}
 	}
 
 	protected function getIndianBooks() 
@@ -278,5 +280,56 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
     }
 
 
-	
+	/**
+     * Retrieve search result count
+     *
+     * @return boolean
+     */
+    public function isIsbn($str)
+    {
+		$str=trim($str);
+		if (preg_match("/^[0-9\-_]+$/", $str)) {
+			$str = preg_replace("/[-_]/", "", $str);
+		}
+		if(preg_match("/^[0-9]*$/",$str)){
+			if (strlen($str) == 12) {
+				$this->_isbn =  '0'.$str;
+				return true;
+			}else if (strlen($str) == 10) {
+				$this->_isbn = $this->isbn10to13($str);
+				return true;
+			}else if (strlen($str) == 13) {
+				$this->_isbn = $str;
+				return true;
+			}else{
+				return false;
+			}
+		}else {
+			return false;
+		}
+		
+    }
+
+	public	function genchksum13($isbn) {
+		$isbn = trim($isbn);
+		if (strlen($isbn) != 12) {
+			return -1;
+		}
+		$sum = 0;
+		for ($i = 0; $i < 12; $i+=2) {
+			$sum += ($isbn[$i] * 1);
+			$sum += ($isbn[$i+1] * 3);
+		}
+		$sum = $sum % 10;
+		$sum = 10 - $sum;
+		return ($sum == 10 ? 0 : $sum);
+	}
+
+	public	function isbn10to13($isbn10) {
+		$isbn13 = "";
+		$isbn13 = substr("978" . $isbn10, 0, -1);
+		$chksum =  $this->genchksum13($isbn13);
+		$isbn13 = $isbn13.$chksum;
+		return ($isbn13);
+	}	
 }

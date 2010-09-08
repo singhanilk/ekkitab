@@ -21,6 +21,7 @@ function printCollectionSection($fh, $z, $section, $books) {
     printSectionHeader($fh, $z, "collection", $section['header'], $section['showall']); 
     fprintf($fh, "%s\n", '$sections[\''.$z.'\'][\'shuffle\'] = "'.$section['shuffle'] . '";');
     fprintf($fh, "%s\n", '$sections[\''.$z.'\'][\'highlight\'] = '.$section['highlight'] . ";");
+    fprintf($fh, "%s\n", '$sections[\''.$z.'\'][\'showThumbnails\'] = "'.$section['showThumbnails'] . '";');
     if (isset($section['showall_url'])) {
         fprintf($fh, "%s\n", '$sections[\''.$z.'\'][\'showall_url\'] = '. "\"" . $section['showall_url'] . "\";");
     }
@@ -30,7 +31,16 @@ function printCollectionSection($fh, $z, $section, $books) {
         fprintf($fh, "%s\n", '$books[\''.$z.'\']['.$i.'][\'id\'] = '. "\"" .$books[$i]['id'] . "\";");
         fprintf($fh, "%s\n", '$books[\''.$z.'\']['.$i.'][\'title\'] = '. "\"" .$books[$i]['title'] . "\";");
         fprintf($fh, "%s\n", '$books[\''.$z.'\']['.$i.'][\'author\'] = '. "\"" .$books[$i]['author'] . "\";");
+        fprintf($fh, "%s\n", '$books[\''.$z.'\']['.$i.'][\'image\'] = '. "\"" .getHashedPath($books[$i]['id']) . ".jpg\";");
     }
+}
+
+function getHashedPath($isbn) {
+    $sum = 0;
+    for ($i = 0; $i<(strlen($isbn)); $i++)  {
+        $sum += substr($isbn,$i,$i+1) + 0;
+    }
+    return ("I" . $sum%100 . "/" . "J" . substr($isbn,strlen($isbn)-2,2) . "/" . $isbn);
 }
 
 function printSectionHeader($fh, $z, $type, $title, $showall) {
@@ -97,6 +107,9 @@ function printUtilityFunctions($fh) {
    fprintf($fh, "%s\n", '           $name = $books[$id][$i][\'title\'] . " __by__ " . $books[$id][$i][\'author\'];');
    fprintf($fh, "%s\n", '           $link[\'name\'] = $name;');
    fprintf($fh, "%s\n", '           $link[\'url\'] = "ekkitab_catalog/product/view/book/" . $url . ".html";');
+   fprintf($fh, "%s\n", '			if ($sections[$id][\'showThumbnails\'] == "yes") {');
+   fprintf($fh, "%s\n", '				$link[\'image\'] = $books[$id][$i][\'image\'];');
+   fprintf($fh, "%s\n", '			}');
    fprintf($fh, "%s\n", '           $result[] = $link;');
    fprintf($fh, "%s\n", '       }');
    fprintf($fh, "%s\n", '   }');
@@ -138,6 +151,19 @@ function printUtilityFunctions($fh) {
    fprintf($fh, "%s\n", '       }');
    fprintf($fh, "%s\n", '       return "ekkitab_catalog/leftlinks/view/details/" . $key . ".html"; ');
    fprintf($fh, "%s\n", '   }');
+   fprintf($fh, "%s\n", ' }');
+   fprintf($fh, "%s\n", ' function getIsShowThumnail($key) {');
+   fprintf($fh, "%s\n", '   global $sections;');
+   fprintf($fh, "%s\n", '   if (!isset($sections[$key])) {');
+   fprintf($fh, "%s\n", '       return false;');
+   fprintf($fh, "%s\n", '   }');
+   fprintf($fh, "%s\n", '   if (isset($sections[$key][\'showThumbnails\'])) {');
+   fprintf($fh, "%s\n", '		if ($sections[$key][\'showThumbnails\'] == "yes") {');
+   fprintf($fh, "%s\n", '			return true; ');
+   fprintf($fh, "%s\n", '		}else{');
+   fprintf($fh, "%s\n", '			return false; ');
+   fprintf($fh, "%s\n", '		}');
+   fprintf($fh, "%s\n", '	}');
    fprintf($fh, "%s\n", ' }');
 }
 
@@ -259,6 +285,9 @@ foreach ($xml as $section) {
         if (isset($section['shuffle'])) {
             $shuffle = $section['shuffle'];
         }
+        if (isset($section['showThumbnails'])) {
+            $showThumbnails = $section['showThumbnails'];
+        }
 
         $phpbooks = array(); 
         $i = 0;
@@ -266,6 +295,7 @@ foreach ($xml as $section) {
             $phpbooks[$i]['id'] = $book['id'];
             $phpbooks[$i]['title'] = $book['title'];
             $phpbooks[$i]['author'] = $book['author'];
+            $phpbooks[$i]['image'] = $book['image'];
             $i++;
         }
         $phpsections = array();
@@ -273,6 +303,7 @@ foreach ($xml as $section) {
         $key = strtolower(preg_replace('/\W+/', '_', $section['title'])); 
         $phpsections['shuffle'] = $shuffle; 
         $phpsections['showall'] = $showall; 
+        $phpsections['showThumbnails'] = $showThumbnails; 
         $phpsections['highlight'] = $highlight; 
         $phpsections['type'] = "collection"; 
         printCollectionSection($fhtml, $key, $phpsections, $phpbooks);
