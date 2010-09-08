@@ -1,7 +1,16 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl -w 
 use strict;
 use Spreadsheet::ParseExcel;
-
+use Config::Abstract::Ini;
+my $ekkitab_home = $ENV{EKKITAB_HOME};
+if (!($ekkitab_home)){
+print "Not Defined" . "\n";
+}
+my $Settingsfile = $ekkitab_home . "/config/stockprocess.ini";
+my $settings     = new Config::Abstract::Ini($Settingsfile);
+my %values       = $settings -> get_entry('utilfunctions');
+my $ref_db_func  = $ekkitab_home . $values{'referencedb_check'};
+require "$ref_db_func";
 my $oExcel = new Spreadsheet::ParseExcel;
 
 die "Usage $0 <Excel File> \n Redirect output to required file from stdout" unless @ARGV;
@@ -128,7 +137,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             defined ($imprint) && 
             defined ($title) && 
             defined ($author)) {
-	    if ($isbn eq '' || $price eq ''){
+	    if ($isbn eq '' || $price eq '' || ifexists($isbn)){
              next;
             }
             elsif (length($isbn) == 10 || length($isbn) == 13){

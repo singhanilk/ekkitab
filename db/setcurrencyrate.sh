@@ -30,7 +30,7 @@ else
     echo "Failed to update currency rate for $currency."
 fi
 
-if [ "$currency" == "USD" ] && (( $conversion > 0 )) ; then
+if [ "$currency" == "USD" ] && (( "${conversion%.*}" > 0 )) ; then
     reverseconversion=`echo "scale=4; 1/$conversion" | bc -l`;
     query="insert into directory_currency_rate (currency_from, currency_to, rate) values ('INR', 'USD', $reverseconversion) on duplicate key update rate = $reverseconversion"
     if mysql -h $host -u $user -p$password ekkitab_books -e "$query" >/dev/null 2>&1 ; then

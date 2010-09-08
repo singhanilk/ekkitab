@@ -1259,7 +1259,8 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
         ));*/
 
 		// TODO: check if in stock... and then return true.
-        return $this->isInStock();
+
+        return ($this->isInStock() && !is_null($this->getPrice()) && $this->getPrice() > 0 );
     }
 
     /**
@@ -1315,7 +1316,7 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
 		$url='';
 		$author=$this->_getData('author');
 		$title=$this->getName();
-		$id=$this->_getData('id');
+		$isbn=$this->_getData('isbn');
 		if(isset($author) && strlen(trim($author)) > 0)
 		{
 			$author = urlencode(preg_replace('#[^A-Za-z0-9\_]+#', '-', $author));
@@ -1333,7 +1334,7 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
 			$url = substr($url,0,-1);
 		}
 		
-		$url=$urlPrefix.$url."__".$id.".html";
+		$url=$urlPrefix.$url."__".$isbn.".html";
 		return $url;
     }
 

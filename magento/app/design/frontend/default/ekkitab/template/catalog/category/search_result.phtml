@@ -188,7 +188,7 @@ if(!is_null($results) && is_array($results)){
 			$title = $book->getTitle();
 			$image = $book->getImage();
 			$id = $book->getId();
-			$listPrice = $book->getListPrice() ;
+			$listPrice = (!is_null($book->getListPrice()))? $book->getListPrice() : 0;
 			$discPrice = $book->getDiscountPrice();
 			$isbn = $book->getIsbn();
 			$sourcedFrom =  $book->getSourcedFrom();
@@ -215,7 +215,7 @@ if(!is_null($results) && is_array($results)){
 			
 			$shortDesc = getShortenedString($shortDesc,30);
 
-			$url=$this->helper('ekkitab_catalog')->getSearchResultProductUrl($author,$title,$id);	?>
+			$url=$this->helper('ekkitab_catalog')->getSearchResultProductUrl($author,$title,$book->getIsbn());	?>
 
 			<!-- searchRowBegins -->
 			<div class="searchRow">
@@ -237,9 +237,16 @@ if(!is_null($results) && is_array($results)){
 			<?php if($listPrice > 0):?><div class="lineHeight14em">MRP Price : <?php echo Mage::helper('core')->currency($listPrice,true,false) ?></div><?php endif; ?>
 			<div class="youSave"><?php if($savings > 0):?>Save <?php echo Mage::helper('core')->currency($savings,true,false) ?><?php endif; ?>
 			<?php if($savingsPerct > 0):?>(<?php echo $savingsPerct?>%)<?php endif; ?></div>
-			<?php if($stock && $listPrice >0) : ?>
-				<div class="lineHeight14em"><?php echo $shippingTime ?></div>
-				<div class="youSave">In Stock</div>
+			<?php if($listPrice >0) : ?>
+				<?php if($stock==1) : ?>
+					<div class="lineHeight14em"><?php echo $shippingTime ?></div>
+					<div class="youSave">In Stock</div>
+				<?php elseif($stock==2): ?>
+					<div class="lineHeight14em">Forthcoming Title.</div>
+					<div class="youSave">Pre-order.</div>
+				<?php else : ?>
+					<div class="noStock">Out of Stock </div>
+				<?php endif;?>
 			<?php else:?>
 				<div class="noStock">Out of Stock </div>
 			<?php endif;?>
