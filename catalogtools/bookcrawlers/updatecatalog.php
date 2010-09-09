@@ -70,7 +70,7 @@ function validBooks($books){
        $descIsValid = true;
     }
 
-    if ($titleIsValid && $authorIsValid && $descIsValid){
+    if ($titleIsValid && $authorIsValid){
      $validBooks[] = $book;
     }
   } 
