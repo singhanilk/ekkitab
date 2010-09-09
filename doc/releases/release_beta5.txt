@@ -1,0 +1,22 @@
+Release Date - 09/September/2010
+
+Enhancements
+1. UI Changes : The layout of the UI has been changed. The home pages and the detail pages have been changed to display 
+   more books. The left menu sections contain thumbnails instead of the text. The right side has been used to display the 
+   vision of Ekkitab. 
+2. #251 - New Arrivals process should be able to accommodate Preorders
+   Backend processing and UI changes done.
+
+Issue Fixes
+Priority 1 ( P1 )
+#263 - Enable the URL to contain 13/10 ISBN instead of the product ID in the URL
+
+Priority 1 ( P2 )
+#256 - Changes to process stock ( New Arrivals processed last ). 
+#261 - Stock processing should be enhanced to ignore a set of books sent by supplier/distributor
+
+Priority 1 ( P3 )
+None.
+
+Priority 1 ( P4 )
+None.
