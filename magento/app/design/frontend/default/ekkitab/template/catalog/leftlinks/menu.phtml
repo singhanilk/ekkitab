@@ -25,7 +25,7 @@ if($sec_count):
 		$tagEnded = false;
 		$startTag="<ul>";
 		$endTag="</ul>";
-		$columnCount=3;
+		$columnCount=2;
 		$count=0;
 		$showAllLink=getShowAllLink($key);
 		$showThumbnail=getIsShowThumnail($key);
@@ -49,6 +49,7 @@ if($sec_count):
 				$info = explode("__by__", $linkCaption);
 				$linkCaption= trim($info[0]);
 				$linkAuthor = 'by <span class="author">'.trim($info[1]).'</span>' ;
+				$author = 'by '.trim($info[1]);
 			}else{
 				$linkAuthor="";
 			}
@@ -61,7 +62,7 @@ if($sec_count):
 ?>					<tr>
 <?php				$count=1;
 				}
-?>				 <td><a href="<?php echo $linkUrl ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'minithumb',false,null, 60); ?>" alt="<?php echo $linkCaption ?>" /></a></td>
+?>				 <td><a href="<?php echo $linkUrl ?>" title="<?php echo $linkCaption." ".$author ?>"><div class="image"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'thumbnail',false,null, 75); ?>" alt="<?php echo $linkCaption." ".$author ?>" /></a></div></td>
 <?php			$count++;
 			}else {?>
 			<li><a href="<?php echo $linkUrl ?>"><?php echo $this->htmlEscape($linkCaption) ?></a><?php  echo $linkAuthor ?></li>

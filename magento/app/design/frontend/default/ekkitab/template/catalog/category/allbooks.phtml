@@ -93,7 +93,7 @@ $bookList=$this->getProductCollection();
 			
 			$shortDesc = getShortenedString($shortDesc,30);
 
-			$url=$this->helper('ekkitab_catalog')->getProductUrl($author,$title,$id);	?>
+			$url=$this->helper('ekkitab_catalog')->getProductUrl($author,$title,$isbn);	?>
 			<div class="lineHeight14em"><?php echo $isbn ?> : <a href="<?php echo $this->getUrl($url)?>" title="<?php echo $title ?>"><?php echo $title ?></a><?php if($author && trim($author)!=''):?> by <?php echo $author ?><?php else: ?><?php echo $parsedAuthor ?><?php endif; ?></div><!-- bkTitle -->
 			<div class="clear"></div>
 		<?php endforeach; ?>

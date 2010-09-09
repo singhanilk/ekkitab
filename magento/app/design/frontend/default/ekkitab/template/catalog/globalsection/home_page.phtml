@@ -16,7 +16,7 @@
 ?>
 <?php $section= $this->getHomePageSection();
 	  $_columnSize=4;
-	  $_deziredRows= 2;
+	  $_deziredRows= 3;
 ?>
 <?php if(!is_null($section) && $section->getId() >0 ):
 		$randomize = false;
@@ -38,6 +38,7 @@
 ?>
 <div class="hmDefScrollRow">
 	<div class="hdr"><?php echo $section->getDisplayName() ?></div>
+	<div class="clear hmInScrollRowSep"></div>
 <?php	if(!is_null($products) && $_count > 0){
 			foreach($products as $product){  
 				if($counter%$_columnSize==0){  
@@ -48,34 +49,54 @@
 					<div class="hmInScrollRow" >
 <?php			}
 				$counter+=1;
-				$savingsPerct= ($product->getPrice() >0 )?	(($product->getPrice() - $product->getFinalPrice())/ $product->getPrice() ) * 100 : 0; 
+				$savingsPerct= round(($product->getPrice() >0 )?	(($product->getPrice() - $product->getFinalPrice())/ $product->getPrice() ) * 100 : 0); 
 				$authorArr = $product->getAuthor();
 			$author = (($author = $authorArr['a'])!='')? "by <a href=\"".$this->getUrl('ekkitab_catalog/search/index/author/'.$author)."\">".$author."</a>":"" ;
 			$binding = trim($product->getBinding());
 			$lang = trim($product->getLanguage());
 			$langNbind=strlen($lang) > 0 ? ("[".ucfirst($lang).(strlen($binding) > 0 ?" - ".ucfirst($binding)."]":"]")):(strlen($binding) > 0 ?"[".ucfirst($binding)."]":"");
-
-			$title= $this->htmlEscape($product->getName());
+			$titleWords = explode(" ",$product->getTitle());
+			$title="";//$product->getTitle();
+			$wordCount=3;
+			$wrdCounter=0;
+			if($titleWords && count($titleWords) >0 ){
+				foreach($titleWords as $words){
+					if($wrdCounter < $wordCount){
+						$title.=$words." ";
+						$wrdCounter++;
+					}else{
+						break;
+					}
+				}
+			}
+			$title= trim($title);
+			if(count($titleWords)>$wordCount){
+				$title.="...";
+			}
+			$fullTitle= $this->htmlEscape($product->getTitle());
 			if(isset($authorArr['a']) && strlen(trim($authorArr['a'])) > 0)
 			{
 				$auth=trim($authorArr['a'])."__";
 			}else{
 				$auth="";
 			}
-			$bookName=$this->helper('ekkitab_catalog')->getSearchResultProductUrl($auth,$title,$product->getIsbn());
-			$image = $product->getImage();
+			$bookName=$this->helper('ekkitab_catalog')->getSearchResultProductUrl($auth,$fullTitle,$product->getIsbn());
+
+				$image = $product->getImage();
 
 	?>
 				<div class="vColumns" style="width:<?php echo $width ?>%;" >
-					<div class="image"><a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" /></a>
-					</div>
+					<div class="image"><a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $fullTitle ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $fullTitle ?>" title="<?php echo $fullTitle ?>" /></a> 
+					<!--div class="dicount"></div--></div>
 				<div class="titleEtc">
-						<div class="bkTitle"><a href="<?php echo $this->getUrl($bookName)?>"  title="<?php echo $product->getTitle() ?>"><?php echo $title ?></a></div><!-- bkTitle -->
-						<div class="lineHeight14em"><?php echo $author?></div>
-						<div class="lineHeight14emIt"><?php echo $langNbind ?></div>
-						<!--div class="youSave"><?php echo Mage::helper('core')->currency($product->getFinalPrice(),true,false) ?></div>
-						<div class="lineHeight14em"><span class="striked"><?php echo Mage::helper('core')->currency($product->getListPrice(),true,false) ?></span></div>
-						<?php if($savingsPerct > 0):?><div class="youSave">Save <?php echo number_format($savingsPerct,2,'.','') ?>%</div><?php endif; ?> -->
+						<div class="bkTitleHome"><a href="<?php echo $this->getUrl($bookName)?>"  title="<?php echo $fullTitle ?>"><?php echo $title ?></a></div><!-- bkTitle -->
+						<div class="authorHome"><?php echo $author?></div>
+						<!--div class="lineHeight14emIt"><?php echo $langNbind ?></div-->
+						<div class="youSave"><?php echo Mage::helper('core')->currency($product->getFinalPrice(),true,false) ?></div>
+						<?php if($savingsPerct > 0):?>
+						<div class="lineHeight14em"><span class="greyFont">MRP: <?php echo Mage::helper('core')->currency($product->getListPrice(),true,false) ?></span></div>
+						<div class="youSave">Save <?php echo $savingsPerct ?>%</div>
+						<?php endif; ?>
 					</div><!-- titleEtc -->
 				</div>
 <?php			$firstTime =1;
@@ -86,9 +107,9 @@
 			<div class="clear hmInScrollRowSep"></div>
 			<div class="clear"></div>
 <?php	} else { //end of if(products not null )... ?>
-			<div class="notAvail">This section will be updated soon...</div>
+			<br/>This section will be updated soon...<br/>
 <?php	} //end of else ..?>
-		</div><!-- hmScrollRow -->
+	</div><!-- hmScrollRow -->
 <?php endif; ?>
 <div class="clear"></div>
 

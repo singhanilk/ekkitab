@@ -65,7 +65,7 @@ class Ekkitab_Catalog_Block_Globalsection extends Mage_Core_Block_Template
 				$this->_homeSection= Mage::getModel('ekkitab_catalog/globalsection')->load($sectionId);
 
 				//hardcoding this to independence day section for now.... 
-				//$this->_homeSection= Mage::getModel('ekkitab_catalog/globalsection')->load(1);
+			//	$this->_homeSection= Mage::getModel('ekkitab_catalog/globalsection')->load(6);
 			} 
 			else{
 				$sections = Mage::getModel('ekkitab_catalog/globalsection')->getCollection()
@@ -79,7 +79,12 @@ class Ekkitab_Catalog_Block_Globalsection extends Mage_Core_Block_Template
 						$this->_homeSection=$sectionArr[0];
 						Mage::getSingleton('core/session')->setHomePageGlobalSection(array('section_id'=>$this->_homeSection->getId()));
 					}
+				}else{
+					$this->_homeSection= Mage::getModel('ekkitab_catalog/globalsection')->load(1);
 				}
+			}
+			if(is_null($this->_homeSection)){
+					$this->_homeSection= Mage::getModel('ekkitab_catalog/globalsection')->load(1);
 			}
 		}
 		return $this->_homeSection;
