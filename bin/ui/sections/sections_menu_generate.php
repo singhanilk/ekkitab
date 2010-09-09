@@ -17,8 +17,48 @@ $configArray=null;
 $globalSectionsXMLFile=null;
 $globalSectionsINIFile=null;
 $sectionsDirectory=null;
+$databaseConfigArray=null;
+$db=null;
 
 
+
+function initDatabase(){
+  global $db;
+
+  $database_server = $databaseConfigArray["database"]["server"];
+  $database_user = $databaseConfigArray["database"]["user"];
+  $database_password = $databaseConfigArray["database"]["password"];
+  $ref_db = $databaseConfigArray["database"]["ref_db"];
+
+  #print_r("Database server=" . $database_server . ":Database user=" . $database_user . "Database password=" . $database_password . "\n");
+  try  {
+    $db = mysqli_connect($database_server,$database_user,$database_password,$ref_db);
+  } catch (exception $e) {
+    fatal($e->getmessage());
+  }
+  $query = "set autocommit = 0";
+  try {
+   $result = mysqli_query($db,$query);
+   if (!$result) {
+     fatal("Failed to set autocommit mode.");
+   }
+  } catch(exception $e) {
+    fatal($e->getmessage());
+  }
+}
+
+function updateDiscounts($isbnArray){
+   global $db;
+
+   foreach($isbnArray as $key => $value ) {
+     $tokens = explode(" ", $value);
+     $discount = $tokens[0];
+     if ( is_numeric($discount) and $discount > 0 ) {
+       $discount = $discount/100;
+       print "update books set discount_price = list_price - (list_price * $discount) where isbn = $key;\n"; 
+     }
+   }
+}
 
 function writeSections($sectionsArray){
   global $globalSectionsXMLFile;
@@ -35,22 +75,28 @@ function writeSections($sectionsArray){
                   'SECTION_ACTIVE_FROM','SECTION_ACTIVE_TO','SECTION_DESCRIPTION',
                   'SECTION_HOMEPAGE_TEMPLATE_PATH', 'SECTION_BOOKSPAGE_TEMPLATE_PATH');
    $sectionId = 1;
+   $section = null;
    fwrite($globalSectionsXMLFile, "<GLOBALSECTIONS>\n"); 
    foreach( $sectionsArray as $sectionFileName){
       // Parse the specific section file
       $sectionFileName = $sectionsDirectory.$sectionFileName . ".ini";
       // Read the section's ini file.
       if( !file_exists($sectionFileName)){
+        print "[Error]: $sectionFileName File does not exist\n";
         continue; 
       } 
+      
       $sectionConfigArray = parse_ini_file($sectionFileName, true); 
+
       // Read the section part for the variables.
       $section = $sectionConfigArray['section'];
       // Read the isbns part
       $isbnArray = $sectionConfigArray['isbns'];
+      //print_r($isbnArray);
+      //updateDiscounts($isbnArray);
       $isbns = implode(",", array_keys($isbnArray));
-
       $section['SECTION_ID'] = $sectionId;
+      $replace = Array();
       foreach($sectionSearchArray as $item ) {
        if(!array_key_exists($item, $section)) {
           $section[$item] = $configArray["section_details"]["DEFAULT_".$item];
@@ -59,9 +105,10 @@ function writeSections($sectionsArray){
        }
        $replace[] = $section[$item];
       }
-
+      //print_r($replace);
       $finalSectionXML = str_replace($sectionSearchArray, $replace, $sectionXML);
-      fwrite($globalSectionsXMLFile, $finalSectionXML);
+      //print $finalSectionXML;
+      fwrite($globalSectionsXMLFile, "\n".$finalSectionXML."\n");
 
       $iniString = "\n[". $section['SECTION_TITLE']. "]\n";
       $iniString .= "isbns=". $isbns. "\n";
@@ -78,9 +125,13 @@ function sections_menu_generate_start($argc, $argv) {
    global $sectionsDirectory;
    global $globalSectionsXMLFile;
    global $globalSectionsINIFile;
+   global $databaseConfigArray;
+   global $db;
 
    //Parse the main ini file
    $configArray = parse_ini_file("sections_menu.ini", true); 
+   // Parse the database config file 
+   $databaseConfigArray = parse_ini_file($EKKITAB_HOME. "/config/ekkitab.ini", true); 
 
    $sectionsDirectory = $EKKITAB_HOME.$configArray["paths"]["SECTIONS_DIRECTORY"];
 
@@ -92,6 +143,7 @@ function sections_menu_generate_start($argc, $argv) {
    $globalSectionsINIFile = fopen($tmpString, "w") or die ("Cannot open" . $tmpString . "\n");
 
    $sectionsArray = $configArray["sections"];
+   //print_r($sectionsArray);
    if( $sectionsArray != null and !empty($sectionsArray)) {
      writeSections($sectionsArray);
    }
