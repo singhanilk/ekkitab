@@ -86,8 +86,9 @@
 <div class="searchArea">
 	<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
 		<div class="bigImage">
-           <img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'image',false,null, 200); ?>"><br/>
+           <img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'image',false,null, 200); ?>"><br/><a href="javascript:showContent('reviewForm');goto('review-form')">Write a Review</a>
         </div>
+		
 		<div class="midArea">
 			<div class="finDetBkTitle"><?php echo $_product->getTitle() ?> <?php echo (strlen($author) > 0 )?( "<br/><span class=\"lineHeight14em\"> by <span class=\"boldFont\"><a href=\"".$this->getUrl('ekkitab_catalog/search/index/author/'.$author)."\">".$author ."</a></span></span>" ):""?></div><!-- authorEtc -->
 					
