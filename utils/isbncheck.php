@@ -1,6 +1,7 @@
 <?php
 
 /* program to enable the operations team to check isbn both in the books table in reference database and the missing isbn list.
+*  Also displays all the preorders in the system.
 *  This utility is to be copied under EKKITAB_URL/magento/internalutils/ ONLY FOR STAGING.
 */
 
@@ -75,22 +76,38 @@ function checkMissingIsbnsTable($isbnno) {
     return $bookResult;
 }
 
+function checkpreorder($preorder) {
+    $db = initDatabase();
+    $sqlQuery = "select isbn, title, author from books where in_stock = '$preorder' and id < 150000;";
+	  $bookResult = queryDatabase($sqlQuery);
+    return $bookResult;
+}
 function createForm($isbnno, $displayString){
 
   $htmlString = "<html>
                  <body>
                  <h4> Please enter an ISBN No. ( Checks the Reference.books table, Reference. )</h4>
-                  <table>
+                  <table border='0'>
                    <tr>
                     <td>
                      <form action='isbncheck.php' method='get'>
                         <input type='text' name ='isbnno' size='30' value='$isbnno' />
                         <input type='submit' value='GO' />
+                        <br>
+                        <br>
                      </form>
                      </td>
+                    <td>
+                     <form action='isbncheck.php' method='get'>
+                        <input type='hidden' name ='preorder' value='2' />
+                        <input type='submit' value='All Pre-orders' />
+                        <br>
+                        <br>
+                     </form>
+                    </td>
                     </tr>
                     <tr>
-                     <td>
+                     <td colspan='2'>
                       $displayString
                      </td>
                     </tr>
@@ -101,6 +118,21 @@ function createForm($isbnno, $displayString){
 }
 
 if(isset($_GET['isbnno'])) { $isbnno = $_GET['isbnno']; } elseif(isset($_POST['isbnno'])) { $isbnno = $_POST['isbnno']; } else { $isbnno = ""; }
+if(isset($_GET['preorder'])) { $preorder = 2; } elseif(isset($_POST['preorder'])) { $preorder = 2; }
+
+if ($preorder != ''){
+        $preorderesult = checkpreorder($preorder);
+        $displayString .= "<table border=1>";
+        $displayString .= "<tr><td>ISBN</td><td>Title</td><td>Author</td></tr>";
+        foreach ( $preorderesult as $book ) {
+            $displayString .= "<tr>";
+            foreach ( $book as $key => $value ) {
+                $displayString .= "<td>$value</td>";
+            }
+          $displayString .= "</tr>";
+        }
+       $displayString .= "</table>";
+}
 
 if ( $isbnno != '' ){
   // Check the reference books table.
