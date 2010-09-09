@@ -173,7 +173,7 @@ class Parser extends BaseParser {
 
         function getBasic($line, $book, $db, $logger) {
             $book['isbn10'] = trim(substr($line, 0, 10));
-            $book['title']  = $this->escape(trim(substr($line, 11, 149)));
+            $book['title']  = stripslashes(trim(substr($line, 11, 149)));
             $edition = trim(substr($line, 191, 4));
             $edition = $edition . "  " . trim(substr($line, 195, 15));
             $book['edition'] = $this->escape($edition);

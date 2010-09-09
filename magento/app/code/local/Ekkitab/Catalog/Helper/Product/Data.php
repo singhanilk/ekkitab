@@ -35,32 +35,55 @@ class Ekkitab_Catalog_Helper_Product_Data extends Mage_Core_Helper_Abstract
      */
     public function getProductId()	
     {
-        if (is_null($this->_productId)) {
-			$productUrl  = (String) $this->_getRequest()->getParam('book');
+		if (is_null($this->_productId)) {
+			$productUrl  = (String) $this->getRequest()->getParam('book');
 
+			// insert the split function here.....and get the product Id
 			$productIdStartIndex = strrpos($productUrl, "__")+2; 	  
 			$productIdEndIndex = strpos($productUrl, ".html"); 	
 			$productIdEndIndex = $productIdEndIndex - $productIdStartIndex;  //.html/	
 			$productId = trim(urldecode(substr($productUrl,$productIdStartIndex,$productIdEndIndex)));
-			
-			if( $productId && strlen($productId)==13){
+
+		
+			if( $productId && $this->isIsbn($productId)){
 				//this is isbn.....
 				 $this->_productId = $productId;
 			}else {
 				$productId = (int) $productId;
 				if (!$productId || $productId <= 0) {
-					$productId  = (int) $this->_getRequest()->getParam('id');
+					$productId  = (int) $this->getRequest()->getParam('id');
 				}
-				$this->_productId = $productId;
-			}
-
-			if ($this->_productId <= 0 ) {
-				//check if it is an isbn ...
-				$this->_productId = trim(urldecode(substr($productUrl,$productIdStartIndex,$productIdEndIndex)));
+				if (!$productId || $productId <= 0) {
+					$this->_productId = 0;
+				}
+				else{
+					$this->_productId = $productId;
+				}
 			}
 
         }
         return $this->_productId;
     }
+
+	/**
+     * Retrieve search result count
+     *
+     * @return boolean
+     */
+    public function isIsbn($str)
+    {
+		$str=trim($str);
+		if(preg_match("/^[0-9]*$/",$str)){
+			if (strlen($str) == 12 || strlen($str) == 10 || strlen($str) == 13) {
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}
+		
+    }
+
 
 }

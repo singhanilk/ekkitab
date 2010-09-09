@@ -665,6 +665,21 @@ a:hover {
 	margin-top: 10px;
 	float:right;
 }
+.donateAreaRight {
+	width: 160px;
+	/*background-image: url(../images/donate_bks_small.jpg);
+	background-position: right bottom;
+	background-repeat: no-repeat;*/
+	margin-bottom: 8px;
+}
+.donateAreaRight .text {
+	font-size: 11px;
+	line-height: 16px;
+}
+.donateAreaRight img {
+	margin-top: 10px;
+	float:right;
+}
 .mainArea .inLeft {
 	padding:0 0 0 0px;
 	margin: 0 0 0 5px;
@@ -2538,3 +2553,8 @@ dt .hdr {
 	text-decoration:underline;
 	line-height:1.2em;
 }
+
+/* Data Table */
+.menu-data-table { width:100%; }
+.menu-data-table td { padding:2px 6px; }
+

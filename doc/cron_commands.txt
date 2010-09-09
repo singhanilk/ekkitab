@@ -20,6 +20,9 @@
 10 *   * * *   root  perl -I /mnt4/twiki/bin /mnt4/twiki/tools/mailnotify -q
 # Backup production DB saved data on staging. (Staging)
 15 *   * * *   ubuntu  cd /mnt2/scm/utils && ./save_db_backup.sh
+# Backup blog DB. (Staging)
+15 1   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/utils && ./backupblog.sh
+
 
 
 
