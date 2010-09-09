@@ -18,11 +18,13 @@
 <?php if($section && $section->getId()):
 		$randomize = false;
 		$pageNo = $this->getCurrentPageNumber();
-		$limit = $this->getPageSize();
+		$_columnSize=5;
+		$_deziredRows= 3;
+		$limit = $_columnSize * $_deziredRows;
+		//$limit = $this->getPageSize();
 		$products= $section->getSectionProducts($randomize,$pageNo,$limit);
 		//$productIds= $section->getSectionProductIds();
 		$_count = (!is_null($products) && is_array($products))?count($products):(!is_null($products))? $products->count() :0; 
-		$_columnSize=5;
 		$width=(int) 100/$_columnSize;
 		$counter=0;
 		$rowNo=1;
@@ -34,13 +36,14 @@
 			$_totalRows= 0;
 		}
 ?>
-	<div class="spSectionImage">
-	<img src="<?php echo $this->getSkinUrl("images/summer_image.jpg") ?>" /></div>
+	<!--div class="spSectionImage">
+	<img src="<?php echo $this->getSkinUrl("images/summer_image.jpg") ?>" /></div-->
 	<!-- spSectionImage -->
-	<div class="spHdrs">Summer is the time when you sweat in the heat with your throat parched, <br> and you yearn for that cool something to slake your thirst.  Summer is the time when you discover how cool <br> your home is when you come in from the sun. Summer is just the time when you realize how much you can enjoy yourself <br> by just having the right book to read, oblivious to the heat and late into the night. No mid-summer madness here... Here is our collection of some of the most enjoyable titles for your reading entertainment this summer....</div>
 <?php if(!is_null($products) && $_count > 0){ ?>
 	<div class="clear"></div>
 	<div class="hmScrollRow">
+		<div class="mainHdr"><?php echo $section->getDisplayName() ?></div>
+		<div class="spHdrsNoTopMargin">Summer is the time when you sweat in the heat with your throat parched, and you yearn for that cool something to slake your thirst.  Summer is the time when you discover how cool your home is when you come in from the sun. Summer is just the time when you realize how much you can enjoy yourself by just having the right book to read, oblivious to the heat and late into the night. No mid-summer madness here... Here is our collection of some of the most enjoyable titles for your reading entertainment this summer....</div>
 <?php 		foreach($products as $product){  ?>
 <?php		if($counter%$_columnSize==0){  ?>
 <?php			if($firstRow!=0){  ?>
@@ -51,14 +54,33 @@
 				<div class="hmInScrollRow" id="gs_row_<?php echo $rowNo?>" >
 <?php		}
 			$counter+=1;
-			$savingsPerct= ($product->getPrice() >0 )?	(($product->getPrice() - $product->getFinalPrice())/ $product->getPrice() ) * 100 : 0; 
-				$authorArr = $product->getAuthor();
+			$savingsPerct= round(($product->getPrice() >0 )?	(($product->getPrice() - $product->getFinalPrice())/ $product->getPrice() ) * 100 : 0); 
+			$authorArr = $product->getAuthor();
 			$author = (($author = $authorArr['a'])!='')? "by <a href=\"".$this->getUrl('ekkitab_catalog/search/index/author/'.$author)."\">".$author."</a>":"" ;
 			$binding = trim($product->getBinding());
 			$lang = trim($product->getLanguage());
 			$langNbind=strlen($lang) > 0 ? ("[".ucfirst($lang).(strlen($binding) > 0 ?" - ".ucfirst($binding)."]":"]")):(strlen($binding) > 0 ?"[".ucfirst($binding)."]":"");
 
-			$title= $this->htmlEscape($product->getName());
+			$titleWords = explode(" ",$product->getTitle());
+			$title="";//$product->getTitle();
+			$wordCount=3;
+			$wrdCounter=0;
+			if($titleWords && count($titleWords) >0 ){
+				foreach($titleWords as $words){
+					if($wrdCounter < $wordCount){
+						$title.=$words." ";
+						$wrdCounter++;
+					}else{
+						break;
+					}
+				}
+			}
+			$title= trim($title);
+			if(count($titleWords)>$wordCount){
+				$title.="...";
+			}
+			$fullTitle= $this->htmlEscape($product->getTitle());
+
 			if(isset($authorArr['a']) && strlen(trim($authorArr['a'])) > 0)
 			{
 				$auth=trim($authorArr['a'])."__";
@@ -69,15 +91,15 @@
 			$image = $product->getImage();
 	?>
 				<div class="vColumns" style="width:<?php echo $width ?>%;"><div class="image">
-					<a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" /></a>
+					<a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $fullTitle ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" /></a>
 					</div>
 				<div class="titleEtc">
-						<div class="bkTitle"><a href="<?php echo $this->getUrl($bookName)?>"  title="<?php echo $product->getTitle() ?>"><?php echo $title ?></a></div><!-- bkTitle -->
-						<div class="lineHeight14em"><?php echo $author?></div>
-						<div class="lineHeight14emIt"><?php echo $langNbind ?></div>
-						<!--div class="youSave"><?php echo Mage::helper('core')->currency($product->getFinalPrice(),true,false) ?></div>
-						<div class="lineHeight14em"><span class="striked"><?php echo Mage::helper('core')->currency($product->getListPrice(),true,false) ?></span></div>
-						<?php if($savingsPerct > 0):?><div class="youSave">Save <?php echo number_format($savingsPerct,2,'.','') ?>%</div><?php endif; ?>-->
+						<div class="bkTitleHome"><a href="<?php echo $this->getUrl($bookName)?>"  title="<?php echo $fullTitle ?>"><?php echo $title ?></a></div><!-- bkTitle -->
+						<div class="authorHome"><?php echo $author?></div>
+						<!--div class="lineHeight14emIt"><?php echo $langNbind ?></div-->
+						<div class="youSave"><?php echo Mage::helper('core')->currency($product->getFinalPrice(),true,false) ?></div>
+						<div class="lineHeight14em"><span class="greyFont"><?php echo Mage::helper('core')->currency($product->getListPrice(),true,false) ?></span></div>
+						<?php if($savingsPerct > 0):?><div class="youSave">Save <?php echo $savingsPerct ?>%</div><?php endif; ?>
 					</div><!-- titleEtc -->
 				</div>
 <?php		if($counter%$_columnSize==0){ 

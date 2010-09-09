@@ -18,7 +18,7 @@ class Ekkitab_Catalog_Block_Globalsection_View extends Mage_Core_Block_Template
 {
 
     private $_globalsection;
-	protected $_pageSize = 10;
+	protected $_pageSize = 15;
 	protected $_pageNo;
 	protected $_lastPageNo;
 	protected $_displayPages = 5;

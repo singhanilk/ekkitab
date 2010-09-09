@@ -435,13 +435,27 @@ a:hover {
 	margin-top: 8px;
 }
 .vColumns .image {
-	width:100px;
+	width:125px;
 	height:120px;
 	float:center;	
 	overflow:hidden;
+	text-align: bottom;
 }
 .vColumns img {
 	border:1px solid #cacaca;
+}
+.vColumns img .no-border {
+	border:0px;
+}
+.vColumns .dicount {
+	width:30px;
+	height:110px;
+	float:right;	
+	background-image: url(../images/discount.png) ;
+	background-position: right bottom;
+	background-repeat: no-repeat;
+	text-align: bottom;
+	
 }
 .vMidColumn {
 	margin: 8px 12px 0;
@@ -452,12 +466,32 @@ a:hover {
 	margin: 0 auto;
 }
 .bkTitle {
-	font-size: 11px;
 	font-weight: bold;
 	line-height: 1.6em;
 }
+.bkTitleHome {
+	font-size: 95%;
+	font-weight: normal;
+	line-height: 1.6em;
+}
+.authorHome {
+	font-size: 92%;
+}
+.authorHome a{
+	color: #000;
+}
+.authorHome a:hover {
+	color: #4f8100;
+	text-decoration: underline;
+}
+
 .lineHeight14em {
 	font-size: 11px;
+	line-height: 1.4em;
+}
+.greyFont {
+	font-size: 10px;
+	color:#666666;
 	line-height: 1.4em;
 }
 .lineHeight14emIt {
@@ -2536,7 +2570,7 @@ dt .hdr {
 .hmDefScrollRow .hdr{
 	font-size: 1.6em;
 	color: #c60;
-	margin: 16px 0px 6px 0px;
+	margin: 5px 0px 6px 0px;
 	padding-bottom: 6px;
 }
 .hmDefScrollRow .notAvail{
@@ -2556,5 +2590,15 @@ dt .hdr {
 
 /* Data Table */
 .menu-data-table { width:100%; }
-.menu-data-table td { padding:2px 6px; }
+.menu-data-table td { width:33%; padding:2px 2px 2px 2px }
+.menu-data-table td image{ width:33%; padding:2px 2px 2px 2px }
 
+.menu-data-table td .image {
+	width:56px;
+	height:77px;
+	float:center;	
+	overflow:hidden;
+}
+.menu-data-table td img {
+	border:1px solid #cacaca;
+}

@@ -54,7 +54,7 @@
 					$listPrice = (!is_null($item->getListPrice()))? $item->getListPrice() : 0;
 					$discPrice = $item->getDiscountPrice();
 					$savings= $listPrice - $discPrice;
-					$savingsPerct= ($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 0;
+					$savingsPerct= round(($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 0);
 					$stock=$item->getInStock();
 			?>
 				<tr >
@@ -65,7 +65,7 @@
 						<div><a href="<?php echo $this->getUrl($item->getProductUrl()) ?>" title="<?php echo $this->htmlEscape($item->getName()) ?>"><?php echo $this->htmlEscape($item->getName()) ?></a></div>
 						<div class="lineHeight14em">Added on: <?php echo $this->getFormatedDate($item->getAddedAt()) ?>
 						<?php if($savings > 0):?>
-							<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($discPrice,true,false) ?> ( Save <?php echo number_format($savingsPerct,2,'.','') ?>%)</div>
+							<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($discPrice,true,false) ?> ( Save <?php echo $savingsPerct ?>%)</div>
 						<?php endif; ?>
 						<?php if($listPrice > 0):?>
 							<div class="lineHeight14em">MRP Price : <?php echo Mage::helper('core')->currency($listPrice,true,false) ?></div>
