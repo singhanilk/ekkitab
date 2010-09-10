@@ -76,6 +76,14 @@ function initXML($name) {
 
 
 
+function writeClearGlobalSectionsStatements($fh) {
+
+	$statement = "Delete from `ek_catalog_global_section_products` ;\n Delete from `ek_catalog_global_sections` ;\n";
+	fputs($fh, $statement);
+
+	return true;
+}
+
 function writeGlobalSectionsStatements($fh,$globalsection) {
 
 	$id = $globalsection["id"];
@@ -87,15 +95,15 @@ function writeGlobalSectionsStatements($fh,$globalsection) {
 	$activeFrom=date('Y-m-d', strtotime($globalsection["activeFrom"]));
 	$activeTo=date('Y-m-d', strtotime($globalsection["activeTo"]));
 	
-	if(!section_exists($id)){
+	//if(!section_exists($id)){
 		$statement = "INSERT INTO `ek_catalog_global_sections` (  `section_id` ,`display_name`, `description` , 
 		`active_from_date`,  `active_to_date`,`template_path`, `is_homepage_display`, `homepage_template_path`) VALUE \n";
 		$statement .= "(".$id.",'".$name."','".$desc."','".$activeFrom."','".$activeTo."','".$booksPageTemplate."',".$displayOnHome.",'".$homePageTemplate."');\n";
 
-	} else{
-		$statement = "Update `ek_catalog_global_sections` set `display_name`='".$name."', `description`='".$desc."' , 
-		`active_from_date`='".$activeFrom."',  `active_to_date`='".$activeTo."',`template_path`='".$booksPageTemplate."', `is_homepage_display`=".$displayOnHome.", `homepage_template_path` ='".$homePageTemplate."' where `section_id`=".$id.";\n";
-	}
+	//} else{
+	//	$statement = "Update `ek_catalog_global_sections` set `display_name`='".$name."', `description`='".$desc."' , 
+	//	`active_from_date`='".$activeFrom."',  `active_to_date`='".$activeTo."',`template_path`='".$booksPageTemplate."', `is_homepage_display`=".$displayOnHome.", //`homepage_template_path` ='".$homePageTemplate."' where `section_id`=".$id.";\n";
+	//}
 
 	fputs($fh, $statement);
 
@@ -196,6 +204,9 @@ if (!$fhtml) {
 
 if($xml){
 	fprintf($fhtml, "use `ekkitab_books`;\n");
+	if(!is_null($xml) && count($xml) > 0 ){
+			writeClearGlobalSectionsStatements($fhtml);
+	}
 	foreach ($xml as $globalSection) {
 		if ($globalSection['id']!="" && $globalSection['title']!="" ) {
 			writeGlobalSectionsStatements($fhtml,$globalSection);
