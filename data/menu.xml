@@ -1,39 +1,20 @@
 <MENU>
-    <!--SECTION title="New York Times BestSellers (Fiction)" type="collection" showall="yes" highlight="5" shuffle="yes">
-        <BOOK id="9781847246929" title="The Girl With The Dragon Tattoo" author="Stieg Larsson"/>
-        <BOOK id="9781906694159" title="The Girl Who Played With Fire" author="Stieg Larsson"/>
-        <BOOK id="9781416589648" title="Little Bee" author="Chris Cleave"/>
-        <BOOK id="9781847390240" title="Best Friends Forever" author="Jennifer Weiner"/>
-        <BOOK id="9780425233689" title="Savor the Moment (The Bride Quartet, Book 3)" author="Nora Roberts"/>
-        <BOOK id="9780385344074" title="South of Broad" author="Pat Conroy"/>
-        <BOOK id="9788184000597" title="Cutting for Stone" author="Abraham Verghese"/>
-        <BOOK id="9781594133831" title="A Reliable Wife" author="Robert Goolrick"/>
-        <BOOK id="9780007294596" title="The Art of Racing in the Rain" author="Garth Stein"/>
-        <BOOK id="9781934137192" title="Tinkers" author="Paul Harding"/>
-    </SECTION>
-    <SECTION title="New York Times BestSellers (Non-Fiction)" type="collection" showall="yes" highlight="3" shuffle="yes">
-        <BOOK id="9781594132667" title="Eat, Pray, Love: One Woman's Search for Everything Across Italy, India and Indonesia" author="Elizabeth Gilbert"/>
-        <BOOK id="9780143038252" title="Three Cups of Tea: One Man's Mission to Promote Peace . . . One School at a Time" author="Greg Mortenson and David Oliver Relin"/>
-        <BOOK id="9781582346182" title="My Horizontal Life: A Collection of One-Night Stands" author="Chelsea Handler"/>
-        <BOOK id="9780099515029" title="Are You There, Vodka? It's Me, Chelsea" author="Chelsea Handler"/>
-        <BOOK id="9780891419198" title="With the Old Breed: At Peleliu and Okinawa" author="E. B. Sledge"/>
-        <BOOK id="9780141014593" title="Blink: The Power of Thinking Without Thinking" author="Malcolm Gladwell"/>
-        <BOOK id="9780805092257" title="Mennonite in a Little Black Dress: A Memoir of Going Home" author="Rhoda Janzen"/>
-        <BOOK id="9780307387097" title="Half the Sky: Turning Oppression into Opportunity for Women Worldwide" author="Nicholas D. Kristof and Sheryl WuDunn"/>
-        <BOOK id="9780141019017" title="Freakonomics: A Rogue Economist Explores the Hidden Side of Everything" author="Steven D. Levitt and Stephen J. Dubner "/>
-        <BOOK id="9780553593310" title="Helmet For My Pillow: From Parris Island To The Pacific" author="Robert Leckie"/>
-    </SECTION-->
-    <SECTION title="New Releases" type="collection" showall="yes" showThumbnails="yes" highlight="9" shuffle="yes">
-        <BOOK id="9781439184301" title="The Overton Window" author="Glenn Beck"/>
-        <BOOK id="9780307269997" title="The Girl Who Kicked the Hornet's Nest" author="Stieg Larsson"/>
-        <BOOK id="9780446563048" title="Delivering Happiness: A Path To Profits, Passion, And Purpose" author="Tony Hsieh"/>
-        <BOOK id="9780316125581" title="The Short Second Life of Bree Tanner" author="Stephenie Meyer"/>
+    <SECTION title="New Releases" type="collection" showall="yes" showThumbnails="yes" highlight="6" shuffle="yes">
+        <BOOK id="9780446563086" title="Abraham Lincoln Vampire Hunter" author="Seth Grahame-Smith"/>
+        <BOOK id="9780061779725" title="Bite Me: A Love Story" author="Christopher Moore"/>
+        <BOOK id="9780224090506" title="Solar" author="Ian McEwan"/>
+        <BOOK id="9780091936938" title="Every Last One" author="Anna Quindlen"/>
+        <BOOK id="9780230746794" title="Deliver Us From Evil" author="David Baldacci"/>
+        <BOOK id="9781846054815" title="9th Judgement" author="James Patterson"/>
+        <BOOK id="9780446554961" title="Fever Dream" author="Douglas J. Preston &amp;  Lincoln Child"/>
+        <BOOK id="9781849162753" title="The Girl Who Kicked the Hornets' Nest" author="Stieg Larsson"/>
+        <BOOK id="9781907410369" title="The Short Second Life Of Bree Tanner: An Eclipse Novella" author="Stephenie Meyer"/>
         <BOOK id="9780345504968" title="The Passage" author="Justin Cronin"/>
-        <BOOK id="9781594202537" title="Cognitive Surplus: Creativity and Generosity in a Connected Age" author="Clay Shirky"/>
-        <BOOK id="9780307378705" title="Extra Lives: Why Video Games Matter" author="Tom Bissell"/>
-        <BOOK id="9780307272829" title="Nine Lives: In Search of the Sacred in Modern India" author="William Dalrymple"/>
-        <BOOK id="9780385522861" title="Welcome to Utopia: Notes from a Small Town" author="Karen Valby"/>
-        <BOOK id="9780307387097" title="Half the Sky: Turning Oppression Into Opportunity for Women Worldwide" author="Nicholas D. Kristof &amp; Sheryl WuDunn"/>
+        <BOOK id="9780446580830" title="The Lion" author="Nelson DeMille"/>
+        <BOOK id="9780062020734" title="Lowcountry Summer" author="Dorothea Benton Frank"/>
+        <BOOK id="9780312383305" title="Sizzling Sixteen" author="Janet Evanovich"/>
+        <BOOK id="9780316043878" title="The Island" author="Elin Hinderbrand"/>
+        <BOOK id="9781847370235" title="Fly Away Home" author="Jennifer Weiner"/>
     </SECTION>
     <SECTION title="Top Categories" type="links" showall="yes" showall_url="ekkitab_catalog/category/viewAll">
         <LINK name="Autobiography" type="search"> 
@@ -47,16 +28,24 @@
         </LINK>
     </SECTION>
     <SECTION title="Popular Books" type="collection" showall="yes" showThumbnails="yes" highlight="6" shuffle="no">
-        <BOOK id="9788172234980" title="The Alchemist" author="Paulo Coelho"/>
         <BOOK id="9780552161275" title="The Da Vinci Code" author="Dan Brown"/>
-        <BOOK id="9780590353427" title="Harry Potter and the Sorcerer's Stone" author="J K Rowling"/>
-        <BOOK id="9780099419785" title="To Kill a Mockingbird" author="Harper Lee"/>
-        <BOOK id="9781905654406" title="Twilight" author="Stephenie Meyer"/>
         <BOOK id="9780747566533" title="The Kite Runner" author="Khaled Hosseini"/>
-        <BOOK id="9788190739146" title="Anne Frank: The Diary of a Young Girl" author="Anne Frank"/>
-        <BOOK id="9780140623215" title="Pride and Prejudice" author="Jane Austen"/>
-        <BOOK id="9780140623581" title="A Tale of Two Cities" author="Charles Dickens"/>
-        <BOOK id="9780140623383" title="Romeo and Juliet" author="William Shakespeare"/>
+        <BOOK id="9780747582380" title="Harry Potter and the goblet of fire" author="J K Rowling"/>
+        <BOOK id="9781905654406" title="Twilight" author="Stephenie Meyer"/>
+        <BOOK id="9788172234980" title="The Alchemist" author="Paulo Coelho"/>
+        <BOOK id="9781847246929" title="The Girl with the Dragon Tattoo" author="Stieg Larsson"/>
+        <BOOK id="9780451191151" title="The Fountainhead" author="Ayn Rand"/>
+        <BOOK id="9780007258918" title="The Namesake" author="Jhumpa Lahiri"/>
+        <BOOK id="9780099830009" title="The Firm" author="John Grisham"/>
+        <BOOK id="9781849162753" title="The Girl Who Kicked the Hornets' Nest" author="Stieg Larsson"/>
+        <BOOK id="9780099429289" title="The Godfather" author="Mario Puzo"/>
+        <BOOK id="9780743424424" title="The Shining" author="Stephen King"/>
+        <BOOK id="9780747585664" title="Eat, Pray, Love" author="Elizabeth Gilbert"/>
+        <BOOK id="9788172234935" title="Other Side of Midnight" author="Sidney Sheldon"/>
+        <BOOK id="9780099552710" title="The Day of The Jackal" author="Frederick Forsyth"/>
+        <BOOK id="9780751542196" title="A Perfect Stranger" author="Danielle Steel"/>
+        <BOOK id="9780330354295" title="Eye of the needle" author="Ken Follett"/>
+        <BOOK id="9780747266983" title="Cradle and all" author="James Patterson"/>
     </SECTION>
     <SECTION title="Prize Winning Books" type="links" showall="no">
         <LINK name="The Man Booker Prize" type="collection">
@@ -97,36 +86,10 @@
             <BOOK id="9780143036661" title="March" author="Geraldine Brooks"/>
         </LINK>
     </SECTION>
-    <!--SECTION title="Pick Of the Week" type="collection" showall="yes" highlight="3" shuffle="yes" showThumbnails="yes">
-        <BOOK id="9781408808863" title="Alex's Adventures In Numberland" author="Alex Bellos"/>
-        <BOOK id="9781423113386" title="The Kane Chronicles: Red Pyramid" author="Rick Riordan"/>
-        <BOOK id="9780340920343" title="Arrows Of Fury: Empire II" author="Anthony Riches"/>
-        <BOOK id="9780670084449" title="Good Man Jesus &amp; The Scoundrel Christ" author="Philip Pullman"/> 
-        <BOOK id="9788190453028" title="Connect The Dots" author="Rashmi Bansal"/>
-        <BOOK id="9781849162104" title="Gandhi: Naked Ambition" author="Jad Adams"/>
-        <BOOK id="9781847670946" title="Dreams From My Father: A Story Of Race And Inheritance" author="Barack Obama"/>
-    </SECTION>
-    <SECTION title="Young Adult Reading" type="collection" showall="no" highlight="3" shuffle="yes" showThumbnails="yes">
-            <BOOK id="9780385504225" title="The Lost Symbol" author="Dan Brown"/>
-            <BOOK id="9781400066216" title="Strength in What Remains" author="Tracy Kidder"/>
-            <BOOK id="9780316042673" title="Beautiful Creatures" author="Kami Garcia &amp; Margaret Stohl"/>
-            <BOOK id="9780061730320" title="The Boy Who Harnessed the Wind: Creating Currents of Electricity and Hope" author="William Kamkwamba &amp; Bryan Mealer"/>
-            <BOOK id="9780307476159" title="The Girl Who Played With Fire" author="Stieg Larsson"/>
-    </SECTION>
-    <SECTION title="Random Picks (Thrillers)" type="collection" showall="no" highlight="3" shuffle="yes" showThumbnails="yes">
-            <BOOK id="9780440241027" title="One Shot" author="Lee Child"/>
-            <BOOK id="9780330352888" title="Invasion" author="Robin Cook"/>
-            <BOOK id="9780330456524" title="The Whole Truth" author="David Baldacci"/>
-            <BOOK id="9780345402875" title="Airframe" author="Michael Crichton"/>
-            <BOOK id="9780340952658" title="Desperation" author="Stephen King"/>
-    </SECTION-->
     <SECTION title="Top Authors" type="links" showall="no">
         <LINK name="Amartya Sen" type ="search">
             <SEARCH field="author">Amartya Sen</SEARCH>
         </LINK>
-        <!--LINK name="Rabindrannath Tagore" type ="search">
-            <SEARCH field="author">Rabindrannath Tagore</SEARCH>
-        </LINK-->
         <LINK name="Arundhati Roy" type ="search">
             <SEARCH field="author">Arundhati Roy</SEARCH>
         </LINK>
@@ -139,38 +102,17 @@
         <LINK name="Gurcharan Das" type ="search">
             <SEARCH field="author">Gurcharan Das</SEARCH>
         </LINK>
-        <!--LINK name="Deepak Chopra" type ="search">
-            <SEARCH field="author">Deepak Chopra</SEARCH>
-        </LINK-->
         <LINK name="Pamuk Orhan" type ="search">
             <SEARCH field="author">Pamuk Orhan</SEARCH>
         </LINK>
         <LINK name="Kiran Desai" type ="search">
             <SEARCH field="author">Kiran Desai</SEARCH>
         </LINK>
-        <!--LINK name="William Dalrymple" type ="search">
-            <SEARCH field="author">William Dalrymple</SEARCH>
-        </LINK>
-        <LINK name="Kiran Desai" type ="search">
-            <SEARCH field="author">Kiran Desai</SEARCH>
-        </LINK>
-        <LINK name="Atul Gawande" type ="search">
-            <SEARCH field="author">Atul Gawande</SEARCH>
-        </LINK>
-        <LINK name="Sashi Tharoor" type ="search">
-            <SEARCH field="author">Sashi Tharoor</SEARCH>
-        </LINK>
-        <LINK name="Thomas Friedman" type ="search">
-            <SEARCH field="author">Thomas Friedman</SEARCH>
-        </LINK>
-        <LINK name="Vikram Seth" type ="search">
-            <SEARCH field="author">Vikram Seth</SEARCH>
-        </LINK-->
         <LINK name="Khushwant Singh" type ="search">
             <SEARCH field="author">Khushwant Singh</SEARCH>
         </LINK>
         <LINK name="Robin Sharma" type="search"> 
-            <SEARCH field="author">robin sharma</SEARCH>
+            <SEARCH field="author">Robin sharma</SEARCH>
         </LINK>
     </SECTION>
 </MENU>
