@@ -52,7 +52,7 @@ class Ekkitab_Catalog_Model_Globalsection extends Mage_Core_Model_Abstract
 		if($products && count($products)>0){
 			$sectionProducts = Mage::getModel('ekkitab_catalog/product')->getCollection()
 			->addIdFilter($products)
-			->addStockFilter($status);
+			->addStockFilter($status)
 			->setLimit($limit);
 		}
         return $sectionProducts;
