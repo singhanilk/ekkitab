@@ -45,15 +45,14 @@ class Ekkitab_Catalog_Model_Globalsection extends Mage_Core_Model_Abstract
 		$sectionProducts = null;
 		//Set the status to 1 to retrieve books which are "In Stock" only
 		$status	=1;
-		$collection = $this->getSectionProductCollection($random,$pageNo);
+		$collection = $this->getSectionProductCollection($random,$pageNo,$limit);
 		foreach ($collection as $product) {
 			$products[] = $product->getProductId();
 		}
 		if($products && count($products)>0){
 			$sectionProducts = Mage::getModel('ekkitab_catalog/product')->getCollection()
 			->addIdFilter($products)
-			->addStockFilter($status)
-			->setLimit($limit);
+			->addStockFilter($status);
 		}
         return $sectionProducts;
     }
