@@ -38,6 +38,7 @@
 ?>
 <div class="hmScrollRow">
 	<div class="mainHdr"><?php echo $section->getDisplayName() ?></div>
+	<div class="spHdrsNoTopMargin"><?php echo $section->getDescription() ?></div>
 <?php	if(!is_null($products) && $_count > 0){
 			foreach($products as $product){  ?>
 <?php			if($counter%$_columnSize==0){  ?>
