@@ -59,6 +59,17 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Globalsection_Products_Collection
      *
      * @return Ekkitab_Catalog_Model_Globalsection
      */
+    public function addProductIdFilter()
+    {
+		$this->getSelect()->join(array('book'=>$this->getTable('ekkitab_catalog/product')),'book.id = main_table.product_id and book.in_stock > 0', array('book.id'));
+        return $this;
+    }
+    
+    /**
+     * Add section to filter
+     *
+     * @return Ekkitab_Catalog_Model_Globalsection
+     */
     public function setLimit($limit)
     {
 		$this->getSelect()->limit($limit);

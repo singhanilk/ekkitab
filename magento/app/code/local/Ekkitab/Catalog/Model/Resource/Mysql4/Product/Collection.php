@@ -90,6 +90,20 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Product_Collection extends Mage_Core
 	public function setCustomOptions($data) {
 		return $this;
 	}
+
+	/**
+     * Add limit to filter
+     *
+     * @return Mage_Core_Model_Mysql4_Collection_Abstract
+     */
+    public function setLimit($limit)
+    {
+		if($limit >0){
+			$this->getSelect()->limit($limit);
+		}
+        return $this;
+    }
+
 	
        /**
      * Set/Get attribute wrapper

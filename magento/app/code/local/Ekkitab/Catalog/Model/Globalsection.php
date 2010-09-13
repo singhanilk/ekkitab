@@ -83,6 +83,7 @@ class Ekkitab_Catalog_Model_Globalsection extends Mage_Core_Model_Abstract
         $collection = $this->getSectionProductInstance()
 			->getProductCollection()
 			->setSection($this)
+			->addProductIdFilter()
 			->addSectionIdFilter();
 		if($pageNo > 0){
 			$collection->setCurPage($pageNo);
