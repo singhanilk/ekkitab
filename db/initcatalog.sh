@@ -52,6 +52,8 @@ if [ $mode == "catalog" ] ; then
 fi
 
 if [ "$mode" == "update" ] ; then
+   echo "Applying section discounts and super discounts..." 
+   ( cd $EKKITAB_HOME/bin; php special_discounts.php )
    echo "Starting Indexing..." 
    # Set System to maintenance
    ( cd $EKKITAB_HOME/bin; ./setdowntime.sh 30 )
