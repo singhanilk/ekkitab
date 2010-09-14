@@ -55,7 +55,7 @@ function updateDiscounts($isbnArray){
      //print "isbn=>$key:value=$value:Discount=$discount\n";
      if ( is_numeric($discount) and $discount > 0 ) {
        $discount = $discount/100;
-       $updateString = "update books set discount_price = list_price - (list_price * $discount) where isbn = $key"; 
+       $updateString = "update books set discount_price = floor(list_price - (list_price * $discount)) where isbn = '$key'"; 
        //print $updateString . "\n";
        try {
           $result = mysqli_query($db,$updateString);
