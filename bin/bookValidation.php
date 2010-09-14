@@ -103,8 +103,8 @@ function checkValidity($db, $fh){
 
 function checkBookCount($db, $fh){
     $num_errors = 0;
-    $query = "SELECT COUNT(*) from `books`";
-    $query1 = "SELECT COUNT(*) from `books` where sourced_from = 'India'";
+    $query = "SELECT COUNT(*) FROM `books`";
+    $query1 = "select count(*) from books where sourced_from = 'India' and (list_price is not null or list_price != 'NULL')";
     try {
        $ingram = mysqli_query($db, $query);
        $india  = mysqli_query($db, $query1);
