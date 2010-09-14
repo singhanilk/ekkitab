@@ -59,14 +59,14 @@ function updateDiscounts($isbnArray){
 
          $sqlString = "select floor(list_price - (list_price * $discount)) as new_discount_price from books "
                     . " where isbn = '$key' and list_price is not null and list_price > 0 and list_price != 'NULL'";
-         print $sqlString . "\n";
+         //print $sqlString . "\n";
          $result = mysqli_query($db,$sqlString);
          if ( $result ) {
            $row = mysqli_fetch_assoc($result);
            if ($row ) {
              $discount = $row['new_discount_price'];
              $sqlString = "update books set discount_price = $discount where isbn = '$key' and discount_price > $discount"; 
-             print $sqlString . "\n";
+             //print $sqlString . "\n";
              $updateResult = mysqli_query($db,$sqlString);
              if (!$updateResult) { print "[Fatal] Update Result=$updateResult Error=". mysqli_errno($db) . "\n"; }
            }
