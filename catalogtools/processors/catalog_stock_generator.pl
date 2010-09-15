@@ -18,7 +18,7 @@ if( defined $ARGV[2] ){
 
 $preorder = "";
 if( defined $ARGV[3] ){
- if ( $ARGV[3] != "preorder") {
+ if ( $ARGV[3] ne "preorder") {
     print STDERR "The fourth parameter can have only values 'preorder': $ARGV[3]\n"; 
     exit(1);
  } else {

@@ -7,7 +7,7 @@
 
 /* The field separator is a tab */
 $FIELD_SEPARATOR = "\t";
-$ISBN_INDEX = 12;
+$ISBN_INDEX = 0;
 $SUBJECT_INDEX = 12;
 $database_server     = 'localhost';
 $database_user       = 'root';
@@ -39,6 +39,13 @@ function initDatabase(){
   } catch(exception $e) {
     fatal($e->getmessage());
   }
+}
+
+function closeDatabase(){
+   global $db;
+
+   mysqli_commit($db);
+   mysqli_close($db);
 }
 
 /* Google specific Bisac Codes function 
@@ -81,7 +88,22 @@ function getBisacCodes($subjects) {
   }
   return implode(",", $bisac_codes);
 }
- 
+
+/** Writes all the not found bisac codes into the reference database */
+function writeNotMappedSubjectsToDatabase($isbnNotFoundBisacMap){
+  global $db;
+
+  if ( !is_null($isbnNotFoundBisacMap) and !empty($isbnNotFoundBisacMap)){
+    foreach($isbnNotFoundBisacMap as $key => $value ){
+     $value = trim($value);
+     $query = "insert into missing_bisac_codes (isbn, subject ) values ( $key, '$value' );";
+     try {
+       $result = mysqli_query($db, $query);
+     } catch (exception $e) { fatal($e->getmessage()); }
+  }
+ } 
+}
+
 function bisaccodes_start($argc, $argv) {
    global $FIELD_SEPARATOR;
    global $ISBN_INDEX;
@@ -90,6 +112,7 @@ function bisaccodes_start($argc, $argv) {
    $bisacCodesNotFound = Array();
    $generatedBisacCode = "";
    $uniqueISBN = Array();
+   $isbnNotFoundBisacMap = Array();
 
      if ($argc < 3) {
        echo "Usage: $argv[0] <file with just subjects no bisac code> <output file name>\n";
@@ -106,6 +129,7 @@ function bisaccodes_start($argc, $argv) {
      /* The file may or may not contain the author */
      $values = explode($FIELD_SEPARATOR, $tmpString);
      $subjectString = $values[$SUBJECT_INDEX];
+     $isbnno = $values[$ISBN_INDEX];
      if(is_null($subjectString) or empty($subjectString)) {
        $generatedBisacCode = $GENERIC_BISAC_CODE;
      } else {
@@ -115,19 +139,23 @@ function bisaccodes_start($argc, $argv) {
      if($generatedBisacCode == $GENERIC_BISAC_CODE ){
           if(!in_array($subjects[0], $bisacCodesNotFound)){
            $bisacCodesNotFound[] = $subjects[0];
+           $isbnNotFoundBisacMap[$isbnno] = $subjects[0];
           }        
        } 
      }
      $values[$SUBJECT_INDEX] = $generatedBisacCode;
+     // Create a list of unique isbns, so the duplicated are removed when we write back.
      if(!in_array($values[$ISBN_INDEX],$uniqueISBN)){
-        $uniqueISBN[] = $values[0];
+        $uniqueISBN[] = $values[$ISBN_INDEX];
         fwrite($bisacFile, implode($FIELD_SEPARATOR, $values). "\n");
      }
     }
     // Print all the unique subjects which have been found.
-    print(implode("\n",$bisacCodesNotFound));
+    // print(implode("\n",$bisacCodesNotFound));
+    writeNotMappedSubjectsToDatabase($isbnNotFoundBisacMap);
     fclose($nonBisacFile);
     fclose($bisacFile);
+    closeDatabase();
 }
 
 bisaccodes_start($argc, $argv);

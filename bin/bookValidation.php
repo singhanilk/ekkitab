@@ -44,7 +44,7 @@ function checkValidity($db, $fh){
     $num_errors = 0;
     $num_books = 0;
     $source = "India";
-    $catalog_validation_stopper = false;
+    //$catalog_validation_stopper = false;
     while ($data = fgets($fh)){
         $num_books++;
         $details = explode(",", $data);
@@ -67,7 +67,7 @@ function checkValidity($db, $fh){
                         if($percentage >= 50){
                             print "[Catalog Validation] [Fatal] Listprice in file->$listprice for isbn-> $isbn is different from that of Database->$row[1] by more than 50%\n"; 
                             $num_errors++;
-                            $catalog_validation_stopper = true;
+                            //$catalog_validation_stopper = true;
                         }
                         elseif($percentage >= 5 && $percentage < 50){
                             print "[Catalog Validation] [Warning] Listprice in file->$listprice for isbn-> $isbn is different from that of Database->$row[1] by more than 5%\n"; 
@@ -92,9 +92,10 @@ function checkValidity($db, $fh){
     if ($num_errors > 15){
         return (1);
     }
-    elseif($catalog_validation_stopper){
+    /*
+        elseif($catalog_validation_stopper){
         return (1);
-    }
+    }*/
     else{
         return (0);
     }
