@@ -44,6 +44,7 @@ sub main {
     my %sitelinks;
     my @links = $page =~ m/(http:\/\/[^ \n\'\"]*)/gs;
     foreach my $link (@links) {
+        $link =~ s/ekkitab\.co\.in/ekkitab\.com/g;
         SWITCH: {
            $link =~ /globalsection/ && do { $sitelinks{$link} = "weekly"; last SWITCH; }; 
            $link =~ /leftlinks/ && do { $sitelinks{$link} = "weekly"; last SWITCH; }; 
