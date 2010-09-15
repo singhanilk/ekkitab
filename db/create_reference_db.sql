@@ -186,3 +186,14 @@ CREATE TABLE IF NOT EXISTS `ignore_isbns` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `ISBN` (`isbn`, `supplier`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+--
+-- Table Structure for table bisac details not present
+--
+CREATE TABLE IF NOT EXISTS `missing_bisac_codes` (
+  `id` int(12) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `isbn` VARCHAR(20) NOT NULL,
+  `subject` VARCHAR(255) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `ISBN` (`isbn`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
