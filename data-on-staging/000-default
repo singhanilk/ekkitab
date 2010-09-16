@@ -1,5 +1,7 @@
 <VirtualHost *:80>
 	ServerAdmin webmaster@localhost
+    ServerName www.ekkitab.co.in
+    ServerAlias ekkitab.co.in
 
     	RewriteEngine On
 
@@ -73,6 +75,30 @@
     	AllowOverride Limit
     </Directory>
 
+</VirtualHost>
 
-  
+<VirtualHost *:80>
+	ServerAdmin webmaster@localhost
+    ServerName blog.ekkitab.com
+
+	DocumentRoot /mnt2/blog
+
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+
+	<Directory /mnt2/blog>
+		Options FollowSymLinks
+		AllowOverride All
+	</Directory>
+
+	ErrorLog /var/log/apache2/error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+
+	CustomLog /var/log/apache2/access.log combined
+
 </VirtualHost>
