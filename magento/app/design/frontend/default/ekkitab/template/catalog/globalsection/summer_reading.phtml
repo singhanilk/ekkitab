@@ -39,11 +39,10 @@
 	<!--div class="spSectionImage">
 	<img src="<?php echo $this->getSkinUrl("images/summer_image.jpg") ?>" /></div-->
 	<!-- spSectionImage -->
-<?php if(!is_null($products) && $_count > 0){ ?>
-	<div class="clear"></div>
 	<div class="hmScrollRow">
 		<div class="mainHdr"><?php echo $section->getDisplayName() ?></div>
 		<div class="spHdrsNoTopMargin">Summer is the time when you sweat in the heat with your throat parched, and you yearn for that cool something to slake your thirst.  Summer is the time when you discover how cool your home is when you come in from the sun. Summer is just the time when you realize how much you can enjoy yourself by just having the right book to read, oblivious to the heat and late into the night. No mid-summer madness here... Here is our collection of some of the most enjoyable titles for your reading entertainment this summer....</div>
+<?php if(!is_null($products) && $_count > 0){ ?>
 <?php 		foreach($products as $product){  ?>
 <?php		if($counter%$_columnSize==0){  ?>
 <?php			if($firstRow!=0){  ?>
@@ -149,6 +148,7 @@
 	<div class="spBotImage">
 	<img src="<?php echo $this->getSkinUrl("images/summer_bot_image.jpg")?>" /></div>
 	<!-- spBotImage -->
+	</div>
 <?php else: ?>
 <div class="hmMainRows">
 	<div class="mainLeftHdr">Special Apologies...</div>

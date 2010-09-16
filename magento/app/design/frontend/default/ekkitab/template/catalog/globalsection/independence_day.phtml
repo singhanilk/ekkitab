@@ -42,11 +42,11 @@
 	  
 	 <div class="spHdrsNoTopMargin">Indian Independence is flush with stories of amazing courage, iron resolve and great statesmanship. The story of our Independence has been told and retold in several different ways, each of which educates us on the happenings of a very special time in the history of our country. From capturing the political intrigue of those times, to chronicling the events of a tumultuous period, from the extraordinary Indian leadership of those days to the emotional trauma of partition, to describing the lives and times of the people of a country that had just been born anew, here are some of the classics written on our Independence. We hope you have a good time reading them and we hope the emotions of that special time in history will re-kindle us all towards the future that our forebears fought and sacrificed for. Jai Hind
 </div>  -->
-<?php if(!is_null($products) && $_count > 0){ ?>
 <div class="hmScrollRow">
 	<div class="mainHdr"><?php echo $section->getDisplayName() ?></div>
 		 <div class="spHdrsNoTopMargin">Indian Independence is flush with stories of amazing courage, iron resolve and great statesmanship. The story of our Independence has been told and retold in several different ways, each of which educates us on the happenings of a very special time in the history of our country. From capturing the political intrigue of those times, to chronicling the events of a tumultuous period, from the extraordinary Indian leadership of those days to the emotional trauma of partition, to describing the lives and times of the people of a country that had just been born anew, here are some of the classics written on our Independence. We hope you have a good time reading them and we hope the emotions of that special time in history will re-kindle us all towards the future that our forebears fought and sacrificed for. Jai Hind
 	</div>
+<?php if(!is_null($products) && $_count > 0){ ?>
 <?php 		foreach($products as $product){  ?>
 <?php		if($counter%$_columnSize==0){  ?>
 <?php			if($firstRow!=0){	?>
@@ -145,9 +145,10 @@
 	</div><!-- paginationAreaOut-->
 	<div class="clear"></div>
 <?php } else { //end of if(products not null )... ?>
-	<div class="hmScrollRow">
+	<div class="hmInScrollRow">
 			This section will be updated soon...
-	</div><!-- hmScrollRow -->
+	</div><!-- hmInScrollRow -->
+	</div>
 <?php } //end of else ..?>
 	<div class="spBotImage">
 	<img src="<?php echo $this->getSkinUrl("images/summer_bot_image.jpg")?>" /></div>
