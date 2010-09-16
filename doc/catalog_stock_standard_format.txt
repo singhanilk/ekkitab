@@ -1,0 +1,6 @@
+# The total number of fields are 18.
+# The fields are tab separated.
+# if a field is missing please leave it empty.
+# The following fields are manadatory for catalog - ISBN, TITLE, AUTHOR, PUBLISHER, SUPPLIER
+# The following fields are manadatory for stock - ISBN, PRICE, CURRENCY, AVAILABILITY, TITLE, AUTHOR, SUPPLIER
+ISBN	PRICE	CURRENCY	AVAILABILITY	IMPRINT	TITLE	AUTHOR	BINDING	DESCRIPTION	PUBLISH-DATE	PUBLISHER	PAGES	LANGUAGE	WEIGHT	DIMENSION	SHIP-REGION	SUBJECT	SUPPLIER

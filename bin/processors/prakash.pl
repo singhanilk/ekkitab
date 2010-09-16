@@ -37,45 +37,51 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     my $imprintcol = -1;
     my $titlecol = -1;
     my $authorcol = -1;
-
-    for(my $iR = $oWkS->{MinRow} ; defined $oWkS->{MaxRow} && $iR <= $oWkS->{MaxRow} ; $iR++) {
+#Starting row hardcoded to 10 ,as the above lines in the worksheet are for ad that interrupt normal execution of the processor 
+    for(my $iR = 10 ; defined $oWkS->{MaxRow} && $iR <= $oWkS->{MaxRow} ; $iR++) {
         for(my $iC = $oWkS->{MinCol} ; defined $oWkS->{MaxCol} && $iC <= $oWkS->{MaxCol} ; $iC++) {
             $oWkC = $oWkS->{Cells}[$iR][$iC];
             if (defined $oWkC) {
                 if ($isbncol == -1) {
-                    if ($oWkC->Value =~ /ISBN13/) {
+                    if ($oWkC->Value =~ /ISBN13/i) {
                         $isbncol = $iC;
                         next;
                     }
                 }
                 if ($pricecol == -1) {
-                    if ($oWkC->Value =~ /Price/) {
+                    if ($oWkC->Value =~ /Price/i) {
                         $pricecol = $iC;
                         next;
                     }
                 }
                 if ($currencycol == -1) {
-                    if ($oWkC->Value =~ /Currency/) {
+                    if ($oWkC->Value =~ /Currency/i) {
                         $currencycol = $iC;
                         next;
                     }
                 }
                 if ($availcol == -1) {
-                    if ($oWkC->Value =~ /Stock/) {
+                    if ($oWkC->Value =~ /Stock/i) {
                         $availcol = $iC;
                         next;
                     }
                 }
     	        if ($titlecol == -1) {
-    		        if ($oWkC->Value =~ /Title/) {
+    		        if ($oWkC->Value =~ /Title/i) {
                         $titlecol = $iC;
+                        next;
+    		        }
+                }
+    	        if ($authorcol == -1) {
+    		        if ($oWkC->Value =~ /Author/i) {
+                        $authorcol = $iC;
                         next;
     		        }
                 }
             }
         }
 
-        if (($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($titlecol >= 0) && ($currencycol)) {
+        if (($availcol >= 0) && ($pricecol >= 0) && ($isbncol >= 0) && ($titlecol >= 0) && ($currencycol >= 0) && ($authorcol >= 0)) {
             $startrow = $iR + 1;
             $endrow   = $oWkS->{MaxRow};
             last;
