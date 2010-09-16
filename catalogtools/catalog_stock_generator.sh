@@ -1,4 +1,5 @@
 #! /bin/sh
+# The parameters are parent directory, supplier name , preorder
 echo "Running catalog and stock";
 excelFile=$1/$2.xls
 noBisacFile=$1/$2-nobisac.txt

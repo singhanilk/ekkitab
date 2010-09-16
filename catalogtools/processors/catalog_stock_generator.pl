@@ -105,7 +105,9 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 sub printColumnValues{
       my $tmpString = "";
       my $availabilityString = "";
-      if (($columnValues[0] ne '') && ($columnValues[6] ne '') && ($columnValues[7] ne '')) {
+
+      # The initial check for isbn, title and author to be present has been modified to just isbn and title as we are loading data without author also.
+      if (($columnValues[0] ne '') && ($columnValues[6] ne '')) {
         $tmpString = $columnValues[0]."\t".$columnValues[6]."\t".$columnValues[7]."\t".$columnValues[8]."\t".$columnValues[9]."\t".
                                  $columnValues[10]."\t".$columnValues[11]."\t".$columnValues[12]."\t".$columnValues[13]."\t".$columnValues[14]."\t".
                                  $columnValues[15]."\t".$columnValues[16]."\t".$columnValues[17]."\n";
