@@ -1,0 +1,78 @@
+<VirtualHost *:80>
+	ServerAdmin webmaster@localhost
+
+    	RewriteEngine On
+
+    	RewriteCond %{HTTP_HOST}    !^www\.ekkitab\.co\.in
+    	RewriteCond %{HTTP_HOST}    !^$
+    	RewriteRule ^/(.*)          http://www.ekkitab.co.in/$1
+
+	DocumentRoot /var/www/scm/magento
+        ExpiresActive On
+
+
+#changed expiry to 3 months - YSLOW considers "far future" only above 2 months (SYLVESTSER THOMAS)
+#                ExpiresByType text/html "access plus 1 day"
+                ExpiresByType text/css "access plus 3 months"
+                ExpiresByType text/javascript "access plus 3 months"
+                ExpiresByType image/gif "access plus 3 months"
+# Included jpeg (SYLVESTER) 
+                ExpiresByType image/jpeg "access plus 3 months"
+#               ExpiresByType image/jpg "access plus 3 months"
+                ExpiresByType image/png "access plus 3 months"
+#               ExpiresByType application/x-shockwave-flash "access plus 1 day"
+# Included ico (SYLVESTER) 
+                ExpiresByType image/x-icon "access plus 3 months"
+
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+	<Directory /var/www/scm>
+		Options FollowSymLinks
+		AllowOverride All
+	</Directory>
+	<Directory /var/www/scm/magento>
+		Options FollowSymLinks MultiViews
+		AllowOverride All
+		Order allow,deny
+		allow from all
+                #ExpiresDefault A300
+
+	</Directory>
+
+	ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+	<Directory "/usr/lib/cgi-bin">
+		AllowOverride None
+		Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+		Order allow,deny
+		Allow from all
+	</Directory>
+
+	ErrorLog /var/log/apache2/error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+
+	CustomLog /var/log/apache2/access.log combined
+
+    Alias /doc/ "/usr/share/doc/"
+    <Directory "/usr/share/doc/">
+        Options Indexes MultiViews FollowSymLinks
+        AllowOverride None
+        Order deny,allow
+        Deny from all
+        Allow from 127.0.0.0/255.0.0.0 ::1/128
+    </Directory>
+
+    <Directory /var/www/scm/magento/bugzilla>
+    	AddHandler cgi-script .cgi
+    	Options +Indexes +ExecCGI
+    	DirectoryIndex index.cgi
+    	AllowOverride Limit
+    </Directory>
+
+
+  
+</VirtualHost>
