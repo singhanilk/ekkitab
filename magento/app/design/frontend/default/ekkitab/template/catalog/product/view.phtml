@@ -82,11 +82,15 @@
 		$shippingTimeMax = round($shippingTimeMin + (.5 * $shippingTimeMin) );
 		$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Delivers in ".$shippingTimeMin." - ".$shippingTimeMax." business days":"";
 		$image = $_product->getImage();
+		$url = $_product->getProductUrl();
 ?>
 <div class="searchArea">
 	<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
 		<div class="bigImage">
-           <img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'image',false,null, 200); ?>"><br/><a href="javascript:showContent('reviewForm');goto('review-form')">Write a Review</a>
+           <img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'image',false,null, 200); ?>"><br/>
+		   <div class="reviewLink"><a href="javascript:showContent('reviewForm');goto('review-form')">Write a Review</a></div>
+		   <iframe src="http://www.facebook.com/plugins/like.php?href=<?php echo $this->getUrl($url)?>&amp;layout=button_count&amp;show_faces=false&amp;width=450&amp;action=like&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:90px; height:21px;" allowTransparency="true"></iframe>
+		   <br/>
         </div>
 		
 		<div class="midArea">

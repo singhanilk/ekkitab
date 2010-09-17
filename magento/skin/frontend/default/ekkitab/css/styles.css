@@ -274,6 +274,22 @@ a:hover {
 	color: #c60;
 	padding: 0;
 }
+
+.copyright  {
+	margin-top:8px;
+	text-align:center;
+}
+
+.reviewLink  {
+	margin-top:8px;
+	text-align:center;
+	margin-bottom:8px;
+}
+
+.facebookFan  {
+	float: left;
+}
+
 .dottedLine {
 	height: 10px;
 	border-bottom: 1px dotted #999;
@@ -2176,7 +2192,6 @@ a:hover {
 	margin-top:8px;
 	text-align:center;
 	width:31%;
-
 }
 .linkSubHdr {
 	color:#333;
@@ -2591,7 +2606,6 @@ dt .hdr {
 /* Data Table */
 .menu-data-table { width:100%; }
 .menu-data-table td { width:33%; padding:2px 2px 2px 2px }
-.menu-data-table td image{ width:33%; padding:2px 2px 2px 2px }
 
 .menu-data-table td .image {
 	width:56px;
