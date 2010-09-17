@@ -38,6 +38,10 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
 			$shippingTimeMax = round($shippingTimeMin + (.5 * $shippingTimeMin) );
 			$shippingTime = ( $shippingTimeMin > 0 && $shippingTimeMax > 0 ) ? "Delivers in ".$shippingTimeMin." - ".$shippingTimeMax." business days":"";
 			$title = $this->getProduct()->getTitle();
+			$ogTitle = $title.$author; 
+			$productUrl = $this->getProduct()->getProductUrl();
+			$imagetUrl = Mage::Helper('ekkitab_catalog')->resize($this->getProduct()->getImage(),'image',false,null, 200); 
+			
 			
 			$desc = "Buy ".$title."(".$isbn.")".$author." at Rs.".$price.". ".$shippingTime."- Ekkitab.com";
 
@@ -45,6 +49,11 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
 				$headBlock->setTitle($title.$author." | ".$isbn." | Buy ".$title." online India | ");
 				$headBlock->setKeywords($title.$author." at Ekkitab, Buy online ". $title.$author." at Ekkitab, ".$isbn.", ".$isbn10);
 				$headBlock->setDescription($desc);
+				$headBlock->setOpenGraphTitle($ogTitle);
+				$headBlock->setOpenGraphSiteName("Ekkitab.com");
+				$headBlock->setOpenGraphType("book");
+				$headBlock->setOpenGraphImageUrl($imagetUrl);
+				$headBlock->setOpenGraphProductUrl($this->getUrl($productUrl));
 			}
 			if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')){
 				$breadcrumbs->addCrumb('home', array(

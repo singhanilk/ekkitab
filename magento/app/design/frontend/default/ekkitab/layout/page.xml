@@ -83,6 +83,9 @@ Default layout, loads most of the pages
            
 			<block type="page/html" name="right" as="right" template="page/html/right.phtml" >
 				<block type="page/html" name="donate_book_blurb_home" as="donate_book_blurb_home" template="page/html/donate_blurb_home.phtml" />
+				<block type="page/html" name="component1" as="component1" template="page/html/component1.phtml" />
+				<block type="page/html" name="component2" as="component2" template="page/html/component2.phtml" />
+				<block type="page/html" name="component3" as="component3" template="page/html/component3.phtml" />
             </block>
 
 
@@ -90,12 +93,13 @@ Default layout, loads most of the pages
             <block type="core/messages" name="global_messages" as="global_messages"/>
             <block type="core/messages" name="messages" as="messages"/>
 
-            <block type="core/text_list" name="content" as="content"/>
+            <block type="core/text_list" name="content" as="content" />
 
             <block type="page/html_footer" name="footer" as="footer" template="page/html/footer.phtml">
                 <block type="page/switch" name="store_switcher" as="store_switcher" template="page/switch/stores.phtml"/>
                 <block type="page/template_links" name="footer_links" as="footer_links" template="page/template/footer_links.phtml">
 					<action method="addLink" translate="label title" ><label>About Us</label><url>ekkitab-vision</url><title>About Us</title><prepare>true</prepare></action>
+					<action method="addLink" translate="label title" ><label>Media</label><url>ekkitab-media-releases</url><title>Media</title><prepare>true</prepare></action>
 					<action method="addLink" translate="label title" ><label>Help</label><url>help</url><title>Help</title><prepare>true</prepare></action>
 					<action method="addLink" translate="label title" ><label>Privacy Policy</label><url>privacy-policy</url><title>Privacy Policy</title><prepare>true</prepare></action>
 					<action method="addLink" translate="label title" ><label>Terms and Conditions</label><url>terms</url><title>Terms of Use</title><prepare>true</prepare></action>

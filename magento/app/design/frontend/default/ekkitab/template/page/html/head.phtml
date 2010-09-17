@@ -29,6 +29,30 @@
 <meta name="keywords" content="<?php echo htmlspecialchars($this->getKeywords()) ?>" />
 <meta name="description" content="<?php echo htmlspecialchars($this->getDescription()) ?>" />
 <meta name="robots" content="<?php echo htmlspecialchars($this->getRobots()) ?>" />
+
+<?php if(!is_null($this->getFacebookPageId()) && $this->getFacebookPageId()!=''): ?>
+	<meta property="fb:page_id" content="<?php echo htmlspecialchars($this->getFacebookPageId()) ?>" />
+<?php endif; ?>
+<?php if(!is_null($this->getOpenGraphTitle()) && $this->getOpenGraphTitle()!=''): ?>
+	<meta name="og_title" property="og:title" content="<?php echo ucfirst(htmlspecialchars($this->getOpenGraphTitle())) ?>" />
+<?php endif; ?>
+<?php if(!is_null($this->getOpenGraphProductUrl()) && $this->getOpenGraphProductUrl()!=''): ?>
+	<meta name="og_url" property="og:url" content="<?php echo htmlspecialchars($this->getOpenGraphProductUrl()) ?>"/>
+<?php endif; ?>
+<?php if(!is_null($this->getOpenGraphImageUrl()) && $this->getOpenGraphImageUrl()!=''): ?>
+	<meta name ="og_image" property="og:image" content="<?php echo htmlspecialchars($this->getOpenGraphImageUrl()) ?>" />
+<?php endif; ?>
+<?php if(!is_null($this->getOpenGraphDescription()) && $this->getOpenGraphDescription()!=''): ?>
+	<meta name="og_description" property="og:description" content="<?php echo htmlspecialchars($this->getOpenGraphDescription()) ?>" />
+<?php endif; ?>
+<?php if(!is_null($this->getOpenGraphSiteName()) && $this->getOpenGraphSiteName()!=''): ?>
+	<meta name="og_site_name" property="og:site_name" content="<?php echo htmlspecialchars($this->getOpenGraphSiteName()) ?>" />
+<?php endif; ?>
+<?php if(!is_null($this->getOpenGraphType()) && $this->getOpenGraphType()!=''): ?>
+	<meta name="og_type" property="og:type" content="<?php echo htmlspecialchars($this->getOpenGraphType()) ?>" />
+<?php endif; ?>
+
+
 <link rel="icon" href="<?php echo $this->getSkinUrl('favicon.ico') ?>" type="image/x-icon" />
 <link rel="shortcut icon" href="<?php echo $this->getSkinUrl('favicon.ico') ?>" type="image/x-icon" />
 <script type="text/javascript">
