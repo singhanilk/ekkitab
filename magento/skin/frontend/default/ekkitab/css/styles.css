@@ -1518,7 +1518,7 @@ a:hover {
 	width:100%;
 }
 
-.aboutUsArea {
+.aboutUsArea{
 	border-bottom:1px dotted #333333;
 	margin:16px auto 10px;
 	padding-bottom:10px;
@@ -1860,7 +1860,7 @@ a:hover {
 	color: #666;
 }
 
-.pageHeader {
+.pageHeader, .mediaReleasesArea .pageHeader{
 	width: 74%;
 	margin-bottom: 8px;
 	font-size: 20px;
@@ -1868,7 +1868,6 @@ a:hover {
 	float: left;
 	line-height:25px
 }
-
 /* Data Table */
 .dashboard-table { width:100%; }
 .dashboard-table tr { background:#fff; }
@@ -2439,6 +2438,7 @@ a:hover {
 	font-size: 1.3em;
 	font-weight:bold;
 	color: #cc6600;
+	margin-top: 6px;
 	margin-bottom: 6px;
 	padding-bottom: 6px;
 	border-bottom: 1px dotted #333333;
@@ -2615,4 +2615,43 @@ dt .hdr {
 }
 .menu-data-table td img {
 	border:1px solid #cacaca;
+}
+
+.mainRight .content { 
+	width: 160px;
+	margin-bottom: 8px;
+	padding: 0px;
+}
+
+.mediaReleasesArea .newsTitle {
+	font-size:12px;
+}
+.mediaReleasesArea .pageHeader{
+	width: 74%;
+	border-bottom:1px dotted #333333;
+	margin-bottom: 8px;
+	font-size: 20px;
+	color: #c60;
+	float: left;
+	line-height:25px
+}
+
+.mediaReleasesArea {
+	margin:16px auto 10px;
+	padding-bottom:10px;
+	width:700px;
+	font-size: 11px;
+	line-height: 22px;
+}
+.mediaReleasesArea .newsArea {
+	width: 670px;
+	float: left;
+	padding-top: 10px; 
+}
+.mediaReleasesArea .rightArea {
+	width: 185px;
+	float: right;
+	margin: 0 0 10px 10px;
+	padding-left: 10px;
+	border-left: 1px dotted #333333;
 }

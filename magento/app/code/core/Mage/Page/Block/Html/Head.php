@@ -258,4 +258,105 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
         return $this->_data['includes'];
     }
 
+    /**
+     * Ekkitab Changes : Added miscellanious Meta tags for Open Graph, for facebook, to be included in head before head closing tag
+     *
+     */
+
+    public function getOpenGraphSiteName()
+    {
+        if (empty($this->_data['ogSiteName'])) {
+            $this->_data['ogSiteName'] ='';
+        }
+        return $this->_data['ogSiteName'];
+    }
+
+    public function getOpenGraphType()
+    {
+        if (empty($this->_data['ogType'])) {
+            $this->_data['ogType'] ='';
+        }
+        return $this->_data['ogType'];
+    }
+
+    public function getOpenGraphTitle()
+    {
+        if (empty($this->_data['ogTitle'])) {
+            $this->_data['ogTitle'] ='';
+        }
+        return $this->_data['ogTitle'];
+    }
+
+    public function getOpenGraphDescription()
+    {
+        if (empty($this->_data['ogDescription'])) {
+            $this->_data['ogDescription'] ='';
+        }
+        return $this->_data['ogDescription'];
+    }
+
+    public function getOpenGraphImageUrl()
+    {
+        if (empty($this->_data['ogImageUrl'])) {
+            $this->_data['ogImageUrl'] ='';
+        }
+        return $this->_data['ogImageUrl'];
+    }
+
+    public function getOpenGraphProductUrl()
+    {
+        if (empty($this->_data['ogProductUrl'])) {
+            $this->_data['ogProductUrl'] ='';
+        }
+        return $this->_data['ogProductUrl'];
+    }
+
+    public function getFacebookPageId()
+    {
+        if (empty($this->_data['fbPageId'])) {
+            $this->_data['fbPageId'] = Mage::getStoreConfig('design/head/facebook_pageid');
+        }
+        if (empty($this->_data['fbPageId'])) {
+            $this->_data['fbPageId'] ='';
+        }
+        return $this->_data['fbPageId'];
+    }
+
+	/* setters */
+
+   public function setOpenGraphSiteName($ogSiteName)
+    {
+        $this->_data['ogSiteName'] = $ogSiteName ;
+    }
+
+    public function setOpenGraphType($ogType)
+    {
+        $this->_data['ogType'] = $ogType;
+    }
+
+    public function setOpenGraphTitle($ogTitle)
+    {
+       $this->_data['ogTitle']=$ogTitle;
+    }
+
+    public function setOpenGraphDescription($ogDescription)
+    {
+		$this->_data['ogDescription']=$ogDescription;
+    }
+
+    public function setOpenGraphImageUrl($ogImageUrl)
+    {
+		$this->_data['ogImageUrl']=$ogImageUrl;
+    }
+
+    public function setOpenGraphProductUrl($ogProductUrl)
+    {
+		$this->_data['ogProductUrl']=$ogProductUrl;
+    }
+
+    public function setFacebookPageId($fbPageId)
+    {
+       $this->_data['fbPageId']=$fbPageId;
+    }
 }
+
