@@ -1,30 +1,36 @@
 <GLOBALSECTIONS>
 
-<SECTION id="1" title="All Time Great Fiction" displayOnHome="yes" activeFrom="01/01/2010" activeTo="01/01/2011">
+<SECTION id="1" title="New Releases" displayOnHome="no" activeFrom="01/01/2010" activeTo="01/01/2011">
+                 <DESCRIPTION>Books released in the past six months</DESCRIPTION>
+                 <HOMEPAGE_TEMPLATE_PATH>catalog/globalsection/home_page.phtml</HOMEPAGE_TEMPLATE_PATH>
+                 <BOOKSPAGE_TEMPLATE_PATH>catalog/globalsection/view.phtml</BOOKSPAGE_TEMPLATE_PATH>
+                </SECTION>
+
+<SECTION id="2" title="All Time Great Fiction" displayOnHome="yes" activeFrom="01/01/2010" activeTo="01/01/2011">
                  <DESCRIPTION>Unputdownables... Works of fiction that have withstood the test of time. Tales that were born in a particular age and culture, but generated universal appeal. Stories you may have grown up with, but which your children will enjoy as much. Stories told with such great skill that there is equal pleasure in the reading as with the imagining. Here is a selection that will enthuse you to look some of them up to find out what you might have missed...</DESCRIPTION>
                  <HOMEPAGE_TEMPLATE_PATH>catalog/globalsection/great_fiction_home.phtml</HOMEPAGE_TEMPLATE_PATH>
                  <BOOKSPAGE_TEMPLATE_PATH>catalog/globalsection/great_fiction.phtml</BOOKSPAGE_TEMPLATE_PATH>
                 </SECTION>
 
-<SECTION id="2" title="India" displayOnHome="no" activeFrom="01/01/2010" activeTo="01/01/2011">
+<SECTION id="3" title="India" displayOnHome="no" activeFrom="01/01/2010" activeTo="01/01/2011">
                  <DESCRIPTION>India is the cradle of the human race, the birthplace of human speech, the mother of history, the grandmother of legend, and the great grand mother of tradition. Our most valuable and most astrictive materials in the history of man are treasured up in India only!- Mark Twain</DESCRIPTION>
                  <HOMEPAGE_TEMPLATE_PATH>catalog/globalsection/home_page.phtml</HOMEPAGE_TEMPLATE_PATH>
                  <BOOKSPAGE_TEMPLATE_PATH>catalog/globalsection/view.phtml</BOOKSPAGE_TEMPLATE_PATH>
                 </SECTION>
 
-<SECTION id="3" title="New York Times BestSellers" displayOnHome="no" activeFrom="01/01/2010" activeTo="01/01/2011">
+<SECTION id="4" title="New York Times BestSellers" displayOnHome="no" activeFrom="01/01/2010" activeTo="01/01/2011">
                  <DESCRIPTION>The best selling books according to the New York Times</DESCRIPTION>
                  <HOMEPAGE_TEMPLATE_PATH>catalog/globalsection/home_page.phtml</HOMEPAGE_TEMPLATE_PATH>
                  <BOOKSPAGE_TEMPLATE_PATH>catalog/globalsection/view.phtml</BOOKSPAGE_TEMPLATE_PATH>
                 </SECTION>
 
-<SECTION id="4" title="Indian Classics" displayOnHome="yes" activeFrom="01/01/2010" activeTo="01/01/2011">
+<SECTION id="5" title="Indian Classics" displayOnHome="yes" activeFrom="01/01/2010" activeTo="01/01/2011">
                  <DESCRIPTION>Classics do not die. They are forever. Stories of love and war, of life and death, of epic moments in history that are told and retold over the centuries never to die but to always teach, inform, rejuvenate, enthrall and mesmerise...Here is a collection that you will enjoy, stories that you may have read but would like to read again and again and again..</DESCRIPTION>
                  <HOMEPAGE_TEMPLATE_PATH>catalog/globalsection/indian_classics_home.phtml</HOMEPAGE_TEMPLATE_PATH>
                  <BOOKSPAGE_TEMPLATE_PATH>catalog/globalsection/indian_classics.phtml</BOOKSPAGE_TEMPLATE_PATH>
                 </SECTION>
 
-<SECTION id="5" title="Top Children''s Books" displayOnHome="yes" activeFrom="01/01/2010" activeTo="01/01/2011">
+<SECTION id="6" title="Top Children''s Books" displayOnHome="yes" activeFrom="01/01/2010" activeTo="01/01/2011">
                  <DESCRIPTION>The best years of life..., as they say of one''s childhood. Years packed with energy and without too much care. In school and outside. How much of your imagination is shaped during these years? How much of what you read shapes your imagination? In an age of cell-phones, 40 character tweets, facebook and a myriad other things to do, a good book is still the choicest way to get into the minds of those brilliant story-tellers who can make you sit spell bound hours on end. And feel good about it afterwards. Here are some of the best works for children over the years.....</DESCRIPTION>
                  <HOMEPAGE_TEMPLATE_PATH>catalog/globalsection/top_childrens_books_home.phtml</HOMEPAGE_TEMPLATE_PATH>
                  <BOOKSPAGE_TEMPLATE_PATH>catalog/globalsection/top_childrens_books.phtml</BOOKSPAGE_TEMPLATE_PATH>

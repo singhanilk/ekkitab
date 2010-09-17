@@ -40,7 +40,9 @@ INSERT INTO `cms_page` (`page_id`, `title`, `root_template`, `meta_keywords`, `m
 
 (8, 'Vision', 'one_column', '', '', 'ekkitab-vision', '{{block type="page/html" name="ekkitab_donation_home"  template="page/html/donate_home.phtml" }}', '2009-10-15 09:35:23', '2009-10-15 09:35:23', 1, 0, NULL, NULL, NULL, NULL),
 
-(9, 'All Books | Books Directory | Complete list of Books | Complete Catalog', 'one_column', '', '', 'all-books', '{{block type="ekkitab_catalog/category_allBooks" name="complete_catalog" template="catalog/category/pages.phtml" }}', '', '', 1, 0, NULL, NULL,NULL,NULL);
+(9, 'All Books | Books Directory | Complete list of Books | Complete Catalog', 'one_column', '', '', 'all-books', '{{block type="ekkitab_catalog/category_allBooks" name="complete_catalog" template="catalog/category/pages.phtml" }}', '', '', 1, 0, NULL, NULL,NULL,NULL),
+
+(10,'Ekkitab in the Media', 'two_columns_left', '', '', 'ekkitab-media-releases', '{{block type="page/html" name="media"  template="page/html/media.phtml" }}', '', '', 1, 0, NULL, NULL,NULL,NULL);
 
 
 --
@@ -61,7 +63,8 @@ INSERT INTO `cms_page_store` (`page_id`, `store_id`) VALUES
 (6, 0),
 (7, 0),
 (8, 0),
-(9, 0);
+(9, 0),
+(10, 0);
 
 
 -- -------------------------------------------------------------
