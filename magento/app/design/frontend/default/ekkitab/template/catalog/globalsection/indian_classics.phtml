@@ -39,10 +39,10 @@
 ?>
 	<!--div class="spSectionImage">
 	<img src="<?php echo $this->getSkinUrl("images/ind_classic_image.jpg") ?>"/></div-->
-<?php if(!is_null($products) && $_count > 0){ ?>
 	<div class="hmScrollRow" >
 	<div class="mainHdr"><?php echo $section->getDisplayName() ?></div>
 	<div class="spHdrsNoTopMargin">Classics do not die. They are forever. Stories of love and war, of life and death, of epic moments in history that are told and retold over the centuries never to die but to always teach, inform, rejuvenate, enthrall and mesmerise...Here is a collection that you will enjoy, stories that you may have read but would like to read again and again and again..	</div><!-- spHdrs -->
+<?php if(!is_null($products) && $_count > 0){ ?>
 <?php 		foreach($products as $product){  ?>
 <?php		if($counter%$_columnSize==0){  ?>
 <?php			if($firstRow!=0){	?>
@@ -144,9 +144,10 @@
 	<div class="hmScrollRow">
 			This section will be updated soon...
 	</div><!-- hmScrollRow -->
+</div>
 <?php } //end of else ..?>
 	<div class="spBotImage">
-	<img src="<?php echo $this->getSkinUrl("images/summer_bot_image.jpg")?>" /></div>
+	<img src="<?php echo $this->getSkinUrl("images/ind_classic_bot_image.jpg")?>" /></div>
 	<!-- spBotImage -->
 <?php else: ?>
 <div class="hmMainRows">

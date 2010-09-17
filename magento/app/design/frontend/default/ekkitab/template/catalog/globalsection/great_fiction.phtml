@@ -38,12 +38,11 @@
 		}
 ?>
 	<!-- <div class="spSectionImage">
-	<img src="<?php echo $this->getSkinUrl("images/fiction_image.jpg") ?>" /></div>
+	<img src="<?php //echo $this->getSkinUrl("images/fiction_image.jpg") ?>" /></div>
 	spSectionImage -->
 	<div class="hmScrollRow">
 		<div class="mainHdr"><?php echo $section->getDisplayName() ?></div>
-	<div class="spHdrsNoTopMargin"><span class="Hdrs">Unputdownables</span>... Works of fiction that have withstood the test of time. Tales that were born in a particular age and culture, but generated universal appeal. Stories you may have grown up with, but which your children will enjoy as much. Stories told with such great skill that there is equal pleasure in the reading as with the imagining. Here is a selection that will enthuse you to look some of them up to find out what you might have missed...
-	</div><!-- spHdrs -->
+		<div class="spHdrsNoTopMargin"><span class="Hdrs">Unputdownables</span>... Works of fiction that have withstood the test of time. Tales that were born in a particular age and culture, but generated universal appeal. Stories you may have grown up with, but which your children will enjoy as much. Stories told with such great skill that there is equal pleasure in the reading as with the imagining. Here is a selection that will enthuse you to look some of them up to find out what you might have missed...</div><!-- spHdrs -->
 <?php if(!is_null($products) && $_count > 0){ ?>
 <?php 		foreach($products as $product){  ?>
 <?php		if($counter%$_columnSize==0){  ?>
@@ -143,12 +142,12 @@
 	</div><!-- paginationAreaOut-->
 	<div class="clear"></div>
 <?php } else { //end of if(products not null )... ?>
-	<div class="hmScrollRow">
+	<div class="hmInScrollRow">
 			This section will be updated soon...
 	</div><!-- hmScrollRow -->
+</div>
 <?php } //end of else ..?>
-	<div class="spBotImage">
-	<img src="<?php echo $this->getSkinUrl("images/summer_bot_image.jpg")?>" /></div>
+	<div class="spBotImage"><img src="<?php echo $this->getSkinUrl("images/fiction_bot_image.jpg")?>"  /></div>
 	<!-- spBotImage -->
 <?php else: ?>
 <div class="hmMainRows">
