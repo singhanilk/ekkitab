@@ -87,8 +87,8 @@
 
 	?>
 				<div class="vColumns" style="width:<?php echo $width ?>%;" >
-					<div class="image"><a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $fullTitle ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $fullTitle ?>" title="<?php echo $fullTitle ?>" /></a> 
-					<!--div class="dicount"></div--></div>
+					<div class="image"><div class="fsu5"></div><a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $fullTitle ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $fullTitle ?>" title="<?php echo $fullTitle ?>" /></a> 
+					<div class="fsu<?php echo $savingsPerct?>"></div><!--div class="dicount"></div--></div>
 				<div class="titleEtc">
 						<div class="bkTitleHome"><a href="<?php echo $this->getUrl($bookName)?>"  title="<?php echo $fullTitle ?>"><?php echo $title ?></a></div><!-- bkTitle -->
 						<div class="authorHome"><?php echo $author?></div>

@@ -90,7 +90,7 @@
 			$image = $product->getImage();
 	?>
 				<div class="vColumns" style="width:<?php echo $width ?>%;"><div class="image">
-					<a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $fullTitle ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" /></a>
+					<a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $fullTitle ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($product, 'small_image')) ?>" /></a><div class="fsu<?php echo $savingsPerct?>"></div>
 					</div>
 				<div class="titleEtc">
 						<div class="bkTitleHome"><a href="<?php echo $this->getUrl($bookName)?>"  title="<?php echo $fullTitle ?>"><?php echo $title ?></a></div><!-- bkTitle -->

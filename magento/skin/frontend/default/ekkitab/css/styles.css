@@ -447,35 +447,95 @@ a:hover {
 }
 .vColumns, .vMidColumn {
 	float: left;
-	text-align: center;
+	text-align: left;
 	margin-top: 8px;
 }
 .vColumns .image {
 	width:125px;
 	height:120px;
-	float:center;	
+	float:left;	
 	overflow:hidden;
 	text-align: bottom;
 }
 .vColumns img {
 	border:1px solid #cacaca;
+	margin-left: 12px;
+	float:left;	
 }
 .vColumns img .no-border {
 	border:0px;
 }
+.vMidColumn {
+	margin: 8px 12px 0;
+}
+
 .vColumns .dicount {
 	width:30px;
-	height:110px;
+	height:70px;
 	float:right;	
 	background-image: url(../images/discount.png) ;
 	background-position: right bottom;
 	background-repeat: no-repeat;
 	text-align: bottom;
-	
 }
-.vMidColumn {
-	margin: 8px 12px 0;
+.fsu0,.fsu5, .fsu6, .fsu7, .fsu8, .fsu9, .fsu10, .fsu11, .fsu12, .fsu13, .fsu14, .fsu15, .fsu16, .fsu17, .fsu18, .fsu19, .fsu20, .fsu21, .fsu22, .fsu23, .fsu24, .fsu25, .fsu26, .fsu27, .fsu28, .fsu29, .fsu30, .fsu31, .fsu32, .fsu33, .fsu34, .fsu35, .fsu36, .fsu37, .fsu38, .fsu39, .fsu40, .fsu41, .fsu42, .fsu43, .fsu44, .fsu45, .fsu46, .fsu47, .fsu48, .fsu49, .fsu50 {
+	background-image: url(../images/discount_icons1.png);
+	background-position: right top;
+	background-repeat: no-repeat;
+	width: 30px;
+	float:left;	
+	height: 28px;
+	position: top;
+	margin: 80px 3px 0px 3px;
 }
+.fsu0 {	background-position: left -3000px;}
+.fsu6 {	background-position: left -30px;}
+.fsu7 {	background-position: right -60px;}
+.fsu8 {	background-position: left -90px;}
+.fsu9 {	background-position: left -120px;}
+.fsu10 {background-position: left -150px;}
+.fsu11 {background-position: left -180px;}
+.fsu12 {background-position: left -210px;}
+.fsu13 {background-position: left -240px;}
+.fsu14 {background-position: left -270px;}
+.fsu15 {background-position: left -300px;}
+.fsu16 {background-position: left -330px;}
+.fsu17 {background-position: left -360px;}
+.fsu18 {background-position: left -390px;}
+.fsu19 {background-position: left -420px;}
+.fsu20 {background-position: left -450px;}
+.fsu21 {background-position: left -480px;}
+.fsu22 {background-position: left -510px;}
+.fsu23 {background-position: left -540px;}
+.fsu24 {background-position: left -570px;}
+.fsu25 {background-position: left -600px;}
+.fsu26 {background-position: left -630px;}
+.fsu27 {background-position: left -660px;}
+.fsu28 {background-position: left -690px;}
+.fsu29 {background-position: left -720px;}
+.fsu30 {background-position: left -750px;}
+.fsu31 {background-position: left -780px;}
+.fsu32 {background-position: left -810px;}
+.fsu33 {background-position: left -840px;}
+.fsu34 {background-position: left -870px;}
+.fsu35 {background-position: left -900px;}
+.fsu36 {background-position: left -930px;}
+.fsu37 {background-position: left -960px;}
+.fsu38 {background-position: left -990px;}
+.fsu39 {background-position: left -1020px;}
+.fsu40 {background-position: left -1050px;}
+.fsu41 {background-position: left -1080px;}
+.fsu42 {background-position: left -1110px;}
+.fsu43 {background-position: left -1140px;}
+.fsu44 {background-position: left -1170px;}
+.fsu45 {background-position: left -1200px;}
+.fsu46 {background-position: left -1230px;}
+.fsu47 {background-position: left -1260px;}
+.fsu48 {background-position: left -1290px;}
+.fsu49 {background-position: left -1320px;}
+.fsu50 {background-position: left -1350px;}
+
+
 .titleEtc {
 	width: 85%;
 	text-align: left;
@@ -2185,13 +2245,6 @@ a:hover {
 	margin-top: 30px;
 
 }
-
-.vColumns, .vMidColumn {
-	float:left;
-	margin-top:8px;
-	text-align:center;
-	width:31%;
-}
 .linkSubHdr {
 	color:#333;
 	font-size:1.2em;
@@ -2655,3 +2708,5 @@ dt .hdr {
 	padding-left: 10px;
 	border-left: 1px dotted #333333;
 }
+
+
