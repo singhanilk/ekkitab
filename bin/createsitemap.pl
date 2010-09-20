@@ -50,6 +50,7 @@ sub main {
            $link =~ /leftlinks/ && do { $sitelinks{$link} = "weekly"; last SWITCH; }; 
            $link =~ /category\/viewAll/ && do { $sitelinks{$link} = "weekly"; last SWITCH; }; 
            $link =~ /all-books/ && do { $sitelinks{$link} = "daily"; last SWITCH; }; 
+           $link =~ /blog\.ekkitab\.com/ && do { $sitelinks{$link} = "weekly"; last SWITCH; }; 
         }
     } 
     close(FILE);
