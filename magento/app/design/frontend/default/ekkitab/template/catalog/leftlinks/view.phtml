@@ -70,7 +70,7 @@
 				
 				$shortDesc = getShortenedString($shortDesc,30);
 
-				$url=$this->helper('ekkitab_catalog')->getProductUrl($author,$title,$id);	
+				$url=$this->helper('ekkitab_catalog')->getProductUrl($author,$title,$book->getIsbn());	
 ?>
 				<div class="listRow">
 				<div class="skuImage"><div class="image"><a href="<?php echo $this->getUrl($url)?>" title="<?php echo $title ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $title ?>" /></a></div></div>
