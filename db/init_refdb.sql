@@ -27,7 +27,8 @@ insert into ek_discount_setting (`info_source`, `discount_percent`) values ('Ing
                                                                            ('Wiley', 70), ('Harvard', 70),
                                                                            ('TBH', 70), ('BookWorldEnterprises', 70),
                                                                            ('PanMacmillan', 70),
-                                                                           ('UBS', 70), ('Viva', 70), ('Cambridge', 70);
+                                                                           ('UBS', 70), ('Viva', 70), ('Cambridge', 70),
+                                                                           ('CinnamonTeal', 35);
 
 --
 -- Seed data for table `ek_supplier_params`
@@ -67,4 +68,5 @@ insert into ek_supplier_params (`info_source`, `publisher`, `supplier_discount`,
                                ('Viva', 'Any', 30, 3),
                                ('Cambridge', 'Any', 30, 3),
                                ('PanMacmillan', 'Any', 25, 3),
+                               ('CinnamonTeal', 'Any', 25, 10),
                                ('Unknown', 'Any', 25, 5);
