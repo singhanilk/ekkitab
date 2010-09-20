@@ -493,7 +493,7 @@ a:hover {
 	height: 28px;
 	position: top;
 	z-index:999;
-	margin: 5px 0px 0px 2px;
+	margin: 3px 0px 0px 2px;
 }
 
 .fsu0 {	background-position: left -3000px;}
@@ -922,7 +922,7 @@ a:hover {
 	margin:0px 0 0 10px;
 }
 .searchArea .buyArea .textArea {
-	width: 155px;
+	width: 135px;
 	float: left;
 	margin:0px 0 0 0px;
 }

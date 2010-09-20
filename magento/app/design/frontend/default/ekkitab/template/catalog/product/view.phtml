@@ -231,14 +231,18 @@
 		
 		
 	<div class="buyArea">
+		<?php if($listPrice > 0):?><div class="ourPrice">Our Price: <?php echo Mage::helper('core')->currency($_product->getFinalPrice(),true,false) ?></div>
+		<?php if($savings > 0):?>
 		<div class="textArea">
-			<?php if($listPrice > 0):?><div class="ourPrice">Our Price: <?php echo Mage::helper('core')->currency($_product->getFinalPrice(),true,false) ?></div>
+		<?php endif; ?>
 			<div class="authorEtc">MRP : <?php echo Mage::helper('core')->currency($listPrice,true,false) ?></div><?php endif; ?>
-			<div class="youSave"><?php if($savings > 0):?>Save <?php echo Mage::helper('core')->currency($savings,true,false) ?><?php endif; ?>
-			<?php if($savingsPerct > 0):?>(<?php echo $savingsPerct?>%)<?php endif; ?></div>
-		</div>
-		<div class="fsu<?php echo $savingsPerct?>"></div>
-		<div class="clear"></div>
+			<?php if($savings > 0 ):?>
+				<div class="youSave">Save <?php echo Mage::helper('core')->currency($savings,true,false) ?>
+				</div>
+			</div>
+			<div class="fsu<?php echo $savingsPerct?>"></div>
+			<div class="clear"></div>
+			<?php endif; ?>
 		<?php if($listPrice > 0):?>
 			<?php if($inStock==1) : ?>
 				<div class="authorEtc"><?php echo $shippingTime ?></div>
