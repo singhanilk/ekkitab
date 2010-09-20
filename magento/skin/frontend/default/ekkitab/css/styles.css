@@ -493,8 +493,9 @@ a:hover {
 	height: 28px;
 	position: top;
 	z-index:999;
-	margin: 80px 0px 0px 2px;
+	margin: 5px 0px 0px 2px;
 }
+
 .fsu0 {	background-position: left -3000px;}
 .fsu6 {	background-position: left -30px;}
 .fsu7 {	background-position: right -60px;}
@@ -541,6 +542,11 @@ a:hover {
 .fsu48 {background-position: left -1290px;}
 .fsu49 {background-position: left -1320px;}
 .fsu50 {background-position: left -1350px;}
+
+.vColumns .fsu0,.vColumns .fsu5, .vColumns .fsu6, .vColumns .fsu7, .vColumns .fsu8, .vColumns .fsu9, .vColumns .fsu10, .vColumns .fsu11, .vColumns .fsu12, .vColumns .fsu13, .vColumns .fsu14, .vColumns .fsu15, .vColumns .fsu16, .vColumns .fsu17, .vColumns .fsu18, .vColumns .fsu19, .vColumns .fsu20, .vColumns .fsu21, .vColumns .fsu22, .vColumns .fsu23, .vColumns .fsu24, .vColumns .fsu25, .vColumns .fsu26, .vColumns .fsu27, .vColumns .fsu28, .vColumns .fsu29, .vColumns .fsu30, .vColumns .fsu31, .vColumns .fsu32, .vColumns .fsu33, .vColumns .fsu34, .vColumns .fsu35, .vColumns .fsu36, .vColumns .fsu37, .vColumns .fsu38, .vColumns .fsu39, .vColumns .fsu40, .vColumns .fsu41, .vColumns .fsu42, .vColumns .fsu43, .vColumns .fsu44, .vColumns .fsu45, .vColumns .fsu46, .vColumns .fsu47, .vColumns .fsu48, .vColumns .fsu49, .vColumns .fsu50 {
+	margin: 80px 0px 0px 2px;
+}
+
 
 
 .titleEtc {
@@ -911,9 +917,14 @@ a:hover {
 
 }
 .searchArea .buyArea {
-	width: 19.5%;
+	width: 20%;
 	float: left;
 	margin:0px 0 0 10px;
+}
+.searchArea .buyArea .textArea {
+	width: 155px;
+	float: left;
+	margin:0px 0 0 0px;
 }
 .searchArea .buyBut {
 	margin: 8px 0 24px;
