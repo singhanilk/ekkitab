@@ -361,7 +361,7 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
 
 	public function setFacebookAdmin($fbAdmin)
     {
-		$this->_data['fbAdmin']=$ogImageUrl;
+		$this->_data['fbAdmin']=$fbAdmin;
     }
 
     public function getFacebookAdmin()
