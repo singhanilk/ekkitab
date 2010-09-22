@@ -34,22 +34,26 @@
 	<meta property="fb:page_id" content="<?php echo htmlspecialchars($this->getFacebookPageId()) ?>" />
 <?php endif; ?>
 <?php if(!is_null($this->getOpenGraphTitle()) && $this->getOpenGraphTitle()!=''): ?>
-	<meta name="og_title" property="og:title" content="<?php echo ucfirst(htmlspecialchars($this->getOpenGraphTitle())) ?>" />
+	<meta property="og:title" content="<?php echo ucfirst(htmlspecialchars($this->getOpenGraphTitle())) ?>" />
 <?php endif; ?>
 <?php if(!is_null($this->getOpenGraphProductUrl()) && $this->getOpenGraphProductUrl()!=''): ?>
-	<meta name="og_url" property="og:url" content="<?php echo htmlspecialchars($this->getOpenGraphProductUrl()) ?>"/>
+	<meta property="og:url" content="<?php echo htmlspecialchars($this->getOpenGraphProductUrl()) ?>"/>
 <?php endif; ?>
 <?php if(!is_null($this->getOpenGraphImageUrl()) && $this->getOpenGraphImageUrl()!=''): ?>
-	<meta name ="og_image" property="og:image" content="<?php echo htmlspecialchars($this->getOpenGraphImageUrl()) ?>" />
+	<meta property="og:image" content="<?php echo htmlspecialchars($this->getOpenGraphImageUrl()) ?>" />
 <?php endif; ?>
 <?php if(!is_null($this->getOpenGraphDescription()) && $this->getOpenGraphDescription()!=''): ?>
-	<meta name="og_description" property="og:description" content="<?php echo htmlspecialchars($this->getOpenGraphDescription()) ?>" />
+	<meta property="og:description" content="<?php echo htmlspecialchars($this->getOpenGraphDescription()) ?>" />
 <?php endif; ?>
 <?php if(!is_null($this->getOpenGraphSiteName()) && $this->getOpenGraphSiteName()!=''): ?>
-	<meta name="og_site_name" property="og:site_name" content="<?php echo htmlspecialchars($this->getOpenGraphSiteName()) ?>" />
+	<meta property="og:site_name" content="<?php echo htmlspecialchars($this->getOpenGraphSiteName()) ?>" />
 <?php endif; ?>
 <?php if(!is_null($this->getOpenGraphType()) && $this->getOpenGraphType()!=''): ?>
-	<meta name="og_type" property="og:type" content="<?php echo htmlspecialchars($this->getOpenGraphType()) ?>" />
+	<meta property="og:type" content="<?php echo htmlspecialchars($this->getOpenGraphType()) ?>" />
+<?php endif; ?>
+
+<?php if(!is_null($this->getFacebookAdmin()) && $this->getFacebookAdmin()!=''): ?>
+	<meta property="fb:admins" content="<?php echo $this->getFacebookAdmin() ?>" />
 <?php endif; ?>
 
 
