@@ -210,13 +210,21 @@
 							if($sourcedFrom && strlen(trim($sourcedFrom)) > 0 && strtolower($sourcedFrom)=='us'){
 								$edition.= " <em>Imported Edition</em>";
 							}
+							$stock = $otherBook->getInStock();
 					?>
 							<tr>
 								<td><div class="thmbImage"><a href="<?php echo $this->getUrl($url)?>" title="<?php  echo $name?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($thmbImage,'thumbnail',false,null, 74); ?>" alt="<?php echo $name?>"></a></div></td>
 								<td><a href="<?php echo $this->getUrl($url)?>" title="<?php  echo $name?>"><?php echo	$caption ?></a>	<br/><?php echo	$publshr?></td>
-								<td><?php echo Mage::helper('core')->currency($discPr,true,false) ?></td>
+								<td><?php if($discPr > 0) : echo Mage::helper('core')->currency($discPr,true,false); else : echo "--" ; endif; ?></td>
 								<td><?php echo	$lang?></td>
-								<td class="last a-left"><?php echo	$edition?>
+								<td class="last a-left">
+								<?php if($listPr >0) : ?>
+									<?php if($stock==1) : ?>	In Stock
+									<?php elseif($stock==2): ?> Pre-order
+									<?php else : ?>				Out of Stock 
+								<?php endif;?>
+								<?php else:?>					Out of Stock
+								<?php endif;?><br/><?php echo	$edition?>
 								</td>
 							</tr>
 					<?php endforeach; ?>

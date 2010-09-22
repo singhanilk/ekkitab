@@ -57,7 +57,7 @@ if($scrollSize):
 	function showSection(scrollNum){
 		var obj = document.getElementById('globalsection_scroll');
 		start=(scrollNum-1)*scrollSize;
-		end=(end = ((start+scrollSize)-1) ) > totalSections ? (totalSections-1): end ;
+		end=(end = ((start+scrollSize)-1) ) >= totalSections ? (totalSections-1): end ;
 		if( (diff= ((end - start) +1))< scrollSize){
 			start= start - (scrollSize - diff);		
 		}

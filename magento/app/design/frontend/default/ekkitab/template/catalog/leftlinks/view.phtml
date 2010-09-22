@@ -85,24 +85,32 @@
 				</div><!-- detailsArea -->
 
 				<div class="priceArea">
-				<?php if($savings > 0):?><div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($discPrice,true,false) ?></div><?php endif; ?>
+				<?php if($savings > 0):?>
+					<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($discPrice,true,false) ?></div>
+				<?php endif; ?>
 				<?php if($listPrice > 0):?><div class="lineHeight14em">MRP Price : <?php echo Mage::helper('core')->currency($listPrice,true,false) ?></div><?php endif; ?>
-				<div class="youSave"><?php if($savings > 0):?>Save <?php echo Mage::helper('core')->currency($savings,true,false) ?><?php endif; ?>
-				<?php if($savingsPerct > 0):?>(<?php echo $savingsPerct?>%)<?php endif; ?></div>
-				<div class="lineHeight14em"><?php echo $shippingTime ?></div>
-				<div class="youSave">
+				<?php if($savings > 0):?>
+					<div class="textArea">
+						<div class="youSave">Save <?php echo Mage::helper('core')->currency($savings,true,false) ?></div>
+				<?php endif; ?>
 				<?php if($listPrice >0) : ?>
 					<?php if($stock==1) : ?>
-						In Stock</div>
+						<div class="lineHeight14em"><?php echo $shippingTime ?></div>
+						<div class="youSave">In Stock</div>
 					<?php elseif($stock==2): ?>
-						Pre-order.</div>
+						<div class="lineHeight14em">Forthcoming Title.</div>
+						<div class="youSave">Pre-order.</div>
 					<?php else : ?>
-						Out of Stock </div>
+						<div class="noStock">Out of Stock </div>
 					<?php endif;?>
 				<?php else:?>
-					Out of Stock </div>
+					<div class="noStock">Out of Stock </div>
 				<?php endif;?>
-
+				<?php if($savings > 0):?>
+					</div>
+					<div class="fsu<?php echo $savingsPerct?>"></div>
+					<div class="clear"></div>
+				<?php endif; ?>
 				</div><!-- priceArea -->
 				<div class="clear"></div>
 

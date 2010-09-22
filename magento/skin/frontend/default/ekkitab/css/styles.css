@@ -926,6 +926,14 @@ a:hover {
 	float: left;
 	margin:0px 0 0 0px;
 }
+
+.searchRow .priceArea .textArea {
+	width: 125px;
+	float: left;
+	margin:0px 0 0 0px;
+}
+
+
 .searchArea .buyBut {
 	margin: 8px 0 24px;
 }
@@ -2323,9 +2331,15 @@ a:hover {
 	float:left;
 	font-size:11px;
 	margin:15px 0 0 10px;
-	width:22%;
+	width:27%;
 
 }
+.listRow .priceArea .textArea {
+	width: 135px;
+	float: left;
+	margin:0px 0 0 0px;
+}
+
 .listRow .detailsArea .synop {
 	color:#666666;
 	font-style:italic;
@@ -2728,3 +2742,6 @@ dt .hdr {
 }
 
 
+.mainRight .centerText{
+	text-align: center;
+}
