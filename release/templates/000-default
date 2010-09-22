@@ -5,7 +5,7 @@
 
     RewriteCond %{HTTP_HOST}    !^www\.ekkitab\.com
     RewriteCond %{HTTP_HOST}    !^$
-    RewriteRule ^/(.*)          http://www.ekkitab.com/$1
+    RewriteRule ^/(.*)          http://www.ekkitab.com/$1 [r=301]
 
     DocumentRoot EKKITAB_HOME/magento
 
