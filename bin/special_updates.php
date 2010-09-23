@@ -18,13 +18,15 @@ function initDatabase(){
   $database_user = $databaseConfigArray["database"]["user"];
   $database_password = $databaseConfigArray["database"]["password"];
   $ref_db = $databaseConfigArray["database"]["ref_db"];
+  $ekkitab_db = $databaseConfigArray["database"]["ekkitab_db"];
+  $login_db = $ref_db;
 
   try  {
-    $db = mysqli_connect($database_server,$database_user,$database_password,$ref_db);
+    $db = mysqli_connect($database_server,$database_user,$database_password,$login_db);
     if (mysqli_connect_errno()) {
       print "[Fatal]:Cannot connect to DB:" . mysqli_connect_error() . "\n";
     }
-    mysqli_select_db($db, $ref_db);
+    mysqli_select_db($db, $login_db);
   } catch (exception $e) {
     fatal($e->getmessage());
   }
@@ -76,7 +78,8 @@ function updateValues($isbn, $columns){
    $comma = ",";
 
    foreach($columns as $key => $value ) {
-    if ( is_null($value) or empty($value))
+    //print "Key=$key value=$value";
+    if ( is_null($value))
       continue;
     if ( $key == "discount_price") {
       $sqlString .= ( $sqlString == "" ? "" : "," ) . getDiscountUpdateString($key, $value); 
@@ -106,7 +109,6 @@ function special_updates_start($argc, $argv) {
    global $EKKITAB_HOME;
    global $updateArray;
    global $databaseConfigArray;
-   global $db;
     
    //Parse the main ini file
    $updateArray = parse_ini_file($EKKITAB_HOME."/data/special_updates.ini", true); 
