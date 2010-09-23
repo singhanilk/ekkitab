@@ -66,12 +66,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                         next;
                     }
                 }
-                if ($pricecol == -1) {
-                    if ($oWkC->Value =~ /CURR/) {
-                        $pricecol = $iC;
-                        next;
-                    }
-                }
                 if ($availcol == -1) {
                     if ($oWkC->Value =~ /QTY/) {
                         $availcol = $iC;
