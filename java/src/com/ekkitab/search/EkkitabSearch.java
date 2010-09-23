@@ -165,7 +165,7 @@ public class EkkitabSearch {
                 if ((query != null) && (query.trim().split(" ").length > 1)) {
         		    matchmode = MATCH_MODE.MATCH_WORDS;
         		    searchQuery = createSearchQuery(query, categories, searchfield, matchmode);
-            	
+        		    
                     if ((searchQuery != null) && (!searchQuery.equals(""))) {
             		    luceneQuery = new QueryParser("title", new StandardAnalyzer()).parse(searchQuery);
             		    //logger.debug("DEBUG: Lucene Query is: '" + luceneQuery.toString() + "'");
@@ -345,28 +345,28 @@ public class EkkitabSearch {
         StringBuffer sb = new StringBuffer();
         List<String> terms = new ArrayList<String>();        
         if (!query.equals("")) {
-        	switch (mode) {
-        		case MATCH_PHRASE:
-        			terms.add("\"" + query + "\"");
-        			break;
-        		case MATCH_WORDS:
-        			String[] words = query.split(" ");
-        			for (String word: words) {
-        				terms.add("\"" + word + "\"");
-        			}
-        			break;
-        		default: break;
+        	String prefix = (mode == MATCH_MODE.MATCH_PHRASE ? "+" : "");
+        	
+        	String[] words = query.split(" ");
+        	for (String word: words) {		
+        		terms.add(prefix+"\"" + word + "\"");
         	}
        
         	sb.append("( ");
-        	for (String term: terms) {
-        		if (searchfield != null) {
-        			sb.append(searchfield+":"+term+" ");
+        	List<String> lucenesearchfields = new ArrayList<String>();
+        	if (searchfield != null) {
+        		lucenesearchfields.add(searchfield);
+    		}
+        	else {
+        		lucenesearchfields.add("title");
+        		lucenesearchfields.add("author");
+        	}
+        	for (String field:lucenesearchfields) {
+        		sb.append(field+":(");
+        		for (String term: terms) {
+        			sb.append(term+" ");
         		}
-        		else {
-        			sb.append("title:"+term+" ");
-        			sb.append("author:"+term+"^2 ");
-        		}
+        		sb.append(")");
         	}
         	sb.append(" ) ");
         }

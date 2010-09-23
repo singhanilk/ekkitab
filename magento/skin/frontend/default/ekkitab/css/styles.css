@@ -926,6 +926,14 @@ a:hover {
 	float: left;
 	margin:0px 0 0 0px;
 }
+
+.searchRow .priceArea .textArea {
+	width: 125px;
+	float: left;
+	margin:0px 0 0 0px;
+}
+
+
 .searchArea .buyBut {
 	margin: 8px 0 24px;
 }
@@ -2323,9 +2331,15 @@ a:hover {
 	float:left;
 	font-size:11px;
 	margin:15px 0 0 10px;
-	width:22%;
+	width:27%;
 
 }
+.listRow .priceArea .textArea {
+	width: 135px;
+	float: left;
+	margin:0px 0 0 0px;
+}
+
 .listRow .detailsArea .synop {
 	color:#666666;
 	font-style:italic;
@@ -2725,6 +2739,137 @@ dt .hdr {
 	margin: 0 0 10px 10px;
 	padding-left: 10px;
 	border-left: 1px dotted #333333;
+}
+
+
+.mainRight .centerText{
+	text-align: center;
+}
+
+.authorsQAArea{
+	font-family: Georgia, "Times New Roman", Times, serif;
+	margin:16px auto 10px;
+	padding-bottom:10px;
+	width:880px;
+	font-size: 11px;
+	line-height: 22px;
+}
+
+.authorsQAArea .pageHeader {
+	color:#CC6600;
+	float:none;
+	font-size: 2.5em;
+	width:100%;
+	margin:0px auto 15px;
+}
+
+.authorsQAArea .authorsIntro {
+	font-size: 12px;
+	line-height: 18px;
+	font-style: italic;
+	color: #717476;
+	padding-bottom: 8px;
+	border-bottom: 1px dotted #666;
+	margin-bottom: 30px;
+}
+
+.authorsQAArea  .authorsIntro img {
+	margin-top: 5px;
+	margin-right: 10px;
+	float: left;
+}
+
+.authorsQAArea .ques {
+	color: #CC6600;
+	font-size: 12px;
+	font-style: normal;
+	margin-bottom: 3px;
+	text-align: justify;
+	
+}
+
+.authorsQAArea .ans {
+	color: #000000;
+	font-size: 12px;
+	font-style: normal;
+	margin-bottom: 10px;
+	text-align: justify;
+}
+.authorsQAArea .quote {
+	color: #717476;
+	padding-bottom: 5px;
+	line-height: 11px;
+	font-size: 10px;
+	font-style: italic;
+	text-align: left;
+}
+
+.authorsQAArea .quoteSign {
+	color: #CC6600;
+	padding-bottom: 2px;
+	font-size: 10px;
+	font-style: italic;
+	text-align: right;
+}
+
+.authorsQAArea .oddRow {
+	width:100%;
+	float:left;	
+	text-align: left;
+	padding-bottom: 20px;
+}
+
+.authorsQAArea .oddRow .col1 {
+	width:200px;
+	float:left;	
+	text-align: justify;
+	margin-right: 15px;
+	padding: 5px 10px 5px 5px;
+	border-right:1px dotted #cacaca;
+}
+
+.authorsQAArea .oddRow .col1 .image {
+	width:100%;
+	text-align: center;
+}
+.authorsQAArea .oddRow .col1 .image img {
+	border:1px solid #cacaca;
+}
+.authorsQAArea .oddRow .col2 {
+	width:645px;
+	float:left;	
+}
+.authorsQAArea .evenRow {
+	width:100%;
+	float:left;	
+	text-align: left;
+	padding-bottom: 20px;
+}
+
+.authorsQAArea .evenRow .col1 {
+	width:645px;
+	float:left;	
+}
+.authorsQAArea .evenRow .col2 {
+	width:200px;
+	float:left;	
+	text-align: justify;
+	margin-left: 15px;
+	padding: 5px 5px 5px 10px;
+	border-left:1px dotted #cacaca;
+}
+
+.authorsQAArea .evenRow .col2 .image {
+	width:100%;
+	text-align: center;
+}
+.authorsQAArea .evenRow .col2 .image img {
+	border:1px solid #cacaca;
+}
+
+.authorsQAArea .footer{
+	margin: 0px;
+	text-align:center;
 }
 
 

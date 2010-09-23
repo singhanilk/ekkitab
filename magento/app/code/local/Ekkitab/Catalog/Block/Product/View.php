@@ -51,9 +51,10 @@ class Ekkitab_Catalog_Block_Product_View extends Mage_Core_Block_Template
 				$headBlock->setDescription($desc);
 				$headBlock->setOpenGraphTitle($ogTitle);
 				$headBlock->setOpenGraphSiteName("Ekkitab.com");
-				$headBlock->setOpenGraphType("book");
+				//$headBlock->setOpenGraphType("book");
 				$headBlock->setOpenGraphImageUrl($imagetUrl);
 				$headBlock->setOpenGraphProductUrl($this->getUrl($productUrl));
+				$headBlock->setFacebookAdmin("ekkitab");
 			}
 			if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')){
 				$breadcrumbs->addCrumb('home', array(
