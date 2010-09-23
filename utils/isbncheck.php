@@ -1,7 +1,6 @@
 <?php
 
 /* program to enable the operations team to check isbn both in the books table in reference database and the missing isbn list.
-*  Also displays all the preorders in the system.
 *  This utility is to be copied under EKKITAB_URL/magento/internalutils/ ONLY FOR STAGING.
 */
 
@@ -142,7 +141,11 @@ if ( $isbnno != '' ){
   foreach ( $booksResult as $book ) {
     $displayString .= "<table border=1>";
     foreach ( $book as $key => $value ) {
-     $displayString .= "<tr><td>$key</td><td>$value</td></tr>";
+     if($key == "image" ){
+        $displayString .= "<tr><td>$key</td><td><img src=/media/catalog/product/$value /></td></tr>";
+     } else {
+        $displayString .= "<tr><td>$key</td><td>$value</td></tr>";
+     }
     }
     $displayString .= "</table>";
   }
