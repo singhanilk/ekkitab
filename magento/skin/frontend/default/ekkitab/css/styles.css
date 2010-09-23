@@ -2775,8 +2775,8 @@ dt .hdr {
 
 .authorsQAArea  .authorsIntro img {
 	margin-top: 5px;
-	margin-left: 10px;
-	float: right;
+	margin-right: 10px;
+	float: left;
 }
 
 .authorsQAArea .ques {

@@ -20,7 +20,6 @@ function getHashedPath($isbn) {
     for ($i = 0; $i<(strlen($isbn)); $i++)  {
         $sum += substr($isbn,$i,$i+1) + 0;
     }
-	Mage::log("isbn is :I" . $sum%100 . "/" . "J" . substr($isbn,strlen($isbn)-2,2) . "/" . $isbn.".jpg");
     return ("I" . $sum%100 . "/" . "J" . substr($isbn,strlen($isbn)-2,2) . "/" . $isbn.".jpg");
 }
 
