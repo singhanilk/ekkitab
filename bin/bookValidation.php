@@ -65,7 +65,7 @@ function checkValidity($db, $fh){
                     if($source == $row1[0] && $localsource == $db_localsource){
                         $percentage = percentage(trim($listprice), trim($row[1]));
                         if($percentage >= 50){
-                            print "[Catalog Validation] [Fatal] Listprice in file->$listprice for isbn-> $isbn is different from that of Database->$row[1] by more than 50%\n"; 
+                            print "[Catalog Validation] [Severe] Listprice in file->$listprice for isbn-> $isbn is different from that of Database->$row[1] by more than 50%\n"; 
                             $num_errors++;
                             //$catalog_validation_stopper = true;
                         }
