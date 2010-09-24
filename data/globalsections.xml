@@ -31,7 +31,7 @@
                 </SECTION>
 
 <SECTION id="6" title="Science" displayOnHome="no" activeFrom="01/01/2010" activeTo="01/01/2011">
-                 <DESCRIPTION>Most of the fundamental ideas of science are essentially simple, and may, as a rule, be expressed in a language comprehensible to everyone.- Albert Einstein</DESCRIPTION>
+                 <DESCRIPTION>Most of the fundamental ideas of science are essentially simple, and may, as a rule, be expressed in a language comprehensible to everyone - Albert Einstein</DESCRIPTION>
                  <HOMEPAGE_TEMPLATE_PATH>catalog/globalsection/home_page.phtml</HOMEPAGE_TEMPLATE_PATH>
                  <BOOKSPAGE_TEMPLATE_PATH>catalog/globalsection/view.phtml</BOOKSPAGE_TEMPLATE_PATH>
                 </SECTION>
