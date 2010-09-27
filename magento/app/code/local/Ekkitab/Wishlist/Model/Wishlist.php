@@ -59,10 +59,10 @@ class Ekkitab_Wishlist_Model_Wishlist extends Mage_Wishlist_Model_Wishlist
      */
     public function addNewItem($productId)
     {
-        $item = Mage::getModel('wishlist/item');
-        $item->loadByProductWishlist($this->getId(), $productId, $this->getSharedStoreIds());
+        $item = Mage::getModel('ekkitab_wishlist/item');
         $product = Mage::getModel('ekkitab_catalog/product')->load($productId);
 		$productIsbn = $product->getIsbn();
+        $item->loadByProductIsbnWishlist($this->getId(), $productIsbn, $this->getSharedStoreIds());
         if (!$item->getId()) {
             $item->setProductId($productId)
                 ->setIsbn($productIsbn)

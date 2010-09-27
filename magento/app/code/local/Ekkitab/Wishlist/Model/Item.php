@@ -19,4 +19,11 @@ class Ekkitab_Wishlist_Model_Item extends Mage_Wishlist_Model_Item
         $this->_init('ekkitab_wishlist/item');
     }
 
+	public function loadByProductIsbnWishlist($wishlistId, $productIsbn, $sharedStores)
+    {
+		$this->_getResource()->loadByProductIsbnWishlist($this, $wishlistId, $productIsbn, $sharedStores);
+        return $this;
+    }
+
+
 }
