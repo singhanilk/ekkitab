@@ -20,7 +20,7 @@ function getHashedPath($isbn) {
     for ($i = 0; $i<(strlen($isbn)); $i++)  {
         $sum += substr($isbn,$i,$i+1) + 0;
     }
-    return ("I" . $sum%100 . "/" . "J" . substr($isbn,strlen($isbn)-2,2) . "/" . $isbn);
+    return ("I" . $sum%100 . "/" . "J" . substr($isbn,strlen($isbn)-2,2) . "/" . $isbn.".jpg");
 }
 
 function getProductUrl($bookUrl)
@@ -42,8 +42,9 @@ function getProductUrl($bookUrl)
 <div class="authorsQAArea">
 	<div class="pageHeader">Meet SONIA SHAH</div>
 		<div class="authorsIntro">
-			<img src="<?php echo $this->getSkinUrl('/images/soniashah.jpg')?>" />
+			<img src="<?php echo $this->getSkinUrl('/images/soniashah1.jpg')?>" />
 			<p><strong>Sonia Shah</strong> is a critically acclaimed and prize winning author and journalist who lives in the United States but who is a citizen of the world. She announces her work, on her website, as the investigation of how science and politics collides in a lop-sided world. <p> Her books reflect that theme perfectly, and discuss the unevenness of the human experience across societies and cultures, across the rich and poor, and across the multitude of other differences that make up our world. Ekkitab had the wonderful privilege of catching up with her to talk about her work, books and philosophy which we present with great pleasure here. <p>At the end of the discussion, it is clear that Sonia is a deeply passionate humanist disturbed by the aberrations in our world that forces the weak and the poor to submit to the strong and the rich. And a courageous and talented writer who refuses to be silent about it.
+			<br/> <br/> <span class="quote">[Photo Credit: Joyce Ravid]</span>
 		</div>
 		
 		<div class="evenRow">
@@ -57,7 +58,7 @@ function getProductUrl($bookUrl)
 				<div class="image">
 					<a href="<?php echo $this->getUrl(getProductUrl('Sonia-Shah__The-Fever-How-Malaria-Has-Ruled-Humankind-for-500-000-Years__9780374230012'))?>" title="Sonia-Shah-The-Fever-How-Malaria-Has-Ruled-Humankind-for-500-000-Years-9780374230012"><img src="<?php echo $this->helper('ekkitab_catalog')->resize(getHashedPath('9780374230012') ,'small_image',false,null, 109); ?>"/></a>
 				</div>
-					<span class="quote">Raw, vivid...shah presents a fascinating history....This is an important book on the historical lessons we must not forget and the mistakes we are still making today in the battle against what remains a formidable killer."</span>
+					<span class="quote">Raw, vivid...Shah presents a fascinating history....This is an important book on the historical lessons we must not forget and the mistakes we are still making today in the battle against what remains a formidable killer."</span>
 					<br/><div class="quoteSign"> -New Scientist</div>
 			</div>
 		</div>
@@ -101,7 +102,7 @@ function getProductUrl($bookUrl)
 				<div class="image">
 					<a href="<?php echo $this->getUrl(getProductUrl('Dragon-Ladies-Asian-American-Feminists-Breathe-Fire__9780896085763')) ?>" title="Dragon-Ladies-Asian-American-Feminists-Breathe-Fire-By-Sonia-Shah-9780896085763"><img src="<?php echo $this->helper('ekkitab_catalog')->resize(getHashedPath('9780896085763'),'small_image',false,null, 109); ?>"/></a>
 				</div>
-				<span class="quote">"Sonia Shah cultivates a unique space for the feminist movement and the intricacies of Asian American life....shah's group of 28 powerful writers 
+				<span class="quote">"Sonia Shah cultivates a unique space for the feminist movement and the intricacies of Asian American life....Shah's group of 28 powerful writers 
 courageously strike each page with thought-provoking subjects"   </span>
 				<br/><div class="quoteSign"> - The Chicago Reporter</div>
 			</div>

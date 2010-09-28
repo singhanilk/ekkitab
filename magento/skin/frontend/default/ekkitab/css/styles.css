@@ -2775,8 +2775,8 @@ dt .hdr {
 
 .authorsQAArea  .authorsIntro img {
 	margin-top: 5px;
-	margin-left: 10px;
-	float: right;
+	margin-right: 10px;
+	float: left;
 }
 
 .authorsQAArea .ques {
@@ -2795,7 +2795,7 @@ dt .hdr {
 	margin-bottom: 10px;
 	text-align: justify;
 }
-.authorsQAArea .quote {
+.quote {
 	color: #717476;
 	padding-bottom: 5px;
 	line-height: 11px;
@@ -2804,7 +2804,7 @@ dt .hdr {
 	text-align: left;
 }
 
-.authorsQAArea .quoteSign {
+.quoteSign {
 	color: #CC6600;
 	padding-bottom: 2px;
 	font-size: 10px;

@@ -82,6 +82,12 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                     }
                 }
                 if ($availcol == -1) {
+                    if ($oWkC->Value =~ /STK/i) {
+                        $availcol = $iC;
+                        next;
+                    }
+                }
+                if ($availcol == -1) {
                     if ($oWkC->Value =~ /BLR/i) {
                         $availcol = $iC;
                         next;
