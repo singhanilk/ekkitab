@@ -43,16 +43,16 @@ public class BookIndex {
 
     private static final int MAXDESC_SIZE = 100;
     private String xmlfile = null;
-    private int startId = 0;
+    private String inputFile;
     private boolean newIndex;
 
-    public BookIndex(String indexDir, String xmlfile, boolean newIndex, String db, String user, String password, int startId) throws Exception {
+    public BookIndex(String indexDir, String xmlfile, boolean newIndex, String db, String user, String password, String inputFile) throws Exception {
         this.user = user;
         this.password = password;
         this.xmlfile = xmlfile;
         this.newIndex = newIndex;
-        if (startId > 0)
-            this.startId = startId;
+        this.inputFile = inputFile;
+        
         Directory d  = FSDirectory.getDirectory(indexDir);
         indexWriter = new IndexWriter(d,new StandardAnalyzer(),newIndex, IndexWriter.MaxFieldLength.LIMITED);
         indexWriter.setUseCompoundFile(true);
@@ -71,6 +71,19 @@ public class BookIndex {
 		}
 		connection.close();
 		connection = null;
+	}
+	
+	private int getBookId(String isbn) throws Exception {
+		String sql = "select id from books where isbn = '" + isbn + "'";
+		Statement stmt = connection.createStatement();
+        ResultSet result = stmt.executeQuery(sql);
+        int id = -1;
+        if (result.next()) {
+        	id = result.getInt("id");
+        }
+        result.close();
+        stmt.close();
+        return id;
 	}
 
     private String[] getFullCategoryForCode(String code) throws Exception {
@@ -267,7 +280,7 @@ public class BookIndex {
             range[0] = result.getInt(1);
             range[1] = result.getInt(2);
         }
-        System.out.println("Min: "+range[0]+" Max: "+range[1]);    
+        // System.out.println("Min: "+range[0]+" Max: "+range[1]);    
         result.close();
         stmt.close();
         return range;
@@ -280,7 +293,10 @@ public class BookIndex {
             Map<String, String> book = iter.next();
             Document doc = new Document();
             doc.add(new Field("entityId", book.get("id"), Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.add(new Field("sourcedfrom", book.get("sourcedfrom"), Field.Store.NO, Field.Index.ANALYZED));
+            if ((book.get("sourcedfrom")).equalsIgnoreCase("India")) {
+            	doc.setBoost(2);
+            }
+            //doc.add(new Field("sourcedfrom", book.get("sourcedfrom"), Field.Store.NO, Field.Index.ANALYZED));
             String value = null;
             long j=0;
             while (book.containsKey("author"+j)) {
@@ -379,6 +395,15 @@ public class BookIndex {
         trans.transform(source, result);
         fw.close();
     }
+    
+    private void runIndexEpilogue() throws Exception {
+    	System.out.println("Indexing Completed. Adding reference document.");
+        addReferenceDocument();
+        System.out.println("Completed adding reference document.");
+        System.out.println("Optimizing Index. Will take a few minutes....");
+        indexWriter.optimize();
+        indexWriter.close();
+    }
 
     public void runIndex() throws Exception {
 
@@ -387,15 +412,6 @@ public class BookIndex {
         timer10kstart = System.currentTimeMillis();
         try {
             int range[] = getRange();
-
-            if (startId > 0) { 
-                range[0] = startId;
-                System.out.println("Starting index from id: " + startId);
-            }
-
-            if (!newIndex) {
-                rootcategory = initCategories();
-            }
 
             for (int i = (range[0] == 0 ? 1 : range[0]); i <= range[1]; i++) {
                 
@@ -408,17 +424,53 @@ public class BookIndex {
                     System.out.println("Indexed: "+i+" books in "+(timer10kend - timer10kstart)/1000+" sec. ");
                 }
             }
-            System.out.println("Indexing Completed. Adding reference document.");
-            addReferenceDocument();
-            System.out.println("Completed adding reference document.");
-            System.out.println("Optimizing Index. Will take a few minutes....");
-            indexWriter.optimize();
-            indexWriter.close();
+            runIndexEpilogue();
         }
         catch (Exception e) {
             e.printStackTrace();
         }
         finally {
+            close();
+        }
+    }
+    
+    public void runUpdateIndex() throws Exception {
+
+        long timer10kstart, timer10kend;
+        BufferedReader updateRdr;
+        if (inputFile.equals("")) {
+        	return;      
+        }
+        
+        updateRdr = new BufferedReader(new FileReader(inputFile));
+        
+        timer10kstart = System.currentTimeMillis();
+        int i = 0;
+        try {
+        	String line;
+			while ((line = updateRdr.readLine()) != null) { 
+
+        		String isbn = line.trim();
+        		rootcategory = initCategories();
+        		int id = getBookId(isbn); 
+        		if (id > 0) {
+        			List<Map<String, String>> books = getBook(id);
+        			if (books != null) { 
+        				addDocument(books);
+        			}
+        			if ((++i % 1000000) == 0) {
+        				timer10kend = System.currentTimeMillis();
+        				System.out.println("Indexed: "+i+" books in "+(timer10kend - timer10kstart)/1000+" sec. ");
+        			}
+        		}
+            }
+			runIndexEpilogue();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+        	updateRdr.close();
             close();
         }
     }
@@ -463,15 +515,18 @@ public class BookIndex {
     public static void main(String[] args) {
         if (args.length < 7) {
             System.out.println("Insufficient arguments.");
-            System.out.println("Usage: BookIndex <index_dir> <categories.xml file> <newindex> <db_host> <user> <password> <startvalue>");
+            System.out.println("Usage: BookIndex <index_dir> <categories.xml file> <newindex> <db_host> <user> <password> <input-file>");
             return;
         }
         else {
             try {
                 boolean newindex = args[2].equalsIgnoreCase("true") ? true : false;
-                int startcount = Integer.parseInt(args[6]);
-                BookIndex bookIndex = new BookIndex(args[0], args[1], newindex, args[3], args[4], args[5], startcount);
-                bookIndex.runIndex();
+                //int startcount = Integer.parseInt(args[6]);
+                BookIndex bookIndex = new BookIndex(args[0], args[1], newindex, args[3], args[4], args[5], args[6]);
+                if (newindex)
+                	bookIndex.runIndex();
+                else 
+                	bookIndex.runUpdateIndex();
                 bookIndex.createAuthorSpellIndex(args[0]);
                 bookIndex.createTitleSpellIndex(args[0]);
             }

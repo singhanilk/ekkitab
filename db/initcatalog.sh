@@ -27,10 +27,11 @@ case "$2" in
    "-p") mode="price";;
    "-c") mode="catalog";;
    "-u") mode="update";;
+   "-ud") mode="updatedelta";;
    *)  echo "Fatal: Unknown mode: $2."
          exit 1;;
 esac
- 
+
 while read line;
 do 
   if ! [ "$line" == "" ] ; then 
@@ -51,18 +52,18 @@ if [ $mode == "catalog" ] ; then
     ( cd $EKKITAB_HOME/db ; ./deletebannedbooks.sh ../data/banned.txt )
 fi
 
-if [ "$mode" == "update" ] ; then
+if [ "$mode" == "update" ] || [ "$mode" == "updatedelta" ]; then
    echo "Applying section discounts and super discounts..." 
    ( cd $EKKITAB_HOME/bin; php special_discounts.php )
    echo "Applying special updates..." 
    ( cd $EKKITAB_HOME/bin; php special_updates.php )
-   echo "Starting Indexing..." 
    # Set System to maintenance
    ( cd $EKKITAB_HOME/bin; ./setdowntime.sh 30 )
    ( cd $EKKITAB_HOME/magento ; cp .htaccess.maintenance .htaccess )
    echo "Starting load of books to production database..." 
-   ( cd $EKKITAB_HOME/db; ./loadbooks.sh )
-   ( cd $EKKITAB_HOME/bin; ./create_index.sh )
+   ( cd $EKKITAB_HOME/db; ./loadbooks.sh $mode )
+   echo "Starting Indexing..." 
+   ( cd $EKKITAB_HOME/bin; ./makeindex.sh $mode )
    # take System off maintenance
    ( cd $EKKITAB_HOME/magento ; cp .htaccess.prod .htaccess )
 fi
