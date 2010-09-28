@@ -4,4 +4,4 @@ if [ -z $EKKITAB_HOME ] ; then
     exit 1;
 fi;
 . $EKKITAB_HOME/bin/db.sh 
-java -Xmx512m -cp ../java/bin:../java/lib/lucene-core-2.4.0.jar:../java/lib/lucene-memory-2.4.0.jar:../java/lib/mysql-connector-java-3.1.14-bin.jar:../java/lib/lucene-spellchecker-2.4.0.jar:../java/bin/ekkitabsearch.jar com.ekkitab.search.BookIndex ../magento/search_index_dir ../magento/categories.xml "true" $host $user $password 0 
+java -Xmx512m -cp ../java/bin:../java/lib/lucene-core-2.4.0.jar:../java/lib/lucene-memory-2.4.0.jar:../java/lib/mysql-connector-java-3.1.14-bin.jar:../java/lib/lucene-spellchecker-2.4.0.jar:../java/bin/ekkitabsearch.jar com.ekkitab.search.BookIndex ../magento/search_index_dir ../magento/categories.xml "true" $host $user $password ""

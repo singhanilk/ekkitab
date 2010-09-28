@@ -255,7 +255,7 @@ public class EkkitabSearch {
         		}
         	}
         	catch (Exception e) {
-        		logger.fatal("["+instanceId+"] Error processing Lucene reults " + e.getMessage());
+        		logger.fatal("["+instanceId+"] Error processing Lucene results " + e.getMessage());
         		throw new EkkitabSearchException(e.getMessage());
         	}
         }
