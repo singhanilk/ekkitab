@@ -68,6 +68,8 @@ function validBooks($books){
     }
     if ( !is_null($book['description']) && !empty($book['description']) && (preg_match($asciiExpression,$book['description']) == 0 )){
        $descIsValid = true;
+    } else {
+      $book['description'] = '';
     }
 
     if ($titleIsValid && $authorIsValid){
