@@ -39,6 +39,10 @@ else {
 
     $logger =& LoggerManager::getLogger("loadbooks");
 
+    // The following two variables are used for delta sql script and index.
+    $catalogUpdateSqlFile = null;
+    $catalogUpdateIndexFile = null;
+
    /** 
     * Log the error and terminate the program.
     * Optionally, will accept the query that failed.
@@ -125,6 +129,22 @@ else {
         }
 
         return $db;
+    }
+
+   /** 
+    *  Write delta sql scripts to update file
+    *  These scripts will contain both insert and update scripts for applying to the production database. 
+    */
+    function writeCatalogUpdatesToFile($sqlString, $isbn, $mode) {
+        global $catalogUpdateSqlFile;
+        global $catalogUpdateIndexFile;
+        
+       if ($mode & MODE_BASIC) {
+        fwrite($catalogUpdateSqlFile, $sqlString.";\n");
+        fwrite($catalogUpdateIndexFile, $isbn."\n");
+       } elseif ($mode & MODE_PRICE) {
+        fwrite($catalogUpdateSqlFile, $sqlString.";\n");
+       }
     }
 
    /** 
@@ -306,19 +326,19 @@ else {
             $bookavailable = $book['in_stock'];
             $discountprice = $book['discount_price']; 
             $delivery_period = $book['delivery_period'];
+            $standardCondition = " and ( in_stock != $bookavailable or discount_price != $discountprice or delivery_period != $delivery_period ) ";
             if ($bookavailable == '0') {
-              $whereclause = "(isbn = '$isbn') and ((discount_price is null) or ((in_stock = '0') and discount_price > '$discountprice'))";
+              $whereclause = "(isbn = '$isbn') $standardCondition and ((discount_price is null) or ((in_stock = '0') and discount_price > '$discountprice'))";
             } elseif ($bookavailable == '2') {
-              $whereclause = "(isbn = '$isbn') and ((discount_price is null) or ((in_stock = '2') and discount_price > '$discountprice'))";
+              $whereclause = "(isbn = '$isbn') $standardCondition and ((discount_price is null) or ((in_stock = '2') and discount_price > '$discountprice'))";
             } else {
-              $whereclause = "(isbn = '$isbn') and ((discount_price is null) or (in_stock = '0') or ((in_stock = '1') and ((discount_price > '$discountprice') or (delivery_period > '$delivery_period'))))";
+              $whereclause = "(isbn = '$isbn') $standardCondition and ((discount_price is null) or (in_stock = '0') or ((in_stock = '1') and ((discount_price > '$discountprice') or (delivery_period > '$delivery_period'))))";
             }
             $query = "update books set " . $updatestatement . " where $whereclause";
        }
        else {
             $query = "update books set " . $updatestatement . " where isbn = '$isbn'";
        }
-
        if (! $result = mysqli_query($db, $query)) {
            if (mysqli_errno($db) != 1062) { // 1062 represents duplicate key
               warn("Failed to write to Books. [Line: $linenumber] ". mysqli_error($db), $query);
@@ -326,6 +346,10 @@ else {
            return(0); 
        }
        else {
+           /* insert has been successfully so we need to add this to the production script */
+           if( mysqli_affected_rows($db) > 0 ) {
+            //writeCatalogUpdatesToFile($query, $isbn, $mode);
+           }
            return(1);
        }
     }
@@ -412,6 +436,8 @@ else {
     function start($argc, $argv) {
 
         global $logger;
+        global $catalogUpdateSqlFile;
+        global $catalogUpdateIndexFile;
 
         if ($argc == 1) {
            echo "Usage: $argv[0] [-abpd] <Data Source> <Data File>\n";
@@ -471,7 +497,19 @@ else {
         $unclassified = 0;
         $filenotfound = 0;
         $linenumber   = 0;
-    
+
+        // The catalog update file names
+        $catalogUpdateDir = EKKITAB_HOME."/release/catalogupdate";
+        $catalogUpdateSqlFileName = $catalogUpdateDir."/catalogupdate.sql";
+        $catalogUpdateIndexFileName = $catalogUpdateDir."/catalogupdate.txt";
+
+        // Open the updateScriptFile and the updateIndexFiles for writing out the deltas for books and indexes. 
+        $catalogUpdateSqlFile = fopen($catalogUpdateSqlFileName, "a"); 
+        if (!$catalogUpdateSqlFile) { fatal("Could not create the  catalog sql file"); }
+        $catalogUpdateIndexFile = fopen($catalogUpdateIndexFileName, "a"); 
+        if (!$catalogUpdateIndexFile) { fatal("Could not create the index text file"); }
+     
+        
         while ($line = fgets($fh)) {
             $linenumber++;
             $book = array();
@@ -542,6 +580,8 @@ else {
         info("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.\n");
     
         fclose($fh);
+        fclose($catalogUpdateSqlFile);
+        fclose($catalogUpdateIndexFile);
         mysqli_close($db);
     }
 
