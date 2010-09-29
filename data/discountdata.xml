@@ -2,7 +2,10 @@
 <DiscountData>
     <Supplier name="Ingrams">
         <DiscountLevel value="40">
-            <Price min="0" max="500">
+            <Price min="0" max="250">
+                <Discount low="2" high="5"/>
+            </Price>
+            <Price min="250" max="500">
                 <Discount low="15" high="20"/>
             </Price>
             <Price min="500" max="1000">
@@ -16,7 +19,10 @@
             </Price>
         </DiscountLevel>
         <DiscountLevel value="35">
-            <Price min="0" max="500">
+            <Price min="0" max="250">
+                <Discount low="2" high="5"/>
+            </Price>
+            <Price min="250" max="500">
                 <Discount low="15" high="18"/>
             </Price>
             <Price min="500" max="1000">
@@ -33,7 +39,10 @@
             </Price>
         </DiscountLevel>
         <DiscountLevel value="30">
-            <Price min="0" max="500">
+            <Price min="0" max="250">
+                <Discount low="2" high="5"/>
+            </Price>
+            <Price min="250" max="500">
                 <Discount low="8" high="12"/>
             </Price>
             <Price min="500" max="1000">
@@ -47,7 +56,10 @@
             </Price>
         </DiscountLevel>
         <DiscountLevel value="25">
-            <Price min="0" max="750">
+            <Price min="0" max="250">
+                <Discount low="2" high="5"/>
+            </Price>
+            <Price min="250" max="750">
                 <Discount low="8" high="12"/>
             </Price>
             <Price min="750" max="1250">
