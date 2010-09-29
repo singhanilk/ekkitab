@@ -13,6 +13,8 @@
 -- @version 1.1     Dec 02, 2009
 -- @version 1.2     Dec 09, 2009
 -- @version 2.0     Jan 28, 2010 (Vijay@ekkitab.com)
+-- @version 2.1     Sep 29, 2010 (prasad@ekkitab.com)
+-- The drop database has been moved to a separate script called create_reference_database.sql
 
 
 
@@ -24,11 +26,10 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 
 -- Droping the Database if it exists
-DROP DATABASE IF EXISTS `reference`;
+-- DROP DATABASE IF EXISTS `reference`;
 
 -- Creating a DataBase
-
-CREATE DATABASE `reference` DEFAULT CHARACTER SET `utf8` COLLATE `utf8_general_ci`;
+-- CREATE DATABASE `reference` DEFAULT CHARACTER SET `utf8` COLLATE `utf8_general_ci`;
 
 USE `reference`;
 
@@ -38,7 +39,7 @@ USE `reference`;
 -- Table structure for table `books`
 --
 
-CREATE TABLE `books` (
+CREATE TABLE IF NOT EXISTS `books` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` varchar(255),
   `author` varchar(120),
