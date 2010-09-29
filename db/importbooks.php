@@ -348,7 +348,7 @@ else {
        else {
            /* insert has been successfully so we need to add this to the production script */
            if( mysqli_affected_rows($db) > 0 ) {
-            //writeCatalogUpdatesToFile($query, $isbn, $mode);
+            writeCatalogUpdatesToFile($query, $isbn, $mode);
            }
            return(1);
        }
