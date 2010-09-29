@@ -326,7 +326,7 @@ else {
             $bookavailable = $book['in_stock'];
             $discountprice = $book['discount_price']; 
             $delivery_period = $book['delivery_period'];
-            $standardCondition = " and ( in_stock != $bookavailable or discount_price != $discountprice or delivery_period != $delivery_period ) ";
+            $standardCondition = " and ( in_stock != $bookavailable or discount_price != $discountprice or delivery_period != $delivery_period or delivery_period is null ) ";
             if ($bookavailable == '0') {
               $whereclause = "(isbn = '$isbn') $standardCondition and ((discount_price is null) or ((in_stock = '0') and discount_price > '$discountprice'))";
             } elseif ($bookavailable == '2') {
