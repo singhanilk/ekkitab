@@ -40,16 +40,18 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Product_Collection extends Mage_Core
 	
 	public function addIdOrderFilter($ids){
 		//Mage::log("Called addIdFilter");
-		$order ='FIELD (main_table.id';
-		if(!is_array($ids)){
-			$order.=','.$ids;
-		}else{
-			foreach($ids as $id){
-				$order.=','.$id;
+		if(!is_null($ids) && count($ids) > 0 ){
+			$order ='FIELD (main_table.id';
+			if(!is_array($ids)){
+				$order.=','.$ids;
+			}else{
+				foreach($ids as $id){
+					$order.=','.$id;
+				}
 			}
+			$order.=')';
+			$this->getSelect()->order($order);
 		}
-		$order.=')';
-		$this->getSelect()->order($order);
 		return $this;
 	}
 	
