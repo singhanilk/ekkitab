@@ -38,6 +38,27 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Product_Collection extends Mage_Core
 		return $this;
 	}
 	
+	public function addIdOrderFilter($ids){
+		//Mage::log("Called addIdFilter");
+		$order ='FIELD (main_table.id';
+		if(!is_array($ids)){
+			$order.=','.$ids;
+		}else{
+			foreach($ids as $id){
+				$order.=','.$id;
+			}
+		}
+		$order.=')';
+		$this->getSelect()->order($order);
+		return $this;
+	}
+	
+	public function addIsbnFilter($isbns){
+		//Mage::log("Called addIdFilter");
+		$this->addFieldToFilter('main_table.isbn', array('in'=>$isbns));
+		return $this;
+	}
+	
 	public function addSourcedFromFilter($sourcedFrom){
 		//Mage::log("Called addIdFilter");
 		$this->addFieldToFilter('main_table.sourced_from', array('eq'=>$sourcedFrom));
@@ -117,6 +138,19 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Product_Collection extends Mage_Core
 		//Mage::log("Invalid method ".get_class($this)."::".$method."(".print_r($args,1).")");
         throw new Exception("Invalid method ".get_class($this)."::".$method."(".print_r($args,1).")");
     }
+
+	public function getItemByIsbn($itemIsbn)
+    {
+        foreach ($this->_items as $item) {
+            if ($item->getIsbn() == $itemIsbn) {
+                return $item;
+            }
+        }
+        return null;
+    }
+
+
+
 
 }
    

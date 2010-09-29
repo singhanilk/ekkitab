@@ -197,7 +197,9 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
   				$productIds = java_values($results->getBookIds());
 				if(!is_null($productIds) && is_array($productIds) && count($productIds) > 0 ){
 					$books = Mage::getModel('ekkitab_catalog/product')->getCollection()
-					->addIdFilter($productIds);
+					->addIdFilter($productIds)
+					->addIdOrderFilter($productIds);
+					
 				}
 				$booksResult = array("books"=>$books,"hits"=>java_values($results->getHitCount()),"categories"=>$results->getResultCategories(),"suggest"=> $suggest,"other_suggestions"=>java_values($results->getSuggestOther()));
 				$this->_productCollection = $booksResult;
