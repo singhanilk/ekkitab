@@ -62,7 +62,7 @@ if($sec_count):
 ?>					<tr>
 <?php				$count=1;
 				}
-?>				 <td><a href="<?php echo $linkUrl ?>" title="<?php echo $linkCaption." ".$author ?>"><div class="image"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'thumbnail',false,null, 75); ?>" alt="<?php echo $linkCaption." ".$author ?>" /></a></div></td>
+?>				 <td><div class="image"><a href="<?php echo $linkUrl ?>" title="<?php echo $linkCaption." ".$author ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'thumbnail',false,null, 75); ?>" alt="<?php echo $linkCaption." ".$author ?>" /></a></div></td>
 <?php			$count++;
 			}else {?>
 			<li><a href="<?php echo $linkUrl ?>"><?php echo $this->htmlEscape($linkCaption) ?></a><?php  echo $linkAuthor ?></li>
