@@ -57,14 +57,14 @@ if [ "$mode" == "update" ] || [ "$mode" == "updatedelta" ]; then
    ( cd $EKKITAB_HOME/bin; php special_discounts.php )
    echo "Applying special updates..." 
    ( cd $EKKITAB_HOME/bin; php special_updates.php )
-   # Set System to maintenance
+   # set system to maintenance
    ( cd $EKKITAB_HOME/bin; ./setdowntime.sh 30 )
    ( cd $EKKITAB_HOME/magento ; cp .htaccess.maintenance .htaccess )
    echo "Starting load of books to production database..." 
    ( cd $EKKITAB_HOME/db; ./loadbooks.sh $mode )
-   echo "Starting Indexing..." 
+   # start indexing 
    ( cd $EKKITAB_HOME/bin; ./makeindex.sh $mode )
-   # take System off maintenance
+   # take system off maintenance
    ( cd $EKKITAB_HOME/magento ; cp .htaccess.prod .htaccess )
 fi
 
