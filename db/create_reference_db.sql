@@ -29,7 +29,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- DROP DATABASE IF EXISTS `reference`;
 
 -- Creating a DataBase
--- CREATE DATABASE `reference` DEFAULT CHARACTER SET `utf8` COLLATE `utf8_general_ci`;
+CREATE DATABASE IF NOT EXISTS `reference` DEFAULT CHARACTER SET `utf8` COLLATE `utf8_general_ci`;
 
 USE `reference`;
 
