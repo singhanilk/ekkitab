@@ -37,7 +37,7 @@
                 </SECTION>
 
 <SECTION id="7" title="History" displayOnHome="no" activeFrom="01/01/2010" activeTo="01/01/2011">
-                 <DESCRIPTION>History is a novel for which the people is the author.  ~Alfred de Vigny, Réflexions sur la Vérité dans l'Art</DESCRIPTION>
+                 <DESCRIPTION>History is a novel for which the people is the author. -Alfred de Vigny</DESCRIPTION>
                  <HOMEPAGE_TEMPLATE_PATH>catalog/globalsection/home_page.phtml</HOMEPAGE_TEMPLATE_PATH>
                  <BOOKSPAGE_TEMPLATE_PATH>catalog/globalsection/view.phtml</BOOKSPAGE_TEMPLATE_PATH>
                 </SECTION>

@@ -5,7 +5,7 @@
 -- drop database if exists reference;
 -- List all the tables that need to be dropped
 USE `reference`;
-drop table if exists books ;
+-- drop table if exists books ;
 drop table if exists ek_bisac_category_map ;
 drop table if exists ek_currency_conversion ;
 drop table if exists ek_discount_setting ;
