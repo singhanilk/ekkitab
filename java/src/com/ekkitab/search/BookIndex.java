@@ -199,7 +199,7 @@ public class BookIndex {
 
         List<Map<String, String>> books = new ArrayList<Map<String, String>>();
 
-	    String sql = "select title, author, bisac_codes, sourced_from, isbn from books where id = " + bookId;
+	    String sql = "select title, author, bisac_codes, sourced_from, isbn, in_stock from books where id = " + bookId;
         Statement stmt = connection.createStatement();
         ResultSet result = stmt.executeQuery(sql);
 
@@ -209,6 +209,7 @@ public class BookIndex {
         String sourcedfrom;
         String bisac_codes;
         String isbn;
+        String in_stock;
 
         long fstart, fstop;
 
@@ -231,6 +232,8 @@ public class BookIndex {
             }
             sourcedfrom = result.getString("sourced_from");
             sourcedfrom = sourcedfrom == null ? "" : sourcedfrom;
+            
+            in_stock = result.getString("in_stock");
 
             isbn = result.getString("isbn");
             isbn = isbn == null ? "" : isbn;
@@ -257,6 +260,7 @@ public class BookIndex {
                         book.put("id", id);
                         book.put("sourcedfrom", sourcedfrom);
                         book.put("isbn", isbn);
+                        book.put("in_stock", in_stock);
                         books.add(book);
                     }
                 }
@@ -285,17 +289,33 @@ public class BookIndex {
         stmt.close();
         return range;
     }
-
+	
+	private Document setDocumentBoost(Document doc, Map<String, String> book) {
+		int boost = 0;
+		if ((book.get("sourcedfrom")).equalsIgnoreCase("India")) {
+        	boost += 10;
+        }
+        if (Integer.parseInt(book.get("in_stock")) > 0) {
+        	boost += 1;
+        }
+        if (boost > 0) {
+        	doc.setBoost((float)1.0+(float)0.1*boost);
+        }
+        System.out.println("Book:"+book.get("title")+" set to boost level "+boost);
+		return doc;
+	}
+	
     public void addDocument(List<Map<String, String>> books) throws Exception {
 
         Iterator<Map<String, String>> iter = books.iterator();
         while (iter.hasNext()) {
             Map<String, String> book = iter.next();
             Document doc = new Document();
+            doc = setDocumentBoost(doc, book);
+            
+            
             doc.add(new Field("entityId", book.get("id"), Field.Store.YES, Field.Index.NOT_ANALYZED));
-            if ((book.get("sourcedfrom")).equalsIgnoreCase("India")) {
-            	doc.setBoost(2);
-            }
+            
             //doc.add(new Field("sourcedfrom", book.get("sourcedfrom"), Field.Store.NO, Field.Index.ANALYZED));
             String value = null;
             long j=0;
