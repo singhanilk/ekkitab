@@ -93,7 +93,7 @@ billing.onSave = function(evt){
 <div class="giftmessages">
 <?php switch ($this->getType()): ?>
 <?php case 'onepage_checkout': ?>
-    <div class="inner-box">
+    <div class="inner-box-giftmessage">
         <span class="gift-header"><?php echo $this->__('Do you have any gift items in your order?'); ?></span>
         <div class="clear"></div>
         <div class="a-left input-checkbox">
@@ -180,7 +180,7 @@ billing.onSave = function(evt){
     <?php break; ?>
     <?php case 'multishipping_adress': ?>
      <br />
-    <div class="inner-box">
+    <div class="inner-box-giftmessage">
         <span class="gift-header"><?php echo $this->__('Gift Messages'); ?></span>
         <div class="clear"></div>
         <div class="a-left input-checkbox">

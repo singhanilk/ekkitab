@@ -301,7 +301,7 @@ public class BookIndex {
         if (boost > 0) {
         	doc.setBoost((float)1.0+(float)0.1*boost);
         }
-        System.out.println("Book:"+book.get("title")+" set to boost level "+boost);
+        // System.out.println("Book:"+book.get("title")+" set to boost level "+boost);
 		return doc;
 	}
 	
