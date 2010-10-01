@@ -59,12 +59,14 @@
 
 <link rel="icon" href="<?php echo $this->getSkinUrl('favicon.ico') ?>" type="image/x-icon" />
 <link rel="shortcut icon" href="<?php echo $this->getSkinUrl('favicon.ico') ?>" type="image/x-icon" />
+<!--[if gt IE 6]>
 <script type="text/javascript">
-<![CDATA[
-    var BLANK_URL = '<?php echo $this->helper('core/js')->getJsUrl('blank.html') ?>';
-    var BLANK_IMG = '<?php echo $this->helper('core/js')->getJsUrl('spacer.gif') ?>';
-]]>
+//<![CDATA[
+	var BLANK_URL = "<?php echo $this->helper('core/js')->getJsUrl('blank.html') ?>";
+    var BLANK_IMG = "<?php echo $this->helper('core/js')->getJsUrl('spacer.gif') ?>";
+//]]>  
 </script>
+<![endif]-->
 
 <!--[if lte IE 6]>
 <script type="text/javascript">
