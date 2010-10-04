@@ -4,6 +4,15 @@
 # The standard field separator for our catalog.
 $FIELD_SEPARATOR = "\t";
 
+/* BISAC VARIABLES */
+$GENERIC_BISAC_CODE='ZZZ000000';
+
+/* DEFAULT VALUES FOR A BOOK */
+$defaultCatalogValues = array (
+"LANGUAGE" => "English",
+"SUBJECT" => "ZZZ000000",
+);
+
 #columns in the excel sheet.
 $columnList = array("ISBN","PRICE","CURRENCY","AVAILABILITY","IMPRINT","DELIVERY-DATE","TITLE","AUTHOR","BINDING", 
                  "DESCRIPTION", "PUBLISH-DATE","PUBLISHER","PAGES","LANGUAGE","WEIGHT","DIMENSION","SHIP-REGION", 
@@ -57,6 +66,21 @@ $supplierList = array (
 $invalidMissingIsbnTitleList = array(".", "Not Available" ); 
 $invalidMissingIsbnAuthorList = array(".", "Not Available", "NONE", "NA", "NO AUTHOR", "Required, No Author Name");
 
+
+/* FUNCTIONS START FROM HERE */
+
+/* Load Default values to book */
+function fillDefaultCatalogValues($book){
+  global $defaultCatalogValues;
+
+  if ($book){
+    foreach($defaultCatalogValues as $key => $value ) {
+     $book[$key] = $value;
+    }   
+  }
+  return $book;
+}
+
 /* Checks for validity of the book passed. Returns true or false. 
 1. ISBN present
 2. Title present
@@ -77,32 +101,32 @@ function validBooks($books){
   $errorString = "";
   if ( !is_null($book['ISBN']) && !empty($book['ISBN']) && (preg_match($asciiExpression,$book['ISBN']) == 0 )){
        $isbnIsValid = true;
-  } else { $errorString =  "ISBN is not valid"; }
+  } else { $errorString .=  "ISBN is not valid\n"; }
 
   if ( !is_null($book['AVAILABILITY']) && !empty($book['AVAILABILITY']) && (preg_match($asciiExpression,$book['AVAILABILITY']) == 0 ) 
        && in_array($book['AVAILABILITY'], $availabilityList)){
        $availabilityIsValid = true;
-  } else { $errorString =  "Availability is not valid"; }
+  } else { $errorString .=  "Availability is not valid\n"; }
 
   if ( !is_null($book['TITLE']) && !empty($book['TITLE']) && (preg_match($asciiExpression,$book['TITLE']) == 0 )){
        $titleIsValid = true;
-  } else { $errorString =  "Title is not valid"; }
+  } else { $errorString .=  "Title is not valid\n"; }
 
   if ( !is_null($book['AUTHOR']) && !empty($book['AUTHOR']) && (preg_match($asciiExpression,$book['AUTHOR']) == 0)){
        $authorIsValid = true;
-  } else { $errorString =  "Author is not valid"; }
+  } else { $errorString .=  "Author is not valid\n"; }
 
   if ( !is_null($book['DESCRIPTION']) && !empty($book['DESCRIPTION']) && (preg_match($asciiExpression,$book['DESCRIPTION']) == 0 )){
        $descIsValid = true;
-  } else { $errorString =  "Description is not valid"; }
+  } else { $errorString .=  "Description is not valid\n"; }
 
   if ( !is_null($book['SUPPLIER']) && !empty($book['SUPPLIER']) && (preg_match($asciiExpression,$book['SUPPLIER']) == 0 ) 
        && in_array($book['SUPPLIER'], $supplierList)){
        $supplierIsValid = true;
-  } else { $errorString =  "Supplier is not valid"; }
+  } else { $errorString .=  "Supplier is not valid\n"; }
 
   if ( $errorString != "" ) { 
-    $errorString = "Error:ISBN=" . $book['ISBN']. ":Title=" . $book['TITLE']. ":Author=".$book['AUTHOR']. ":" . $errorString; 
+    $errorString = "Error:ISBN=" . $book['ISBN']. ":Title=" . $book['TITLE']. ":Author=".$book['AUTHOR']. "\n" . $errorString; 
     $errorList[] = $errorString;
   }
  }

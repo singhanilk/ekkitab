@@ -92,6 +92,8 @@ function missingisbns_stock_catalog_start($argc, $argv) {
       $book['TITLE'] = trim($values[1]);
       $book['AUTHOR'] = trim($values[2]);
       $book = validMissingIsbnBook($book); 
+      $book = fillDefaultCatalogValues($book);
+      print_r($book);
       if ( $book != null ) {
         writeBookToCatalog($book, $catalogFile);
       }
@@ -101,7 +103,7 @@ function missingisbns_stock_catalog_start($argc, $argv) {
    }// for each missing isbn file.
  
   // Check import of each and every catalog which has been written.
-   
+     
 }
 
 missingisbns_stock_catalog_start($argc, $argv);
