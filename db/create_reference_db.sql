@@ -40,7 +40,7 @@ USE `reference`;
 --
 
 CREATE TABLE IF NOT EXISTS `books` (
-  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` INT(10) UNSIGNED NOT NULL,
   `title` varchar(255),
   `author` varchar(120),
   `isbn` varchar(20),
