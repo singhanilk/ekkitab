@@ -1,0 +1,19 @@
+Release Date - 01/October/2010
+
+Enhancements
+1. UI Changes : The header on top has been changed to accomodate six sections
+2. Like button on Author Interview.
+
+Issue Fixes
+Priority 1 ( P1 )
+#287 - Shopping Cart Error
+#283 - IE 6 and 8 Compatibility
+
+Priority 1 ( P2 )
+#288 -  Switch on the Gift message at Order level
+
+Priority 1 ( P3 )
+None.
+
+Priority 1 ( P4 )
+None.

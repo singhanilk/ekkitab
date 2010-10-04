@@ -29,7 +29,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- DROP DATABASE IF EXISTS `reference`;
 
 -- Creating a DataBase
--- CREATE DATABASE `reference` DEFAULT CHARACTER SET `utf8` COLLATE `utf8_general_ci`;
+CREATE DATABASE IF NOT EXISTS `reference` DEFAULT CHARACTER SET `utf8` COLLATE `utf8_general_ci`;
 
 USE `reference`;
 
@@ -40,7 +40,7 @@ USE `reference`;
 --
 
 CREATE TABLE IF NOT EXISTS `books` (
-  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` INT(10) UNSIGNED NOT NULL,
   `title` varchar(255),
   `author` varchar(120),
   `isbn` varchar(20),

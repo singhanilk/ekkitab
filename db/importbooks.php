@@ -42,6 +42,8 @@ else {
     // The following two variables are used for delta sql script and index.
     $catalogUpdateSqlFile = null;
     $catalogUpdateIndexFile = null;
+    // The product id which will be incremented only if there is a succesfull insert.
+    $productId = null;
 
    /** 
     * Log the error and terminate the program.
@@ -294,6 +296,7 @@ else {
     * Insert or Update the book in the database. 
     */
     function insertBook($book, $db, $mode, $linenumber) {
+       global $productId;
 
        if ($mode & MODE_PROMO) {
            return insertPromo($book,$db, $linenumber);
@@ -317,6 +320,10 @@ else {
           $insertvalues .= $conjunct . "'" . $value . "'";
           $conjunct = ",";
        }
+       // Add the productId in front of all other values as the autoincrement has been taken away.
+       $insertfields = "id".$conjunct.$insertfields;
+       $insertvalues = "$productId".$conjunct.$insertvalues;
+
        $updatestatement = preg_replace("/^\s*,/", "", $updatestatement);
 
        if ($mode & MODE_BASIC) {
@@ -346,9 +353,11 @@ else {
            return(0); 
        }
        else {
-           /* insert has been successfully so we need to add this to the production script */
            if( mysqli_affected_rows($db) > 0 ) {
-            writeCatalogUpdatesToFile($query, $isbn, $mode);
+            /* The query has been successful and check if it is a insert then increment the productId  */
+            if ($mode & MODE_BASIC) $productId++;
+            /* We have commented out the write as we are not applying delta right now */
+            //writeCatalogUpdatesToFile($query, $isbn, $mode);
            }
            return(1);
        }
@@ -438,6 +447,7 @@ else {
         global $logger;
         global $catalogUpdateSqlFile;
         global $catalogUpdateIndexFile;
+        global $productId;
 
         if ($argc == 1) {
            echo "Usage: $argv[0] [-abpd] <Data Source> <Data File>\n";
@@ -508,8 +518,9 @@ else {
         if (!$catalogUpdateSqlFile) { fatal("Could not create the  catalog sql file"); }
         $catalogUpdateIndexFile = fopen($catalogUpdateIndexFileName, "a"); 
         if (!$catalogUpdateIndexFile) { fatal("Could not create the index text file"); }
-     
-        
+        // Get the start Id  
+        $productId = getStartId($db);
+
         while ($line = fgets($fh)) {
             $linenumber++;
             $book = array();
@@ -583,10 +594,12 @@ else {
         fclose($catalogUpdateSqlFile);
         fclose($catalogUpdateIndexFile);
         mysqli_close($db);
+        return $errorcount + $unresolved + $filenotfound + $ignored;
     }
 
     $start = (float) array_sum(explode(' ', microtime()));
-    start($argc, $argv);
+    $errorRowCount = start($argc, $argv);
     $end = (float) array_sum(explode(' ', microtime()));
     info("Processing time: " . sprintf("%.2f", ($end - $start)/60) . " minutes.");
+    exit($errorRowCount);
 ?>
