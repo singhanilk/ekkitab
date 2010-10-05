@@ -173,6 +173,9 @@ global $duplicatebook, $newarrival;
                 $deliverydays = $fields[7];
             }
             $query = "select count(1) from books where isbn = '$isbn'";
+            // escape the title and author for insert statements.
+            $title = mysqli_real_escape_string($db, $title);
+            $author = mysqli_real_escape_string($db, $author);
             $query1 = "INSERT INTO `missing_isbns` (isbn, title, author, supplier) VALUES ('$isbn', '$title','$author','$distributor')";
             try{
             $result = mysqli_query($db, $query);

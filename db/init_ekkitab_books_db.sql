@@ -344,6 +344,7 @@ INSERT INTO `core_config_data` (`scope`, `scope_id`, `path`, `value`) VALUES
 ('default', 0, 'google/analytics/active', '1'),
 ('default',	0, 'web/browser_capabilities/cookies','1'),
 ('default',	0, 'web/browser_capabilities/javascript','1'),
+('default', 0, 'sales/gift_messages/allow_order', '1'),
 ('default', 0, 'web/cookie/cookie_lifetime', '7200');
 
 --

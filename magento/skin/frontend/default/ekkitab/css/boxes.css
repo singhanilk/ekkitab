@@ -73,7 +73,8 @@ input.checkbox            { margin-right:3px; }
 .qty                      { width:2.5em; }
 .group-select label,
 .form-list label,
-.payment-methods label    { font-weight:bold; }
+.payment-methods label ,
+.institute-form-list label{ font-weight:bold; }
 .button-set { /* Container for form buttons*/
     clear:both;
     margin-top:4em;
@@ -947,6 +948,10 @@ tr.grand_total td, p.grand_total { padding-top:5px; padding-bottom:5px; }
    padding:0px 20px;
     }
 
+.one-page-checkout .box-no-padding .inner-box-giftmessage {
+   padding:0px 30px;
+    }
+
 
 /* Multiple Addresses checkout */
 .checkout-progress { margin:0 auto 1.5em auto; }
@@ -1050,7 +1055,6 @@ tr.grand_total td, p.grand_total { padding-top:5px; padding-bottom:5px; }
     }
 .giftmessages .gift-box .scroll-box {
     overflow:auto;
-    height:500px;
     }
 .giftmessages .product-image {
     border:1px solid #d2d1cd;
@@ -1384,3 +1388,12 @@ table.print .price-incl-tax .price { display:inline; }
 .promo-box .product-img { float:left; border:2px solid #dcdcdc; }
 .promo-box .product-description { float:left; line-height:1.3em; }
 .promo-box a.product-name, .home-spot .promo-box a.product-name:hover { color:#203548; }
+
+.institute-form-select li                    { margin:0 8px 10px 0; padding-left:8px; }
+.institute-form-select li .input-box         { float:left; width:450px; }
+.institute-form-select li .input-text,
+.institute-form-select li select,
+.institute-form-select li textarea           { width:600px; }
+.institute-form-select li .input-box .input-text,
+.institute-form-select li .input-box textarea{ width:400px; }
+.institute-form-select li .input-box select  { width:256px; }
