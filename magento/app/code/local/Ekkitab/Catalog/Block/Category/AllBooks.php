@@ -171,14 +171,12 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
 			$results = $search->searchSequential($this->getPageSize(),$pageNo);
 			if(!is_null($results)){
   				$productIds = java_values($results->getBookIds());
-				Mage::log("In View All Books........ ids returned from searchSequential is as follows... ");
 				if(!is_null($productIds) && is_array($productIds) && count($productIds) > 0 ){
 					foreach($productIds as $id){
 						Mage::log($id.", ");
 					}
 					$books = Mage::getModel('ekkitab_catalog/product')->getCollection()
 					->addIdFilter($productIds);
-					Mage::log("In View All Books........ size of collection returned from getModel('ekkitab_catalog/product')->getCollection() is:". $books->count());
 
 				}
 				$this->_productCollection = $books;
@@ -228,7 +226,7 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
      *
      * @return string
      */
-    public function getTotalResultCount1()
+    public function getTotalResultCount()
     {
 		$indexFilePathArray;
 		$javaIncFilePathArray;
@@ -276,7 +274,7 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
      *
      * @return string
      */
-    public function getTotalResultCount()
+    public function getTotalResultCount_old()
     {
         $countArr = Mage::getSingleton('core/session')->getFullCatalogResultCount();
         if(is_array($countArr) && count($countArr) > 0 ){
