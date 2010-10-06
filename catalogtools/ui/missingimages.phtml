@@ -1,0 +1,68 @@
+<?php
+include "setenv.php";
+
+$errorList = Array();
+$selectedSupplier = '';
+$missingImagesDirectory='';
+
+// Task is set or not
+if(isset($_GET['task'])) {$task = $_GET['task']; } elseif(isset($_POST['task'])) { $task = $_POST['task']; } else { $task = ""; }
+
+if ($task == "getMissingImages" ) {
+  if(isset($_GET['SUPPLIER'])) {$selectedSupplier = $_GET['SUPPLIER']; } elseif(isset($_POST['SUPPLIER'])) { $selectedSupplier = $_POST['SUPPLIER']; } else { $selectedSupplier = ""; }
+  if ($selectedSupplier != '' ){
+   #Create a directory for the current images with date time stamp.
+   $missingImagesDirectory = $imagesWorkDirectory.$selectedSupplier."_".date("YmdHis");  
+   mkdir($missingImagesDirectory); 
+   $missingImagesFileName = $imagesWorkDirectory.$selectedSupplier."_".date("YmdHis").".txt";  
+   $command = "$EKKITAB_HOME/catalogtools/checkimages.php $selectedSupplier $missingImagesFileName";
+   $output = system($command, $result );
+  }
+}
+
+?>
+<html>
+<head>
+<!--  <link rel="stylesheet" href="../skin/frontend/default/ekkitab/css/styles.css" type="text/css" / > -->
+</head>
+<body>
+<h1>Missing Images</h1>
+<div id="errors">
+  <table class="redFont" border="1">
+  <?php 
+  foreach ($errorList as $error ){
+   echo "<tr><td>";
+   echo $error;
+   echo "</td></tr>";
+  }
+  ?>
+  </table>
+</div>
+<br>
+<div id="missingimages">
+<form action=<?php echo $baseURL."/missingimages.phtml" ?> method='post'>
+ <table border='0'>
+ <tr>
+  <td>SUPPLIER:(Valid supplier name)</td>
+  <td>
+     <select name ='SUPPLIER' value='' />
+     <?php 
+        foreach($supplierList as $key=>$value ) {
+          echo "<option values=$key>$value</option>";
+        }
+     ?>
+     </select>
+ </td>
+ </tr>
+ <tr>
+  <td>
+    <input type="hidden" name="task" value="getMissingImages" />
+    <input type="hidden" name="missingImagesDirectory" value="<?php echo $missingImagesDirectory ?>" />
+    <input type="hidden" name="missingImagesFileName" value="<?php echo $missingImagesFileName ?>" />
+    <input type='submit' value='GO' /></td>
+ <tr>
+</table>
+</form>
+</div>
+</body>
+</html>

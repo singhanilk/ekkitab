@@ -116,7 +116,7 @@ function validBooks($books){
        $authorIsValid = true;
   } else { $errorString .=  "Author is not valid\n"; }
 
-  if ( !is_null($book['DESCRIPTION']) && !empty($book['DESCRIPTION']) && (preg_match($asciiExpression,$book['DESCRIPTION']) == 0 )){
+  if ((preg_match($asciiExpression,$book['DESCRIPTION']) == 0 )){
        $descIsValid = true;
   } else { $errorString .=  "Description is not valid\n"; }
 

@@ -1,6 +1,16 @@
 <MENU>
     <SECTION title="New Releases" type="collection" showall="yes" showThumbnails="yes" highlight="6" shuffle="yes">
-        <BOOK id="9780446563086" title="Abraham Lincoln Vampire Hunter" author="Seth Grahame-Smith"/>
+        <BOOK id="9780552159913" title="The Cobra" author="Frederick, Forsyth" />
+        <BOOK id="9780330534253" title="Fall of Gaints" author="Ken Follett" />
+        <BOOK id="9780340992586" title="Under the Dome" author="Stephen King" />
+        <BOOK id="9789380658599" title="Small Wonder" author="Chacko Philip" />
+        <BOOK id="9780857201706" title="The Secret - The Power" author="Rhonda Byrne" />
+        <BOOK id="9788172239732" title="Fault Lines" author="Raghuram Rajan" />
+        <BOOK id="9780330519922" title="Room" author="Emma Donoghue" />
+        <BOOK id="9780143068716" title="Absolute Khuswant" author="Khuswant Singh" />
+        <BOOK id="9780670084630" title="Superpower ?" author="Raghav Bhal" />
+        <BOOK id="9788184951332" title="Corporate Chanakya" author="R Pillai" />
+        <BOOK id="9780143415251" title="Road to Commonwealth Games" author="Sunil Yash Kalra" />
         <BOOK id="9780061779725" title="Bite Me: A Love Story" author="Christopher Moore"/>
         <BOOK id="9780224090506" title="Solar" author="Ian McEwan"/>
         <BOOK id="9780091936938" title="Every Last One" author="Anna Quindlen"/>
@@ -12,7 +22,6 @@
         <BOOK id="9780345504968" title="The Passage" author="Justin Cronin"/>
         <BOOK id="9780446580830" title="The Lion" author="Nelson DeMille"/>
         <BOOK id="9780062020734" title="Lowcountry Summer" author="Dorothea Benton Frank"/>
-        <BOOK id="9780312383305" title="Sizzling Sixteen" author="Janet Evanovich"/>
         <BOOK id="9780316043878" title="The Island" author="Elin Hinderbrand"/>
         <BOOK id="9781847370235" title="Fly Away Home" author="Jennifer Weiner"/>
     </SECTION>

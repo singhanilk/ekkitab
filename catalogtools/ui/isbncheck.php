@@ -13,6 +13,7 @@ $db = NULL;
 $GENERIC_BISAC_CODE='ZZZ000000';
 $isbnno = '';
 $displayString = '';
+$preorder = '';
 
 /* Function to write both stdout and file */
 function logMessage($logFile, $outputString){
@@ -77,7 +78,7 @@ function checkMissingIsbnsTable($isbnno) {
 
 function checkpreorder($preorder) {
     $db = initDatabase();
-    $sqlQuery = "select isbn, title, author from books where in_stock = '$preorder' and id < 150000;";
+    $sqlQuery = "select isbn, title, author from books where in_stock = '$preorder'";
 	  $bookResult = queryDatabase($sqlQuery);
     return $bookResult;
 }
