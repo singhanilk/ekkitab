@@ -174,6 +174,25 @@ function validSupplier($supplier){
   return in_array($supplier, $supplierList);
 }
 
+function getBookDetails($isbn) {
+  global $db;
+  $book = Array();
+  $query = "select ISBN, TITLE, AUTHOR from books where isbn = '$isbn'";
+
+  try {
+   $result = mysqli_query($db,$query);
+   if (!$result) { 
+     $book = null; 
+   } else { 
+       $book= mysqli_fetch_array($result);
+   }
+  } catch(exception $e) {
+    $book = null;
+  }
+
+  return $book; 
+}
+
 /* Function to write to catalog file 
 ** Assumes that the file is open.
 */
