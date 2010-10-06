@@ -707,9 +707,6 @@ a:hover {
 .logo a{
 	width: 284px;
 	height: 89px;
-	background-image: url(../images/ekkitab_logo.png);
-	background-position: left top;
-	background-repeat: no-repeat;
 	display: block;
 }
 .headerRight {
@@ -2873,5 +2870,4 @@ dt .hdr {
 	margin: 0px;
 	text-align:center;
 }
-
 
