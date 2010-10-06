@@ -245,9 +245,7 @@ foreach my $toplink (@toplinks) {
         print "Processing: $nextlink\n";
         @books = getBooks($ua, $nextlink);
         writeLinks(@books);
-        last;
     }
-    last;
 }
 closeSitemapFile(); 
 closeSitemapIndex();
