@@ -1,0 +1,190 @@
+<?php
+# This has to be defined as we want the rest of the run with this variable
+$EKKITAB_HOME = "/Volumes/ppotula_data/Users/admin/ppotula/development/ekkitab/src/scm"; 
+putenv("EKKITAB_HOME=$EKKITAB_HOME");
+
+include "../common_catalog_functions.php";
+
+#Catalog Stock Generator Method.
+$catalogCode = "../catalog_stock_generator.php";
+
+#Import Method.
+$importBooksCode = "../../db/importbooks.php";
+
+#Temporary directory when uploading a document
+$tmpDir="/tmp/work/catalogs/";
+
+#GLOBAL VARIABLES
+$errorList = Array();
+
+#Book associate array
+$book = Array();
+
+$filename = "";
+
+// Task is set or not
+if(isset($_GET['task'])) {$task = $_GET['task']; } elseif(isset($_POST['task'])) { $task = $_POST['task']; } else { $task = ""; }
+
+if ($task == "saveSingleBook" ) {
+ foreach($columnList as $column) {
+   if(isset($_GET[$column])) { $book[$column] = $_GET[$column]; } elseif(isset($_POST[$column])) { $book[$column] = $_POST[$column]; } else { $book[$column] = ""; }
+ }
+
+// Write Books to file
+$books = Array();
+$books[] = $book;
+$errorList = validBooks($books);
+$errorList = preg_replace("/\n/", "<br>", $errorList);
+
+if (empty($errorList)){
+ // Create a temporary directory for storing the tmp file and writing it down.
+ if ( !is_dir($tmpDir )) { mkdir($tmpDir, 0777, true); }
+
+ $filename=$tmpDir.$book['SUPPLIER']."_".date("YmdHis").".txt";  
+
+ $fileHandle = fopen($filename, "w");
+
+ writeBooksToCatalog($books, $fileHandle);
+
+ fclose($fileHandle);
+ } // No errors.
+} // saveSingleBook function
+
+
+# HTML CODE FROM BELOW
+?>
+<html>
+<head>
+ <link rel="stylesheet" href="../skin/frontend/default/ekkitab/css/styles.css" type="text/css" / >
+</head>
+<body>
+<br><br><br>
+<br><br><br>
+<br><br><br>
+<br><br><br>
+<h1>Supplier and File to upload </h1>
+<div id="errors">
+  <table class="redFont" border="1">
+  <?php 
+  foreach ($errorList as $error ){
+   echo "<tr><td>";
+   echo $error;
+   echo "</td></tr>";
+  }
+  ?>
+  </table>
+</div>
+<br>
+<div id="singleBookUpload">
+<form action='/magento/internalutils/bookupdate.phtml' method='post'>
+ <table border='0'>
+ <tr>
+  <td>ISBN:(13 digit)</td>
+  <td><input type='text' name ='ISBN' size='50' maxlength='13' value='<?php if($book) { echo $book['ISBN']; } ?>' /></td>
+ </tr>
+ <tr>
+  <td>TITLE:</td>
+  <td><input type='text' name ='TITLE' size="50" maxlength='255' value='<?php if($book) { echo $book['TITLE']; } ?>' /></td>
+ </tr>
+ <tr>
+  <td>AUTHOR:(FirstName LastName&SecondFirstName SecondLastName)</td>
+  <td><input type='text' name ='AUTHOR' size='50' maxlength='120' value='<?php if($book) { echo $book['AUTHOR']; } ?>' /></td>
+ </tr>
+ <tr>
+  <td>DESCRIPTION:</td>
+  <td><textarea name ='DESCRIPTION' rows="4" cols="50" maxlength='2047' value='<?php if($book) { echo $book['DESCRIPTION']; } ?>' /></textarea></td>
+ </tr>
+ <tr>
+  <td>BINDING:(Paperback,Hardcover,Hardback)</td>
+  <td>
+     <select name ='BINDING' value='Paperback' />
+     <?php 
+        foreach($bindingList as $key=>$value ) {
+          echo "<option values=$key>$value</option>";
+        }
+     ?>
+     </select>
+  </td>
+  <td>IMPRINT:(Text only)</td>
+  <td><input type='text' name ='IMPRINT' size='50' value='<?php if($book) { echo $book['IMPRINT']; } ?>' /></td>
+ </tr>
+ <tr>
+  <td>PRICE:(Numbers only)</td>
+  <td><input type='text' name ='PRICE' size='50' value='<?php if($book) { echo $book['PRICE']; } ?>' /></td>
+  <td>CURRENCY:(I,U,P,S only)</td>
+  <td>
+     <select name ='CURRENCY' value='I' />
+     <?php 
+        foreach($currencyList as $key=>$value ) {
+          echo "<option values=$key>$value</option>";
+        }
+     ?>
+     </select>
+  </td>
+ </tr>
+ <tr>
+  <td>AVAILABILITY:(Available, Not Available, Preorder)</td>
+  <td>
+     <select name ='AVAILABILITY' value='Available' />
+     <?php 
+        foreach($availabilityList as $key=>$value ) {
+          echo "<option values=$key>$value</option>";
+        }
+     ?>
+     </select>
+  </td>
+  <td>DELIVERY-DATE:(Text only. Do not include / or -)</td>
+  <td><input type='text' name ='DELIVERY-DATE' size='50' value='<?php if($book) { echo $book['DELIVERY-DATE']; } ?>' /></td>
+ </tr>
+ <tr>
+  <td>PUBLISH-DATE:(Text only. Do not include / or -)</td>
+  <td><input type='text' name ='PUBLISH-DATE' size='50' maxlength='255' value='<?php if($book) { echo $book['PUBLISH-DATE']; } ?>' /></td>
+  <td>PUBLISHER:</td>
+  <td><input type='text' name ='PUBLISHER' size='50' maxlength='120' value='<?php if($book) { echo $book['PUBLISHER']; } ?>' /></td>
+ </tr>
+ <tr>
+  <td>PAGES:(Number only)</td>
+  <td><input type='text' name ='PAGES' size='50' value='<?php if($book) { echo $book['PAGES']; } ?>' /></td>
+  <td>LANGUAGE:(English Default)</td>
+  <td>
+     <select name ='LANGUAGE' value='English' />
+     <?php 
+        foreach($languageList as $key=>$value ) {
+          echo "<option values=$key>$value</option>";
+        }
+     ?>
+     </select>
+  </td>
+ </tr>
+ <tr>
+  <td>WEIGHT:</td>
+  <td><input type='text' name ='WEIGHT' size='30' value='<?php if($book) { echo $book['WEIGHT']; } ?>' /></td>
+  <td>DIMENSION:</td>
+  <td><input type='text' name ='DIMENSION' size='30' value='<?php if($book) { echo $book['DIMENSION']; } ?>' /></td>
+ </tr>
+ <tr>
+  <td>SHIP-REGION:</td>
+  <td><input type='text' name ='SHIP-REGION' size='30' value='<?php if($book) { echo $book['SHIP-REGION']; } ?>' /></td>
+  <td>SUBJECT:(Do not include Bisac codes here )</td>
+  <td><input type='text' name ='SUBJECT' size='30' maxlength='120' value='<?php if($book) { echo $book['SUBJECT']; } ?>' /></td>
+ </tr>
+ <tr>
+  <td>SUPPLIER:(Valid supplier name)</td>
+  <td>
+     <select name ='SUPPLIER' value='<?php if($book) { echo $book['SUPPLIER']; } ?>' />
+     <?php 
+        foreach($supplierList as $key=>$value ) {
+          echo "<option values=$key>$value</option>";
+        }
+     ?>
+     </select>
+ </td>
+ </tr>
+ <tr>
+  <td><input type="hidden" name="task" value="saveSingleBook" /><input type='submit' value='GO' /></td>
+ <tr>
+</table>
+</form>
+</div>
+</body>
+</html>
