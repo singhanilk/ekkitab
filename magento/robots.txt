@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /media
+Disallow: /skin
+Disallow: /lib
+Disallow: /app
+
+Sitemap: http://www.ekkitab.com/sitemap_index.xml
+
