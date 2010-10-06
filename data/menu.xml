@@ -125,7 +125,7 @@
         </LINK>
     </SECTION>
 
-	<SECTION title="Indian Books" type="collection" showall="yes" showThumbnails="yes" highlight="6" shuffle="no">
+	<SECTION title="Indian Books" type="collection" showall="yes" showThumbnails="yes" highlight="2" shuffle="no">
 		<BOOK id="9780140138351" title="A History of India: Volume 1" author="Romila Thapar" />
 		<BOOK id="9780156005784" title="In Light of India" author="Octavio Paz" />
 		<BOOK id="9780195668742" title="The Oxford India Illustrated Corbett" author="Jim Corbett" />
