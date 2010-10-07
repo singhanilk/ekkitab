@@ -187,7 +187,7 @@
 							$bookId = $otherBook->getId();
 							$bookIsbn = $otherBook->getIsbn();
 							$thmbImage = $otherBook->getImage();
-							$url=$this->helper('ekkitab_catalog')->getSearchResultProductUrl($auth,$name,$bookIsbn);	
+							$url=$this->helper('ekkitab_catalog')->getProductUrl($auth,$name,$bookIsbn);	
 							$bind=strlen($otherBook->getBinding()) > 0 ? ucfirst($otherBook->getBinding()) : "" ;
 							$lang=strlen($otherBook->getLanguage()) > 0 ? $otherBook->getLanguage() : "";
 							$listPr = $otherBook->getListPrice() ;
