@@ -5,8 +5,7 @@ use HTML::Entities;
 use Encode;
 
 my  $outputdir = "/tmp";
-#use constant MAXBOOKS_PER_FILE => 45000;
-use constant MAXBOOKS_PER_FILE => 50;
+use constant MAXBOOKS_PER_FILE => 40000;
 
 sub getDate {
     my ($d,$m,$y) = (localtime)[3,4,5];
