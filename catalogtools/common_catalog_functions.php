@@ -174,8 +174,7 @@ function validSupplier($supplier){
   return in_array($supplier, $supplierList);
 }
 
-function getBookDetails($isbn) {
-  global $db;
+function getBookDetails($db, $isbn) {
   $book = Array();
   $query = "select ISBN, TITLE, AUTHOR from books where isbn = '$isbn'";
 
