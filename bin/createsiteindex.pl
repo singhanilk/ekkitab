@@ -5,7 +5,7 @@ use HTML::Entities;
 use Encode;
 
 my  $outputdir = "/tmp";
-use constant MAXBOOKS_PER_FILE => 45000;
+use constant MAXBOOKS_PER_FILE => 40000;
 
 sub getDate {
     my ($d,$m,$y) = (localtime)[3,4,5];
@@ -138,7 +138,12 @@ sub getBooks {
         open ($fd_index, "> $index_filename") or die "[Fatal] Cannot open output file: $index_filename";
         $fd_index->autoflush(1);
         binmode($fd_index, ":utf8");
-        print $fd_index "<sitemapindex xsi:schemaLocation=\"http://www.sitemaps.org/schemas/sitemap/0.9\thttp://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd\">\n";
+        print $fd_index '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+        print $fd_index '<sitemapindex' . "\n";
+        print $fd_index '          xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' . "\n";
+        print $fd_index '          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' . "\n";
+        print $fd_index '          xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9' . "\n";
+        print $fd_index '                              http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd">' . "\n";
     }
 
     sub closeSitemapIndex {
@@ -170,7 +175,7 @@ sub getBooks {
             $bookcount++;
             if ($bookcount > MAXBOOKS_PER_FILE) {
                 closeSitemapFile();
-                openSitemapFile();
+                $fd = getSitemapHandle();
                 $bookcount = 0;
             }
         }
@@ -240,9 +245,9 @@ if ($page eq "") {
 
 @toplinks = getTopLinks($page);
 foreach my $toplink (@toplinks) {
+    print "[Info] Processing: $toplink\n";
     @nextlinks = getNextLinks($ua, $toplink);
     foreach my $nextlink (@nextlinks) {
-        print "Processing: $nextlink\n";
         @books = getBooks($ua, $nextlink);
         writeLinks(@books);
     }

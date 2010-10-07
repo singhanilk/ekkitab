@@ -1,5 +1,7 @@
-# Execute daily data pull, data import, catalog and index build and transfer to production.
-00 15   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./dailysync.sh vijay@ekkitab.com anil@ekkitab.com prasad@ekkitab.com | php /mnt2/scm/bin/sendmail.php -s "Daily Sync Summary" vijay@ekkitab.com anil@ekkitab.com prasad@ekkitab.com
+# Execute daily data import, catalog and index build and transfer to production.
+00 14   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./dailysync.sh vijay@ekkitab.com anil@ekkitab.com prasad@ekkitab.com | php /mnt2/scm/bin/sendmail.php -s "Daily Sync Summary" vijay@ekkitab.com anil@ekkitab.com prasad@ekkitab.com
+# Execute daily data refresh from Ingram.
+00 10   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./refreshingram.sh vijay@ekkitab.com anil@ekkitab.com | php /mnt2/scm/bin/sendmail.php -s "Daily Ingram Refresh Summary" vijay@ekkitab.com anil@ekkitab.com
 # Execute hourly processing of stocklists coming in as email attachments.
 00 *   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./stockstatusimport.sh christopher@ekkitab.com anil@ekkitab.com saran@ekkitab.com prasad@ekkitab.com
 # Backup production database tables hourly. (Production)
@@ -22,6 +24,7 @@
 15 *   * * *   ubuntu  cd /mnt2/scm/utils && ./save_db_backup.sh
 # Backup blog DB. (Staging)
 15 1   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/utils && ./backupblog.sh
+
 
 
 
