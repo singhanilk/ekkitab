@@ -143,7 +143,7 @@ if ( $isbnno != '' ){
     $displayString .= "<table border=1>";
     foreach ( $book as $key => $value ) {
      if($key == "image" ){
-        $displayString .= "<tr><td>$key</td><td><img src=/media/catalog/product/$value /></td></tr>";
+        $displayString .= "<tr><td>$key</td><td><img src=http://www.ekkitab.co.in/media/catalog/product/$value /></td></tr>";
      } else {
         $displayString .= "<tr><td>$key</td><td>$value</td></tr>";
      }

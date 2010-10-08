@@ -363,7 +363,7 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
      */
     public function getSearchResultProductUrl($author,$title,$isbn)
     {
-		$urlPrefix='ekkitab_catalog/product/view/book/';
+		$urlPrefix='ekkitab_catalog/product/show/book/';
 		return $this->getProductUrl($author,$title,$isbn,$urlPrefix);
 	}
 

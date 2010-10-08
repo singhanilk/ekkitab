@@ -83,7 +83,7 @@
 			}else{
 				$auth="";
 			}
-			$bookName=$this->helper('ekkitab_catalog')->getSearchResultProductUrl($auth,$fullTitle,$product->getIsbn());
+			$bookName=$this->helper('ekkitab_catalog')->getProductUrl($auth,$fullTitle,$product->getIsbn());
 
 				$image = $product->getImage();
 

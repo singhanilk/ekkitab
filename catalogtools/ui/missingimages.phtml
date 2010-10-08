@@ -4,22 +4,98 @@ include "setenv.php";
 $errorList = Array();
 $selectedSupplier = '';
 $missingImagesDirectory='';
+$books = Array();
 
 // Task is set or not
 if(isset($_GET['task'])) {$task = $_GET['task']; } elseif(isset($_POST['task'])) { $task = $_POST['task']; } else { $task = ""; }
 
+// Make the mandatory checks
+if (!is_dir($imagesWorkDirectory)){
+  $errorString = "Mandatory directories missing-$imagesWorkDirectory"; 
+  $errorList[] = $errorString;
+  $task = "";
+}
 if ($task == "getMissingImages" ) {
+  $db = initDatabase($config);
+  $runAgain = false;
   if(isset($_GET['SUPPLIER'])) {$selectedSupplier = $_GET['SUPPLIER']; } elseif(isset($_POST['SUPPLIER'])) { $selectedSupplier = $_POST['SUPPLIER']; } else { $selectedSupplier = ""; }
   if ($selectedSupplier != '' ){
    #Create a directory for the current images with date time stamp.
-   $missingImagesDirectory = $imagesWorkDirectory.$selectedSupplier."_".date("YmdHis");  
-   mkdir($missingImagesDirectory); 
-   $missingImagesFileName = $imagesWorkDirectory.$selectedSupplier."_".date("YmdHis").".txt";  
-   $command = "$EKKITAB_HOME/catalogtools/checkimages.php $selectedSupplier $missingImagesFileName";
-   $output = system($command, $result );
+   $missingImagesDirectory = $imagesWorkDirectory.$selectedSupplier;  
+   $missingImagesFileName = $imagesWorkDirectory.$selectedSupplier.".txt";  
+   if(is_dir($missingImagesDirectory)) {
+   # read the directory and fill in the array with the isbn and the URL for the image only if it is not zero bytes
+  //$missingImagesDirectory = $imagesWorkDirectory."amit_20101006102016";
+   if ($handle = opendir($missingImagesDirectory)) {
+    while (false !== ($file = readdir($handle))) {
+        if ($file != "." && $file != "..") {
+           $filename = $missingImagesDirectory . "/". $file;
+           if(is_file($filename) && filesize($filename) > 0 ){
+              $tokens = explode(".", $file);
+              //Get the title and author for this
+              $book = getBookDetails($db,$tokens[0]);
+              $book['URL'] = $filename;
+              if ( $book ) { $books[] = $book; }
+           } else {
+             unlink($filename);
+           }
+        }
+     }
+    closedir($handle);
+    if ( empty($books)) { $runAgain = true; }
+    } // Open the directory of the images
+   } else {
+    mkdir($missingImagesDirectory); 
+    $runAgain = true;
+   } // Directory is not present.
+   if($runAgain) {
+     $command = "php $EKKITAB_HOME/catalogtools/checkimages.php $selectedSupplier $missingImagesFileName";
+     exec($command, $result );
+     # Check if the file is created and is not of zero bytes
+     # If the files is not empty call google images to get the images and store them in the directory 
+     if ( is_file($missingImagesFileName) && filesize($missingImagesFileName)){
+      $command = "php $EKKITAB_HOME/catalogtools/googleimages.php $missingImagesFileName $missingImagesDirectory";
+      exec($command);
+     }
+  # read the directory and fill in the array with the isbn and the URL for the image only if it is not zero bytes
+  if ($handle = opendir($missingImagesDirectory)) {
+    while (false !== ($file = readdir($handle))) {
+        if ($file != "." && $file != "..") {
+           $filename = $missingImagesDirectory . "/". $file;
+           if(is_file($filename) && filesize($filename) > 0 ){
+              $tokens = explode(".", $file);
+              //Get the title and author for this
+              $book = getBookDetails($db,$tokens[0]);
+              $book['URL'] = $filename;
+              if ( $book ) { $books[] = $book; }
+           } else {
+             unlink($filename);
+           }
+        }
+    }
+    closedir($handle);
+   } // Open the directory of the images
+  }  // Run Again.
+  } // Supplier is selected.
+  closeDatabase($db);
+} // getMissingImages.
+if ($task == "saveMissingImages" ) {
+  if(isset($_GET['saveImageList'])) {$saveImageList = $_GET['saveImageList']; } elseif(isset($_POST['saveImageList'])) { $saveImageList = $_POST['saveImageList']; } else { $saveImageList = null; }
+  if(isset($_GET['missingImagesDirectory'])) {$missingImagesDirectory = $_GET['missingImagesDirectory']; } 
+      elseif(isset($_POST['missingImagesDirectory'])) { $missingImagesDirectory = $_POST['missingImagesDirectory']; } else { $saveImageList = null; }
+  mkdir($missingImagesDirectory."/tmp");
+  foreach($saveImageList as $isbn => $value) {
+    if ( $value == "YES" ) {
+       rename($missingImagesDirectory."/$isbn.jpg", $missingImagesDirectory."/tmp/$isbn.jpg");
+    } else {
+      unlink($missingImagesDirectory."/$isbn.jpg");
+    }
   }
+  $command = "php $EKKITAB_HOME/bin/copyimages.php $missingImagesDirectory/tmp";
+  system($command, $result);
+  $command = "rm -rf $missingImagesDirectory/tmp";
+  exec($command, $result);
 }
-
 ?>
 <html>
 <head>
@@ -39,8 +115,34 @@ if ($task == "getMissingImages" ) {
   </table>
 </div>
 <br>
-<div id="missingimages">
-<form action=<?php echo $baseURL."/missingimages.phtml" ?> method='post'>
+<?php if ( !empty($books)) { ?>
+<div id="missingImages">
+<form action="missingimages.phtml" method='post'>
+ <table border='1'>
+ <tr><td>ISBN</td><td>TITLE</td><td>AUTHOR</td><td>IMAGE</td> </tr>
+ <?php foreach($books as $book) { 
+       echo "<tr>";
+       echo "<td>". $book['ISBN'] . "</td>";
+       echo "<td>". $book['TITLE'] . "</td>";
+       echo "<td>". $book['AUTHOR'] . "</td>"; 
+       echo "<td><img src='". $book['URL'] ."' />";
+       echo "<input type='radio' name='saveImageList[". $book['ISBN']. "]' value='YES'>Yes";
+       echo "<input type='radio' name='saveImageList[" . $book['ISBN'] ."]' value='NO'>No</td>";
+       echo "</tr>";
+  } ?>
+ <tr>
+  <td>
+    <input type="hidden" name="task" value="saveMissingImages" />
+    <input type="hidden" name="missingImagesDirectory" value="<?php echo $missingImagesDirectory ?>" />
+    <input type="hidden" name="missingImagesFileName" value="<?php echo $missingImagesFileName ?>" />
+    <input type='submit' value='GO' /></td>
+ <tr>
+</table>
+</form>
+</div>
+<?php } else { ?>
+<div id="supplierSelect">
+<form action="missingimages.phtml" method='post'>
  <table border='0'>
  <tr>
   <td>SUPPLIER:(Valid supplier name)</td>
@@ -64,5 +166,6 @@ if ($task == "getMissingImages" ) {
 </table>
 </form>
 </div>
+<?php }  ?>
 </body>
 </html>
