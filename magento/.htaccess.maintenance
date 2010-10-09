@@ -4,5 +4,6 @@ RewriteCond %{REQUEST_URI} !^/bugzilla
 RewriteCond %{REQUEST_URI} !^/twiki
 RewriteCond %{REQUEST_URI} !^/skin
 RewriteCond %{REQUEST_URI} !^/media
+RewriteCond %{REQUEST_URI} !^/sitemap*
 RewriteCond %{REQUEST_URI} !/maintenance.html$
 RewriteRule $ /maintenance.html [R=302,L]
