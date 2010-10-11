@@ -422,9 +422,8 @@ public class BookIndex {
     }
     
     private void runIndexEpilogue() throws Exception {
-    	System.out.println("Indexing Completed. Adding reference document.");
+    	System.out.println("Adding reference document.");
         addReferenceDocument();
-        System.out.println("Completed adding reference document.");
         System.out.println("Optimizing Index. Will take a few minutes....");
         indexWriter.optimize();
         indexWriter.close();
@@ -444,12 +443,18 @@ public class BookIndex {
                 if (books != null) { 
                     addDocument(books);
                 }
-                if ((i % 1000000) == 0) {
+                if ((indexWriter.numDocs() % 1000000) == 0) {
                     timer10kend = System.currentTimeMillis();
-                    System.out.println("Indexed: "+i+" books in "+(timer10kend - timer10kstart)/1000+" sec. ");
+                    System.out.println("Indexed: "+i+" documents in "+(timer10kend - timer10kstart)/(60*1000)+" minutes. ");
                 }
             }
+            timer10kend = System.currentTimeMillis();
+            System.out.println("Indexing completed: "+indexWriter.numDocs()+" documents in "+(timer10kend - timer10kstart)/(60*1000)+" minutes. ");
+            timer10kstart = System.currentTimeMillis();
             runIndexEpilogue();
+            timer10kend = System.currentTimeMillis();
+            System.out.println("Index Optimized in "+(timer10kend - timer10kstart)/(60*1000)+" minutes.");
+            
         }
         catch (Exception e) {
             e.printStackTrace();
