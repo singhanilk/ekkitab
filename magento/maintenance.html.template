@@ -32,7 +32,7 @@
 </style>
 <body class=" cms-index-index cms-home">
 	<div class="header">
-	<div class="logo"><a href="index.php/" title="ekkitab homepage"></a></div>
+	<div class="logo"><a href="index.php/" title="Ekkitab.com - Online Bookstore India"><img src="skin/frontend/default/ekkitab/images/ekkitab_logo_live.png"  alt="Ekkitab: Online Bookstore India" /></a></div>
 	<div class="headerRight">	</div>
 </div>
 <div class="whiteBg">

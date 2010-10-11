@@ -30,7 +30,8 @@ class Ekkitab_Catalog_ProductController extends Mage_Core_Controller_Front_Actio
         Mage::getSingleton('core/session')->setCurrentQueryText(array('current_query_text'=>''));
 		$productUrl  = (String) $this->getRequest()->getParam('book');
 		
-		$this->_redirect('ekkitab_catalog/product/show/book/'.$productUrl);
+		//$this->_redirect('ekkitab_catalog/product/show/book/'.$productUrl);
+		$this->_forward('show');
     }
 
     /**

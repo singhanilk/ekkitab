@@ -1,0 +1,122 @@
+<?php
+/**
+ * 
+ * Frontend Authors Write up page.
+ * @category   design/ekkitab
+ * @author Anisha (anisha@ekkitab.com)
+ * @version 1.0 Jan 5, 2010
+ * 
+ * @copyright  COPYRIGHT (C) 2009 Ekkitab Educational Services India Pvt. Ltd.
+ * @license    All Rights Reserved. All material contained in this file (including, but not limited to, text, images, graphics, HTML, programming code and scripts) 
+ * constitute proprietary and  * confidential information protected by copyright laws, trade secret and other laws. No part of this software may be copied, reproduced, modified or 
+ * distributed in any form or by any means, or stored in a database or retrieval system without the prior written permission of Ekkitab Educational Services.
+ * 
+ * 
+ */
+?>
+<?php
+function getHashedPath($isbn) {
+    $sum = 0;
+    for ($i = 0; $i<(strlen($isbn)); $i++)  {
+        $sum += substr($isbn,$i,$i+1) + 0;
+    }
+    return ("I" . $sum%100 . "/" . "J" . substr($isbn,strlen($isbn)-2,2) . "/" . $isbn.".jpg");
+}
+
+function getProductUrl($bookUrl)
+{
+	$urlPrefix='ekkitab_catalog/product/view/book/';
+	$bookUrl = urlencode(preg_replace('#[^A-Za-z0-9\_]+#', '-', $bookUrl));
+	//this is to remove '-' from end of title string if any
+	if(substr($bookUrl,-1,1)=='-'){
+		$url = substr($bookUrl,0,-1);
+	}
+	
+	$url=$urlPrefix.$bookUrl.".html";
+	return $url;
+}
+
+?>
+
+<div class="authorsQAArea">
+	<div class="pageHeader">Meet SONIA SHAH</div>
+		<div class="authorsIntro">
+			<img src="<?php echo $this->getSkinUrl('/images/soniashah1.jpg')?>" />
+			<p><strong>Sonia Shah</strong> is a critically acclaimed and prize winning author and journalist who lives in the United States but who is a citizen of the world. She announces her work, on her website, as the investigation of how science and politics collides in a lop-sided world. <p> Her books reflect that theme perfectly, and discuss the unevenness of the human experience across societies and cultures, across the rich and poor, and across the multitude of other differences that make up our world. Ekkitab had the wonderful privilege of catching up with her to talk about her work, books and philosophy which we present with great pleasure here. <p>At the end of the discussion, it is clear that Sonia is a deeply passionate humanist disturbed by the aberrations in our world that forces the weak and the poor to submit to the strong and the rich. And a courageous and talented writer who refuses to be silent about it.
+			<br/> <br/> <span class="quote">[Photo Credit: Joyce Ravid]<br/> <iframe src="http://www.facebook.com/plugins/like.php?href=<?php echo $this->getUrl('meet-sonia-shah')?>&amp;layout=button_count&amp;show_faces=false&amp;width=450&amp;action=like&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:240px; height:30px;" allowTransparency="true"></iframe></span>
+		</div>
+		
+		<div class="evenRow">
+			<div class="col1">
+				<div class="ques"><span class="boldFont">EK: </span> Most of the authors I have read over time generally seem to have a central theme on multiple books they write: politics, biographies, mysteries etc. You have tremendous diversity. Would it be correct to assume that "fairness" -  whether talking about Asian women and how they view the world or about a materialistic world that values human life according to the wealth of its society - is your central theme, and that you wish to bring out in your books, the overall unevenness of the human experience?	</div>
+			
+				<div class="ans"><span class="boldFont">SS: </span>Yes, I think so. What I'm most interested in is the lopsidedness of the world we live in, whether it is the power differential between women and men or between resource-rich and resource-poor societies, or between the healthy and diseased. In my writing I try to tell stories that may throw light on how these inequities arise, how they are maintained, and what their consequences are. There's a common idea in the left that inequities arise because of simple greed or apathy, but I think it is much more complicated than that. Geography, economics, culture, and ecology all play a role, too. I like to think that by understanding inequities more fully we can learn how to overcome them effectively.</div>
+
+			</div>
+			<div class="col2">
+				<div class="image">
+					<a href="<?php echo $this->getUrl(getProductUrl('Sonia-Shah__The-Fever-How-Malaria-Has-Ruled-Humankind-for-500-000-Years__9780374230012'))?>" title="Sonia-Shah-The-Fever-How-Malaria-Has-Ruled-Humankind-for-500-000-Years-9780374230012"><img src="<?php echo $this->helper('ekkitab_catalog')->resize(getHashedPath('9780374230012') ,'small_image',false,null, 109); ?>"/></a>
+				</div>
+					<span class="quote">Raw, vivid...Shah presents a fascinating history....This is an important book on the historical lessons we must not forget and the mistakes we are still making today in the battle against what remains a formidable killer."</span>
+					<br/><div class="quoteSign"> -New Scientist</div>
+			</div>
+		</div>
+		<div class="clear"></div>
+		<div class="oddRow">
+			<div class="col1">
+				<div class="image">
+					<a href="<?php echo $this->getUrl(getProductUrl('Sonia-Shah__The-Body-Hunters-Testing-New-Drugs-on-the-World-s-Poorest-Patients__9781565849129')) ?>" title="Sonia-Shah-The-Body-Hunters-Testing-New-Drugs-on-the-World-s-Poorest-Patients-9781565849129"><img src="<?php echo $this->helper('ekkitab_catalog')->resize(getHashedPath('9781565849129'),'small_image',false,null, 109); ?>"/></a>
+				</div>
+				<span class="quote">"This book is an act of courage on the part of its author and its publishers..."   </span>
+				<br/><div class="quoteSign"> - John Le Carre</div>
+			</div>
+			<div class="col2">
+				<div class="ques"><span class="boldFont">EK: </span> Your early experiences appear to have involved much travel between the US and India. How much did your exposure to multiple cultures and inequalities across societies influence you to become a journalist and investigative writer?	</div>
+			
+				<div class="ans"><span class="boldFont">SS: </span>In many ways! I encountered extreme poverty (in India) and extreme wealth (in the US as well as in India) at a very young age, and it confused me. None of the typical answers I heard for this state of affairs made any sense. So the central questions of my work were provoked pretty early on. Also, in both the US and in India, I was an outsider, the one asking dumb, culturally obvious questions. Over time, I got used to that role, and it is quite helpful in my work as a journalist.</div>
+			</div>
+		</div>
+		<div class="clear"></div>
+		<div class="evenRow">
+			<div class="col1">
+				<div class="ques"><span class="boldFont">EK: </span> What do you plan to write about next? Given today's turbulent times in most of the world, is there anything about the times we live in, that intrigues you enough to write a book on?	</div>
+			
+				<div class="ans"><span class="boldFont">SS: </span>I'm currently developing a new book on the conflicts between Western medicine and non-Western medical cultures, many of which take place, silently and out of the headlines, in global health campaigns.</div>
+				
+				<div class="ques"><span class="boldFont">EK: </span> Do you consider yourself an American citizen first or a citizen of the world? Do you think that nationalistic thinking, in much the same way as religious parochialism, leads to a less than perfect world?</div>
+			
+				<div class="ans"><span class="boldFont">SS: </span>I'm actually a citizen of both the U.S and Australia but I would certainly consider myself a citizen of the world before pledging allegiance to either. Nationalism is problematic, but I don't think we should all aspire to some kind of detached rootlessness, either. I think it's good to be deeply rooted to places, but the scale should be much smaller, like a mountainside or a river valley. Localism isn't the key to a perfect world, but it might inspire maximum stewardship and cooperation among flawed humans.</div>
+			</div>
+			<div class="col2">
+				<div class="image">
+					<a href="<?php echo $this->getUrl(getProductUrl('Sonia-Shah__Crude-The-Story-of-Oil__9781583226254')) ?>" title="Sonia-Shah-Crude-The-Story-of-Oil-9781583226254"><img src="<?php echo $this->helper('ekkitab_catalog')->resize(getHashedPath('9781583226254'),'small_image',false,null, 109); ?>"/></a>
+				</div>
+				<span class="quote">"Shah has written a brilliant book-This is not a Michael Moore-style anti-corporate rant-Shah writes beautifully, with dispassionate, elegant clarity-and it is all the more powerful for it."</span>
+				<br/><div class="quoteSign">  -The Guardian</div>
+			</div>
+		</div>
+		<div class="clear"></div>
+		<div class="oddRow">
+			<div class="col1">
+				<div class="image">
+					<a href="<?php echo $this->getUrl(getProductUrl('Dragon-Ladies-Asian-American-Feminists-Breathe-Fire__9780896085763')) ?>" title="Dragon-Ladies-Asian-American-Feminists-Breathe-Fire-By-Sonia-Shah-9780896085763"><img src="<?php echo $this->helper('ekkitab_catalog')->resize(getHashedPath('9780896085763'),'small_image',false,null, 109); ?>"/></a>
+				</div>
+				<span class="quote">"Sonia Shah cultivates a unique space for the feminist movement and the intricacies of Asian American life....Shah's group of 28 powerful writers 
+courageously strike each page with thought-provoking subjects"   </span>
+				<br/><div class="quoteSign"> - The Chicago Reporter</div>
+			</div>
+			<div class="col2">
+				<div class="ques"><span class="boldFont">EK: </span> Who are your favorite writers?  In particular, what are you reading now? What do you enjoy most in a book - style or content?	</div>
+			
+				<div class="ans"><span class="boldFont">SS: </span>I guess I'd have to say content, given that I often read content-rich books that have zero style, but will drop a book in a second if it is all style and no thoughtful content. In nonfiction I love Jared Diamond, Laurie Garrett, Anne Fadiman, Atul Gawande. I don't get to read much fiction these days but I will always drop everything to read Jhumpa Lahiri or Amitav Ghosh.</div>
+				
+				<div class="ques"><span class="boldFont">EK: </span> Do you believe that writing is a skill that is more a product of nature rather than nurture? That is, you are born with the skill to write and it cannot be acquired through training. </div>
+			
+				<div class="ans"><span class="boldFont">SS: </span>No, I think writing can be learned through training and even more than that, from reading and practice. What is in-born, in my opinion, is the desire to express one's ideas publicly. Not everyone wants to do that!</div>
+			</div>
+		</div>
+		<div class="clear"></div>
+		<div class="menuSep"></div>
+		<div class="footer">Get to know Sonia Shah more closely through her website: <a href="http://www.soniashah.com" rel="nofollow external" target="_blank">http://www.soniashah.com</a>. <br/>Please click on the book images for more details and to purchase.</div>
+</div>
+<!-- aboutUsArea -->

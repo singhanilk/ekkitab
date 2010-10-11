@@ -17,8 +17,7 @@
             <td valign="top">
                 <p>
                     <strong>Dear {{htmlescape var=$billing.getName()}}</strong>,<br/>
-                    Your order # {{var order.increment_id}} has been <br/>
-                    <strong>{{var order.getStatusLabel()}}</strong>.
+                    The status of your order '# {{var order.increment_id}}' is: <strong>{{var order.getStatusLabel()}}</strong>.
                 </p>
                 <p>{{var comment}}</p>
                 <p>

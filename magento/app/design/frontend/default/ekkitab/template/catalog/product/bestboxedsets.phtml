@@ -50,7 +50,7 @@
 				}else{
 					$auth="";
 				}
-				$bookName=$this->helper('ekkitab_catalog')->getSearchResultProductUrl($auth,$title,$product->getIsbn());
+				$bookName=$this->helper('ekkitab_catalog')->getProductUrl($auth,$title,$product->getIsbn());
 			
 			?>
 			<div class="vColumns">
