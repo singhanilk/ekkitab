@@ -45,6 +45,7 @@ public class BookIndex {
     private String xmlfile = null;
     private String inputFile;
     private boolean newIndex;
+    private static final int  BATCH_SIZE = 1000;
 
     public BookIndex(String indexDir, String xmlfile, boolean newIndex, String db, String user, String password, String inputFile) throws Exception {
         this.user = user;
@@ -195,11 +196,11 @@ public class BookIndex {
         return rootcategory;
     }
 
-	private List<Map<String, String>> getBook(int bookId) throws Exception {
+	private List<Map<String, String>> getBooks(int startBookId, int endBookId) throws Exception {
 
         List<Map<String, String>> books = new ArrayList<Map<String, String>>();
 
-	    String sql = "select title, author, bisac_codes, sourced_from, isbn, in_stock from books where id = " + bookId;
+	    String sql = "select id, title, author, bisac_codes, sourced_from, isbn, in_stock from books where id >= " + startBookId + " and id < " + endBookId;
         Statement stmt = connection.createStatement();
         ResultSet result = stmt.executeQuery(sql);
 
@@ -213,9 +214,10 @@ public class BookIndex {
 
         long fstart, fstop;
 
-        id = Integer.toString(bookId);
 
-        if (result.next()) {
+        while (result.next()) {
+            id = result.getString("id");
+
             title = result.getString("title");
             title = title == null ? "" : title;
 
@@ -225,7 +227,8 @@ public class BookIndex {
             if (!author.equals("")) {
             	authors = author.split("&");
             	for (int j =0; j< authors.length; j++) {
-            		if (authors[j].matches(":[a-z]:.*")) {
+                    authors[j] = authors[j].trim();
+            		if (authors[j].matches("^:[a-z]:.*")) {
             			authors[j] = authors[j].substring(3);
             		}
             	}
@@ -293,13 +296,13 @@ public class BookIndex {
 	private Document setDocumentBoost(Document doc, Map<String, String> book) {
 		int boost = 0;
 		if ((book.get("sourcedfrom")).equalsIgnoreCase("India")) {
-        	boost += 10;
+        	boost += 1;
         }
         if (Integer.parseInt(book.get("in_stock")) > 0) {
         	boost += 1;
         }
         if (boost > 0) {
-        	doc.setBoost((float)1.0+(float)0.1*boost);
+        	doc.setBoost(1+boost);
         }
         // System.out.println("Book:"+book.get("title")+" set to boost level "+boost);
 		return doc;
@@ -322,7 +325,9 @@ public class BookIndex {
             while (book.containsKey("author"+j)) {
                 value = book.get("author"+j);
                 if (value != null) {
-                	doc.add(new Field("author", value, Field.Store.YES, Field.Index.ANALYZED));
+                    Field f = new Field("author", value, Field.Store.YES, Field.Index.ANALYZED);
+                    f.setBoost(2);
+                    doc.add(f);
                 	String[] words = value.split(" ");
                     for (String word: words) {
                         word = word.replaceAll("\\W+", "").toLowerCase();
@@ -433,9 +438,9 @@ public class BookIndex {
         try {
             int range[] = getRange();
 
-            for (int i = (range[0] == 0 ? 1 : range[0]); i <= range[1]; i++) {
+            for (int i = (range[0] == 0 ? 1 : range[0]); i <= range[1]; i+=BATCH_SIZE) {
                 
-                List<Map<String, String>> books = getBook(i);
+                List<Map<String, String>> books = getBooks(i, i+BATCH_SIZE);
                 if (books != null) { 
                     addDocument(books);
                 }
@@ -474,7 +479,7 @@ public class BookIndex {
         		rootcategory = initCategories();
         		int id = getBookId(isbn); 
         		if (id > 0) {
-        			List<Map<String, String>> books = getBook(id);
+        			List<Map<String, String>> books = getBooks(id, id+1);
         			if (books != null) { 
         				addDocument(books);
         			}
