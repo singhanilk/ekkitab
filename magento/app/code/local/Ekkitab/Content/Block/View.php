@@ -22,18 +22,45 @@ class Ekkitab_Content_Block_View extends Mage_Core_Block_Template
 
 	public function chooseTemplate()
     {
-		Mage::log("Here in content Block.................");
 		if (!Mage::registry('template_url')) {
 			Mage::register('template_url', Mage::helper('ekkitab_content')->getTemplateUrl());
 		}
 		if (Mage::registry('template_url') && Mage::registry('template_url')!='' ) {
-			Mage::log("Here in content Block.................template is ".$this->templatePrefix.trim(Mage::registry('template_url')).$this->templateSuffix);
 			$this->setTemplate($this->templatePrefix.trim(Mage::registry('template_url')).$this->templateSuffix);
 		}
 		else {
 		   $this->setTemplate($this->templatePrefix.$this->getDefaultTemplate());
         }
-		Mage::log("Here in content Block.................template is ".$this->getTemplate());
     }
+
+	public function getHashedPath($isbn) {
+		$sum = 0;
+		for ($i = 0; $i<(strlen($isbn)); $i++)  {
+			$sum += substr($isbn,$i,$i+1) + 0;
+		}
+		return ("I" . $sum%100 . "/" . "J" . substr($isbn,strlen($isbn)-2,2) . "/" . $isbn.".jpg");
+	}
+
+	public function getProductUrl($bookUrl)
+	{
+		$urlPrefix='ekkitab_catalog/product/view/book/';
+		$bookUrl = urlencode(preg_replace('#[^A-Za-z0-9\_]+#', '-', $bookUrl));
+		//this is to remove '-' from end of title string if any
+		if(substr($bookUrl,-1,1)=='-'){
+			$url = substr($bookUrl,0,-1);
+		}
+		
+		$url=$urlPrefix.$bookUrl.".html";
+		return $url;
+	}
+
+	public function getThisPagetUrl()
+	{
+		$urlPrefix='ekkitab_content/index/view/page/';
+		$url=$urlPrefix.Mage::registry('template_url').".html";
+		return $url;
+	}
+
+
 
 }

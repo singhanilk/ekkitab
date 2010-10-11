@@ -26,11 +26,7 @@ class Ekkitab_Content_IndexController extends Mage_Core_Controller_Front_Action
      */
     public function viewAction()
     {
-		Mage::log("Here in content Controller.................");
-		
 		$contentUrl  = trim((String) $this->getRequest()->getParam('page'));
-
-		Mage::log("Here in content Controller.................contentUrl is : $contentUrl");
 		// insert the split function here.....and get the product Id
 		if(strrpos($contentUrl, "/")){
 			$contentStartIndex = strrpos($contentUrl, "/")+1; 	 
@@ -40,7 +36,6 @@ class Ekkitab_Content_IndexController extends Mage_Core_Controller_Front_Action
 		$contentEndIndex = strpos($contentUrl, ".html"); 	
 		$contentEndIndex = $contentEndIndex - $contentStartIndex; 
 		$templateUrl = trim(urldecode(substr($contentUrl,$contentStartIndex,$contentEndIndex)));
-		Mage::log("Here in content Controller.................templateUrl is : $templateUrl");
 		if($templateUrl && count($templateUrl) > 0 ){
 			Mage::register('template_url', $templateUrl);
 			$this->loadLayout();

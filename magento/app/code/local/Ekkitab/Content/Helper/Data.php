@@ -41,5 +41,27 @@ class Ekkitab_Content_Helper_Data extends Mage_Core_Helper_Abstract
 		return $this->_templateUrl;
     }
 
+	public function getHashedPath($isbn) {
+		$sum = 0;
+		for ($i = 0; $i<(strlen($isbn)); $i++)  {
+			$sum += substr($isbn,$i,$i+1) + 0;
+		}
+		return ("I" . $sum%100 . "/" . "J" . substr($isbn,strlen($isbn)-2,2) . "/" . $isbn.".jpg");
+	}
+
+	public function getProductUrl($bookUrl)
+	{
+		$urlPrefix='ekkitab_catalog/product/view/book/';
+		$bookUrl = urlencode(preg_replace('#[^A-Za-z0-9\_]+#', '-', $bookUrl));
+		//this is to remove '-' from end of title string if any
+		if(substr($bookUrl,-1,1)=='-'){
+			$url = substr($bookUrl,0,-1);
+		}
+		
+		$url=$urlPrefix.$bookUrl.".html";
+		return $url;
+	}
+
+
 
 }
