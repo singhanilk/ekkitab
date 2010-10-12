@@ -17,13 +17,10 @@ $configArray=null;
 $globalSectionsXMLFile=null;
 $globalSectionsINIFile=null;
 $sectionsDirectory=null;
-$databaseConfigArray=null;
-$db=null;
+$debug=0;
 
-
-
-function initDatabase(){
-  global $db;
+function initDatabase($databaseConfigArray){
+  $db = null;
 
   $database_server = $databaseConfigArray["database"]["server"];
   $database_user = $databaseConfigArray["database"]["user"];
@@ -45,9 +42,36 @@ function initDatabase(){
   } catch(exception $e) {
     fatal($e->getmessage());
   }
+ return $db;
 }
 
-function updateDiscounts($isbnArray){
+function closeDatabase($db){
+   mysqli_commit($db);
+   mysqli_close($db);
+}
+
+function returnInStockBooks($db,$sectionName, $isbnArray){
+   global $debug;
+   $inStockIsbnArray = Array();
+
+   foreach($isbnArray as $key => $value ) {
+     $query = "select in_stock from books where isbn = '$key' and in_stock > 0 ";
+     try {
+       $result = mysqli_query($db,$query);
+       //Add the isbn to the array only if the book is in stock.
+       if ($result && mysqli_num_rows($result) > 0 ) { 
+             $inStockIsbnArray[$key] = $value; 
+       } else { 
+        if ($debug) print "$key\t$sectionName\tNot Available\n"; 
+       }
+     } catch(exception $e) { 
+       fatal($e->getmessage()); 
+     }
+   }
+  return $inStockIsbnArray;
+}
+
+function updateDiscounts($db, $isbnArray){
    global $db;
 
    foreach($isbnArray as $key => $value ) {
@@ -60,7 +84,7 @@ function updateDiscounts($isbnArray){
    }
 }
 
-function writeSections($sectionsArray){
+function writeSections($db, $sectionsArray){
   global $globalSectionsXMLFile;
   global $globalSectionsINIFile;
   global $sectionsDirectory;
@@ -77,9 +101,9 @@ function writeSections($sectionsArray){
    $sectionId = 1;
    $section = null;
    fwrite($globalSectionsXMLFile, "<GLOBALSECTIONS>\n"); 
-   foreach( $sectionsArray as $sectionFileName){
+   foreach( $sectionsArray as $sectionName){
       // Parse the specific section file
-      $sectionFileName = $sectionsDirectory.$sectionFileName . ".ini";
+      $sectionFileName = $sectionsDirectory.$sectionName . ".ini";
       // Read the section's ini file.
       if( !file_exists($sectionFileName)){
         print "[Error]: $sectionFileName File does not exist\n";
@@ -92,8 +116,9 @@ function writeSections($sectionsArray){
       $section = $sectionConfigArray['section'];
       // Read the isbns part
       $isbnArray = $sectionConfigArray['isbns'];
-      //print_r($isbnArray);
-      //updateDiscounts($isbnArray);
+      //Return ISBN's which are present in the database with stock.
+      $isbnArray = returnInStockBooks($db, $sectionName, $isbnArray);
+      //updateDiscounts($db, $isbnArray);
       $isbns = implode(",", array_keys($isbnArray));
       $section['SECTION_ID'] = $sectionId;
       $replace = Array();
@@ -125,13 +150,22 @@ function sections_menu_generate_start($argc, $argv) {
    global $sectionsDirectory;
    global $globalSectionsXMLFile;
    global $globalSectionsINIFile;
-   global $databaseConfigArray;
-   global $db;
+   global $debug;
 
+   if ( $argc == 2 ){
+     if ($argv[1] != "-d" ) {
+       echo "Usage sections_menu_generate -d\n";
+       exit();
+     } else {
+      $debug = 1;
+     }
+   }
+        
    //Parse the main ini file
    $configArray = parse_ini_file("sections_menu.ini", true); 
    // Parse the database config file 
    $databaseConfigArray = parse_ini_file($EKKITAB_HOME. "/config/ekkitab.ini", true); 
+   $db = initDatabase($databaseConfigArray);
 
    $sectionsDirectory = $EKKITAB_HOME.$configArray["paths"]["SECTIONS_DIRECTORY"];
 
@@ -145,10 +179,11 @@ function sections_menu_generate_start($argc, $argv) {
    $sectionsArray = $configArray["sections"];
    //print_r($sectionsArray);
    if( $sectionsArray != null and !empty($sectionsArray)) {
-     writeSections($sectionsArray);
+     writeSections($db, $sectionsArray);
    }
    fclose($globalSectionsXMLFile);
    fclose($globalSectionsINIFile);
+   closeDatabase($db);
 }
 
 sections_menu_generate_start($argc, $argv);

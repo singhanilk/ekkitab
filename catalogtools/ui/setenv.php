@@ -1,6 +1,6 @@
 <?php
 #---- All the ENV variables to be set here -----.
-$EKKITAB_HOME = "/mnt2/scm"; 
+$EKKITAB_HOME = "/home/ubuntu/prasad/src/scm"; 
 putenv("EKKITAB_HOME=$EKKITAB_HOME");
 
 #---- All the INCLUDES ------.

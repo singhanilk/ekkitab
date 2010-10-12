@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<config>    
+    <modules>
+        <Ekkitab_Content>
+            <version>0.1.0</version>
+        </Ekkitab_Content>
+    </modules>
+	<global>
+		<helpers>
+            <ekkitab_content>
+                <class>Ekkitab_Content_Helper</class>
+            </ekkitab_content>
+        </helpers>
+		<blocks>
+			<ekkitab_content>
+				<class>Ekkitab_Content_Block</class>
+			</ekkitab_content>   
+		</blocks>
+	</global>
+	<frontend>
+		<routers>
+			<ekkitab_content>
+				<use>standard</use>
+				<args>
+					<module>Ekkitab_Content</module>
+					<frontName>ekkitab_content</frontName>
+				</args>
+			</ekkitab_content>
+		</routers>
+		<layout>
+            <updates>
+                <ekkitab_content>
+                    <file>content.xml</file>
+                </ekkitab_content>
+            </updates>
+        </layout>
+
+	</frontend>       
+</config>   

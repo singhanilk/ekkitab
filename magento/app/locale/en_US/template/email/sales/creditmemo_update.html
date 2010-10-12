@@ -17,8 +17,7 @@
             <td valign="top">
                 <p>
                     <strong>Dear {{htmlescape var=$order.getCustomerName()}}</strong>,<br/>
-                    Your order # {{var order.increment_id}} has been <br/>
-                    <strong>{{var order.getStatusLabel()}}</strong>.
+                    The status of your order '# {{var order.increment_id}}' is: <strong>{{var order.getStatusLabel()}}</strong>.
                 </p>
                 <p>You can check the status of your order by <a href="{{store url="customer/account/"}}" style="color:#1E7EC8;">logging into your account</a>.</p>
                 <p>{{var comment}}</p>
