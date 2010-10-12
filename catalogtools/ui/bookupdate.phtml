@@ -1,54 +1,41 @@
 <?php
-# This has to be defined as we want the rest of the run with this variable
-$EKKITAB_HOME = "/Volumes/ppotula_data/Users/admin/ppotula/development/ekkitab/src/scm"; 
-putenv("EKKITAB_HOME=$EKKITAB_HOME");
+include "setenv.php";
 
-include "../common_catalog_functions.php";
-
-#Catalog Stock Generator Method.
-$catalogCode = "../catalog_stock_generator.php";
-
-#Import Method.
-$importBooksCode = "../../db/importbooks.php";
-
-#Temporary directory when uploading a document
-$tmpDir="/tmp/work/catalogs/";
-
-#GLOBAL VARIABLES
 $errorList = Array();
-
-#Book associate array
-$book = Array();
-
-$filename = "";
+$books = Array();
+$save = false;;
 
 // Task is set or not
 if(isset($_GET['task'])) {$task = $_GET['task']; } elseif(isset($_POST['task'])) { $task = $_POST['task']; } else { $task = ""; }
 
+// Make the mandatory checks
+if (!is_dir($catalogWorkDirectory)){
+  $errorString = "Mandatory directories missing-$catalogWorkDirectory"; 
+  $errorList[] = $errorString;
+  $task = "";
+}
+
 if ($task == "saveSingleBook" ) {
  foreach($columnList as $column) {
-   if(isset($_GET[$column])) { $book[$column] = $_GET[$column]; } elseif(isset($_POST[$column])) { $book[$column] = $_POST[$column]; } else { $book[$column] = ""; }
+   if(isset($_GET[$column])) { $book[$column] = $_GET[$column]; } 
+   elseif(isset($_POST[$column])) { $book[$column] = $_POST[$column]; } 
+   else { $book[$column] = ""; }
  }
+ $books[] = $book;
+ $errorList = validBooks($books);
+ // Generate Bisac Codes
+ // Fill Default Values in the data.
+}
 
-// Write Books to file
-$books = Array();
-$books[] = $book;
-$errorList = validBooks($books);
 $errorList = preg_replace("/\n/", "<br>", $errorList);
-
-if (empty($errorList)){
- // Create a temporary directory for storing the tmp file and writing it down.
- if ( !is_dir($tmpDir )) { mkdir($tmpDir, 0777, true); }
-
- $filename=$tmpDir.$book['SUPPLIER']."_".date("YmdHis").".txt";  
-
- $fileHandle = fopen($filename, "w");
-
- writeBooksToCatalog($books, $fileHandle);
-
- fclose($fileHandle);
- } // No errors.
-} // saveSingleBook function
+if (empty($errorList)){ $save = true; }
+if ( $save ){
+  // Create a temporary directory for storing the tmp file and writing it down.
+  $filename=$catalogWorkDirectory.$book['SUPPLIER']."_".date("YmdHis").".txt";  
+  $fileHandle = fopen($filename, "w");
+  writeBooksToCatalog($books, $fileHandle);
+  fclose($fileHandle);
+} // Save is true
 
 
 # HTML CODE FROM BELOW
@@ -76,7 +63,7 @@ if (empty($errorList)){
 </div>
 <br>
 <div id="singleBookUpload">
-<form action='/magento/internalutils/bookupdate.phtml' method='post'>
+<form action='bookupdate.phtml' method='post'>
  <table border='0'>
  <tr>
   <td>ISBN:(13 digit)</td>
