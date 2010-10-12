@@ -17,3 +17,5 @@ echo "Loading globalsection links..."
 mysql -s -h $host -u $user -p$password <<!
 source $sqlfile;
 !
+echo "Updating global section product ids..."
+( cd $EKKITAB_HOME/db ; php ./load_globalsection_books.php ../data/globalsection.ini )
