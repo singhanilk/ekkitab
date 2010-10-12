@@ -46,6 +46,7 @@ public class BookIndex {
     private String inputFile;
     private boolean newIndex;
     private static final int  BATCH_SIZE = 1000;
+    private Set<String> importantBooks = null;	
 
     public BookIndex(String indexDir, String xmlfile, boolean newIndex, String db, String user, String password, String inputFile) throws Exception {
         this.user = user;
@@ -293,8 +294,43 @@ public class BookIndex {
         return range;
     }
 	
+	private Set<String> initImportantBooks(String file) {
+		
+		Set<String> books = new HashSet<String>();
+		
+		if ((file != null) && (!file.equals(""))) {
+			try {
+				BufferedReader bf = new BufferedReader(new FileReader(file));
+				String line;
+				while ((line = bf.readLine()) != null) {
+					String isbn;
+					if (line.indexOf('#') >= 0) {
+						isbn = line.substring(0, line.indexOf('#')).trim();
+					}
+					else {
+						isbn = line.trim();
+					}
+					if (isbn.length() > 0)
+						books.add(isbn);
+				}
+				bf.close();
+			}
+			catch (Exception e) {
+				books.clear();
+			}
+		}
+		
+		return books;
+	}
+	
 	private Document setDocumentBoost(Document doc, Map<String, String> book) {
 		int boost = 0;
+		if (importantBooks == null) {
+			importantBooks = initImportantBooks(inputFile);
+		}
+		if (importantBooks.contains(book.get("isbn"))) {
+			boost += 5;
+		}
 		if ((book.get("sourcedfrom")).equalsIgnoreCase("India")) {
         	boost += 1;
         }
@@ -476,12 +512,12 @@ public class BookIndex {
         
         timer10kstart = System.currentTimeMillis();
         int i = 0;
+        rootcategory = initCategories();
         try {
         	String line;
 			while ((line = updateRdr.readLine()) != null) { 
 
         		String isbn = line.trim();
-        		rootcategory = initCategories();
         		int id = getBookId(isbn); 
         		if (id > 0) {
         			List<Map<String, String>> books = getBooks(id, id+1);
