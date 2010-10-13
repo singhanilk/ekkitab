@@ -48,12 +48,6 @@ fi
 rundate=$(date +"%D-%T")
 echo "[$rundate] Releasing new catalog to production.."
 ( cd $EKKITAB_HOME/bin; ./release catalog )
-# Delete magento image cache on production server. 
-ssh prod <<!
-export EKKITAB_HOME=/mnt2/scm;
-echo "Deleting image cache...";
-rm -rf $EKKITAB_HOME/magento/media/catalog/product/cache/1/*
-!
 rundate=$(date +"%D-%T")
 echo "[$rundate] Completed daily sync routine."
 
