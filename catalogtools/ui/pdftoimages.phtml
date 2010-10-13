@@ -1,0 +1,131 @@
+<?php
+include "setenv.php";
+
+$errorList = Array();
+$images = Array();
+$pfdImagesDirectory = '';
+$command = '';
+
+// Task is set or not
+if(isset($_GET['task'])) {$task = $_GET['task']; } elseif(isset($_POST['task'])) { $task = $_POST['task']; } else { $task = ""; }
+
+// Make the mandatory checks
+if (!is_dir($pdfImagesWorkDirectory)){
+  $errorString = "Mandatory directories missing-$pdfImagesWorkDirectory"; 
+  $errorList[] = $errorString;
+  $task = "";
+}
+
+if ( $task == "loadPdfFile" ) {
+   $pdfImagesDirectory = $pdfImagesWorkDirectory;
+   $uploadedFileName = $pdfImagesDirectory . "/". $_FILES['uploadedFile']['name'];
+   $uploadedTmpFileName = $_FILES['uploadedFile']['tmp_name'];
+   if(move_uploaded_file($uploadedTmpFileName, $uploadedFileName)) {
+     // Convert the pdf file to html with images
+     $command = "pdftohtml -noframes $uploadedFileName";
+     exec($command, $result );
+    // Convert all the png files to jpg files.
+     $command = "php $EKKITAB_HOME/utils/convertpngtojpg.php $pdfImagesDirectory";
+     exec($command, $result );
+     $command = "rm $pdfImagesDirectory/*.html";
+     exec($command, $result );
+     $command = "rm $pdfImagesDirectory/*.png";
+     exec($command, $result );
+     $command = "rm $pdfImagesDirectory/*.pdf";
+     exec($command, $result );
+    // Populate the images Array with the filename and the url
+    if ($handle = opendir($pdfImagesDirectory)) {
+     while (false !== ($file = readdir($handle))) {
+        if ($file != "." && $file != "..") {
+           $filename = $pdfImagesDirectory . "/". $file;
+           if(is_file($filename) && filesize($filename) > 0 ){
+              $image['NAME'] = $file;
+              $image['URL'] = $filename;
+              $images[] = $image;
+           } else {
+             unlink($filename);
+           }
+        }
+     }
+    closedir($handle);
+    } // Open the directory of the images
+   } else{
+     $errorString = "Error uploading the file";
+     $errorList[] = $errorString;
+   } // move is unsuccessful.
+} // task loadPdfFile
+
+if ( $task == "savePdfImages" ){
+  if(isset($_GET['pdfImagesDirectory'])) {$pdfImagesDirectory = $_GET['pdfImagesDirectory']; } 
+  elseif(isset($_POST['pdfImagesDirectory'])) { $pdfImagesDirectory = $_POST['pdfImagesDirectory']; } else { $pdfImagesDirectory = ""; }
+
+  if(isset($_GET['pdfImageList'])) {$pdfImageList = $_GET['pdfImageList']; } elseif(isset($_POST['pdfImageList'])) { $pdfImageList = $_POST['pdfImageList']; } else { $pdfImageList = null; }
+  foreach($pdfImageList as $filename => $isbn) {
+    if ( $isbn != "" ) {
+       rename($pdfImagesDirectory."$filename", $pdfImagesDirectory."$isbn.jpg");
+    } 
+  }
+  $command = "php $EKKITAB_HOME/bin/copyimages.php $pdfImagesDirectory";
+  system($command, $result);
+  $command = "rm $pdfImagesDirectory/*.jpg";
+  #exec($command, $result);
+}
+?>
+<html>
+<head>
+</head>
+<body>
+<h3>PDF To Images</h3>
+<h5><i>
+Load a pdf file form the supplier/distributor which contains the images of the books.<br>
+All the images are extracted and displayed with text boxes. The isbn needs to be put in there and click go.<br>
+If Done button is clicked rest of the files are deleted<br>
+</i></h5>
+<div id="errors">
+  <table class="redFont" border="1">
+  <?php 
+  foreach ($errorList as $error ){
+   echo "<tr><td>";
+   echo $error;
+   echo "</td></tr>";
+  }
+  ?>
+  </table>
+</div>
+<br>
+<?php if ( !empty($images)) { ?>
+<div id="div_PdfImages">
+<form action="pdftoimages.phtml" method='post'>
+ <table border='1'>
+ <?php foreach($images as $image) { 
+       echo "<tr>";
+       echo "<td><img src='". $image['URL'] ."' />";
+       echo "<input type='text' name='pdfImageList[". $image['NAME']. "]' value='' />";
+       echo "</tr>";
+  } ?>
+ <tr>
+  <td>
+    <input type="hidden" name="task" value="savePdfImages" />
+    <input type="hidden" name="pdfImagesDirectory" value="<?php echo $pdfImagesDirectory ?>" />
+    <input type='submit' value='GO' /></td>
+ <tr>
+</table>
+</form>
+</div>
+<?php } else { ?>
+<div id="div_loadPdfFile">
+<form enctype="multipart/form-data" action="pdftoimages.phtml" method='post'>
+ <table border='0'>
+ <tr>
+  <td>
+    <input type="file" name="uploadedFile"/>
+    <input type="hidden" name="task" value="loadPdfFile" />
+    <input type="hidden" name="pdfImagesDirectory" value="<?php echo $pdfImagesDirectory ?>" />
+    <input type='submit' value='Upload PDF File' /></td>
+ <tr>
+</table>
+</form>
+</div>
+<?php }  ?>
+</body>
+</html>

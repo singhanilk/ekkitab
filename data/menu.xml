@@ -58,6 +58,7 @@
     </SECTION>
     <SECTION title="Prize Winning Books" type="links" showall="no">
         <LINK name="The Man Booker Prize" type="collection">
+            <BOOK id="9781408809105" title="The Finkler Question" author="Howard Jacobson"/>
             <BOOK id="9780007292417" title="Wolf Hall" author="Hillary Mantel"/>
             <BOOK id="9788172238476" title="The White Tiger" author="Aravind Adiga"/>
             <BOOK id="9780099523826" title="The Gathering" author="Anne Enright"/>
