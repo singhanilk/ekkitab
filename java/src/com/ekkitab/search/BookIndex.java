@@ -337,6 +337,9 @@ public class BookIndex {
         if (Integer.parseInt(book.get("in_stock")) > 0) {
         	boost += 1;
         }
+        else {
+        	boost -= 1;
+        }
         if (boost > 0) {
         	doc.setBoost(1+boost);
         }
