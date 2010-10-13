@@ -472,16 +472,16 @@ public class BookIndex {
         timer10kstart = System.currentTimeMillis();
         try {
             int range[] = getRange();
-
+            int counter = 0;
             for (int i = (range[0] == 0 ? 1 : range[0]); i <= range[1]; i+=BATCH_SIZE) {
                 
                 List<Map<String, String>> books = getBooks(i, i+BATCH_SIZE);
                 if (books != null) { 
                     addDocument(books);
                 }
-                if ((indexWriter.numDocs() % 1000000) == 0) {
+                if ((++counter % BATCH_SIZE) == 0) {
                     timer10kend = System.currentTimeMillis();
-                    System.out.println("Indexed: "+i+" documents in "+(timer10kend - timer10kstart)/(60*1000)+" minutes. ");
+                    System.out.println("Indexed: "+indexWriter.numDocs()+" documents in "+(timer10kend - timer10kstart)/(60*1000)+" minutes. ");
                 }
             }
             timer10kend = System.currentTimeMillis();
