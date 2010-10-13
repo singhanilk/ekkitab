@@ -20,7 +20,7 @@ case "$entity" in
               ;;
 esac
 
-ZERO_SESSIONS_THRESHOLD=2
+ZERO_SESSIONS_THRESHOLD=0
 activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
 tries=0;
 MAXTRIES=30;
