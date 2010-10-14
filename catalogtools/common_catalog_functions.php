@@ -75,7 +75,9 @@ function fillDefaultCatalogValues($book){
 
   if ($book){
     foreach($defaultCatalogValues as $key => $value ) {
-     $book[$key] = $value;
+     if ( empty($book[$key]) || is_null($book[$key])) {
+      $book[$key] = $value;
+     }
     }   
   }
   return $book;
@@ -176,7 +178,7 @@ function validSupplier($supplier){
 
 function getBookDetails($db, $isbn) {
   $book = Array();
-  $query = "select ISBN, TITLE, AUTHOR from books where isbn = '$isbn'";
+  $query = "select * books where isbn = '$isbn'";
 
   try {
    $result = mysqli_query($db,$query);
@@ -191,6 +193,35 @@ function getBookDetails($db, $isbn) {
 
   return $book; 
 }
+
+
+function getBisacCodes($db, $subjects) {
+ $bisac_codes = array();
+ if ($subjects != null) {
+   foreach ($subjects as $subject) {
+     $topics = explode("/", $subject);
+     $query = "select bisac_code from ek_bisac_category_map where ";
+     $i = 1;
+     $conjunction = "";
+     foreach($topics as $topic) {
+      $label = "level".$i++;
+      $value = strtolower(trim($topic));
+      $query = $query . $conjunction . $label . " = '" . $value . "'";
+      $conjunction = " and ";
+     }
+     $result = mysqli_query($db, $query);
+     if (($result) && (mysqli_num_rows($result) > 0)) {
+       $row = mysqli_fetch_array($result);
+       $bisac_codes[] = $row[0];
+     }
+   }
+  }
+  if (empty($bisac_codes)) {
+     $bisac_codes[] = "ZZZ000000";
+  }
+  return implode(",", $bisac_codes);
+}
+
 
 /* Function to write to catalog file 
 ** Assumes that the file is open.
