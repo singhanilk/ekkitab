@@ -68,16 +68,40 @@ for ((i=0; i < $tablecount; i++)) ; do
    starttime=`date +%s`
    query="drop table if exists new$table";
    mysql -h $host -u $user -p$password ekkitab_books -e "$query" >> $logfile 2>&1;
+   if (( $? > 0 )); then
+        echo "Mysql query '$query' failed. Stopping execution of release.";
+        exit 1;
+   fi
    query="create table new$table like $table";
    mysql -h $host -u $user -p$password ekkitab_books -e "$query" >> $logfile 2>&1;
+   if (( $? > 0 )); then
+        echo "Mysql query '$query' failed. Stopping execution of release.";
+        exit 1;
+   fi
    query="load data local infile '$releasedir/$table.txt' into table new$table";
    mysql -h $host -u $user -p$password ekkitab_books -e "$query" >> $logfile 2>&1;
+   if (( $? > 0 )); then
+        echo "Mysql query '$query' failed. Stopping execution of release.";
+        exit 1;
+   fi
    query="drop table if exists old$table";
    mysql -h $host -u $user -p$password ekkitab_books -e "$query" >> $logfile 2>&1;
+   if (( $? > 0 )); then
+        echo "Mysql query '$query' failed. Stopping execution of release.";
+        exit 1;
+   fi
    query="rename table $table to old$table, new$table to $table"
    mysql -h $host -u $user -p$password ekkitab_books -e "$query" >> $logfile 2>&1;
+   if (( $? > 0 )); then
+        echo "Mysql query '$query' failed. Stopping execution of release.";
+        exit 1;
+   fi
    query="drop table if exists old$table";
    mysql -h $host -u $user -p$password ekkitab_books -e "$query" >> $logfile 2>&1;
+   if (( $? > 0 )); then
+        echo "Mysql query $query failed. Stopping execution of release.";
+        exit 1;
+   fi
    finishtime=`date +%s`
    seconds=$(expr $finishtime - $starttime);
    echo "done. [$seconds seconds]";
