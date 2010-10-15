@@ -20,10 +20,10 @@ case "$entity" in
               ;;
     * )       echo "[Fatal] Unknown entity '$entity'";
               exit 1;
-              ;;f
+              ;;
 esac
 
-if [ "waitforzerosessions" == "true" ] ; then
+if [ "$waitforzerosessions" == "true" ] ; then
     ZERO_SESSIONS_THRESHOLD=0
     activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
     tries=0;
