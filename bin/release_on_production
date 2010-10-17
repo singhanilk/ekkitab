@@ -1,7 +1,6 @@
 #!/bin/bash
 if [ -z $EKKITAB_HOME ] ; then
-    echo "EKKITAB_HOME is not set..."
-    exit 1;
+    export EKKITAB_HOME=/mnt2/scm
 fi;
 if (( $# < 1 )) ; then
     echo "Require entity name. (catalog or app)"
