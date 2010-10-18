@@ -1,0 +1,4 @@
+#!/bin/bash
+filename=`date +%d%b%Y`;
+nohup /mnt2/scm/bin/release_on_production $* </dev/null >/tmp/release_$1_$filename 2>&1 &
+exit 0
