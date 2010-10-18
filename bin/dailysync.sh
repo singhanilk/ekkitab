@@ -24,6 +24,9 @@ rundate=$(date +"%D-%T")
 echo "[$rundate] Running updating prices..."
 ( cd $EKKITAB_HOME/bin ; ./updateprices.sh | php sendmail.php -s "Daily Sync Report: [$rundate] Update Prices" $tomail )
 rundate=$(date +"%D-%T")
+echo "[$rundate] Resetting price and stock..."
+( cd $EKKITAB_HOME/db ; ./reset_refdb_price_stock.sh )
+rundate=$(date +"%D-%T")
 echo "[$rundate] Updating catalog prices..."
 ( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -p | php ../bin/sendmail.php -s "Daily Sync Report: [$rundate] Init Catalog - prices" $tomail ) 
 rundate=$(date +"%D-%T")
