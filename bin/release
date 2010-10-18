@@ -40,5 +40,4 @@ echo -n "Transferring new $entity to production server..."
 ( cd $releasedir; scp -r $entity prod:/tmp >/dev/null )
 echo "done."
 echo "Deploying new $entity on production server."
-filename=`date +%d%b%Y`;
-ssh prod "/mnt2/scm/bin/release_on_production $entity </dev/null >/tmp/release_$filename 2>&1 &"
+ssh prod "/mnt2/scm/bin/launch_release_on_production $entity"
