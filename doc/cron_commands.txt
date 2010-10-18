@@ -3,7 +3,7 @@
 # Execute daily data refresh from Ingram.
 00 10   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./refreshingram.sh vijay@ekkitab.com anil@ekkitab.com | php /mnt2/scm/bin/sendmail.php -s "Daily Ingram Refresh Summary" vijay@ekkitab.com anil@ekkitab.com
 # Execute hourly processing of stocklists coming in as email attachments.
-00 *   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./stockstatusimport.sh christopher@ekkitab.com anil@ekkitab.com saran@ekkitab.com prasad@ekkitab.com
+00 *   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./stockstatusimport.sh anil@ekkitab.com saran@ekkitab.com prasad@ekkitab.com
 # Backup production database tables hourly. (Production)
 00 *   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/utils && ./backupdb.sh
 # Check for user reviews and inform administrator. (Production)
