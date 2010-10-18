@@ -40,6 +40,7 @@ cp "$dbdir/init_ekkitab_books_db.sql" $releasedir
 cp "$bindir/sendsms.php" $releasedir
 cp "$utilsdir/backupdb.sh" $releasedir
 cp "$bindir/release_on_production" $releasedir
+cp "$bindir/launch_release_on_production" $releasedir
 
 echo "Creating release date file"
 echo `date +%D' 'at' '%T` > $releasedir/releasedate

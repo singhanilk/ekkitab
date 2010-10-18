@@ -187,6 +187,7 @@ cp $releasedir/checkreviews.sh $bindir
 cp $releasedir/sendmail.php $bindir
 cp $releasedir/setdowntime.sh $bindir
 cp $releasedir/release_on_production $bindir
+cp $releasedir/launch_release_on_production $bindir
 
 sudo service tomcat6 start
 

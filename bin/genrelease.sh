@@ -59,6 +59,7 @@ cp $EKKITAB_HOME/bin/checkreviews.sh $releasedir
 cp $EKKITAB_HOME/bin/sendmail.php $releasedir
 cp $EKKITAB_HOME/bin/setdowntime.sh $releasedir
 cp $EKKITAB_HOME/bin/release_on_production $releasedir
+cp $EKKITAB_HOME/bin/launch_release_on_production $releasedir
 echo "done."
 echo -n "Copying synch file to synchronize release on server..."
 cp $EKKITAB_HOME/bin/synchrelease.sh  $releasedir
