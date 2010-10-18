@@ -40,13 +40,10 @@ fi
 bindir=$EKKITAB_HOME/bin
 
 # Setting up maintenance page
-echo -n "Setting system to maintenance mode..."
-( cd $bindir; ./setdowntime.sh 30 )
-( cd $magentodir; cp ".htaccess.maintenance" .htaccess )
-echo "done."
-
-# First stop tomcat service
-sudo service tomcat6 stop
+#echo -n "Setting system to maintenance mode..."
+#( cd $bindir; ./setdowntime.sh 30 )
+#( cd $magentodir; cp ".htaccess.maintenance" .htaccess )
+#echo "done."
 
 # Setting logfile
 if [ ! -d $EKKITAB_HOME/logs ] ; then
@@ -56,28 +53,59 @@ if [ ! -d $EKKITAB_HOME/logs ] ; then
    echo "done."
 fi
 logfile="$EKKITAB_HOME/logs/catalogsynch.log"
+rm -rf $logfile;
 
-#echo -n "Unzipping books data..."
-#( cd $releasedir; unzip -qo books.zip )
-#echo "done."
+DBTABLES=( "books" "book_availability" "books_promo" )
+tablecount=${#DBTABLES[@]}
 
-# Check if books.sql is present.
-if [ ! -f $releasedir/books.sql ] ; then
-    echo "Fatal: Unzip of books data seems to have failed."
-    exit 1;
-fi
-
-echo -n "Updating books table [logging at $logfile] ..."
-mysql -h $host -u $user -p$password ekkitab_books < $releasedir/books.sql > $logfile 
-echo "done."
-
-echo -n "Updating book_availability table [logging at $logfile] ..."
-mysql -h $host -u $user -p$password ekkitab_books < $releasedir/book_availability.sql >> $logfile 
-echo "done."
-
-echo -n "Updating books_promo table [logging at $logfile] ..."
-mysql -h $host -u $user -p$password ekkitab_books < $releasedir/books_promo.sql >> $logfile 
-echo "done."
+for ((i=0; i < $tablecount; i++)) ; do
+   table=${DBTABLES[$i]};
+   if [ ! -f $releasedir/$table.txt ] ; then
+      echo "FATAL: Required file - $releasedir/$table.txt - is missing. "
+      exit 1;
+   fi
+   echo -n "Updating table $table...[logging at $logfile]...";
+   starttime=`date +%s`
+   query="drop table if exists new$table";
+   mysql -h $host -u $user -p$password ekkitab_books -e "$query" >> $logfile 2>&1;
+   if (( $? > 0 )); then
+        echo "Mysql query '$query' failed. Stopping execution of release.";
+        exit 1;
+   fi
+   query="create table new$table like $table";
+   mysql -h $host -u $user -p$password ekkitab_books -e "$query" >> $logfile 2>&1;
+   if (( $? > 0 )); then
+        echo "Mysql query '$query' failed. Stopping execution of release.";
+        exit 1;
+   fi
+   query="load data local infile '$releasedir/$table.txt' into table new$table";
+   mysql -h $host -u $user -p$password ekkitab_books -e "$query" >> $logfile 2>&1;
+   if (( $? > 0 )); then
+        echo "Mysql query '$query' failed. Stopping execution of release.";
+        exit 1;
+   fi
+   query="drop table if exists old$table";
+   mysql -h $host -u $user -p$password ekkitab_books -e "$query" >> $logfile 2>&1;
+   if (( $? > 0 )); then
+        echo "Mysql query '$query' failed. Stopping execution of release.";
+        exit 1;
+   fi
+   query="rename table $table to old$table, new$table to $table"
+   mysql -h $host -u $user -p$password ekkitab_books -e "$query" >> $logfile 2>&1;
+   if (( $? > 0 )); then
+        echo "Mysql query '$query' failed. Stopping execution of release.";
+        exit 1;
+   fi
+   query="drop table if exists old$table";
+   mysql -h $host -u $user -p$password ekkitab_books -e "$query" >> $logfile 2>&1;
+   if (( $? > 0 )); then
+        echo "Mysql query $query failed. Stopping execution of release.";
+        exit 1;
+   fi
+   finishtime=`date +%s`
+   seconds=$(expr $finishtime - $starttime);
+   echo "done. [$seconds seconds]";
+done
 
 # Check if the global section sql files are present.
 if [ ! -f $releasedir/ek_catalog_global_sections.sql ] || 
@@ -110,12 +138,15 @@ cp $releasedir/synchcatalog.sh $bindir
 # Copy sample search script to the bin directory.
 cp $releasedir/samplesearch.php $bindir
 
+# Stop and start tomcat service
+sudo service tomcat6 stop
+sleep 5;
 sudo service tomcat6 start
 
 # Removing maintenance page
-echo -n "Taking system off maintenance mode..."
-cp $magentodir/.htaccess.prod $magentodir/.htaccess
-echo "done."
+#echo -n "Taking system off maintenance mode..."
+#cp $magentodir/.htaccess.prod $magentodir/.htaccess
+#echo "done."
 
 #echo "Restarting apache2 service"
 #sudo service apache2 restart

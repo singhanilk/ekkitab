@@ -1,7 +1,6 @@
 #!/bin/bash
 if [ -z $EKKITAB_HOME ] ; then
-    echo "EKKITAB_HOME is not set..."
-    exit 1;
+    export EKKITAB_HOME=/mnt2/scm
 fi;
 if (( $# < 1 )) ; then
     echo "Require entity name. (catalog or app)"
@@ -10,34 +9,39 @@ if (( $# < 1 )) ; then
 fi
 entity=`echo $1 | tr A-Z a-z`
 runcommand="";
+waitforzerosessions=true
 case "$entity" in 
     catalog ) runcommand=synchcatalog.sh;
+              waitforzerosessions=false;
               ;;
     app )     runcommand=synchrelease.sh;
+              waitforzerosessions=true;
               ;;
     * )       echo "[Fatal] Unknown entity '$entity'";
               exit 1;
               ;;
 esac
 
-ZERO_SESSIONS_THRESHOLD=0
-activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
-tries=0;
-MAXTRIES=30;
-while (( $activesessions > $ZERO_SESSIONS_THRESHOLD )) && (( $tries < $MAXTRIES )) ; do
-(( tries++ ));
-echo "Sleeping. $activesessions sessions are active."
-sleep 60;
-activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
-done;
-if (( $activesessions <= $ZERO_SESSIONS_THRESHOLD )) ; then
-    cd /tmp/$entity;
-    ./$runcommand;
-    sleep 10;
-    php $EKKITAB_HOME/bin/samplesearch.php
-    echo "New $entity is now in production.";
-    echo "Deleting image cache...";
-    rm -rf $EKKITAB_HOME/magento/media/catalog/product/cache/1/*
-else
-    echo "Production system has active sessions. Wait timed out. New $entity is NOT pushed to production." 
-fi;
+if [ "$waitforzerosessions" == "true" ] ; then
+    ZERO_SESSIONS_THRESHOLD=0
+    activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
+    tries=0;
+    MAXTRIES=30;
+    while (( $activesessions > $ZERO_SESSIONS_THRESHOLD )) && (( $tries < $MAXTRIES )) ; do
+        (( tries++ ));
+        echo "Sleeping. $activesessions sessions are active."
+        sleep 60;
+        activesessions=`$EKKITAB_HOME/bin/getactivesessions.sh`;
+    done;
+    if (( $activesessions > $ZERO_SESSIONS_THRESHOLD )) ; then
+        echo "Production system has active sessions. Wait timed out. New $entity is NOT pushed to production." 
+        exit 1;
+    fi
+fi
+cd /tmp/$entity;
+./$runcommand;
+sleep 10;
+php $EKKITAB_HOME/bin/samplesearch.php
+echo "New $entity is now in production.";
+echo "Deleting image cache...";
+rm -rf $EKKITAB_HOME/magento/media/catalog/product/cache/1/*

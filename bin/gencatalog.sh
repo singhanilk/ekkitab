@@ -14,30 +14,20 @@ fi
 # Clean release directory before start.
 rm -rf $releasedir/*
 
-echo -n "Exporting books..."
-echo "SET AUTOCOMMIT = 0;" > $releasedir/books.sql
-echo "SET FOREIGN_KEY_CHECKS = 0;" >> $releasedir/books.sql
-mysqldump -h $host -u $user -p$password --opt ekkitab_books books >> $releasedir/books.sql
-echo "SET FOREIGN_KEY_CHECKS = 1;" >> $releasedir/books.sql
-echo "COMMIT;" >> $releasedir/books.sql
-echo "SET AUTOCOMMIT = 1;" >> $releasedir/books.sql
+DBTABLES=( "books" "ekkitab_books" "book_availability" "reference" "books_promo" "ekkitab_books" );
+tablecount=${#DBTABLES[@]}
 
-echo "done."
-#echo -n "Zipping books data..."
-#( cd $releasedir ; zip -q books.zip books.sql && rm books.sql )
-#echo "done."
-#if [ ! -f $releasedir/books.zip ] ; then
-#    echo "FATAL: Zip process appears to have failed. No books.zip file found."
-#    exit 1
-#fi
-
-echo -n "Exporting books availability..."
-mysqldump -h $host -u $user -p$password reference book_availability > $releasedir/book_availability.sql
-echo "done."
-
-echo -n "Exporting books_promo..."
-mysqldump -h $host -u $user -p$password ekkitab_books books_promo > $releasedir/books_promo.sql
-echo "done."
+for ((i=0; i < $tablecount; i+=2)) ; do
+   table=${DBTABLES[$i]};
+   let j=i+1;
+   db=${DBTABLES[$j]};
+   echo -n "Exporting table $table from database $db..."
+   sudo rm -f /tmp/$table.txt
+   query="select * from $table into outfile '/tmp/$table.txt'";
+   mysql -h $host -u $user -p$password $db -e "$query";
+   echo "done."
+   cp /tmp/$table.txt $releasedir
+done
 
 echo -n "Exporting global sections..."
 mysqldump -h $host -u $user -p$password ekkitab_books ek_catalog_global_sections > $releasedir/ek_catalog_global_sections.sql

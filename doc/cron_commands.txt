@@ -13,7 +13,7 @@
 # Backup /mnt3/ on the server  (Images) (Production)
 00 2   * * 0   ubuntu  cd /mnt2/tools && ./bkmnt3.sh
 # Backup /mnt2/ on the server (Staging)
-00 5   * * *   ubuntu  cd /mnt2/tools && ./bkmnt2.sh
+30 22   * * *   ubuntu  cd /mnt2/tools && ./bkmnt2.sh
 # Backup /mnt3/ on the server  (Images) (Staging)
 00 2   * * 0   ubuntu  cd /mnt2/tools && ./bkmnt3.sh
 # Backup /mnt4/ on the server  (Archives) (Staging)
