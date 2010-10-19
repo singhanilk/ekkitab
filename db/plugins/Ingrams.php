@@ -235,9 +235,9 @@ class Parser extends BaseParser {
                 $discount = str_replace("%", "", $discount);
             }
 
-            // Add $3.00 to list price to recover shipping costs if we get zero discount from supplier. 
-            if ($discount == 0) {
-                $listprice += 3.00;
+            // Add acquisition charge to list price to recover shipping costs if we get less than 15% from supplier. 
+            if ($discount < 15) {
+                $listprice += ((15 - $discount)/100)*$list_price;
             }
 
             $currency = "USD";
