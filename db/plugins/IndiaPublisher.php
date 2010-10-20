@@ -233,7 +233,7 @@ class Parser extends BaseParser {
                 case 'A'  : $book['currency'] = "AUD";
                             break;
                 default:    $book['currency'] = "XXX";
-                            throw new exception("Unknown currency " . str_replace("\"", "", strtoupper(trim($fields[1]))));
+                            throw new exception("Unknown currency for ISBN " . $book['isbn'] . " -> '" . str_replace("\"", "", strtoupper(trim($fields[1]))) . "'");
                             break;
             }
             $listprice = preg_replace("/[\",]/", "", trim($fields[2]));
