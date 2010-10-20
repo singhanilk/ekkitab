@@ -30,6 +30,9 @@ function percentage($listprice, $dbprice){
 #convert string to double
     $listprice += 0;
     $dbprice   += 0;
+    if (($listprice == 0) || ($dbprice == 0)) {
+        return -1;
+    }
     $listprice = round($listprice);
     $dbprice   = round($dbprice);
         if($dbprice < $listprice){
@@ -64,6 +67,9 @@ function checkValidity($db, $fh){
                     $db_localsource = strtoupper($row1[1]);
                     if($source == $row1[0] && $localsource == $db_localsource){
                         $percentage = percentage(trim($listprice), trim($row[1]));
+                        if ($percentage < 0) {
+                            print "[Catalog Validation] [Warning] Likely null value for list price for isbn-> $isbn.  $row[1]\n"; 
+                        }
                         if($percentage >= 50){
                             print "[Catalog Validation] [Severe] Listprice in file->$listprice for isbn-> $isbn is different from that of Database->$row[1] by more than 50%\n"; 
                             $num_errors++;
