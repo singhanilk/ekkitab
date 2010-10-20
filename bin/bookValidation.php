@@ -70,7 +70,7 @@ function checkValidity($db, $fh){
                         if ($percentage < 0) {
                             print "[Catalog Validation] [Warning] Likely null value for list price for isbn-> $isbn.  $row[1]\n"; 
                         }
-                        if($percentage >= 50){
+                        elseif($percentage >= 50){
                             print "[Catalog Validation] [Severe] Listprice in file->$listprice for isbn-> $isbn is different from that of Database->$row[1] by more than 50%\n"; 
                             $num_errors++;
                             //$catalog_validation_stopper = true;
@@ -79,9 +79,18 @@ function checkValidity($db, $fh){
                             print "[Catalog Validation] [Warning] Listprice in file->$listprice for isbn-> $isbn is different from that of Database->$row[1] by more than 5%\n"; 
                             $num_errors++;
                         }
-                        $ratio =round(100 -  ((($row[2]+0)/($row[1]+0))*100));
-                        if($ratio > 35){
-                            print "[Catalog Validation] [Warning] We are loosing too Much Money!! Discount Greater than 35% on isbn --> $row[0] $row[2]\n";
+                        $listprice = $row[1] + 0;
+                        $discountprice = $row[2] + 0;
+                        $ratio = 100;
+                        if (($listprice > 0) && ($discountprice > 0)) {
+                            $ratio = round(100 -  (($discountprice/$listprice)*100));
+                        }
+                        if ($ratio == 100) {
+                            print "[Catalog Validation] [Severe] Discount or list price is likely null for isbn --> $row[0] $discountprice $listprice\n";
+                            $num_errors++; 
+                        }
+                        elseif($ratio > 35){
+                            print "[Catalog Validation] [Warning] Discount greater than 35% on isbn --> $row[0] $row[2]\n";
                             $num_errors++; 
                         }
                     }
