@@ -4,7 +4,7 @@ if [ -z $EKKITAB_HOME ] ; then
     exit 1;
 fi;
 . $EKKITAB_HOME/bin/db.sh 
-echo "Resetting reference database..."
+echo "Resetting price and stock data ..."
 mysql -s -h$host -u$user -p$password <<!
 source $EKKITAB_HOME/db/reset_refdb_price_stock.sql;
 !
