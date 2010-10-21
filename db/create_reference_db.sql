@@ -198,3 +198,15 @@ CREATE TABLE IF NOT EXISTS `missing_bisac_codes` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `ISBN` (`isbn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+--
+-- Table structure to capture state of import from catalog files.
+--
+CREATE TABLE IF NOT EXISTS `ek_import_state` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `filename` varchar(128) NOT NULL,
+  `tablename` varchar(32) NOT NULL,
+  `updatetime` timestamp default current_timestamp,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`filename`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  AUTO_INCREMENT=1 ;

@@ -55,11 +55,30 @@ fi
 logfile="$EKKITAB_HOME/logs/catalogsynch.log"
 rm -rf $logfile;
 
-DBTABLES=( "books" "book_availability" "books_promo" )
+# Determine if it is required to copy the books_promo table
+query="select max(id) from books_promo";
+maxid=`mysql -h $host -u $user -p$password ekkitab_books -e "$query"`;
+maxid=`echo ${maxid##max(id)}`;
+checkfile=$releasedir/max_books_promo_id;
+if [ -f $checkfile ] ; then
+    checkmaxid=`cat $checkfile`;
+else
+    checkmaxid=0;
+fi
+if (( $checkmaxid > 0 )) && (( $checkmaxid == $maxid )) ; then
+    promotable="";
+else
+    promotable="books_promo";
+fi
+
+DBTABLES=( "books" "book_availability" $promotable )
 tablecount=${#DBTABLES[@]}
 
 for ((i=0; i < $tablecount; i++)) ; do
    table=${DBTABLES[$i]};
+   if [ "$table" == "" ] ; then
+       continue;
+   fi
    if [ ! -f $releasedir/$table.txt ] ; then
       echo "FATAL: Required file - $releasedir/$table.txt - is missing. "
       exit 1;
