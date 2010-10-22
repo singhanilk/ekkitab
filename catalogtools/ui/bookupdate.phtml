@@ -3,107 +3,206 @@ include "setenv.php";
 
 $errorList = Array();
 $books = Array();
-$save = false;;
+$save = false;
+$update = false;
+$filename = '';
+$command = '';
+$book = Array();
+$systemOutput = "";
+$supplier = "";
+$atLeastOnePreorder=false;
 
 // Task is set or not
 if(isset($_GET['task'])) {$task = $_GET['task']; } elseif(isset($_POST['task'])) { $task = $_POST['task']; } else { $task = ""; }
 
-// Make the mandatory checks
+// Make the mandatory check if the catalog work directory is present.
 if (!is_dir($catalogWorkDirectory)){
   $errorString = "Mandatory directories missing-$catalogWorkDirectory"; 
   $errorList[] = $errorString;
   $task = "";
 }
-
-if ($task == "saveSingleBook" ) {
- foreach($columnList as $column) {
-   if(isset($_GET[$column])) { $book[$column] = $_GET[$column]; } 
-   elseif(isset($_POST[$column])) { $book[$column] = $_POST[$column]; } 
+// Irrespective of the task set the books object.
+foreach($columnList as $column) {
+   if(isset($_GET[$column])) { $book[$column] = trim($_GET[$column]); } 
+   elseif(isset($_POST[$column])) { $book[$column] = trim($_POST[$column]); } 
    else { $book[$column] = ""; }
- }
- $books[] = $book;
- $errorList = validBooks($books);
- // Generate Bisac Codes
- // Fill Default Values in the data.
 }
+/* If the task is checkIsbn.
+*/
+if ( $task =="checkIsbn" ) {
+  $db = initDatabase($reference_config);
+  if ( !empty($book['isbn'] )) {
+   $isbn = $book['isbn'];
+   $book = getBookDetails($db, $isbn);
+   if ( $book != null ) {
+     if ( $book['info_source'] == 'Ingrams') {
+       $errorString = "ISBN:" . $book['isbn'] 
+                      . "is an Ingrams import. Click on the link to see the details <a href=isbncheck.php?isbnno=" 
+                      . $book['isbn'] . " >" . $book['isbn'] . "</a>";
+       $errorList[] = $errorString;
+       $task = "";
+       $book = Array();
+     } else {
+      $update = true;
+     }
+  } else {
+    $book = Array();
+    $book['isbn'] = $isbn;
+  }
+ }
+  closeDatabase($db);
+} 
+elseif ($task == "saveSingleBook" ) {
+ $books[] = $book;
+ $books = formatValues($books);
+ $errorList = validBooks($books);
+} // task is saveSingleBook
 
-$errorList = preg_replace("/\n/", "<br>", $errorList);
-if (empty($errorList)){ $save = true; }
+if (empty($errorList) && $task == "saveSingleBook" ){ 
+  $save = true; 
+} else {
+  $errorList = preg_replace("/\n/", "<br>", $errorList);
+}
 if ( $save ){
-  // Create a temporary directory for storing the tmp file and writing it down.
-  $filename=$catalogWorkDirectory.$book['SUPPLIER']."_".date("YmdHis").".txt";  
-  $fileHandle = fopen($filename, "w");
-  writeBooksToCatalog($books, $fileHandle);
+  $counter = 0;
+  $newArrivalsFileHandle = null;
+  // This db points to the reference database.
+  $db = initDatabase($reference_config);
+  foreach($books as $book ) {
+   if ( $counter == 0 ) {
+     $supplier =  strtolower($book['info_source']);
+     $fileDateTime = date("YmdHis");
+     // Create a temporary directory for storing the tmp file and writing it down.
+     $filename=$catalogWorkDirectory.$supplier."_".$fileDateTime.".txt";  
+     $fileHandle = fopen($filename, "w");
+   } else {
+   }
+  // Generate Bisac Codes
+   $book['bisac_codes'] = getBisacCodes($db, array($book['bisac_codes']));
+  // Fill Default Values in the data.
+   $book = fillDefaultCatalogValues($book);
+   fwrite($fileHandle, bookStringInCatalogFormat($book));
+  // Check for pre order and write to the new arrivals stock list format.
+   if ( $book['in_stock'] == '2' ) {
+     if( $newArrivalsFileHandle == null ) {
+       $atLeastOnePreorder = true;
+       $newArrivalsFileName = $catalogWorkDirectory.$supplier."-newarrivals-stocklist_".$fileDateTime.".txt";
+       $newArrivalsFileHandle = fopen($newArrivalsFileName, "w");
+     } 
+     fwrite($newArrivalsFileHandle, bookStringInStockFormat($book));
+   } // New Arrivals check.
+  } // For all the books.
   fclose($fileHandle);
-} // Save is true
+  if( $newArrivalsFileHandle != null ) fclose($newArrivalsFileHandle);
+  closeDatabase($db);
+  /*Run the import books for the above file. If the value returned by importbooks is same as the book count
+    then only append the same to the catalog file else display error 
+    NOTE: The import only works againts the development database.
+  */
+ $command = "php " . $importBooksCode . " -bd IndiaPublisher " . $filename;
+ $output = system($command , $retval);
+ $systemOutput .= $output . "Retval=$retval\n";
+ if( count($books) == $retval ) {
+   // Append the file data to the catalog
+   $command = "cat $filename >> $catalogDirectory/$supplier.txt"; 
+   $output = system($command , $retval);
+   $systemOutput .= $output . "Retval=$retval\n";
+  // If preorder append the new arrivals to the new-arrivals stocklist
+   if($atLeastOnePreorder) {
+    $command = "cat $newArrivalsFileName >> $stockDirectory/newarrivals-stocklist.txt"; 
+    $output = system($command , $retval);
+    $systemOutput .= $output . "Retval=$retval\n";
+   }
+ }
+ //Unlink the files if created. 
 
+} // Save is true
 
 # HTML CODE FROM BELOW
 ?>
 <html>
 <head>
- <link rel="stylesheet" href="../skin/frontend/default/ekkitab/css/styles.css" type="text/css" / >
+ <script src="../js/prototype/prototype.js" type="text/javascript"></script>
+ <script type="text/javascript" language="JavaScript">
+
+/* Function to submit the form on tab out */
+ function checkIsbn(isbn){
+    var input_task = document.getElementById("input_task"); 
+    input_task.value='checkIsbn';
+    var form_singleBookUpdate = document.getElementById("form_singleBookUpdate");
+    form_singleBookUpdate.submit();
+ }
+ </script>
 </head>
 <body>
-<br><br><br>
-<br><br><br>
-<br><br><br>
-<br><br><br>
 <h1>Supplier and File to upload </h1>
+<div id="updates" >
+  <h5><?php echo $systemOuput; ?></h5>
+</div>
 <div id="errors">
   <table class="redFont" border="1">
   <?php 
+  $counter = 0;
   foreach ($errorList as $error ){
+   $counter++;
    echo "<tr><td>";
-   echo $error;
+   echo "$counter . $error";
    echo "</td></tr>";
   }
   ?>
   </table>
 </div>
 <br>
-<div id="singleBookUpload">
-<form action='bookupdate.phtml' method='post'>
+<div id="div_singleBookUpdate">
+<form id="form_singleBookUpdate" action='bookupdate.phtml' method='post'>
  <table border='0'>
  <tr>
   <td>ISBN:(13 digit)</td>
-  <td><input type='text' name ='ISBN' size='50' maxlength='13' value='<?php if($book) { echo $book['ISBN']; } ?>' /></td>
+  <td>
+    <div id="isbncheck_div" style="display:block" ></div>
+    <input id='isbn_input' type='text' name ='isbn' size='50' maxlength='13' 
+           value='<?php if($book) { echo $book['isbn']; } ?>' onblur=javascript:checkIsbn() <?php if($update) { echo 'readonly'; } ?> />
+  </td>
  </tr>
  <tr>
   <td>TITLE:</td>
-  <td><input type='text' name ='TITLE' size="50" maxlength='255' value='<?php if($book) { echo $book['TITLE']; } ?>' /></td>
+  <td><input type='text' name ='title' size="50" maxlength='255' value='<?php if($book) { echo $book['title']; } ?>' /></td>
  </tr>
  <tr>
   <td>AUTHOR:(FirstName LastName&SecondFirstName SecondLastName)</td>
-  <td><input type='text' name ='AUTHOR' size='50' maxlength='120' value='<?php if($book) { echo $book['AUTHOR']; } ?>' /></td>
+  <td><input type='text' name ='author' size='50' maxlength='120' value='<?php if($book) { echo $book['author']; } ?>' /></td>
  </tr>
  <tr>
   <td>DESCRIPTION:</td>
-  <td><textarea name ='DESCRIPTION' rows="4" cols="50" maxlength='2047' value='<?php if($book) { echo $book['DESCRIPTION']; } ?>' /></textarea></td>
+  <td><textarea name ='description' rows="4" cols="50" maxlength='2047' /><?php if($book) { echo $book['description']; } ?></textarea></td>
  </tr>
  <tr>
   <td>BINDING:(Paperback,Hardcover,Hardback)</td>
   <td>
-     <select name ='BINDING' value='Paperback' />
+     <select name ='binding' value='Paperback' />
      <?php 
         foreach($bindingList as $key=>$value ) {
-          echo "<option values=$key>$value</option>";
+          echo '<option value="' . $key . '"' . (($book && $book['binding'] == $value) ? " selected " : "") . ">$value</option>";
         }
      ?>
      </select>
   </td>
+ </tr>
+ <tr>
   <td>IMPRINT:(Text only)</td>
-  <td><input type='text' name ='IMPRINT' size='50' value='<?php if($book) { echo $book['IMPRINT']; } ?>' /></td>
+  <td><input type='text' name ='imprint' size='50' value='<?php if($book) { echo $book['imprint']; } ?>' /></td>
  </tr>
  <tr>
   <td>PRICE:(Numbers only)</td>
-  <td><input type='text' name ='PRICE' size='50' value='<?php if($book) { echo $book['PRICE']; } ?>' /></td>
+  <td><input type='text' name ='list_price' size='50' value='<?php if($book) { echo $book['list_price']; } ?>' <?php if($update) { echo 'readonly'; } ?> /></td>
+ </tr>
+ <tr>
   <td>CURRENCY:(I,U,P,S only)</td>
   <td>
-     <select name ='CURRENCY' value='I' />
+     <select name ='currency' value='I' />
      <?php 
         foreach($currencyList as $key=>$value ) {
-          echo "<option values=$key>$value</option>";
+          echo '<option value="' . $key .'"' . (( $book && $book['currency'] == $value ) ? " selected " : "") . ">$value</option>";
         }
      ?>
      </select>
@@ -112,32 +211,38 @@ if ( $save ){
  <tr>
   <td>AVAILABILITY:(Available, Not Available, Preorder)</td>
   <td>
-     <select name ='AVAILABILITY' value='Available' />
+     <select name ='in_stock' value='Available' />
      <?php 
         foreach($availabilityList as $key=>$value ) {
-          echo "<option values=$key>$value</option>";
+          echo '<option value="' . $key . '"' . (( $book && $book['in_stock'] == $value ) ? " selected " : "") . ">$value</option>";
         }
      ?>
      </select>
   </td>
-  <td>DELIVERY-DATE:(Text only. Do not include / or -)</td>
-  <td><input type='text' name ='DELIVERY-DATE' size='50' value='<?php if($book) { echo $book['DELIVERY-DATE']; } ?>' /></td>
  </tr>
  <tr>
-  <td>PUBLISH-DATE:(Text only. Do not include / or -)</td>
-  <td><input type='text' name ='PUBLISH-DATE' size='50' maxlength='255' value='<?php if($book) { echo $book['PUBLISH-DATE']; } ?>' /></td>
+  <td>DELIVERY PERIOD:(Text only. Do not include / or -)</td>
+  <td><input type='text' name ='delivery_period' size='50' value='<?php if($book) { echo $book['delivery_period']; } ?>' /></td>
+ </tr>
+ <tr>
+  <td>PUBLISHING DATE:(Text only. Do not include / or -)</td>
+  <td><input type='text' name ='publishing_date' size='50' maxlength='255' value='<?php if($book) { echo $book['publishing_date']; } ?>' /></td>
+ </tr>
+ <tr>
   <td>PUBLISHER:</td>
-  <td><input type='text' name ='PUBLISHER' size='50' maxlength='120' value='<?php if($book) { echo $book['PUBLISHER']; } ?>' /></td>
+  <td><input type='text' name ='publisher' size='50' maxlength='120' value='<?php if($book) { echo $book['publisher']; } ?>' /></td>
  </tr>
  <tr>
   <td>PAGES:(Number only)</td>
-  <td><input type='text' name ='PAGES' size='50' value='<?php if($book) { echo $book['PAGES']; } ?>' /></td>
+  <td><input type='text' name ='pages' size='50' value='<?php if($book) { echo $book['pages']; } ?>' /></td>
+ </tr>
+ <tr>
   <td>LANGUAGE:(English Default)</td>
   <td>
-     <select name ='LANGUAGE' value='English' />
+     <select name ='language' value='English' />
      <?php 
         foreach($languageList as $key=>$value ) {
-          echo "<option values=$key>$value</option>";
+          echo '<option value="' . $key . '"' . " > $value </option>";
         }
      ?>
      </select>
@@ -145,30 +250,54 @@ if ( $save ){
  </tr>
  <tr>
   <td>WEIGHT:</td>
-  <td><input type='text' name ='WEIGHT' size='30' value='<?php if($book) { echo $book['WEIGHT']; } ?>' /></td>
+  <td><input type='text' name ='weight' size='30' value='<?php if($book) { echo $book['weight']; } ?>' /></td>
+ </tr>
+ <tr>
   <td>DIMENSION:</td>
-  <td><input type='text' name ='DIMENSION' size='30' value='<?php if($book) { echo $book['DIMENSION']; } ?>' /></td>
+  <td><input type='text' name ='dimension' size='30' value='<?php if($book) { echo $book['dimension']; } ?>' /></td>
  </tr>
  <tr>
   <td>SHIP-REGION:</td>
-  <td><input type='text' name ='SHIP-REGION' size='30' value='<?php if($book) { echo $book['SHIP-REGION']; } ?>' /></td>
+  <td><input type='text' name ='shipping_region' size='30' value='<?php if($book) { echo $book['shipping_region']; } ?>' /></td>
+ </tr>
+ <tr>
   <td>SUBJECT:(Do not include Bisac codes here )</td>
-  <td><input type='text' name ='SUBJECT' size='30' maxlength='120' value='<?php if($book) { echo $book['SUBJECT']; } ?>' /></td>
+  <td><input type='text' name ='bisac_codes' size='30' maxlength='120' value='<?php if($book) { echo $book['bisac_codes']; } ?>' /></td>
  </tr>
  <tr>
   <td>SUPPLIER:(Valid supplier name)</td>
+  <?php if($update) { ?>
   <td>
-     <select name ='SUPPLIER' value='<?php if($book) { echo $book['SUPPLIER']; } ?>' />
+   <input type='text' name ='info_source' size='30' maxlength='120' value='<?php if($book) { echo $book['info_source']; } ?>' readonly />
+  </td>
+  <?php } else { ?> 
+  <td>
+     <select name ='info_source' value=<?php if($book) { echo $book['info_source']; } ?> />
      <?php 
         foreach($supplierList as $key=>$value ) {
-          echo "<option values=$key>$value</option>";
+          if ( $book && $book['info_source'] == $value ) {
+            echo '<option value="' . $key . '"'. " selected>$value</option>";
+          } else {
+            echo '<option value="' . $key . '"' . ">$value</option>";
+          }
         }
      ?>
      </select>
  </td>
+ <?php } ?>
  </tr>
  <tr>
-  <td><input type="hidden" name="task" value="saveSingleBook" /><input type='submit' value='GO' /></td>
+  <td align="right" colspan="2">
+  <input type="hidden" name="filename" value='<?php  echo $filename; ?>' />
+  <?php if ( $update ) {
+       echo "<input id='input_task' type='hidden' name='task' value='updateSingleBook' />";
+       echo "<input id='input_submit' type='submit' value='Update Book' />";
+     } else {
+       echo "<input id='input_task' type='hidden' name='task' value='saveSingleBook' />";
+       echo "<input id='input_submit' type='submit' value='Save Book' />";
+     }
+  ?>
+  </td>
  <tr>
 </table>
 </form>

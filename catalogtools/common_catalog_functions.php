@@ -4,62 +4,68 @@
 # The standard field separator for our catalog.
 $FIELD_SEPARATOR = "\t";
 
+# Control characters which have to be replaced
+$controlCharactersToReplace = array("\x0D");
+$controlCharactersReplaceValues = array("<br>");
+# characters outside the range.
+$asciiExpression = '/(?:[^\x00-\x7F])/';
+
 /* BISAC VARIABLES */
 $GENERIC_BISAC_CODE='ZZZ000000';
 
 /* DEFAULT VALUES FOR A BOOK */
 $defaultCatalogValues = array (
-"LANGUAGE" => "English",
-"SUBJECT" => "ZZZ000000",
+"language" => "English",
+"bisac_codes" => "ZZZ000000",
 );
 
 #columns in the excel sheet.
-$columnList = array("ISBN","PRICE","CURRENCY","AVAILABILITY","IMPRINT","DELIVERY-DATE","TITLE","AUTHOR","BINDING", 
-                 "DESCRIPTION", "PUBLISH-DATE","PUBLISHER","PAGES","LANGUAGE","WEIGHT","DIMENSION","SHIP-REGION", 
-                 "SUBJECT", "SUPPLIER");
+$columnList = array("isbn","list_price","currency","in_stock","imprint","delivery_period","title","author","binding", 
+                 "description", "publishing_date","publisher","pages","language","weight","dimension", "shipping_region", "bisac_codes", "info_source");
 # valid currency 
 $currencyList = array("I" => "Rs", "U" => "USD", "P" => "Pound", "S" => "SD" );
 # valid availability 
-$availabilityList = array("Available" => "Available", "Not Available" => "Not Available", "Preorder" => "Preorder");
+$availabilityList = array("1" => "Available", "0" => "Not Available", "2" => "Preorder");
 # valid binding
 $bindingList = array("Paperback" => "Paperback", "Hardcover" => "Hardcover", "Hardback" => "Hardback");
 # valid Language
 $languageList = array("English" => "English");
 # The valid suppliers as of now. This is taken from /mnt4/publisherdata/
 $supplierList = array (
-"amit" => "amit",
-"bookworldenterprises" => "bookworldenterprises",
-"cambridge" => "cambridge",
-"cinnamonteal" => "cinnamonteal",
-"dolphin" => "dolphin",
-"eurokids" => "eurokids",
-"hachette" => "hachette",
-"harpercollins" => "harpercollins",
-"harvard" => "harvard",
-"indiabooks" => "indiabooks",
-"jaico" => "jaico",
-"mediastar" => "mediastar",
-"newindiabooksource" => "newindiabooksource",
-"orientblackswan" => "orientblackswan",
-"oxford" => "oxford",
-"panmacmillan" => "panmacmillan",
-"paragonbooks" => "paragonbooks",
-"penguin" => "penguin",
-"popularprakasham" => "popularprakasham",
-"prakash" => "praksah",
-"prism" => "prism",
-"randomhouse" => "randomhouse",
-"researchpress" => "researchpress",
-"rupa" => "rupa",
-"sage" => "sage",
-"schand" => "schand",
-"tatamcgrawhill"=>"tatamcgrawhill",
-"tbh"=>"tbh",
-"ubs"=>"ubs",
-"vinayaka" => "vinayaka",
-"viva" => "viva",
-"westland" => "westland",
-"wiley" => "wiley",
+"AMIT" => "AMIT",
+"BOOKWORLDENTERPRISES" => "BOOKWORLDENTERPRISES",
+"CAMBRIDGE" => "CAMBRIDGE",
+"CINNAMONTEAL" => "CINNAMONTEAL",
+"DOLPHIN" => "DOLPHIN",
+"EUROKIDS" => "EUROKIDS",
+"HACHETTE" => "HACHETTE",
+"HARPERCOLLINS" => "HARPERCOLLINS",
+"HARVARD" => "HARVARD",
+"INDIABOOKS" => "INDIABOOKS",
+"JAICO" => "JAICO",
+"MEDIASTAR" => "MEDIASTAR",
+"NEWINDIABOOKSOURCE" => "NEWINDIABOOKSOURCE",
+"ORIENTBLACKSWAN" => "ORIENTBLACKSWAN",
+"OXFORD" => "OXFORD",
+"PANMACMILLAN" => "PANMACMILLAN",
+"PARAGONBOOKS" => "PARAGONBOOKS",
+"PENGUIN" => "PENGUIN",
+"POPULARPRAKASHAM" => "POPULARPRAKASHAM",
+"PRAKASH" => "PRAKSAH",
+"PRISM" => "PRISM",
+"RANDOMHOUSE" => "RANDOMHOUSE",
+"RESEARCHPRESS" => "RESEARCHPRESS",
+"RUPA" => "RUPA",
+"SAGE" => "SAGE",
+"SCHAND" => "SCHAND",
+"TATAMCGRAWHILL"=>"TATAMCGRAWHILL",
+"TBH"=>"TBH",
+"UBS"=>"UBS",
+"VINAYAKA" => "VINAYAKA",
+"VIVA" => "VIVA",
+"WESTLAND" => "WESTLAND",
+"WILEY" => "WILEY",
+"NARI" => "NARI",
 );
 
 // This list of invalid Author and title list is made after going through the missing isbns files.
@@ -82,6 +88,23 @@ function fillDefaultCatalogValues($book){
   }
   return $book;
 }
+/* Replacing special char acters and other values in the book */
+function formatValues($books){
+  global $controlCharactersToReplace;
+  global $controlCharactersReplaceValues;
+  global $asciiExpression;
+
+  $modifiedBooks = Array();
+  foreach($books as $book){
+   $book['title'] = preg_replace($asciiExpression, " ", $book['title']);
+   $book['author'] = preg_replace($asciiExpression, " ", $book['author']);
+   $book['description'] = str_replace($controlCharactersToReplace, $controlCharactersReplaceValues, $book['description']);
+   $book['description'] = preg_replace($asciiExpression, " ", $book['description']);
+   $modifiedBooks[] = $book;
+  }
+  print_r($modifiedBooks);
+  return $modifiedBooks;
+}
 
 /* Checks for validity of the book passed. Returns true or false. 
 1. ISBN present
@@ -91,46 +114,39 @@ function fillDefaultCatalogValues($book){
 */
 function validBooks($books){
   $errorList = Array();
-  $asciiExpression = '/(?:[^\x00-\x7F])/';
   $titleIsValid = false;
   $authorIsValid = false;
   $descIsValid = false;
-  $errorString = "";
+  global $asciiExpression;
   global $availabilityList;
   global $supplierList;
 
  foreach($books as $book ) {
-  $errorString = "";
-  if ( !is_null($book['ISBN']) && !empty($book['ISBN']) && (preg_match($asciiExpression,$book['ISBN']) == 0 )){
+  if ( !is_null($book['isbn']) && !empty($book['isbn']) && (preg_match($asciiExpression,$book['isbn']) == 0 )){
        $isbnIsValid = true;
-  } else { $errorString .=  "ISBN is not valid\n"; }
+  } else { $errorList[] =  "isbn is not valid"; }
 
-  if ( !is_null($book['AVAILABILITY']) && !empty($book['AVAILABILITY']) && (preg_match($asciiExpression,$book['AVAILABILITY']) == 0 ) 
-       && in_array($book['AVAILABILITY'], $availabilityList)){
+  if ( !is_null($book['in_stock']) && !empty($book['in_stock']) && (preg_match($asciiExpression,$book['in_stock']) == 0 ) 
+       && array_key_exists($book['in_stock'], $availabilityList)){
        $availabilityIsValid = true;
-  } else { $errorString .=  "Availability is not valid\n"; }
+  } else { $errorList[] =  "Availability is not valid"; }
 
-  if ( !is_null($book['TITLE']) && !empty($book['TITLE']) && (preg_match($asciiExpression,$book['TITLE']) == 0 )){
+  if ( !is_null($book['title']) && !empty($book['title']) && (preg_match($asciiExpression,$book['title']) == 0 )){
        $titleIsValid = true;
-  } else { $errorString .=  "Title is not valid\n"; }
+  } else { $errorList[] =  "Title is not valid"; }
 
-  if ( !is_null($book['AUTHOR']) && !empty($book['AUTHOR']) && (preg_match($asciiExpression,$book['AUTHOR']) == 0)){
+  if ( !is_null($book['author']) && !empty($book['author']) && (preg_match($asciiExpression,$book['author']) == 0)){
        $authorIsValid = true;
-  } else { $errorString .=  "Author is not valid\n"; }
+  } else { $errorList[] =  "Author is not valid"; }
 
-  if ((preg_match($asciiExpression,$book['DESCRIPTION']) == 0 )){
+  if ((preg_match($asciiExpression,$book['description']) == 0 )){
        $descIsValid = true;
-  } else { $errorString .=  "Description is not valid\n"; }
+  } else { $errorList[] =  "Description is not valid"; }
 
-  if ( !is_null($book['SUPPLIER']) && !empty($book['SUPPLIER']) && (preg_match($asciiExpression,$book['SUPPLIER']) == 0 ) 
-       && in_array($book['SUPPLIER'], $supplierList)){
+  if ( !is_null($book['info_source']) && !empty($book['info_source']) && (preg_match($asciiExpression,$book['info_source']) == 0 ) 
+       && in_array($book['info_source'], $supplierList)){
        $supplierIsValid = true;
-  } else { $errorString .=  "Supplier is not valid\n"; }
-
-  if ( $errorString != "" ) { 
-    $errorString = "Error:ISBN=" . $book['ISBN']. ":Title=" . $book['TITLE']. ":Author=".$book['AUTHOR']. "\n" . $errorString; 
-    $errorList[] = $errorString;
-  }
+  } else { $errorList[] =  "Supplier is not valid"; }
  }
  return $errorList;
 } 
@@ -141,27 +157,27 @@ function validBooks($books){
 **
 */
 function validMissingIsbnBook($book){
-  $asciiExpression = '/(?:[^\x00-\x7F])/';
+  global $asciiExpression;
   $isbnIsValid = false;
   $titleIsValid = false;
   $validBook = null;
   global $invalidMissingIsbnTitleList;
   global $invalidMissingIsbnAuthorList;
 
-  if ( !is_null($book['ISBN']) && !empty($book['ISBN']) && (preg_match($asciiExpression,$book['ISBN']) == 0 )){
+  if ( !is_null($book['isbn']) && !empty($book['isbn']) && (preg_match($asciiExpression,$book['isbn']) == 0 )){
        $isbnIsValid = true;
   } 
 
-  if ( !is_null($book['TITLE']) && !empty($book['TITLE']) && (preg_match($asciiExpression,$book['TITLE']) == 0 ) 
-       && !in_array($book['TITLE'], $invalidMissingIsbnTitleList)){
+  if ( !is_null($book['title']) && !empty($book['title']) && (preg_match($asciiExpression,$book['title']) == 0 ) 
+       && !in_array($book['title'], $invalidMissingIsbnTitleList)){
        $titleIsValid = true;
   } 
 
-  if ( !is_null($book['AUTHOR']) && !empty($book['AUTHOR']) && (preg_match($asciiExpression,$book['AUTHOR']) == 0) 
-       && !in_array($book['AUTHOR'], $invalidMissingIsbnAuthorList)){
+  if ( !is_null($book['author']) && !empty($book['author']) && (preg_match($asciiExpression,$book['author']) == 0) 
+       && !in_array($book['author'], $invalidMissingIsbnAuthorList)){
        $authorIsValid = true;
   } else {
-     $book['AUTHOR']  = "";
+     $book['author']  = "";
   } 
 
   if ( $isbnIsValid && $titleIsValid) {
@@ -178,7 +194,7 @@ function validSupplier($supplier){
 
 function getBookDetails($db, $isbn) {
   $book = Array();
-  $query = "select * books where isbn = '$isbn'";
+  $query = "select * from books where isbn = '$isbn'";
 
   try {
    $result = mysqli_query($db,$query);
@@ -190,8 +206,51 @@ function getBookDetails($db, $isbn) {
   } catch(exception $e) {
     $book = null;
   }
-
   return $book; 
+}
+
+/* Reads the catalog file which is derived from the info_source column
+** If $db is not null will replace the values in the db.
+** If catalogFile is present then will replace the values in the catalog file also.
+*/
+function updateBookDetails($book, $columnsToBeReplaced, $db, $catalogFilename){
+  global $FIELD_SEPARATOR;
+  if ( empty($columnsToBeReplaced) || is_null($columnsToBeRepalced)) {
+    return false;
+  }
+
+  if ( $db != null ) {
+   $query = "update books set ";
+   foreach($columnsToBeReplaced as $column ) {
+    $query .= " $column=" . $book[$column];
+   }
+   try {
+    $result = mysqli_query($db,$query);
+    if (!$result) { return false; } else { return true; }
+    mysqli_free_result($result);
+   } catch ( exception $e ) {
+     return false;
+   }  
+  }// Db is null
+
+  if ( !is_null($catalogFilename) && file_exists($catalogFilename) && is_file($catalogFilename)){
+    $catalogFile = fopen($catalogFilename, "r") or die ("Cannot open" . $catalogFilename . "\n");
+    $catalogFileTmp = fopen($catalogFilename, "w") or die ("Cannot open" . $catalogFilenameTmp . "\n");
+    while (!feof($catalogFile)){
+     $tmpString = fgets($catalogFile);   
+     if ( $tmpString == null ) { break; }
+     $values = explode($FIELD_SEPARATOR, $tmpString);
+     $isbnno = $values[0];
+     if ( $book['isbn'] == $isbnno ) {
+          fwrite($catalogFileTmp, bookStringInCatalogFormat($book)); 
+     } else {
+        fwrite($bisacFile, implode($FIELD_SEPARATOR, $values). "\n");
+     }
+    }
+    
+  } else {
+   return false;
+  }
 }
 
 
@@ -223,15 +282,29 @@ function getBisacCodes($db, $subjects) {
 }
 
 
+function bookStringInCatalogFormat($book) {
+   $catalogString = "";
+   $catalogString = $book["isbn"] . "\t" . $book["title"] . "\t" . $book["author"] . "\t" . $book["binding"] . "\t";
+   $catalogString .= $book["description"] . "\t" . $book["publishing_date"] . "\t" . $book["publisher"] . "\t" . $book["pages"] . "\t";
+   $catalogString .= $book["language"] . "\t" . $book["weight"] . "\t" . $book["dimension"] . "\t" . $book["shipping_region"] . "\t" . $book["bisac_codes"] . "\n";
+   return $catalogString;
+}
+
+function bookStringInStockFormat($book) {
+   global $availabilityList;
+
+   $stockString = "";
+   $stockString =  $book["isbn"] . "\t". $book["list_price"] . "\t" . $book["currency"] . "\t" ;
+   $stockString .= $availabilityList[$book["in_stock"]]. "\t" . $book["info_source"] . "\t" . $book["title"] . "\t" . $book["author"] ."\t";
+   $stockString .= $book["delivery_period"] . "\n";
+   return $stockString;
+}
+
 /* Function to write to catalog file 
 ** Assumes that the file is open.
 */
 function writeBookToCatalog($book, $catalogFile) {
-   $catalogString = "";
-   $catalogString = $book["ISBN"] . "\t" . $book["TITLE"] . "\t" . $book["AUTHOR"] . "\t" . $book["BINDING"] . "\t";
-   $catalogString .= $book["DESCRIPTION"] . "\t" . $book["PUBLISH-DATE"] . "\t" . $book["PUBLISHER"] . "\t" . $book["PAGES"] . "\t";
-   $catalogString .= $book["LANGUAGE"] . "\t" . $book["WEIGHT"] . "\t" . $book["DIMENSION"] . "\t" . $book["SHIP-REGION"] . "\t" . $book["SUBJECT"] . "\n";
-   fwrite($catalogFile, $catalogString);
+   fwrite($catalogFile, bookStringInCatalogFormat($book));
 }
 
 function writeBooksToCatalog($books, $catalogFile) {
@@ -239,6 +312,7 @@ function writeBooksToCatalog($books, $catalogFile) {
     writeBookToCatalog($book, $catalogFile);
    }
 }
+
 
 /* Function to write both stdout and file */
 function logMessage($logFile, $outputString){
