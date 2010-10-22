@@ -13,45 +13,54 @@ if [ "$tomail" == "" ] ; then
 fi
 tomail=`echo $tomail`
 
+outfilename=`date +%d%b%Y`;
+outfilename=/tmp/dailysync_$outfilename.txt
+rm -f $outfilename;
+rundate=$(date +"%D")
+echo "Daily Synchronization of Catalog - $rundate" >>$outfilename
+
+function pecho {
+    echo $* >>$outfilename
+}
+
 rundate=$(date +"%D-%T")
-echo "[$rundate] Starting daily sync routine."
-echo "[$rundate] Resetting reference database..."
+pecho "[$rundate] Resetting reference database..."
 ( cd $EKKITAB_HOME/db ; ./reset_refdb.sh ) 
 rundate=$(date +"%D-%T")
-echo "[$rundate] Updating catalog..."
-( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -c | php ../bin/sendmail.php -s "Daily Sync Report: [$rundate] Init Catalog - books" $tomail ) 
+pecho "[$rundate] Updating catalog..."
+( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -c >>$outfilename 2>>$outfilename) 
 rundate=$(date +"%D-%T")
-echo "[$rundate] Running updating prices..."
-( cd $EKKITAB_HOME/bin ; ./updateprices.sh | php sendmail.php -s "Daily Sync Report: [$rundate] Update Prices" $tomail )
+pecho "[$rundate] Running updating prices..."
+( cd $EKKITAB_HOME/bin ; ./updateprices.sh >>$outfilename 2>>$outfilename )
 rundate=$(date +"%D-%T")
-echo "[$rundate] Resetting price and stock..."
-( cd $EKKITAB_HOME/db ; ./reset_refdb_price_stock.sh )
+pecho "[$rundate] Resetting price and stock..."
+( cd $EKKITAB_HOME/db ; ./reset_refdb_price_stock.sh >>$outfilename 2>>$outfilename )
 rundate=$(date +"%D-%T")
-echo "[$rundate] Updating catalog prices..."
-( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -p | php ../bin/sendmail.php -s "Daily Sync Report: [$rundate] Init Catalog - prices" $tomail ) 
+pecho "[$rundate] Updating catalog prices..."
+( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -p >>$outfilename 2>>$outfilename ) 
 rundate=$(date +"%D-%T")
-echo "[$rundate] Indexing and updating production database..."
-( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -u ) 
+pecho "[$rundate] Indexing and updating production database..."
+( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -u >>$outfilename 2>>$outfilename ) 
 rundate=$(date +"%D-%T")
-echo "[$rundate] Updating global section product ids..."
-( cd $EKKITAB_HOME/db ; php ./load_globalsection_books.php ../data/globalsection.ini )
+pecho "[$rundate] Updating global section product ids..."
+( cd $EKKITAB_HOME/db ; php ./load_globalsection_books.php ../data/globalsection.ini >>$outfilename 2>>$outfilename )
 # Restart Tomcat
-sudo service tomcat6 stop
+sudo service tomcat6 stop >>$outfilename 2>>$outfilename
 sleep 10
-sudo service tomcat6 start
+sudo service tomcat6 start >>$outfilename 2>>$outfilename
 rundate=$(date +"%D-%T")
-echo "[$rundate] Running smoke test on new catalog..."
-( cd $EKKITAB_HOME/bin; php bookValidation.php )
+pecho "[$rundate] Running smoke test on new catalog..."
+( cd $EKKITAB_HOME/bin; php bookValidation.php >>$outfilename 2>>$outfilename )
 success=$?
 if (( $success > 0 )) ; then
-    echo "Catalog validation failed. Will not continue."
+    pecho "Catalog validation failed. Will not continue."
     exit 1;
 fi
 # Release the new catalog
 rundate=$(date +"%D-%T")
-echo "[$rundate] Releasing new catalog to production.."
-( cd $EKKITAB_HOME/bin; ./release catalog )
+pecho "[$rundate] Releasing new catalog to production.."
+( cd $EKKITAB_HOME/bin; ./release catalog >>$outfilename 2>>$outfilename )
 rundate=$(date +"%D-%T")
-echo "[$rundate] Completed daily sync routine."
-
-
+pecho "[$rundate] Completed daily sync routine."
+rundate=$(date +"%D")
+cat $outfilename | php $EKKITAB_HOME/bin/sendmail.php -s "Daily Sync Summary for $rundate" $tomail 
