@@ -1,5 +1,5 @@
 # Execute daily data import, catalog and index build and transfer to production.
-00 14   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./dailysync.sh vijay@ekkitab.com anil@ekkitab.com prasad@ekkitab.com | php /mnt2/scm/bin/sendmail.php -s "Daily Sync Summary" vijay@ekkitab.com anil@ekkitab.com prasad@ekkitab.com
+00 14   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./dailysync.sh vijay@ekkitab.com anil@ekkitab.com prasad@ekkitab.com
 # Execute daily data refresh from Ingram.
 00 10   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./refreshingram.sh vijay@ekkitab.com anil@ekkitab.com | php /mnt2/scm/bin/sendmail.php -s "Daily Ingram Refresh Summary" vijay@ekkitab.com anil@ekkitab.com
 # Execute hourly processing of stocklists coming in as email attachments.
