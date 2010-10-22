@@ -1,5 +1,6 @@
 <?php
 include "setenv.php";
+include "../../bin/convertisbn.php";
 
 $errorList = Array();
 $selectedSupplier = '';
@@ -16,25 +17,33 @@ if (!is_dir($imagesWorkDirectory)){
   $task = "";
 }
 if ($task == "getMissingImages" ) {
-  $db = initDatabase($config);
+  $db = initDatabase($reference_config);
   $runAgain = false;
   if(isset($_GET['SUPPLIER'])) {$selectedSupplier = $_GET['SUPPLIER']; } elseif(isset($_POST['SUPPLIER'])) { $selectedSupplier = $_POST['SUPPLIER']; } else { $selectedSupplier = ""; }
   if ($selectedSupplier != '' ){
+   $selectedSupplier = strtolower($selectedSupplier);
    #Create a directory for the current images with date time stamp.
    $missingImagesDirectory = $imagesWorkDirectory.$selectedSupplier;  
    $missingImagesFileName = $imagesWorkDirectory.$selectedSupplier.".txt";  
    if(is_dir($missingImagesDirectory)) {
    # read the directory and fill in the array with the isbn and the URL for the image only if it is not zero bytes
-  //$missingImagesDirectory = $imagesWorkDirectory."amit_20101006102016";
+   # NOTE the code is repeated below again. So the change is required again.
    if ($handle = opendir($missingImagesDirectory)) {
     while (false !== ($file = readdir($handle))) {
         if ($file != "." && $file != "..") {
            $filename = $missingImagesDirectory . "/". $file;
            if(is_file($filename) && filesize($filename) > 0 ){
               $tokens = explode(".", $file);
+              /* Check the $tokens[0] which is the isbn is a 10 digit one if yes convert to 13
+              ** rename the file also accordingly 
+              */
+              if(strlen($tokens[0]) == 10 ){
+                $tokens[0] = isbn10to13($tokens[0]);
+                rename($filename, $missingImagesDirectory."/$tokens[0].jpg");
+              }
               //Get the title and author for this
               $book = getBookDetails($db,$tokens[0]);
-              $book['URL'] = $filename;
+              $book['url'] = $filename;
               if ( $book ) { $books[] = $book; }
            } else {
              unlink($filename);
@@ -58,15 +67,23 @@ if ($task == "getMissingImages" ) {
       exec($command);
      }
   # read the directory and fill in the array with the isbn and the URL for the image only if it is not zero bytes
+  # NOTE the code is repeated above again. So the change is required again.
   if ($handle = opendir($missingImagesDirectory)) {
     while (false !== ($file = readdir($handle))) {
         if ($file != "." && $file != "..") {
            $filename = $missingImagesDirectory . "/". $file;
            if(is_file($filename) && filesize($filename) > 0 ){
               $tokens = explode(".", $file);
+              /* Check the $tokens[0] which is the isbn is a 10 digit one if yes convert to 13
+              ** rename the file also accordingly 
+              */
+              if(strlen($tokens[0]) == 10){
+                $tokens[0] = isbn10to13($tokens[0]);
+                rename($filename, $missingImagesDirectory."/$tokens[0].jpg");
+              }
               //Get the title and author for this
               $book = getBookDetails($db,$tokens[0]);
-              $book['URL'] = $filename;
+              $book['url'] = $filename;
               if ( $book ) { $books[] = $book; }
            } else {
              unlink($filename);
@@ -122,12 +139,12 @@ if ($task == "saveMissingImages" ) {
  <tr><td>ISBN</td><td>TITLE</td><td>AUTHOR</td><td>IMAGE</td> </tr>
  <?php foreach($books as $book) { 
        echo "<tr>";
-       echo "<td>". $book['ISBN'] . "</td>";
-       echo "<td>". $book['TITLE'] . "</td>";
-       echo "<td>". $book['AUTHOR'] . "</td>"; 
-       echo "<td><img src='". $book['URL'] ."' />";
-       echo "<input type='radio' name='saveImageList[". $book['ISBN']. "]' value='YES'>Yes";
-       echo "<input type='radio' name='saveImageList[" . $book['ISBN'] ."]' value='NO'>No</td>";
+       echo "<td>". $book['isbn'] . "</td>";
+       echo "<td>". $book['title'] . "</td>";
+       echo "<td>". $book['author'] . "</td>"; 
+       echo "<td><img src='". $book['url'] ."' />";
+       echo "<input type='radio' name='saveImageList[". $book['isbn']. "]' value='YES'>Yes";
+       echo "<input type='radio' name='saveImageList[" . $book['isbn'] ."]' value='NO'>No</td>";
        echo "</tr>";
   } ?>
  <tr>

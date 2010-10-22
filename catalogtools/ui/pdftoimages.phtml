@@ -15,9 +15,9 @@ if (!is_dir($pdfImagesWorkDirectory)){
   $errorList[] = $errorString;
   $task = "";
 }
-
 if ( $task == "loadPdfFile" ) {
    $pdfImagesDirectory = $pdfImagesWorkDirectory;
+   // Get the file details from the post variables.
    $uploadedFileName = $pdfImagesDirectory . "/". $_FILES['uploadedFile']['name'];
    $uploadedTmpFileName = $_FILES['uploadedFile']['tmp_name'];
    if(move_uploaded_file($uploadedTmpFileName, $uploadedFileName)) {
@@ -39,8 +39,8 @@ if ( $task == "loadPdfFile" ) {
         if ($file != "." && $file != "..") {
            $filename = $pdfImagesDirectory . "/". $file;
            if(is_file($filename) && filesize($filename) > 0 ){
-              $image['NAME'] = $file;
-              $image['URL'] = $filename;
+              $image['name'] = $file;
+              $image['url'] = $filename;
               $images[] = $image;
            } else {
              unlink($filename);
@@ -59,8 +59,11 @@ if ( $task == "savePdfImages" ){
   if(isset($_GET['pdfImagesDirectory'])) {$pdfImagesDirectory = $_GET['pdfImagesDirectory']; } 
   elseif(isset($_POST['pdfImagesDirectory'])) { $pdfImagesDirectory = $_POST['pdfImagesDirectory']; } else { $pdfImagesDirectory = ""; }
 
-  if(isset($_GET['pdfImageList'])) {$pdfImageList = $_GET['pdfImageList']; } elseif(isset($_POST['pdfImageList'])) { $pdfImageList = $_POST['pdfImageList']; } else { $pdfImageList = null; }
+  if(isset($_GET['pdfImageList'])) {$pdfImageList = $_GET['pdfImageList']; } 
+  elseif(isset($_POST['pdfImageList'])) { $pdfImageList = $_POST['pdfImageList']; } else { $pdfImageList = null; }
+
   foreach($pdfImageList as $filename => $isbn) {
+    $isbn = trim($isbn);
     if ( $isbn != "" ) {
        rename($pdfImagesDirectory."$filename", $pdfImagesDirectory."$isbn.jpg");
     } 
@@ -99,8 +102,8 @@ If Done button is clicked rest of the files are deleted<br>
  <table border='1'>
  <?php foreach($images as $image) { 
        echo "<tr>";
-       echo "<td><img src='". $image['URL'] ."' />";
-       echo "<input type='text' name='pdfImageList[". $image['NAME']. "]' value='' />";
+       echo "<td><img src='". $image['url'] ."' />";
+       echo "<input type='text' name='pdfImageList[". $image['name']. "]' value='' />";
        echo "</tr>";
   } ?>
  <tr>

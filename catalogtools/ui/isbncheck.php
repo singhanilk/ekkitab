@@ -14,6 +14,7 @@ $GENERIC_BISAC_CODE='ZZZ000000';
 $isbnno = '';
 $displayString = '';
 $preorder = '';
+$task = '';
 
 /* Function to write both stdout and file */
 function logMessage($logFile, $outputString){
@@ -119,6 +120,7 @@ function createForm($isbnno, $displayString){
 
 if(isset($_GET['isbnno'])) { $isbnno = $_GET['isbnno']; } elseif(isset($_POST['isbnno'])) { $isbnno = $_POST['isbnno']; } else { $isbnno = ""; }
 if(isset($_GET['preorder'])) { $preorder = 2; } elseif(isset($_POST['preorder'])) { $preorder = 2; }
+if(isset($_GET['task'])) { $task = $_GET['task']; } elseif(isset($_POST['task'])) { $task = $_POST['task']; } else { $task = ""; }
 
 if ($preorder != ''){
         $preorderesult = checkpreorder($preorder);
@@ -169,7 +171,11 @@ if ( $isbnno != '' ){
   $displayString .= '<h5>The book is not listed under missing isbns</h5>';
  }
 }
-echo createForm($isbnno, $displayString);
+if ( $task == "xml" ) {
+  echo $displayString;
+} else {
+ echo createForm($isbnno, $displayString);
+}
 
  
 ?>
