@@ -3,22 +3,35 @@ if [ -z $EKKITAB_HOME ] ; then
     echo "EKKITAB_HOME is not set..."
     exit 1;
 fi;
-. $EKKITAB_HOME/bin/db.sh 
-#if [ $# -ne 3 ] ; then
-#    echo "Not enough arguments...."; echo "Usage: $0 <host> <user> <password>" 
-#    exit 1;
-#fi;
-# Run the delta scripts if called with updatedelta
-if [ "$1" == "updatedelta" ] ; then
-if [ -f $EKKITAB_HOME/release/catalogupdate/catalogupdate.sql ] ; then
-mysql -s -h $host -u $user -p$password <<!
-use ekkitab_books;
-source $EKKITAB_HOME/release/catalogupdate/catalogupdate.sql;
-!
 
-fi
-else 
-mysql -s -h $host -u $user -p$password <<!
-source $EKKITAB_HOME/db/loadbooks.sql;
+. $EKKITAB_HOME/bin/db.sh 
+
+echo -n "[Info] Copying books table from reference to ekkitab_books ...";
+mysql -s -h $host -u $user -p$password ekkitab_books <<!
+    drop table if exists books;
+    create table books like reference.books;
+    insert into books select * from reference.books where title is not null;
 !
+echo "done."
+
+## Decide whether it is necessary to transfer the books_promo table.
+query="select max(id) from books_promo";
+
+refmax=`mysql -u $user -p$password -h $host reference -e "$query"` ; 
+refmax=`echo ${refmax##max(id)}`
+
+ekkitabmax=`mysql -u $user -p$password -h $host ekkitab_books -e "$query"` ; 
+ekkitabmax=`echo ${ekkitabmax##max(id)}`
+
+if (( $ekkitabmax == $refmax )) ; then
+    echo "[Info] Table books_promo is up to date. Not transferring from reference db."
+    exit 0;
 fi
+
+echo -n "[Info] Copying books_promo table from reference to ekkitab_books ...";
+mysql -s -h $host -u $user -p$password ekkitab_books <<!
+    drop table if exists books_promo;
+    create table books_promo like reference.books_promo;
+    insert into books_promo select * from reference.books_promo;
+!
+echo "done."

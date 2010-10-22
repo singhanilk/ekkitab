@@ -69,6 +69,10 @@ function googleimages_start($argc, $argv) {
      if(is_null($isbnno) or empty($isbnno)){
        break; 
      }
+     // If it is a 10 digit isbn convert it to 13 digit isbn.
+     if(strlen($isbnno) == 10 ){
+      $isbnno = isbn10to13($isbnno);
+     }
      /* Obtain the search result page first */
      $htmlString = googleimages_getWebPage("http://www.google.com/search?tbs=bks:1&tbo=1&q=".$isbnno."&btnG=Search+Books");
      /* Get the URL for Book Overview */

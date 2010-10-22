@@ -1,4 +1,33 @@
 #!/bin/bash
 filename=`date +%d%b%Y`;
-nohup /mnt2/scm/bin/release_on_production $* </dev/null >/tmp/release_$1_$filename 2>&1 &
+filename=/tmp/release_$1_$filename
+
+rm -f $filename
+
+rundate=$(date +"%D")
+echo "Daily Synchronization of Catalog - $rundate" >>$filename
+
+if (( $# < 1 )) ; then
+    echo "[Fatal] No arguments! Cannot continue." >>$filename 
+    exit 1;
+fi
+
+releaseentity=$1;
+shift;
+
+tomail=""
+while [ $# -gt 0 ] ; do 
+    tomail="$tomail $1"
+    shift
+done 
+
+if [ "$tomail" == "" ] ; then
+    tomail=vijay@ekkitab.com # Default recipient
+fi
+
+EKKITAB_HOME=/mnt2/scm
+$EKKITAB_HOME/bin/release_on_production $releaseentity </dev/null >>$filename 2>&1 
+
+rundate=$(date +"%D")
+cat $filename | php $EKKITAB_HOME/bin/sendmail.php -s "Daily Sync Summary from Production Server for $rundate" $tomail 
 exit 0

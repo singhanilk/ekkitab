@@ -133,6 +133,68 @@ else {
         return $db;
     }
 
+    /*
+     * Check if a data file has already been processed using data in table ek_import_state.
+     */
+     function checkFileProcessed($file, $db) {
+        $processed = false;
+        $filemodtime = "";
+        $dbmodtime = "";
+        if ($file != null) {
+            if (file_exists($file)) {
+                $filemodtime = date("Y-m-d H:i:s", filemtime($file));
+            }
+        }
+        if ($filemodtime != "") {
+            $query = "select updatetime from ek_import_state where filename = '$file'";
+            try {
+                $result = mysqli_query($db,$query);
+                if (($result) && (mysqli_num_rows($result) > 0)) {
+                    $row = mysqli_fetch_array($result);
+                    $dbmodtime = $row[0];
+                }
+            }
+            catch (exception $e) {
+                fatal($e->getmessage());
+            }
+        }
+
+        if (($dbmodtime == "") ||  ($filemodtime == "")) {
+            $processed = false;
+        }
+        else {
+            $db_mod = strtotime($dbmodtime);
+            $file_mod = strtotime($filemodtime);
+            if ($file_mod > $db_mod) {
+                $processed = false;
+            }
+            else {
+                $processed = true;
+            }
+        }
+        return $processed;
+     }
+
+    /*
+     * Update import_state table with the file that has been processed.
+     */
+     function setFileProcessed($file, $table, $db) {
+        if (($file != null) && ($file != "")) {
+            $query = "insert into  ek_import_state (filename, tablename, updatetime) values ('$file', '$table', now()) ";
+            $query .= "on duplicate key update tablename = '$table', updatetime = now()";
+            try {
+                $result = mysqli_query($db,$query);
+                if (!$result) {
+                    fatal("Failed to update import state table.\n");
+                }
+            }
+            catch (exception $e) {
+                fatal("Exception in trying to update import state table. " . $e->getmessage());
+                exit(1);
+            }
+        }
+     }
+
    /** 
     *  Write delta sql scripts to update file
     *  These scripts will contain both insert and update scripts for applying to the production database. 
@@ -333,13 +395,12 @@ else {
             $bookavailable = $book['in_stock'];
             $discountprice = $book['discount_price']; 
             $delivery_period = $book['delivery_period'];
-            $standardCondition = " and ( in_stock != $bookavailable or discount_price != $discountprice or delivery_period != $delivery_period or delivery_period is null ) ";
             if ($bookavailable == '0') {
-              $whereclause = "(isbn = '$isbn') $standardCondition and ((discount_price is null) or ((in_stock = '0') and discount_price > '$discountprice'))";
+              $whereclause = "(isbn = '$isbn') and ((discount_price is null) or ((in_stock = '0') and discount_price > '$discountprice'))";
             } elseif ($bookavailable == '2') {
-              $whereclause = "(isbn = '$isbn') $standardCondition and ((discount_price is null) or ((in_stock = '2') and discount_price > '$discountprice'))";
+              $whereclause = "(isbn = '$isbn') and ((discount_price is null) or ((in_stock = '2') and discount_price > '$discountprice'))";
             } else {
-              $whereclause = "(isbn = '$isbn') $standardCondition and ((discount_price is null) or (in_stock = '0') or ((in_stock = '1') and ((discount_price > '$discountprice') or (delivery_period > '$delivery_period'))))";
+              $whereclause = "(isbn = '$isbn') and ((discount_price is null) or (in_stock = '0') or ((in_stock = '1') and ((discount_price > '$discountprice') or (delivery_period > '$delivery_period'))))";
             }
             $query = "update books set " . $updatestatement . " where $whereclause";
        }
@@ -487,6 +548,11 @@ else {
         $config = getConfig(CONFIG_FILE);
         $db = initDatabases($config);
 
+        if (($pgm_mode & ~MODE_PRICE) && (checkFileProcessed($argv[3], $db))) {
+            info("Data file ".$argv[3]. " has already been processed.");
+            exit(0);
+        }
+
         //Get the file that controls how much discount we give to customers.
         $discountfile = "";
         if (isset($config['files']['discountdatafile'])) {
@@ -589,6 +655,9 @@ else {
         $inserted = $i - ($errorcount + $unresolved + $filenotfound + $ignored);
         writeUnclassifiedCodesToFile($infosource);
         info("Processed $i rows. [$inserted] inserted. [$errorcount] errors. [$unresolved] unresolved. [$ignored] ignored. [$unclassified] unclassified.\n");
+        $updatedtable = ($pgm_mode & MODE_PROMO) ? "books_promo" : "books"; 
+        setFileProcessed($argv[3], $updatedtable, $db);
+        doCommit($db);
     
         fclose($fh);
         fclose($catalogUpdateSqlFile);

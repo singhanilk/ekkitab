@@ -28,6 +28,10 @@ for ((i=0; i < $tablecount; i+=2)) ; do
    echo "done."
    cp /tmp/$table.txt $releasedir
 done
+# Get the max(id) of the books_promo table and write it to file.
+query="select max(id) from books_promo";
+maxid=`mysql -h $host -u $user -p$password ekkitab_books -e "$query"`;
+echo ${maxid##max(id)} > $releasedir/max_books_promo_id;
 
 echo -n "Exporting global sections..."
 mysqldump -h $host -u $user -p$password ekkitab_books ek_catalog_global_sections > $releasedir/ek_catalog_global_sections.sql

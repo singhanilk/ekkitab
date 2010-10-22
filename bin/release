@@ -9,6 +9,18 @@ if (( $# < 1 )) ; then
     exit 1;
 fi
 entity=`echo $1 | tr A-Z a-z`
+shift;
+
+tomail=""
+while [ $# -gt 0 ] ; do 
+    tomail="$tomail $1"
+    shift
+done 
+
+if [ "$tomail" == "" ] ; then
+    tomail=vijay@ekkitab.com # Default recipient
+fi
+
 releasedir=$EKKITAB_HOME/release 
 runcommand="";
 case "$entity" in 
@@ -40,4 +52,4 @@ echo -n "Transferring new $entity to production server..."
 ( cd $releasedir; scp -r $entity prod:/tmp >/dev/null )
 echo "done."
 echo "Deploying new $entity on production server."
-ssh prod "/mnt2/scm/bin/launch_release_on_production $entity"
+ssh prod "/mnt2/scm/bin/launch_release_on_production $entity $tomail"
