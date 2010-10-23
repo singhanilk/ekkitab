@@ -44,6 +44,8 @@ else {
     $catalogUpdateIndexFile = null;
     // The product id which will be incremented only if there is a succesfull insert.
     $productId = null;
+   // Duplicate insert errors global count.
+    $duplicateErrorCount = null;
 
    /** 
     * Log the error and terminate the program.
@@ -359,6 +361,7 @@ else {
     */
     function insertBook($book, $db, $mode, $linenumber) {
        global $productId;
+       global $duplicateErrorCount;
 
        if ($mode & MODE_PROMO) {
            return insertPromo($book,$db, $linenumber);
@@ -409,6 +412,7 @@ else {
        }
        if (! $result = mysqli_query($db, $query)) {
            if (mysqli_errno($db) != 1062) { // 1062 represents duplicate key
+              $duplicateErrorCount++;
               warn("Failed to write to Books. [Line: $linenumber] ". mysqli_error($db), $query);
            }
            return(0); 
@@ -586,7 +590,7 @@ else {
         if (!$catalogUpdateIndexFile) { fatal("Could not create the index text file"); }
         // Get the start Id  
         $productId = getStartId($db);
-
+        $duplicateErrorCount = 0;
         while ($line = fgets($fh)) {
             $linenumber++;
             $book = array();
@@ -663,7 +667,7 @@ else {
         fclose($catalogUpdateSqlFile);
         fclose($catalogUpdateIndexFile);
         mysqli_close($db);
-        return $errorcount + $unresolved + $filenotfound + $ignored;
+        return $inserted + $duplicateErrorCount;
     }
 
     $start = (float) array_sum(explode(' ', microtime()));
