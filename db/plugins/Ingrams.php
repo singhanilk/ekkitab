@@ -220,7 +220,7 @@ class Parser extends BaseParser {
             
             $listprice    = substr($line,150,7)/100;
             $discount     = substr($line,165,3);
-            
+
             //Extracting the Supplier Discount Info
             if (!strcmp($discount, "REG")){
                 $discount = 40;
@@ -237,7 +237,7 @@ class Parser extends BaseParser {
 
             // Add acquisition charge to list price to recover shipping costs if we get less than 15% from supplier. 
             if ($discount < 15) {
-                $listprice += ((15 - $discount)/100)*$list_price;
+                $listprice += ((15 - $discount)/100)*$listprice;
             }
 
             $currency = "USD";
