@@ -667,7 +667,7 @@ else {
         fclose($catalogUpdateSqlFile);
         fclose($catalogUpdateIndexFile);
         mysqli_close($db);
-        return $inserted + $duplicateErrorCount;
+        return $inserted;
     }
 
     $start = (float) array_sum(explode(' ', microtime()));
