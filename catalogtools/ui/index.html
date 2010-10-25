@@ -1,0 +1,22 @@
+<html>
+<body>
+<h4> Internal Utils(Prasad Potula - 05/Oct/2010 )</h4>
+<ul>
+<U>Set up and source code for these tools</U><br><br>
+1. The internalutils directory is a soft link to the /home/ubuntu/prasad/src/scm/catalogtools/ui directory.<br>
+   The reason being this source code is used for uploading catalogs, image and new arrivals stock data.<br>
+<br><U>Dependencies and Assumptions</U><br><br>
+1. A development database has been created which is a replica of refernce database. All the scripts which <br>
+   modify database point to the development database<br>
+2. Scripts like copy images etc work on the main /mnt directories only<br>
+3. A script called setenv.php is included in all the phtml scripts which sets the environment to development.<br>
+<br><U>List of Utilities</U><br><br>
+<ol>
+<li><a href="isbncheck.php">isbncheck.php - Isbn Check Program for checking a particular isbn in reference database</a></li>
+<li><a href="missingimages.phtml">missingimages.phtml - Program which runs google get images for all missing images for a selected supplier</a></li>
+<li><a href="pdftoimages.phtml">pdftoimages.phtml - Program takes a PDF file and extracts images, after specifying the respective isbn can be uploaded</a></li>
+<li><a href="bookupdate.phtml">bookupdate.phtml - Data entry for a single book</a></li>
+</ol>
+</ul>
+</body>
+</html>

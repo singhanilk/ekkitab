@@ -141,7 +141,7 @@ else {
 
 							//get the equivalent bookId for the given isbns
 							$i = 0;
-							$query = "select id from books where isbn in (".$isbns.")";
+							$query = "select id from books where isbn in (".$isbns.") order by field ( isbn, " . $isbns . ")";
 							//echo "\n".$query."\n";
 							$result  = mysqli_query($db, $query);
 							if (! $result)
