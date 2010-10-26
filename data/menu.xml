@@ -67,11 +67,20 @@
         <BOOK id="9780747266983" title="Cradle and all" author="James Patterson"/>
     </SECTION>
     <SECTION title="Top Categories" type="links" showall="yes" showall_url="ekkitab_catalog/category/viewAll">
+        <LINK name="Fiction" type="search"> 
+            <SEARCH field="category">fiction</SEARCH>
+        </LINK>
         <LINK name="Autobiography" type="search"> 
             <SEARCH field="category">biography &amp; autobiography</SEARCH>
         </LINK>
+        <LINK name="Religion" type="search"> 
+            <SEARCH field="category">religion</SEARCH>
+        </LINK>
         <LINK name="Philosophy" type="search"> 
             <SEARCH field="category">philosophy</SEARCH>
+        </LINK>
+        <LINK name="History" type="search"> 
+            <SEARCH field="category">history</SEARCH>
         </LINK>
         <LINK name="Self-Help" type="search"> 
             <SEARCH field="category">self-help</SEARCH>
