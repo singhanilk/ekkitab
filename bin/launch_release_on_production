@@ -29,5 +29,5 @@ EKKITAB_HOME=/mnt2/scm
 $EKKITAB_HOME/bin/release_on_production $releaseentity </dev/null >>$filename 2>&1 
 
 rundate=$(date +"%D")
-cat $filename | php $EKKITAB_HOME/bin/sendmail.php -s "Daily Sync Summary from Production Server for $rundate" $tomail 
+cat $filename | php $EKKITAB_HOME/bin/sendmail.php -s "Release update from Production Server for $releaseentity on $rundate" $tomail 
 exit 0
