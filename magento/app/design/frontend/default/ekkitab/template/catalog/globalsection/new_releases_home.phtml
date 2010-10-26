@@ -14,7 +14,23 @@
  * 
  */
 ?>
-<?php $section= $this->getHomePageSection();
+<?php 
+	function getShortenedString($str,$count){
+		$resStr = '';
+		//$str = eregi_replace(" +", " ", $str);
+		$array = explode(" ", $str);
+		$arrCount = count($array); 
+		if($arrCount >0){
+			$count = $count > $arrCount ? $arrCount : $count;
+			for($i=0;$i < $count ;$i++)
+			{
+				$resStr=$resStr." ".$array[$i];
+			}
+		}
+		return $resStr;
+	}
+
+	$section= $this->getHomePageSection();
 	  $_columnSize=4;
 	  $_deziredRows= 3;
 ?>
@@ -59,14 +75,14 @@
 				$listPrice = (!is_null($product->getListPrice()))? $product->getListPrice() : 0;
 				$discPrice = $product->getDiscountPrice();
 				$savings= $listPrice - $discPrice;
-
+				$shortDesc = getShortenedString($desc,30);
 ?>	
 		<div class="bigImage">
            <a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $fullTitle ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'image',false,null, 200); ?>" alt="<?php echo $fullTitle ?>" title="<?php echo $fullTitle ?>" /></a> 
         </div>
 		<div class="hdr"><?php echo $section->getDisplayName() ?></div>	
 		<div class="finDetBkTitle"><a href="<?php echo $this->getUrl($bookName)?>"  title="<?php echo $fullTitle ?>" ><?php echo ucwords($fullTitle)?></a>  <?php echo (strlen($author) > 0 )?( "<div class=\"lineHeight14em\">by <span class=\"boldFont\"><a href=\"".$this->getUrl('ekkitab_catalog/search/index/author/'.$author)."\">".$author ."</a></span></div>" ):""?></div> <!-- bkTitle -->
-		<div class="bookDetArea"><?php echo $desc?></div>
+		<div class="bookDetArea"><?php echo $shortDesc?>...</div>
 		<div class="textArea">
 			<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($discPrice,true,false) ?></div>
 			<?php if($savingsPerct > 0):?>
