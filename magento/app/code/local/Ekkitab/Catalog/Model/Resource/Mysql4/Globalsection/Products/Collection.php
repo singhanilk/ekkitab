@@ -87,4 +87,14 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Globalsection_Products_Collection
         return $this;
     }
     
+    /**
+     * Add section to filter
+     *
+     * @return Ekkitab_Catalog_Model_Globalsection
+     */
+    public function setOrderFilter($order)
+    {
+		$this->getSelect()->order($order);
+        return $this;
+    }
 }

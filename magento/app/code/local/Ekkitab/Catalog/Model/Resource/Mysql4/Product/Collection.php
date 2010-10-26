@@ -60,6 +60,24 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Product_Collection extends Mage_Core
 		$this->addFieldToFilter('main_table.isbn', array('in'=>$isbns));
 		return $this;
 	}
+
+	public function addIsbnOrderFilter($isbns){
+		//Mage::log("Called addIdFilter");
+		if(!is_null($isbns) && count($isbns) > 0 ){
+			$order ='FIELD (main_table.isbn';
+			if(!is_array($isbns)){
+				$order.=','.$isbns;
+			}else{
+				foreach($isbns as $isbn){
+					$order.=','.$isbn;
+				}
+			}
+			$order.=')';
+			$this->getSelect()->order($order);
+		}
+		return $this;
+	}
+	
 	
 	public function addSourcedFromFilter($sourcedFrom){
 		//Mage::log("Called addIdFilter");
@@ -69,7 +87,7 @@ class Ekkitab_Catalog_Model_Resource_Mysql4_Product_Collection extends Mage_Core
 	
 	public function addStockFilter($status){
 		//Mage::log("Called addStockFilter");
-		$this->addFieldToFilter('main_table.in_stock', array('eq'=>$status));
+		$this->addFieldToFilter('main_table.in_stock', array('in'=>$status));
 		return $this;
 	}
 	

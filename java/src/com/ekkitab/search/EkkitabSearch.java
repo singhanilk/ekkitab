@@ -149,6 +149,7 @@ public class EkkitabSearch {
         	
         	MATCH_MODE matchmode = MATCH_MODE.MATCH_PHRASE;
         	searchQuery = createSearchQuery(query, categories, searchfield, matchmode);
+        	//logger.debug("DEBUG(1): Search Query is: '" + searchQuery + "'");
         	
             if ((searchQuery != null) && (!searchQuery.equals(""))) {
         		luceneQuery = new QueryParser("title", new StandardAnalyzer()).parse(searchQuery);
@@ -165,6 +166,7 @@ public class EkkitabSearch {
                 if ((query != null) && (query.trim().split(" ").length > 1)) {
         		    matchmode = MATCH_MODE.MATCH_WORDS;
         		    searchQuery = createSearchQuery(query, categories, searchfield, matchmode);
+        		    //logger.debug("DEBUG(2): Search Query is: '" + searchQuery + "'");
         		    
                     if ((searchQuery != null) && (!searchQuery.equals(""))) {
             		    luceneQuery = new QueryParser("title", new StandardAnalyzer()).parse(searchQuery);
@@ -345,14 +347,13 @@ public class EkkitabSearch {
         StringBuffer sb = new StringBuffer();
         List<String> terms = new ArrayList<String>();        
         if (!query.equals("")) {
-        	String prefix = (mode == MATCH_MODE.MATCH_PHRASE ? "+" : "");
+        	String conjuncttype = (mode == MATCH_MODE.MATCH_PHRASE ? " AND " : " OR ");
         	
         	String[] words = query.split(" ");
         	for (String word: words) {		
-        		terms.add(prefix+"\"" + word + "\"");
+        		terms.add("\"" + word + "\"");
         	}
        
-        	sb.append("( ");
         	List<String> lucenesearchfields = new ArrayList<String>();
         	if (searchfield != null) {
         		lucenesearchfields.add(searchfield);
@@ -361,14 +362,16 @@ public class EkkitabSearch {
         		lucenesearchfields.add("title");
         		lucenesearchfields.add("author");
         	}
-        	for (String field:lucenesearchfields) {
-        		sb.append(field+":(");
-        		for (String term: terms) {
-        			sb.append(term+" ");
+        	String conjunction = "";
+        	for (String term: terms) {
+        		sb.append(conjunction);
+        		sb.append("(");
+        		for (String field:lucenesearchfields) {
+        			sb.append(field+":"+term+" ");
         		}
         		sb.append(")");
+        		conjunction = conjuncttype;
         	}
-        	sb.append(" ) ");
         }
 
         if (categories != null) {

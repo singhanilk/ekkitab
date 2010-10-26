@@ -43,8 +43,32 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
     const XML_PATH_SEARCH_INDEX_FILE = 'global/search_index/path';
 	const JAVA_BRIDGE_INC_FILE = 'global/java_inc/path';
 
+	private $_searchCriteriaTemplateUrlPrefix="content/";
+    private $_searchCriteriaTemplateUrlSuffix='.php';
+	protected $_searchCriteriaIncludeFile;
 
-   protected function _prepareLayout()
+	public function setSelectCriteriaInclude()
+    {
+		if (!Mage::registry('search_temp_url')) {
+			Mage::register('search_temp_url', Mage::helper('ekkitab_catalog')->getSearchCriteriaTemplateUrl());
+		}
+		if (Mage::registry('search_temp_url') && Mage::registry('search_temp_url')!='' ) {
+			$this->setSearchCriteriaInclude($this->_searchCriteriaTemplateUrlPrefix.trim(Mage::registry('search_temp_url')).$this->_searchCriteriaTemplateUrlSuffix);
+		}
+    }
+
+	public function setSearchCriteriaInclude($includeUrl)
+    {
+        $this->_searchCriteriaIncludeFile = $includeUrl;
+        return $this;
+    }
+
+    public function getSearchCriteriaInclude()
+    {
+        return $this->_searchCriteriaIncludeFile;
+    }
+
+	protected function _prepareLayout()
     {
 	   
 		$title ='';
@@ -78,6 +102,17 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 					'link'=>$link
 				));
 				
+			}else{
+				$title = $this->__("Buy Books Online");
+				$link='';
+				$label = $this->__("Search for Books");
+				
+				$breadcrumbs->addCrumb('search', array(
+					'label'=>$label,
+					'title'=>$label,
+					'link'=>$link
+				));
+
 			}
 
 			// This code is to break the category path inot a parent child hierarchy... for breadcrumb display.
@@ -111,6 +146,8 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 		
         return parent::_prepareLayout();
     }
+
+
 
 	public function setColumnCount($count)
     {
@@ -199,7 +236,6 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 					$books = Mage::getModel('ekkitab_catalog/product')->getCollection()
 					->addIdFilter($productIds)
 					->addIdOrderFilter($productIds);
-					
 				}
 				$booksResult = array("books"=>$books,"hits"=>java_values($results->getHitCount()),"categories"=>$results->getResultCategories(),"suggest"=> $suggest,"other_suggestions"=>java_values($results->getSuggestOther()));
 				$this->_productCollection = $booksResult;
@@ -220,12 +256,82 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 		return $booksResult;
     }
  
+	protected function getResultByIsbns($productIsbns) 
+    {
+		$books=null;
+		$booksResult =NULL;
+		if(!is_null($productIsbns) && is_array($productIsbns) && count($productIsbns) > 0 ){
+			if($this->getCurrentPageNumber() > 0 && $this->getPageSize() > 0){
+				$start=($this->getCurrentPageNumber()-1)* $this->getPageSize() ; // 0, 15 , 30 and so on.... 
+				$end = min ($this->getPageSize(),count($productIsbns)-$start); // 15 or size of array
+				$isbns = array_slice($productIsbns,$start,$end);
+			}
+			else {
+				$isbns = $productIsbns;
+			}
+			$books = Mage::getModel('ekkitab_catalog/product')->getCollection()
+					->addIsbnFilter($isbns)
+					->addIsbnOrderFilter($isbns);
+
+			$booksResult = array("books"=>$books,"hits"=>count($productIsbns),"categories"=>null,"suggest"=>null,"other_suggestions"=>null);
+			$this->_productCollection = $booksResult;
+		}else{
+			$booksResult = array("books"=>null,"hits"=>null,"categories"=>null,"suggest"=>null,"other_suggestions"=>null);
+		}
+		return $booksResult;
+    }
+ 
+		
+	protected function getResultByIds($productIds) 
+    {
+		$books=null;
+		$booksResult =NULL;
+		if(!is_null($productIds) && is_array($productIds) && count($productIds) > 0 ){
+			if($this->getCurrentPageNumber() > 0 && $this->getPageSize() > 0){
+				$start=($this->getCurrentPageNumber()-1)* $this->getPageSize() ; // 0, 15 , 30 and so on.... 
+				$end = min ($this->getPageSize(),count($productIds)-$start); // 15 or size of array
+				$ids = array_slice($productIds,$start,$end);
+			}
+			else {
+				$ids = $productIds;
+			}
+
+			$books = Mage::getModel('ekkitab_catalog/product')->getCollection()
+					->addIdFilter($ids)
+					->addIdOrderFilter($ids);
+			
+			$booksResult = array("books"=>$books,"hits"=>count($productIds),"categories"=>null,"suggest"=>null,"other_suggestions"=>null);
+			$this->_productCollection = $booksResult;
+		}else{
+			$booksResult = array("books"=>null,"hits"=>null,"categories"=>null,"suggest"=>null,"other_suggestions"=>null);
+		}
+		return $booksResult;
+    }
+ 
 		
 	public function getProductCollection(){
 
 		//introduce the lucene search here.....
 		if (is_null($this->_productCollection)) { 
 			$this->_productCollection = $this->getSearchResults();
+		}
+		return $this->_productCollection;
+    }
+	
+	public function getProductCollectionByIsbns($productIsbns){
+
+		//introduce the lucene search here.....
+		if (is_null($this->_productCollection)) { 
+			$this->_productCollection = $this->getResultByIsbns($productIsbns);
+		}
+		return $this->_productCollection;
+    }
+	
+	public function getProductCollectionByIds($productIds){
+
+		//introduce the lucene search here.....
+		if (is_null($this->_productCollection)) { 
+			$this->_productCollection = $this->getResultByIds($productIds);
 		}
 		return $this->_productCollection;
     }
@@ -334,6 +440,9 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 	 public function getPagerUrl($params=array(),$queryParams=null)
     {
 		$url = '*/*/*/';
+		if(Mage::helper('ekkitab_catalog')->getSearchCriteriaTemplateUrl()!=''){
+				  $url  = $url."books/".Mage::helper('ekkitab_catalog')->getSearchCriteriaTemplateUrl().".html/";
+		}
 		if(is_array($params)){
 			foreach ($params as $param => $value) {
                if(isset($value) && strlen($value) > 0){
@@ -471,7 +580,6 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 
     public function getLastNum()
     {
-        $collection = $this->getCollection();
         return $this->getPageSize()*($this->getCurrentPageNumber()-1)+$this->getResultCount();
     }
 
