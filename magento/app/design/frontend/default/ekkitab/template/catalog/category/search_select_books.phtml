@@ -15,49 +15,54 @@
  */
 ?>
 <?php
-
-function getShortenedString($str,$count){
-	$resStr = '';
-	//$str = eregi_replace(" +", " ", $str);
-	$array = explode(" ", $str);
-	$arrCount = count($array); 
-	if($arrCount >0){
-		$count = $count > $arrCount ? $arrCount : $count;
-		for($i=0;$i < $count ;$i++)
-		{
-			$resStr=$resStr." ".$array[$i];
+if($this->getSearchCriteriaInclude() && $this->getSearchCriteriaInclude()!=''){
+ $includePath=Mage::getDesign()->getTemplateFilename($this->getSearchCriteriaInclude());
+ if(file_exists($includePath)){
+	include($includePath);
+	function getShortenedString($str,$count){
+		$resStr = '';
+		$array = explode(" ", $str);
+		$arrCount = count($array); 
+		if($arrCount >0){
+			$count = $count > $arrCount ? $arrCount : $count;
+			for($i=0;$i < $count ;$i++)
+			{
+				$resStr=$resStr." ".$array[$i];
+			}
 		}
+		return $resStr;
 	}
-	return $resStr;
-}
-function stripChars($str){
-	$str = preg_replace("/:[a-z]:/", "", $str);
-	return $str;
-}
-$results=$this->getProductCollection();
-$start=microtime(true);
-$bookList = null;
-$subcats = null;
-$curr_cp = null;
-if(!is_null($results) && is_array($results)){
-  $bookList = $results["books"];
-  $subcats = $results["categories"];
-  $curr_cp = $this->getCurrentCategoryPath();
-  $suggest=trim($results["suggest"]);
-  //$suggest="Amartya Sen";
-  $othrSuggestions=trim($results["other_suggestions"]);
-  //$othrSuggestions=":e:Amartya K. Sen|Amrita Shah| :c:Amartya Sen|Amritha Venkatraman|";
-  $othrSuggestionsArr = null;
-  if(!is_null($othrSuggestions)){
-	$othrSuggestionsArr = explode("|",$othrSuggestions);
- }
-}
+	function stripChars($str){
+		$str = preg_replace("/:[a-z]:/", "", $str);
+		return $str;
+	}
+	if($selectParam && $selectParam=="isbn"){
+		$results=$this->getProductCollectionByIsbns($isbns);
+	} else{
+		$results=$this->getProductCollectionByIds($isbns);
+	}
+	$start=microtime(true);
+	$bookList = null;
+	$subcats = null;
+	$curr_cp = null;
+	if(!is_null($results) && is_array($results)){
+		  $bookList = $results["books"];
+		  $subcats = $results["categories"];
+		  $curr_cp = $this->getCurrentCategoryPath();
+		  $suggest=trim($results["suggest"]);
+		  //$suggest="Amartya Sen";
+		  $othrSuggestions=trim($results["other_suggestions"]);
+		  //$othrSuggestions=":e:Amartya K. Sen|Amrita Shah| :c:Amartya Sen|Amritha Venkatraman|";
+		  $othrSuggestionsArr = null;
+		  if(!is_null($othrSuggestions)){
+			$othrSuggestionsArr = explode("|",$othrSuggestions);
+		 }
+	}
 ?>
 <div class="leftNavArea">
 <?php
   if (!is_null($subcats)) {
 	  $retsize = java_values($subcats->size());
-	  //echo "Size of Category List:[" . $retsize . "]\n"; 
 	  $keys = java_values($subcats->keySet());
 	  sort($keys);
 	  if($retsize > 0){		?>
@@ -75,19 +80,14 @@ if(!is_null($results) && is_array($results)){
 			}else{
 				$cp =  $urlKey;
 			}		
-			//if($val >= 1000 ){
-			//	$val ="";
-			//}else{
-				$val ="[".$val."]";
-			//}
 			?>
 			<li><a href="<?php echo $this->getSubCategorySearchUrl($cp,1) ?>"><?php echo ucwords($key)." ".$val?></a></li>
 <?php	endforeach;	?>
 		</ul>
 		<div class="seeAll"><!--a href="#">See all &raquo;</a-->&nbsp;</div><!-- seeAll -->
 <?php 
-	  } //end of if(retsize > 0)
-	} //end of if(!java_is_null(subcats))
+	  } 
+	} 
 ?>
 	<?php echo $this->getDonateBlurbHtml(); ?>
 	<?php echo $this->getChildHtml('leftlink_menu'); ?>
@@ -123,6 +123,9 @@ if(!is_null($results) && is_array($results)){
 			</span>
 		</div><!-- suggestResTop -->
 		<?php endif; ?>
+		<div class="suggestResTop">
+			<span class="boldFont orangeItTxt12"><?php echo $pageTitle ?></span>
+		</div><!-- suggestResTop -->
 		<div class="searchResTop">
 			<div class="leftArea">
 				<?php if($this->getLastPageNumber()>1): ?>
@@ -301,7 +304,7 @@ if(!is_null($results) && is_array($results)){
 	</div><!-- paginationAreaOut-->
 <?php
 	} 	
-	else { // else of if (!java_is_null(bookList))
+	else {
 		$queryTxt = trim($this->helper('ekkitab_catalogsearch')->getEscapedQueryText());
 		$catTxt = trim($this->helper('ekkitab_catalog')->getEscapedQueryCategoryPath());
 		
@@ -350,15 +353,85 @@ if(!is_null($results) && is_array($results)){
 			</div>
 		</div><div class="clear"></div>
 <?php }
-}
+} 
 else { 
 ?>
 		<div class="inLeft">
 			<div class="note-msg"> Sorry, we are unable to process your request now. Please try again later or write to us if the problem persists.</div>
 		</div>
-<?php } 
-
-$end=microtime(true);
-Mage::getSingleton('core/session')->setPhtmlDebugTimer(array('start'=>$start,'end'=>$end));
+<?php 
+	} 
+	$end=microtime(true);
+	Mage::getSingleton('core/session')->setPhtmlDebugTimer(array('start'=>$start,'end'=>$end));
 ?>
 </div>
+<?php 
+	}
+	else { 
+	?>
+		<div class="leftNavArea">
+			<?php echo $this->getDonateBlurbHtml(); ?>
+			<?php echo $this->getChildHtml('leftlink_menu'); ?>
+		</div><!-- leftNavArea inside checks -->
+
+		<div class="mainArea">
+		<div class="inLeft">
+			<div class="note-msg">The content you have requested for is not available.</div>
+			<p> 
+				<ul>
+					<li>If you typed the URL directly, please make sure that the spelling is correct.</li>
+					<li>If you clicked on a link to get here, the link might be outdated</li>
+				</ul>
+			</p>
+			<p><div class="boldFont">What can you do?</div>
+				Please contact Customer Care at  <a href="mailto:support@ekkitab.com">support@ekkitab.com</a> and let us know of this problem. We appreciate your help in ensuring that the service is available and runs error free.
+				<ul>
+					<li>Go <a href="javascript:history.back();">back to the previous page</a></li>
+					<li>Use the Search Facility at the top of the page to search the ekkitab web site</li>
+					<li>Click on any of the links below to get you back on track
+					<ul>
+						<li><a href="<?php echo $this->getUrl('home')?>">ekkitab Home Page</a></li>
+						<li><a href="<?php echo $this->getUrl('customer/account')?>">My Account</a> (You will have to Sign in or Register, if it's your first time)</li>
+					</ul>
+					</li>
+				</ul>
+			</p>
+		</div>
+	</div>
+<?php 
+		}
+} 
+else { 
+?>
+	<div class="leftNavArea">
+		<?php echo $this->getDonateBlurbHtml(); ?>
+		<?php echo $this->getChildHtml('leftlink_menu'); ?>
+	</div><!-- leftNavArea inside checks -->
+
+	<div class="mainArea">
+	<div class="inLeft">
+		<div class="note-msg">The content you have requested for is not available.</div>
+		<p> 
+			<ul>
+				<li>If you typed the URL directly, please make sure that the spelling is correct.</li>
+				<li>If you clicked on a link to get here, the link might be outdated</li>
+			</ul>
+		</p>
+		<p><div class="boldFont">What can you do?</div>
+			Please contact Customer Care at  <a href="mailto:support@ekkitab.com">support@ekkitab.com</a> and let us know of this problem. We appreciate your help in ensuring that the service is available and runs error free.
+			<ul>
+				<li>Go <a href="javascript:history.back();">back to the previous page</a></li>
+				<li>Use the Search Facility at the top of the page to search the ekkitab web site</li>
+				<li>Click on any of the links below to get you back on track
+				<ul>
+					<li><a href="<?php echo $this->getUrl('home')?>">ekkitab Home Page</a></li>
+					<li><a href="<?php echo $this->getUrl('customer/account')?>">My Account</a> (You will have to Sign in or Register, if it's your first time)</li>
+				</ul>
+				</li>
+			</ul>
+		</p>
+	</div>
+</div>
+<?php 
+	}
+?>

@@ -30,6 +30,8 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
 	
 	protected $_repArr= array(" & ", "&");
 
+    protected $_searchIncludeTemplateUrl;
+
 	/**
      * Page Number
 
@@ -461,6 +463,22 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
     public function getGlobalSectionViewUrl($sectionId)
     {
         return $this->_getUrl('ekkitab_catalog/globalsection/view/', array('id'=>$sectionId));
+    }
+
+	public function getSearchCriteriaTemplateUrl()
+    {
+
+		$tempUrl  = trim((String) $this->_getRequest()->getParam('books'));
+		// insert the split function here.....and get the product Id
+		if(strrpos($tempUrl, "/")){
+			$startIndex = strrpos($tempUrl, "/")+1; 	 
+		}else{
+			$startIndex=0;
+		}
+		$endIndex = strpos($tempUrl, ".html"); 	
+		$endIndex = $endIndex - $startIndex; 
+		$this->_searchIncludeTemplateUrl  = trim(urldecode(substr($tempUrl,$startIndex,$endIndex)));
+		return $this->_searchIncludeTemplateUrl;
     }
 
 

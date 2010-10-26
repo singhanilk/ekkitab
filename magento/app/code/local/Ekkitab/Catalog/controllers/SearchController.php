@@ -115,5 +115,34 @@ class Ekkitab_Catalog_SearchController extends Mage_Core_Controller_Front_Action
 		$this->renderLayout();
 	}
 
+	/**
+     * Initialize requested product object
+     *
+     * @return Mage_Catalog_Model_Product
+     */
+    public function selectAction()
+    {
+		$tempUrl  = trim((String) $this->getRequest()->getParam('books'));
+		// insert the split function here.....and get the product Id
+		if(strrpos($tempUrl, "/")){
+			$startIndex = strrpos($tempUrl, "/")+1; 	 
+		}else{
+			$startIndex=0;
+		}
+		$endIndex = strpos($tempUrl, ".html"); 	
+		$endIndex = $endIndex - $startIndex; 
+		$templateUrl = trim(urldecode(substr($tempUrl,$startIndex,$endIndex)));
+		if($templateUrl && count($templateUrl) > 0 ){
+			Mage::register('search_temp_url', $templateUrl);
+			$this->loadLayout();
+			$this->renderLayout();
+		}else {
+			$this->_forward('noRoute');
+
+		}
+    }
+
+
+
 
 }

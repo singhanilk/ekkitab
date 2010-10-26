@@ -1329,6 +1329,9 @@ a:hover {
 .padderTop5px {
 	padding-top: 5px;
 }
+.padderLeft5px {
+	padding-left: 5px;
+}
 
 .marginTop5px {
 	margin-top: 5px;
@@ -2469,6 +2472,77 @@ a:hover {
 	line-height:1.6em;
 	padding-top:95px;
 }
+.hmHighlightRow {
+	margin-bottom:8px;
+	padding-bottom:8px;
+}
+.hmHighlightTextImage {
+	line-height:1.6em;
+}
+
+.hmHighlightRow .hdr{
+	width: 390px;
+	border-bottom:1px dotted #666666;
+	font-size: 1.6em;
+	color: #c60;
+	margin: 5px 0px 6px 0px;
+	padding-bottom: 6px;
+}
+
+.hmHighlightRow .bigImage {
+	padding-top:5px;
+	width: 145px;
+	float: right;
+	overflow:hidden;
+	text-align: center;
+
+}
+.hmHighlightRow .bigImage img {
+	border:1px solid #cacaca;
+}
+
+.hmHighlightTextImage .finDetBkTitle {
+	padding-left:1px;
+	font-size: 18px;
+	font-family: Arial, Helvetica, sans-serif;
+	width: 390px;
+	margin-bottom: 3px;
+	line-height:1.3em;
+	border-bottom:none;
+}
+
+.hmHighlightTextImage .finDetBkTitle a {
+	color: #000;
+}
+
+.hmHighlightTextImage .finDetBkTitle .lineHeight14em {
+	padding-left:5px;
+}
+
+.hmHighlightTextImage .finDetBkTitle .lineHeight14em a {
+	color: #03c;
+}
+
+.hmHighlightTextImage .bookDetArea {
+	padding-left:6px;
+	width: 390px;
+	text-align: justify;
+	margin-bottom: 8px;
+}
+.hmHighlightTextImage .textArea {
+	padding-left:6px;
+	width: 362px;
+	float: left;
+	margin:0px 0 0 0px;
+}
+
+.hmHighlightTextImage .discBigImageBox {
+	width:175px;
+	height:200px;
+	float:right;	
+	text-align: bottom;
+}
+
 .hmChildrenRow {
 	background-image: url(../images/hm_childrens_vis.jpg);
 	background-position:right top;
@@ -2749,7 +2823,7 @@ dt .hdr {
 	font-family: Georgia, "Times New Roman", Times, serif;
 	margin:16px auto 10px;
 	padding-bottom:10px;
-	width:880px;
+	width:100%;
 	font-size: 11px;
 	line-height: 22px;
 }
@@ -2819,7 +2893,7 @@ dt .hdr {
 }
 
 .authorsQAArea .oddRow .col1 {
-	width:200px;
+	width:25%	;
 	float:left;	
 	text-align: justify;
 	margin-right: 15px;
@@ -2835,7 +2909,7 @@ dt .hdr {
 	border:1px solid #cacaca;
 }
 .authorsQAArea .oddRow .col2 {
-	width:645px;
+	width:70%;
 	float:left;	
 }
 .authorsQAArea .evenRow {
@@ -2846,11 +2920,11 @@ dt .hdr {
 }
 
 .authorsQAArea .evenRow .col1 {
-	width:645px;
+	width:70%;
 	float:left;	
 }
 .authorsQAArea .evenRow .col2 {
-	width:200px;
+	width:25%;
 	float:left;	
 	text-align: justify;
 	margin-left: 15px;
@@ -2871,6 +2945,14 @@ dt .hdr {
 	text-align:center;
 }
 
+.authorsQAArea a{
+	color:#CC6600;
+}
+
+.authorsQAArea a.hover {
+	color:#CC6600;
+}
+
 .floatRight{
 	float:right;
 	padding-right:5px;
@@ -2886,3 +2968,4 @@ dt .hdr {
 	font-size: 11px;
 	font-style: normal;
 }
+

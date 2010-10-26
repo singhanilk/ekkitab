@@ -33,6 +33,24 @@ class Ekkitab_Catalog_Block_Globalsection extends Mage_Core_Block_Template
 		return $sections;
 	}
 	
+	/**
+     * Get popular catagories of current store
+     *
+     */
+    public function isHomeDisplayAllowed($sectionId)
+    {
+		if($sectionId > 0 ){
+			$section =  Mage::getModel('ekkitab_catalog/globalsection')->load($sectionId);
+			if($section && $section->getId() > 0 ){
+				return $section->getIsHomepageDisplay();
+			}else { 
+				return false;
+			}
+		}else { 
+			return false;
+		}
+	}
+	
     public function _prepareLayout()
     {
 		//$this->setDefaultTemplate('catalog/globalsection/home_page.phtml');
@@ -61,7 +79,7 @@ class Ekkitab_Catalog_Block_Globalsection extends Mage_Core_Block_Template
 				$sectionId	= $sectionArr['section_id'];
 			}
 
-			if(!is_null($sectionId) && $sectionId > 0 ){
+			if(!is_null($sectionId) && $sectionId > 0 && $this->isHomeDisplayAllowed($sectionId)   ){
 				$this->_homeSection= Mage::getModel('ekkitab_catalog/globalsection')->load($sectionId);
 
 				//hardcoding this to independence day section for now.... 

@@ -44,7 +44,7 @@ class Ekkitab_Catalog_Model_Globalsection extends Mage_Core_Model_Abstract
 		$products = array();
 		$sectionProducts = null;
 		//Set the status to 1 to retrieve books which are "In Stock" only
-		$status	=1;
+		$status	=array("1","2");
 		$collection = $this->getSectionProductCollection($random,$pageNo,$limit);
 		foreach ($collection as $product) {
 			$products[] = $product->getProductId();
@@ -52,6 +52,7 @@ class Ekkitab_Catalog_Model_Globalsection extends Mage_Core_Model_Abstract
 		if($products && count($products)>0){
 			$sectionProducts = Mage::getModel('ekkitab_catalog/product')->getCollection()
 			->addIdFilter($products)
+			->addIdOrderFilter($products)
 			->addStockFilter($status);
 		}
         return $sectionProducts;
@@ -84,7 +85,8 @@ class Ekkitab_Catalog_Model_Globalsection extends Mage_Core_Model_Abstract
 			->getProductCollection()
 			->setSection($this)
 			->addProductIdFilter()
-			->addSectionIdFilter();
+			->addSectionIdFilter()
+			->setOrderFilter('main_table.id');
 		if($pageNo > 0){
 			$collection->setCurPage($pageNo);
 		}

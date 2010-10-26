@@ -159,6 +159,18 @@ Category Lecene search layout
 			</reference>
 	</ekkitab_catalog_search_index>
 
+    <ekkitab_catalog_search_select>
+		<reference name="root">
+			<action method="setTemplate"><template>page/1column.phtml</template></action>
+		</reference>
+        <reference name="content">
+            <block type="ekkitab_catalog/category_searchResult" name="catalog_search_select_books" template="catalog/category/search_select_books.phtml">
+				<action method="setSelectCriteriaInclude"/>
+				<block type="ekkitab_catalog/leftlinks" name="leftlink_menu" template="catalog/leftlinks/menu.phtml"/>
+            </block>
+		</reference>
+    </ekkitab_catalog_search_select>
+
 	<ekkitab_catalog_search_folder>
 			<!-- Mage_Catalogsearch -->
 			<reference name="root">
