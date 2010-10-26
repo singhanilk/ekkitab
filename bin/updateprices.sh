@@ -23,12 +23,12 @@ if [ -f $excelConverter ] ; then
     echo "[Update Prices] Converting stocklist files to text..."; 
     php $excelConverter
 else
-    echo "[Update Prices] [Fatal] $excelConverter Not Found";
+    echo "[Update Prices] [Fatal] $excelConverter Not Found. Exiting updateprices.sh";
     exit 1;
 fi;
 
 if (($? > 0)) ; then
-    echo "[Update Prices] [Fatal] Excel stocklist file conversion failed."
+    echo "[Update Prices] [Fatal] Excel stocklist file conversion failed. Exiting updateprices.sh";
     exit 1;
 fi
 
@@ -36,12 +36,12 @@ if [ -f $stockProcessor ] ; then
      echo "[Update Prices] Finding missing isbn's and creating price file...";
      php $stockProcessor $stockList
 else
-    echo "[Update Prices] [Fatal] $stockProcessor Not Found";
+    echo "[Update Prices] [Fatal] $stockProcessor Not Found. Exiting updateprices.sh";
     exit 1;
 fi;
 
 if (($? > 0)) ; then
-    echo "[Update Prices] [Fatal] Price file generation failed..."
+    echo "[Update Prices] [Fatal] Price file generation failed.Exiting updateprices.sh"
     exit 1;
 fi
 
