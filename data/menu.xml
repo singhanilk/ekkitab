@@ -1,5 +1,5 @@
 <MENU>
-    <SECTION title="New Releases" type="collection" showall="yes" showThumbnails="yes" highlight="6" shuffle="yes">
+<!--    <SECTION title="New Releases" type="collection" showall="yes" showThumbnails="yes" highlight="6" shuffle="yes">
         <BOOK id="9780552159913" title="The Cobra" author="Frederick, Forsyth" />
         <BOOK id="9780330534253" title="Fall of Gaints" author="Ken Follett" />
         <BOOK id="9780340992586" title="Under the Dome" author="Stephen King" />
@@ -45,17 +45,7 @@
         <BOOK id="9780007412655" title="UPSIDE OF IRRATIONALITY" author="ARIELY DAN"/>
         <BOOK id="9780755379842" title="Death Instinct" author="J Rubenfeld"/>
     </SECTION>
-    <SECTION title="Top Categories" type="links" showall="yes" showall_url="ekkitab_catalog/category/viewAll">
-        <LINK name="Autobiography" type="search"> 
-            <SEARCH field="category">biography &amp; autobiography</SEARCH>
-        </LINK>
-        <LINK name="Philosophy" type="search"> 
-            <SEARCH field="category">philosophy</SEARCH>
-        </LINK>
-        <LINK name="Self-Help" type="search"> 
-            <SEARCH field="category">self-help</SEARCH>
-        </LINK>
-    </SECTION>
+-->
     <SECTION title="Popular Books" type="collection" showall="yes" showThumbnails="yes" highlight="6" shuffle="no">
         <BOOK id="9780552161275" title="The Da Vinci Code" author="Dan Brown"/>
         <BOOK id="9780747566533" title="The Kite Runner" author="Khaled Hosseini"/>
@@ -75,6 +65,69 @@
         <BOOK id="9780751542196" title="A Perfect Stranger" author="Danielle Steel"/>
         <BOOK id="9780330354295" title="Eye of the needle" author="Ken Follett"/>
         <BOOK id="9780747266983" title="Cradle and all" author="James Patterson"/>
+    </SECTION>
+    <SECTION title="Top Categories" type="links" showall="yes" showall_url="ekkitab_catalog/category/viewAll">
+        <LINK name="Autobiography" type="search"> 
+            <SEARCH field="category">biography &amp; autobiography</SEARCH>
+        </LINK>
+        <LINK name="Philosophy" type="search"> 
+            <SEARCH field="category">philosophy</SEARCH>
+        </LINK>
+        <LINK name="Self-Help" type="search"> 
+            <SEARCH field="category">self-help</SEARCH>
+        </LINK>
+    </SECTION>
+	<SECTION title="Indian Books" type="collection" showall="yes" showThumbnails="yes" highlight="6" shuffle="no">
+		<BOOK id="9780140138351" title="A History of India: Volume 1" author="Romila Thapar" />
+		<BOOK id="9780156005784" title="In Light of India" author="Octavio Paz" />
+		<BOOK id="9780195668742" title="The Oxford India Illustrated Corbett" author="Jim Corbett" />
+		<BOOK id="9780195673517" title="Lal Bahadur Shastri, Prime Minister of India 1964-1966: A Life of Truth in Politics" author="C. P. Srivastava" />
+		<BOOK id="9780195677072" title="The Oxford India Tagore: Selected Writings on Education and Nationalism" author="Rabindranath Tagore" />
+		<BOOK id="9780195698411" title="Indian Philosophy, Volume 1" author="S. Radhakrishnan" />
+		<BOOK id="9780195698428" title="Indian Philosophy, Volume 2" author="S. Radhakrishnan" />
+		<BOOK id="9780199555758" title="Pancatantra: The Book of India's Folk Wisdom" author="" />
+		<BOOK id="9780312200794" title="Rabindranath Tagore: An Anthology" author="Rabindranath Tagore" />
+		<BOOK id="9780756659073" title="Great Monuments of India" author="DK Publishing" />
+		<BOOK id="9781426205958" title="National Geographic Traveler India" author="Louise Nicholson" />
+		<BOOK id="9788173711466" title="Wings of fire,an autobiography" author="Avul Pakir Jainulabdeen Abdul Kalam &amp; Arun Tiwari" />
+		<BOOK id="9780140255638" title="Good Boatman" author="Rajmohan Gandhi" />
+		<BOOK id="9780143104117" title="Mohandas: A True Story of a Man, His People and an Empire" author="Rajmohan Gandhi" />
+		<BOOK id="9780143062066" title="For the love of India : The life &amp; times" author="R.M. Lala" />
+		<BOOK id="9780143031048" title="An Autobiography: Jawaharlal Nehru" author="Jawaharlal Nehru" />
+		<BOOK id="9780140114621" title="Indira Gandhi : A Biography" author="Pupul Jayakar" />
+		<BOOK id="9780140103434" title="J. Krishnamurti: A Biography" author="Pupul Jayakar" />
+		<BOOK id="9780140269673" title="Rajaji : A Life" author="Rajmohan Gandhi" />
+		<BOOK id="9780140120493" title="Great Indian Novel" author="Shashi Tharoor" />
+		<BOOK id="9780143102434" title="Last Mughal, The" author="William Dalrymple" />
+		<BOOK id="9780670999217" title="Identity &amp; Violence" author="Amartya Sen" />
+		<BOOK id="9780143032465" title="Idea Of India" author="Sunil Khilnani" />
+		<BOOK id="9780143031055" title="Glimpses Of World History" author="Jawaharlal Nehru" />
+		<BOOK id="9780143029892" title="Penguin History Of Early India" author="Romila Thapar" />
+		<BOOK id="9780140290455" title="Revenge And Reconciliation" author="Rajmohan Gandhi" />
+		<BOOK id="9780670084098" title="Mother India: A Political Biography of Indira Gandhi" author="Pranay Gupte" />
+		<BOOK id="9781408800614" title="Nine Lives: In Search of the Sacred in Modern India" author="William Dalrymple" />
+		<BOOK id="9780143103240" title="India: From Midnight to the Millennium and Beyond" author="Shashi Tharoor" />
+		<BOOK id="9780141012117" title="The Argumentative Indian: Writings on Indian History, Culture and Identity" author="Amartya Sen" />
+		<BOOK id="9780140278330" title="India 2020: Vision For A New Millennium" author="A. P. J. Abdul Kalam &amp; Y.S. Rajan" />
+		<BOOK id="9780141004372" title="India What Can It Teach Us ?" author="F.M. Muller" />
+		<BOOK id="9780670083169" title="India" author="Shashi Tharoor" />
+		<BOOK id="9780143031062" title="City Of Djinns : A Year In Delhi" author="William Dalrymple" />
+		<BOOK id="9780140104806" title="No Full Stops In India" author="Mark Tully" />
+		<BOOK id="9780670081967" title="Imagining India" author="Nandan Nilekani" />
+		<BOOK id="9780143029106" title="Elephant Paradigm" author="Gurcharan Das" />
+		<BOOK id="9780143063018" title="India Unbound" author="Gurcharan Das" />
+		<BOOK id="9780143066439" title="Folktales from India" author="" />
+		<BOOK id="9780143031031" title="The Discovery of India" author="Jawaharlal Nehru" />
+		<BOOK id="9780141037851" title="The Idea of Justice" author="Amartya Sen &amp; The Times" />
+		<BOOK id="9780141018249" title="Hinduism" author="K. M. Sen" />
+		<BOOK id="9780140274233" title="A passage to India" author="E M Forster" />
+		<BOOK id="9780330505543" title="INDIA AFTER GANDHI- The History Of The World's Largest Democracy" author="Ramachandra Guha" />
+		<BOOK id="9788172238476" title="The White Tiger" author="Aravind Adiga" />
+		<BOOK id="9780195648546" title="The essential writings of Netaji Subhas Chandra Bose" author="Subhas Chandra Bose &amp; Sisir Kumar Bose" />
+		<BOOK id="9780195693560" title="Of Love, Nature and Devotion,Selected Songs of Rabindranath Tagore" author="Rabindranath Tagore &amp; Kalpana Bardhan" />
+		<BOOK id="9780006387848" title="India,a history" author="John Keay" />
+		<BOOK id="9788172231248" title="The Principal Upanishads" author="Sarvepalli Radhakrishnan" />
+		<BOOK id="9788171673513" title="BROTHERS AGAINST THE RAJ [PB]" author="CORDEROY, CONOR" />
     </SECTION>
     <SECTION title="Prize Winning Books" type="links" showall="no">
         <LINK name="The Man Booker Prize" type="collection">
@@ -145,58 +198,4 @@
             <SEARCH field="author">Robin sharma</SEARCH>
         </LINK>
     </SECTION>
-
-	<SECTION title="Indian Books" type="collection" showall="yes" showThumbnails="yes" highlight="2" shuffle="no">
-		<BOOK id="9780140138351" title="A History of India: Volume 1" author="Romila Thapar" />
-		<BOOK id="9780156005784" title="In Light of India" author="Octavio Paz" />
-		<BOOK id="9780195668742" title="The Oxford India Illustrated Corbett" author="Jim Corbett" />
-		<BOOK id="9780195673517" title="Lal Bahadur Shastri, Prime Minister of India 1964-1966: A Life of Truth in Politics" author="C. P. Srivastava" />
-		<BOOK id="9780195677072" title="The Oxford India Tagore: Selected Writings on Education and Nationalism" author="Rabindranath Tagore" />
-		<BOOK id="9780195698411" title="Indian Philosophy, Volume 1" author="S. Radhakrishnan" />
-		<BOOK id="9780195698428" title="Indian Philosophy, Volume 2" author="S. Radhakrishnan" />
-		<BOOK id="9780199555758" title="Pancatantra: The Book of India's Folk Wisdom" author="" />
-		<BOOK id="9780312200794" title="Rabindranath Tagore: An Anthology" author="Rabindranath Tagore" />
-		<BOOK id="9780756659073" title="Great Monuments of India" author="DK Publishing" />
-		<BOOK id="9781426205958" title="National Geographic Traveler India" author="Louise Nicholson" />
-		<BOOK id="9788173711466" title="Wings of fire,an autobiography" author="Avul Pakir Jainulabdeen Abdul Kalam &amp; Arun Tiwari" />
-		<BOOK id="9780140255638" title="Good Boatman" author="Rajmohan Gandhi" />
-		<BOOK id="9780143104117" title="Mohandas: A True Story of a Man, His People and an Empire" author="Rajmohan Gandhi" />
-		<BOOK id="9780143062066" title="For the love of India : The life &amp; times" author="R.M. Lala" />
-		<BOOK id="9780143031048" title="An Autobiography: Jawaharlal Nehru" author="Jawaharlal Nehru" />
-		<BOOK id="9780140114621" title="Indira Gandhi : A Biography" author="Pupul Jayakar" />
-		<BOOK id="9780140103434" title="J. Krishnamurti: A Biography" author="Pupul Jayakar" />
-		<BOOK id="9780140269673" title="Rajaji : A Life" author="Rajmohan Gandhi" />
-		<BOOK id="9780140120493" title="Great Indian Novel" author="Shashi Tharoor" />
-		<BOOK id="9780143102434" title="Last Mughal, The" author="William Dalrymple" />
-		<BOOK id="9780670999217" title="Identity &amp; Violence" author="Amartya Sen" />
-		<BOOK id="9780143032465" title="Idea Of India" author="Sunil Khilnani" />
-		<BOOK id="9780143031055" title="Glimpses Of World History" author="Jawaharlal Nehru" />
-		<BOOK id="9780143029892" title="Penguin History Of Early India" author="Romila Thapar" />
-		<BOOK id="9780140290455" title="Revenge And Reconciliation" author="Rajmohan Gandhi" />
-		<BOOK id="9780670084098" title="Mother India: A Political Biography of Indira Gandhi" author="Pranay Gupte" />
-		<BOOK id="9781408800614" title="Nine Lives: In Search of the Sacred in Modern India" author="William Dalrymple" />
-		<BOOK id="9780143103240" title="India: From Midnight to the Millennium and Beyond" author="Shashi Tharoor" />
-		<BOOK id="9780141012117" title="The Argumentative Indian: Writings on Indian History, Culture and Identity" author="Amartya Sen" />
-		<BOOK id="9780140278330" title="India 2020: Vision For A New Millennium" author="A. P. J. Abdul Kalam &amp; Y.S. Rajan" />
-		<BOOK id="9780141004372" title="India What Can It Teach Us ?" author="F.M. Muller" />
-		<BOOK id="9780670083169" title="India" author="Shashi Tharoor" />
-		<BOOK id="9780143031062" title="City Of Djinns : A Year In Delhi" author="William Dalrymple" />
-		<BOOK id="9780140104806" title="No Full Stops In India" author="Mark Tully" />
-		<BOOK id="9780670081967" title="Imagining India" author="Nandan Nilekani" />
-		<BOOK id="9780143029106" title="Elephant Paradigm" author="Gurcharan Das" />
-		<BOOK id="9780143063018" title="India Unbound" author="Gurcharan Das" />
-		<BOOK id="9780143066439" title="Folktales from India" author="" />
-		<BOOK id="9780143031031" title="The Discovery of India" author="Jawaharlal Nehru" />
-		<BOOK id="9780141037851" title="The Idea of Justice" author="Amartya Sen &amp; The Times" />
-		<BOOK id="9780141018249" title="Hinduism" author="K. M. Sen" />
-		<BOOK id="9780140274233" title="A passage to India" author="E M Forster" />
-		<BOOK id="9780330505543" title="INDIA AFTER GANDHI- The History Of The World's Largest Democracy" author="Ramachandra Guha" />
-		<BOOK id="9788172238476" title="The White Tiger" author="Aravind Adiga" />
-		<BOOK id="9780195648546" title="The essential writings of Netaji Subhas Chandra Bose" author="Subhas Chandra Bose &amp; Sisir Kumar Bose" />
-		<BOOK id="9780195693560" title="Of Love, Nature and Devotion,Selected Songs of Rabindranath Tagore" author="Rabindranath Tagore &amp; Kalpana Bardhan" />
-		<BOOK id="9780006387848" title="India,a history" author="John Keay" />
-		<BOOK id="9788172231248" title="The Principal Upanishads" author="Sarvepalli Radhakrishnan" />
-		<BOOK id="9788171673513" title="BROTHERS AGAINST THE RAJ [PB]" author="CORDEROY, CONOR" />
-    </SECTION>
-
 </MENU>
