@@ -188,6 +188,8 @@ cp $releasedir/sendmail.php $bindir
 cp $releasedir/setdowntime.sh $bindir
 cp $releasedir/release_on_production $bindir
 cp $releasedir/launch_release_on_production $bindir
+cp $releasedir/trim_ekkitab_books_log_tables.sh $dbdir
+cp $releasedir/trim_ekkitab_books_log_tables.sql $dbdir
 
 sudo service tomcat6 start
 
