@@ -5,6 +5,10 @@ use HTML::Entities;
 use Encode;
 
 my  $outputdir = "/tmp";
+my  $startpage = 1;
+my  $startsection = 1;
+my  $startbook = 0;
+my  $sitemap_index_global = 0;
 use constant MAXBOOKS_PER_FILE => 40000;
 
 sub getDate {
@@ -97,7 +101,7 @@ sub getBooks {
 
     sub openSitemapFile {
         if (!defined($sitemap_index)) {
-            $sitemap_index = 0;
+            $sitemap_index = $sitemap_index_global;
         }
         else {
             $sitemap_index++;
@@ -166,10 +170,11 @@ sub getBooks {
 {
     my $bookcount = 0;
     sub writeLinks {
-        my (@books) = @_;
+        my ($books, $start) = @_;
 
         my $fd = getSitemapHandle();
-        foreach my $book (@books) {
+        for ($i = $start; $i <= $#$books; $i++) {
+            $book = $$books[$i];
             $book =~ s/ekkitab\.co\.in/ekkitab\.com/g;
             print $fd "<url>\n  <loc>$book</loc>\n</url>\n";
             $bookcount++;
@@ -211,11 +216,25 @@ sub getHomePageLinks {
 # Start of main program
 #########################
 
-my @args = @_;
-if ($#args >= 0) {
-    $outputdir = $args[0];
+if ($#ARGV >= 0) {
+    my $i = 0;
+    if (-d $ARGV[0]) {
+        $outputdir = $ARGV[0];
+        $i = 1;
+    }
+    if ($#ARGV == $i+3) {
+        $startpage = $ARGV[$i];
+        $startsection = $ARGV[$i+1];
+        $startbook = $ARGV[$i+2];
+        $sitemap_index_global = $ARGV[$i+3];
+    } 
 } 
 print "[Info] Creating sitemap index and catalog indexes in dir: $outputdir.\n";
+my $updatemode=0;
+if (($startpage > 1) or ($startsection > 1) or ($startbook > 0)) {
+    $updatemode=1;
+    print "[Info] Starting indexing from page $startpage, section $startsection, book $startbook\n";
+}
 
 $enc = find_encoding("utf-8");
 
@@ -225,14 +244,16 @@ my $ua = initLWP();
 # Create the sitemap for the basic links on the home page 
 ##########################################################
 
-openSitemapFile();
-my %sitelinks = getHomePageLinks($ua);
-my $fd = getSitemapHandle();
-print $fd "<url>\n  <loc>http://www.ekkitab.com/</loc>\n  <priority>0.9</priority>\n  <changefreq>weekly</changefreq>\n</url>\n";
-foreach my $link (keys(%sitelinks)) {
-   print $fd "<url>\n  <loc>" . $link . "</loc>\n  <priority>0.5</priority>\n  <changefreq>" . $sitelinks{$link} . "</changefreq>\n</url>" . "\n";
+if ($updatemode == 0) {
+    openSitemapFile();
+    my %sitelinks = getHomePageLinks($ua);
+    my $fd = getSitemapHandle();
+    print $fd "<url>\n  <loc>http://www.ekkitab.com/</loc>\n  <priority>0.9</priority>\n  <changefreq>weekly</changefreq>\n</url>\n";
+    foreach my $link (keys(%sitelinks)) {
+        print $fd "<url>\n  <loc>" . $link . "</loc>\n  <priority>0.5</priority>\n  <changefreq>" . $sitelinks{$link} . "</changefreq>\n</url>" . "\n";
+    }
+    closeSitemapFile();
 }
-closeSitemapFile();
     
 ##########################################################
 # Now, create the sitemaps for the books. 
@@ -245,11 +266,24 @@ if ($page eq "") {
 
 @toplinks = getTopLinks($page);
 foreach my $toplink (@toplinks) {
+    $toplink =~ m/.*\/([0-9]+)\/$/;
+    my $page = $1;
+    if ($page < $startpage) {
+        next;
+    }
     print "[Info] Processing: $toplink\n";
     @nextlinks = getNextLinks($ua, $toplink);
     foreach my $nextlink (@nextlinks) {
+        $nextlink =~ m/.*\/([0-9]+)\/$/;
+        my $section = $1;
+        if ($section < $startsection) {
+            next;
+        }
+        $startsection = 1;
+        print "[Debug] Processing: $nextlink\n";
         @books = getBooks($ua, $nextlink);
-        writeLinks(@books);
+        writeLinks(\@books, $startbook);
+        $startbook = 0;
     }
 }
 closeSitemapFile(); 
