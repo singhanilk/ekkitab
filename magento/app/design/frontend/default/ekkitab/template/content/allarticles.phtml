@@ -1,0 +1,53 @@
+<?php
+/**
+ * 
+ * Frontend Authors Write up page.
+ * @category   design/ekkitab
+ * @author Anisha (anisha@ekkitab.com)
+ * @version 1.0 Jan 5, 2010
+ * 
+ * @copyright  COPYRIGHT (C) 2009 Ekkitab Educational Services India Pvt. Ltd.
+ * @license    All Rights Reserved. All material contained in this file (including, but not limited to, text, images, graphics, HTML, programming code and scripts) 
+ * constitute proprietary and  * confidential information protected by copyright laws, trade secret and other laws. No part of this software may be copied, reproduced, modified or 
+ * distributed in any form or by any means, or stored in a database or retrieval system without the prior written permission of Ekkitab Educational Services.
+ * 
+ * 
+ */
+?>
+<div class="contentArea">
+	<div class="pageHeader">All Articles</div>
+<?php
+	$includePath=Mage::getDesign()->getTemplateFilename("content/allfiles.php");
+	if(file_exists($includePath)){
+		include($includePath);
+		$articles = getArticles();
+		if($articles && is_array($articles) && count($articles) > 0){
+			foreach($articles as $story){
+?>				<div class="articlesArea">
+					<p class="articleTitle"><?php if(array_key_exists("url",$story)) :?><a href="<?php echo $this->getUrl($this->getThisPagetUrl($story["url"]))?>" ><?php endif; ?><?php echo $story['title'] ?></a>
+						<br/>
+						<?php if(array_key_exists("image",$story)) :?><div class="image"><img src="<?php echo $this->getSkinUrl('/images/'.$story["image"])?>" /></div><?php endif; ?>
+						<?php if(array_key_exists("description",$story)) : echo $story["description"];endif; ?>
+					</p>
+					<div class="clear"></div>
+					<div class="menuSep"></div>
+					<div class="clear"><br/></div>
+				</div>
+<?php		}
+		}else{
+?>
+		<div class="articlesArea"> There are no articles to display. Please visit us later. Thank You.
+			<div class="clear"></div>
+			<div class="menuSep"></div>
+			<div class="clear"><br/></div>
+		</div>
+<?php	}
+	}else{
+?>		<div class="articlesArea"> There are no articles to display. Please visit us later. Thank You.
+			<div class="clear"></div>
+			<div class="menuSep"></div>
+			<div class="clear"><br/></div>
+		</div>
+<?php
+	}?>
+</div>

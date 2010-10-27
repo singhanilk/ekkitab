@@ -61,10 +61,14 @@ class Ekkitab_Content_Block_View extends Mage_Core_Block_Template
 		return $url;
 	}
 
-	public function getThisPagetUrl()
+	public function getThisPagetUrl($fileName='')
 	{
 		$urlPrefix='ekkitab_content/index/view/page/';
-		$url=$urlPrefix.Mage::registry('template_url').".html";
+		if($fileName!=''){
+			$url=$urlPrefix.$fileName.".html";
+		}else{
+			$url=$urlPrefix.Mage::registry('template_url').".html";
+		}
 		return $url;
 	}
 

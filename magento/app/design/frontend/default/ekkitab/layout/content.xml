@@ -1,8 +1,16 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-    <ekkitab_content_index_view>
+    <default>
+		<reference name="footer_links">
+			<action method="addLink" translate="label title" module="ekkitab_content" ><label>Articles</label><url>/ekkitab_content/view/allarticles</url><title>Articles</title></action>
+		</reference>
+    </default>
+
+	<ekkitab_content_index_view>
         <reference name="root">
-            <action method="setTemplate"><template>page/1column.phtml</template></action>
+            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+        </reference>
+        <reference name="left">
         </reference>
         <reference name="content">
             <block type="ekkitab_content/view" name="ekkitab_content_view" >
@@ -11,4 +19,12 @@
             </block>
 		</reference>
     </ekkitab_content_index_view>
+    <ekkitab_content_view_allarticles>
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+        </reference>
+        <reference name="content">
+            <block type="ekkitab_content/view" name="ekkitab_content_view_allarticles" template="content/allarticles.phtml" />
+		</reference>
+    </ekkitab_content_view_allarticles>
 </layout>

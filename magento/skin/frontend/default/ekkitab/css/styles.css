@@ -1713,8 +1713,27 @@ a:hover {
 .contentArea p {
 	margin: 0;
 	padding: 0;
-	margin-left: 20px;
-	list-style-type:circle;
+	list-style-type:none;
+}
+
+
+.contentArea .articleTitle {
+	font-size:14px;
+}
+
+.contentArea .articlesArea {
+	width: 670px;
+	float: left;
+	padding-top: 10px; 
+}
+
+.contentArea .image {
+	float: left;
+	padding-right: 10px; 
+}
+
+.contentArea .content {
+	float: left;
 }
 
 .notFoundArea, .regArea {
@@ -2968,4 +2987,5 @@ dt .hdr {
 	font-size: 11px;
 	font-style: normal;
 }
+
 
