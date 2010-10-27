@@ -24,7 +24,8 @@
 15 *   * * *   ubuntu  cd /mnt2/scm/utils && ./save_db_backup.sh
 # Backup blog DB. (Staging)
 15 1   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/utils && ./backupblog.sh
-
+# Trim  production database log tables.( Production only )
+00 1  * * 0   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/db && ./trim_ekkitab_books_log_tables.sh
 
 
 
