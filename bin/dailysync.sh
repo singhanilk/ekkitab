@@ -25,7 +25,7 @@ function pecho {
 
 rundate=$(date +"%D-%T")
 pecho "[$rundate] Resetting reference database..."
-( cd $EKKITAB_HOME/db ; ./reset_refdb.sh ) 
+( cd $EKKITAB_HOME/db ; ./reset_refdb.sh >>$outfilename 2>&1 ) 
 rundate=$(date +"%D-%T")
 pecho "[$rundate] Updating catalog..."
 ( cd $EKKITAB_HOME/db ; ./initcatalog.sh ../config/catalog.cfg -c >>$outfilename 2>&1 ) 
