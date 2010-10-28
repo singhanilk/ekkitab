@@ -30,7 +30,7 @@
         $num_errors = 0;
         $num_serious_errors = 0;
         $threshold_errors = 20;
-        $threshold_serious_errors = 10;
+        $threshold_serious_errors = 15;
         $num_books = 0;
         $source = "India";
         //$catalog_validation_stopper = false;
