@@ -26,7 +26,7 @@
 ?>				<div class="articlesArea">
 					<p class="articleTitle"><?php if(array_key_exists("url",$story)) :?><a href="<?php echo $this->getUrl($this->getThisPagetUrl($story["url"]))?>" ><?php endif; ?><?php echo $story['title'] ?></a>
 						<br/>
-						<?php if(array_key_exists("image",$story)) :?><div class="image"><img src="<?php echo $this->getSkinUrl('/images/'.$story["image"])?>" width="100" height="100" /></div><?php endif; ?>
+						<?php if(array_key_exists("image",$story)) :?><div class="image"><img src="<?php echo $this->getSkinUrl('/images/'.$story["image"])?>" width="75" height="75" /></div><?php endif; ?>
 						<?php if(array_key_exists("description",$story)) : echo $story["description"];endif; ?>
 					</p>
 					<div class="clear"></div>
