@@ -1,0 +1,2 @@
+#name	admin_email_id	admin_first_name	admin_last_name	admin_password	email	password	type	street	locality	city	state	postcode	country	website_url	telephone	aboutus	aboutus_summary	is_html	image
+Jnana Mithra Granthalaya	bookdonations@ilp.com	ILP		ILP_Bangalore	jnana_560067@ekkitab.com	jnana_560067	school	Bainahalli	Chikjala Post, Yelahanka	Bangalore	Karnataka	560067	India		944848484					
