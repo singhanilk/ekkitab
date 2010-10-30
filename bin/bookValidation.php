@@ -66,7 +66,7 @@
     	    }
         
             if (($sourcedfrom == "India") && ($supplier == $reference_supplier)) {
-                if ($reference_listprice != 0) {
+                if ($listprice > 0) {
                     $percentdiff = round(abs($listprice - $reference_listprice)/$reference_listprice)*100;
                     if ($percentdiff >= 50) {
                         print "[Catalog Validation] [Severe] Actual list price [$listprice] differs from reference value [$reference_listprice] for book: $isbn, by more than 50%.\n"; 
