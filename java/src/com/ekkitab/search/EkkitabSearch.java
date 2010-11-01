@@ -2,19 +2,18 @@ package com.ekkitab.search;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.io.File;
 import org.apache.log4j.Logger;
 import org.apache.log4j.LogManager;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.MapFieldSelector;
 import org.apache.lucene.document.FieldSelector;
 import org.apache.lucene.document.FieldSelectorResult;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.TopFieldDocCollector;
+import org.apache.lucene.search.TopFieldCollector;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.store.Directory;
@@ -26,6 +25,7 @@ import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.spell.SpellChecker;
+import org.apache.lucene.util.Version;
 
 public class EkkitabSearch {
     private static String indexDir;
@@ -46,24 +46,24 @@ public class EkkitabSearch {
     
 
     public EkkitabSearch(String indexDir, String indexmode) throws EkkitabSearchException {
-        this.indexDir = indexDir;
+        EkkitabSearch.indexDir = indexDir;
         try {
         	//if (Runtime.getRuntime().maxMemory() < 3000000000L) { // not enough memory for RAM directory
         	if (indexmode.equalsIgnoreCase("memory")) {
-        		this.searchDir = new RAMDirectory(FSDirectory.getDirectory(this.indexDir));
+        		EkkitabSearch.searchDir = new RAMDirectory(FSDirectory.open(new File(EkkitabSearch.indexDir)));
         		logger.info("Using memory based index.");
         	}
         	else {
-            	this.searchDir =  FSDirectory.getDirectory(this.indexDir);
+            	EkkitabSearch.searchDir =  FSDirectory.open(new File(EkkitabSearch.indexDir));
             	logger.info("Using disk based index.");
             }
-    	    this.reader    = IndexReader.open(this.searchDir, true);
-    		this.searcher  = new IndexSearcher(reader);
-    		this.sorter = new Sort();	
-    		this.author_spell_dir = FSDirectory.getDirectory(this.indexDir + "_spell_author");
-    		this.title_spell_dir = FSDirectory.getDirectory(this.indexDir + "_spell_title");
-    		this.author_speller = new SpellChecker(this.author_spell_dir);
-    		this.title_speller = new SpellChecker(this.title_spell_dir);
+    	    EkkitabSearch.reader    = IndexReader.open(EkkitabSearch.searchDir, true);
+    		EkkitabSearch.searcher  = new IndexSearcher(reader);
+    		EkkitabSearch.sorter = new Sort();	
+    		EkkitabSearch.author_spell_dir = FSDirectory.open(new File(EkkitabSearch.indexDir + "_spell_author"));
+    		EkkitabSearch.title_spell_dir = FSDirectory.open(new File(EkkitabSearch.indexDir + "_spell_title"));
+    		EkkitabSearch.author_speller = new SpellChecker(EkkitabSearch.author_spell_dir);
+    		EkkitabSearch.title_speller = new SpellChecker(EkkitabSearch.title_spell_dir);
         }
         catch(Exception e) {
         	throw new EkkitabSearchException(e.getMessage());
@@ -152,7 +152,7 @@ public class EkkitabSearch {
         	//logger.debug("DEBUG(1): Search Query is: '" + searchQuery + "'");
         	
             if ((searchQuery != null) && (!searchQuery.equals(""))) {
-        		luceneQuery = new QueryParser("title", new StandardAnalyzer()).parse(searchQuery);
+        		luceneQuery = new QueryParser(Version.LUCENE_30, "title", new StandardAnalyzer(Version.LUCENE_30)).parse(searchQuery);
         		//logger.debug("DEBUG: Lucene Query is: '" + luceneQuery.toString() + "'");
             }
         	docs = search(luceneQuery, instanceId);
@@ -169,7 +169,7 @@ public class EkkitabSearch {
         		    //logger.debug("DEBUG(2): Search Query is: '" + searchQuery + "'");
         		    
                     if ((searchQuery != null) && (!searchQuery.equals(""))) {
-            		    luceneQuery = new QueryParser("title", new StandardAnalyzer()).parse(searchQuery);
+            		    luceneQuery = new QueryParser(Version.LUCENE_30,"title", new StandardAnalyzer(Version.LUCENE_30)).parse(searchQuery);
             		    //logger.debug("DEBUG: Lucene Query is: '" + luceneQuery.toString() + "'");
                     }
             	    docs = search(luceneQuery, instanceId);
@@ -183,7 +183,7 @@ public class EkkitabSearch {
     				searchQuery = createSearchQuery(suggestQueries[0], categories, searchfield, matchmode);
                 	
                     if ((searchQuery != null) && (!searchQuery.equals(""))) {
-                		luceneQuery = new QueryParser("title", new StandardAnalyzer()).parse(searchQuery);
+                		luceneQuery = new QueryParser(Version.LUCENE_30, "title", new StandardAnalyzer(Version.LUCENE_30)).parse(searchQuery);
                 		//logger.debug("DEBUG: Lucene Query is: '" + luceneQuery.toString() + "'");
                     }
                 	docs = search(luceneQuery, instanceId);
@@ -284,13 +284,13 @@ public class EkkitabSearch {
         if ((reader == null) || (searcher == null))	
             throw new EkkitabSearchException("Initialization Error!");
 
-        final BitSet hits = new BitSet(reader.maxDoc());
+        //final BitSet hits = new BitSet(reader.maxDoc());
 
         Map<String, Integer> catMap = new HashMap<String, Integer>();
        
         long fstart = System.currentTimeMillis();
         if (categories != null) {
-            int catsize = categories.size();
+            //int catsize = categories.size();
             searchQuery = searchQuery.equals("") ? "" : searchQuery + " AND ";
             
             for (String category: categories) {
@@ -298,7 +298,7 @@ public class EkkitabSearch {
                  String query = searchQuery + "+level"+level+":"+category.replaceAll("\\W+", "");
                  try {
                 	 //long f = System.currentTimeMillis();
-                	 Query luceneQuery = new QueryParser("title", new StandardAnalyzer()).parse(query);
+                	 Query luceneQuery = new QueryParser(Version.LUCENE_30, "title", new StandardAnalyzer(Version.LUCENE_30)).parse(query);
                 	 //ftotal += System.currentTimeMillis() - f;
                 	 //searcher.search(luceneQuery, new HitCollector() { 
                      //                                    	public void collect(int doc, float score) {
@@ -329,9 +329,9 @@ public class EkkitabSearch {
 
     }
 
-    private String getFieldValue(Field fd) {
+    /*private String getFieldValue(Field fd) {
         return (fd == null ? null : fd.stringValue());
-    }
+    }*/
     
     private String createSearchQuery(String query, String[] categories, String searchfield, MATCH_MODE mode) {
 
@@ -396,7 +396,7 @@ public class EkkitabSearch {
     	   return null;
        }
        //logger.debug("["+instanceId+"] Lucene Query: "+query.toString());
-       TopFieldDocCollector collector = new TopFieldDocCollector(reader, sorter, MAXHITS);
+       TopFieldCollector collector = TopFieldCollector.create(EkkitabSearch.sorter, MAXHITS, false, false, false, false);
 
        //long fstart = System.currentTimeMillis();
        searcher.search(query, collector);
@@ -435,7 +435,7 @@ public class EkkitabSearch {
 
            TermQuery tq = new TermQuery(new Term("spell_author", suggestion));
                 
-           TopFieldDocCollector collector = new TopFieldDocCollector(reader, sorter, 10);
+           TopFieldCollector collector = TopFieldCollector.create(EkkitabSearch.sorter, MAXHITS, false, false, false, false);
 
            searcher.search(tq, collector);
 
@@ -495,7 +495,7 @@ public class EkkitabSearch {
        return (results.size() > 0 ? results.toArray(new String[0]): suggestions);
     }
 
-    private BitSet dedup(BitSet hits) throws Exception {
+    /*private BitSet dedup(BitSet hits) throws Exception {
     	String[] fields = {"entityId"};
         for (int i = hits.nextSetBit(0); (i >= 0); i = hits.nextSetBit(i+1)) {
             Document doc = reader.document(i, new MapFieldSelector(fields));
@@ -522,9 +522,9 @@ public class EkkitabSearch {
             }
         }
         return hits;
-    }
+    }*/
 
-    private List<String> getBooks(long instanceId, ScoreDoc[] hits, BitSet uniques, int start, int end) 
+    /*private List<String> getBooks(long instanceId, ScoreDoc[] hits, BitSet uniques, int start, int end) 
                         throws Exception {
 
         int index = 0;
@@ -549,7 +549,7 @@ public class EkkitabSearch {
             throw new Exception(e.getMessage());
         }
         return result;
-    }
+    }*/
     
     protected TimerSnapshot getTimer(String type) {
     	if (type.equalsIgnoreCase("basic"))
