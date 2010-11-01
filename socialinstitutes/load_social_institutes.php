@@ -125,10 +125,10 @@ function createCustomerEntity($db, $email, $password, $firstName, $lastName) {
 
   try {
 	  $query = "INSERT INTO `customer_entity` (`entity_id`, `entity_type_id`, `attribute_set_id`, `website_id`, `email`, `group_id`, `increment_id`, `store_id`, `created_at`, `updated_at`, `is_active`) VALUE (".$entityId.",1, 0, 1, '".$email."', 1, '".$incrementId."', 1, '2010-07-07 06:42:03', '2010-07-07 09:56:03', 1);";
-    $result = mysqli_query($db, $query);
+    mysqli_query($db, $query);
 
-	$query2 = "INSERT INTO `customer_entity_varchar` (`entity_type_id`, `attribute_id`, `entity_id`, `value`) VALUES (1,5,".$entityId.",'".$firstName."'),(1,7,".$entityId.",'".$lastName."'),(1,3,".$entityId.",'Ekkitab'),(1,12,".$entityId.",'".$password."');";
-    $result = mysqli_query($db, $query);
+	$query = "INSERT INTO `customer_entity_varchar` (`entity_type_id`, `attribute_id`, `entity_id`, `value`) VALUES (1,5,".$entityId.",'".$firstName."'),(1,7,".$entityId.",'".$lastName."'),(1,3,".$entityId.",'Ekkitab'),(1,12,".$entityId.",'".$password."');";
+    mysqli_query($db, $query);
   } catch (Exception $e) {
      print "Fatal: SQL Exception. $e->getMessage()\n";
      $entityId = null;
