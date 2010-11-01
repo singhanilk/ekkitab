@@ -27,9 +27,14 @@ echo "Copying missing libraries to tomcat location ..."
    cd $EKKITAB_HOME/java/lib; for i in *.jar ; 
    do 
         f=${i%%-*};
+        fname=${i%-bin.jar};
+        fname=${fname%.jar};
+        fname=${fname%-*};
+        fname=${fname}*.jar;
         if [ $f == "lucene" ] || [ $f == "log4j" ]; then 
             if [ ! -f $searchlib/$i ] ; then 
                 echo "Copying $i to Tomcat JavaBridge library."; 
+                sudo rm -f $searchlib/$fname
                 sudo cp $i $searchlib/$i
             fi 
         fi 

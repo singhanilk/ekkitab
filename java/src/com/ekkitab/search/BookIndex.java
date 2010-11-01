@@ -12,13 +12,12 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.spell.Dictionary;
 import org.apache.lucene.search.spell.LuceneDictionary;
 import org.apache.lucene.search.spell.SpellChecker;
+import org.apache.lucene.util.Version;
 
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.PreparedStatement;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
@@ -32,7 +31,6 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 
 public class BookIndex {
-    private Document d = null;
     private Connection connection = null; 
     private String user = "";
     private String password = "";
@@ -41,10 +39,8 @@ public class BookIndex {
     private IndexWriter indexWriter = null;
     private CategoryLevel rootcategory = new CategoryLevel();
 
-    private static final int MAXDESC_SIZE = 100;
     private String xmlfile = null;
     private String inputFile;
-    private boolean newIndex;
     private static final int  BATCH_SIZE = 1000;
     private Set<String> importantBooks = null;	
 
@@ -52,11 +48,10 @@ public class BookIndex {
         this.user = user;
         this.password = password;
         this.xmlfile = xmlfile;
-        this.newIndex = newIndex;
         this.inputFile = inputFile;
         
-        Directory d  = FSDirectory.getDirectory(indexDir);
-        indexWriter = new IndexWriter(d,new StandardAnalyzer(),newIndex, IndexWriter.MaxFieldLength.LIMITED);
+        Directory d  = FSDirectory.open(new File(indexDir));
+        indexWriter = new IndexWriter(d,new StandardAnalyzer(Version.LUCENE_30),newIndex, IndexWriter.MaxFieldLength.LIMITED);
         indexWriter.setUseCompoundFile(true);
         jdbcUrl = "jdbc:mysql://"+db+":3306/reference";
         open();
@@ -212,8 +207,6 @@ public class BookIndex {
         String bisac_codes;
         String isbn;
         String in_stock;
-
-        long fstart, fstop;
 
 
         while (result.next()) {
@@ -413,7 +406,7 @@ public class BookIndex {
         if (node == null)
            return null;
         Set<String> categories = node.getKeys();
-        Iterator it = categories.iterator();
+        Iterator<String> it = categories.iterator();
         while (it.hasNext()) {
               String name = (String)it.next();
               Element e = dom.createElement("Level"+level);
@@ -549,9 +542,9 @@ public class BookIndex {
         IndexReader indexReader = null;
         System.out.println("Creating spell dictionary and index for author names ...");
         try {
-            Directory d  = FSDirectory.getDirectory(indexDir);
-            Directory dspell  = FSDirectory.getDirectory(indexDir + "_spell_author");
-            indexReader = IndexReader.open(d);
+            Directory d  = FSDirectory.open(new File(indexDir));
+            Directory dspell  = FSDirectory.open(new File(indexDir + "_spell_author"));
+            indexReader = IndexReader.open(d, true);
             SpellChecker spellChecker = new SpellChecker(dspell);
             Dictionary dict = new LuceneDictionary(indexReader, "spell_author");
             spellChecker.indexDictionary(dict);
@@ -567,9 +560,9 @@ public class BookIndex {
         IndexReader indexReader = null;
         System.out.println("Creating spell dictionary and index for book titles ...");
         try {
-            Directory d  = FSDirectory.getDirectory(indexDir);
-            Directory dspell  = FSDirectory.getDirectory(indexDir + "_spell_title");
-            indexReader = IndexReader.open(d);
+            Directory d  = FSDirectory.open(new File(indexDir));
+            Directory dspell  = FSDirectory.open(new File(indexDir + "_spell_title"));
+            indexReader = IndexReader.open(d, true);
             SpellChecker spellChecker = new SpellChecker(dspell);
             Dictionary dict = new LuceneDictionary(indexReader, "spell_title");
             spellChecker.indexDictionary(dict);
