@@ -29,7 +29,15 @@ insert into ek_discount_setting (`info_source`, `discount_percent`) values ('Ing
                                                                            ('PanMacmillan', 70),
                                                                            ('UBS', 70), ('Viva', 70), ('Cambridge', 70),
                                                                            ('CinnamonTeal', 35),
-                                                                           ('Nari', 20);
+                                                                           ('Nari', 20),
+                                                                           ('Prathambooks', 25),
+                                                                           ('Navakarnataka', 33),
+                                                                           ('Nbt', 25),
+                                                                           ('Cbt', 15),
+                                                                           ('Navneet', 33),
+                                                                           ('Navajivan', 0),
+                                                                           ('Ibn', 33),
+                                                                           ('Tulika', 0);
 
 --
 -- Seed data for table `ek_supplier_params`
@@ -71,4 +79,12 @@ insert into ek_supplier_params (`info_source`, `publisher`, `supplier_discount`,
                                ('PanMacmillan', 'Any', 25, 3),
                                ('CinnamonTeal', 'Any', 25, 10),
                                ('Nari', 'Any', 20, 8),
+                               ('Prathambooks', 'Any', 25, 8),
+                               ('Navakarnataka', 'Any', 33, 8),
+                               ('Nbt', 'Any', 25, 8),
+                               ('Cbt', 'Any', 15, 8),
+                               ('Navneet', 'Any', 33, 8),
+                               ('Navajivan', 'Any', 0, 8),
+                               ('Ibn', 'Any', 33, 8),
+                               ('Tulika', 'Any', 0, 8),
                                ('Unknown', 'Any', 25, 5);
