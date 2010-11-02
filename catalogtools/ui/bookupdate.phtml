@@ -100,19 +100,27 @@ if ( $save ){
     NOTE: The import only works againts the development database.
   */
  $command = "php " . $importBooksCode . " -bd IndiaPublisher " . $filename;
- $output = system($command , $retval);
- $systemOutput .= $output . "Retval=$retval\n";
+ $execOuput = Array();
+ exec($command , $execOutput, $retval);
+ $execOutput[] = "$command Return value = $retval";
  if( count($books) == $retval ) {
    // Append the file data to the catalog
    $command = "cat $filename >> $catalogDirectory/$supplier.txt"; 
-   $output = system($command , $retval);
-   $systemOutput .= $output . "Retval=$retval\n";
+   exec($command , $execOutput, $retval);
+   $execOutput[] = "$command Return value = $retval";
   // If preorder append the new arrivals to the new-arrivals stocklist
    if($atLeastOnePreorder) {
     $command = "cat $newArrivalsFileName >> $stockDirectory/newarrivals-stocklist.txt"; 
-    $output = system($command , $retval);
-    $systemOutput .= $output . "Retval=$retval\n";
+    exec($command , $execOutput, $retval);
+    $execOutput[] = "$command Return value = $retval";
    }
+  // Reset the books array so that it does not carry the data.
+  $book =  null;
+  $books = Array();
+  $execOutput = Array();
+  $execOutput[] = "Success: Book has been successfully added to catalog";
+ } else {
+  $execOutput[] = "Failure: Book was not added to catalog";
  }
  //Unlink the files if created. 
 
@@ -137,7 +145,7 @@ if ( $save ){
 <body>
 <h1>Supplier and File to upload </h1>
 <div id="updates" >
-  <h5><?php echo $systemOuput; ?></h5>
+  <h5><?php print_r($execOutput) ; ?></h5>
 </div>
 <div id="errors">
   <table class="redFont" border="1">
@@ -160,7 +168,7 @@ if ( $save ){
   <td>ISBN:(13 digit)</td>
   <td>
     <div id="isbncheck_div" style="display:block" ></div>
-    <input id='isbn_input' type='text' name ='isbn' size='50' maxlength='13' 
+    <input id='isbn_input' type='text' name ='isbn' size='50' maxlength='20' 
            value='<?php if($book) { echo $book['isbn']; } ?>' onblur=javascript:checkIsbn() <?php if($update) { echo 'readonly'; } ?> />
   </td>
  </tr>
@@ -211,10 +219,10 @@ if ( $save ){
  <tr>
   <td>AVAILABILITY:(Available, Not Available, Preorder)</td>
   <td>
-     <select name ='in_stock' value='Available' />
+     <select name ='in_stock' value="<?php if($book) { echo $book['in_stock']; } ?>"/>
      <?php 
         foreach($availabilityList as $key=>$value ) {
-          echo '<option value="' . $key . '"' . (( $book && $book['in_stock'] == $value ) ? " selected " : "") . ">$value</option>";
+          echo '<option value="' . $key . '"' . (( $book && $book['in_stock'] == $key ) ? " selected " : "") . ">$value</option>";
         }
      ?>
      </select>
@@ -298,6 +306,19 @@ if ( $save ){
      }
   ?>
   </td>
+ <tr>
+</table>
+</form>
+</div>
+<div id="div_multipleBookUpdate" style="display:none;">
+<form enctype="multipart/form-data" action="bookupdate.phtml" method='post'>
+ <table border='0'>
+ <tr>
+  <td>
+    <input type="file" name="uploadedFile"/>
+    <input type="hidden" name="task" value="loadExcelFile" />
+    <input type="hidden" name="pdfImagesDirectory" value="<?php echo $pdfImagesDirectory ?>" />
+    <input type='submit' value='Upload PDF File' /></td>
  <tr>
 </table>
 </form>

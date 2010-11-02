@@ -5,8 +5,8 @@
 $FIELD_SEPARATOR = "\t";
 
 # Control characters which have to be replaced
-$controlCharactersToReplace = array("\x0D");
-$controlCharactersReplaceValues = array("<br>");
+$controlCharactersToReplace = array("\x0D", "\n");
+$controlCharactersReplaceValues = array("<br>", "<br>");
 # characters outside the range.
 $asciiExpression = '/(?:[^\x00-\x7F])/';
 
@@ -27,7 +27,7 @@ $currencyList = array("I" => "Rs", "U" => "USD", "P" => "Pound", "S" => "SD" );
 # valid availability 
 $availabilityList = array("1" => "Available", "0" => "Not Available", "2" => "Preorder");
 # valid binding
-$bindingList = array("Paperback" => "Paperback", "Hardcover" => "Hardcover", "Hardback" => "Hardback");
+$bindingList = array("None" => "", "Paperback" => "Paperback", "Hardcover" => "Hardcover", "Hardback" => "Hardback");
 # valid Language
 $languageList = array("English" => "English");
 # The valid suppliers as of now. This is taken from /mnt4/publisherdata/
@@ -102,7 +102,7 @@ function formatValues($books){
    $book['description'] = preg_replace($asciiExpression, " ", $book['description']);
    $modifiedBooks[] = $book;
   }
-  print_r($modifiedBooks);
+  //print_r($modifiedBooks);
   return $modifiedBooks;
 }
 
@@ -295,7 +295,7 @@ function bookStringInStockFormat($book) {
 
    $stockString = "";
    $stockString =  $book["isbn"] . "\t". $book["list_price"] . "\t" . $book["currency"] . "\t" ;
-   $stockString .= $availabilityList[$book["in_stock"]]. "\t" . $book["info_source"] . "\t" . $book["title"] . "\t" . $book["author"] ."\t";
+   $stockString .= $availabilityList[$book["in_stock"]]. "\t" . strtolower($book["info_source"]) . "\t" . $book["title"] . "\t" . $book["author"] ."\t";
    $stockString .= $book["delivery_period"] . "\n";
    return $stockString;
 }
