@@ -241,12 +241,13 @@ function addWishlistEntry($db, $customerId, $organizationId){
 
 function addWishlistItem($db, $wishlistItem) {
   $query = "insert into wishlist_item ( wishlist_id, product_id, store_id, added_at, description,isbn ) values ( " .
-           $wishlistItem['wishlist_id'] . "," .  $wishlist_item['product_id'] . ", 1, now()," .  $wishlistItem['description'] . "," .  $wishlistItem['isbn']. ")";
-  print $query;
+           $wishlistItem['wishlist_id'] . "," .  $wishlistItem['product_id'] . ", 1, now(),'" .  $wishlistItem['description'] . "'," .  $wishlistItem['isbn']. ")";
+  print $query . "\n";
   try {
    $result = mysqli_query($db,$query);
    if (!$result) { $wishlistItem = null; } 
   } catch(exception $e) {
+    print $e->getMessage();
     $wishlistItem = null;
   }
  return $wishlistItem;

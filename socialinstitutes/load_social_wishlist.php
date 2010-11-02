@@ -31,9 +31,8 @@ function formatValues($values) {
 /** Takes an wishlist and validates the sane.
 at the same time populates it also if no error 
 */
-function validateWishlistItem($db, $line, &$wishlist){
+function validateWishlistItem($db, $line, &$wishlistItem){
    $errorList = Array();
-
    if ( $wishlistItem == null || empty($wishlistItem) ) { 
     $errorList[] = "Line $line Institute values are empty"; return $errorList; 
    }
@@ -57,7 +56,7 @@ function validateWishlistItem($db, $line, &$wishlist){
      else { $errorList[] = "Line $line Institute not present";  }
    }
    $isbn = $wishlistItem['isbn'];
-   if ( $isbn == null || empty($isbn) || strlen($isbn) != 13 || strlen($isbn) != 10 ){ 
+   if ( $isbn == null || empty($isbn) ||  (strlen($isbn) != 13 && strlen($isbn) != 10)){ 
     $errorList[] = "Line $line ISBN is mandatory"; 
    } else {
        if ( strlen($isbn) == 10 ) { $isbn = isbn10to13($isbn); }
@@ -98,13 +97,13 @@ function load_social_wishlist_start($argc, $argv) {
      $wishlist[] = formatValues($values);
     }
     fclose($wishlistFile);
-    $validWishlist = Array();
+    $validWishList = Array();
+    $count=0;
     foreach($wishlist as $wishlistItem) {
-      $errorList = validateWishlistItem($db, &$wishlistItem);
+      $errorList = validateWishlistItem($db, $count++, &$wishlistItem);
       if ( $errorList != null || !empty($errorList)) { print_r($errorList); } 
       else { $validWishList[] = $wishlistItem; }
     }
-
     $customerIdOrganizationIdList = Array();
     $wishlistEntry = null;
     foreach($validWishList as $wishlistItem ) {
@@ -121,7 +120,8 @@ function load_social_wishlist_start($argc, $argv) {
       $wishlistItem['wishlist_id'] = $customerIdOrganizationIdList[$key]['wishlist_id'];
       $wishlistItem['shared'] = $customerIdOrganizationIdList[$key]['shared'];
       $wishlistItem['sharing_code'] = $customerIdOrganizationIdList[$key]['sharing_code'];
-      addWishlistItem($wishlistItem);
+      print_r($wishlistItem);
+      addWishlistItem($db, $wishlistItem);
     } // for each wishlist entry
     closeDatabase($db);
 }
