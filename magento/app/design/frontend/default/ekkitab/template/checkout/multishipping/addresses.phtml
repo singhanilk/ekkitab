@@ -52,7 +52,15 @@
 			<div class="titleCol"><?php echo $this->getItemHtml($_item->getQuoteItem())?></div>
 
 			<div class="qtyCol"><input name="ship[<?php echo $_index ?>][<?php echo $_item->getQuoteItemId() ?>][qty]" value="<?php echo $this->htmlEscape($_item->getQty()) ?>" size="2" class="input-text qty"/></div>
-			<div class="sendToCol"><?php if ($_item->getProduct()->getIsVirtual()): echo $this->__('Shipping selection is not applicable'); else: echo $this->getAddressesHtmlSelect($_item, $_index); endif; ?></div>
+			<div class="sendToCol">
+			<?php 
+			if ($_item->getProduct()->getIsVirtual()): 
+				echo $this->__('Shipping selection is not applicable'); 
+			elseif($_item->getQuoteItem()->getIsDonation()) : 
+				echo $this->getOrganizationAddress($_item, $_index,$_item->getQuoteItem()->getOrganizationId()) ;
+			else : 
+				echo $this->getAddressesHtmlSelect($_item, $_index); endif;  ?>
+			</div>
 			<div class="trashBoxCol"><a href="<?php echo $this->getItemDeleteUrl($_item) ?>"><img src="<?php echo $this->getSkinUrl('images/btn_trash.gif') ?>" width="16" height="16" alt="<?php echo $this->__('Remove Item') ?>"/></a></div>
 			<div class="clear"></div>
 	</div>

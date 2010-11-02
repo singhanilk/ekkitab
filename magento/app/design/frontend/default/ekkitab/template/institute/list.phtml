@@ -1,0 +1,83 @@
+<?php
+/**
+ * Magento
+ *
+ * @copyright  Copyright (c) 2009 Ekkitab Educational Services Pvt Ltd (http://www.ekkitab.com)
+ *
+ * All  Categories List template
+ *
+ */
+?>
+<div class="contentArea">
+<div class="pageHeader">All Institutes Registered with Ekkitab</div>
+<br class="clear" />
+<?php
+	$institutes = $this->getAllInstitutes();
+	if(!is_null($institutes)){
+?>
+<?php if($this->getLastPageNumber()>1): ?>
+<div class="searchResTop">
+	<div class="leftArea">
+	</div><!-- leftArea -->
+	<div class="rightArea">
+		<div class="topPaginationArea">
+			<ul>
+				<?php if (!$this->isFirstPage()): ?>
+					<li><a href="<?php echo $this->getPreviousPageUrl() ?>" id="prev"><?php echo $this->__('Prev') ?></a></li>
+				<?php else: ?>
+					<li class="nolink"><?php echo $this->__('Prev') ?></li>
+				<?php endif; ?>
+				
+				<?php foreach ($this->getPages() as $_page): ?>
+					<?php if ($this->isPageCurrent($_page)): ?>
+						<li><span><?php echo $_page ?></span></li>
+					<?php else: ?>
+						<li><a href="<?php echo $this->getPageUrl($_page) ?>"><?php echo $_page ?></a></li>
+					<?php endif ?>
+				<?php endforeach; ?>
+
+				<?php if (!$this->isLastPage()): ?>
+					<li><a href="<?php echo $this->getNextPageUrl() ?>"><?php echo $this->__('Next') ?></a></li>
+				<?php else: ?>
+					<li><b id="sep"><?php echo $this->__('Next') ?></b></li>
+				<?php endif; ?>
+
+			</ul>
+		</div>
+	</div><!-- rightArea -->
+	<div class="clear"></div>
+</div><!-- searchResTop -->
+<?php endif; ?>
+<table class="custom-data-table box-table" id="institute-table" cellspacing="0">
+		<col width="80"/>
+		<col width="350"/>
+		<col width="200"/>
+		<col width="250"/>
+		<thead>
+			<tr>
+				<th><?php echo $this->__('Institute Name') ?></th>
+				<th>&nbsp;</th>
+				<th>Website</th>
+				<th>&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody>
+<?	foreach ($institutes as $institute): 
+?>	
+			<tr>
+				<td><img src="<?php echo $this->helper('ekkitab_institute')->resize($institute->getImage(),'small_image',false,null, 109); ?>" /></td>
+				<td><a href="<?php echo $this->helper('ekkitab_institute')->getViewLink() ?>id/<?php echo $institute->getId() ?>"><?php echo $institute->getName(); ?></a>
+				<br/><?php echo $institute->getLocality(); ?>, <?php echo $institute->getCity(); ?>
+				<br/><?php echo $institute->getState() ?>
+				</td>
+				<td ><a href="<?php echo $institute->getWebsiteUrl(); ?>" target="_blank"><?php echo $institute->getWebsiteUrl()?></a></td>
+				<td class="last a-center"><a href="<?php echo $this->helper('ekkitab_institute')->getViewLink() ?>id/<?php echo $institute->getId() ?>#wishlist">View School's Wishlist</a></td>
+			</tr>
+<?php	endforeach; ?>
+		</tbody>
+	</table>
+<?php	}
+?>
+<div class="clear"></div>
+</div><!-- allCategoriesArea -->
+

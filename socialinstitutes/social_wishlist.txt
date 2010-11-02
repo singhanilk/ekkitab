@@ -1,0 +1,4 @@
+#admin_email_id	institute_email_id	isbn	title	author
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9780670083855	Makers of Modern India	Ramachandra Guha
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9789350092170	Turbulance	Samit Basu
+prasad@ekkitab.com	spars_560092@ekkitab.com	9789350092170	Turbulance	Samit Basu

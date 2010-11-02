@@ -134,6 +134,116 @@ class Ekkitab_Wishlist_IndexController extends Mage_Wishlist_IndexController
     }
 
     /**
+     * Add wishlist item to shopping cart
+     */
+    public function donationCartAction()
+    {
+        $wishlist   = $this->_getWishlist();
+        $id         = (int) $this->getRequest()->getParam('item');
+        $item       = Mage::getModel('wishlist/item')->load($id);
+        $orgId      = (int) $this->getRequest()->getParam('org');
+
+		$product = Mage::getModel('ekkitab_catalog/product')->load($item->getIsbn(),'isbn')->setQty(1);
+        if($orgId && $orgId > 0){
+			$product->setIsDonation(1);
+			$product->setOrgId($orgId);
+			
+			try {
+				$quote = Mage::getSingleton('checkout/cart')
+				   ->addProduct($product)
+				   ->save();
+			}
+			catch(Exception $e) {
+				Mage::getSingleton('checkout/session')->addError($e->getMessage());
+				$url = Mage::getSingleton('checkout/session')->getRedirectUrl(true);
+				if ($url) {
+					$url = Mage::getModel('core/url')->getUrl("ekkitab_catalog/product/view/book/unable-to-add-to__wishlist__".$product->getId().".html"
+					,array('wishlist_next'=>1));
+					Mage::getSingleton('checkout/session')->setSingleWishlistId($item->getId());
+					$this->getResponse()->setRedirect($url);
+				}
+				else {
+					$this->_redirect('*/*/');
+				}
+				return;
+			}
+		}else{
+			$this->_redirect('*/*/');
+		}
+
+        if (Mage::getStoreConfig('checkout/cart/redirect_to_cart')) {
+            $this->_redirect('checkout/cart');
+        } else {
+            if ($this->getRequest()->getParam(self::PARAM_NAME_BASE64_URL)) {
+                $this->getResponse()->setRedirect(
+                    Mage::helper('core')->urlDecode($this->getRequest()->getParam(self::PARAM_NAME_BASE64_URL))
+                );
+            } else {
+                $this->_redirect('*/*/');
+            }
+        }
+    }
+
+    /**
+     * Add all items to shoping cart
+     *
+     */
+    public function allOrgCartAction() {
+        $messages           = array();
+        $urls               = array();
+        $wishlistIds        = array();
+        $notSalableNames    = array(); // Out of stock products message
+
+        $wishlist           = $this->_getWishlist();
+        $wishlist->getItemCollection()->load();
+
+        foreach ($wishlist->getItemCollection() as $item) {
+			$product = Mage::getModel('ekkitab_catalog/product')
+                    ->load($item->getIsbn(),'isbn')
+                    ->setQty(1);
+            try {
+                if ($product->isSalable()) {
+                    Mage::getSingleton('checkout/cart')->addProduct($product);
+                    $item->delete();
+                }
+                else {
+                    $notSalableNames[] = $product->getName();
+                }
+            } catch(Exception $e) {
+                $url = Mage::getSingleton('checkout/session')
+                    ->getRedirectUrl(true);
+                if ($url) {
+                    $url = Mage::getModel('core/url')->getUrl("ekkitab_catalog/product/view/book/unable-to-add-to__wishlist__".$product->getIsbn().".html");
+                    $urls[]         = $url;
+                    $messages[]     = $e->getMessage();
+                    $wishlistIds[]  = $item->getId();
+                } else {
+                    $item->delete();
+                }
+            }
+            Mage::getSingleton('checkout/cart')->save();
+        }
+
+        if (count($notSalableNames) > 0) {
+            Mage::getSingleton('checkout/session')
+                ->addNotice($this->__('This product(s) is currently out of stock:'));
+            array_map(array(Mage::getSingleton('checkout/session'), 'addNotice'), $notSalableNames);
+        }
+
+        if ($urls) {
+            Mage::getSingleton('checkout/session')->addError(array_shift($messages));
+            $this->getResponse()->setRedirect(array_shift($urls));
+
+            Mage::getSingleton('checkout/session')->setWishlistPendingUrls($urls);
+            Mage::getSingleton('checkout/session')->setWishlistPendingMessages($messages);
+            Mage::getSingleton('checkout/session')->setWishlistIds($wishlistIds);
+        }
+        else {
+            $this->_redirect('checkout/cart');
+        }
+    }
+
+    /**
      * Add all items to shoping cart
      *
      */
@@ -192,7 +302,7 @@ class Ekkitab_Wishlist_IndexController extends Mage_Wishlist_IndexController
         }
     }
 
-	    public function sendAction()
+	public function sendAction()
     {
         if (!$this->_validateFormKey()) {
             return $this->_redirect('*/*/');

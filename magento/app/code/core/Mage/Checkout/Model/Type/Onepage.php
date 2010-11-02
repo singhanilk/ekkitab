@@ -282,7 +282,7 @@ class Mage_Checkout_Model_Type_Onepage
         if (!empty($customerAddressId)) {
             $customerAddress = Mage::getModel('customer/address')->load($customerAddressId);
             if ($customerAddress->getId()) {
-                if ($customerAddress->getCustomerId() != $this->getQuote()->getCustomerId()) {
+                if (!$this->getQuote()->hasDonationItems() && $customerAddress->getCustomerId() != $this->getQuote()->getCustomerId()) {
                     return array('error' => 1,
                         'message' => Mage::helper('checkout')->__('Customer Address is not valid.')
                     );
