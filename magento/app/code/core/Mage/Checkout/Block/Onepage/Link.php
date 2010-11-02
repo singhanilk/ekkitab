@@ -47,4 +47,26 @@ class Mage_Checkout_Block_Onepage_Link extends Mage_Core_Block_Template
     {
         return $this->helper('checkout')->canOnepageCheckout();
     }
+
+    public function hasMultipleAddressDelivery()
+    {
+        $quote = Mage::getSingleton('checkout/session')->getQuote();
+		if($quote->hasDonationItems()){
+			$donationItems = $quote->getAllDonationItems();
+			if(sizeof($quote->getAllItems()) == sizeof($donationItems) ){
+				$orgId = 0;
+				foreach ($donationItems as $item){
+					if(!($orgId==0 || $orgId==$item->getOrganizationId())){
+						return true;
+					}
+					$orgId = $item->getOrganizationId();
+				}
+				return false;
+			}else{
+				return true;
+			}
+		}else{
+			return false;
+		}
+    }
 }

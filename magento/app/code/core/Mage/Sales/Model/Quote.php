@@ -744,13 +744,51 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
 
         $item->setOptions($product->getCustomOptions())
             ->setProduct($product);
-
-        $this->addItem($item);
+        //Mage::log("In Sales Quote.... is Donation ? ".$product->getIsDonation() );
+        //Mage::log("In Sales Quote.... org Id is ? ".$product->getOrgId());
+		//$listPrice = (!is_null($product->getListPrice()))? $product->getListPrice() : 0;
+		//$discPrice = $product->getDiscountPrice();
+		//$savings= $listPrice - $discPrice;
+		//$savingsPerct= round(($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 0);
+		//$item->setBasePrice($listPrice);
+		//$item->setCustomPrice($discPrice);
+		//$item->setDiscountPercent($savingsPerct*1.0);
+		//$item->setDiscountAmount($savings*1.0);
+		$item->setIsDonation($product->getIsDonation());
+        $item->setOrganizationId($product->getOrgId());
+		$this->addItem($item);
 
         return $item;
     }
 
-    /**
+	public function hasDonationItems()
+	{
+		foreach ($this->getAllItems() as $item) {
+			if ($item->getIsDonation()) {
+				return true;
+			}
+		}
+		return false;	
+	}
+	
+	/**
+     * Get array of all items what can be display directly
+     *
+     * @return array
+     */
+    public function getAllDonationItems()
+    {
+        $items = array();
+        foreach ($this->getItemsCollection() as $item) {
+            if (!$item->isDeleted() && $item->getIsDonation()) {
+                $items[] =  $item;
+            }
+        }
+        return $items;
+    }
+
+	
+	/**
      * Retrieve quote item by product id
      *
      * @param   int $productId

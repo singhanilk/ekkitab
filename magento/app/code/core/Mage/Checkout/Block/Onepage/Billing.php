@@ -74,6 +74,10 @@ class Mage_Checkout_Block_Onepage_Billing extends Mage_Checkout_Block_Onepage_Ab
         }
     }
 
+    function hasDonationItems() {
+        return $this->getQuote()->hasDonationItems();
+    }
+
     public function getFirstname()
     {
         $firstname = $this->getAddress()->getFirstname();

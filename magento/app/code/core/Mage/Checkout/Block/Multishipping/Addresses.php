@@ -77,6 +77,33 @@ class Mage_Checkout_Block_Multishipping_Addresses extends Mage_Sales_Block_Items
     }
 
     /**
+     * Retrieve HTML for addresses dropdown
+     *
+     * @param  $item
+     * @return string
+     */
+    public function getOrganizationAddress($item, $index,$orgId)
+    {
+		$outputText='<input type="hidden" name="ship['.$index.']['.$item->getQuoteItemId().'][address]" id="ship_'.$index.'_'.$item->getQuoteItemId().'_address" />';
+		$org = Mage::getModel('ekkitab_institute/institute')->load($orgId);
+		if($org && $org->getId() > 0 ){
+			$instituteEmailId = $org->getEmail();
+			$orgCustomer = Mage::getModel('customer/customer')
+				->setStore(Mage::app()->getStore())
+				->loadByEmail($instituteEmailId);
+			$addresses= $orgCustomer->getAddresses();
+			if($addresses){
+				foreach ($addresses as $address) {
+					$outputText= $address->format('oneline').'<input type="hidden" name="ship['.$index.']['.$item->getQuoteItemId().'][address]" id="ship_'.$index.'_'.$item->getQuoteItemId().'_address" value="'.$address->getId().'" />';
+				}
+			}
+		}
+
+        return $outputText;
+
+	}
+
+    /**
      * Retrieve options for addresses dropdown
      *
      * @return array

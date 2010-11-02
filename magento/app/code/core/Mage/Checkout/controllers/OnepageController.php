@@ -126,12 +126,31 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
      */
     public function indexAction()
     {
-        if (!Mage::helper('checkout')->canOnepageCheckout()) {
+		if (!Mage::helper('checkout')->canOnepageCheckout()) {
             Mage::getSingleton('checkout/session')->addError($this->__('Sorry, Onepage Checkout is disabled.'));
             $this->_redirect('checkout/cart');
             return;
         }
         $quote = $this->getOnepage()->getQuote();
+		
+		/* check if cart has items for donation as well as items  for self checkout... then forward to multishipping... */
+		if($quote->hasDonationItems()){
+			$donationItems = $quote->getAllDonationItems();
+			if(sizeof($quote->getAllItems()) == sizeof($donationItems) ){
+				$orgId = 0;
+				foreach ($donationItems as $item){
+					if(!($orgId==0 || $orgId==$item->getOrganizationId())){
+						$this->_redirect('checkout/multishipping');
+						return;
+					}
+					$orgId = $item->getOrganizationId();
+				}
+			}else{
+				$this->_redirect('checkout/multishipping');
+				return;
+			}
+		}
+
         if (!$quote->hasItems() || $quote->getHasError()) {
             $this->_redirect('checkout/cart');
             return;

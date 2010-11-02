@@ -52,6 +52,30 @@ class Ekkitab_Wishlist_Model_Wishlist extends Mage_Wishlist_Model_Wishlist
     }
 
 	/**
+     * Load wishlist by customer
+     *
+     * @param mixed $customer
+     * @param bool $create Create wishlist if don't exists
+     * @return Mage_Wishlist_Model_Wishlist
+     */
+    public function loadByOrganization($orgId, $custId, $create = false)
+    {
+		$wishlistId =  $this->_getResource()->getWishListId($custId,$orgId);
+        if(!is_null($wishlistId) && $wishlistId >0 ){
+		   $this->load($wishlistId);
+		}
+		if (!$this->getId() && $create) {
+            $this->setCustomerId($custId);
+            $this->setOrganizationId($orgId);
+            $this->setShared(1);
+            $this->setSharingCode($this->_getSharingRandomCode());
+            $this->save();
+        }
+        return $this;
+    }
+
+
+	/**
      * Add new item to wishlist
      *
      * @param int $productId
