@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
     <default>
-        <!-- Mage_Customer -->
+        <!-- Mage_Customer
         <reference name="top.links">
             <action method="addLink" translate="label title" module="ekkitab_institute"><label>Register Institute</label><url helper="ekkitab_institute/getRegisterUrl"/><title>Register Institute</title><prepare/><urlParams/><position>10</position></action>
-        </reference>
+        </reference> -->
     </default>
 
     <ekkitab_institute_account_create>
