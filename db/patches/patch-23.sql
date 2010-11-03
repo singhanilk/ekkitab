@@ -39,3 +39,12 @@ CREATE TABLE IF NOT EXISTS ek_social_institute_types (
 	created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Constraints for table ek_social_institutes
+--
+ALTER TABLE ek_social_institutes
+ADD CONSTRAINT FK_EK_INSTITUTE_ADMIN FOREIGN KEY (admin_id) REFERENCES customer_entity (entity_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE ek_social_institutes
+ADD CONSTRAINT FK_EK_INSTITUTE_TYPE FOREIGN KEY (type_id) REFERENCES ek_social_institute_types (id) ON DELETE CASCADE ON UPDATE CASCADE;

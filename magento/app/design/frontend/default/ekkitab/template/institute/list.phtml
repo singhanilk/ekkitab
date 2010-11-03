@@ -9,9 +9,24 @@
  */
 ?>
 <div class="contentArea">
-<div class="pageHeader">All Institutes Registered with Ekkitab</div>
+<div class="pageHeader">Members of the Ekkitab Donor Network</div>
 <br class="clear" />
 <?php
+	function getShortenedString($str,$count){
+		$resStr = '';
+		//$str = eregi_replace(" +", " ", $str);
+		$array = explode(" ", $str);
+		$arrCount = count($array); 
+		if($arrCount >0){
+			$count = $count > $arrCount ? $arrCount : $count;
+			for($i=0;$i < $count ;$i++)
+			{
+				$resStr=$resStr." ".$array[$i];
+			}
+		}
+		return $resStr;
+	}
+
 	$institutes = $this->getAllInstitutes();
 	if(!is_null($institutes)){
 ?>
@@ -49,29 +64,21 @@
 </div><!-- searchResTop -->
 <?php endif; ?>
 <table class="custom-data-table box-table" id="institute-table" cellspacing="0">
-		<col width="80"/>
-		<col width="350"/>
-		<col width="200"/>
-		<col width="250"/>
-		<thead>
-			<tr>
-				<th><?php echo $this->__('Institute Name') ?></th>
-				<th>&nbsp;</th>
-				<th>Website</th>
-				<th>&nbsp;</th>
-			</tr>
-		</thead>
+		<col width="110"/>
+		<col width="300"/>
+		<col width="540"/>
 		<tbody>
 <?	foreach ($institutes as $institute): 
 ?>	
 			<tr>
-				<td><img src="<?php echo $this->helper('ekkitab_institute')->resize($institute->getImage(),'small_image',false,null, 109); ?>" /></td>
+				<td><img src="<?php echo $this->helper('ekkitab_institute')->resize($institute->getImage(),'small_image',false,90,null); ?>" class="img-border" /></td>
 				<td><a href="<?php echo $this->helper('ekkitab_institute')->getViewLink() ?>id/<?php echo $institute->getId() ?>"><?php echo $institute->getName(); ?></a>
-				<br/><?php echo $institute->getLocality(); ?>, <?php echo $institute->getCity(); ?>
-				<br/><?php echo $institute->getState() ?>
+				<br/><?php echo $institute->getLocality(); ?>, <?php echo $institute->getCity(); ?>, <?php echo $institute->getState() ?>.
+				<br/><a href="<?php echo $institute->getWebsiteUrl(); ?>" target="_blank"><?php echo $institute->getWebsiteUrl()?></a>
 				</td>
-				<td ><a href="<?php echo $institute->getWebsiteUrl(); ?>" target="_blank"><?php echo $institute->getWebsiteUrl()?></a></td>
-				<td class="last a-center"><a href="<?php echo $this->helper('ekkitab_institute')->getViewLink() ?>id/<?php echo $institute->getId() ?>#wishlist">View School's Wishlist</a></td>
+				<td ><?php $desc = $institute->getAboutus();
+				  		   $shortDesc = getShortenedString($desc,30);
+						   echo $shortDesc; ?> ... <a href="<?php echo $this->helper('ekkitab_institute')->getViewLink() ?>id/<?php echo $institute->getId() ?>">Click here to read more about us and donate.</a></td>
 			</tr>
 <?php	endforeach; ?>
 		</tbody>

@@ -89,7 +89,6 @@ class Ekkitab_Catalog_Block_Globalsection_View extends Mage_Core_Block_Template
 					}else{
 						$size = count($products);
 					}
-					Mage::log("size of products is : $size");
 				}else{
 					$size = 0;
 				}

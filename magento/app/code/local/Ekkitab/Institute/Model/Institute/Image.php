@@ -41,7 +41,6 @@ class Ekkitab_Institute_Model_Institute_Image extends Mage_Catalog_Model_Product
             $file = '/' . $file;
         }
         $baseDir = Mage::getBaseDir('media') . DIRECTORY_SEPARATOR . 'social_institutes';
-		Mage::log("base dir is : $baseDir");
         if ('/no_selection' == $file) {
             $file = null;
         }
@@ -53,9 +52,7 @@ class Ekkitab_Institute_Model_Institute_Image extends Mage_Catalog_Model_Product
         if (!$file) {
             // check if placeholder defined in config
             $isConfigPlaceholder = Mage::getStoreConfig("ekkitab/social_institutes/placeholder/{$this->getDestinationSubdir()}_placeholder");
-			Mage::log("isConfigPlaceholder dir is : $isConfigPlaceholder");
             $configPlaceholder   = '/placeholder/' . $isConfigPlaceholder;
-			Mage::log("configPlaceholder dir is : $configPlaceholder");
             if ($isConfigPlaceholder && file_exists($baseDir . $configPlaceholder)) {
                 $file = $configPlaceholder;
             }

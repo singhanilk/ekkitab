@@ -43,20 +43,36 @@ class Ekkitab_Institute_Block_Institute extends Mage_Core_Block_Template
 	protected function _prepareLayout()
     {
 	   
-		$title ='All Institutes';
+		$title ='Members of the Ekkitab Donor Network';
 		
-		if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
+			if ($headBlock = $this->getLayout()->getBlock('head')) {
+				$headBlock->setTitle($title);
+				$headBlock->setKeywords("");
+				$headBlock->setDescription("");
+				$headBlock->setOpenGraphTitle($title);
+				$headBlock->setOpenGraphSiteName("Ekkitab.com");
+				$headBlock->setOpenGraphImageUrl("");
+				$headBlock->setOpenGraphProductUrl("");
+				$headBlock->setFacebookAdmin("ekkitab");
+			}
+			
+			if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
 
-			$breadcrumbs->addCrumb('home', array(
-				'label'=>Mage::helper('catalogsearch')->__('Home'),
-				'title'=>Mage::helper('catalogsearch')->__('Go to Home Page'),
-				'link'=>Mage::getBaseUrl()
-			));
+				$breadcrumbs->addCrumb('home', array(
+					'label'=>Mage::helper('ekkitab_institute')->__('Home'),
+					'title'=>Mage::helper('ekkitab_institute')->__('Go to Home Page'),
+					'link'=>Mage::getBaseUrl()
+				));
+	   
+				$breadcrumbs->addCrumb('Members of Donor Network', array(
+					'label'=>Mage::helper('ekkitab_institute')->__('Members of the Ekkitab Donor Network'),
+					'title'=>Mage::helper('ekkitab_institute')->__('Ekkitab Donor List'),
+					'link'=>''
+				));
    
-			$this->getLayout()->getBlock('head')->setTitle($title);
-		}
+			}
 		
-        return parent::_prepareLayout();
+			return parent::_prepareLayout();
     }
 
 	public function setPageSize($count)

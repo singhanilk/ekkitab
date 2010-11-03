@@ -52,6 +52,12 @@ class Ekkitab_Institute_Block_Institute_View extends Mage_Core_Block_Template
 					'link'=>Mage::getBaseUrl()
 				));
 	   
+				$breadcrumbs->addCrumb('Members of Donor Network', array(
+					'label'=>Mage::helper('ekkitab_institute')->__('Members of the Ekkitab Donor Network'),
+					'title'=>Mage::helper('ekkitab_institute')->__('Ekkitab Donor List'),
+					'link'=> '/ekkitab_institute/search/listAll'
+				));
+	   
 
 
 				$title=htmlspecialchars_decode($title,ENT_QUOTES);
@@ -100,7 +106,6 @@ class Ekkitab_Institute_Block_Institute_View extends Mage_Core_Block_Template
     {
 		if(!is_null($this->_institute) && is_null($this->_wishlistCollection)){
 			if(!$this->_wishlistLoaded) {
-				Mage::log("ABout to load the wishlist for the organization :".$this->_institute->getId() ." and admin :".$this->_institute->getAdminId() );
 				$wishlist = Mage::getModel('ekkitab_wishlist/wishlist')
 						->loadByOrganization($this->_institute->getId(),$this->_institute->getAdminId(), true);
 				$this->_wishlistCollection = $wishlist->getProductCollection();
@@ -130,6 +135,18 @@ class Ekkitab_Institute_Block_Institute_View extends Mage_Core_Block_Template
     public function getMoveAllCartUrl()
     {
         return $this->getUrl('ekkitab_wishlist/index/allOrgCart');
+    }
+
+    public function getMoveSelectedCartUrl()
+    {
+        return $this->getUrl('ekkitab_wishlist/index/moveSelectedToCart');
+    }
+    public function getBackUrl()
+    {
+        if ($this->getRefererUrl()) {
+            return $this->getRefererUrl();
+        }
+        return $this->getUrl('ekkitab_institute/search/listAll');
     }
 
 
