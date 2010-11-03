@@ -281,6 +281,23 @@ function getBisacCodes($db, $subjects) {
   return implode(",", $bisac_codes);
 }
 
+function getIgnoreIsbns($db) {
+  $ignoreIsbnList = Array();
+  $query = "select * from ignore_isbns";
+
+  try {
+   $result = mysqli_query($db,$query);
+   if (!$result) { 
+     $ignoreIsbnList = null; 
+   } else { 
+       $ignoreIsbnList= mysqli_fetch_array($result);
+   }
+  } catch(exception $e) {
+    $ignoreIsbnList = null;
+  }
+  return $ignoreIsbnList; 
+ 
+}
 
 function bookStringInCatalogFormat($book) {
    $catalogString = "";
