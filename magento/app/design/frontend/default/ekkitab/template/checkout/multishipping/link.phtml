@@ -24,4 +24,8 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<a href="<?php echo $this->getCheckoutUrl()?>"><?php echo Mage::helper('checkout')->__('Checkout with Multiple Addresses');?></a>
+<?php if($this->hasMultipleAddressDelivery()): ?>
+	<a href="<?php echo $this->getCheckoutUrl()?>"><img src="<?php echo $this->getSkinUrl('images/checkout_but_new.png');?>" alt="<?php echo Mage::helper('checkout')->__('Checkout with Multiple Addresses');?>" /></a>
+<?php else: ?>
+	<a href="<?php echo $this->getCheckoutUrl()?>"><?php echo Mage::helper('checkout')->__('Checkout with Multiple Addresses');?></a>
+<?php endif?>

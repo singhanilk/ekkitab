@@ -172,9 +172,6 @@ class Ekkitab_Catalog_Block_Category_AllBooks extends Mage_Core_Block_Template
 			if(!is_null($results)){
   				$productIds = java_values($results->getBookIds());
 				if(!is_null($productIds) && is_array($productIds) && count($productIds) > 0 ){
-					foreach($productIds as $id){
-						Mage::log($id.", ");
-					}
 					$books = Mage::getModel('ekkitab_catalog/product')->getCollection()
 					->addIdFilter($productIds);
 

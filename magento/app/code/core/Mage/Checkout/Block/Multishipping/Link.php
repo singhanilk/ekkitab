@@ -51,4 +51,27 @@ class Mage_Checkout_Block_Multishipping_Link extends Mage_Core_Block_Template
 
         return parent::_toHtml();
     }
+
+	public function hasMultipleAddressDelivery()
+    {
+        $quote = $this->getQuote();
+		if($quote->hasDonationItems()){
+			$donationItems = $quote->getAllDonationItems();
+			if(sizeof($quote->getAllItems()) == sizeof($donationItems) ){
+				$orgId = 0;
+				foreach ($donationItems as $item){
+					if(!($orgId==0 || $orgId==$item->getOrganizationId())){
+						return true;
+					}
+					$orgId = $item->getOrganizationId();
+				}
+				return false;
+			}else{
+				return true;
+			}
+		}else{
+			return false;
+		}
+    }
+
 }

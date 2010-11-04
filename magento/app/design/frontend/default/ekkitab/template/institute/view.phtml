@@ -31,34 +31,51 @@
  */
 ?>
 <?php
-    $_institute = $this->getInstitute();
+	$_institute = $this->getInstitute();
 	if(!is_null($_institute)){
 		$image = $_institute->getImage();
 ?>
 <div class="instituteArea">
 	<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
-	<div class="bigImage">
-	   <img src="<?php echo $this->helper('ekkitab_institute')->resize($image,'image',false,null, 200); ?>"><br/>
-	   <br/>
-	</div>
 	
 	<div class="midArea">
 		<div class="finDetBkTitle"><?php echo $_institute->getName() ?> </div><!-- authorEtc -->
 		<div class="finDetSynop">
+			<div class="bigImage">
+			   <img src="<?php echo $this->helper('ekkitab_institute')->resize($image,'image',false,220, null); ?>"><br/>
+			</div>
 			<?php $desc = $_institute->getAboutus();
 				  echo $desc; ?>
+			<div class="clear"></div>
 		</div><!-- finDetSynop -->
 <?php	$orgWishlist = 	$this->getOrganizationWishlist();
-		if($orgWishlist->getSize()): ?>
-		<p><div class="wishlistHdr"><?php echo $this->__("The Wishlist of Books") ?></div></p>
-		<form action="<?php echo $this->getUrl('*/*/update') ?>" method="post">
+		if($orgWishlist->getSize()): 
+		  $_count=$orgWishlist->getSize();
+		  $_columnSize=3;
+		  $counter=0;
+	      $firstTime=0;
+		  if($_count > 0){
+			$_totalRows= intval($_count/ $_columnSize) ;
+			$_totalRows= ($_count % $_columnSize) > 0 ? $_totalRows +1 : $_totalRows  ;
+		  }else{
+			$_totalRows= 0;
+		  }
+		  $_totalRows= 1;
+
+		?>
+		<p><div class="wishlistHdr"><?php echo $this->__("We would be glad to have these Books in our Library") ?></div></p>
+		<form action="<?php echo $this->getMoveSelectedCartUrl()?>" method="post">
 			<?php echo $this->getBlockHtml('formkey')?>
 			<table cellspacing="0" width="100%" class="custom-data-table box-table wishlist" id="wishlist-table">
 			<col width="25"/>
-			<col width="80"/>
-			<col width="290"/>
-			<col width="200"/>
-			<col width="100"/>
+			<col width="70"/>
+			<col width="215"/>
+			<col width="25"/>
+			<col width="70"/>
+			<col width="215"/>
+			<col width="25"/>
+			<col width="70"/>
+			<col width="215"/>
 			<tbody>
 			<?php foreach($orgWishlist as $item): 
 					$listPrice = (!is_null($item->getListPrice()))? $item->getListPrice() : 0;
@@ -66,43 +83,59 @@
 					$savings= $listPrice - $discPrice;
 					$savingsPerct= round(($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 0);
 					$stock=$item->getInStock();
-			?>
-				<tr >
+				    if($counter%$_columnSize==0){  
+						if($firstTime!=0){  
+?>							</tr>
+<?php					}					?>
+					<tr>
+<?php				}
+					$counter+=1;
+?>
 					<td>
-						<input type="checkbox" value="1" name="cart[<?php echo $item->getId() ?>][wishlist]" /> 
+						<input type="checkbox" value="1" name="cart[<?php echo $item->getWishlistItemId() ?>][wishlist]" <?php if($stock==0 || $listPrice <= 0) : ?> disabled<?php endif;?>/> 
 					</td>
 					<td>
 						<div class="thumbnail"><a href="<?php echo $this->getUrl($item->getProductUrl()) ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($item->getImage(), 'thumbnail',false,null,74); ?>" class="img-border" alt="<?php echo $this->htmlEscape($item->getName()) ?>" /></a></div>
 					</td>
 					<td align="left">
 						<div><a href="<?php echo $this->getUrl($item->getProductUrl()) ?>" title="<?php echo $this->htmlEscape($item->getName()) ?>"><?php echo $this->htmlEscape($item->getName()) ?></a></div>
-					</td>
-					<td>
-						<?php if($savings > 0):?>
-							<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($discPrice,true,false) ?> <?php if($savingsPerct > 0):?><br/>Save: <?php echo $savingsPerct ?>%<?php endif; ?></div>
+						<?php if($discPrice > 0 && $stock!=0 && $listPrice > 0 ):?>
+							<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($discPrice,true,false) ?> <!--<?php if($savingsPerct > 0):?><br/>Save: <?php echo $savingsPerct ?>%<?php endif; ?>--></div>
 						<?php endif; ?>
 						<?php if($listPrice > 0):?>
-							<div class="lineHeight14em">MRP Price : <?php echo Mage::helper('core')->currency($listPrice,true,false) ?></div>
+							<!--div class="lineHeight14em">MRP Price : <?php echo Mage::helper('core')->currency($listPrice,true,false) ?></div-->
 						<?php endif; ?>
+						<?php if($item->isSaleable()): ?>
+							<!--a href="<?php echo $this->getItemAddToCartUrl($item,$_institute->getId()) ?>"><img src="<?php echo $this->getSkinUrl('images/move_cart_button_grey.png') ?>" alt="<?php echo $this->__('Add to Cart') ?>" class="v-middle"/></a><br/-->
+						<?php endif; ?>
+						<div class="youSave"><?php if($stock==0 || $listPrice <=0) : ?>Out of Stock<?php endif;?> </div><br/>
 					</td>
-					<td >
-					<?php if($item->isSaleable()): ?>
-						<a href="<?php echo $this->getItemAddToCartUrl($item,$_institute->getId()) ?>"><img src="<?php echo $this->getSkinUrl('images/move_cart_button_grey.png') ?>" alt="<?php echo $this->__('Add to Cart') ?>" class="v-middle"/></a><br/>
-						
-					<?php endif; ?>
-					<div class="youSave"><?php if($stock==0 || $listPrice <=0) : ?>Out of Stock<?php endif;?> </div><br/>
-					</td>
-				</tr>
-			<?php endforeach ?>
-			</tbody>
-		</table>
+<?php			$firstTime =1;
+			endforeach;
+			if($counter%$_columnSize==1){ ?>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+<?php		}
+			if($counter%$_columnSize==2){ ?>
+				<td></td>
+				<td></td>
+				<td></td>
+<?php		}				?>
+
+			</tr>
+		</tbody>
+		<input type="hidden" value="<?php echo $_institute->getId()?>" name="org"/> 
+	</table>
 		<script type="text/javascript">decorateTable('wishlist-table')</script>
 		<div class="content" style="text-align:center">
-			<ul>
-				<!--li><?php if($this->isSaleable()):?>
-					&nbsp;<a href="<?php echo $this->getMoveAllCartUrl()?>" class="f-left"><img src="<?php echo $this->getSkinUrl('images/moveall_cart_button.png');?>" alt="<?php echo $this->__('Move All to Cart') ?>" class="v-middle"/></a>&nbsp;
-				<?php endif;?><br/></li-->
-				<li><br/><a href="<?php echo $this->getBackUrl() ?>" class="f-left">&laquo; <?php echo $this->__('Back') ?></a></li>
+				<?php if($this->isSaleable()):?>
+					&nbsp;<input type="image" src="<?php echo $this->getSkinUrl('images/donate_bks_selected.jpg');?>" alt="<?php echo $this->__('Donate Selected to Cart') ?>" />&nbsp;
+				<?php endif;?><br/></li>
+				<br/><a href="<?php echo $this->getBackUrl() ?>" class="f-left">&laquo; <?php echo $this->__('Back') ?></a></li>
 		</div>
 	</form>
 <?php else: ?>
