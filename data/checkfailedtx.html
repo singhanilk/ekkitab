@@ -1,0 +1,50 @@
+<!--@subject {{var order.getStoreGroupName()}}: New Order # {{var order.increment_id}} @-->
+
+<style type="text/css">
+    body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+</style>
+
+<div style="font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;">
+<table cellspacing="0" cellpadding="0" border="0" width="98%" style="margin-top:10px; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; margin-bottom:10px;">
+<tr>
+    <td align="center" valign="top">
+        <!-- [ header starts here] -->
+        <table cellspacing="0" cellpadding="0" border="0" width="650">
+            <tr>
+                <td valign="top"><a href="http://www.ekkitab.com"><img src="http://www.ekkitab.com/skin/frontend/default/ekkitab/images/logo_email.png" alt="Ekkitab"  style="margin-bottom:10px;" border="0"/></a></td>
+            </tr>
+        </table>
+        <!-- [ middle starts here] -->
+        <table cellspacing="0" cellpadding="0" border="0" width="650">
+            <tr>
+                <td valign="top">
+                    <p>
+                        <strong>Dear [% Name %],</strong><br/><br/>
+                        Thank you for visiting Ekkitab.
+                        We think that you may have encountered difficulty in ordering the following books, while paying with your credit or debit card.
+                    </p>
+				<table style="border-right: #bebcb7 1px solid; border-top: #bebcb7 1px solid; background: #f8f7f5; border-left: #bebcb7 1px solid; border-bottom: #bebcb7 1px solid" cellSpacing=0 cellPadding=0 width="100%" border=0>
+					<thead>
+						<tr>
+							<th style="padding-right: 9px; padding-left: 9px; padding-bottom: 3px; padding-top: 3px" align=left bgColor=#d9e5ee>Book Title</th>
+						</tr>
+					</thead>
+					<tbody bgColor=#eeeded>
+						<tr>
+							<td style="padding-right: 9px; padding-left: 9px; padding-bottom: 3px; padding-top: 3px" valign=top align=left><strong>[% Titles %]</strong></td>
+						</tr>
+					</tbody>
+				    </table>
+		    
+                    <p>
+                        To help us provide you with better service, can you please let us know the precise problem you encountered with the payment? Perhaps, the problem was temporary and you would like to try again by visiting our website? Alternatively, would you like order the book(s) via cheque payment? If so, you can select the 'pay by cheque' option at the time of placing the order.</br></br>We look forward to be of assistance to you always.</br>
+                    </p>
+
+                    <p>Thank you,<br/><strong>Ekkitab Team</strong></p>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+</table>
+</div>
