@@ -87,15 +87,14 @@
 <div class="col2-set">
     <div class="col-1">
         <div class="button-set">
-            <p class="required">&nbsp;</p>
-            <a href="#" onclick="checkout.setMethod()"><img src="<?php echo $this->getSkinUrl('images/btn_continue.gif');?>" alt="<?php echo ($this->getQuote()->isAllowedGuestCheckout() ? $this->__('Continue') : $this->__('Register')) ?>" class="v-middle"/></a>
+           <a href="#" onclick="checkout.setMethod()"><img src="<?php echo $this->getSkinUrl('images/btn_continue.gif');?>" alt="<?php echo ($this->getQuote()->isAllowedGuestCheckout() ? $this->__('Continue') : $this->__('Register')) ?>" class="v-middle"/></a>
         </div>
     </div>
     <div class="col-2">
         <div class="button-set">
+            <p><a href="#" onclick="onepageLogin(this)"><img src="<?php echo $this->getSkinUrl('images/btn_login.gif');?>" alt="<?php echo $this->__('Login') ?>" class="v-middle"/></a></p>
+            <p><a href="<?php echo $this->getUrl('customer/account/forgotpassword') ?>" class="f-left"><?php echo $this->__('Forgot your password?') ?></a></p>
             <p class="required"><?php echo $this->__('* Required Fields') ?></p>
-            <a href="<?php echo $this->getUrl('customer/account/forgotpassword') ?>" class="f-left"><?php echo $this->__('Forgot your password?') ?></a>
-            <a href="#" onclick="onepageLogin(this)"><img src="<?php echo $this->getSkinUrl('images/btn_login.gif');?>" alt="<?php echo $this->__('Login') ?>" class="v-middle"/></a>
         </div>
     </div>
 </div>

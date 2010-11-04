@@ -273,6 +273,28 @@ class Mage_Sales_Model_Quote_Item extends Mage_Sales_Model_Quote_Item_Abstract
     }
 
     /**
+     * Retrieve product model object associated with item
+     *
+     * @return Mage_Catalog_Model_Product
+     */
+    /*public function getItemOrganizationAddress()
+    {
+        $product = $this->_getData('product');
+        if (($product === null) && $this->getProductId()) {
+            $product = Mage::getModel('ekkitab_catalog/product')
+                ->setStoreId($this->getQuote()->getStoreId())
+                ->load($this->getProductId());
+            $this->setProduct($product);
+        }
+
+		// Reset product final price because it related to custom options
+        $product->setFinalPrice(null);
+        $product->setCustomOptions($this->_optionsByCode);
+        return $product;
+    }
+     */
+
+    /**
      * Check product representation in item
      *
      * @param   Mage_Catalog_Model_Product $product
@@ -282,6 +304,9 @@ class Mage_Sales_Model_Quote_Item extends Mage_Sales_Model_Quote_Item_Abstract
     {
         $itemProduct = $this->getProduct();
         if ($itemProduct->getId() != $product->getId()) {
+            return false;
+        }
+		if ($this->getOrganizationId() != $product->getOrgId()) {
             return false;
         }
 

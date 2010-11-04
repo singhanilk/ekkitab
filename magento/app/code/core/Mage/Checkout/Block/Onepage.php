@@ -33,6 +33,7 @@
  */
 class Mage_Checkout_Block_Onepage extends Mage_Checkout_Block_Onepage_Abstract
 {
+
     public function getSteps()
     {
         $steps = array();
@@ -54,8 +55,49 @@ class Mage_Checkout_Block_Onepage extends Mage_Checkout_Block_Onepage_Abstract
         return $this->isCustomerLoggedIn() ? 'billing' : 'login';
     }
 
-/*
-    // ADDRESSES
+/*	This was added for Donation flow... but now not used. Retaining this code... just incase we might need it for later.
+
+	public function getAddressesHtmlSelect($type)
+    {
+        if ($this->isCustomerLoggedIn()) {
+            $options = array();
+            foreach ($this->getCustomer()->getAddresses() as $address) {
+                $options[] = array(
+                    'value'=>$address->getId(),
+                    'label'=>$address->format('oneline')
+                );
+            }
+			$quoteId =$this->getQuote()->getId();
+	            $addressId = $this->getAddress()->getId();
+            if (empty($addressId)) {
+                if ($type=='billing') {
+                    $address = $this->getCustomer()->getPrimaryBillingAddress();
+                } else {
+                    $address = $this->getCustomer()->getPrimaryShippingAddress();
+                }
+                if ($address) {
+                    $addressId = $address->getId();
+                }
+            }
+
+            $select = $this->getLayout()->createBlock('core/html_select')
+                ->setName($type.'_address_id')
+                ->setId($type.'-address-select')
+                ->setClass('address-select')
+                ->setExtraParams('onchange="'.$type.'.newAddress(!this.value)"')
+                ->setValue($addressId)
+                ->setOptions($options);
+
+            $select->addOption('', Mage::helper('checkout')->__('New Address'));
+
+            return $select->getHtml();
+        }
+        return '';
+    }
+*/
+
+
+/*    // ADDRESSES
 
     public function getAddressesHtmlSelect($address, $type)
     {

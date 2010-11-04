@@ -24,11 +24,16 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="proceedCheckout">
 <?php if ($this->isPossibleOnepageCheckout()):?>
 	<?php if ($this->isDisabled()):?>
+	<div class="proceedCheckout">
 	<img src="<?php echo $this->getSkinUrl('images/checkout_but.png');?>" alt="<?php echo Mage::helper('checkout')->__('Proceed to Checkout');?>" />
+	</div><br class="clear"/>
 	<?php else: ?>
-	<a href="<?php echo $this->getCheckoutUrl()?>"><img src="<?php echo $this->getSkinUrl('images/checkout_but.png');?>" alt="<?php echo Mage::helper('checkout')->__('Proceed to Buy');?>" /></a>
+		<?php if(!$this->hasMultipleAddressDelivery()): ?>
+			<div class="proceedCheckout">
+			<a href="<?php echo $this->getCheckoutUrl()?>"><img src="<?php echo $this->getSkinUrl('images/checkout_but.png');?>" alt="<?php echo Mage::helper('checkout')->__('Proceed to Buy');?>" /></a>
+			</div><br class="clear"/>
+		<?php endif?>
 	<?php endif?>
-<?php endif?></div><br class="clear"/>
+<?php endif?>

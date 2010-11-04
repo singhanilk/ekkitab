@@ -49,6 +49,13 @@ class Mage_Sales_Model_Mysql4_Quote_Item_Collection extends Mage_Core_Model_Mysq
     protected $_productIds = array();
 
     /**
+     * Product Ids array
+     *
+     * @var array
+     */
+    protected $_productIsbns = array();
+
+    /**
      * Initialize resource model
      *
      */
@@ -77,6 +84,18 @@ class Mage_Sales_Model_Mysql4_Quote_Item_Collection extends Mage_Core_Model_Mysq
     {
         $this->_quote = $quote;
         $this->addFieldToFilter('quote_id', $quote->getId());
+        return $this;
+    }
+
+    /**
+     * Set Quote object to Collection
+     *
+     * @param Mage_Sales_Model_Quote $quote
+     * @return Mage_Sales_Model_Mysql4_Quote_Item_Collection
+     */
+    public function setIsDonationFilter($isDonation =true)
+    {
+        $this->addFieldToFilter('is_donation', $isDonation );
         return $this;
     }
 
@@ -156,15 +175,22 @@ class Mage_Sales_Model_Mysql4_Quote_Item_Collection extends Mage_Core_Model_Mysq
     protected function _assignProducts()
     {
         Varien_Profiler::start('QUOTE:'.__METHOD__);
-        $productIds = array();
-        foreach ($this as $item) {
-            $productIds[] = $item->getProductId();
+
+	   /* Ekkitab Changes : The productIds should no longer be referenced, instead the productIsbns have to be referenced. This changes are no longer required... retaining the code just in case */
+	   
+		//$productIsbns = array();
+		$productIds = array();
+		foreach ($this as $item) {
+			$productIds[] = $item->getProductId();
+            //$productIsbns[] = $item->getSku();
         }
         $this->_productIds = array_merge($this->_productIds, $productIds);
+       // $this->_productIsbns = array_merge($this->_productIsbns, $productIsbns);
 
         $productCollection = Mage::getModel('ekkitab_catalog/product')->getCollection()
             ->setStoreId($this->getStoreId())
-            ->addIdFilter($this->_productIds)
+           // ->addIsbnFilter($this->_productIsbns)
+             ->addIdFilter($this->_productIds)
             ->addAttributeToSelect(Mage::getSingleton('sales/quote_config')->getProductAttributes())
             ->addOptionsToResult()
             ->addStoreFilter()
@@ -175,7 +201,8 @@ class Mage_Sales_Model_Mysql4_Quote_Item_Collection extends Mage_Core_Model_Mysq
         $recollectQuote = false;
         foreach ($this as $item) {
 
-            if ($product = $productCollection->getItemById($item->getProductId())) {
+           //if ($product = $productCollection->getItemByIsbn($item->getSku())) {
+	       if ($product = $productCollection->getItemById($item->getProductId())) {
                 $product->setCustomOptions(array());
 
                 foreach ($item->getOptions() as $option) {
@@ -203,4 +230,6 @@ class Mage_Sales_Model_Mysql4_Quote_Item_Collection extends Mage_Core_Model_Mysq
         Varien_Profiler::stop('QUOTE:'.__METHOD__);
         return $this;
     }
+
+	
 }

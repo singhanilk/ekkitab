@@ -1,0 +1,119 @@
+<?php
+/**
+ * 
+ * Frontend Global Section Template
+ * @category   design/ekkitab
+ * @author Anisha (anisha@ekkitab.com)
+ * @version 1.0 Nov 17, 2009
+ * 
+ * @copyright  COPYRIGHT (C) 2009 Ekkitab Educational Services India Pvt. Ltd.
+ * @license    All Rights Reserved. All material contained in this file (including, but not limited to, text, images, graphics, HTML, programming code and scripts) 
+ * constitute proprietary and  * confidential information protected by copyright laws, trade secret and other laws. No part of this software may be copied, reproduced, modified or 
+ * distributed in any form or by any means, or stored in a database or retrieval system without the prior written permission of Ekkitab Educational Services.
+ * 
+ * 
+ */
+?>
+<?php $section= $this->getHomePageSection();
+	  $_columnSize=4;
+	  $_deziredRows= 3;
+?>
+<?php if(!is_null($section) && $section->getId() >0 ):
+		$randomize = false;
+		$limit = $_columnSize * $_deziredRows;
+		$pageNo = 1;
+		$products= $section->getSectionProducts($randomize,$pageNo,$limit);
+		//$productIds= $section->getSectionProductIds();
+		$_count = (!is_null($products) && is_array($products))?count($products):(!is_null($products))? $products->count() :0; 
+		$width=(int) 100/$_columnSize;
+		$counter=0;
+		$firstTime=0;
+		if($_count > 0){
+			$_totalRows= intval($_count/ $_columnSize) ;
+			$_totalRows= ($_count % $_columnSize) > 0 ? $_totalRows +1 : $_totalRows  ;
+		}else{
+			$_totalRows= 0;
+		}
+		$_totalRows= 1;
+?>
+<div class="hmDiwaliRow">
+	<div class="hmDiwaliTextImage">
+		We are adding more sparkle to your Diwali this year. Keeping with the spirit of the season, we have great offers in our special Diwali collection. Find out what you might have missed...
+		<div class="hmScrollRow">
+<?php	if(!is_null($products) && $_count > 0){
+			foreach($products as $product){  
+				if($counter%$_columnSize==0){  
+				    if($firstTime!=0){  ?>
+						</div>
+						<div class="clear hmInScrollRowSep"></div>
+<?php				}					?>
+					<div class="hmInScrollRow" >
+<?php			}
+				$counter+=1;
+				$savingsPerct= round(($product->getPrice() >0 )?	(($product->getPrice() - $product->getFinalPrice())/ $product->getPrice() ) * 100 : 0); 
+				$authorArr = $product->getAuthor();
+			$author = (($author = $authorArr['a'])!='')? "by <a href=\"".$this->getUrl('ekkitab_catalog/search/index/author/'.$author)."\">".$author."</a>":"" ;
+			$binding = trim($product->getBinding());
+			$lang = trim($product->getLanguage());
+			$langNbind=strlen($lang) > 0 ? ("[".ucfirst($lang).(strlen($binding) > 0 ?" - ".ucfirst($binding)."]":"]")):(strlen($binding) > 0 ?"[".ucfirst($binding)."]":"");
+			$titleWords = explode(" ",$product->getTitle());
+			$title="";//$product->getTitle();
+			$wordCount=3;
+			$wrdCounter=0;
+			if($titleWords && count($titleWords) >0 ){
+				foreach($titleWords as $words){
+					if($wrdCounter < $wordCount){
+						$title.=$words." ";
+						$wrdCounter++;
+					}else{
+						break;
+					}
+				}
+			}
+			$title= trim($title);
+			if(count($titleWords)>$wordCount){
+				$title.="...";
+			}
+			$fullTitle= $this->htmlEscape($product->getTitle());
+			if(isset($authorArr['a']) && strlen(trim($authorArr['a'])) > 0)
+			{
+				$auth=trim($authorArr['a'])."__";
+			}else{
+				$auth="";
+			}
+			$bookName=$this->helper('ekkitab_catalog')->getProductUrl($auth,$fullTitle,$product->getIsbn());
+
+				$image = $product->getImage();
+
+	?>
+				<div class="vColumns" style="width:<?php echo $width ?>%;" >
+					<div class="discImageBox"><div class="image"><a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $fullTitle ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'small_image',false,null, 109); ?>" alt="<?php echo $fullTitle ?>" title="<?php echo $fullTitle ?>" /></a></div>
+					<div class="fsu<?php echo $savingsPerct?>"></div><!--div class="dicount"></div--></div>
+				<div class="titleEtc">
+						<div class="bkTitleHome"><a href="<?php echo $this->getUrl($bookName)?>"  title="<?php echo $fullTitle ?>"><?php echo $title ?></a></div><!-- bkTitle -->
+						<div class="authorHome"><?php echo $author?></div>
+						<!--div class="lineHeight14emIt"><?php echo $langNbind ?></div-->
+						<div class="youSave"><?php echo Mage::helper('core')->currency($product->getFinalPrice(),true,false) ?></div>
+						<?php if($savingsPerct > 0):?>
+						<div class="lineHeight14em"><span class="greyFont">MRP: <?php echo Mage::helper('core')->currency($product->getListPrice(),true,false) ?></span></div>
+						
+						<?php endif; ?>
+					</div><!-- titleEtc -->
+				</div>
+<?php			$firstTime =1;
+			}	//end of foreach...	?>
+			</div><!-- hmInScrollRow -->
+			<div class="clear">&nbsp;</div>
+			<div class="readMore"><a href="<?php echo Mage::helper('ekkitab_catalog')->getGlobalSectionViewUrl($section->getSectionId()) ?>">See All...</a></div>
+			<div class="clear hmInScrollRowSep"></div>
+			<div class="clear"></div>
+<?php	} else { //end of if(products not null )... ?>
+			<br/>This section will be updated soon...<br/>
+<?php	} //end of else ..?>
+		</div><!-- hmScrollRow -->
+	</div><!-- hmSummerTextImage -->
+</div><!-- hmSummerRow -->
+<?php endif; ?>
+<div class="clear"></div>
+
+

@@ -8,8 +8,10 @@ include $EKKITAB_HOME . "/catalogtools/common_catalog_functions.php";
 
 #----- All the GLOBAL variables which will be used by different UI programs. ------.
 #Main catalog directories
-$catalogDirectory="/home/ubuntu/prasad/data/catalogs";
-$stockDirectory="/home/ubuntu/prasad/data/catalogs";
+// $catalogDirectory="/home/ubuntu/prasad/data/catalogs";
+// $stockDirectory="/home/ubuntu/prasad/data/catalogs";
+$catalogDirectory="/mnt4/publisherdata/indiacatalog";
+$stockDirectory="/mnt4/publisherdata/stock/stocklists";
 
 #Temporary directory when uploading a document
 $baseURL="internalutils";

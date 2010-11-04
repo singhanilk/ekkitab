@@ -1,0 +1,195 @@
+#admin_email_id	institute_email_id	isbn	title	author
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182631038	Chanda Mama	Sanjeeva Jayasavala
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182630994	Ondu dodda vipattu	harmindor hohari
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182630062	Timmy & Pepe	Madhav Chavan
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182632318	Appa banda	Subhadra Sen Gupta
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182632271	Sailing Home	Subhadra Sen Gupta
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182630109	Going Home	Rukmini Banerji
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182630741	kohu kohu kogie	jayashee deshpande 
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182630703	kage balagava kareyithu	venkataramana gowda
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182633490	Spring	Leela Kirloskar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182632523	Heleakka agasaveke thilinili	Roopa Pai
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182631014	Sooryana Kopa	Sanjiv Jaiswal
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182632301	Raja meravanige 	Subhadra Sen Gupta
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182632554	Akka Akka vasthugalethake elavu melakke	Roopa Pai
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182630895	Namma Adbutha jagathu	harmindor hohari
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182630987	Nowkayana	harmindor hohari
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788181632524	Haleakka Agasaveke thilinili	Roopa Pai
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182632509	"Sister, sister where does thunder come from?"	Roopa Pai
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182632264	A Royal Procession	Subhadra Sen Gupta
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182632257	Raza Meets the King	Subhadra Sen Gupta
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182632295	Akbar Mattu Baladarje	Sujatha Rajanna
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182632288	swathanthra yathre	Subhadra Sen Gupta
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182630901	Naguva Gini	Manorama Jafa
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182634299	I want to..	Pankaj Chaturvedi
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182630772	Gubbi Mattu Hannu	venkataramana gowda
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182633285	Monsoon	Leela Kirloskar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182634251	Look At Me	Pankaj Chaturvedi
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182632547	Akka Akka gudugudu saddu baruvudelinda	Roopa Pai
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182633223	Summer	Leela Kirloskar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182632042	Manthrika Pundi	Dr.K.P.Bhatt
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182631021	Murida Rekke	Sanjiv Jaiswal
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788170118893	The Sun's Handkerchief	Tarun Cherian
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182634077	Pehelwaan ji	Sanjiv Jaiswal
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182630727	Dallimbeya ruchi	jai shree deshpande
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182632059	The Quirquincho and the fox	
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182632417	The Mouse with Seven Tails	Bapsi Sidhwa
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788189013585	Avasarada kolimari	Jakeer Husen
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182631007	Ajji mattu shobini	Sarvendar vikram
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788182633919	Mini the hippo learns to jump	Herminder Ohri
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788189013509	Puriya Palayana	Jakheer Hussen
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173028311	Dasthavejugala nondani mattu kalaparimithi	"S,R.Gowtham"
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173028496	Ellinda banthu boost	L.S.Shamasundara sharma
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173025204	Gadegalu Huttuvaga	Navagirinanda
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173025433	tanaa reeree	bhumika
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173025457	Bhootayi Bhootayi	Niharika
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173021862	Shabdaloka	Gayeethri Murthy
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173022777	Manava Sharira	Dr.C.R.Chandrashekar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173025259	Sada chalisuva vasthugalu	Dhu.Nim.Belagali
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173027802	Reshan Kardugalu Esttu Vida	Y.G.Muralidhara
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173025914	Vidyarthigale nimma samrthya hechisikolli	Dr.C.R.Chandrashekar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173025280	Murkana joothe kelasa biddare ennu madabeku?	Dhu.Nim.Belagali
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173022210	kanda oduveya part2	bk thirumalamma
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173025501	Tharakagalu thirupathige hodaddu	A.S.Lalithamma
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173024351	Chandamamana manege	Navagirinanda
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173021756	Mahileyara Manasika Aswsthegagu	Dr.C.R.Chandrashekar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173024108	Prathibimbha	Pro.D.R.Balaragi
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173021671	Gaali	Gayathri Murthy
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173021138	Mulla Nusruddin	Dhu.Nim.Belagali
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173022203	kanda oduveya part 1	bk thirumalamma
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173029394	Kumbakrnana nidde	N.srinivasa udapa
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173022333	amanasa patagalu	
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173028236	Kasadavingadane mattu vilevari	M.H.N.Murthi
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788173026355	Himakinnari	Kiran prasad
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123707051	Bhima Joodha	Uppendra
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123711997	Badavaneya adikara	Ramesh thanavi
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123741017	Kannuga harekey drustiya rakshane	Udaya chandra guptha
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123720500	Red Kite	Geeta Dharmarajan
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123741352	Holige yanthra mattu adara samrakshane	G.K.sahani
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123701547	Ek Kori's Dream	Mahasveta Devi
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123712246	Ondukalu seru goodhi	prem chandar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123707709	Mahileyaru odu-baraha kalithare?	Varsha das
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123702087	Eddu nanna kathe	vikki arya
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123710709	Bhukampa mattu kalgichu	Raskin brand
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123707969	Bhapu	H.S.Pateel
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123704579	Amma Avara Bassu 	Vallikannan
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123706252	Baapu	F.C.Fretars
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123746135	Muru prashnegalu	Jagadish jooshi
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123707914	Huchu Mavanna	A.N.Pednakar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123734576	Dear popat	jagdish joshi
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123704807	Manguvina Buguri	Kamakshi Balasubramanian
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123707136	The Best Thirteen 	
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123720265	Edu rajasthana	Sharadindu Sen Rai
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123703107	Mangu's Top	Kamakshi Balasubramanian
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788170114604	Read Aloud Stories	
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123722696	Adventures of a Wildlife Warden	ERC Davidar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123700212	Tales from Panchatantra	AND Haksar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123714479	thoda balaka mattu kadumeke	ERC Davidar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123710112	Diduvillada eruvegalu	pulak bishvas
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123708133	Ome ondu halliyalli	H.C.Madan
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123745992	Matte Banthu champu	Ananda patila
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123733692	Bharathada deera kishoraru	Sigrun srivasthava
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123722030	Besige maragalu sparde	Raadha M.Kubadakone
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123701097	Bharatha swathantra kathe	Krishna chethanya
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123739595	Where does the wind live	santhini Govindan
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123725925	Festival of Eid	Premchand
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123742632	Heledala ajji	yuri orllerv
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123710266	Bapu - Part 1	FC Freitas
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123739908	The Sultan's Choice and other stories	Kala Thairani
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123713946	The Adventures of Rusty	Ruskin Bond
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123729442	Granny Knits	Uri Orlev
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123748221	Unusual Courage	Abhilahs Verma
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123736587	The Prince and the coral sea	Daisaku Ikeda
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123746227	The Clever farmer and the four thugs	Soma Kaushik
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123717203	The Moneylender	Jai Prakash Rai
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123729800	Alamelu's Appetite	Jaya Paramasivan
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123746005	Surya banda	Vaydehi
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123711065	My First Railway Journey	Mrinal Mitra
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123710259	Bapu - Part II	FC Freitas
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123726236	Birju and the Flying Horse	Deepa Agarwal
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123700311	Moora	Mulkraj anand
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123700229	kamanabillu	ushajooshi
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123700670	kosu mari	shintha choo
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123704845	shodane	jagdish joshi
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123720050	A visit to the city market	Manjula Padmanabhan
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123720135	This is my story	Viky Arya
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123743523	Nine Little Birds	N T Rajeev
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123701592	Rupa and the Elephant	Mickey Patel
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123710976	We Indians	Mehroo J Wadia
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123731384	Tom and the naughty crow	Tanuka Bhaumik Endow
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123708591	Lalu and the red kite	Ashish Sen Gupta
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123722900	Animal World	Aurobindo Kundu
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123741925	Shera and Mithu	Manorama Jafa
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123701745	Little Old Woman	Margaret Bhatty
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123726663	A baby lion learns to roar	Indu Rana
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123705088	Stories from Bapu's life	uma shankar jooshi
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123700793	suryana kudire	shijoo thashima
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123742083	The Coming of Wheels	Anup Ray
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788123703275	Discover India through mazes and games	Viky Arya
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788170118664	The Rajah's Moustache	Asha Nehemiah
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788170118657	Magic	B Das
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788170115922	Mrugalayadalli showrika	Prathibhanath
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788170116608	Manga mattu musule	Shivakumar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788170116622	Panchathathrada kathegalu	Shivakumar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788170115885	Ku kuu gadiyara	Kaveri batt
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788170115243	Chitaku	Surekha Panandikar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788170115250	Simha Hagu Mola	Shankar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788170116639	Panchathathrada kathegalu book4	Shivakumar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788170117896	Chukki kagada post madida sahasa	Mithra pocan
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788170118961	Monkeys come to the village	Swati Bhattacharjee
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788170119203	The Gujjars	Lisa Gammel
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788170119784	Kachru Rabbit	Sangeeta Gupta & Vinita Krishna
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788170118190	My Fish and I	Kalyani Rajan
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788170118183	Zoo Duck	Harini Gopalaswami Srinivasan
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788170117872	Belungalendare nanage panchaprana	naveen menan
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788175961340	The Peace Ring	Rosemary Hayes
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788175961159	Granny's Teeth	June Crebbin
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788175961494	The Most Beautiful Child	Debjani Chatterjee
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788175961364	Animal Communication	Phil Gates
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788175961470	A Shoot of corn	Richard Brown
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788175961456	Asian Elephants	
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788175961418	Imran and the watch	Tony Bradman
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788174785039	Vikatakavi Thenali rama	Neela Subramanya
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788124301593	Stories for children	C K Sampat
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788124306956	Cruise Liner	Chris Oxlade
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788124306932	Helicopter	Chris Oxlade
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788172290788	Towards New Education	M K Gandhi
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788175082069	Veer Savarkar	
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788175961142	Five little monkeys	ruttle and richard brown
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788174783509	Biraballana kathegalu	Dr. Nirupama
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788181460509	Line and Circle (Reke mattu vrutta) Ğ English & Kannada	Radhika  Menon
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788181461445	Who Am I? (Kannada)	Sakshi Jain
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788186838808	Sweet and Salty (English)	Sandhya Rao
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788181461643	Gadagada gudugudu (English)	Jeeva Raghunath
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788181461377	Gadagada gudugudu (Kannada)	Jeeva Raghunath
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788181461599	Kuniyuva Dumbigalu (Kananda)	Ranjith lalh
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788181461308	Radha finds the circle (Eng)	Subir Shukla
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788181460912	Malli (Kannada)	Jeeva Raghunath
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788181461131	The Seed (eng)	Deepa Balsavar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788181460981	Grandma's Eyes (Eng)	Sandhya Rao
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788181461056	Norbu's New Shoes (Eng)	Chewang Dorji Bhutia
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788185229355	Ekki Dokki (Kannada)	Sandhya Rao
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788186895160	A Curly Tale (Kannada)	Vayu Nadu
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788186896112	All About Nothing	Diya Nayar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788186838716	All Free (english)	Mamatha Pandya
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788186838693	All Free (Kannada)	Mamatha Pandya
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788181460714	Basava Mattu Benkiya Chukke (Kannada)	Radhika Chada
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788186895566	Sunu sunu snail- Storm in the Garden ( Kannada)	Sandhya Rao
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788185229270	Eecha Poocha (Eng)	Kala Sashi kumar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788185229317	Eecha Poocha (Kannada)	Kala Sashi kumar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788186895177	Eyes On The Peacok's Tail  (Kannada)	Vayu Nadu
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788186895054	Eyes On The Peacok's Tail (Eng)	Vayu Naidu
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788186895153	Hiss Don't Bite (kannada)	Vayu Nadu
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788186895436	Kali and the Rat Snake (eng)	Zia Whitekar
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788186895948	Kolaba (Kannada)	Sandya Rao
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788186895184	Magic Vessels (Kannada)	Vayu Nadu
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788186896044	Malu Bhalu (Kannada)	Kamala Bhasin
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788186895733	Mazzoo Mazzoo	Sandya Rao
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788186895566	Look the Moon (Kannada)	Sandhya Rao
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788181461223	The Runaway Peppercorn (Kannada)	Suchitra Ramadurai
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788181461513	Pranav's Picture (Kannada)	Nandini Nayak
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788186895313	Priya's Day (Kannada & Eng)	Cathy Spagnoli
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788181460455	The Boy Who Loved Colour (Kannada & English)	Subir Shukla
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788181460226	The Why Why Girl (Kannada)	Mahashevata Devi
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788186896044	Who will Be Ningthou?	Indira Mukharji
+prasad@ekkitab.com	jnana_560067@ekkitab.com	9788186895771	Wrestling Mania	Sandhya Rao

@@ -35,7 +35,18 @@
 .col2-set .col-1, .col2-set .col-2 { width:48.5%; }
 .col2-set .col-1 { float:left; }
 .col2-set .col-2 { float:right; }
-
+.col2-set .col-1 .button-set { /* Container for form buttons*/
+    clear:both;
+    border-top:1px solid #e4e4e4;
+    padding-top:8px;
+    text-align:left;
+}
+.col2-set .col-2 .button-set { /* Container for form buttons*/
+    clear:both;
+    border-top:1px solid #e4e4e4;
+    padding-top:8px;
+    text-align:left;
+}
 /* Col2-alt */
 .col2-alt-set .col-1 { float:left; width:32%; }
 .col2-alt-set .col-2 { float:right; width:65%; }

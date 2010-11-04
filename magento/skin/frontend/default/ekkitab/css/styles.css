@@ -235,7 +235,7 @@ a:hover {
 	color: #666;
 	line-height: 1.6em;
 }
-.searchArea .dropDown, .searchArea .textField, .topSearchArea .dropDown, .topSearchArea .textField {
+.searchArea .dropDown, .searchArea .textField, .topSearchArea .dropDown, .topSearchArea .textField, .instituteArea .dropDown, .instituteArea .textField{
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	color: #000;
@@ -243,7 +243,7 @@ a:hover {
 	margin-right: 8px;
 }
 
-.searchArea .searchButton, .topSearchArea .searchButton {
+.searchArea .searchButton, .topSearchArea .searchButton , .instituteArea .searchButton {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size:11px;
 	color: #000;
@@ -2070,6 +2070,13 @@ a:hover {
 	overflow:hidden;
 	border:1px solid #cacaca;
 }
+.custom-data-table td .thumbnail {
+	width:70px;
+	height:77px;
+	float:center;	
+	border:none;
+	overflow:hidden;
+}
 
 .myOrderCopy {
 	line-height: 18px;
@@ -2988,4 +2995,69 @@ dt .hdr {
 	font-style: normal;
 }
 
+
+.inMainArea .instituteArea {
+	line-height: 22px;
+	text-align: center;
+	margin-top: 16px;
+}
+.instituteArea {
+	margin-bottom: 10px;
+	font-size: 11px;
+}
+.instituteArea .finDetBkTitle {
+	width: 80%;
+	font-size: 20px;
+	margin-bottom: 10px;
+	line-height:1.4em;
+	border-bottom: 1px dotted #333;
+	color:#CC6600;
+}
+
+.instituteArea .wishlistHdr {
+	font-size: 12px;
+	width: 99%;
+	margin-bottom: 10px;
+	line-height:1.6em;
+	border-bottom: 1px dotted #333;
+	color:#CC6600;
+	font-weight:bold;
+}
+
+.instituteArea .bigImage {
+	width: 250px;
+	float: right;
+	overflow:hidden;
+	text-align: center;
+
+}
+.instituteArea .bigImage img {
+	border:1px solid #333;
+}
+.instituteArea .midArea {
+	width: 100%;
+	padding: 0 9px 0 9px;
+	float: left;
+	/*border-right: 1px dotted #333; */
+}
+
+.no-border {
+	border:none;
+}
+
+.img-border {
+	border:1px solid #cacaca;
+}
+
+.hmDiwaliRow {
+	background-image: url(../images/diwali_vis_hm.jpg);
+	background-position:right top;
+	background-repeat:no-repeat;
+	margin-bottom:8px;
+	padding-bottom:8px;
+}
+.hmDiwaliTextImage {
+	line-height:1.6em;
+	padding-top:125px;
+}
 

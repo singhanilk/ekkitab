@@ -46,6 +46,148 @@ class Mage_Checkout_Block_Onepage_Shipping extends Mage_Checkout_Block_Onepage_A
         return $this->getQuote()->getCheckoutMethod();
     }
 
+    public function getOrganizationAddressHtml($type)
+    {
+		$quoteId =$this->getQuote()->getId();
+	 
+		$donationItems = Mage::getModel('sales/quote_item')->getCollection()
+			 ->setQuote($this->getQuote())
+			 ->setIsDonationFilter();
+		
+		$instituteIds = array() ;
+		foreach ($donationItems as $item) {
+			$instituteIds[] = $item->getOrganizationId();
+		}
+		
+		if($instituteIds && count($instituteIds) > 0 ){
+			$institutes = Mage::getModel('ekkitab_institute/institute')->getCollection()
+			 ->addIdFilter($instituteIds);
+			
+			$instituteEmailIds = array() ;
+			foreach ($institutes as $org) {
+				$instituteEmailIds[] = $org->getEmail();
+			}
+			if($instituteEmailIds && count($instituteEmailIds) > 0 ){
+				foreach ($instituteEmailIds as $email) {
+					$customer = Mage::getModel('customer/customer')
+						->setStore(Mage::app()->getStore())
+						->loadByEmail($email);
+					$addresses= $customer->getAddresses();
+					if($addresses){
+						foreach ($addresses as $address) {
+							$options[] = array(
+								'value'=>$address->getId(),
+								'label'=>$address->format('oneline')
+							);
+						}
+					}
+				}
+			}
+		}
+
+		if($options && count($options) == 1){
+			$addressId = $options[0]['value'];
+			$address = $options[0]['label'];
+			$outputText = $address.'<input type="hidden" name="'.$type.'_address_id" id="'.$type.'-address-select" value="'.$addressId.'" />';
+			return $outputText;
+
+		}else{
+			$select = $this->getLayout()->createBlock('core/html_select')
+			->setName($type.'_address_id')
+			->setId($type.'-address-select')
+			->setClass('address-select')
+			->setExtraParams('onchange="'.$type.'.newAddress(!this.value)"')
+			->setValue($addressId)
+			->setOptions($options);
+			$select->addOption('', Mage::helper('checkout')->__('New Address'));
+			return $select->getHtml();
+		}
+	}
+	
+	public function getAddressesHtmlSelect($type)
+    {
+        if ($this->isCustomerLoggedIn()) {
+            $options = array();
+          	/* Moving this code down because customer address needs to be loaded only if there are no items to be donated to school.
+			foreach ($this->getCustomer()->getAddresses() as $address) {
+                $options[] = array(
+                    'value'=>$address->getId(),
+                    'label'=>$address->format('oneline')
+                );
+            }
+			*/
+			$quoteId =$this->getQuote()->getId();
+         
+			$donationItems = Mage::getModel('sales/quote_item')->getCollection()
+				 ->setQuote($this->getQuote())
+				 ->setIsDonationFilter();
+			
+			$instituteIds = array() ;
+			foreach ($donationItems as $item) {
+				$instituteIds[] = $item->getOrganizationId();
+            }
+			
+			if($instituteIds && count($instituteIds) > 0 ){
+				$institutes = Mage::getModel('ekkitab_institute/institute')->getCollection()
+				 ->addIdFilter($instituteIds);
+				
+				$instituteEmailIds = array() ;
+				foreach ($institutes as $org) {
+					$instituteEmailIds[] = $org->getEmail();
+				}
+				if($instituteEmailIds && count($instituteEmailIds) > 0 ){
+					foreach ($instituteEmailIds as $email) {
+						$customer = Mage::getModel('customer/customer')
+							->setStore(Mage::app()->getStore())
+							->loadByEmail($email);
+						$addresses= $customer->getAddresses();
+						if($addresses){
+							foreach ($addresses as $address) {
+								$options[] = array(
+									'value'=>$address->getId(),
+									'label'=>$address->format('oneline')
+								);
+							}
+						}
+
+					}
+				}
+			}else{
+				  foreach ($this->getCustomer()->getAddresses() as $address) {
+					$options[] = array(
+						'value'=>$address->getId(),
+						'label'=>$address->format('oneline')
+					);
+				}
+			}
+			$addressId = $this->getAddress()->getId();
+            if (empty($addressId)) {
+                if ($type=='billing') {
+                    $address = $this->getCustomer()->getPrimaryBillingAddress();
+                } else {
+                    $address = $this->getCustomer()->getPrimaryShippingAddress();
+                }
+                if ($address) {
+                    $addressId = $address->getId();
+                }
+            }
+
+            $select = $this->getLayout()->createBlock('core/html_select')
+                ->setName($type.'_address_id')
+                ->setId($type.'-address-select')
+                ->setClass('address-select')
+                ->setExtraParams('onchange="'.$type.'.newAddress(!this.value)"')
+                ->setValue($addressId)
+                ->setOptions($options);
+
+            $select->addOption('', Mage::helper('checkout')->__('New Address'));
+
+            return $select->getHtml();
+        }
+        return '';
+    }
+
+
     public function getAddress()
     {
         if (!$this->isCustomerLoggedIn()) {
@@ -63,5 +205,14 @@ class Mage_Checkout_Block_Onepage_Shipping extends Mage_Checkout_Block_Onepage_A
     public function isShow()
     {
         return !$this->getQuote()->isVirtual();
+    }
+    /**
+     * Retrieve is allow and show block
+     *
+     * @return bool
+     */
+    public function hasDonationItems()
+    {
+        return $this->getQuote()->hasDonationItems();
     }
 }

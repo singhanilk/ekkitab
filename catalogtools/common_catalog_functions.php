@@ -5,8 +5,8 @@
 $FIELD_SEPARATOR = "\t";
 
 # Control characters which have to be replaced
-$controlCharactersToReplace = array("\x0D");
-$controlCharactersReplaceValues = array("<br>");
+$controlCharactersToReplace = array("\x0D", "\n");
+$controlCharactersReplaceValues = array("<br>", "<br>");
 # characters outside the range.
 $asciiExpression = '/(?:[^\x00-\x7F])/';
 
@@ -27,7 +27,7 @@ $currencyList = array("I" => "Rs", "U" => "USD", "P" => "Pound", "S" => "SD" );
 # valid availability 
 $availabilityList = array("1" => "Available", "0" => "Not Available", "2" => "Preorder");
 # valid binding
-$bindingList = array("Paperback" => "Paperback", "Hardcover" => "Hardcover", "Hardback" => "Hardback");
+$bindingList = array("None" => "", "Paperback" => "Paperback", "Hardcover" => "Hardcover", "Hardback" => "Hardback");
 # valid Language
 $languageList = array("English" => "English");
 # The valid suppliers as of now. This is taken from /mnt4/publisherdata/
@@ -102,7 +102,7 @@ function formatValues($books){
    $book['description'] = preg_replace($asciiExpression, " ", $book['description']);
    $modifiedBooks[] = $book;
   }
-  print_r($modifiedBooks);
+  //print_r($modifiedBooks);
   return $modifiedBooks;
 }
 
@@ -157,6 +157,37 @@ function validBooks($books){
 **
 */
 function validMissingIsbnBook($book){
+  global $asciiExpression;
+  $isbnIsValid = false;
+  $titleIsValid = false;
+  $validBook = null;
+  global $invalidMissingIsbnTitleList;
+  global $invalidMissingIsbnAuthorList;
+
+  if ( !is_null($book['isbn']) && !empty($book['isbn']) && (preg_match($asciiExpression,$book['isbn']) == 0 )){
+       $isbnIsValid = true;
+  } 
+
+  if ( !is_null($book['title']) && !empty($book['title']) && (preg_match($asciiExpression,$book['title']) == 0 ) 
+       && !in_array($book['title'], $invalidMissingIsbnTitleList)){
+       $titleIsValid = true;
+  } 
+
+  if ( !is_null($book['author']) && !empty($book['author']) && (preg_match($asciiExpression,$book['author']) == 0) 
+       && !in_array($book['author'], $invalidMissingIsbnAuthorList)){
+       $authorIsValid = true;
+  } else {
+     $book['author']  = "";
+  } 
+
+  if ( $isbnIsValid && $titleIsValid) {
+    return $book;
+  } else {
+   return null;
+  }
+} 
+
+function validIgnoreIsbnBook($book){
   global $asciiExpression;
   $isbnIsValid = false;
   $titleIsValid = false;
@@ -281,6 +312,58 @@ function getBisacCodes($db, $subjects) {
   return implode(",", $bisac_codes);
 }
 
+function addToIgnoreIsbns($db, $ignoreBook) {
+  $errorList = Array();
+  $query = "insert into reference.ignore_isbns (isbn, title, author, supplier ) values ( ". $ignoreBook['isbn'] . ",'" . $ignoreBook['title'] . "','" 
+           . $ignoreBook['author'] . "','" . strtolower($ignoreBook['info_source']) . "')";
+  try {
+   $result = mysqli_query($db,$query);
+   if (!$result) { 
+     $errorList[]  = "Failed to add the book to the ignore isbn list"; 
+   }
+  } catch(exception $e) {
+    $errorList[]  = "Exception while adding book to the ignore isbn list";
+  }
+  return $errorList; 
+
+}
+
+function removeFromIgnoreIsbns($db, $isbnList) {
+  $errorList = Array();
+  if ( $isbnList == null || empty($isbnList)) {
+   return $errorList;
+  }
+  $query = "delete from reference.ignore_isbns where id in ( " . implode(",", $isbnList) . ")";
+  try {
+   $result = mysqli_query($db,$query);
+   if (!$result) { 
+     $errorList[]  = "Failed to remove isbns from the ignore isbns table"; 
+   }
+  } catch(exception $e) {
+    $errorList[]  = "Exception while removing books from ignore isbn list";
+  }
+  return $errorList; 
+}
+
+function getIgnoreIsbns($db) {
+  $ignoreIsbnList = Array();
+  $query = "select id, isbn, title, author, supplier as info_source from reference.ignore_isbns";
+  try {
+   $result = mysqli_query($db,$query);
+   if (!$result) { 
+     $ignoreIsbnList = null; 
+   } else { 
+     while ($row = mysqli_fetch_assoc($result)) {
+        $ignoreIsbnList[] = $row;
+     }
+   }
+  } catch(exception $e) {
+    $ignoreIsbnList = null;
+  }
+  if ( $ignoreIsbnList == null ) $ignoreIsbnList = Array();
+  return $ignoreIsbnList; 
+ 
+}
 
 function bookStringInCatalogFormat($book) {
    $catalogString = "";
@@ -295,7 +378,7 @@ function bookStringInStockFormat($book) {
 
    $stockString = "";
    $stockString =  $book["isbn"] . "\t". $book["list_price"] . "\t" . $book["currency"] . "\t" ;
-   $stockString .= $availabilityList[$book["in_stock"]]. "\t" . $book["info_source"] . "\t" . $book["title"] . "\t" . $book["author"] ."\t";
+   $stockString .= $availabilityList[$book["in_stock"]]. "\t" . strtolower($book["info_source"]) . "\t" . $book["title"] . "\t" . $book["author"] ."\t";
    $stockString .= $book["delivery_period"] . "\n";
    return $stockString;
 }
