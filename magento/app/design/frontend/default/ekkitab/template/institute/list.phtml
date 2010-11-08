@@ -9,8 +9,7 @@
  */
 ?>
 <div class="contentArea">
-<div class="pageHeader">Members of the Ekkitab Donor Network</div>
-<br class="clear" />
+<div class="pageHeader">The Ekkitab Network</div>
 <?php
 	function getShortenedString($str,$count){
 		$resStr = '';
@@ -30,9 +29,11 @@
 	$institutes = $this->getAllInstitutes();
 	if(!is_null($institutes)){
 ?>
+<div class="intro">The Ekkitab Network comprises of organizations (mostly schools and colleges, but not confined to them) that wish to advertise their library and book requirements through Ekkitab. As an online bookstore, we provide a channel for well-wishers interested in the spread of literacy and reading, to contribute and donate books purchased from our bookstore to any organization listed here, anywhere in India. Your donation will be sent direct to the specified organization and you will be notified by us when it is successfully delivered. We hope that a thriving network of donors can be built through this process and that books will eventually become available to those who do not have them today. We thank you for your support.</div>
 <?php if($this->getLastPageNumber()>1): ?>
 <div class="searchResTop">
 	<div class="leftArea">
+		<div class="wishlistHdr">&nbsp;<?php echo $this->__("Members:") ?></div>
 	</div><!-- leftArea -->
 	<div class="rightArea">
 		<div class="topPaginationArea">
@@ -62,6 +63,8 @@
 	</div><!-- rightArea -->
 	<div class="clear"></div>
 </div><!-- searchResTop -->
+<?php else: ?>
+	<div class="wishlistHdr">&nbsp;<?php echo $this->__("Members:") ?></div>
 <?php endif; ?>
 <table class="custom-data-table box-table" id="institute-table" cellspacing="0">
 		<col width="110"/>
@@ -78,7 +81,7 @@
 				</td>
 				<td ><?php $desc = $institute->getAboutus();
 				  		   $shortDesc = getShortenedString($desc,30);
-						   echo $shortDesc; ?> ... <a href="<?php echo $this->helper('ekkitab_institute')->getViewLink() ?>id/<?php echo $institute->getId() ?>">Click here to read more about us and donate.</a></td>
+						   echo $shortDesc; ?> ... <a href="<?php echo $this->helper('ekkitab_institute')->getViewLink() ?>id/<?php echo $institute->getId() ?>">read more.</a></td>
 			</tr>
 <?php	endforeach; ?>
 		</tbody>

@@ -43,7 +43,7 @@ class Ekkitab_Institute_Block_Institute extends Mage_Core_Block_Template
 	protected function _prepareLayout()
     {
 	   
-		$title ='Members of the Ekkitab Donor Network';
+		$title ='Members of the Ekkitab Network';
 		
 			if ($headBlock = $this->getLayout()->getBlock('head')) {
 				$headBlock->setTitle($title);
@@ -64,9 +64,9 @@ class Ekkitab_Institute_Block_Institute extends Mage_Core_Block_Template
 					'link'=>Mage::getBaseUrl()
 				));
 	   
-				$breadcrumbs->addCrumb('Members of Donor Network', array(
-					'label'=>Mage::helper('ekkitab_institute')->__('Members of the Ekkitab Donor Network'),
-					'title'=>Mage::helper('ekkitab_institute')->__('Ekkitab Donor List'),
+				$breadcrumbs->addCrumb('Ekkitab Network', array(
+					'label'=>Mage::helper('ekkitab_institute')->__('Members of the Ekkitab Network'),
+					'title'=>Mage::helper('ekkitab_institute')->__('Members of the Ekkitab Network'),
 					'link'=>''
 				));
    
