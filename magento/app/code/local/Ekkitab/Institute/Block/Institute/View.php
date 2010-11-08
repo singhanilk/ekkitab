@@ -52,9 +52,9 @@ class Ekkitab_Institute_Block_Institute_View extends Mage_Core_Block_Template
 					'link'=>Mage::getBaseUrl()
 				));
 	   
-				$breadcrumbs->addCrumb('Members of Donor Network', array(
-					'label'=>Mage::helper('ekkitab_institute')->__('Members of the Ekkitab Donor Network'),
-					'title'=>Mage::helper('ekkitab_institute')->__('Ekkitab Donor List'),
+				$breadcrumbs->addCrumb('Members of the Ekkitab Network', array(
+					'label'=>Mage::helper('ekkitab_institute')->__('Members of the Ekkitab Network'),
+					'title'=>Mage::helper('ekkitab_institute')->__('Ekkitab Network List'),
 					'link'=> '/ekkitab_institute/search/listAll'
 				));
 	   
@@ -139,7 +139,7 @@ class Ekkitab_Institute_Block_Institute_View extends Mage_Core_Block_Template
 
     public function getMoveSelectedCartUrl()
     {
-        return $this->getUrl('ekkitab_wishlist/index/moveSelectedToCart');
+        return $this->getUrl('ekkitab_checkout/cart/moveSelectedToCart');
     }
     public function getBackUrl()
     {

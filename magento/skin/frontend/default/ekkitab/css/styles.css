@@ -1332,6 +1332,9 @@ a:hover {
 .padderLeft5px {
 	padding-left: 5px;
 }
+.padderLeft15px {
+	padding-left: 15px;
+}
 
 .marginTop5px {
 	margin-top: 5px;
@@ -3005,8 +3008,17 @@ dt .hdr {
 	margin-bottom: 10px;
 	font-size: 11px;
 }
+.intro {
+	font-size: 12px;
+	line-height: 18px;
+	font-style: italic;
+	color: #717476;
+	padding-bottom: 8px;
+	margin-bottom: 10px;
+}
+
 .instituteArea .finDetBkTitle {
-	width: 80%;
+	width: 100%;
 	font-size: 20px;
 	margin-bottom: 10px;
 	line-height:1.4em;
@@ -3014,12 +3026,12 @@ dt .hdr {
 	color:#CC6600;
 }
 
-.instituteArea .wishlistHdr {
+.wishlistHdr {
 	font-size: 12px;
-	width: 99%;
+	width:100%;
+	border-bottom: 1px dotted #666;
 	margin-bottom: 10px;
 	line-height:1.6em;
-	border-bottom: 1px dotted #333;
 	color:#CC6600;
 	font-weight:bold;
 }
@@ -3035,7 +3047,7 @@ dt .hdr {
 	border:1px solid #333;
 }
 .instituteArea .midArea {
-	width: 100%;
+	width: 98%;
 	padding: 0 9px 0 9px;
 	float: left;
 	/*border-right: 1px dotted #333; */
@@ -3061,3 +3073,12 @@ dt .hdr {
 	padding-top:125px;
 }
 
+.instituteArea .searchResTop .leftArea {
+	width: 75%;
+	float: left;
+}
+
+.instituteArea .searchResTop .rightArea {
+	width: 25%;
+	float: right;
+}
