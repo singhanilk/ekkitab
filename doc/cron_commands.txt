@@ -26,6 +26,9 @@
 15 1   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/utils && ./backupblog.sh
 # Trim  production database log tables.( Production only )
 00 1  * * 0   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/db && ./trim_ekkitab_books_log_tables.sh
+# Inform users of failed transactions. (Production only)
+00 22  * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && /mnt2/scm/bin/checkfailedtx.pl
+
 
 
 
