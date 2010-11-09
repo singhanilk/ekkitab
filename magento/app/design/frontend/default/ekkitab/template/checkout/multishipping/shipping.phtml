@@ -46,7 +46,7 @@
         <div class="col-1">
 			<div class="col-1-left">
 				<div class="head">
-					<h5 class="title"><?php echo $this->__('Shipping to') ?><span class="pipe">|</span><a href="<?php echo $this->getAddressEditUrl($_address) ?>"><?php echo $this->__('Change') ?></a></h5>
+					<h5 class="title"><?php echo $this->__('Shipping to') ?><?php if($_address->getCustomerId()==null || ($_address->getCustomerId()== Mage::getSingleton('customer/session')->getCustomerId()) ):?><span class="pipe">|</span><a href="<?php echo $this->getAddressEditUrl($_address) ?>"><?php echo $this->__('Change') ?></a>  <?php endif ?></h5>
 				</div>
 				<address>
 					<?php echo $_address->format('html') ?>

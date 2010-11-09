@@ -85,4 +85,15 @@ class Mage_Checkout_Block_Onepage_Progress extends Mage_Checkout_Block_Onepage_A
     {
         return $this->getQuote()->getStore()->formatPrice($price);
     }
+	
+	/**
+     * Retrieve is allow and show block
+     *
+     * @return bool
+     */
+    public function isForDonation()
+    {
+        return $this->getQuote()->hasDonationItems();
+    }
+
 }
