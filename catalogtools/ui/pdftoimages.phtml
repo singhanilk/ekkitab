@@ -5,7 +5,6 @@ $errorList = Array();
 $images = Array();
 $pfdImagesDirectory = '';
 $command = '';
-
 // Task is set or not
 if(isset($_GET['task'])) {$task = $_GET['task']; } elseif(isset($_POST['task'])) { $task = $_POST['task']; } else { $task = ""; }
 
@@ -78,11 +77,13 @@ if ( $task == "savePdfImages" ){
 <head>
 </head>
 <body>
+<?php include "links.html"  ?>
 <h3>PDF To Images</h3>
 <h5><i>
 Load a pdf file form the supplier/distributor which contains the images of the books.<br>
 All the images are extracted and displayed with text boxes. The isbn needs to be put in there and click go.<br>
 If Done button is clicked rest of the files are deleted<br>
+NOTE: The file name should not have spaces<br>
 </i></h5>
 <div id="errors">
   <table class="redFont" border="1">

@@ -87,6 +87,7 @@ function createForm($isbnno, $displayString){
 
   $htmlString = "<html>
                  <body>
+                 <!--#include FILE='links.html' -->
                  <h4> Please enter an ISBN No. ( Checks the Reference.books table, Reference. )</h4>
                   <table border='0'>
                    <tr>

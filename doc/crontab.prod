@@ -1,0 +1,28 @@
+# /etc/crontab: system-wide crontab
+# Unlike any other crontab you don't have to run the `crontab'
+# command to install the new version when you edit this file
+# and files in /etc/cron.d. These files also have username fields,
+# that none of the other crontabs do.
+
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# m h dom mon dow user	command
+17 *	* * *	root    cd / && run-parts --report /etc/cron.hourly
+25 6	* * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
+47 6	* * 7	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
+52 6	1 * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
+#
+# Backup production database tables.
+00 *   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/utils && ./backupdb.sh
+# Check for user reviews and inform administrator.
+10 1   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./checkreviews.sh | php $EKKITAB_HOME/bin/sendmail.php -s "User Reviews for Moderation" anisha@ekkitab.com  vijay@ekkitab.com
+# Backup /mnt2/ on the server
+00 23  * * *   ubuntu  cd /mnt2/tools && ./bkmnt2.sh
+# Backup /mnt3/ on the server  (Images)
+00 2   * * 0   ubuntu  cd /mnt2/tools && ./bkmnt3.sh
+# Trim  production database log tables.( Production only )
+00 1 * * 0     ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/db && ./trim_ekkitab_books_log_tables.sh
+# Inform users of failed transactions. (Production only)
+00 22  * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && /mnt2/scm/bin/checkfailedtx.pl
+
