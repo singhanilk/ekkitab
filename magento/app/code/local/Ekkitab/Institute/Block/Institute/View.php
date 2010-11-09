@@ -139,7 +139,7 @@ class Ekkitab_Institute_Block_Institute_View extends Mage_Core_Block_Template
 
     public function getMoveSelectedCartUrl()
     {
-        return $this->getUrl('ekkitab_wishlist/index/moveSelectedToCart');
+        return $this->getUrl('ekkitab_checkout/cart/moveSelectedToCart');
     }
     public function getBackUrl()
     {

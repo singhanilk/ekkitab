@@ -1332,6 +1332,9 @@ a:hover {
 .padderLeft5px {
 	padding-left: 5px;
 }
+.padderLeft15px {
+	padding-left: 15px;
+}
 
 .marginTop5px {
 	margin-top: 5px;
@@ -3070,3 +3073,12 @@ dt .hdr {
 	padding-top:125px;
 }
 
+.instituteArea .searchResTop .leftArea {
+	width: 75%;
+	float: left;
+}
+
+.instituteArea .searchResTop .rightArea {
+	width: 25%;
+	float: right;
+}
