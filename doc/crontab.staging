@@ -1,0 +1,31 @@
+# /etc/crontab: system-wide crontab
+# Unlike any other crontab you don't have to run the `crontab'
+# command to install the new version when you edit this file
+# and files in /etc/cron.d. These files also have username fields,
+# that none of the other crontabs do.
+
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# m h dom mon dow user	command
+17 *	* * *	root    cd / && run-parts --report /etc/cron.hourly
+25 6	* * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
+47 6	* * 7	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
+52 6	1 * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
+#
+00 14   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./dailysync.sh vijay@ekkitab.com anil@ekkitab.com prasad@ekkitab.com 
+00 10   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./refreshingram.sh vijay@ekkitab.com anil@ekkitab.com | php /mnt2/scm/bin/sendmail.php -s "Daily Ingram Refresh Summary" vijay@ekkitab.com anil@ekkitab.com prasad@ekkitab.com
+00 *   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./stockstatusimport.sh prasad@ekkitab.com anil@ekkitab.com saran@ekkitab.com
+# Backup /mnt2/ on the server
+30 22   * * *   ubuntu  cd /mnt2/tools && ./bkmnt2.sh
+# Backup /mnt3/ on the server  (Images)
+00 2   * * 0   ubuntu  cd /mnt2/tools && ./bkmnt3.sh
+# Backup /mnt4/ on the server  (Archives)
+00 7   1 * *   ubuntu  cd /mnt2/tools && ./bkmnt4.sh
+# TWiki Notifications
+10 *   * * *   root  perl -I /mnt4/twiki/bin /mnt4/twiki/tools/mailnotify -q
+# Backup production DB saved data on staging. 
+15 *   * * *   ubuntu  cd /mnt2/scm/utils && ./save_db_backup.sh
+# Backup blog DB.
+15 1   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/utils && ./backupblog.sh
+
