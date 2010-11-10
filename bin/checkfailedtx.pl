@@ -27,6 +27,7 @@ sub sendmail {
                 'Data'        => $content);
 
    #print "Sending mail to: $email\n";
+
    $msg->send('smtp', 'smtpout.secureserver.net', AuthUser=>'support@ekkitab.com', AuthPass=>'eki22Ab');
 }
 
@@ -55,8 +56,10 @@ while (<FILE>) {
           $rows{$line[0]}{'books'} = \@books;
 	   }
        $books = $rows{$line[0]}{'books'}; 
-       push(@$books, $line[2]);
-	}
+       if (not grep({$_ eq $line[2]} @$books)) {
+       	  push(@$books, $line[2]);
+       }
+     }
 }
 close (FILE);
 foreach my $email (keys(%rows)) {
