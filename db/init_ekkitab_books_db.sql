@@ -362,4 +362,10 @@ INSERT INTO `ek_catalog_global_sections` (  `section_id` ,`display_name`, `descr
 INSERT INTO `customer_entity` VALUES (1,1,0,1,'install@ekkitab.com',1,'000000004',1,'2010-04-10 06:42:03','2010-04-10 06:42:04',1);
 INSERT INTO `customer_entity_varchar` VALUES (1,1,5,1,'Installation'),(2,1,7,1,'Account'),(4,1,3,1,'Ekkitab'),(5,1,12,1,'78e356fc19336772aceb39e57d122dcc:lr');
 
+--
+-- Seed data for table `ek_social_institute_types`
+--
+
+insert into ek_social_institute_types (`type` ) values ('school'), ('library');
+
 	
