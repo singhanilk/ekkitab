@@ -10,6 +10,7 @@ else {
     define(EKKITAB_HOME, $EKKITAB_HOME); 
 }
 define("CONFIG_FILE", "ekkitab.ini");
+define("CHECK_INTERVAL", 1);
 //  
 //
 // COPYRIGHT (C) 2009 Ekkitab Educational Services India Pvt. Ltd.  
@@ -55,9 +56,7 @@ define("CONFIG_FILE", "ekkitab.ini");
        exit (1);
     }
 
-    $interval = 1;
-
-    $query = "select qa.email,qa.firstname,qa.lastname,qi.name from sales_order so, sales_order_int oi, sales_flat_quote_item qi, sales_order_varchar ov,`sales_flat_quote_address` qa  where so.entity_id = oi.entity_id and so.entity_id = ov.entity_id and so.updated_at >= (now() -interval $interval day) and qa.quote_id = oi.value and oi.attribute_id=118 and ov.attribute_id=106 and qa.address_type='billing' and ov.value='pending_ccav' and qi.quote_id = oi.value and qa.email not in (select qa.email from sales_order so, sales_order_int oi, sales_order_varchar ov,`sales_flat_quote_address` qa  where so.entity_id = oi.entity_id and so.entity_id = ov.entity_id and so.updated_at >= (now() -interval 3 day) and qa.quote_id = oi.value and oi.attribute_id=118 and ov.attribute_id=106 and qa.address_type='billing' and ov.value='processing')";
+    $query = "select qa.email,qa.firstname,qa.lastname,qi.name from sales_order so, sales_order_int oi, sales_flat_quote_item qi, sales_order_varchar ov,`sales_flat_quote_address` qa  where so.entity_id = oi.entity_id and so.entity_id = ov.entity_id and so.updated_at >= (now() -interval " . CHECK_INTERVAL . " day) and qa.quote_id = oi.value and oi.attribute_id=118 and ov.attribute_id=106 and qa.address_type='billing' and qi.quote_id = oi.value and qa.email not in (select qa.email from sales_order so, sales_order_int oi, sales_order_varchar ov,`sales_flat_quote_address` qa  where so.entity_id = oi.entity_id and so.entity_id = ov.entity_id and so.updated_at >= (now() -interval " . CHECK_INTERVAL . " day) and qa.quote_id = oi.value and oi.attribute_id=118 and ov.attribute_id=106 and qa.address_type='billing' and ov.value in ('processing', 'complete'))";
 
     try {
        $result = mysqli_query($db, $query);
