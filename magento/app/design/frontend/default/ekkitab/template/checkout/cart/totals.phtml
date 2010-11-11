@@ -32,8 +32,10 @@
  */
 ?>
    
+<table cellspacing="0" id="shopping-cart-totals-table" class="right padderRight5px">
+    <col width="200" />
+    <col width="100" />
+
+	<?php echo $this->renderTotals(); ?>
 	<?php echo $this->renderTotals('footer'); ?>
-    <!--tbody>
-        <?php echo $this->renderTotals(); ?>
-    </tbody-->
-	<div class="clear"></div>
+</table>

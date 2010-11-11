@@ -36,7 +36,7 @@
 		<?php endif ?></div>   
 	</div>
 	
-	<div class="skuImage"><a href="<?php echo $this->getUrl($this->getProductUrl()) ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'thumbnail',false,null, 74); ?>" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" width="75" /></a></div>
+	<div class="skuImage"><a href="<?php echo $this->getUrl($this->getProductUrl()) ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'thumbnail',false,null, 74); ?>" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" /></a></div>
 
 	<div class="itemCol"><a href="<?php echo $this->getUrl($this->getProductUrl()) ?>"><?php echo $this->getProductName() ?></a>
 	<?php if($_item->getIsDonation() && $this->helper('ekkitab_institute')->getInstituteName($_item->getOrganizationId()) ):?><br/>To be donated to : <?php echo $this->helper('ekkitab_institute')->getInstituteName($_item->getOrganizationId()) ?><br/><?php endif; ?>
