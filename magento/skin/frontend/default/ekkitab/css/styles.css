@@ -1335,6 +1335,13 @@ a:hover {
 .padderLeft15px {
 	padding-left: 15px;
 }
+.padderRight15px {
+	padding-right: 15px;
+}
+
+.padderRight5px {
+	padding-right: 5px;
+}
 
 .marginTop5px {
 	margin-top: 5px;
@@ -1374,10 +1381,17 @@ a:hover {
 	background-color: #e6e6e6;
 }
 .scartArea .itemCol {
-	width: 422px;
+	width: 472px;
 	float: left;
-	padding-left: 10px;
+	padding-left: 5px;
 	text-align: left;
+}
+
+.scartArea .couponCol {
+	width: 522px;
+	float: right;
+	padding: 7px 5px 10px 0px;
+	text-align: right;
 }
 
 .scartArea .titleColHdr {
@@ -1554,7 +1568,7 @@ a:hover {
 .modifiedText {
 	float: left;
 	text-align:left;
-	padding: 0 0 0 120px ;
+	padding: 0 0 0 105px ;
 }
 .updateBut {
 	width: 103px;
@@ -1586,16 +1600,14 @@ a:hover {
 	float: right;
 	text-align:right;
 }
-.scartArea .skuImageHdr, .scartArea .skuImage {
-	float:left;
-	width:109px;
-	background-color: #e6e6e6;
-	border-left: 1px solid #666;
-}
 .scartArea .skuImage {
-	background-color: #fff;
-	border-left: none;
-	text-align: center;
+	width:65px;
+	float: left;
+	overflow:hidden;
+}
+
+.scartArea .skuImage img{
+	border:1px solid #cacaca;
 }
 
 .scartArea .pageHeader {
@@ -3081,4 +3093,12 @@ dt .hdr {
 .instituteArea .searchResTop .rightArea {
 	width: 25%;
 	float: right;
+}
+
+.p-right-5{
+	padding-right:5px;
+}
+
+.p-left-5{
+	padding-left:5px;
 }

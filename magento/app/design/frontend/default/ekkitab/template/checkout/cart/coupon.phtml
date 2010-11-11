@@ -24,16 +24,15 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-    <form id="discount-coupon-form" action="<?php echo $this->getUrl('checkout/cart/couponPost') ?>" method="post">
+    <form id="discount-coupon-form" action="<?php echo $this->getUrl('ekkitab_checkout/cart/couponPost') ?>" method="post">
     <fieldset class="cart-coupon-block">
-    <h4><?php echo $this->__('Discount Codes') ?></h4>
-    <div style="margin-left:240px;">
+    <div>
         <input type="hidden" name="remove" id="remove-coupone" value="0"/>
-    <?php if(!strlen($this->getCouponCode())): ?>
-        <label for="coupon_code"><?php echo $this->__('Enter your coupon code if you have one.') ?></label>
-        <input class="input-text" id="coupon_code" name="coupon_code" value="<?php echo $this->htmlEscape($this->getCouponCode()) ?>"/> &nbsp;<input type="image" name="do" src="<?php echo $this->getSkinUrl('images/btn_cart_apply.gif') ?>" alt="<?php echo $this->__('Apply Coupon') ?>"/>
-    <?php else: ?>
-        <input class="input-text" id="coupon_code" name="coupon_code" value="<?php echo $this->htmlEscape($this->getCouponCode()) ?>"/>&nbsp;<a href="#" onclick="discountForm.submit(true)"><img src="<?php echo $this->getSkinUrl('images/btn_cart_cancel.gif') ?>" alt="<?php echo $this->__('Cancel Coupon') ?>" style="vertical-align:middle;" /></a><?php endif;?>
+		<?php if(!strlen($this->getCouponCode())): ?>
+			<label for="coupon_code"><?php echo $this->__('Enter your coupon code (if you have one)') ?></label>
+			<input class="input-text" id="coupon_code" name="coupon_code" value="<?php echo $this->htmlEscape($this->getCouponCode()) ?>"/> &nbsp;<input type="image" name="do" src="<?php echo $this->getSkinUrl('images/apply_button.png') ?>" alt="<?php echo $this->__('Apply Coupon') ?>"/>
+		<?php else: ?>
+			<?php echo $this->__('Coupon code applied : <span class="orangeTxt"> "%s"</span>',$this->getCouponCode()) ?> <input type="hidden" class="input-text" id="coupon_code" name="coupon_code" value="<?php echo $this->htmlEscape($this->getCouponCode()) ?>"/>&nbsp;<a href="#" onclick="discountForm.submit(true)"><img src="<?php echo $this->getSkinUrl('images/remove_button_grey.png') ?>" alt="<?php echo $this->__('Cancel Coupon') ?>" style="vertical-align:middle;" /></a><?php endif;?>
     </div>
     </fieldset>
 </form>

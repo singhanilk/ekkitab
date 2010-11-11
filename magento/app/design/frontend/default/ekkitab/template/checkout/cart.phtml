@@ -59,14 +59,15 @@
 		<div class="wishListBut"><input type="image" src="<?php echo $this->getSkinUrl('images/update_cart_but.png') ?>" alt="<?php echo $this->__('Update Shopping Cart') ?>" width="103" height="22" border="0" /></div><!-- updateBut -->
 		<?php echo $this->getChildHtml('totals'); ?>
 		<div class="clear"></div>
-	</div>
 	</form>
-	
+	</div>
 
 	<div class="skuScartRow">
-	<div class="bkHomePage left"> <a href="<?php if($this->getContinueShoppingUrl()): echo $this->getContinueShoppingUrl(); endif; ?>" class="boldFont">Click here to continue Shopping</a> </div> <div class="bkHomePage right"><?php if(!$this->hasError()): ?><?php echo $this->getChildHtml('methods') ?><?php endif; ?></div>
-	<!-- proceedCheckout -->
-	<div class="clear"></div>
+		<div class="bkHomePage left"> <a href="<?php if($this->getContinueShoppingUrl()): echo $this->getContinueShoppingUrl(); endif; ?>" class="boldFont">Click here to continue Shopping</a> </div> <div class="couponCol left">
+				<?php echo $this->getChildHtml('coupon') ?>
+			</div><div class="bkHomePage right padderRight5px"><?php if(!$this->hasError()): ?><?php echo $this->getChildHtml('methods') ?><?php endif; ?></div>
+		<!-- proceedCheckout -->
+		<div class="clear"></div>
 	</div><!-- skuScartRow -->
 <br/>
 <div class="clear"></div>
