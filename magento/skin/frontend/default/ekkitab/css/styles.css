@@ -1388,10 +1388,10 @@ a:hover {
 }
 
 .scartArea .couponCol {
-	width: 505px;
-	float: right;
-	padding: 7px 5px 10px 0px;
-	text-align: right;
+	width: 685px;
+	float: left;
+	padding: 7px 5px 8px 0px;
+	text-align: left;
 }
 
 .scartArea .titleColHdr {
