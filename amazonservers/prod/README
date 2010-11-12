@@ -1,0 +1,50 @@
+Date: 11th Aug 2010
+
+1.    . ec2.sh  :  to read in all the shell env variables.
+
+       Please look into each shell script before executing it. 
+        Try the command 2-3 times, if it does not work first time.
+        
+        ssh should be run with -v mode to diagnose what is happening.
+
+       In one case it was connecting to some different m/c.
+
+       ssh -i ekkitab.pem -v ubuntu@........
+        
+2. Run prod.sh to write all the summary of the aws.
+
+         It writes into prod.out and moves old status to oldprod.out.
+
+2. Try to reboot the system: ec2-reboot-instances instance-id
+
+3. Try to stop the system with: ec2-stop-instances instance-id  --force
+
+4. if the system stops, than restart again: ec2-start-instances instance id
+
+5. If system does not stop and does not reboot still, try to force detach the db and image volume.
+
+               ec2detvol vol-31576888 -f
+               
+               Try the command 2-3 times.
+
+6. Read Kelp.sh. Modify its "amiid" to the ami that you want to use for creating the instance.
+
+8. Run ./kelp.sh was to bring on a new  m/c with our image.
+
+9. Run  ./crdbimg1.sh or ./crdbimg.sh was  to bring on db and images.
+                Make changes in the scrip to which snapshots to use for db and img.
+
+  crdbimg.sh is used when both image and database disk has to be created.
+  crdbimg1.sh should be use when a previous image disk already exists and you have to create only database disk.
+
+10. On staging m/c, go to /mnt3/prod_dbbkup, take the last bkup directory and copy that to new production mc:/tmp
+
+11. on prod, cd /tmp and run: for  i in *.sql; do mysql -u root -ppassword ekkitab_books  -e "source $i" ; done
+
+12. Than ec2assocaddr should be used to associate the new address to the elastic address.
+
+13. Run donotdeleterootpatition.sh after modifying it.
+
+NOTE: This is for if you are accessing the system from some other url.
+        If we are testing the restore, than use vijaymodify.sh to change ip addresses and than test from browser wheter the system is working.
+~                                     
