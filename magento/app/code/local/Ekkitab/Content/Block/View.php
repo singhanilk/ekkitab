@@ -33,6 +33,19 @@ class Ekkitab_Content_Block_View extends Mage_Core_Block_Template
         }
     }
 
+	public function chooseOverleafTemplate()
+    {
+		if (!Mage::registry('template_url')) {
+			Mage::register('template_url', Mage::helper('ekkitab_content')->getOverleafTemplateUrl());
+		}
+		if (Mage::registry('template_url') && Mage::registry('template_url')!='' ) {
+			$this->setTemplate($this->templatePrefix.trim(Mage::registry('template_url')).$this->templateSuffix);
+		}
+		else {
+		   $this->setTemplate($this->templatePrefix.$this->getDefaultTemplate());
+        }
+    }
+
 	public function getHashedPath($isbn) {
 		$sum = 0;
 		for ($i = 0; $i<(strlen($isbn)); $i++)  {
