@@ -70,7 +70,10 @@ TABLES=( "billdesk_api_debug"
          "sales_order_text"
          "sales_order_varchar"
          "wishlist"
-         "wishlist_item" )
+         "wishlist_item" 
+         "ek_social_institutes"
+         "salesrule"
+         "salesrule_customer" );
 
 count=${#TABLES[@]}
 
