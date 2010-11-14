@@ -75,10 +75,10 @@ class Ekkitab_Catalog_ProductController extends Mage_Core_Controller_Front_Actio
     public function isIsbn($str)
     {
 		$str=trim($str);
-		if (preg_match("/^[0-9\-_]+$/", $str)) {
+		if (preg_match("/^[0-9X\-_]+$/", $str)) {
 			$str = preg_replace("/[-_]/", "", $str);
 		}
-		if(preg_match("/^[0-9]*$/",$str)){
+		if(preg_match("/^[0-9X]*$/",$str)){
 			if (strlen($str) == 12) {
 				$this->_isbn =  '0'.$str;
 				return true;
