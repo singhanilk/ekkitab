@@ -92,4 +92,11 @@
             </Price>
         </DiscountLevel>
     </Supplier>
+    <Supplier name="Promotion">
+        <DiscountLevel value="Any">
+            <Price min="0" max="100000">
+                <Discount low="0" high="0"/>
+            </Price>
+        </DiscountLevel>
+    </Supplier>
 </DiscountData>
