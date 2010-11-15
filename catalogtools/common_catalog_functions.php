@@ -66,6 +66,7 @@ $supplierList = array (
 "WESTLAND" => "WESTLAND",
 "WILEY" => "WILEY",
 "NARI" => "NARI",
+"ROLI" => "ROLI",
 );
 
 // This list of invalid Author and title list is made after going through the missing isbns files.
