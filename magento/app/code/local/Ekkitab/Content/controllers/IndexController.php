@@ -46,4 +46,31 @@ class Ekkitab_Content_IndexController extends Mage_Core_Controller_Front_Action
 		}
     }
 
+	/**
+     * Initialize requested product object
+     *
+     * @return Mage_Catalog_Model_Product
+     */
+    public function overleafAction()
+    {
+		$contentUrl  = trim((String) $this->getRequest()->getParam('product'));
+		// insert the split function here.....and get the product Id
+		if(strrpos($contentUrl, "/")){
+			$contentStartIndex = strrpos($contentUrl, "/")+1; 	 
+		}else{
+			$contentStartIndex=0;
+		}
+		$contentEndIndex = strpos($contentUrl, ".html"); 	
+		$contentEndIndex = $contentEndIndex - $contentStartIndex; 
+		$templateUrl = trim(urldecode(substr($contentUrl,$contentStartIndex,$contentEndIndex)));
+		if($templateUrl && count($templateUrl) > 0 ){
+			Mage::register('template_url', $templateUrl);
+			$this->loadLayout();
+			$this->renderLayout();
+		}else {
+			$this->_forward('noRoute');
+
+		}
+    }
+
 }

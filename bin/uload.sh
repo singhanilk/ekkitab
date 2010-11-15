@@ -21,4 +21,5 @@ apt-get -y  install monit
 apt-get -y  install munin munin-node
 apt-get -y  install libapache2-mod-evasive
 apt-get -y install libapache-mod-security
+apt-get -y install sysstat
 

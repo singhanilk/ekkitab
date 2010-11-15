@@ -41,6 +41,22 @@ class Ekkitab_Content_Helper_Data extends Mage_Core_Helper_Abstract
 		return $this->_templateUrl;
     }
 
+	public function getOverleafTemplateUrl()
+    {
+		$contentUrl  = (String) $this->getRequest()->getParam('product');
+
+		// insert the split function here.....and get the product Id
+		if(strrpos($contentUrl, "/")){
+			$contentStartIndex = strrpos($contentUrl, "/")+1; 	 
+		}else{
+			$contentStartIndex=0;
+		}
+		$contentEndIndex = strpos($contentUrl, ".html"); 	
+		$contentEndIndex = $contentEndIndex - $contentStartIndex; 
+		$this->_templateUrl = trim(urldecode(substr($contentUrl,$contentStartIndex,$contentEndIndex)));
+		return $this->_templateUrl;
+    }
+
 	public function getHashedPath($isbn) {
 		$sum = 0;
 		for ($i = 0; $i<(strlen($isbn)); $i++)  {

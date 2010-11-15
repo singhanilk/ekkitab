@@ -19,6 +19,18 @@
             </block>
 		</reference>
     </ekkitab_content_index_view>
+	
+	<ekkitab_content_index_overleaf>
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+        <reference name="content">
+            <block type="ekkitab_content/view" name="ekkitab_content_view" >
+                <action method="setDefaultTemplate"><value>view.phtml</value></action>
+				<action method="chooseOverleafTemplate"/>
+            </block>
+		</reference>
+    </ekkitab_content_index_overleaf>
     <ekkitab_content_view_allarticles>
         <reference name="root">
             <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
