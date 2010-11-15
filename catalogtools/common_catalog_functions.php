@@ -6,7 +6,7 @@ $FIELD_SEPARATOR = "\t";
 
 # Control characters which have to be replaced
 $controlCharactersToReplace = array("\x0D", "\n");
-$controlCharactersReplaceValues = array("<br>", "<br>");
+$controlCharactersReplaceValues = array("", "<br>");
 # characters outside the range.
 $asciiExpression = '/(?:[^\x00-\x7F])/';
 
@@ -66,6 +66,7 @@ $supplierList = array (
 "WESTLAND" => "WESTLAND",
 "WILEY" => "WILEY",
 "NARI" => "NARI",
+"ROLI" => "ROLI",
 );
 
 // This list of invalid Author and title list is made after going through the missing isbns files.
@@ -237,6 +238,10 @@ function getBookDetails($db, $isbn) {
   } catch(exception $e) {
     $book = null;
   }
+  // Conver the Bisac codes back to the subjects.
+  if ( $book != null ) {
+    $book['bisac_codes'] = getSubjectsFromBisacCodes($db, $book['bisac_codes']);
+  }
   return $book; 
 }
 
@@ -310,6 +315,38 @@ function getBisacCodes($db, $subjects) {
      $bisac_codes[] = "ZZZ000000";
   }
   return implode(",", $bisac_codes);
+}
+
+function getSubjectsFromBisacCodes($db, $bisacCodesString){
+     $subjectLine = "";
+     $subjectResultArray = Array();
+
+     if ( $bisacCodesString == null || empty($bisacCodesString)) {
+       return "";
+     }
+
+     $bisacCodesArray = explode(",", $bisacCodesString);
+     $query = "select * from ek_biasc_category_map where bisac_code in ( " ; 
+     $count = 0;
+     foreach ( $bisacCodesArray as $biascCode ) {
+       $query .= (($count == 0 ) ? "'" : ",'" ) . $bisacCode . "'"; 
+     }
+     $query .= ")";
+     $result = mysqli_query($db, $query);
+     if (($result) && (mysqli_num_rows($result) > 0)) {
+         $subjects = mysqli_fetch_assoc($result);
+     }
+     if ( $subjects != null && !empty($subjects) ) {
+      foreach($subjects as $subject ) {
+         $subjectResultArray[] = $subject["level1"] . (($subject["level2"] != "" ) ? $subject["level2"] : "") . (($subject["level3"] != "" ) ? $subject["level3"] : "");       
+      }
+      $subjectLine = implode(",", $subjectResultArray);
+     } else {
+      $subjectLine = "";
+     }
+
+    return $subjectLine;     
+ 
 }
 
 function addToIgnoreIsbns($db, $ignoreBook) {

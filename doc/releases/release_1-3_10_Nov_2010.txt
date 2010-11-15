@@ -1,0 +1,17 @@
+Release Date - 10/November/2010
+
+Enhancements
+1. Social Institute Creation and Wishlist page has been incorporated
+
+Issue Fixes
+Priority 1 ( P1 )
+None.
+
+Priority 1 ( P2 )
+None.
+
+Priority 1 ( P3 )
+None.
+
+Priority 1 ( P4 )
+None.
