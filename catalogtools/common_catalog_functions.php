@@ -44,6 +44,7 @@ $supplierList = array (
 "INDIABOOKS" => "INDIABOOKS",
 "JAICO" => "JAICO",
 "MEDIASTAR" => "MEDIASTAR",
+"NARI" => "NARI",
 "NEWINDIABOOKSOURCE" => "NEWINDIABOOKSOURCE",
 "ORIENTBLACKSWAN" => "ORIENTBLACKSWAN",
 "OXFORD" => "OXFORD",
@@ -55,9 +56,11 @@ $supplierList = array (
 "PRISM" => "PRISM",
 "RANDOMHOUSE" => "RANDOMHOUSE",
 "RESEARCHPRESS" => "RESEARCHPRESS",
+"ROLI" => "ROLI",
 "RUPA" => "RUPA",
 "SAGE" => "SAGE",
 "SCHAND" => "SCHAND",
+"SCHOLASTIC" => "SCHOLASTIC",
 "TATAMCGRAWHILL"=>"TATAMCGRAWHILL",
 "TBH"=>"TBH",
 "UBS"=>"UBS",
@@ -65,8 +68,6 @@ $supplierList = array (
 "VIVA" => "VIVA",
 "WESTLAND" => "WESTLAND",
 "WILEY" => "WILEY",
-"NARI" => "NARI",
-"ROLI" => "ROLI",
 );
 
 // This list of invalid Author and title list is made after going through the missing isbns files.
