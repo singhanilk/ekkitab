@@ -144,7 +144,7 @@ if ( $save ){
 </head>
 <body>
 <?php include "links.html"; ?>
-<h1>Supplier and File to upload </h1>
+<h1>Single Book Catalog Creation</h1>
 <div id="updates" >
   <h5><?php print_r($execOutput) ; ?></h5>
 </div>
@@ -186,16 +186,30 @@ if ( $save ){
   <td><textarea name ='description' rows="4" cols="50" maxlength='2047' /><?php if($book) { echo $book['description']; } ?></textarea></td>
  </tr>
  <tr>
-  <td>BINDING:(Paperback,Hardcover,Hardback)</td>
+  <td>SOURCE:(Who supplied the catalog)</td>
+  <?php if($update) { ?>
   <td>
-     <select name ='binding' value='Paperback' />
+   <input type='text' name ='info_source' size='30' maxlength='120' value='<?php if($book) { echo $book['info_source']; } ?>' readonly />
+  </td>
+  <?php } else { ?> 
+  <td>
+     <select name ='info_source' value=<?php if($book) { echo $book['info_source']; } ?> />
      <?php 
-        foreach($bindingList as $key=>$value ) {
-          echo '<option value="' . $key . '"' . (($book && $book['binding'] == $value) ? " selected " : "") . ">$value</option>";
+        foreach($supplierList as $key=>$value ) {
+          if ( $book && $book['info_source'] == $value ) {
+            echo '<option value="' . $key . '"'. " selected>$value</option>";
+          } else {
+            echo '<option value="' . $key . '"' . ">$value</option>";
+          }
         }
      ?>
      </select>
-  </td>
+ </td>
+ <?php } ?>
+ </tr>
+ <tr>
+  <td>PUBLISHER:(May be different from SOURCE)</td>
+  <td><input type='text' name ='publisher' size='50' maxlength='120' value='<?php if($book) { echo $book['publisher']; } ?>' /></td>
  </tr>
  <tr>
   <td>IMPRINT:(Text only)</td>
@@ -230,16 +244,24 @@ if ( $save ){
   </td>
  </tr>
  <tr>
-  <td>DELIVERY PERIOD:(Text only. Do not include / or -)</td>
-  <td><input type='text' name ='delivery_period' size='50' value='<?php if($book) { echo $book['delivery_period']; } ?>' /></td>
- </tr>
- <tr>
   <td>PUBLISHING DATE:(Text only. Do not include / or -)</td>
   <td><input type='text' name ='publishing_date' size='50' maxlength='255' value='<?php if($book) { echo $book['publishing_date']; } ?>' /></td>
  </tr>
  <tr>
-  <td>PUBLISHER:</td>
-  <td><input type='text' name ='publisher' size='50' maxlength='120' value='<?php if($book) { echo $book['publisher']; } ?>' /></td>
+  <td>DELIVERY PERIOD:(Text only. Do not include / or -)</td>
+  <td><input type='text' name ='delivery_period' size='50' value='<?php if($book) { echo $book['delivery_period']; } ?>' /></td>
+ </tr>
+ <tr>
+  <td>BINDING:(Paperback,Hardcover,Hardback)</td>
+  <td>
+     <select name ='binding' value='Paperback' />
+     <?php 
+        foreach($bindingList as $key=>$value ) {
+          echo '<option value="' . $key . '"' . (($book && $book['binding'] == $value) ? " selected " : "") . ">$value</option>";
+        }
+     ?>
+     </select>
+  </td>
  </tr>
  <tr>
   <td>PAGES:(Number only)</td>
@@ -272,28 +294,6 @@ if ( $save ){
  <tr>
   <td>SUBJECT:(Do not include Bisac codes here )</td>
   <td><input type='text' name ='bisac_codes' size='30' maxlength='120' value='<?php if($book) { echo $book['bisac_codes']; } ?>' /></td>
- </tr>
- <tr>
-  <td>SUPPLIER:(Valid supplier name)</td>
-  <?php if($update) { ?>
-  <td>
-   <input type='text' name ='info_source' size='30' maxlength='120' value='<?php if($book) { echo $book['info_source']; } ?>' readonly />
-  </td>
-  <?php } else { ?> 
-  <td>
-     <select name ='info_source' value=<?php if($book) { echo $book['info_source']; } ?> />
-     <?php 
-        foreach($supplierList as $key=>$value ) {
-          if ( $book && $book['info_source'] == $value ) {
-            echo '<option value="' . $key . '"'. " selected>$value</option>";
-          } else {
-            echo '<option value="' . $key . '"' . ">$value</option>";
-          }
-        }
-     ?>
-     </select>
- </td>
- <?php } ?>
  </tr>
  <tr>
   <td align="right" colspan="2">
