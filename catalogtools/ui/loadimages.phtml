@@ -126,7 +126,6 @@ else if ( $task == "saveImages" ){
 <h4>Load Images ( Staging )</h4>
 <ul>
 1. Load a single image file<br>
-2. Load a zip file containing the images.<br>
 Note: All the image names should be 13 digit isbns with extension .jpg<br>
 </ul>
 <div id="errors">
@@ -168,7 +167,7 @@ Note: All the image names should be 13 digit isbns with extension .jpg<br>
   <td>
     <input type="file" name="uploadedFile"/>
     <input type="radio" name="loadType" value="singleImage"/>Single Image.
-    <input type="radio" name="loadType" value="zipImage"/>Zip File Image.
+    <!-- input type="radio" name="loadType" value="zipImage"/>Zip File Image. -->
     <!-- input type="radio" name="loadType" value="pdfImage"/>Pdf File Image. -->
     <input type="hidden" name="task" value="load" />
     <input type="hidden" name="tmpImagesDirectory" value="<?php echo $tmpImagesDirectory ?>" />

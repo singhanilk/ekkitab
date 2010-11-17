@@ -26,8 +26,6 @@ if ( $task == "loadPdfFile" ) {
    // Get the file details from the post variables.
    $uploadedFileName = $pdfImagesDirectory . str_replace(" ", "", $_FILES['uploadedFile']['name']);
    $uploadedTmpFileName = $_FILES['uploadedFile']['tmp_name'];
-   $errorList[] = "uploadedFileName" . $uploadedFileName;
-   $errorList[] = "uploadedTmpFileName" . $uploadedTmpFileName;
    if(move_uploaded_file($uploadedTmpFileName, $uploadedFileName)) {
      // Convert the pdf file to html with images
      $command = "pdftohtml -noframes $uploadedFileName";

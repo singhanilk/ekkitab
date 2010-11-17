@@ -57,8 +57,33 @@ elseif ($task == "saveSingleBook" ) {
  $books = formatValues($books);
  $errorList = validBooks($books);
 } // task is saveSingleBook
+elseif ($task =="saveMultiBooks" ){
+// Save the uploaded file into a location
+   $supplier =  strtolower($book['info_source']);
+   $fileDateTime = date("YmdHis");
+   $uploadedFileName=$catalogWorkDirectory.$supplier."_".$fileDateTime.".txt";  
+   $uploadedTmpFileName = $_FILES['uploadedFile']['tmp_name'];
+   if(move_uploaded_file($uploadedTmpFileName, $uploadedFileName)) {
+     // Load the file into books array 
+     $fileHandle = fopen($uploadedFileName, "r");
+     // The first line contains the header, ignore it as of now.
+     if (!feof($fileHandle)){ $tmpString = fgets($fileHandle); }
+     while (!feof($fileHandle)){
+      $tmpString = fgets($fileHandle);   
+      if ( $tmpString == null ) { break; }
+      $books[] = getBookFromStandardUploadFormat($tmpString);
+     }
+     fclose($fileHandle);
+     unlink($uploadedFileName);
+     // Format the books
+     $books = formatValues($books);
+     $errorList = validBooks($books);
+   }else {
+    $books = Array();
+   }
+}
 
-if (empty($errorList) && $task == "saveSingleBook" ){ 
+if (empty($errorList) && ($task == "saveSingleBook" || $task == "saveMultiBooks")){ 
   $save = true; 
 } else {
   $errorList = preg_replace("/\n/", "<br>", $errorList);
@@ -66,17 +91,20 @@ if (empty($errorList) && $task == "saveSingleBook" ){
 if ( $save ){
   $counter = 0;
   $newArrivalsFileHandle = null;
+  $alreadyPresentCount=0;
   // This db points to the reference database.
   $db = initDatabase($reference_config);
+  $dbDev = initDatabase($development_config);
   foreach($books as $book ) {
    if ( $counter == 0 ) {
      $supplier =  strtolower($book['info_source']);
      $fileDateTime = date("YmdHis");
-     // Create a temporary directory for storing the tmp file and writing it down.
+     // Create a file for storing the tmp file and writing it down.
      $filename=$catalogWorkDirectory.$supplier."_".$fileDateTime.".txt";  
      $fileHandle = fopen($filename, "w");
    } else {
    }
+   if ( getBookDetails($dbDev, $book['isbn']) != null ) { $alreadyPresentCount++;continue; }
   // Generate Bisac Codes
    $book['bisac_codes'] = getBisacCodes($db, array($book['bisac_codes']));
   // Fill Default Values in the data.
@@ -91,10 +119,12 @@ if ( $save ){
      } 
      fwrite($newArrivalsFileHandle, bookStringInStockFormat($book));
    } // New Arrivals check.
+   $counter++;
   } // For all the books.
   fclose($fileHandle);
   if( $newArrivalsFileHandle != null ) fclose($newArrivalsFileHandle);
   closeDatabase($db);
+  closeDatabase($dbDev);
   /*Run the import books for the above file. If the value returned by importbooks is same as the book count
     then only append the same to the catalog file else display error 
     NOTE: The import only works againts the development database.
@@ -103,7 +133,7 @@ if ( $save ){
  $execOuput = Array();
  exec($command , $execOutput, $retval);
  $execOutput[] = "$command Return value = $retval";
- if( count($books) == $retval ) {
+ if( count($books) - $alreadyPresentCount == $retval ) {
    // Append the file data to the catalog
    $command = "cat $filename >> $catalogDirectory/$supplier.txt"; 
    exec($command , $execOutput, $retval);
@@ -120,10 +150,11 @@ if ( $save ){
   $execOutput = Array();
   $execOutput[] = "Success: Book has been successfully added to catalog";
  } else {
+  // Do nullify the objects as we do not want the same to be shown up in the single update
+  if ( $task == "saveMultiBooks" ) { $book = null; $books = Array(); }
   $execOutput[] = "Failure: Book was not added to catalog";
  }
  //Unlink the files if created. 
-
 } // Save is true
 
 # HTML CODE FROM BELOW
@@ -144,7 +175,6 @@ if ( $save ){
 </head>
 <body>
 <?php include "links.html"; ?>
-<h1>Single Book Catalog Creation</h1>
 <div id="updates" >
   <h5><?php print_r($execOutput) ; ?></h5>
 </div>
@@ -162,7 +192,8 @@ if ( $save ){
   </table>
 </div>
 <br>
-<div id="div_singleBookUpdate">
+<h5>Single Book Catalog Creation</h5>
+<div id="div_singleBookUpdate" style="background-color:#929bb1">
 <form id="form_singleBookUpdate" action='bookupdate.phtml' method='post'>
  <table border='0'>
  <tr>
@@ -241,6 +272,7 @@ if ( $save ){
         }
      ?>
      </select>
+     Note: If Preorder is seleted, the stock will be added to New Arrivals. Else no stock information will be generated.
   </td>
  </tr>
  <tr>
@@ -311,18 +343,44 @@ if ( $save ){
 </table>
 </form>
 </div>
-<div id="div_multipleBookUpdate" style="display:none;">
-<form enctype="multipart/form-data" action="bookupdate.phtml" method='post'>
- <table border='0'>
+<h5>Book Catalog Creation From tab delimited file</h5>
+<div id="div_multiBookUpdate" style="background-color:#c8c8c8">
+<form id="form_multiBookUpdate" enctype="multipart/form-data" action="bookupdate.phtml" method='post'>
+ <table border='1'>
  <tr>
   <td>
     <input type="file" name="uploadedFile"/>
-    <input type="hidden" name="task" value="loadExcelFile" />
-    <input type="hidden" name="pdfImagesDirectory" value="<?php echo $pdfImagesDirectory ?>" />
-    <input type='submit' value='Upload PDF File' /></td>
+  </td>
+  <td>
+   SOURCE:(Who supplied the catalog)
+  </td>
+  <td>
+     <select name ='info_source' value='' />
+     <?php 
+        foreach($supplierList as $key=>$value ) {
+            echo '<option value="' . $key . '"' . ">$value</option>";
+          }
+     ?>
+     </select>
+ </td>
+ </tr>
  <tr>
+  <td>
+    <input type="hidden" name="task" value="saveMultiBooks" />
+    <input type="hidden" name="filename" value='<?php  echo $filename; ?>' />
+    <input type='submit' value='Upload Catalog File' />
+  </td>
+ </tr>
 </table>
 </form>
 </div>
+<table>
+ <tr>
+  <td colspan="3">
+   The standard format is as follows<br>
+   ISBN  TITLE   AUTHOR  SUPPLIER    PUBLISHER   IMPRINT PRICE   CURRENCY    AVAILABILITY    PUBLISHING_DATE DELIVERY_PERIOD BINDING PAGES   LANGUAGE    WEIGHT  DIMENSION   SHIPPING_REGION SUBJECT DESCRIPTION<br>
+  </td>
+ </tr>
+</table>
 </body>
 </html>
