@@ -5,8 +5,8 @@
 $FIELD_SEPARATOR = "\t";
 
 # Control characters which have to be replaced
-$controlCharactersToReplace = array("\x0D", "\n");
-$controlCharactersReplaceValues = array("", "<br>");
+$controlCharactersToReplace = array("\x0D", "\n", '"');
+$controlCharactersReplaceValues = array("", "<br>", "");
 # characters outside the range.
 $asciiExpression = '/(?:[^\x00-\x7F])/';
 
@@ -99,9 +99,11 @@ function formatValues($books){
   $modifiedBooks = Array();
   foreach($books as $book){
    $book['title'] = preg_replace($asciiExpression, " ", $book['title']);
+   $book['title'] = str_replace($controlCharactersToReplace, $controlCharactersReplaceValues, $book['title']);
 
    if ( $book['author'] == "NA" ) { $book['author'] = ""; }
    $book['author'] = preg_replace($asciiExpression, " ", $book['author']);
+   $book['author'] = str_replace($controlCharactersToReplace, $controlCharactersReplaceValues, $book['author']);
 
    $book['description'] = str_replace($controlCharactersToReplace, $controlCharactersReplaceValues, $book['description']);
    $book['description'] = preg_replace($asciiExpression, " ", $book['description']);

@@ -73,6 +73,8 @@ elseif ($task =="saveMultiBooks" ){
       if ( $tmpString == null ) { break; }
       $books[] = getBookFromStandardUploadFormat($tmpString);
      }
+     fclose($fileHandle);
+     unlink($uploadedFileName);
      // Format the books
      $books = formatValues($books);
      $errorList = validBooks($books);
@@ -89,8 +91,10 @@ if (empty($errorList) && ($task == "saveSingleBook" || $task == "saveMultiBooks"
 if ( $save ){
   $counter = 0;
   $newArrivalsFileHandle = null;
+  $alreadyPresentCount=0;
   // This db points to the reference database.
   $db = initDatabase($reference_config);
+  $dbDev = initDatabase($development_config);
   foreach($books as $book ) {
    if ( $counter == 0 ) {
      $supplier =  strtolower($book['info_source']);
@@ -100,6 +104,7 @@ if ( $save ){
      $fileHandle = fopen($filename, "w");
    } else {
    }
+   if ( getBookDetails($dbDev, $book['isbn']) != null ) { $alreadyPresentCount++;continue; }
   // Generate Bisac Codes
    $book['bisac_codes'] = getBisacCodes($db, array($book['bisac_codes']));
   // Fill Default Values in the data.
@@ -114,10 +119,12 @@ if ( $save ){
      } 
      fwrite($newArrivalsFileHandle, bookStringInStockFormat($book));
    } // New Arrivals check.
+   $counter++;
   } // For all the books.
   fclose($fileHandle);
   if( $newArrivalsFileHandle != null ) fclose($newArrivalsFileHandle);
   closeDatabase($db);
+  closeDatabase($dbDev);
   /*Run the import books for the above file. If the value returned by importbooks is same as the book count
     then only append the same to the catalog file else display error 
     NOTE: The import only works againts the development database.
@@ -126,7 +133,7 @@ if ( $save ){
  $execOuput = Array();
  exec($command , $execOutput, $retval);
  $execOutput[] = "$command Return value = $retval";
- if( count($books) == $retval ) {
+ if( count($books) - $alreadyPresentCount == $retval ) {
    // Append the file data to the catalog
    $command = "cat $filename >> $catalogDirectory/$supplier.txt"; 
    exec($command , $execOutput, $retval);
@@ -143,10 +150,11 @@ if ( $save ){
   $execOutput = Array();
   $execOutput[] = "Success: Book has been successfully added to catalog";
  } else {
+  // Do nullify the objects as we do not want the same to be shown up in the single update
+  if ( $task == "saveMultiBooks" ) { $book = null; $books = Array(); }
   $execOutput[] = "Failure: Book was not added to catalog";
  }
  //Unlink the files if created. 
-
 } // Save is true
 
 # HTML CODE FROM BELOW
@@ -264,6 +272,7 @@ if ( $save ){
         }
      ?>
      </select>
+     Note: If Preorder is seleted, the stock will be added to New Arrivals. Else no stock information will be generated.
   </td>
  </tr>
  <tr>
@@ -365,5 +374,13 @@ if ( $save ){
 </table>
 </form>
 </div>
+<table>
+ <tr>
+  <td colspan="3">
+   The standard format is as follows<br>
+   ISBN  TITLE   AUTHOR  SUPPLIER    PUBLISHER   IMPRINT PRICE   CURRENCY    AVAILABILITY    PUBLISHING_DATE DELIVERY_PERIOD BINDING PAGES   LANGUAGE    WEIGHT  DIMENSION   SHIPPING_REGION SUBJECT DESCRIPTION<br>
+  </td>
+ </tr>
+</table>
 </body>
 </html>
