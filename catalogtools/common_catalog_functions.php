@@ -32,6 +32,7 @@ $bindingList = array("None" => "", "Paperback" => "Paperback", "Hardcover" => "H
 $languageList = array("English" => "English");
 # The valid suppliers as of now. This is taken from /mnt4/publisherdata/
 $supplierList = array (
+"APK" => "APK",
 "AMIT" => "AMIT",
 "BOOKWORLDENTERPRISES" => "BOOKWORLDENTERPRISES",
 "CAMBRIDGE" => "CAMBRIDGE",
