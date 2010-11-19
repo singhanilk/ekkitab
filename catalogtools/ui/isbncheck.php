@@ -171,6 +171,15 @@ if ( $isbnno != '' ){
  } else {
   $displayString .= '<h5>The book is not listed under missing isbns</h5>';
  }
+ // Grep the stocklist information from the files
+  $displayString .= "<h5>Stock list information by grepping data from the actual stocklists India Prices only(/mnt4/publisherdata/stock/stocklists)</h5>";
+  $displayString .= "<table border=1><tr><td>";
+  $command = "grep $isbnno /mnt4/publisherdata/stock/stocklists/*.txt";
+  $execOutput = Array();
+  exec($command , $execOutput, $retval);
+  $displayString .= implode("</td></tr><tr><td>", $execOutput);
+  $displayString .= "</td></tr></table>";
+ 
 }
 if ( $task == "xml" ) {
   echo $displayString;
