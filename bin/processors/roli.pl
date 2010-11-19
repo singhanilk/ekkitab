@@ -145,10 +145,16 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             if ($currency =~ /INR/) {
                 $currency ='I';
             }
+            elsif ($currency =~ /RS./) {
+                   $currency = 'I';
+            }
             elsif ($currency =~ /GBP/) {
                    $currency = 'P';
             }
-            elsif ($currency =~ /USD/) {
+            elsif ($currency =~ /EUR/) {
+                   $currency = 'E';
+            }
+            elsif ($currency =~ /US$/) {
                    $currency = 'U';
             }
         }
