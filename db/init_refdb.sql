@@ -37,7 +37,8 @@ insert into ek_discount_setting (`info_source`, `discount_percent`) values ('Ing
                                                                            ('Navneet', 33),
                                                                            ('Navajivan', 0),
                                                                            ('Ibn', 33),
-                                                                           ('Tulika', 0);
+                                                                           ('Tulika', 0),
+                                                                           ('Roli', 0);
 
 --
 -- Seed data for table `ek_supplier_params`
@@ -87,4 +88,5 @@ insert into ek_supplier_params (`info_source`, `publisher`, `supplier_discount`,
                                ('Navajivan', 'Any', 0, 8),
                                ('Ibn', 'Any', 33, 8),
                                ('Tulika', 'Any', 0, 8),
+                               ('Roli', 'Any', 33, 3),
                                ('Unknown', 'Any', 25, 5);
