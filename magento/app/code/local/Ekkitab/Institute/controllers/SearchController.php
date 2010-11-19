@@ -19,5 +19,13 @@ class Ekkitab_Institute_SearchController extends Mage_Core_Controller_Front_Acti
 
     }
 
+	public function myInstitutesAction()
+    {
+		$this->loadLayout();
+		$this->_initLayoutMessages('checkout/session');
+		$this->renderLayout();
+
+    }
+
 
 }

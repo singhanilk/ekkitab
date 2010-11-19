@@ -6945,6 +6945,7 @@ CREATE TABLE IF NOT EXISTS ek_social_institutes (
  aboutus text DEFAULT NULL,
  aboutus_summary varchar(2048) DEFAULT NULL,
  is_html tinyint(1) DEFAULT '0',
+ any_donation tinyint(1) DEFAULT '0',
  image varchar(80) DEFAULT NULL,
  is_valid tinyint(1) DEFAULT '0',
  admin_id int(10) unsigned NOT NULL,

@@ -32,6 +32,12 @@ class Ekkitab_Institute_Model_Resource_Mysql4_Institute_Collection extends Mage_
 		return $this;
 	}
 
+	public function addAdminIdFilter($ids){
+		//Mage::log("Called addIdFilter");
+		$this->addFieldToFilter('main_table.admin_id', array('in'=>$ids));
+		return $this;
+	}
+
 	    /**
      * Add section to filter
      *
