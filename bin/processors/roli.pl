@@ -10,7 +10,7 @@ print "Not Defined" . "\n";
 my $Settingsfile = $ekkitab_home . "/config/stockprocess.ini";
 my $settings     = new Config::Abstract::Ini($Settingsfile);
 my %values       = $settings -> get_entry('availability');
-my %stockvalues  = $settings -> get_entry('cinnamonteal');
+my %stockvalues  = $settings -> get_entry('roli');
 my $threshold    = $stockvalues{'availability'};
 my $bangalore    = $values{'bangalore'}; 
 my $kolkata      = $values{'kolkata'};
@@ -67,12 +67,19 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                     }
                 }
                 if ($pricecol == -1) {
-                    if ($oWkC->Value =~ /PRICE/i) {
+                    if ($oWkC->Value =~ /RATE/i) {
                         $pricecol = $iC;
-                        $currencycol = $iC+1;
                         next;
                     }
                 }
+
+                if ($currencycol == -1) {
+                    if ($oWkC->Value =~ /CURRENCY/i) {
+                        $currencycol = $iC;
+                        next;
+                    }
+                }
+
                 if ($availcol == -1) {
                     if ($oWkC->Value =~ /QTY/i) {
                         $availcol = $iC;
@@ -82,12 +89,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     	        if ($titlecol == -1) {
     		        if ($oWkC->Value =~ /TITLE/i) {
                         $titlecol = $iC;
-                        next;
-    		        }
-                }
-		        if ($authorcol == -1) {
-    		        if ($oWkC->Value =~ /FIRST\sNAME/i) {
-                        $authorcol = $iC;
                         next;
     		        }
                 }
@@ -123,7 +124,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 	        last;
 	    }
         my $isbn;
-        my $imprint = 'CinnamonTeal';
+        my $imprint = 'Roli';
 	    if (defined ($value)) {
             $isbn = $value->Value;
             chomp($isbn);
