@@ -105,16 +105,36 @@ class Ekkitab_Institute_Block_Institute extends Mage_Core_Block_Template
 			$institutes->setPageSize($this->getPageSize());
 			//$collection->setLimit($limit);
 		}
-		return $institutes;
+		$this->_instituteCollection =$institutes;
+		return $this->_instituteCollection;
+
+    }
+ 
+	public function getCustomer()
+    {
+        return Mage::getSingleton('customer/session')->getCustomer();
+    }
+
+	protected function getMyInstitutes() 
+    {
+		$institutes = Mage::getModel('ekkitab_institute/institute')->getCollection()
+			->addAdminIdFilter($this->getCustomer()->getId());
+		
+		if($this->getCurrentPageNumber() > 0){
+			$institutes->setCurPage($this->getCurrentPageNumber());
+		}
+		if($this->getPageSize() && $this->getPageSize() > 0 ){
+			$institutes->setPageSize($this->getPageSize());
+			//$collection->setLimit($limit);
+		}
+		$this->_instituteCollection =$institutes;
+		return $this->_instituteCollection;
+
     }
  
 		
 	public function getInstituteCollection(){
 
-		//introduce the lucene search here.....
-		if (is_null($this->_instituteCollection)) { 
-			$this->_instituteCollection =Mage::getModel('ekkitab_institute/institute')->getCollection()->addAuthenticateFilter();
-		}
 		return $this->_instituteCollection;
     }
 	
@@ -185,7 +205,6 @@ class Ekkitab_Institute_Block_Institute extends Mage_Core_Block_Template
 
     public function getPageUrl($page)
     {
-        Mage::log($this->helper('ekkitab_institute')->getPageNoVarName()." value is : ".$page);
 		return $this->getPagerUrl(array($this->helper('ekkitab_institute')->getPageNoVarName()=>$page));
     }
 

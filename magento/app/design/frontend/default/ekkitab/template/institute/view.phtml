@@ -30,6 +30,7 @@
  * @see Ekkitab_Catalog_Block_Product_View
  */
 ?>
+<?php Mage::app()->getLayout()->getMessagesBlock()->setMessages(Mage::getSingleton('customer/session')->getMessages(true)); ?> 
 <?php
 	$_institute = $this->getInstitute();
 	
@@ -71,7 +72,32 @@
 			</div>
 			<?php $desc = $_institute->getAboutus();
 				  echo $desc; ?>
-			<div class="clear"></div>
+			<br/><br/>
+			<?php $address = $_institute->getStreet()."<br/> ".$_institute->getLocality().", ".$_institute->getCity()."<br/>".$_institute->getState()."  ".$_institute->getPostcode();
+				?>
+				
+			<strong>Address:</strong><br/>
+			<?php echo $address; ?>
+
+<?php	if($this->isUserAdmin()):
+?>			<br/><br/>
+		  <a href="#" onClick="javascript:showWishlistForm()"><img src="<?php echo $this->getSkinUrl('images/btn_update_wishlist.gif') ?>" border="0"></a><br/>
+		  <div class="padderTop15px" id="wishlistForm" style="display:none">
+		  <form action="<?php echo $this->getOrgWishlistActionUrl($_institute->getId())?>" method="post">
+				<label for="email_address"><?php echo $this->__("Please enter comma seperated list of book isbns you would like to add in your wishlist.") ?></label><br/>
+				<textarea name="wishlist_isbns" id="wishlist_isbns" title="<?php echo $this->__('Wishlist Isbns') ?>" class="required-entry" rows="2" cols="120">
+				</textarea>
+				<ul class="form-list">
+					<li><input type="image" src="<?php echo $this->getSkinUrl('images/submit_button.png') ?>" alt="<?php echo $this->__('Submit') ?>"/></li>
+				</ul>
+		</form>or
+
+		<strong><a href="<?php echo $this->getWishlistBrowseUrl($_institute->getId())?>">Click here</a> to visit our bookstore and add books to your school's wishlist.</strong>
+
+		</div>
+
+<?php endif; ?>
+		<div class="clear"></div>
 		</div><!-- finDetSynop -->
 <?php	$orgWishlist = 	$this->getOrganizationWishlist();
 		if($orgWishlist->getSize()): 
@@ -99,7 +125,12 @@
 		var totalDonationCartItems=0;
 		var totalDonationCost=0;
 	</script>
-	<div class="wishlistHdr">&nbsp;<?php echo $this->__("Our Library Needs") ?></div>
+	<div class="wishlistHdr">&nbsp;<?php echo $this->__("Our Library Needs") ?>
+	
+	<?php if($_institute->getAnyDonation()): ?>
+	 <span class="greyTxtBoldIt">( <?php echo $this->__("We welcome any other book donation in addition to the list below.") ?> <a href="#anydonation">Click here</a> to know how.)</span>
+	<?php endif; ?>
+	</div>
 	<form name="school_wishlist_books" action="<?php echo $this->getMoveSelectedCartUrl()?>" method="post">
 	<?php for ($i=1; $i <=$pages ;$i++ ){
 			$displayPages =getDisplayPagesArray($i,$pages);
@@ -232,11 +263,24 @@
 </form>
 
 <?php  else: ?>
-    <p><?php echo $this->__("There are no books added to %s's wishlist",$_institute->getName()) ?></p>
-    <div class="button-set">
-        <a href="<?php echo $this->getBackUrl() ?>" class="f-left">&laquo; <?php echo $this->__('Back') ?></a>
-    </div>
+	<?php if($_institute->getAnyDonation()): ?>
+		 <div class="wishlistHdr"><?php echo $this->__("We welcome any book donation. ") ?></div>
+		<div class="clear"></div>
+		We do not have any specific need right now. We welcome any book donation of your choice to our library. For this you can use the school's address(provided above) as the shipping address instead of yours during the checkout.</span>
+	<?php  else: ?>
+		<div class="wishlistHdr">&nbsp;<?php echo $this->__("Our Library Needs") ?></div>
+		<p><?php echo $this->__("There are no books added to %s's wishlist",$_institute->getName()) ?></p>
+		<div class="button-set">
+			<a href="<?php echo $this->getBackUrl() ?>" class="f-left">&laquo; <?php echo $this->__('Back') ?></a>
+		</div>
+	<?php endif; ?>
 <?php endif ?>
+<?php if($orgWishlist->getSize() && $_institute->getAnyDonation()): ?>
+	<a name="anydonation"></a>
+	<div class="menuSep"></div><br/>
+	 <div class="wishlistHdr"><?php echo $this->__("We welcome any book donation. ") ?></div>
+		<span class="greyTxtIt">Use the school's address(provided above) as the shipping address instead of yours during the checkout.</span>
+<?php endif;?>
 
 	</div><!-- midArea -->
 	
@@ -354,4 +398,11 @@
 			donationCounter.style.display="none";
 		}
 	}
+
+	function showWishlistForm(){
+		var wishlistFormDiv = document.getElementById("wishlistForm");
+		wishlistFormDiv.style.display="block";
+	}
+
 </script>
+

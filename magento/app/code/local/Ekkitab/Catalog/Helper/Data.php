@@ -428,6 +428,37 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
         return $this->_getUrl('ekkitab_wishlist/index/add', array('product'=>$productId));
     }
 	
+
+	/**
+     * Retrieve url for adding product to wishlist
+     *
+     * @param   mixed $product
+     * @return  string
+     */
+    public function getOrgWishListAddUrl($productId)
+    {
+		$orgId = Mage::helper('ekkitab_institute')->getCurrentLinkedOrganization();
+		return $this->_getUrl('ekkitab_wishlist/index/addOrgWishlist',array('orgId'=>$orgId,'wishlist_isbns'=>$productId));
+    }
+	
+	/**
+     * Retrieve url for adding product to wishlist
+     *
+     * @param   mixed $product
+     * @return  string
+     */
+    public function getOrgWishListText()
+    {
+		$orgId = Mage::helper('ekkitab_institute')->getCurrentLinkedOrganization();
+		$instituteName = Mage::helper('ekkitab_institute')->getInstituteName($orgId);
+		if(!is_null($instituteName) && $instituteName!=''){
+			return $this->__("Add to %s's Wishlist",$instituteName);
+		}
+		else{
+			return $this->__('Add to Wishlist');
+		}
+    }
+	
 	/**
      * Retrieve url for add product to cart
      *

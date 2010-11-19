@@ -70,19 +70,34 @@ class Ekkitab_Institute_AccountController extends Mage_Core_Controller_Front_Act
         $this->renderLayout();
     }
 
-
     /**
+     * Retrieve customer session model object
+     *
+     * @return Mage_Customer_Model_Session
+     */
+    protected function _getSession()
+    {
+        return Mage::getSingleton('core/session');
+    }
+
+	
+    /**
+     * Retrieve customer session model object
+     *
+     * @return Mage_Customer_Model_Session
+     */
+    protected function _getCustomerSession()
+    {
+        return Mage::getSingleton('customer/session');
+    }
+
+	
+	/**
      * Customer register form page
      */
     public function createAction()
     {
-       // if ($this->_getSession()->isLoggedIn()) {
-        //    $this->_redirect('*/*');
-       //     return;
-       // }
-
         $this->loadLayout();
-       // $this->_initLayoutMessages('customer/session');
         $this->renderLayout();
     }
 
@@ -92,85 +107,212 @@ class Ekkitab_Institute_AccountController extends Mage_Core_Controller_Front_Act
     public function createPostAction()
     {
         if ($this->getRequest()->isPost()) {
-            $errors = array();
+			$errors = array();
+			
+			//instantiate institute Object.
+			$institute = Mage::getModel('ekkitab_institute/institute')->setId(null);
+            $useAsAdmin = $this->getRequest()->getParam('use_as_admin');
 
-	        $customer = Mage::getModel('ekkitab_institute/institute')->setId(null);
-            
-            foreach (Mage::getConfig()->getFieldset('customer_account') as $code=>$node) {
+			$postArray =array();
+			//load all institute details from form.
+			foreach (Mage::getConfig()->getFieldset('institute_account') as $code=>$node) {
                 if ($node->is('create') && ($value = $this->getRequest()->getParam($code)) !== null) {
-                    $customer->setData($code, $value);
+                    Mage::log("Setting Data for $code as : $value");
+					$institute->setData($code, $value);
                 }
             }
 
-            if ($this->getRequest()->getParam('is_subscribed', false)) {
-                $customer->setIsSubscribed(1);
-            }
+			$instituteName	= $institute->getData('name');
+			$institutePostcode	= $institute->getData('postcode');
+			if(!is_null($instituteName) && $instituteName!='' && !is_null($institutePostcode) && $institutePostcode!='' ){
 
-            /**
-             * Initialize customer group id
-             */
-            $customer->getGroupId();
+				// create shool email with the name and postcode.
+				$email = strtolower(trim(trim(substr(str_replace(" ","",$instituteName),0,10))."_".trim($institutePostcode)."@ekkitab.com"));
+				$password = strtolower(trim(trim(substr(str_replace(" ","",$instituteName),0,10))."_".trim($institutePostcode)));
+				$lastSpaceIndex = strrpos($instituteName, ' ');
+				if($lastSpaceIndex > 0){
+					$firstname = trim(substr($instituteName,0,$lastSpaceIndex));
+					$lastname = trim(substr($instituteName,$lastSpaceIndex,strlen($instituteName)-$lastSpaceIndex));
+				}else{
+					$firstname = trim($instituteName);
+					$lastname = "School";
+				}
+				
+				//check if institute with this email exists... if yes then exit.
+				$instituteCust = Mage::getModel('customer/customer')
+					->setStore(Mage::app()->getStore())
+					->loadByEmail($email);
+				if ($instituteCust && $instituteCust->getId() > 0) {
+					$this->_getSession()->addError($this->__("Institute with name '$instituteName' and in postcode '$institutePostcode' already exists in the network."));
+					//throw new Exception('This Institute already exists.');
+				}
+				else{
+					//else... 
+					try{
+						//check if exister user wants to be admin..validate username and passowrd...
+						if($useAsAdmin && $useAsAdmin!='' && strtolower($useAsAdmin) =='y'){
+							$username = $institute->getData('admin_email');
+							$password = $institute->getData('admin_password');
+							if (!empty($username) && !empty($password) && $this->validateLoginForm($username,$password)) {
+								$admin =  Mage::getModel('customer/customer')
+								->setStore(Mage::app()->getStore())
+								->loadByEmail($username);
+							}else{
+								$postArray['use_as_admin'] = "y"; 
+								$admin=null;
+							}
 
-            if ($this->getRequest()->getPost('create_address')) {
-                $address = Mage::getModel('customer/address')
-                    ->setData($this->getRequest()->getPost())
-                    ->setIsDefaultBilling($this->getRequest()->getParam('default_billing', false))
-                    ->setIsDefaultShipping($this->getRequest()->getParam('default_shipping', false))
-                    ->setId(null);
-                $customer->addAddress($address);
+						} else{
+							//check if admin already exists.... 
+							$admin =  Mage::getModel('customer/customer')
+								->setStore(Mage::app()->getStore())
+								->loadByEmail($institute->getData('admin_email'));
 
-                $errors = $address->validate();
-                if (!is_array($errors)) {
-                    $errors = array();
-                }
-            }
+							if($admin && $admin->getId() > 0){
+								$postArray['use_as_admin'] = "y"; 
+								$this->_getSession()->addError($this->__("Customer with email '".$admin->getData('email')."' already exists. If you wish to add this user as the school's administrator, please provide the username and password and press continue."));
+								$admin = null;
+							}
+							else{
+								//create admin with the admin details provided in the form.
+								$admin = Mage::getModel('customer/customer')->setId(null);
+								$admin->setData('email',$institute->getData('admin_email'));
+								$admin->setData('firstname',$institute->getData('admin_firstname'));
+								$admin->setData('lastname',$institute->getData('admin_lastname'));
+								$admin->setData('password',$institute->getData('admin_password'));
+								$admin->setData('confirmation',$institute->getData('admin_confirmation'));
+								$admin->getGroupId();
 
-            try {
-                $validationCustomer = $customer->validate();
-                if (is_array($validationCustomer)) {
-                    $errors = array_merge($validationCustomer, $errors);
-                }
-                $validationResult = count($errors) == 0;
+								Mage::log("Addding the admin..");
+								$this->addCustomerEntity($admin,array());
+								$admin =  Mage::getModel('customer/customer')
+									->setStore(Mage::app()->getStore())
+									->loadByEmail($admin->getData('email'));
+								Mage::log("Added the admin... id is:".$admin->getId());
 
-                if (true === $validationResult) {
-                    $customer->save();
+							}
+						}
 
-                    if ($customer->isConfirmationRequired()) {
-                        $customer->sendNewAccountEmail('confirmation', $this->_getSession()->getBeforeAuthUrl());
-                        $this->_getSession()->addSuccess($this->__('Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href="%s">click here</a>.',
-                            Mage::helper('customer')->getEmailConfirmationUrl($customer->getEmail())
-                        ));
-                        $this->_redirectSuccess(Mage::getUrl('*/*/index', array('_secure'=>true)));
-                        return;
-                    }
-                    else {
-                        $this->_getSession()->setCustomerAsLoggedIn($customer);
-                        $url = $this->_welcomeCustomer($customer);
-                        $this->_redirectSuccess($url);
-                        return;
-                    }
-                } else {
-                    $this->_getSession()->setInstituteFormData($this->getRequest()->getPost());
-                    if (is_array($errors)) {
-                        foreach ($errors as $errorMessage) {
-                            $this->_getSession()->addError($errorMessage);
-                        }
-                    }
-                    else {
-                        $this->_getSession()->addError($this->__('Invalid customer data'));
-                    }
-                }
-            }
-            catch (Mage_Core_Exception $e) {
-                $this->_getSession()->addError($e->getMessage())
-                    ->setInstituteFormData($this->getRequest()->getPost());
-            }
-            catch (Exception $e) {
-                $this->_getSession()->setInstituteFormData($this->getRequest()->getPost())
-                    ->addException($e, $this->__('Can\'t save customer'));
-            }
+						if($admin && $admin->getId() > 0){
+							$institute->setData('admin_id', $admin->getId());
+
+							//Then... create customer_entity with the generated EmailId 
+							$schoolCustomer = Mage::getModel('customer/customer')->setId(null);
+							$schoolCustomer->setData('email',$email);
+							$schoolCustomer->setData('firstname',$firstname);
+							$schoolCustomer->setData('lastname',$lastname);
+							$schoolCustomer->setData('password',$password);
+							$schoolCustomer->setData('confirmation',$password);
+							$schoolCustomer->getGroupId();
+						
+							// Set the address for this customer 
+							Mage::log($this->getRequest()->getPost());
+							$address = Mage::getModel('customer/address')
+									->setData($this->getRequest()->getPost())
+									->setData('firstname',$firstname)
+									->setData('lastname',$lastname)
+									->setIsDefaultBilling(0)
+									->setIsDefaultShipping(0)
+									->setId(null);
+							
+							$schoolCustomer->addAddress($address);
+
+							$errors = $address->validate();
+							if (!is_array($errors)) {
+								$errors = array();
+							}
+							try{
+								Mage::log("Addding the school customer....");
+								$this->addCustomerEntity($schoolCustomer,$errors);
+								Mage::log("Added the school customer....");
+								$schoolCustomer =  Mage::getModel('customer/customer')
+									->setStore(Mage::app()->getStore())
+									->loadByEmail($schoolCustomer->getData('email'));
+								
+								if($schoolCustomer && $schoolCustomer->getId() > 0 ){
+
+									//and set this in the above institute model.
+
+									// Get the file details from the post variables.
+									$imageName= strtolower(trim(trim(substr(str_replace(" ","",$instituteName),0,10))."_".trim($institutePostcode)));
+									$imageNameExtArr= explode(".",$_FILES['image']['name']);
+									if( $imageNameExtArr && count($imageNameExtArr) >1 ){
+									   $imageNameExt= ".".$imageNameExtArr[1];
+									}else{
+									   $imageNameExt=".jpg";
+									}
+									$imageName =$imageName.$imageNameExt ;
+									$baseDir = Mage::getBaseDir('media') . DIRECTORY_SEPARATOR . 'social_institutes';
+									$uploadedFileName = $baseDir . DIRECTORY_SEPARATOR . $imageName;
+									$uploadedTmpFileName = $_FILES['image']['tmp_name'];
+									move_uploaded_file($uploadedTmpFileName, $uploadedFileName);
+
+									$institute->setImage($imageName);
+									$institute->setEmail($email);
+									$institute->setIsValid(0);
+									try{
+										$institute->save();
+
+										if ($admin->isConfirmationRequired()) {
+											$admin->sendNewAccountEmail('confirmation', $this->_getSession()->getBeforeAuthUrl());
+											$this->_getSession()->addSuccess($this->__('Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href="%s">click here</a>.',
+												Mage::helper('customer')->getEmailConfirmationUrl($admin->getEmail())
+											));
+											$this->_redirectSuccess(Mage::getUrl('customer/account/index', array('_secure'=>true)));
+											return;
+										}
+										else {
+											$this->_getSession()->setCustomerAsLoggedIn($admin);
+											$url = $this->_welcomeCustomer($admin);
+											$this->_redirectSuccess($url);
+											return;
+										}
+									}
+									catch (Mage_Core_Exception $e) {
+										//$schoolCustomer->delete();
+										//Mage::getModel('customer/customer')->delete($schoolCustomer);
+										$this->_getSession()->addError($e->getMessage())
+											->setInstituteFormData($this->getRequest()->getPost());
+									}
+									catch (Exception $e) {
+										//$schoolCustomer->delete();
+										//Mage::getModel('customer/customer')->delete($schoolCustomer);
+										$this->_getSession()->setInstituteFormData($this->getRequest()->getPost())
+											->addException($e, $this->__('Can\'t save institute. Error while saving the School Customer.'));
+									}
+								}else {
+									//Mage::getModel('customer/customer')->delete($admin);
+									//$admin->delete();
+									$this->_getSession()->addError($this->__('Invalid School data. Unable to save institute.'));
+								}
+							}
+							catch (Mage_Core_Exception $e) {
+								$this->_getSession()->addError($e->getMessage())
+									->setInstituteFormData($this->getRequest()->getPost());
+							}
+							catch (Exception $e) {
+								$this->_getSession()->setInstituteFormData($this->getRequest()->getPost())
+									->addException($e, $this->__('Can\'t save institute. Error while saving the School Customer.'));
+							}
+						}else{
+							$this->_getSession()->addError($this->__('Invalid Insitute data. Administrator information is not available/valid.'));
+						}
+					}
+					catch (Mage_Core_Exception $e) {
+						$this->_getSession()->addError($e->getMessage())
+							->setInstituteFormData($this->getRequest()->getPost());
+					}
+					catch (Exception $e) {
+						$this->_getSession()->setInstituteFormData($this->getRequest()->getPost())
+							->addException($e, $this->__('Can\'t save institute'));
+					}
+				}
+			}else {
+				$this->_getSession()->addError($this->__('Invalid Insitute data. Institute Name and Institute Postcode not available.'));
+			}
         }
-
+		Mage::log(array_merge($this->getRequest()->getPost(),$postArray));
+		$this->_getSession()->setInstituteFormData(array_merge($this->getRequest()->getPost(),$postArray));
         $this->_redirectError(Mage::getUrl('*/*/create', array('_secure'=>true)));
     }
 
@@ -178,245 +320,72 @@ class Ekkitab_Institute_AccountController extends Mage_Core_Controller_Front_Act
      * Add welcome message and send new account email.
      * Returns success URL
      *
-     * @param Ekkitab_Institute_Model_Customer $customer
+     * @param Mage_Customer_Model_Customer $customer
      * @param bool $isJustConfirmed
      * @return string
      */
-    protected function _welcomeCustomer(Ekkitab_Institute_Model_Customer $customer, $isJustConfirmed = false)
+    protected function _welcomeCustomer(Mage_Customer_Model_Customer $customer, $isJustConfirmed = false)
     {
-        $this->_getSession()->addSuccess($this->__('Thank you for registering with %s', Mage::app()->getStore()->getName()));
+        $this->_getCustomerSession()->addSuccess($this->__('Thank you for registering with %s', Mage::app()->getStore()->getName()));
 
         $customer->sendNewAccountEmail($isJustConfirmed ? 'confirmed' : 'registered');
 
-        $successUrl = Mage::getUrl('*/*/index', array('_secure'=>true));
-        if ($this->_getSession()->getBeforeAuthUrl()) {
-            $successUrl = $this->_getSession()->getBeforeAuthUrl(true);
+        $successUrl = Mage::getUrl('customer/account/index', array('_secure'=>true));
+        if ($this->_getCustomerSession()->getBeforeAuthUrl()) {
+            $successUrl = $this->_getCustomerSession()->getBeforeAuthUrl(true);
         }
         return $successUrl;
     }
 
-    /**
-     * Confirm customer account by id and confirmation key
-     */
-    public function confirmAction()
-    {
-        if ($this->_getSession()->isLoggedIn()) {
-            $this->_redirect('*/*/');
-            return;
-        }
-        try {
-            $id      = $this->getRequest()->getParam('id', false);
-            $key     = $this->getRequest()->getParam('key', false);
-            $backUrl = $this->getRequest()->getParam('back_url', false);
-            if (empty($id) || empty($key)) {
-                throw new Exception($this->__('Bad request.'));
-            }
 
-            // load customer by id (try/catch in case if it throws exceptions)
-            try {
-                $customer = Mage::getModel('customer/customer')->load($id);
-                if ((!$customer) || (!$customer->getId())) {
-                    throw new Exception('Failed to load customer by id.');
-                }
-            }
-            catch (Exception $e) {
-                throw new Exception($this->__('Wrong customer account specified.'));
-            }
+	private function addCustomerEntity($customer,$errors){
+		$validationCustomer = $customer->validate();
+		if (is_array($validationCustomer)) {
+			$errors = array_merge($validationCustomer, $errors);
+		}
+		$validationResult = count($errors) == 0;
 
-            // check if it is inactive
-            if ($customer->getConfirmation()) {
-                if ($customer->getConfirmation() !== $key) {
-                    throw new Exception($this->__('Wrong confirmation key.'));
-                }
+		if (true === $validationResult) {
+			$customer->save();
+		} else {
+			$this->_getSession()->setInstituteFormData($this->getRequest()->getPost());
+			if (is_array($errors)) {
+				foreach ($errors as $errorMessage) {
+					$this->_getSession()->addError($errorMessage);
+				}
+			}
+			else {
+				$this->_getSession()->addError($this->__('Invalid Insitute data'));
+			}
+		}
+		return ;
+	}
 
-                // activate customer
-                try {
-                    $customer->setConfirmation(null);
-                    $customer->save();
-                }
-                catch (Exception $e) {
-                    throw new Exception($this->__('Failed to confirm customer account.'));
-                }
+	private function validateLoginForm($username,$password){
+		try {
+			$customer = Mage::getModel('customer/customer')
+						->setWebsiteId(Mage::app()->getStore()->getWebsiteId());
 
-                // log in and send greeting email, then die happy
-                $this->_getSession()->setCustomerAsLoggedIn($customer);
-                $successUrl = $this->_welcomeCustomer($customer, true);
-                $this->_redirectSuccess($backUrl ? $backUrl : $successUrl);
-                return;
-            }
-
-            // die happy
-            $this->_redirectSuccess(Mage::getUrl('*/*/index', array('_secure'=>true)));
-            return;
-        }
-        catch (Exception $e) {
-            // die unhappy
-            $this->_getSession()->addError($e->getMessage());
-            $this->_redirectError(Mage::getUrl('*/*/index', array('_secure'=>true)));
-            return;
-        }
-    }
-
-    /**
-     * Send confirmation link to specified email
-     */
-    public function confirmationAction()
-    {
-        $customer = Mage::getModel('customer/customer');
-        if ($this->_getSession()->isLoggedIn()) {
-            $this->_redirect('*/*/');
-            return;
-        }
-
-        // try to confirm by email
-        $email = $this->getRequest()->getPost('email');
-        if ($email) {
-            try {
-                $customer->setWebsiteId(Mage::app()->getStore()->getWebsiteId())->loadByEmail($email);
-                if (!$customer->getId()) {
-                    throw new Exception('');
-                }
-                if ($customer->getConfirmation()) {
-                    $customer->sendNewAccountEmail('confirmation');
-                    $this->_getSession()->addSuccess($this->__('Please, check your e-mail for confirmation key.'));
-                }
-                else {
-                    $this->_getSession()->addSuccess($this->__('This e-mail does not require confirmation.'));
-                }
-                $this->_getSession()->setUsername($email);
-                $this->_redirectSuccess(Mage::getUrl('*/*/index', array('_secure' => true)));
-            }
-            catch (Exception $e) {
-                $this->_getSession()->addError($this->__('Wrong email.'));
-                $this->_redirectError(Mage::getUrl('*/*/*', array('email' => $email, '_secure' => true)));
-            }
-            return;
-        }
-
-        // output form
-        $this->loadLayout();
-
-        $this->getLayout()->getBlock('accountConfirmation')
-            ->setEmail($this->getRequest()->getParam('email', $email));
-
-        $this->_initLayoutMessages('customer/session');
-        $this->renderLayout();
-    }
-
-    /**
-     * Forgot customer account information page
-     */
-    public function editAction()
-    {
-        $this->loadLayout();
-        $this->_initLayoutMessages('customer/session');
-        $this->_initLayoutMessages('catalog/session');
-
-        if ($block = $this->getLayout()->getBlock('customer_edit')) {
-            $block->setRefererUrl($this->_getRefererUrl());
-        }
-        $data = $this->_getSession()->getInstituteFormData(true);
-        $customer = $this->_getSession()->getCustomer();
-        if (!empty($data)) {
-            $customer->addData($data);
-        }
-        if($this->getRequest()->getParam('changepass')==1){
-            $customer->setChangePassword(1);
-        }
-
-        $this->getLayout()->getBlock('head')->setTitle($this->__('Account Information'));
-
-        $this->renderLayout();
-    }
-
-    /**
-     * Change customer password action
-     */
-    public function editPostAction()
-    {
-        if (!$this->_validateFormKey()) {
-            return $this->_redirect('*/*/edit');
-        }
-
-        if ($this->getRequest()->isPost()) {
-            $customer = Mage::getModel('customer/customer')
-                ->setId($this->_getSession()->getCustomerId())
-                ->setWebsiteId($this->_getSession()->getCustomer()->getWebsiteId());
-
-            $fields = Mage::getConfig()->getFieldset('customer_account');
-            foreach ($fields as $code=>$node) {
-                if ($node->is('update') && ($value = $this->getRequest()->getParam($code)) !== null) {
-                    $customer->setData($code, $value);
-                }
-            }
-
-            $errors = $customer->validate();
-            if (!is_array($errors)) {
-                $errors = array();
-            }
-
-            /**
-             * we would like to preserver the existing group id
-             */
-            if ($this->_getSession()->getCustomerGroupId()) {
-                $customer->setGroupId($this->_getSession()->getCustomerGroupId());
-            }
-
-            if ($this->getRequest()->getParam('change_password')) {
-                $currPass = $this->getRequest()->getPost('current_password');
-                $newPass  = $this->getRequest()->getPost('password');
-                $confPass  = $this->getRequest()->getPost('confirmation');
-
-                if (empty($currPass) || empty($newPass) || empty($confPass)) {
-                    $errors[] = $this->__('Password fields can\'t be empty.');
-                }
-
-                if ($newPass != $confPass) {
-                    $errors[] = $this->__('Please make sure your passwords match.');
-                }
-
-                $oldPass = $this->_getSession()->getCustomer()->getPasswordHash();
-                if (strpos($oldPass, ':')) {
-                    list($_salt, $salt) = explode(':', $oldPass);
-                } else {
-                    $salt = false;
-                }
-
-                if ($customer->hashPassword($currPass, $salt) == $oldPass) {
-                    $customer->setPassword($newPass);
-                } else {
-                    $errors[] = $this->__('Invalid current password');
-                }
-            }
-
-            if (!empty($errors)) {
-                $this->_getSession()->setInstituteFormData($this->getRequest()->getPost());
-                foreach ($errors as $message) {
-                    $this->_getSession()->addError($message);
-                }
-                $this->_redirect('*/*/edit');
-                return $this;
-            }
-
-
-            try {
-                $customer->save();
-                $this->_getSession()->setCustomer($customer)
-                    ->addSuccess($this->__('Account information was successfully saved'));
-
-                $this->_redirect('customer/account');
-                return;
-            }
-            catch (Mage_Core_Exception $e) {
-                $this->_getSession()->setInstituteFormData($this->getRequest()->getPost())
-                    ->addError($e->getMessage());
-            }
-            catch (Exception $e) {
-                $this->_getSession()->setInstituteFormData($this->getRequest()->getPost())
-                    ->addException($e, $this->__('Can\'t save customer'));
-            }
-        }
-
-        $this->_redirect('*/*/edit');
-    }
+			if($customer->authenticate($username, $password)){
+				return true;
+			} 
+			return false;
+		}
+		catch (Exception $e) {
+			switch ($e->getCode()) {
+				case Mage_Customer_Model_Customer::EXCEPTION_EMAIL_NOT_CONFIRMED:
+					$message = Mage::helper('customer')->__('This account is not confirmed. <a href="%s">Click here</a> to resend confirmation email.',
+						Mage::helper('customer')->getEmailConfirmationUrl($login['username'])
+					);
+					break;
+				case Mage_Customer_Model_Customer::EXCEPTION_INVALID_EMAIL_OR_PASSWORD:
+					$message = $e->getMessage();
+					break;
+				default:
+					$message = $e->getMessage();
+			}
+			$this->_getSession()->addError($message);
+		}
+		return false;
+	}
 }

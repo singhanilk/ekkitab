@@ -38,6 +38,14 @@ class Ekkitab_Institute_Helper_Data extends Mage_Core_Helper_Abstract
     protected $_orgId;
 
 	/**
+     * Current Linked Organization
+
+     *
+     * @var int
+     */
+    protected $_custOrg;
+
+	/**
      * Retrieve search query text
      *
      * @return string
@@ -174,6 +182,53 @@ class Ekkitab_Institute_Helper_Data extends Mage_Core_Helper_Abstract
 		}
     }
 
+	public function getCustomer()
+    {
+        return Mage::getSingleton('customer/session')->getCustomer();
+    }
 
+
+	/**
+     * Retrieve search query text
+     *
+     * @return string
+     */
+	
+	 public function isCustOrgAdmin() {
+		$orgId = $this->getCurrentLinkedOrganization();
+		if($orgId > 0){
+			$_institute= Mage::getModel('ekkitab_institute/institute')->load($orgId);
+			if($_institute &&  $this->getCustomer() && $this->getCustomer()->getId()==$_institute->getAdminId() ){
+				return true;
+			} else{
+				return false;
+			}
+		} else {
+			return false;
+        }
+    }
+	
+	/**
+     * Retrieve organization set in session
+     *
+     * @return string
+     */
+    public function getCurrentLinkedOrganization()
+    {
+        if (is_null($this->_custOrg)) {
+			$orgArr = Mage::getSingleton('core/session')->getCurrentLinkedOrganization();
+			if(is_array($orgArr) && count($orgArr) > 0 ){
+				$this->_custOrg = $orgArr['current_linked_organization'];
+			}else{
+				$this->_custOrg = '';
+			}
+            if (isset($this->_custOrg)) {
+                $this->_custOrg = (int)trim($this->_custOrg);
+            } else {
+                $this->_custOrg = 0;
+            }
+        }
+        return $this->_custOrg;
+    }
 
 }
