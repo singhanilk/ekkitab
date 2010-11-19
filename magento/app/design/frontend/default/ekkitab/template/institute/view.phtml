@@ -70,8 +70,12 @@
 			<div class="bigImage">
 			   <img src="<?php echo $this->helper('ekkitab_institute')->resize($image,'image',false,220, null); ?>"><br/>
 			</div>
-			<?php $desc = $_institute->getAboutus();
-				  echo $desc; ?>
+			<?php $desc = $_institute->getAboutus();?>
+			<?php if(trim($desc) !=''){ ?>
+				 <?php echo $desc; ?>
+			<?php } else{ ?>
+				 Ekkitab welcomes '<?php echo $_institute->getName() ?>' to our Network.
+			<?php } ?>
 			<br/><br/>
 			<?php $address = $_institute->getStreet()."<br/> ".$_institute->getLocality().", ".$_institute->getCity()."<br/>".$_institute->getState()."  ".$_institute->getPostcode();
 				?>
