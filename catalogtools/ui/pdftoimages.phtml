@@ -15,9 +15,16 @@ if (!is_dir($pdfImagesWorkDirectory)){
   $task = "";
 }
 if ( $task == "loadPdfFile" ) {
-   $pdfImagesDirectory = $pdfImagesWorkDirectory;
+
+   if(isset($_GET['info_source'])) {$infoSource = $_GET['info_source']; } 
+   elseif(isset($_POST['info_source'])) { $infoSource = $_POST['info_source']; } else { $infoSource = "tmp"; }
+
+   $pdfImagesDirectory = $pdfImagesWorkDirectory . $infoSource . "/";
+   if (!is_dir($pdfImagesDirectory)){
+     mkdir($pdfImagesDirectory); 
+   }
    // Get the file details from the post variables.
-   $uploadedFileName = $pdfImagesDirectory . "/". $_FILES['uploadedFile']['name'];
+   $uploadedFileName = $pdfImagesDirectory . str_replace(" ", "", $_FILES['uploadedFile']['name']);
    $uploadedTmpFileName = $_FILES['uploadedFile']['tmp_name'];
    if(move_uploaded_file($uploadedTmpFileName, $uploadedFileName)) {
      // Convert the pdf file to html with images
@@ -36,7 +43,7 @@ if ( $task == "loadPdfFile" ) {
     if ($handle = opendir($pdfImagesDirectory)) {
      while (false !== ($file = readdir($handle))) {
         if ($file != "." && $file != "..") {
-           $filename = $pdfImagesDirectory . "/". $file;
+           $filename = $pdfImagesDirectory .  $file;
            if(is_file($filename) && filesize($filename) > 0 ){
               $image['name'] = $file;
               $image['url'] = $filename;
@@ -65,12 +72,15 @@ if ( $task == "savePdfImages" ){
     $isbn = trim($isbn);
     if ( $isbn != "" ) {
        rename($pdfImagesDirectory."$filename", $pdfImagesDirectory."$isbn.jpg");
-    } 
+    } else {
+      //unlink the specific file. 
+       unlink($pdfImagesDirectory. $filename);
+    }
   }
   $command = "php $EKKITAB_HOME/bin/copyimages.php $pdfImagesDirectory";
   system($command, $result);
-  $command = "rm $pdfImagesDirectory/*.jpg";
-  #exec($command, $result);
+  $command = "rm $pdfImagesDirectory/*";
+  exec($command, $result);
 }
 ?>
 <html>
@@ -119,14 +129,31 @@ NOTE: The file name should not have spaces<br>
 <?php } else { ?>
 <div id="div_loadPdfFile">
 <form enctype="multipart/form-data" action="pdftoimages.phtml" method='post'>
- <table border='0'>
+ <table border='1'>
  <tr>
   <td>
     <input type="file" name="uploadedFile"/>
+  </td>
+  <td>
+   SOURCE:(Who supplied the catalog)
+  </td>
+  <td>
+     <select name ='info_source' value='' />
+     <?php 
+        foreach($supplierList as $key=>$value ) {
+            echo '<option value="' . $key . '"' . ">$value</option>";
+          }
+     ?>
+     </select>
+ </td>
+ </tr>
+ <tr>
+  <td>
     <input type="hidden" name="task" value="loadPdfFile" />
     <input type="hidden" name="pdfImagesDirectory" value="<?php echo $pdfImagesDirectory ?>" />
-    <input type='submit' value='Upload PDF File' /></td>
- <tr>
+    <input type='submit' value='Upload PDF File' />
+  </td>
+ </tr>
 </table>
 </form>
 </div>

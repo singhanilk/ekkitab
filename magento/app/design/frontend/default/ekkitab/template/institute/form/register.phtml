@@ -1,0 +1,219 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category   design_default
+ * @package    Mage
+ * @copyright  Copyright (c) 2008 Irubin Consulting Inc. DBA Varien (http://www.varien.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Create account form template
+ *
+ * @see Ekkitab_Institute_Block_Form_Register
+ */
+?>
+<div class="pageHeader"><?php echo $this->__('Create your Institute Account') ?></div>
+<div class="clear"></div>
+<div class="myAccCopy">
+	<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+	<form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="form-validate" enctype="multipart/form-data">
+		<fieldset class="institute-form-select wide">
+		<input type="hidden" name="success_url" value="<?php echo $this->getSuccessUrl() ?>"/>
+		<input type="hidden" name="error_url" value="<?php echo $this->getErrorUrl() ?>"/>
+		<div class="accTop">
+			<div class="accHdr"><?php echo $this->__('Institute Information') ?></div>
+			<div class="clear"></div>
+		</div>	
+		<div class="content">
+			<ul class="form-list">
+				<li>
+					<div class="input-box">
+						<label for="name"><?php echo $this->__('Institute Name') ?> <span class="required">*</span></label><br/>
+						<input type="text" name="name" id="name" value="<?php echo $this->htmlEscape($this->getFormData()->getName()) ?>" title="<?php echo $this->__('Institute Name') ?>" class="required-entry required-entry input-text"/>
+					</div>
+					<div class="input-box">
+						<label for="type"><?php echo $this->__('Type') ?> <span class="required">*</span></label><br/>
+						<?php echo $this->getInstituteTypeHtmlSelect() ?>
+					</div>
+				</li>
+				<li>
+					<label for="street_1"><?php echo $this->__('Street Address') ?> <span class="required">*</span></label><br />
+					<input type="text" name="street" value="<?php echo $this->htmlEscape($this->getFormData()->getStreet()) ?>" title="<?php echo $this->__('Street Address') ?>" id="street" class="required-entry input-text" />
+				</li>
+				<li>
+					<div class="input-box">
+						<label for="locality"><?php echo $this->__('Area/Locality') ?> <span class="required">*</span></label><br />
+						<input type="text" name="locality" value="<?php echo $this->htmlEscape($this->getFormData()->getLocality()) ?>" title="<?php echo $this->__('Area/Locality') ?>" id="locality" class="required-entry input-text" />
+					</div>
+				</li>
+				<li>
+					<div class="input-box">
+						<label for="city"><?php echo $this->__('City') ?> <span class="required">*</span></label><br/>
+						<input type="text" name="city" value="<?php echo $this->htmlEscape($this->getFormData()->getCity()) ?>"  title="<?php echo $this->__('City') ?>" class="required-entry input-text" id="city"/>
+					</div>
+					<div class="input-box">
+						<label for="region_id"><?php echo $this->__('State') ?> <span class="required">*</span></label><br/>
+						<select id="region_id" name="region_id" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none">
+							<option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+						</select>
+						<script type="text/javascript">
+							$('region_id').setAttribute('defaultValue',  "<?php echo $this->getFormData()->getRegionId() ?>");
+						</script>
+						<input type="text" id="region" name="region" value="<?php echo $this->htmlEscape($this->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text" style="display:none"/>
+					</div>
+				</li>
+				<li>
+					<div class="input-box">
+						<label for="zip"><?php echo $this->__('Zip/Postal Code') ?> <span class="required">*</span></label><br/>
+						<input type="text" name="postcode" value="<?php echo $this->htmlEscape($this->getFormData()->getPostcode()) ?>" title="<?php echo $this->__('Zip/Postal Code') ?>" id="zip" class="validate-zip-international required-entry input-text"/>
+					</div>
+					<div class="input-box">
+						<label for="country"><?php echo $this->__('Country') ?> <span class="required">*</span></label><br/>
+						<!--input type="text" name="cntry" id="cntry" value="" title="ctry" class="required-entry input-text"/>
+						 
+						<input type="hidden" name="country_id" value="IN" title="country" id="country" class="required-entry input-text"/ -->
+						<?php	echo $this->getCountryHtmlSelect() ?>
+					</div>
+				</li>
+				<li>
+					<div class="input-box">
+						<label for="telephone"><?php echo $this->__('Telephone') ?> <span class="required">*</span></label><br/>
+						<input type="text" name="telephone" id="telephone" value="<?php echo $this->htmlEscape($this->getFormData()->getTelephone()) ?>" title="<?php echo $this->__('Telephone') ?>" class="required-entry input-text"/>
+					</div>
+					<div class="input-box">
+						<label for="website_url"><?php echo $this->__('Website Address') ?></label><br/>
+						<input type="text" name="website_url" id="website_url" value="<?php echo $this->htmlEscape($this->getFormData()->getWebsiteUrl()) ?>" title="<?php echo $this->__('Website Address') ?>" class="input-text"/>
+					</div>
+				</li>
+				<li>
+					<div class="input-box">
+						<label for="telephone"><?php echo $this->__('About the school') ?></label><br/>
+						<textarea name="aboutus" rows="5" id="aboutus" title="<?php echo $this->__('About the school') ?>>"<?php echo $this->htmlEscape($this->getFormData()->getAboutus()) ?></textarea>
+					</div>
+					<div class="input-box">
+						<label for="image"><?php echo $this->__('Institute Photo') ?></label><br/>
+						<input type="file" name="image" id="image" value="<?php echo $this->htmlEscape($this->getFormData()->getImage()) ?>" title="<?php echo $this->__('Institute Photo') ?>" class="input-text"/>
+					</div>
+				</li>
+				<li>
+					<div class="input-box">
+						<input type="checkbox" name="any_donation" id="any_donation" value="1" <?php echo ($this->htmlEscape($this->getFormData()->getAnyDonation()==1)? "checked":"") ?>" title="<?php echo $this->__('Any Donation to Library') ?>"/> &nbsp;  <label for="any_donationx"><?php echo $this->__('Allow customer to donate any book to your library') ?></label>
+						
+					</div>
+				</li>
+			</ul>
+		</div>	
+		<div class="accTop">
+				<div class="accHdr"><?php echo $this->__('Admininistrator Information') ?></div>
+			<div class="clear"></div>
+		</div>	
+		<div class="content">
+			<ul class="form-list">
+				<div class="customer-name">
+						<label for="useAsAdmin"><?php echo $this->__('If you already have an account with us and if you would like that account to be the administrator for this school, check this box') ?>  </label> &nbsp; <input id="use_as_admin" name="use_as_admin" value="<?php echo $this->htmlEscape($this->getFormData()->getUseAsAdmin()) ?>"  title="Use As Admin" type="checkbox" onChange="javascript:showLoginForm();" <?php echo ($this->htmlEscape($this->getFormData()->getUseAsAdmin())=='y')? "checked":""?>/>
+				</div>
+			</ul>
+		</div>
+		<div class="content" id="registerAdmin">
+			<ul class="form-list">
+				<li>
+					<div class="customer-name">
+						<div class="input-box name-firstname">
+							<label for="admin_firstname"><?php echo $this->__('First Name') ?><span class="required">*</span></label>
+							<br />
+							<input id="admin_firstname" name="admin_firstname" value="<?php echo $this->htmlEscape($this->getFormData()->getAdminFirstname()) ?>" title="Admin First Name" class="required-entry input-text" type="text">
+						</div>
+						<div class="input-box name-lastname">
+							<label for="admin_lastname"><?php echo $this->__('Last Name') ?><span class="required">*</span></label>
+							<br>
+							<input id="admin_lastname" name="admin_lastname" value="<?php echo $this->htmlEscape($this->getFormData()->getAdminLastname()) ?>" title="Admin Last Name" class="required-entry input-text" type="text">
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="input-box">
+						<label for="email_address"><?php echo $this->__('Email Address') ?> <span class="required">*</span></label><br/>
+						<input type="text" name="admin_email" id="admin_email" value="<?php echo $this->htmlEscape($this->getFormData()->getAdminEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="validate-email required-entry input-text"/>
+					</div>
+				</li>
+				<li>
+					<div class="input-box">
+						<label for="password"><?php echo $this->__('Password') ?> <span class="required">*</span></label><br/>
+						<input type="password" name="admin_password" id="admin_password" title="<?php echo $this->__('Password') ?>"  class="required-entry validate-password input-text"/>
+					</div>
+					<div class="input-box">
+						<label for="confirmation"><?php echo $this->__('Confirm Password') ?> <span class="required">*</span></label><br/>
+						<input type="password" name="admin_confirmation" title="<?php echo $this->__('Confirm Password') ?>" id="admin_confirmation" class="required-entry validate-cpassword input-text"/>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="content" id="loginAdmin" style="display:none">
+			<ul class="form-list">
+				<li>
+					<div class="input-box">
+						<label for="email_address"><?php echo $this->__('Email Address') ?> <span class="required">*</span></label><br/>
+						<input type="text" name="admin_email" id="admin_email" value="<?php echo $this->htmlEscape($this->getFormData()->getAdminEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="validate-email required-entry input-text"/>
+					</div>
+				</li>
+				<li>
+					<div class="input-box">
+						<label for="password"><?php echo $this->__('Password') ?> <span class="required">*</span></label><br/>
+						<input type="password" name="admin_password" id="admin_password" title="<?php echo $this->__('Password') ?>"  class="required-entry validate-password input-text"/>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="content" id="">
+			<ul class="form-list">
+				<li><span class="note">Note: Your institute information will be validated before it is added to our network. So please provide the correct communication details. Thank you. </li>
+				<li><input type="image" src="<?php echo $this->getSkinUrl('images/submit_button.png') ?>" alt="<?php echo $this->__('Submit') ?>"/></li>
+					<li><a href="<?php echo $this->getBackUrl() ?>" class="f-left">&laquo; <?php echo $this->__('Back') ?></a></li>
+			</ul>
+		</div>
+		</fieldset>
+	</form>
+	<script type="text/javascript">
+		var dataForm = new VarienForm('form-validate', true);
+		new RegionUpdater('country', 'region', 'region_id', <?php echo $this->helper('directory')->getRegionJson() ?>);
+	</script>
+</div>
+
+<script language="javascript">
+	function showLoginForm(){
+		var loginDiv = document.getElementById("loginAdmin");
+		var registerDiv = document.getElementById("registerAdmin");
+		var obj = document.getElementById("use_as_admin");
+		if(obj.checked ){
+			loginDiv.style.display="block";
+			registerDiv.style.display="none";
+			obj.value="y";
+		}else {
+			loginDiv.style.display="none";
+			registerDiv.style.display="block";
+			obj.value="n";
+		}
+	}
+	
+	showLoginForm();
+
+</script>

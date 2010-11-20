@@ -102,6 +102,23 @@ class Ekkitab_Institute_Block_Institute_View extends Mage_Core_Block_Template
 		}
 	}
 
+
+	public function getCustomer()
+    {
+        return Mage::getSingleton('customer/session')->getCustomer();
+    }
+
+	public function isUserAdmin()
+    {
+        Mage::log($this->getCustomer()->getId());
+        Mage::log($this->_institute->getAdminId());
+		if($this->_institute &&  $this->getCustomer() && $this->getCustomer()->getId()==$this->_institute->getAdminId() ){
+			return true;
+		} else{
+			return false;
+		}
+    }
+
 	public function getOrganizationWishlist()
     {
 		if(!is_null($this->_institute) && is_null($this->_wishlistCollection)){
@@ -129,7 +146,19 @@ class Ekkitab_Institute_Block_Institute_View extends Mage_Core_Block_Template
 
     public function getItemAddToCartUrl($item,$orgId)
     {
-        return $this->getUrl('ekkitab_wishlist/index/donationCart',array('item'=>$item->getWishlistItemId(),'org'=>$orgId));
+        return $this->getUrl('ekkitab_checkout/cart/donationCart',array('item'=>$item->getWishlistItemId(),'org'=>$orgId));
+    }
+
+    public function getOrgWishlistActionUrl($orgId)
+    {
+        return $this->getUrl('ekkitab_wishlist/index/addOrgWishlist',array('orgId'=>$orgId));
+    }
+
+    public function getWishlistBrowseUrl($orgId)
+    {
+        $session = Mage::getSingleton('core/session');
+		$session->setCurrentLinkedOrganization(array('current_linked_organization'=>$orgId));
+		return $this->getUrl('home');
     }
 
     public function getMoveAllCartUrl()

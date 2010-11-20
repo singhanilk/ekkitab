@@ -36,19 +36,33 @@ class Ekkitab_Wishlist_Model_Wishlist extends Mage_Wishlist_Model_Wishlist
         if ($customer instanceof Mage_Customer_Model_Customer) {
             $customer = $customer->getId();
         }
-		$organizationId= Mage::helper('ekkitab_wishlist')->getCurrentLinkedOrganization();
-		$wishlistId =  $this->_getResource()->getWishListId($customer,$organizationId);
-        if(!is_null($wishlistId) && $wishlistId >0 ){
-		   $this->load($wishlistId);
-		}
-		if (!$this->getId() && $create) {
+
+        $customerIdFieldName = $this->_getResource()->getCustomerIdFieldName();
+        $this->_getResource()->load($this, $customer, $customerIdFieldName);
+        if (!$this->getId() && $create) {
             $this->setCustomerId($customer);
-            $this->setOrganizationId($organizationId);
             $this->setSharingCode($this->_getSharingRandomCode());
             $this->save();
         }
 
         return $this;
+
+		/*if ($customer instanceof Mage_Customer_Model_Customer) {
+            $customer = $customer->getId();
+        }
+		//$organizationId= Mage::helper('ekkitab_institute')->getCurrentLinkedOrganization();
+		$wishlistId =  $this->_getResource()->getWishListId($customer);
+        if(!is_null($wishlistId) && $wishlistId >0 ){
+		   $this->load($wishlistId);
+		}
+		if (!$this->getId() && $create) {
+            $this->setCustomerId($customer);
+           // $this->setOrganizationId($organizationId);
+            $this->setSharingCode($this->_getSharingRandomCode());
+            $this->save();
+        }
+
+        return $this;*/
     }
 
 	/**

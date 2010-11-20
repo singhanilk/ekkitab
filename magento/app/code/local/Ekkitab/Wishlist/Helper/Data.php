@@ -16,13 +16,6 @@
 class Ekkitab_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data 
 {
 
-	/**
-     * Current Linked Organization
-
-     *
-     * @var int
-     */
-    protected $_custOrg;
 
 
 	/**
@@ -37,29 +30,6 @@ class Ekkitab_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data
 				->loadByCustomer($this->_getCurrentCustomer());
         }
         return $this->_wishlist;
-    }
-
-	/**
-     * Retrieve search query text
-     *
-     * @return string
-     */
-    public function getCurrentLinkedOrganization()
-    {
-        if (is_null($this->_custOrg)) {
-			$orgArr = Mage::getSingleton('core/session')->getCurrentLinkedOrganization();
-			if(is_array($orgArr) && count($orgArr) > 0 ){
-				$this->_custOrg = $orgArr['current_linked_organization'];
-			}else{
-				$this->_custOrg = '';
-			}
-            if (isset($this->_custOrg)) {
-                $this->_custOrg = (int)trim($this->_custOrg);
-            } else {
-                $this->_custOrg = 0;
-            }
-        }
-        return $this->_custOrg;
     }
 
 	/**

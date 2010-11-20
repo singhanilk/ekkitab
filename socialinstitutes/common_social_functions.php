@@ -56,6 +56,35 @@ function getHash($password) {
 		return $str === false ? md5($password) : md5($str . $password) . ':' . $str;
 }
 
+/* Method to generate the email id for the institute */
+function generateInstituteEmailId($institute){
+
+ if ( $institute == null ) return "";
+ if ( $institute['name'] == null or empty($institute['name']) ) return "";
+
+ if ( $institute['postcode'] == null or empty($institute['postcode']) ) return "";
+
+ $tmpString = str_replace(" ", "", $institute['name']);
+ $tmpString = substr($tmpString, 0, 10 );
+ $email = $tmpString."_".trim($institute['postcode'])."@ekkitab.com";
+ return $email;
+}
+
+/* Method to generate the image name for the institute */
+function generateInstituteImageName($institute){
+
+ if ( $institute == null ) return "";
+ if ( $institute['name'] == null or empty($institute['name']) ) return "";
+
+ if ( $institute['postcode'] == null or empty($institute['postcode']) ) return "";
+
+ $tmpString = str_replace(" ", "", $institute['name']);
+ $tmpString = substr($tmpString, 0, 10 );
+ $imageName = $tmpString."_".trim($institute['postcode']);
+
+ return $imageName;
+}
+
 /** Retrieve sharing code (random string)
 * @return string
 */

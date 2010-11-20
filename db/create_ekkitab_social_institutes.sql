@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS ek_social_institutes (
  is_html tinyint(1) DEFAULT '0',
  image varchar(80) DEFAULT NULL,
  is_valid tinyint(1) DEFAULT '0',
+ any_donation tinyint(1) DEFAULT '0',
  admin_id int(10) unsigned NOT NULL,
  created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  modified datetime DEFAULT NULL,

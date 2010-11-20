@@ -5,8 +5,8 @@
 $FIELD_SEPARATOR = "\t";
 
 # Control characters which have to be replaced
-$controlCharactersToReplace = array("\x0D", "\n");
-$controlCharactersReplaceValues = array("", "<br>");
+$controlCharactersToReplace = array("\x0D", "\n", '"');
+$controlCharactersReplaceValues = array("", "<br>", "");
 # characters outside the range.
 $asciiExpression = '/(?:[^\x00-\x7F])/';
 
@@ -32,6 +32,7 @@ $bindingList = array("None" => "", "Paperback" => "Paperback", "Hardcover" => "H
 $languageList = array("English" => "English");
 # The valid suppliers as of now. This is taken from /mnt4/publisherdata/
 $supplierList = array (
+"APK" => "APK",
 "AMIT" => "AMIT",
 "BOOKWORLDENTERPRISES" => "BOOKWORLDENTERPRISES",
 "CAMBRIDGE" => "CAMBRIDGE",
@@ -44,6 +45,7 @@ $supplierList = array (
 "INDIABOOKS" => "INDIABOOKS",
 "JAICO" => "JAICO",
 "MEDIASTAR" => "MEDIASTAR",
+"NARI" => "NARI",
 "NEWINDIABOOKSOURCE" => "NEWINDIABOOKSOURCE",
 "ORIENTBLACKSWAN" => "ORIENTBLACKSWAN",
 "OXFORD" => "OXFORD",
@@ -55,9 +57,11 @@ $supplierList = array (
 "PRISM" => "PRISM",
 "RANDOMHOUSE" => "RANDOMHOUSE",
 "RESEARCHPRESS" => "RESEARCHPRESS",
+"ROLI" => "ROLI",
 "RUPA" => "RUPA",
 "SAGE" => "SAGE",
 "SCHAND" => "SCHAND",
+"SCHOLASTIC" => "SCHOLASTIC",
 "TATAMCGRAWHILL"=>"TATAMCGRAWHILL",
 "TBH"=>"TBH",
 "UBS"=>"UBS",
@@ -65,8 +69,6 @@ $supplierList = array (
 "VIVA" => "VIVA",
 "WESTLAND" => "WESTLAND",
 "WILEY" => "WILEY",
-"NARI" => "NARI",
-"ROLI" => "ROLI",
 );
 
 // This list of invalid Author and title list is made after going through the missing isbns files.
@@ -98,9 +100,15 @@ function formatValues($books){
   $modifiedBooks = Array();
   foreach($books as $book){
    $book['title'] = preg_replace($asciiExpression, " ", $book['title']);
+   $book['title'] = str_replace($controlCharactersToReplace, $controlCharactersReplaceValues, $book['title']);
+
+   if ( $book['author'] == "NA" ) { $book['author'] = ""; }
    $book['author'] = preg_replace($asciiExpression, " ", $book['author']);
+   $book['author'] = str_replace($controlCharactersToReplace, $controlCharactersReplaceValues, $book['author']);
+
    $book['description'] = str_replace($controlCharactersToReplace, $controlCharactersReplaceValues, $book['description']);
    $book['description'] = preg_replace($asciiExpression, " ", $book['description']);
+
    $modifiedBooks[] = $book;
   }
   //print_r($modifiedBooks);
@@ -121,33 +129,41 @@ function validBooks($books){
   global $asciiExpression;
   global $availabilityList;
   global $supplierList;
+  global $currencyList;
+  $index = 0;
 
  foreach($books as $book ) {
+  $index++;
   if ( !is_null($book['isbn']) && !empty($book['isbn']) && (preg_match($asciiExpression,$book['isbn']) == 0 )){
        $isbnIsValid = true;
-  } else { $errorList[] =  "isbn is not valid"; }
+  } else { $errorList[] =  "Book No:$index-Isbn is not valid"; }
 
   if ( !is_null($book['in_stock']) && !empty($book['in_stock']) && (preg_match($asciiExpression,$book['in_stock']) == 0 ) 
        && array_key_exists($book['in_stock'], $availabilityList)){
        $availabilityIsValid = true;
-  } else { $errorList[] =  "Availability is not valid"; }
+  } else { $errorList[] =  "Book No:$index-Availability is not valid"; }
 
   if ( !is_null($book['title']) && !empty($book['title']) && (preg_match($asciiExpression,$book['title']) == 0 )){
        $titleIsValid = true;
-  } else { $errorList[] =  "Title is not valid"; }
+  } else { $errorList[] =  "Book No:$index-Title is not valid"; }
 
   if ( !is_null($book['author']) && !empty($book['author']) && (preg_match($asciiExpression,$book['author']) == 0)){
        $authorIsValid = true;
-  } else { $errorList[] =  "Author is not valid"; }
+  } else { $errorList[] =  "Book No:$index-Author is not valid"; }
 
   if ((preg_match($asciiExpression,$book['description']) == 0 )){
        $descIsValid = true;
-  } else { $errorList[] =  "Description is not valid"; }
+  } else { $errorList[] =  "Book No:$index-Description is not valid"; }
 
   if ( !is_null($book['info_source']) && !empty($book['info_source']) && (preg_match($asciiExpression,$book['info_source']) == 0 ) 
        && in_array($book['info_source'], $supplierList)){
        $supplierIsValid = true;
-  } else { $errorList[] =  "Supplier is not valid"; }
+  } else { $errorList[] =  "Book No:$index-Supplier is not valid"; }
+
+  if ( !is_null($book['currency']) && !empty($book['currency']) && (preg_match($asciiExpression,$book['currency']) == 0 ) 
+       && array_key_exists($book['currency'], $currencyList)){
+       $currencyIsValid = true;
+  } else { $errorList[] =  "Book No:$index-Currency is not valid"; }
  }
  return $errorList;
 } 
@@ -400,6 +416,51 @@ function getIgnoreIsbns($db) {
   if ( $ignoreIsbnList == null ) $ignoreIsbnList = Array();
   return $ignoreIsbnList; 
  
+}
+
+/* This is the standard file format in which tab delimited files will be uploaded
+** The following columns are named differently in the TAB delimited file for user conviencen
+** info_source as SUPPLIER
+** list_price as PRICE
+** in_stock as AVAILABILITY
+** bisac_codes as SUBJECT 
+** 
+** The bisac codes and description are kept at the end for the ease of entering data in excel sheet 
+** which is later converted into TAB delimited file 
+*/
+function getBookFromStandardUploadFormat($line){
+  global $FIELD_SEPARATOR;
+  global $availabilityList;
+
+  $book = Array();
+  $values = explode($FIELD_SEPARATOR, $line);
+  $index =0;  
+  $book['isbn'] = $values[$index++];
+  $book['title'] = $values[$index++];
+  // Convert the authors's to right format
+  $book['author'] = $values[$index++];
+  $book['info_source'] = strtoupper($values[$index++]);
+  $book['publisher'] = $values[$index++];
+  $book['imprint'] = $values[$index++];
+  $book['list_price'] = $values[$index++];
+  $book['currency'] = $values[$index++];
+  // Convert availability from string to code.
+  $book['in_stock'] = ""; 
+  $tmpString = $values[$index++];
+  foreach($availabilityList as $key=>$value ){
+     if ( $value == $tmpString ) { $book['in_stock'] = $key; break; }
+  }
+  $book['publishing_date'] = $values[$index++];
+  $book['delivery_period'] = $values[$index++];
+  $book['binding'] = $values[$index++];
+  $book['pages'] = $values[$index++];
+  $book['language'] = $values[$index++];
+  $book['weight'] = $values[$index++];
+  $book['dimension'] = $values[$index++];
+  $book['shipping_region'] = $values[$index++];
+  $book['bisac_codes'] = $values[$index++];
+  $book['description'] = $values[$index++];
+  return $book;
 }
 
 function bookStringInCatalogFormat($book) {

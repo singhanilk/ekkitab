@@ -13,6 +13,35 @@
 
 require_once 'Mage/Wishlist/controllers/IndexController.php';
 
+function trim_value(&$value) 
+{ 
+	$value = trim($value); 
+}
+
+function isIsbn(&$str)
+{
+	$str=trim($str);
+	if (preg_match("/^[0-9X\-_]+$/", $str)) {
+		$str = preg_replace("/[-_]/", "", $str);
+	}
+	if(preg_match("/^[0-9X]*$/",$str)){
+		if (strlen($str) == 12) {
+			$str =  '0'.$str;
+			return true;
+		}else if (strlen($str) == 10) {
+			$str = $this->isbn10to13($str);
+			return true;
+		}else if (strlen($str) == 13) {
+			return true;
+		}else{
+			return false;
+		}
+	}else {
+		return false;
+	}
+	
+}
+
 class Ekkitab_Wishlist_IndexController extends Mage_Wishlist_IndexController
 {
 
@@ -28,6 +57,33 @@ class Ekkitab_Wishlist_IndexController extends Mage_Wishlist_IndexController
             $wishlist = Mage::getModel('ekkitab_wishlist/wishlist')
                 ->loadByCustomer(Mage::getSingleton('customer/session')->getCustomer(), true);
             Mage::register('wishlist', $wishlist);
+        }
+        catch (Exception $e) {
+            Mage::getSingleton('wishlist/session')->addError($this->__('Cannot create wishlist'));
+            return false;
+        }
+        return $wishlist;
+    }
+
+
+
+    /**
+     * Retrieve wishlist object
+     *
+     * @return Mage_Wishlist_Model_Wishlist
+     */
+    protected function _getOrgWishlist($orgId)
+    {
+        try {
+           $cust = Mage::getSingleton('customer/session')->getCustomer();
+		   if($cust && $cust->getId() > 0 ){
+			   $wishlist = Mage::getModel('ekkitab_wishlist/wishlist')
+					->loadByOrganization($orgId,$cust->getId(), true);
+				Mage::register('wishlist', $wishlist);
+		   }else{
+			   Mage::getSingleton('wishlist/session')->addError($this->__('Cannot create wishlist'));
+	            return false;
+		   }
         }
         catch (Exception $e) {
             Mage::getSingleton('wishlist/session')->addError($this->__('Cannot create wishlist'));
@@ -83,6 +139,69 @@ class Ekkitab_Wishlist_IndexController extends Mage_Wishlist_IndexController
             $session->addError($this->__('There was an error while adding item to wishlist.'));
         }
         $this->_redirect('*');
+    }
+
+
+	/**
+     * Adding new item
+     */
+    public function addOrgWishlistAction()
+    {
+        $session = Mage::getSingleton('customer/session');
+        $orgId = (int) $this->getRequest()->getParam('orgId');
+        $notSalableNames    = array(); // Out of stock products message
+		
+
+		if($orgId && $orgId > 0){
+			$wishlist = $this->_getOrgWishlist($orgId);
+			if (!$wishlist) {
+				$this->_redirectReferer();
+				return;
+			}
+
+			$productIsbns = $this->getRequest()->getParam('wishlist_isbns');
+			if (!$productIsbns || $productIsbns=='' || strlen(trim($productIsbns)) ==0 ) {
+				$this->_redirectReferer();
+				return;
+			}
+			$isbns= explode(",",trim($productIsbns));
+			$isbns= array_filter($isbns,'isIsbn');
+			array_walk($isbns, 'trim_value');
+			$status	=array("1","2");
+			if(!is_null($isbns) && is_array($isbns) && count($isbns) > 0  ){
+				$books = Mage::getModel('ekkitab_catalog/product')->getCollection()
+					->addIsbnFilter($isbns)
+					->addStockFilter($status)
+					->addIsbnOrderFilter($isbns);
+				
+				if(!is_null($books) && $books->count() > 0  ){
+					foreach ($books as $product) {
+						if ($product->getId()) {
+							try {
+								$wishlist->addNewItem($product->getId());
+								Mage::dispatchEvent('wishlist_add_product', array('wishlist'=>$wishlist, 'product'=>$product));
+							}
+							catch (Mage_Core_Exception $e) {
+								$session->addError($this->__("There was an error while adding book to Institute's wishlist: %s", $e->getMessage()));
+							}
+							catch (Exception $e) {
+								$session->addError($this->__("There was an error while adding book to Institute's wishlist."));
+							}
+						}
+					}
+					$message = $this->__("Successfully added book(s) to your Institute's wishlist.");
+					$session->addSuccess($message);
+
+				}else{
+					$session->addError($this->__("Cannot add to your Institute's wishlist. Book(s) requested are either not available with us,invalid or are out of stock."));
+				}
+			}else{
+				$session->addError($this->__("Cannot add to Institute's wishlist. Book(s) information is not valid/available."));
+			}
+		}else{
+			$session->addError($this->__("Cannot add Institute's wishlist. Institute information not available."));
+		}
+		$this->_redirectReferer();
     }
 
 

@@ -36,6 +36,7 @@ function formatValues($values) {
   $institute['aboutus_summary'] = $values[$i++];
   $institute['is_html'] = $values[$i++];
   $institute['image'] = $values[$i++];
+  $institute['any_donation'] = $values[$i++];
   $institute['is_valid'] = 1;
   $institute['created'] = '';
   $institute['modified'] = '';
@@ -79,7 +80,7 @@ function addInstitute($db, $institute) {
 
   try {
   $query = "insert into ek_social_institutes (name, email, type_id, street, locality, city, " . 
-            "state, postcode, country_id, website_url,telephone, aboutus,aboutus_summary,is_html, image, is_valid, admin_id, created, modified ) ".
+            "state, postcode, country_id, website_url,telephone, aboutus,aboutus_summary,is_html, image, is_valid, any_donation, admin_id, created, modified ) ".
             "values ( '" .  $institute['name'] . "'"
             . ",'" . $institute['email'] . "'"
             . "," . $institute['type_id'] . ""
@@ -96,6 +97,7 @@ function addInstitute($db, $institute) {
             . ",'" . $institute['is_html'] . "'"
             . ",'" . $institute['image'] . "'"
             . "," . $institute['is_valid'] . ""
+            . "," . $institute['any_donation'] . ""
             . "," . $institute['admin_id'] . ""
             . ", now(), now());";
    print $query;

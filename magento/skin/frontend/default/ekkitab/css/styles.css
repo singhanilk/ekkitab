@@ -1329,6 +1329,9 @@ a:hover {
 .padderTop5px {
 	padding-top: 5px;
 }
+.padderTop15px {
+	padding-top: 15px;
+}
 .padderLeft5px {
 	padding-left: 5px;
 }
@@ -2062,6 +2065,14 @@ a:hover {
 	font-size: 11px;
 	color: #c60;
 	font-weight:bold;
+	margin:2px 0px;
+}
+
+.greyTxtBoldIt {
+	font-size: 11px;
+	color: #717476;
+	font-weight:bold;
+	font-style:italic;
 	margin:2px 0px;
 }
 
@@ -3105,3 +3116,13 @@ dt .hdr {
 .p-left-5{
 	padding-left:5px;
 }
+
+.greyTxtIt {
+	color: #717476;
+	padding-bottom: 5px;
+	line-height: 11px;
+	font-size: 11px;
+	font-style: italic;
+	text-align: left;
+}
+
