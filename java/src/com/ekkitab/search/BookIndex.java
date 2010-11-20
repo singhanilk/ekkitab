@@ -358,7 +358,7 @@ public class BookIndex {
                 value = book.get("author"+j);
                 if (value != null) {
                     Field f = new Field("author", value, Field.Store.YES, Field.Index.ANALYZED);
-                    f.setBoost(2);
+                    //f.setBoost(2);
                     doc.add(f);
                 	String[] words = value.split(" ");
                     for (String word: words) {
