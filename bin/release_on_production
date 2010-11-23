@@ -43,5 +43,5 @@ cd /tmp/$entity;
 sleep 10;
 php $EKKITAB_HOME/bin/samplesearch.php
 echo "New $entity is now in production.";
-echo "Deleting image cache...";
-rm -rf $EKKITAB_HOME/magento/media/catalog/product/cache/1/*
+echo "Not deleting image cache.";
+#rm -rf $EKKITAB_HOME/magento/media/catalog/product/cache/1/*
