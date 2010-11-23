@@ -7,8 +7,8 @@ my $oExcel = new Spreadsheet::ParseExcel;
 die "Usage $0 <Excel File> \n Redirect output to required file from stdout" unless @ARGV;
 my $FH = "filehandle";
 my $FilePath;
-my $enteredcount = 0;
-my $printedcount = 0;
+my $count_available = 0;
+my $count_notavailable = 0;
 my $oBook = $oExcel->Parse($ARGV[0]);
 if (not defined $oBook) {
     print STDERR "Failed to parse input file: $ARGV[0]\n"; 
@@ -124,14 +124,14 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if(defined ($value)) {
            $availability = $value->Value;
            $availability =~ s/\n//g;
-           if ($availability > $threshold){
-	       $availability = 'Available';
-            if (length($isbn) == 10 || length($isbn) == 13){
-                $enteredcount++;
-            }
+           if ($availability > $threshold) {
+	          $availability = 'Available';
+              if (length($isbn) == 10 || length($isbn) == 13){
+                $count_available++;
+              }
            }
            else{
-		  $printedcount++;
+		       $count_notavailable++;
                $availability = 'Not Available' . '[' . $availability . ']';
            }        
         }
@@ -165,11 +165,11 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     }
 }
     my $ratio = 0;
-    if ($enteredcount > 0) {
-        $ratio = ($printedcount/$enteredcount)*100;
+    if (($count_available + $count_notavailable)> 0) {
+        $ratio = ($count_available/($count_available + $count_notavailable))*100;
     }
     if (int($ratio) < 70){
-        warn "[WARNING] Values printed less than 70% \n";
+        warn "[WARNING] Available books are less than 70% of total.\n";
     }
-print "Available --> $enteredcount Not Available --> $printedcount Total -->" . ($enteredcount+$printedcount) . "\n";
+#print "Available --> $count_available Not Available --> $count_notavailable Total -->" . ($count_available+$count_notavailable) . "\n";
 exit(0);
