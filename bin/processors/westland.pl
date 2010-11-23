@@ -233,7 +233,10 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         }
     }
 }
-my $ratio = ($printedcount/$enteredcount)*100;
+my $ratio = 0;
+if ($enteredcount > 0) {
+    $ratio = ($printedcount/$enteredcount)*100;
+}
 if (int($ratio) < 70) {
   warn "[WARNING] Values printed less than 70% \n";
 }
