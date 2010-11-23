@@ -17,7 +17,7 @@ if (not defined $oBook) {
 my($iR, $iC, $oWkS, $oWkC);
 my $ekkitab_home = $ENV{EKKITAB_HOME};
 if (!($ekkitab_home)){
-print "Not Defined" . "\n";
+  die "EKKITAB_HOME is not defined";
 }
 
 my $Settingsfile = $ekkitab_home . "/config/stockprocess.ini";
@@ -45,32 +45,34 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             $oWkC = $oWkS->{Cells}[$iR][$iC];
             if (defined $oWkC) {
                 if ($isbncol == -1) {
-                    if ($oWkC->Value =~ /ISBN/) {
+                    if ($oWkC->Value =~ /ISBN/i) {
                         $isbncol = $iC;
                         next;
                     }
                 }
                 if ($pricecol == -1) {
-                    if ($oWkC->Value =~ /SellRate/) {
+                    if (($oWkC->Value =~ /SellRate/i) or 
+                       ($oWkC->Value =~ /PRICE/i)) {
                         $pricecol = $iC;
                         next;
                     }
                 }
                 if ($availcol == -1) {
-                    if ($oWkC->Value =~ /Net\sAvailability/) {
+                    if (($oWkC->Value =~ /Net\sAvailability/i) or 
+                       ($oWkC->Value =~ /AVAILABILITY/i)) {
                         $availcol = $iC;
                         next;
                     }
                 }
     	        if ($titlecol == -1) {
-    		        if ($oWkC->Value =~ /Title/) {
+    		        if ($oWkC->Value =~ /Title/i) {
                         $titlecol = $iC;
                         next;
     		        }
                 }
     
     	        if ($authorcol == -1) {
-    		        if ($oWkC->Value =~ /Author/) {
+    		        if ($oWkC->Value =~ /Author/i) {
                         $authorcol = $iC;
                         next;
     		        }
@@ -162,7 +164,10 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         }
     }
 }
-    my $ratio = ($printedcount/$enteredcount)*100;
+    my $ratio = 0;
+    if ($enteredcount > 0) {
+        $ratio = ($printedcount/$enteredcount)*100;
+    }
     if (int($ratio) < 70){
         warn "[WARNING] Values printed less than 70% \n";
     }
