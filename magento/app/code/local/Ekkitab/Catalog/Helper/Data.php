@@ -423,7 +423,7 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
         $baseUrl = Mage::getSingleton('catalog/product_media_config')->getBaseMediaUrl();
         $url = "";
         if (file_exists($baseDir . "/" . $imagePath)) {
-            $url = $baseUrl . $imagePath;
+            $url = $baseUrl . "/" . $imagePath;
         }
         else {
             // check if placeholder defined in config
