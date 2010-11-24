@@ -366,6 +366,6 @@ INSERT INTO `customer_entity_varchar` VALUES (1,1,5,1,'Installation'),(2,1,7,1,'
 -- Seed data for table `ek_social_institute_types`
 --
 
-insert into ek_social_institute_types (`type` ) values ('school'), ('library');
+insert into ek_social_institute_types (`type` ) values ('school'), ('library'),('others');
 
 	

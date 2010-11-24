@@ -78,7 +78,12 @@
 				</td>
 				<td ><?php $desc = $institute->getAboutus();
 				  		   $shortDesc = getShortenedString($desc,30);
-						   echo $shortDesc; ?> ... <a href="<?php echo $this->helper('ekkitab_institute')->getViewLink() ?>id/<?php echo $institute->getId() ?>">read more.</a></td>
+						   if(trim($shortDesc) !=''){ ?>
+								<?php echo $shortDesc; ?>
+					<?php } else{ ?>
+							Ekkitab welcomes '<?php echo $institute->getName() ?>' to our Network.
+					<?php } ?>
+						  ... <a href="<?php echo $this->helper('ekkitab_institute')->getViewLink() ?>id/<?php echo $institute->getId() ?>">read more.</a></td>
 			</tr>
 <?php	endforeach; ?>
 		</tbody>
