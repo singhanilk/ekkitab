@@ -417,16 +417,30 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
         return $url;
     }
 
-    public function getImageUrl($imagePath) 
+    public function getImageUrl($imagePath, $imageType="image") 
     {
         $baseDir = Mage::getSingleton('catalog/product_media_config')->getBaseMediaPath();
-        $baseUrl = Mage::getBaseUrl('media') . "catalog/product/";
+        $baseUrl = Mage::getSingleton('catalog/product_media_config')->getBaseMediaUrl();
         $url = "";
         if (file_exists($baseDir . "/" . $imagePath)) {
             $url = $baseUrl . $imagePath;
         }
         else {
-            $url = $baseUrl . "placeholder/stores/1/image.png";
+            // check if placeholder defined in config
+            $isConfigPlaceholder = Mage::getStoreConfig("catalog/placeholder/${imageType}_placeholder");
+            $configPlaceholder   = '/placeholder/' . $isConfigPlaceholder;
+            if ($isConfigPlaceholder && file_exists($baseDir . $configPlaceholder)) {
+                $url = $baseUrl . $configPlaceholder;
+            }
+            else {
+                // replace file with skin or default skin placeholder
+                $skinBaseDir = Mage::getDesign()->getSkinBaseDir();
+                $skinBaseUrl =  Mage::getDesign()->getSkinBaseUrl();
+                $skinPlaceholder = "/images/catalog/product/placeholder/{$imageType}.png";
+                if (file_exists($skinBaseDir . $skinPlaceholder)) {
+                    $url = $skinBaseUrl . $skinPlaceholder;
+                }
+            }
         }
         return $url;
     }
