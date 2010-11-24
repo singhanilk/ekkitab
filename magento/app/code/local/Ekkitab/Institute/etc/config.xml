@@ -68,7 +68,15 @@
                 <class>Ekkitab_Institute_Helper</class>
             </ekkitab_institute>
         </helpers>
-
+        <template>
+            <email>
+                <ekkitab_institute_create_account_email_template translate="label" module="customer">
+                    <label>New account</label>
+                    <file>institute_new.html</file>
+                    <type>html</type>
+                </ekkitab_institute_create_account_email_template>
+            </email>
+        </template>
     </global>
    <frontend>
         <routers>
@@ -88,4 +96,15 @@
             </updates>
         </layout>
     </frontend>
+	<default>
+        <ekkitab_institute>
+            <create_account>
+                <confirm>0</confirm>
+                <default_group>1</default_group>
+                <email_domain>emaildomain.com</email_domain>
+                <email_identity>general</email_identity>
+                <email_template>ekkitab_institute_create_account_email_template</email_template>
+            </create_account>
+        </ekkitab_institute>
+    </default>
 </config>

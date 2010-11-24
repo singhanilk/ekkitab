@@ -40,39 +40,67 @@ class Ekkitab_Institute_Block_Institute extends Mage_Core_Block_Template
 	protected $_instituteCollection;
 	protected $__instituteCollectionCount;
 	
-	protected function _prepareLayout()
+	public function addMyInstituteBreadcrumb()
     {
-	   
-		$title ='Members of the Ekkitab Network';
-		
-			if ($headBlock = $this->getLayout()->getBlock('head')) {
-				$headBlock->setTitle($title);
-				$headBlock->setKeywords("");
-				$headBlock->setDescription("");
-				$headBlock->setOpenGraphTitle($title);
-				$headBlock->setOpenGraphSiteName("Ekkitab.com");
-				$headBlock->setOpenGraphImageUrl("");
-				$headBlock->setOpenGraphProductUrl("");
-				$headBlock->setFacebookAdmin("ekkitab");
-			}
-			
-			if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
+		$title ='Manage My Institutes ';
+	
+		if ($headBlock = $this->getLayout()->getBlock('head')) {
+			$headBlock->setTitle($title);
+			$headBlock->setKeywords("");
+			$headBlock->setDescription("");
+			$headBlock->setOpenGraphTitle($title);
+			$headBlock->setOpenGraphSiteName("Ekkitab.com");
+			$headBlock->setOpenGraphImageUrl("");
+			$headBlock->setOpenGraphProductUrl("");
+			$headBlock->setFacebookAdmin("ekkitab");
+		}
+		if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
 
-				$breadcrumbs->addCrumb('home', array(
-					'label'=>Mage::helper('ekkitab_institute')->__('Home'),
-					'title'=>Mage::helper('ekkitab_institute')->__('Go to Home Page'),
-					'link'=>Mage::getBaseUrl()
-				));
-	   
-				$breadcrumbs->addCrumb('Ekkitab Network', array(
-					'label'=>Mage::helper('ekkitab_institute')->__('Members of the Ekkitab Network'),
-					'title'=>Mage::helper('ekkitab_institute')->__('Members of the Ekkitab Network'),
-					'link'=>''
-				));
-   
-			}
-		
-			return parent::_prepareLayout();
+			$breadcrumbs->addCrumb('home', array(
+				'label'=>Mage::helper('ekkitab_institute')->__('Home'),
+				'title'=>Mage::helper('ekkitab_institute')->__('Go to Home Page'),
+				'link'=>Mage::getBaseUrl()
+			));
+			$breadcrumbs->addCrumb('My Account', array(
+				'label'=>Mage::helper('ekkitab_institute')->__('My Account'),
+				'title'=>Mage::helper('ekkitab_institute')->__('My Account'),
+				'link'=>'/customer/account'
+			));
+			$breadcrumbs->addCrumb('Manage My Institutes', array(
+				'label'=>Mage::helper('ekkitab_institute')->__("Manage Institutes"),
+				'title'=>Mage::helper('ekkitab_institute')->__("Manage Institutes"),
+				'link'=>''
+			));
+		}
+    }
+
+	public function addListAllInstitutesBreadCrumb($title='My Account',$label='My Account',$link='customer/account')
+    {
+		$title ='Members of the Ekkitab Network';
+	
+		if ($headBlock = $this->getLayout()->getBlock('head')) {
+			$headBlock->setTitle($title);
+			$headBlock->setKeywords("");
+			$headBlock->setDescription("");
+			$headBlock->setOpenGraphTitle($title);
+			$headBlock->setOpenGraphSiteName("Ekkitab.com");
+			$headBlock->setOpenGraphImageUrl("");
+			$headBlock->setOpenGraphProductUrl("");
+			$headBlock->setFacebookAdmin("ekkitab");
+		}
+		if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
+
+			$breadcrumbs->addCrumb('home', array(
+				'label'=>Mage::helper('ekkitab_institute')->__('Home'),
+				'title'=>Mage::helper('ekkitab_institute')->__('Go to Home Page'),
+				'link'=>Mage::getBaseUrl()
+			));
+			$breadcrumbs->addCrumb('Ekkitab Network Members', array(
+				'label'=>Mage::helper('ekkitab_institute')->__('Members of the Ekkitab Network'),
+				'title'=>Mage::helper('ekkitab_institute')->__('Members of the Ekkitab Network'),
+				'link'=>''
+			));
+		}
     }
 
 	public function setPageSize($count)
@@ -95,6 +123,7 @@ class Ekkitab_Institute_Block_Institute extends Mage_Core_Block_Template
 
 	protected function getAllInstitutes() 
     {
+		
 		$institutes = Mage::getModel('ekkitab_institute/institute')->getCollection()
 			->addAuthenticateFilter();
 		

@@ -117,7 +117,7 @@ class Ekkitab_Institute_AccountController extends Mage_Core_Controller_Front_Act
 			//load all institute details from form.
 			foreach (Mage::getConfig()->getFieldset('institute_account') as $code=>$node) {
                 if ($node->is('create') && ($value = $this->getRequest()->getParam($code)) !== null) {
-                    Mage::log("Setting Data for $code as : $value");
+                  //  Mage::log("Setting Data for $code as : $value");
 					$institute->setData($code, $value);
                 }
             }
@@ -157,6 +157,7 @@ class Ekkitab_Institute_AccountController extends Mage_Core_Controller_Front_Act
 								$admin =  Mage::getModel('customer/customer')
 								->setStore(Mage::app()->getStore())
 								->loadByEmail($username);
+								$admin->setData('password',$password);
 							}else{
 								$postArray['use_as_admin'] = "y"; 
 								$admin=null;
@@ -183,12 +184,15 @@ class Ekkitab_Institute_AccountController extends Mage_Core_Controller_Front_Act
 								$admin->setData('confirmation',$institute->getData('admin_confirmation'));
 								$admin->getGroupId();
 
-								Mage::log("Addding the admin..");
+								//Mage::log("Addding the admin..");
 								$this->addCustomerEntity($admin,array());
 								$admin =  Mage::getModel('customer/customer')
 									->setStore(Mage::app()->getStore())
 									->loadByEmail($admin->getData('email'));
-								Mage::log("Added the admin... id is:".$admin->getId());
+								$admin->setData('firstname',$institute->getData('admin_firstname'));
+								$admin->setData('lastname',$institute->getData('admin_lastname'));
+								$admin->setData('password',$institute->getData('admin_password'));
+								//Mage::log("Added the admin... id is:".$admin->getId());
 
 							}
 						}
@@ -206,7 +210,7 @@ class Ekkitab_Institute_AccountController extends Mage_Core_Controller_Front_Act
 							$schoolCustomer->getGroupId();
 						
 							// Set the address for this customer 
-							Mage::log($this->getRequest()->getPost());
+							//Mage::log($this->getRequest()->getPost());
 							$address = Mage::getModel('customer/address')
 									->setData($this->getRequest()->getPost())
 									->setData('firstname',$firstname)
@@ -222,9 +226,9 @@ class Ekkitab_Institute_AccountController extends Mage_Core_Controller_Front_Act
 								$errors = array();
 							}
 							try{
-								Mage::log("Addding the school customer....");
+								//Mage::log("Addding the school customer....");
 								$this->addCustomerEntity($schoolCustomer,$errors);
-								Mage::log("Added the school customer....");
+								//Mage::log("Added the school customer....");
 								$schoolCustomer =  Mage::getModel('customer/customer')
 									->setStore(Mage::app()->getStore())
 									->loadByEmail($schoolCustomer->getData('email'));
@@ -262,7 +266,7 @@ class Ekkitab_Institute_AccountController extends Mage_Core_Controller_Front_Act
 											return;
 										}
 										else {
-											$this->_getSession()->setCustomerAsLoggedIn($admin);
+											$this->_getCustomerSession()->setCustomerAsLoggedIn($admin);
 											$url = $this->_welcomeCustomer($admin);
 											$this->_redirectSuccess($url);
 											return;
@@ -311,7 +315,7 @@ class Ekkitab_Institute_AccountController extends Mage_Core_Controller_Front_Act
 				$this->_getSession()->addError($this->__('Invalid Insitute data. Institute Name and Institute Postcode not available.'));
 			}
         }
-		Mage::log(array_merge($this->getRequest()->getPost(),$postArray));
+		//Mage::log(array_merge($this->getRequest()->getPost(),$postArray));
 		$this->_getSession()->setInstituteFormData(array_merge($this->getRequest()->getPost(),$postArray));
         $this->_redirectError(Mage::getUrl('*/*/create', array('_secure'=>true)));
     }
@@ -324,16 +328,16 @@ class Ekkitab_Institute_AccountController extends Mage_Core_Controller_Front_Act
      * @param bool $isJustConfirmed
      * @return string
      */
-    protected function _welcomeCustomer(Mage_Customer_Model_Customer $customer, $isJustConfirmed = false)
+    protected function _welcomeCustomer(Mage_Customer_Model_Customer $admin, $isJustConfirmed = false)
     {
         $this->_getCustomerSession()->addSuccess($this->__('Thank you for registering with %s', Mage::app()->getStore()->getName()));
 
-        $customer->sendNewAccountEmail($isJustConfirmed ? 'confirmed' : 'registered');
+        $admin->sendNewAccountEmail($isJustConfirmed ? 'confirmed' : 'registered_institute');
 
-        $successUrl = Mage::getUrl('customer/account/index', array('_secure'=>true));
-        if ($this->_getCustomerSession()->getBeforeAuthUrl()) {
-            $successUrl = $this->_getCustomerSession()->getBeforeAuthUrl(true);
-        }
+        $successUrl = Mage::getUrl('ekkitab_institute/search/myInstitutes/', array('_secure'=>true));
+        //if ($this->_getCustomerSession()->getBeforeAuthUrl()) {
+       //     $successUrl = $this->_getCustomerSession()->getBeforeAuthUrl(true);
+        //}
         return $successUrl;
     }
 
