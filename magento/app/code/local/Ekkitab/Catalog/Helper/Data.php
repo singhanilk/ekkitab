@@ -417,6 +417,20 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
         return $url;
     }
 
+    public function getImageUrl($imagePath) 
+    {
+        $baseDir = Mage::getSingleton('catalog/product_media_config')->getBaseMediaPath();
+        $baseUrl = Mage::getBaseUrl('media') . "catalog/product/";
+        $url = "";
+        if (file_exists($baseDir . "/" . $imagePath)) {
+            $url = $baseUrl . $imagePath;
+        }
+        else {
+            $url = $baseUrl . "placeholder/stores/1/image.png";
+        }
+        return $url;
+    }
+
 	/**
      * Retrieve url for adding product to wishlist
      *
