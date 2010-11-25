@@ -110,8 +110,6 @@ class Ekkitab_Institute_Block_Institute_View extends Mage_Core_Block_Template
 
 	public function isUserAdmin()
     {
-        Mage::log($this->getCustomer()->getId());
-        Mage::log($this->_institute->getAdminId());
 		if($this->_institute &&  $this->getCustomer() && $this->getCustomer()->getId()==$this->_institute->getAdminId() ){
 			return true;
 		} else{
@@ -161,15 +159,16 @@ class Ekkitab_Institute_Block_Institute_View extends Mage_Core_Block_Template
 		return $this->getUrl('home');
     }
 
-    public function getMoveAllCartUrl()
-    {
-        return $this->getUrl('ekkitab_wishlist/index/allOrgCart');
-    }
-
     public function getMoveSelectedCartUrl()
     {
         return $this->getUrl('ekkitab_checkout/cart/moveSelectedToCart');
     }
+
+    public function getRemoveSelectedWishlistUrl()
+    {
+        return $this->getUrl('ekkitab_wishlist/index/removeSelected');
+    }
+
     public function getBackUrl()
     {
         if ($this->getRefererUrl()) {

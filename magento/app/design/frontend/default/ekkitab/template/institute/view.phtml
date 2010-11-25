@@ -78,7 +78,13 @@
 			<?php } ?>
 			<br/><br/>
 			<?php $address = $_institute->getStreet()."<br/> ".$_institute->getLocality().", ".$_institute->getCity()."<br/>".$_institute->getState()."  ".$_institute->getPostcode();
-				?>
+				  if($_institute->getCountryId()!=""){
+					 $country = Mage::getModel('directory/country')->loadByCode($_institute->getCountryId());
+					 if($country->getName()!=""){
+						$address.=("<br/>".$country->getName());
+					}
+				}			
+			?>
 				
 			<strong>Address:</strong><br/>
 			<?php echo $address; ?>
@@ -143,10 +149,14 @@
 		<div class="searchResTop">
  			<div class="leftArea">
 				<div class="left">
-				&nbsp; <input type="checkbox" onChange="javascript:selectAllBooks(<?php echo $i?>);" value="1" id="selectAll_<?php echo $i?>" />
-				<?php if($this->isSaleable()):?>
+				<?php if($this->isSaleable()  && !$this->isUserAdmin()):?>
+					&nbsp; <input type="checkbox" onChange="javascript:selectAllBooks(<?php echo $i?>);" value="1" id="selectAll_<?php echo $i?>" />
 					&nbsp; <input type="image"  src="<?php echo $this->getSkinUrl('images/donate_bks_selected.jpg');?>" alt="<?php echo $this->__('Donate Selected to Cart') ?>" />&nbsp;
-				<?php endif;?>
+			  <?php endif;?>
+				<?php if($this->isUserAdmin()): ?>
+					&nbsp; <input type="checkbox" onChange="javascript:selectAllBooks(<?php echo $i?>);" value="1" id="selectAll_<?php echo $i?>" />
+					&nbsp; <a href="#" onClick="javascript:removeBooks();"><img  src="<?php echo $this->getSkinUrl('images/remove_button.png');?>" align="absmiddle" alt="<?php echo $this->__('Remove Selected from Wishlist') ?>" /></a>&nbsp;
+			  <?php  endif;  ?>
 				</div>
 				<div class="padderLeft15px left" id="donationBooksCount_<?php echo $i?>"  name="donationBooksCount_<?php echo $i?>"  style="display:block"></div>
 				<div class="padderLeft15px left" name="donationAmount_<?php echo $i?>"  id="donationAmount_<?php echo $i?>" style="display:block"></div>
@@ -214,7 +224,7 @@
 					$counter+=1;
 ?>
 					<td>
-						<input type="checkbox" onChange="javascript:addBookPrice(this,<?php echo $discPrice?>,<?php echo $i?>);" value="1" name="cart[<?php echo $item->getWishlistItemId() ?>][wishlist]" <?php if($stock==0 || $listPrice <= 0) : ?> disabled<?php endif;?> id="cart_item_<?php echo $item->getWishlistItemId() ?>" /> 
+						<input type="checkbox" onChange="javascript:addBookPrice(this,<?php echo $discPrice?>,<?php echo $i?>);" value="1" name="cart[<?php echo $item->getWishlistItemId() ?>][wishlist]" <?php if(!$this->isUserAdmin() && ($stock==0 || $listPrice <= 0)) : ?> disabled<?php endif;?> id="cart_item_<?php echo $item->getWishlistItemId() ?>" /> 
 						<input type="hidden" value="<?php echo $discPrice?>" id="book_price_<?php echo $item->getWishlistItemId()?>"/> 
 						<input type="hidden" value="<?php echo $item->getWishlistItemId()?>" name="book_id_<?php echo $i?>"/> 
 					</td>
@@ -232,6 +242,7 @@
 						<?php if($item->isSaleable()): ?>
 							<!--a href="<?php echo $this->getItemAddToCartUrl($item,$_institute->getId()) ?>"><img src="<?php echo $this->getSkinUrl('images/move_cart_button_grey.png') ?>" alt="<?php echo $this->__('Add to Cart') ?>" class="v-middle"/></a><br/-->
 						<?php endif; ?>
+
 						<div class="youSave"><?php if($stock==0 || $listPrice <=0) : ?>Out of Stock<?php endif;?> </div><br/>
 					</td>
 <?php			$firstTime =1;
@@ -253,12 +264,16 @@
 			</tr>
 		</tbody>
 		<input type="hidden" value=" <?php echo $_institute->getId()?>" name="org"/> 
+		<input type="hidden" value=" <?php echo $_institute->getAdminId()?>" name="adminId"/> 
 	</table>
 		<script type="text/javascript">decorateTable('wishlist-table')</script>
 		<div class="content" style="text-align:left">
-				<?php if($this->isSaleable()):?>
+				<?php if($this->isSaleable() && !$this->isUserAdmin()):?>
 					&nbsp; &nbsp; <input type="image" src="<?php echo $this->getSkinUrl('images/donate_bks_selected.jpg');?>" alt="<?php echo $this->__('Donate Selected to Cart') ?>" />&nbsp;
 				<?php endif;?> 
+				<?php if($this->isUserAdmin()): ?>
+					&nbsp; <a href="#" onClick="javascript:removeBooks();"><img  src="<?php echo $this->getSkinUrl('images/remove_button.png');?>" align="absmiddle" alt="<?php echo $this->__('Remove Selected from Wishlist') ?>" /></a>&nbsp;
+			  <?php  endif;  ?>
 				<br/></li>
 				<br/>&nbsp; &nbsp;<a href="<?php echo $this->getBackUrl() ?>" >&laquo; <?php echo $this->__('Back') ?></a></li>
 		</div>
@@ -347,30 +362,49 @@
 		}
 		addBookPrice(true,0,pageNo);
 	}
+	
+	function removeBooks(){
+		var frm= document.school_wishlist_books;
+		frm.action="<?php echo $this->getRemoveSelectedWishlistUrl()?>";
+		frm.submit();
+	}
+
+
 	function selectAllBooks(pageNo){
 		var obj = document.getElementById("selectAll_"+pageNo);
 		var idName="book_id_"+pageNo;
 		var ids =eval("document.school_wishlist_books."+idName);
-		var size=ids.length;
-		var alterCounter =false;
-		if(obj && size > 0){
-			for(i=0;i<size;i++){
-				var itemId = ids[i].value;
-				var checkBox = document.getElementById("cart_item_"+itemId);
-				var priceItem = document.getElementById("book_price_"+itemId);
-				if(checkBox.disabled==false){
-					if(checkBox.checked!=obj.checked){
-						alterCounter = true;
-					}
-					if(obj.checked==false){
-						checkBox.checked=false;
+		if(obj){
+			var size;
+			if(ids && ids.value){
+				size=1;
+			}else{
+				size=ids.length;
+			}
+			var alterCounter =false;
+			if(size > 0){
+				for(i=0;i<size;i++){
+					if(size==1){
+						var itemId = ids.value;
 					}else{
-						checkBox.checked=true;
+						var itemId = ids[i].value;
 					}
-					if(alterCounter){
-						addBookPrice(checkBox,priceItem.value,pageNo);
-					}
-				} 
+					var checkBox = document.getElementById("cart_item_"+itemId);
+					var priceItem = document.getElementById("book_price_"+itemId);
+					if(checkBox.disabled==false){
+						if(checkBox.checked!=obj.checked){
+							alterCounter = true;
+						}
+						if(obj.checked==false){
+							checkBox.checked=false;
+						}else{
+							checkBox.checked=true;
+						}
+						if(alterCounter){
+							addBookPrice(checkBox,priceItem.value,pageNo);
+						}
+					} 
+				}
 			}
 		}
 	}

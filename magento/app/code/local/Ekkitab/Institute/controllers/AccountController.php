@@ -117,7 +117,7 @@ class Ekkitab_Institute_AccountController extends Mage_Core_Controller_Front_Act
 			//load all institute details from form.
 			foreach (Mage::getConfig()->getFieldset('institute_account') as $code=>$node) {
                 if ($node->is('create') && ($value = $this->getRequest()->getParam($code)) !== null) {
-                  //  Mage::log("Setting Data for $code as : $value");
+                    //Mage::log("Setting Data for $code as : $value");
 					$institute->setData($code, $value);
                 }
             }
@@ -199,6 +199,8 @@ class Ekkitab_Institute_AccountController extends Mage_Core_Controller_Front_Act
 
 						if($admin && $admin->getId() > 0){
 							$institute->setData('admin_id', $admin->getId());
+							$institute->setData('state', $institute->getData('region'));
+							$institute->setData('country_id',  $this->getRequest()->getParam('country_id'));
 
 							//Then... create customer_entity with the generated EmailId 
 							$schoolCustomer = Mage::getModel('customer/customer')->setId(null);

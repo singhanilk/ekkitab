@@ -72,18 +72,21 @@ class Ekkitab_Wishlist_IndexController extends Mage_Wishlist_IndexController
      *
      * @return Mage_Wishlist_Model_Wishlist
      */
-    protected function _getOrgWishlist($orgId)
+    protected function _getOrgWishlist($orgId,$custId=0)
     {
         try {
-           $cust = Mage::getSingleton('customer/session')->getCustomer();
-		   if($cust && $cust->getId() > 0 ){
-			   $wishlist = Mage::getModel('ekkitab_wishlist/wishlist')
-					->loadByOrganization($orgId,$cust->getId(), true);
-				Mage::register('wishlist', $wishlist);
-		   }else{
-			   Mage::getSingleton('wishlist/session')->addError($this->__('Cannot create wishlist'));
-	            return false;
-		   }
+			if($custId==0){
+				$cust = Mage::getSingleton('customer/session')->getCustomer();
+				if($cust && $cust->getId() > 0 ){
+					$custId = $cust->getId();
+			   }else{
+				   Mage::getSingleton('wishlist/session')->addError($this->__('Cannot create wishlist'));
+					return false;
+			   }
+			}
+		   $wishlist = Mage::getModel('ekkitab_wishlist/wishlist')
+				->loadByOrganization($orgId,$custId, true);
+			Mage::register('wishlist', $wishlist);
         }
         catch (Exception $e) {
             Mage::getSingleton('wishlist/session')->addError($this->__('Cannot create wishlist'));
@@ -255,7 +258,7 @@ class Ekkitab_Wishlist_IndexController extends Mage_Wishlist_IndexController
     /**
      * Add all items to shoping cart
      *
-     */
+    
     public function allOrgCartAction() {
         $messages           = array();
         $urls               = array();
@@ -310,6 +313,7 @@ class Ekkitab_Wishlist_IndexController extends Mage_Wishlist_IndexController
             $this->_redirect('checkout/cart');
         }
     }
+	*/
 
     /**
      * Add all items to shoping cart
@@ -369,6 +373,58 @@ class Ekkitab_Wishlist_IndexController extends Mage_Wishlist_IndexController
             $this->_redirect('checkout/cart');
         }
     }
+
+		/**
+     * Add wishlist item to shopping cart
+     */
+    public function removeSelectedAction()
+    {
+        $orgId      = (int) $this->getRequest()->getParam('org');
+        $custId      = (int) $this->getRequest()->getParam('adminId');
+        if($orgId && $orgId > 0 && $custId && $custId > 0){
+			$wishlist = $this->_getOrgWishlist($orgId,$custId);
+		}else{
+			$wishlist = $this->_getWishlist();
+		}
+		if (!$wishlist ) {
+			Mage::getSingleton('core/session')->addError("Sorry couldn't retreive the wishlist.");
+			$this->_redirectReferer();
+			return;
+		}
+		$customer = Mage::getSingleton('customer/session')->getCustomer();
+
+		if ($customer->getId()!=$wishlist->getCustomerId()) {
+			Mage::getSingleton('core/session')->addError("Sorry couldn't modify wishlist. Only an administrator can modify the Institute's wishlist.");
+			$this->_redirectReferer();
+			return;
+		}
+		$cartData = $this->getRequest()->getParam('cart');
+		if (is_array($cartData)) {
+			/**
+			 * Collect product ids marked for move to cart
+			 */
+			foreach ($cartData as $itemId => $itemInfo) {
+				if (!empty($itemInfo['wishlist'])) {
+					$item = Mage::getModel('wishlist/item')->load($itemId);
+					if ($item){
+						try {
+							  $item->delete();
+						}
+						catch(Exception $e) {
+							Mage::getSingleton('checkout/session')->addError($e->getMessage());
+						}
+					}
+				}
+			}
+			Mage::getSingleton('core/session')->addSuccess("Modified institute's wishlist successfully");
+		}else{
+			Mage::getSingleton('core/session')->addError("Sorry couldn't modify wishlist. List of books to be removed is empty.");
+			$this->_redirectReferer();
+		}
+
+		$this->_redirectReferer();
+    }
+	
 
 	public function sendAction()
     {
