@@ -8,6 +8,7 @@
  *
  */
 ?>
+<?php Mage::app()->getLayout()->getMessagesBlock()->setMessages(Mage::getSingleton('customer/session')->getMessages(true)); ?> 
 <div class="contentArea">
 <div class="pageHeader">Institutes under your administration</div>
 <?php
