@@ -119,6 +119,16 @@ class Ekkitab_Institute_Helper_Data extends Mage_Core_Helper_Abstract
         return $this->_getUrl('ekkitab_institute/account/createpost');
     }
 
+    /**
+     * Retrieve customer register form post url
+     *
+     * @return string
+     */
+    public function getEditUrl($id)
+    {
+        return $this->_getUrl('ekkitab_institute/account/edit',array("id"=>$id));
+    }
+
 		/**
      * Schedule resize of the image
      * $width *or* $height can be null - in this case, lacking dimension will be calculated.

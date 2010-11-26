@@ -61,8 +61,8 @@
 				</li>
 				<li>
 					<div class="input-box">
-						<label for="locality"><?php echo $this->__('Area/Locality') ?> <span class="required">*</span></label><br />
-						<input type="text" name="locality" value="<?php echo $this->htmlEscape($this->getFormData()->getLocality()) ?>" title="<?php echo $this->__('Area/Locality') ?>" id="locality" class="required-entry input-text" />
+						<label for="locality"><?php echo $this->__('Area/Locality') ?> </label><br />
+						<input type="text" name="locality" value="<?php echo $this->htmlEscape($this->getFormData()->getLocality()) ?>" title="<?php echo $this->__('Area/Locality') ?>" id="locality" class="input-text" />
 					</div>
 				</li>
 				<li>
@@ -91,7 +91,7 @@
 						<!-- input type="text" name="cntry" id="cntry" value="" title="ctry" class="required-entry input-text"/>
 						 
 						<input type="hidden" name="country_id" value="IN" title="country" id="country" class="required-entry input-text"/ -->
-						<?php	echo $this->getCountryHtmlSelect() ?>
+						<?php   echo $this->getCountryHtmlSelect() ?>
 					</div>
 				</li>
 				<li>
