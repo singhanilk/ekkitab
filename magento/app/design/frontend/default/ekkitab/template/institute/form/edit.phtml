@@ -91,7 +91,7 @@
 						<input type="checkbox" name="any_donation" id="any_donation" value="1" <?php echo ($this->htmlEscape($_institute->getAnyDonation()==1)? "checked":"") ?>" title="<?php echo $this->__('Any Donation to Library') ?>"/> &nbsp;  <label for="any_donationx"><?php echo $this->__('Allow customer to donate any book to your library') ?></label>
 					</div>
 					<div class="input-box">
-						<div class="left" style="width:25%"> <img src="<?php echo $this->helper('ekkitab_institute')->resize($_institute->getImage(),'small_image',false,null,null); ?>" align="absmiddle"></div><div class="left" style="width:50%"> <br/>
+						<div class="left" style="width:25%"> <img src="<?php echo $this->helper('ekkitab_institute')->resize($_institute->getImage(),'small_image',false,75,null); ?>" align="absmiddle"></div><div class="left" style="width:50%"> <br/>
 						<label for="image"><?php echo $this->__('Upload New Photo') ?> : <input type="file" name="image" id="image" value="<?php echo $this->htmlEscape($_institute->getImage()) ?>" title="<?php echo $this->__('Institute Photo') ?>"/></label>
 					</div></div>
 				</li>
