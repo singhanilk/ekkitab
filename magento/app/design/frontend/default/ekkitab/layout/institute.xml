@@ -66,4 +66,16 @@
             <block type="ekkitab_institute/institute_view" name="ekkitab_institute_view" template="institute/view.phtml"/>
         </reference>
     </ekkitab_institute_account_view>
+
+	    <ekkitab_institute_account_edit>
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+            <action method="setHeaderTitle" translate="title" module="customer"><title>Edit Institute Account Info</title></action>
+        </reference>
+        <reference name="content">
+            <block type="ekkitab_institute/form_edit" name="institute_edit" template="institute/form/edit.phtml"/>
+        </reference>
+    </ekkitab_institute_account_edit>
+
+
 </layout>

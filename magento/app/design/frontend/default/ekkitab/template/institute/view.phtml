@@ -90,13 +90,14 @@
 			<?php echo $address; ?>
 
 <?php	if($this->isUserAdmin()):
-?>			<br/><br/>
-		  <a href="#" onClick="javascript:showWishlistForm()"><img src="<?php echo $this->getSkinUrl('images/btn_update_wishlist.gif') ?>" border="0"></a><br/>
+?>		
+		  <br/><br/>
+		  <a name="updateWishlistForm"></a>
+		  <a href="javascript:gotoWishlistForm();" onClick="javascript:showWishlistForm();"><img src="<?php echo $this->getSkinUrl('images/btn_update_wishlist.gif') ?>" border="0"></a><br/>
 		  <div class="padderTop15px" id="wishlistForm" style="display:none">
 		  <form action="<?php echo $this->getOrgWishlistActionUrl($_institute->getId())?>" method="post">
 				<label for="email_address"><?php echo $this->__("Please enter comma seperated list of book isbns you would like to add in your wishlist.") ?></label><br/>
-				<textarea name="wishlist_isbns" id="wishlist_isbns" title="<?php echo $this->__('Wishlist Isbns') ?>" class="required-entry" rows="2" cols="120">
-				</textarea>
+				<textarea name="wishlist_isbns" id="wishlist_isbns" title="<?php echo $this->__('Wishlist Isbns') ?>" class="required-entry" rows="2" cols="120"></textarea>
 				<ul class="form-list">
 					<li><input type="image" src="<?php echo $this->getSkinUrl('images/submit_button.png') ?>" alt="<?php echo $this->__('Submit') ?>"/></li>
 				</ul>
@@ -105,7 +106,6 @@
 		<strong><a href="<?php echo $this->getWishlistBrowseUrl($_institute->getId())?>">Click here</a> to visit our bookstore and add books to your school's wishlist.</strong>
 
 		</div>
-
 <?php endif; ?>
 		<div class="clear"></div>
 		</div><!-- finDetSynop -->
@@ -158,8 +158,10 @@
 					&nbsp; <a href="#" onClick="javascript:removeBooks();"><img  src="<?php echo $this->getSkinUrl('images/remove_button.png');?>" align="absmiddle" alt="<?php echo $this->__('Remove Selected from Wishlist') ?>" /></a>&nbsp;
 			  <?php  endif;  ?>
 				</div>
+				<?php if(!$this->isUserAdmin()): ?>
 				<div class="padderLeft15px left" id="donationBooksCount_<?php echo $i?>"  name="donationBooksCount_<?php echo $i?>"  style="display:block"></div>
 				<div class="padderLeft15px left" name="donationAmount_<?php echo $i?>"  id="donationAmount_<?php echo $i?>" style="display:block"></div>
+			  <?php  endif;  ?>
 				<br/></li>
 
 			</div><!-- leftArea -->
@@ -412,34 +414,39 @@
 		var itemsCounterObj = document.getElementById("donationBooksCount_"+pageNo);
 		var donationCounter =document.getElementById("donationAmount_"+pageNo);
 		var price = parseInt(price);
-		if(price > 0 && obj){
-			if(obj.checked){
-				totalDonationCost = totalDonationCost + price ;
-				totalDonationCartItems = totalDonationCartItems + 1 ;
-			}else {
-				totalDonationCost = totalDonationCost - price ;
-				totalDonationCartItems = totalDonationCartItems - 1 ;
+		if(itemsCounterObj  &&  donationCounter){
+			if(price > 0 && obj){
+				if(obj.checked){
+					totalDonationCost = totalDonationCost + price ;
+					totalDonationCartItems = totalDonationCartItems + 1 ;
+				}else {
+					totalDonationCost = totalDonationCost - price ;
+					totalDonationCartItems = totalDonationCartItems - 1 ;
+				}
 			}
-		}
-		if(totalDonationCartItems > 0){
-			itemsCounterObj.innerHTML="<b>Books Selected :</b> <span class='orangeTxt'>"+totalDonationCartItems+"</span>";
-			itemsCounterObj.style.display="block";
-		}else{
-			itemsCounterObj.innerHTML="";
-			itemsCounterObj.style.display="none";
-		}
-		if(totalDonationCost > 0) {
-			donationCounter.innerHTML="<b>Donation Cart Total :</b> <span class='orangeTxt'>"+totalDonationCost+"</span>";
-			donationCounter.style.display="block";
-		}else{
-			donationCounter.innerHTML="";
-			donationCounter.style.display="none";
+			if(totalDonationCartItems > 0){
+				itemsCounterObj.innerHTML="<b>Books Selected :</b> <span class='orangeTxt'>"+totalDonationCartItems+"</span>";
+				itemsCounterObj.style.display="block";
+			}else{
+				itemsCounterObj.innerHTML="";
+				itemsCounterObj.style.display="none";
+			}
+			if(totalDonationCost > 0) {
+				donationCounter.innerHTML="<b>Donation Cart Total :</b> <span class='orangeTxt'>"+totalDonationCost+"</span>";
+				donationCounter.style.display="block";
+			}else{
+				donationCounter.innerHTML="";
+				donationCounter.style.display="none";
+			}
 		}
 	}
 
 	function showWishlistForm(){
 		var wishlistFormDiv = document.getElementById("wishlistForm");
 		wishlistFormDiv.style.display="block";
+	}
+	function gotoWishlistForm(){
+		location.href='#updateWishlistForm';
 	}
 
 </script>

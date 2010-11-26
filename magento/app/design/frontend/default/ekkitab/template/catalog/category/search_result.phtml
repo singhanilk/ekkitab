@@ -40,6 +40,34 @@ $start=microtime(true);
 $bookList = null;
 $subcats = null;
 $curr_cp = null;
+
+$queryTxt = trim($this->helper('ekkitab_catalogsearch')->getEscapedQueryText());
+$catTxt = trim($this->helper('ekkitab_catalog')->getEscapedQueryCategoryPath());
+		
+if(strlen($catTxt)>0) {
+	$parentCatArr = explode("__",$catTxt);
+	if(!is_null($parentCatArr) && sizeof($parentCatArr) > 0){
+		$arrSize = sizeof($parentCatArr);
+		$catTxt ="";
+		for($i=0;$i < $arrSize ; $i++){
+			$cat = $parentCatArr[$i];
+			$cat = ucwords($this->getDecodedString($cat));
+			$catTxt=$catTxt.$cat."/";
+		}
+		$catTxt=substr($catTxt,0,-1);
+	}
+}
+$searchTxt="";
+if (strlen($queryTxt)>0){
+	$searchTxt="for '";
+	$searchTxt=$searchTxt." ".$queryTxt." ' ";
+	if(strlen($catTxt)>0){
+		$searchTxt=$searchTxt." in ' ".$catTxt." ' ";
+	}
+}else if(strlen($catTxt)>0) {
+	$searchTxt="in ' ".$catTxt." ' ";
+}
+
 if(!is_null($results) && is_array($results)){
   $bookList = $results["books"];
   $subcats = $results["categories"];
@@ -109,9 +137,11 @@ if(!is_null($results) && is_array($results)){
 				<?php endforeach;?>
 			</div>
 		<?php endif; ?>
-		<?php if(!is_null($suggest) && strlen($suggest)>0 ) : ?>
+		<?php if((!is_null($suggest) && strlen($suggest)>0 ) || $this->getTotalNum() >= 100) : ?>
 		<div class="suggestResTop">
-			<span class="boldFont ">Your search query returned zero results. Did you mean <span class="orangeItTxt12"><?php echo  ucwords($suggest) ?></span> instead ?
+		<span class="boldFont ">
+		<?php 	if(!is_null($suggest) && strlen($suggest)>0 ) : ?>
+			Your search query returned zero results. Did you mean <span class="orangeItTxt12"><?php echo  ucwords($suggest) ?></span> instead ?
 <?php if(!is_null($othrSuggestionsArr) && count($othrSuggestionsArr) > 0){
 ?>			<br/> Other Suggestions:
 <?php	foreach($othrSuggestionsArr as $OthrSuggest): 
@@ -121,6 +151,22 @@ if(!is_null($results) && is_array($results)){
 <?php	endforeach;
 	  }
 ?>
+		<?php endif; ?>
+		<?php if($this->getTotalNum() >= 100 && $queryTxt!='') : 
+				$authArr =array();
+				$titleArr =array();
+				$authArr["filterby"] = "author";
+				$authArr["q"] = urlencode(strtolower($queryTxt));
+				$titleArr["filterby"] = "title";
+				$titleArr["q"] = urlencode(strtolower($queryTxt));
+				if($catTxt!=''){
+					$authArr["category"] = urlencode(strtolower($catTxt));
+					$titleArr["category"] = urlencode(strtolower($catTxt));
+				}
+		?>
+			Filter your search by : <a href="<?php echo $this->getUrl('*/*/*',$authArr) ?>" class="orangeTxt12">Author</a>&nbsp; or &nbsp;<a href="<?php echo $this->getUrl('*/*/*',$titleArr) ?>" class="orangeTxt12">Title</a>.
+		
+		<?php endif; ?>
 			</span>
 		</div><!-- suggestResTop -->
 		<?php endif; ?>
@@ -305,32 +351,6 @@ if(!is_null($results) && is_array($results)){
 <?php
 	} 	
 	else { // else of if (!java_is_null(bookList))
-		$queryTxt = trim($this->helper('ekkitab_catalogsearch')->getEscapedQueryText());
-		$catTxt = trim($this->helper('ekkitab_catalog')->getEscapedQueryCategoryPath());
-		
-		if(strlen($catTxt)>0) {
-			$parentCatArr = explode("__",$catTxt);
-			if(!is_null($parentCatArr) && sizeof($parentCatArr) > 0){
-				$arrSize = sizeof($parentCatArr);
-				$catTxt ="";
-				for($i=0;$i < $arrSize ; $i++){
-					$cat = $parentCatArr[$i];
-					$cat = ucwords($this->getDecodedString($cat));
-					$catTxt=$catTxt.$cat."/";
-				}
-				$catTxt=substr($catTxt,0,-1);
-			}
-		}
-		$searchTxt="";
-		if (strlen($queryTxt)>0){
-			$searchTxt="for '";
-			$searchTxt=$searchTxt." ".$queryTxt." ' ";
-			if(strlen($catTxt)>0){
-				$searchTxt=$searchTxt." in ' ".$catTxt." ' ";
-			}
-		}else if(strlen($catTxt)>0) {
-			$searchTxt="in ' ".$catTxt." ' ";
-		}
 ?>			<div class="inLeft">
 <?php		if(strlen($queryTxt) > 0 && strlen($queryTxt) < 4 ){ ?>
 				<div class="boldFont orangeTxt12">Too many results to be displayed for your search - "<?php echo urldecode($searchTxt) ?>".</div> 

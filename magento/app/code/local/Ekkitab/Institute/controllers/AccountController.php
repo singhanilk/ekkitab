@@ -57,16 +57,16 @@ class Ekkitab_Institute_AccountController extends Mage_Core_Controller_Front_Act
     /**
      * Default customer account page
      */
-    public function indexAction()
+    public function editAction()
     {
-        $this->loadLayout();
-        $this->_initLayoutMessages('customer/session');
-        $this->_initLayoutMessages('catalog/session');
+		$orgId  = (int) $this->getRequest()->getParam('id');
 
-        $this->getLayout()->getBlock('content')->append(
-            $this->getLayout()->createBlock('customer/account_dashboard')
-        );
-        $this->getLayout()->getBlock('head')->setTitle($this->__('My Account'));
+		if (!(is_int($orgId) && $orgId > 0 )) {
+			$this->_forward('noRoute');
+		}
+
+		Mage::register('instituteId', $orgId);
+        $this->loadLayout();
         $this->renderLayout();
     }
 
@@ -321,6 +321,73 @@ class Ekkitab_Institute_AccountController extends Mage_Core_Controller_Front_Act
 		$this->_getSession()->setInstituteFormData(array_merge($this->getRequest()->getPost(),$postArray));
         $this->_redirectError(Mage::getUrl('*/*/create', array('_secure'=>true)));
     }
+
+
+    /**
+     * Change customer password action
+     */
+    public function editPostAction()
+    {
+        if (!$this->_validateFormKey()) {
+            return $this->_redirect('*/*/edit');
+        }
+        $id = (int)$this->getRequest()->getParam('id');
+
+        if ($this->getRequest()->isPost() && $id && $id > 0) {
+            $institute = Mage::getModel('ekkitab_institute/institute')->load($id);
+			
+			$customer = Mage::getSingleton('customer/session')->getCustomer();
+
+			if ($customer->getId()!=$institute->getAdminId()) {
+				Mage::getSingleton('core/session')->addError("Sorry couldn't modify institute details. Only an administrator can modify the Institute's details.");
+				$this->_redirectReferer();
+				return;
+			}
+            $fields = Mage::getConfig()->getFieldset('institute_account');
+            foreach ($fields as $code=>$node) {
+                if ($node->is('update') && ($value = $this->getRequest()->getParam($code)) !== null) {
+                    $institute->setData($code, $value);
+                }
+            }
+
+			// Get the file details from the post variables.
+			$uploadedImageName = $_FILES['image']['name'];
+			if($uploadedImageName && trim($uploadedImageName)!=''){
+				$imageName= strtolower(trim(trim(substr(str_replace(" ","",$institute->getName()),0,10))."_".trim($institute->getPostcode())));
+				$imageNameExtArr= explode(".",$_FILES['image']['name']);
+				if( $imageNameExtArr && count($imageNameExtArr) >1 ){
+				   $imageNameExt= ".".$imageNameExtArr[1];
+				}else{
+				   $imageNameExt=".jpg";
+				}
+				$imageName =$imageName.$imageNameExt ;
+				$baseDir = Mage::getBaseDir('media') . DIRECTORY_SEPARATOR . 'social_institutes';
+				$uploadedFileName = $baseDir . DIRECTORY_SEPARATOR . $imageName;
+				$uploadedTmpFileName = $_FILES['image']['tmp_name'];
+				move_uploaded_file($uploadedTmpFileName, $uploadedFileName);
+				$institute->setImage($imageName);
+
+			}
+            try {
+                $institute->save();
+                $this->_getSession()->addSuccess($this->__('Institute information was successfully modified'));
+
+                $this->_redirect('ekkitab_institute/account/edit/id/'.$institute->getId());
+                return;
+            }
+            catch (Mage_Core_Exception $e) {
+                $this->_getSession()->setInstituteFormData($this->getRequest()->getPost())
+                    ->addError($e->getMessage());
+            }
+            catch (Exception $e) {
+                $this->_getSession()->setInstituteFormData($this->getRequest()->getPost())
+                    ->addException($e, $this->__('Can\'t save Insitute'));
+            }
+        }
+
+        $this->_redirect('*/*/edit');
+    }
+
 
     /**
      * Add welcome message and send new account email.
