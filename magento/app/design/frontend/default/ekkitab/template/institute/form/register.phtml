@@ -61,8 +61,8 @@
 				</li>
 				<li>
 					<div class="input-box">
-						<label for="locality"><?php echo $this->__('Area/Locality') ?> <span class="required">*</span></label><br />
-						<input type="text" name="locality" value="<?php echo $this->htmlEscape($this->getFormData()->getLocality()) ?>" title="<?php echo $this->__('Area/Locality') ?>" id="locality" class="required-entry input-text" />
+						<label for="locality"><?php echo $this->__('Area/Locality') ?> </label><br />
+						<input type="text" name="locality" value="<?php echo $this->htmlEscape($this->getFormData()->getLocality()) ?>" title="<?php echo $this->__('Area/Locality') ?>" id="locality" class="input-text" />
 					</div>
 				</li>
 				<li>
@@ -88,10 +88,10 @@
 					</div>
 					<div class="input-box">
 						<label for="country"><?php echo $this->__('Country') ?> <span class="required">*</span></label><br/>
-						<!--input type="text" name="cntry" id="cntry" value="" title="ctry" class="required-entry input-text"/>
+						<!-- input type="text" name="cntry" id="cntry" value="" title="ctry" class="required-entry input-text"/>
 						 
 						<input type="hidden" name="country_id" value="IN" title="country" id="country" class="required-entry input-text"/ -->
-						<?php	echo $this->getCountryHtmlSelect() ?>
+						<?php   echo $this->getCountryHtmlSelect() ?>
 					</div>
 				</li>
 				<li>
@@ -133,10 +133,10 @@
 				</div>
 			</ul>
 		</div>
-		<div class="content" id="registerAdmin">
-			<ul class="form-list">
-				<li>
-					<div class="customer-name">
+		<div class="content">
+			<div class="customer-name" id="registerAdmin">
+				<ul class="form-list">
+					<li>
 						<div class="input-box name-firstname">
 							<label for="admin_firstname"><?php echo $this->__('First Name') ?><span class="required">*</span></label>
 							<br />
@@ -147,30 +147,12 @@
 							<br>
 							<input id="admin_lastname" name="admin_lastname" value="<?php echo $this->htmlEscape($this->getFormData()->getAdminLastname()) ?>" title="Admin Last Name" class="required-entry input-text" type="text">
 						</div>
-					</div>
-				</li>
-				<li>
-					<div class="input-box">
-						<label for="email_address"><?php echo $this->__('Email Address') ?> <span class="required">*</span></label><br/>
-						<input type="text" name="admin_email" id="admin_email" value="<?php echo $this->htmlEscape($this->getFormData()->getAdminEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="validate-email required-entry input-text"/>
-					</div>
-				</li>
-				<li>
-					<div class="input-box">
-						<label for="password"><?php echo $this->__('Password') ?> <span class="required">*</span></label><br/>
-						<input type="password" name="admin_password" id="admin_password" title="<?php echo $this->__('Password') ?>"  class="required-entry validate-password input-text"/>
-					</div>
-					<div class="input-box">
-						<label for="confirmation"><?php echo $this->__('Confirm Password') ?> <span class="required">*</span></label><br/>
-						<input type="password" name="admin_confirmation" title="<?php echo $this->__('Confirm Password') ?>" id="admin_confirmation" class="required-entry validate-cpassword input-text"/>
-					</div>
-				</li>
-			</ul>
-		</div>
-		<div class="content" id="loginAdmin" style="display:none">
+					</li>
+				</ul>
+			</div>
 			<ul class="form-list">
 				<li>
-					<div class="input-box">
+					<div class="input-box" >
 						<label for="email_address"><?php echo $this->__('Email Address') ?> <span class="required">*</span></label><br/>
 						<input type="text" name="admin_email" id="admin_email" value="<?php echo $this->htmlEscape($this->getFormData()->getAdminEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="validate-email required-entry input-text"/>
 					</div>
@@ -179,6 +161,10 @@
 					<div class="input-box">
 						<label for="password"><?php echo $this->__('Password') ?> <span class="required">*</span></label><br/>
 						<input type="password" name="admin_password" id="admin_password" title="<?php echo $this->__('Password') ?>"  class="required-entry validate-password input-text"/>
+					</div>
+					<div class="input-box" id="registerAdminCnfrmPwd">
+						<label for="confirmation"><?php echo $this->__('Confirm Password') ?> <span class="required">*</span></label><br/>
+						<input type="password" name="admin_confirmation" title="<?php echo $this->__('Confirm Password') ?>" id="admin_confirmation" class="required-entry validate-cpassword input-text"/>
 					</div>
 				</li>
 			</ul>
@@ -200,16 +186,19 @@
 
 <script language="javascript">
 	function showLoginForm(){
-		var loginDiv = document.getElementById("loginAdmin");
+		//var loginDiv = document.getElementById("loginAdmin");
 		var registerDiv = document.getElementById("registerAdmin");
+		var registerCfrmPwdDiv = document.getElementById("registerAdminCnfrmPwd");
 		var obj = document.getElementById("use_as_admin");
 		if(obj.checked ){
-			loginDiv.style.display="block";
+			//loginDiv.style.display="block";
 			registerDiv.style.display="none";
+			registerCfrmPwdDiv.style.display="none";
 			obj.value="y";
 		}else {
-			loginDiv.style.display="none";
+			//loginDiv.style.display="none";
 			registerDiv.style.display="block";
+			registerCfrmPwdDiv.style.display="block";
 			obj.value="n";
 		}
 	}

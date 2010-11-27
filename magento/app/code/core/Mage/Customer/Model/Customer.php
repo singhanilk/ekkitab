@@ -40,7 +40,9 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
     const XML_PATH_CONFIRM_EMAIL_TEMPLATE   = 'customer/create_account/email_confirmation_template';
     const XML_PATH_CONFIRMED_EMAIL_TEMPLATE = 'customer/create_account/email_confirmed_template';
 
-    const EXCEPTION_EMAIL_NOT_CONFIRMED       = 1;
+    const XML_PATH_REGISTER_INSTITUTE_EMAIL_TEMPLATE  = 'ekkitab_institute/create_account/email_template';
+
+	const EXCEPTION_EMAIL_NOT_CONFIRMED       = 1;
     const EXCEPTION_INVALID_EMAIL_OR_PASSWORD = 2;
 
     const SUBSCRIBED_YES = 'yes';
@@ -454,6 +456,7 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
     {
         $types = array(
             'registered'   => self::XML_PATH_REGISTER_EMAIL_TEMPLATE,  // welcome email, when confirmation is disabled
+            'registered_institute'   => self::XML_PATH_REGISTER_INSTITUTE_EMAIL_TEMPLATE,  // welcome email, when institute is registered and confirmation is disabled
             'confirmed'    => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE, // welcome email, when confirmation is enabled
             'confirmation' => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,   // email with confirmation link
         );

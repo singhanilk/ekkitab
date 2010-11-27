@@ -8,6 +8,7 @@
  *
  */
 ?>
+<?php Mage::app()->getLayout()->getMessagesBlock()->setMessages(Mage::getSingleton('customer/session')->getMessages(true)); ?> 
 <div class="contentArea">
 <div class="pageHeader">Institutes under your administration</div>
 <?php
@@ -27,12 +28,11 @@
 	}
 
 	$institutes = $this->getMyInstitutes();
-	if(!is_null($institutes)){
+	if(!is_null($institutes) && $institutes->count() > 0 ){
 ?>
 <?php if($this->getLastPageNumber()>1): ?>
 <div class="searchResTop">
 	<div class="leftArea">
-		<span class="orangeTxt">&nbsp;<?php echo $this->__("Members:") ?></span>
 	</div><!-- leftArea -->
 	<div class="rightArea">
 		<div class="topPaginationArea">
@@ -75,15 +75,24 @@
 				<td><a href="<?php echo $this->helper('ekkitab_institute')->getViewLink() ?>id/<?php echo $institute->getId() ?>"><?php echo $institute->getName(); ?></a>
 				<br/><?php echo $institute->getLocality(); ?>, <?php echo $institute->getCity(); ?>, <?php echo $institute->getState() ?>.
 				<br/><a href="<?php echo $institute->getWebsiteUrl(); ?>" target="_blank"><?php echo $institute->getWebsiteUrl()?></a>
+				<br/><a href="<?php echo $this->helper('ekkitab_institute')->getEditUrl($institute->getId()); ?>">Edit Institute</a>
 				</td>
 				<td ><?php $desc = $institute->getAboutus();
 				  		   $shortDesc = getShortenedString($desc,30);
-						   echo $shortDesc; ?> ... <a href="<?php echo $this->helper('ekkitab_institute')->getViewLink() ?>id/<?php echo $institute->getId() ?>">read more.</a></td>
+						   if(trim($shortDesc) !=''){ ?>
+								<?php echo $shortDesc; ?>
+					<?php } else{ ?>
+							Ekkitab welcomes '<?php echo $institute->getName() ?>' to our Network.
+					<?php } ?>
+						  ... <a href="<?php echo $this->helper('ekkitab_institute')->getViewLink() ?>id/<?php echo $institute->getId() ?>">read more.</a></td>
 			</tr>
 <?php	endforeach; ?>
 		</tbody>
 	</table>
-<?php	}
+<?php	}else{
+?>
+		&nbsp; <?php echo $this->__("There are no institutes registered under your administration.") ?>
+<?php }
 ?>
 <div class="clear"></div>
 </div><!-- allCategoriesArea -->

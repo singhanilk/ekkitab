@@ -30,6 +30,7 @@
  * @see Ekkitab_Catalog_Block_Product_View
  */
 ?>
+<?php Mage::app()->getLayout()->getMessagesBlock()->setMessages(Mage::getSingleton('customer/session')->getMessages(true)); ?> 
 <a name="home" ></a><?php
     $_helper = $this->helper('catalog/output');
     $_product = $this->getProduct();
@@ -97,8 +98,7 @@
 			<div class="finDetBkTitle"><?php echo $_product->getTitle() ?> <?php echo (strlen($author) > 0 )?( "<br/><span class=\"lineHeight14em\"> by <span class=\"boldFont\"><a href=\"".$this->getUrl('ekkitab_catalog/search/index/author/'.$author)."\">".$author ."</a></span></span>" ):""?></div><!-- authorEtc -->
 					
 			<?php if($inStock==0 || $listPrice <= 0):?>
-			  <div class="marginTop5px"><img src="<?php echo $this->getSkinUrl('images/out_of_stock_image.png')?>" align="absmiddle"> &nbsp; <a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($_product->getId()) ?>">Add to Wishlist</a> </div>
-
+				<div class="marginTop5px"><img src="<?php echo $this->getSkinUrl('images/out_of_stock_image.png')?>" align="absmiddle"> &nbsp; <a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($_product->getId()) ?>">Add to Wishlist</a> </div>
 			<?php endif;?>
 			<a name="promo-content"></a>
 			<div class="finDetSynop">
@@ -254,7 +254,12 @@
 		<?php if($listPrice > 0):?>
 			<?php if($inStock==1) : ?>
 				<div class="authorEtc"><?php echo $shippingTime ?></div>
-				<a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($_product->getId()) ?>">Add to Wishlist</a>
+				<?php if($this->helper('ekkitab_institute')->isCustOrgAdmin()):?>
+					<a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($_product->getId()) ?>">Add to your Wishlist</a>
+					<br/><a href="<?php echo $this->helper('ekkitab_catalog')->getOrgWishListAddUrl($_product->getIsbn())?>"><?php echo $this->helper('ekkitab_catalog')->getOrgWishlistText() ?></a>	
+				<?php else: ?>
+					<a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($_product->getId()) ?>">Add to wishlist</a>
+				<?php endif;?>
 				<form action="<?php echo $this->helper('ekkitab_catalog')->getCartUrl($_product->getId(),$this->helper('core/url')->getCurrentUrl()) ?>" method="post" id="product_addtocart_form">
 				<?php echo $this->getChildHtml('addtocart') ?>
 				<fieldset class="no-display">
@@ -264,7 +269,12 @@
 				</form>
 			<?php elseif($inStock==2): ?>
 				<div class="authorEtc">Forthcoming Title.</div>
-				<a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($_product->getId()) ?>">Add to Wishlist</a>
+				<?php if($this->helper('ekkitab_institute')->isCustOrgAdmin()):?>
+					<a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($_product->getId()) ?>">Add to your wishlist</a>
+					<br/><a href="<?php echo $this->helper('ekkitab_catalog')->getOrgWishListAddUrl($_product->getIsbn())?>"><?php echo $this->helper('ekkitab_catalog')->getOrgWishlistText() ?></a>	
+				<?php else: ?>
+					<a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($_product->getId()) ?>">Add to Wishlist</a>
+				<?php endif;?>
 				<form action="<?php echo $this->helper('ekkitab_catalog')->getCartUrl($_product->getId(),$this->helper('core/url')->getCurrentUrl()) ?>" method="post" id="product_addtocart_form">
 				<?php echo $this->getChildHtml('preorder') ?>
 				<fieldset class="no-display">

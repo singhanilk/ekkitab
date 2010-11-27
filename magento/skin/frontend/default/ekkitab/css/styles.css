@@ -3071,6 +3071,7 @@ dt .hdr {
 }
 .instituteArea .bigImage img {
 	border:1px solid #333;
+	margin-left: 10px;
 }
 .instituteArea .midArea {
 	width: 98%;
@@ -3125,4 +3126,3 @@ dt .hdr {
 	font-style: italic;
 	text-align: left;
 }
-

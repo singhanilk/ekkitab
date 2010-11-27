@@ -1408,3 +1408,4 @@ table.print .price-incl-tax .price { display:inline; }
 .institute-form-select li .input-box .input-text,
 .institute-form-select li .input-box textarea{ width:400px; }
 .institute-form-select li .input-box select  { width:256px; }
+.institute-form-select .form-list            { margin:5px 0px;}

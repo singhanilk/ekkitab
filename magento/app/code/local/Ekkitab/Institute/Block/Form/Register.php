@@ -33,9 +33,32 @@ class Ekkitab_Institute_Block_Form_Register extends Mage_Directory_Block_Data
 {
     protected function _prepareLayout()
     {
-        $this->getLayout()->getBlock('head')->setTitle(Mage::helper('customer')->__('Create New Institute Account'));
+		if ($headBlock = $this->getLayout()->getBlock('head')) {
+			$headBlock->setTitle(Mage::helper('ekkitab_institute')->__("Create New Institute Account"));
+			$headBlock->setOpenGraphSiteName("Ekkitab.com");
+			$headBlock->setFacebookAdmin("ekkitab");
+		}
+		if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')){
+			$breadcrumbs->addCrumb('home', array(
+				'label'=>Mage::helper('ekkitab_institute')->__('Home'),
+				'title'=>Mage::helper('ekkitab_institute')->__('Go to Home Page'),
+				'link'=>Mage::getBaseUrl()
+			));
+			$breadcrumbs->addCrumb('vision', array(
+				'label'=>Mage::helper('ekkitab_institute')->__('Vision'),
+				'title'=>Mage::helper('ekkitab_institute')->__('Ekkitab Vision'),
+				'link'=>$this->getUrl('ekkitab-vision')
+			));
+			$breadcrumbs->addCrumb('Create Institute', array(
+				'label'=>Mage::helper('ekkitab_institute')->__('Create Institute'),
+				'title'=>Mage::helper('ekkitab_institute')->__('Create Institute'),
+				'link'=>''
+			));
+		}
         return parent::_prepareLayout();
+		
     }
+
 
     /**
      * Retrieve form posting url

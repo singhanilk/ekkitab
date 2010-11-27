@@ -1,0 +1,109 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category   design_default
+ * @package    Mage
+ * @copyright  Copyright (c) 2008 Irubin Consulting Inc. DBA Varien (http://www.varien.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php Mage::app()->getLayout()->getMessagesBlock()->setMessages(Mage::getSingleton('customer/session')->getMessages(true)); ?> 
+<?php
+	$_institute = $this->getInstitute();
+
+?>
+
+<div class="pageHeader"><?php echo $this->__('Edit Institute Information') ?></div>
+<div class="clear"><br/></div>
+<?php	if(!is_null($_institute)){
+?>
+<div class="myAccCopy">
+	<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+	<form action="<?php echo $this->getUrl('ekkitab_institute/account/editPost') ?>" autocomplete="off" method="post" id="form-validate" enctype="multipart/form-data">
+	<?php echo $this->getBlockHtml('formkey')?>
+	<fieldset class="institute-form-select wide">
+		<div class="accTop">
+			<div class="accHdr"><?php echo $this->__('Institute Information') ?></div>
+			<div class="clear"></div>
+		</div>
+		<div class="content">
+			<ul class="form-list">
+				<li>
+					<div class="input-box">
+						<label for="name"><?php echo $this->__('Institute Name') ?> </label><br/>
+						<?php echo $this->htmlEscape($_institute->getName()) ?>	
+					</div>
+					<div class="input-box">
+						<label for="type"><?php echo $this->__('Type') ?> <span class="required">*</span></label><br/>
+						<?php echo $this->getInstituteTypeHtmlSelect() ?>
+					</div>
+				</li>
+				<li>
+					<div class="input-box">
+					<label for="street_1"><?php echo $this->__('Address') ?></label> <br />
+					<?php echo $this->htmlEscape($_institute->getStreet()) ?>
+					<br /><?php echo $this->htmlEscape($_institute->getLocality()) ?>, <?php echo $this->htmlEscape($_institute->getCity()) ?>
+					<?php 
+						if($_institute->getCountryId()!=""){
+							$country = Mage::getModel('directory/country')->loadByCode($_institute->getCountryId());
+							if($country->getName()!=""){
+								echo "<br/>".$country->getName();
+							}
+						}?> <?php echo $this->htmlEscape($_institute->getPostcode()) ?>
+					<!--input type="hidden" name="locality" value="<?php echo $this->htmlEscape($_institute->getLocality()) ?>" id="locality"/>
+					<input type="hidden" name="street" value="<?php echo $this->htmlEscape($_institute->getStreet()) ?>" id="street" />
+					<input type="hidden" name="city" value="<?php echo $this->htmlEscape($_institute->getCity()) ?>"  id="city"/>
+					<input type="hidden" id="region" name="region" value="<?php echo $this->htmlEscape($this->getRegion()) ?>" />
+					<input type="hidden" name="postcode" value="<?php echo $this->htmlEscape($_institute->getPostcode()) ?>" id="zip"/>
+					<input type="hidden" name="country_id" value="IN" title="country" id="country"/-->
+					<input type="hidden" name="id" value="<?php echo $_institute->getId() ?>" id="id"/>
+				
+					<br/><br/><label for="telephone"><?php echo $this->__('Telephone') ?> <span class="required">*</span></label><br/>
+					<input type="text" name="telephone" id="telephone" value="<?php echo $this->htmlEscape($_institute->getTelephone()) ?>" title="<?php echo $this->__('Telephone') ?>" class="required-entry input-text"/>
+					
+					</div>
+					<div class="input-box">
+						<label for="telephone"><?php echo $this->__('About the school') ?></label><br/>
+						<textarea name="aboutus" rows="6" id="aboutus" title="<?php echo $this->__('About the school') ?>"><?php echo $this->htmlEscape($_institute->getAboutus()) ?></textarea>
+					</div>
+				</li>
+				<li>
+					<div class="input-box">
+						<label for="website_url"><?php echo $this->__('Website Address') ?></label><br/>
+						<input type="text" name="website_url" id="website_url" value="<?php echo $this->htmlEscape($_institute->getWebsiteUrl()) ?>" title="<?php echo $this->__('Website Address') ?>" class="input-text"/><br/><br/>
+						<input type="checkbox" name="any_donation" id="any_donation" value="1" <?php echo ($this->htmlEscape($_institute->getAnyDonation()==1)? "checked":"") ?>" title="<?php echo $this->__('Any Donation to Library') ?>"/> &nbsp;  <label for="any_donationx"><?php echo $this->__('Allow customer to donate any book to your library') ?></label>
+					</div>
+					<div class="input-box">
+						<div class="left" style="width:25%"> <img src="<?php echo $this->helper('ekkitab_institute')->resize($_institute->getImage(),'small_image',false,75,null); ?>" align="absmiddle"></div><div class="left" style="width:50%"> <br/>
+						<label for="image"><?php echo $this->__('Upload New Photo') ?> : <input type="file" name="image" id="image" value="<?php echo $this->htmlEscape($_institute->getImage()) ?>" title="<?php echo $this->__('Institute Photo') ?>"/></label>
+					</div></div>
+				</li>
+			</ul>
+		</div>	
+		<div class="content" >
+			<ul class="form-list">
+				<li><input type="image" src="<?php echo $this->getSkinUrl('images/submit_button.png') ?>" alt="<?php echo $this->__('Submit') ?>"/></li>
+					<li><a href="<?php echo $this->getBackUrl() ?>" class="f-left">&laquo; <?php echo $this->__('Back') ?></a></li>
+			</ul>
+		</div>
+	</fieldset>
+</div>
+</form><?php } ?>
+</div>

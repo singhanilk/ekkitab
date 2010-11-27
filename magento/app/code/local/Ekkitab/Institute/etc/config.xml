@@ -8,25 +8,23 @@
     <global>
 		<fieldsets>
             <institute_account>
-                <name><create>1</create><update>1</update><name>1</name></name>
-                <email><create>1</create><update>1</update></email>
+                <name><create>1</create><name>1</name></name>
+                <email><create>1</create></email>
                 <type_id><create>1</create><update>1</update></type_id>
-                <street><create>1</create><update>1</update></street>
-                <locality><create>1</create><update>1</update></locality>
-                <city><create>1</create><update>1</update></city>
-                <region><create>1</create><update>1</update></region>
-                <country><create>1</create><update>1</update></country>
-                <postcode><create>1</create><update>1</update></postcode>
+                <street><create>1</create></street>
+                <locality><create>1</create></locality>
+                <city><create>1</create></city>
+                <region><create>1</create></region>
+                <country><create>1</create></country>
+                <postcode><create>1</create></postcode>
                 <telephone><create>1</create><update>1</update></telephone>
                 <website_url><create>1</create><update>1</update></website_url>
                 <aboutus><create>1</create><update>1</update></aboutus>
                 <aboutus_summary><create>1</create><update>1</update></aboutus_summary>
-                <aboutus_summary><create>1</create><update>1</update></aboutus_summary>
                 <any_donation><create>1</create><update>1</update></any_donation>
-                <aboutus_summary><create>1</create><update>1</update></aboutus_summary>
-				<admin_firstname><create>1</create><update>1</update><name>1</name></admin_firstname>
-                <admin_lastname><create>1</create><update>1</update><name>1</name></admin_lastname>
-                <admin_email><create>1</create><update>1</update></admin_email>
+				<admin_firstname><create>1</create><name>1</name></admin_firstname>
+                <admin_lastname><create>1</create><name>1</name></admin_lastname>
+                <admin_email><create>1</create></admin_email>
                 <admin_password><create>1</create></admin_password>
                 <admin_confirmation><create>1</create></admin_confirmation>
             </institute_account>
@@ -68,7 +66,15 @@
                 <class>Ekkitab_Institute_Helper</class>
             </ekkitab_institute>
         </helpers>
-
+        <template>
+            <email>
+                <ekkitab_institute_create_account_email_template translate="label" module="customer">
+                    <label>New account</label>
+                    <file>institute_new.html</file>
+                    <type>html</type>
+                </ekkitab_institute_create_account_email_template>
+            </email>
+        </template>
     </global>
    <frontend>
         <routers>
@@ -88,4 +94,15 @@
             </updates>
         </layout>
     </frontend>
+	<default>
+        <ekkitab_institute>
+            <create_account>
+                <confirm>0</confirm>
+                <default_group>1</default_group>
+                <email_domain>emaildomain.com</email_domain>
+                <email_identity>general</email_identity>
+                <email_template>ekkitab_institute_create_account_email_template</email_template>
+            </create_account>
+        </ekkitab_institute>
+    </default>
 </config>

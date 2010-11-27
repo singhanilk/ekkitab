@@ -513,7 +513,13 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
 		return ('images/catalog/product/placeholder/'.$attr.'.png');
 	}
 
-		/**
+    public function getOrgWishlistActionUrl()
+    {
+        return $this->getUrl('ekkitab_checkout/cart/addBooksToCart',array());
+    }
+
+
+	/**
      * Retrieve result page url
      *
      * @param   string $query
