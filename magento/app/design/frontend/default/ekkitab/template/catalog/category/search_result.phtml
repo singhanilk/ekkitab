@@ -137,10 +137,9 @@ if(!is_null($results) && is_array($results)){
 				<?php endforeach;?>
 			</div>
 		<?php endif; ?>
-		<?php if((!is_null($suggest) && strlen($suggest)>0 ) || $this->getTotalNum() >= 100) : ?>
+		<?php if(!is_null($suggest) && strlen($suggest)>0 ): ?>
 		<div class="suggestResTop">
 		<span class="boldFont ">
-		<?php 	if(!is_null($suggest) && strlen($suggest)>0 ) : ?>
 			Your search query returned zero results. Did you mean <span class="orangeItTxt12"><?php echo  ucwords($suggest) ?></span> instead ?
 <?php if(!is_null($othrSuggestionsArr) && count($othrSuggestionsArr) > 0){
 ?>			<br/> Other Suggestions:
@@ -151,22 +150,6 @@ if(!is_null($results) && is_array($results)){
 <?php	endforeach;
 	  }
 ?>
-		<?php endif; ?>
-		<?php if($this->getTotalNum() >= 100 && $queryTxt!='') : 
-				$authArr =array();
-				$titleArr =array();
-				$authArr["filterby"] = "author";
-				$authArr["q"] = urlencode(strtolower($queryTxt));
-				$titleArr["filterby"] = "title";
-				$titleArr["q"] = urlencode(strtolower($queryTxt));
-				if($catTxt!=''){
-					$authArr["category"] = urlencode(strtolower($catTxt));
-					$titleArr["category"] = urlencode(strtolower($catTxt));
-				}
-		?>
-			Filter your search by : <a href="<?php echo $this->getUrl('*/*/*',$authArr) ?>" class="orangeTxt12">Author</a>&nbsp; or &nbsp;<a href="<?php echo $this->getUrl('*/*/*',$titleArr) ?>" class="orangeTxt12">Title</a>.
-		
-		<?php endif; ?>
 			</span>
 		</div><!-- suggestResTop -->
 		<?php endif; ?>
@@ -174,10 +157,24 @@ if(!is_null($results) && is_array($results)){
 			<div class="leftArea">
 				<?php if($this->getLastPageNumber()>1): ?>
 					<?php if($this->getTotalNum() >= 1000): ?>
-						<?php echo $this->__('Showing %s to %s of more than %s books', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+						<?php echo $this->__('Showing %s to %s of more than %s books. ', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
 					<?php else : ?>
-						<?php echo $this->__('Showing %s to %s of %s books', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
-
+						<?php echo $this->__('Showing %s to %s of %s books. ', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+						<?php if($this->getTotalNum() >= 1 && $queryTxt!='') : 
+								$authArr =array();
+								$titleArr =array();
+								$authArr["filterby"] = "author";
+								$authArr["q"] = urlencode(strtolower($queryTxt));
+								$titleArr["filterby"] = "title";
+								$titleArr["q"] = urlencode(strtolower($queryTxt));
+								if($catTxt!=''){
+									$authArr["category"] = urlencode(strtolower($catTxt));
+									$titleArr["category"] = urlencode(strtolower($catTxt));
+								}
+						?>
+							&nbsp; <span class="padderLeft15px">Narrow your search by <a href="<?php echo $this->getUrl('*/*/*',$authArr) ?>" class="orangeTxt12">Author</a>&nbsp; or &nbsp;<a href="<?php echo $this->getUrl('*/*/*',$titleArr) ?>" class="orangeTxt12">Title</a>.</span>
+						
+						<?php endif; ?>	
 					<?php endif; ?>
 				<?php elseif($this->getTotalNum()==1): ?>
 					<?php echo $this->__('Showing %s book', $this->getTotalNum()) ?>
