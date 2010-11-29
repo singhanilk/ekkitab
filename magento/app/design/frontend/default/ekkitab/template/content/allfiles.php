@@ -1,13 +1,11 @@
 <?php 
 
 	function getArticles() {
-		Mage::log("here");
 		$articleXMLFile=Mage::getDesign()->getTemplateFilename("content/articlesindex.xml");
 		
 		if ( !file_exists($articleXMLFile) && !is_file($articleXMLFile) ) {
 			return null;
 		}
-		Mage::log("here after file exists...");
         $xml = simplexml_load_file($articleXMLFile);
         if (! $xml instanceof SimpleXmlElement) {
             return(null);

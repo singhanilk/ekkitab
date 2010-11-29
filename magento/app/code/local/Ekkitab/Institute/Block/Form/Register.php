@@ -44,11 +44,6 @@ class Ekkitab_Institute_Block_Form_Register extends Mage_Directory_Block_Data
 				'title'=>Mage::helper('ekkitab_institute')->__('Go to Home Page'),
 				'link'=>Mage::getBaseUrl()
 			));
-			$breadcrumbs->addCrumb('vision', array(
-				'label'=>Mage::helper('ekkitab_institute')->__('Vision'),
-				'title'=>Mage::helper('ekkitab_institute')->__('Ekkitab Vision'),
-				'link'=>$this->getUrl('ekkitab-vision')
-			));
 			$breadcrumbs->addCrumb('Create Institute', array(
 				'label'=>Mage::helper('ekkitab_institute')->__('Create Institute'),
 				'title'=>Mage::helper('ekkitab_institute')->__('Create Institute'),
