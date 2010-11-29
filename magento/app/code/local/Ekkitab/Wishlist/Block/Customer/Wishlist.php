@@ -13,7 +13,9 @@
 class Ekkitab_Wishlist_Block_Customer_Wishlist extends Mage_Wishlist_Block_Customer_Wishlist
 {
 
-    public function getWishlist()
+    protected $_wishlistLoaded = false;
+
+	public function getWishlist()
     {
         if(!$this->_wishlistLoaded) {
             Mage::registry('wishlist')
