@@ -1,0 +1,303 @@
+html * {
+    margin: 0;
+}
+body {
+	font-family:Georgia,"Times New Roman",Times,serif;
+	font-size:0.8em;
+	text-align:left;
+	color:#000000;
+	background-color: #ffffff;
+}
+
+.rect300X250 {
+	width:300px;
+	height:250px;
+}
+
+/* column holding the book info */
+.rect300X250 .hColumns {
+	float:left;
+	margin-top:8px;
+	text-align:left;
+}
+/* small image of the book */
+.rect300X250 .hColumns .discImageBox {
+	float:left;
+	height:120px;
+	width:145px;
+	line-height:1.6em;
+	text-align:left;
+}
+.rect300X250 .hColumns .bkDetails {
+	float:left;
+	padding-left:10px;
+	padding-right:10px;
+	width:125px;
+}
+/* box enclosing the book image */
+.rect300X250 .hColumns .image {
+	text-align:left;
+	padding-left:10px;
+	float:left;
+	height:110px;
+	overflow:hidden;
+	width:75px;
+}
+
+/* column holding the book info */
+.rect300X250 .vColumns {
+	float:left;
+	margin-top:8px;
+	text-align:left;
+}
+/* small image of the book */
+.rect300X250 .vColumns .discImageBox {
+	float:left;
+	height:120px;
+	width:240px;
+	line-height:1.6em;
+}
+.rect300X250 .vColumns .bkDetails {
+	float:left;
+	padding-left:5px;
+}
+/* box enclosing the book image */
+.rect300X250 .vColumns .image {
+	float:left;
+	height:120px;
+	overflow:hidden;
+	padding-left:10px;
+	width:85px;
+}
+
+/* Another Dinmension */
+.rect250X300 {
+	width:250px;
+	height:300px;
+}
+
+/* column holding the book info */
+.rect250X300 .vColumns {
+	float:left;
+	margin-top:8px;
+	text-align:left;
+}
+
+.rect250X300 .vColumns .discImageBox {
+	float:left;
+	height:120px;
+	width:250px;
+	line-height:1.6em;
+	text-align:center;
+	padding-bottom:2px;
+}
+
+.rect250X300 .vColumns .bkDetails {
+	float:left;
+	padding-left:5px;
+	width:160px;
+}
+/* box enclosing the book image */
+.rect250X300 .vColumns .image {
+	float:left;
+	height:120px;
+	overflow:hidden;
+	width:85px;
+}
+
+/* column holding the book info */
+.rect250X300 .hColumns {
+	float:left;
+	margin-top:8px;
+	text-align:left;
+}
+/* small image of the book */
+.rect250X300 .hColumns .discImageBox {
+	float:left;
+	height:120px;
+	width:125px;
+	line-height:1.6em;
+	text-align:left;
+}
+.rect250X300 .hColumns .bkDetails {
+	float:left;
+	padding-left:10px;
+	padding-right:10px;
+	width:105px;
+}
+/* box enclosing the book image */
+.rect250X300 .hColumns .image {
+	text-align:left;
+	padding-left:10px;
+	float:left;
+	height:110px;
+	overflow:hidden;
+	width:75px;
+}
+
+
+.skyscraper {
+	width:275px;
+}
+
+.leaderboard {
+	width:1100px;
+	height:130px;
+}
+a {
+	color:#0033CC;
+	text-decoration:none;
+}
+
+
+/* text box  for title author link */
+.titleEtc {
+	margin:0 auto;
+	text-align:left;
+}
+/* title of the book */
+.bkTitleHome {
+	font-size:95%;
+	font-weight:normal;
+	line-height:1.6em;
+}
+/* author line related styles */
+.authorHome {
+	font-size:92%;
+}
+.authorHome a {
+	color:#000000;
+}
+.authorHome a:hover {
+	color:#4F8100;
+	text-decoration:underline;
+}
+/* offer price related changes */
+.youSave {
+	color:#CC6600;
+	font-weight:bold;
+	line-height:1.4em;
+}
+/* separator above the MRP */
+.lineHeight14em {
+	font-size:11px;
+	line-height:1.4em;
+}
+/* MRP style */
+
+.greyFont {
+	color:#666666;
+	font-size:10px;
+	line-height:1.4em;
+}
+/* discount related */
+.fsu0, .fsu5, .fsu6, .fsu7, .fsu8, .fsu9, .fsu10, .fsu11, .fsu12, .fsu13, .fsu14, .fsu15, .fsu16, .fsu17, .fsu18, .fsu19, .fsu20, .fsu21, .fsu22, .fsu23, .fsu24, .fsu25, .fsu26, .fsu27, .fsu28, .fsu29, .fsu30, .fsu31, .fsu32, .fsu33, .fsu34, .fsu35, .fsu36, .fsu37, .fsu38, .fsu39, .fsu40, .fsu41, .fsu42, .fsu43, .fsu44, .fsu45, .fsu46, .fsu47, .fsu48, .fsu49, .fsu50 {
+	background-image:url(../images/skin/discount/discount_icons1.png);
+	background-position:right top;
+	background-repeat:no-repeat;
+	float:left;
+	height:28px;
+	margin:3px 0 0 2px;
+	width:30px;
+	z-index:999;
+}
+.fsu0  { background-position:left -3000px;}
+.fsu6  { background-position:left -30px;  }
+.fsu7  { background-position:right -60px; }
+.fsu8  { background-position:left -90px;  }
+.fsu9  { background-position:left -120px; }
+.fsu10 { background-position:left -150px; }
+.fsu11 { background-position:left -180px; }
+.fsu12 { background-position:left -210px; }
+.fsu13 { background-position:left -240px; }
+.fsu14 { background-position:left -270px; }
+.fsu15 { background-position:left -300px; }
+.fsu16 { background-position:left -330px; }
+.fsu17 { background-position:left -360px; }
+.fsu18 { background-position:left -390px; }
+.fsu19 { background-position:left -420px; }
+.fsu20 { background-position:left -450px; }
+.fsu21 { background-position:left -480px; }
+.fsu22 { background-position:left -510px; }
+.fsu23 { background-position:left -540px; }
+.fsu24 { background-position:left -570px; }
+.fsu25 { background-position:left -600px; }
+.fsu26 { background-position:left -630px; }
+.fsu27 { background-position:left -660px; }
+.fsu28 { background-position:left -690px; }
+.fsu29 { background-position:left -720px; }
+.fsu30 { background-position:left -750px; }
+.fsu31 { background-position:left -780px; }
+.fsu32 { background-position:left -810px; }
+.fsu33 { background-position:left -840px; }
+.fsu34 { background-position:left -870px; }
+.fsu35 { background-position:left -900px; }
+.fsu36 { background-position:left -930px; }
+.fsu37 { background-position:left -960px; }
+.fsu38 { background-position:left -990px; }
+.fsu39 { background-position:left -1020px;}
+.fsu40 { background-position:left -1050px;}
+.fsu41 { background-position:left -1080px;}
+.fsu42 { background-position:left -1110px;}
+.fsu43 { background-position:left -1140px;}
+.fsu44 { background-position:left -1170px;}
+.fsu45 { background-position:left -1200px;}
+.fsu46 { background-position:left -1230px;}
+.fsu47 { background-position:left -1260px;}
+.fsu48 { background-position:left -1290px;}
+.fsu49 { background-position:left -1320px;}
+.fsu50 { background-position:left -1350px;}
+
+.vColumns .fsu0, 
+.vColumns .fsu5, 
+.vColumns .fsu6, 
+.vColumns .fsu7, 
+.vColumns .fsu8, 
+.vColumns .fsu9, 
+.vColumns .fsu10, 
+.vColumns .fsu11, 
+.vColumns .fsu12, 
+.vColumns .fsu13, 
+.vColumns .fsu14, 
+.vColumns .fsu15, 
+.vColumns .fsu16, 
+.vColumns .fsu17, 
+.vColumns .fsu18, 
+.vColumns .fsu19, 
+.vColumns .fsu20, 
+.vColumns .fsu21, 
+.vColumns .fsu22, 
+.vColumns .fsu23, 
+.vColumns .fsu24, 
+.vColumns .fsu25, 
+.vColumns .fsu26, 
+.vColumns .fsu27, 
+.vColumns .fsu28, 
+.vColumns .fsu29, 
+.vColumns .fsu30, 
+.vColumns .fsu31, 
+.vColumns .fsu32, 
+.vColumns .fsu33, 
+.vColumns .fsu34, 
+.vColumns .fsu35, 
+.vColumns .fsu36, 
+.vColumns .fsu37, 
+.vColumns .fsu38, 
+.vColumns .fsu39, 
+.vColumns .fsu40, 
+.vColumns .fsu41, 
+.vColumns .fsu42, 
+.vColumns .fsu43, 
+.vColumns .fsu44, 
+.vColumns .fsu45, 
+.vColumns .fsu46, 
+.vColumns .fsu47, 
+.vColumns .fsu48, 
+.vColumns .fsu49, 
+.vColumns .fsu50 {
+	width:100%;
+}
+
+.clear {
+	clear: both;
+}

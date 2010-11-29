@@ -1,0 +1,245 @@
+base_path = http://www.ekkitab.com/index.php/ekkitab_catalog/product/view/book/
+small_image_base_path = http://www.ekkitab.com/media/catalog/product/cache/1/small_image 
+
+<book>
+<isbn>9780061779725</isbn>
+<author>Christopher Moore</author>
+<link>Christopher-Moore____Bite-Me-A-Love-Story__9780061779725.html</link>
+<title>Bite Me: A Love Story</title>
+<image>5e06319eda06f020e43594a9c230972d/I77/J25/9780061779725.jpg</image>
+<discount>fsu26</discount>
+<price>831.00</price>
+<mrp>1,123.00</mrp>
+</book>
+
+<link>J-K-Rowling__Harry-Potter-and-the-Sorcerer-s-Stone__9780545069670.html</link>
+<title>Harry Potter and the Sorcerer's Stone</title>
+5e06319eda06f020e43594a9c230972d/I59/J70/9780545069670.jpg
+Our Price: Rs 1,077.00
+MRP Price : Rs 1,404.00
+<div class="fsu23"></div>
+
+J-K-Rowling__Harry-Potter-and-the-Deathly-Hallows__9780545139700.html
+title="Harry Potter and the Deathly Hallows
+5e06319eda06f020e43594a9c230972d/I47/J00/9780545139700.jpg
+Our Price: Rs 545.00
+MRP Price : Rs 702.00				
+<div class="fsu22"></div>
+
+
+
+<title>The Guide</title>
+<category>Fiction</category>
+<author>R. K. Narayan</author>
+<isbn>9780143039648</isbn>
+<image>5e06319eda06f020e43594a9c230972d/I26/J48/9780143039648.jpg</image>
+<link>R-K-Narayan__The-Guide__9780143039648.html</link>
+<price>250.00</price>
+<mrp>300.00</mrp>
+<discount>fsu20</discount>
+
+
+<title>Malgudi Days</title>
+<category>Fiction</category>
+<author>R. K. Narayan</author>
+<isbn>9780143039655</isbn>
+<link>R-K-Narayan__Malgudi-Days__9780143039655.html</link>
+<image>5e06319eda06f020e43594a9c230972d/I65/J55/9780143039655.jpg</image>
+<price>212.00</price>
+<mrp>250.00</mrp>
+<discount>fsu15</discount>
+
+
+<link>R-K-Narayan__The-Painter-of-Signs__9780143039662.html</link>
+<image>5e06319eda06f020e43594a9c230972d/I4/J62/9780143039662.jpg</image>
+<title>The Painter of Signs</title>
+<category>Fiction</category>
+<author>R. K. Narayan</author>
+<isbn>9780143039662</isbn>
+<price>479.00</price>
+<mrp>608.00</mrp>
+<discount>fsu21</discount>
+
+
+
+
+<title>Indian Cooking</title>
+<author>Jan Purser</author>
+<isbn>9780794650339</isbn>
+<price>817.00</price>
+<mrp>1,027.00</mrp>
+<discount>fsu20</discount>
+<link>Jan-Purser-Ajoy-Joshi__Indian-Cooking__9780794650339.html</link>
+<image>5e06319eda06f020e43594a9c230972d/I99/J39/9780794650339.jpg</image>
+
+
+<title>Easy Indian Cooking</title>
+<author>Suneeta Vaswanis</author>
+<isbn>9780778800880</isbn>
+<price>699.00</price>
+<mrp>934.00</mrp>
+<discount>fsu25</discount>
+<link>Suneeta-Vaswanis__Easy-Indian-Cooking__9780778800880.html</link>
+<image>5e06319eda06f020e43594a9c230972d/I40/J80/9780778800880.jpg</image>
+
+
+
+<title>Healthy South Indian Cooking</title>
+<author>Alamelu Vairavan</author>
+<isbn>9780781811897</isbn>
+<price>1,148.00</price>
+<mrp>1,498.00</mrp>
+<discount>fsu23</discount>
+<link>Alamelu-Vairavan-Patricia-Marquardt__Healthy-South-Indian-Cooking__9780781811897.html/</link>
+<image>5e06319eda06f020e43594a9c230972d/I63/J97/9780781811897.jpg</image>
+
+<isbn>9780143039679</isbn>
+<link>R-K-Narayan__The-Ramayana-A-Shortened-Modern-Prose-Version-of-the-Indian-Epic__9780143039679.html</link>
+<image>5e06319eda06f020e43594a9c230972d/I13/J79/9780143039679.jpg</image>
+<author>R. K. Narayan</author>
+<category>Mythology</category>
+<title>The Ramayana: A Shortened Modern Prose Version of the Indian Epic<title>
+<author>R. K. Narayan</author>
+<price>434.00</price>
+<mrp>469.00</mrp>
+<discount>fsu7</discount>
+
+
+<category>Mythology</category>
+<title>Gods, Demons, and Others</title>
+<author>R. K. Narayan</author>
+<link>R-K-Narayan__Gods-Demons-and-Others__9780226568256.html</link>
+<image>5e06319eda06f020e43594a9c230972d/I95/J56/9780226568256.jpg</image>
+<isbn>9780226568256</isbn>
+<price>848.00</price>
+<mrp>1,076.00</mrp>
+<discount>fsu21<discount>
+
+
+
+<div class="vColumns">
+	<!-- one product -->
+	<div class="discImageBox">
+		<div class="image">
+				<a href="http://www.ekkitab.com/index.php/ekkitab_catalog/product/view/book/Christopher-Moore____Bite-Me-A-Love-Story__9780061779725.html/" 
+				   title="Bite Me: A Love Story">
+				   <img src="http://www.ekkitab.com/media/catalog/product/cache/1/small_image/5e06319eda06f020e43594a9c230972d/I77/J25/9780061779725.jpg" 
+				   		alt="Bite Me: A Love Story" title="Bite Me: A Love Story">
+				</a>
+		</div>
+		<div class="fsu26"></div>
+	</div>
+	<div class="titleEtc">
+		<div class="bkTitleHome">
+			<a href="http://www.ekkitab.com/index.php/ekkitab_catalog/product/view/book/Christopher-Moore____Bite-Me-A-Love-Story__9780061779725.html/" 
+			   title="Bite Me: A Love Story">
+			   Bite Me: A...
+			</a>
+		</div>
+		<!-- bkTitle -->
+		<div class="authorHome">
+			by 
+			<a href="http://www.ekkitab.com/index.php/ekkitab_catalog/search/index/author/Christopher%20Moore/">
+				Christopher Moore
+			</a>
+		</div>
+		<div class="youSave">
+			Rs 831.00
+		</div>
+		<div class="lineHeight14em">
+			<span class="greyFont">MRP: Rs 1,123.00
+			</span>
+		</div>
+	</div>
+</div>
+//styles
+* {
+	margin:0;
+	padding:0;
+}
+.vColumns, .vMidColumn {
+	float:left;
+	margin-top:8px;
+	text-align:left;
+}
+.hmHighlightTextImage {
+	line-height:1.6em;
+}
+
+.vColumns .discImageBox {
+	float:left;
+	height:120px;
+	width:130px;
+}
+.youSave {
+	color:#CC6600;
+	font-weight:bold;
+	line-height:1.4em;
+}
+.lineHeight14em {
+	font-size:11px;
+	line-height:1.4em;
+}
+.greyFont {
+	color:#666666;
+	font-size:10px;
+	line-height:1.4em;
+}
+
+
+/* discount related stuff */
+
+
+
+
+.bkTitle {
+	font-weight:bold;
+	line-height:1.6em;
+}
+.bkTitleHome {
+	font-size:95%;
+	font-weight:normal;
+	line-height:1.6em;
+}
+.authorHome {
+	font-size:92%;
+}
+.authorHome a {
+	color:#000000;
+}
+.authorHome a:hover {
+	color:#4F8100;
+	text-decoration:underline;
+}
+.lineHeight14em {
+	font-size:11px;
+	line-height:1.4em;
+}
+.greyFont {
+	color:#666666;
+	font-size:10px;
+	line-height:1.4em;
+}
+.lineHeight14emIt {
+	font-size:11px;
+	font-style:italic;
+	line-height:1.4em;
+}
+.youSave {
+	color:#CC6600;
+	font-weight:bold;
+	line-height:1.4em;
+}
+.ourPrice {
+	color:#CC6600;
+	font-size:12px;
+	font-weight:bold;
+	line-height:1.5em;
+}
+body {
+	font-family:Georgia,"Times New Roman",Times,serif;
+	font-size:1.1em;
+	text-align:left;
+	color:#000000;
+}
+				
