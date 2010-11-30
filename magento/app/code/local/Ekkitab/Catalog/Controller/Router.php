@@ -2,6 +2,11 @@
 
 class Ekkitab_Catalog_Controller_Router extends Mage_Core_Controller_Varien_Router_Standard {
 
+    private function getISBN($path) {
+        $pattern = "/^.*?([0-9X]{10,13}).*$/";
+        return preg_replace($pattern, "$1", $path);
+    }
+
     public function match(Zend_Controller_Request_Http $request) {
     	
         $path = explode('/', trim($request->getPathInfo(), '/'));
@@ -14,11 +19,14 @@ class Ekkitab_Catalog_Controller_Router extends Mage_Core_Controller_Varien_Rout
         					  			$realModule = "Ekkitab_Catalog";
         					  			$controller = "product";
         					  			$action = "view";
+                                        $path[1] = $this->getISBN($path[1]);
         					  			break; 
         		case 'book-detail':  	$module = "ekkitab_catalog";
         					  			$realModule = "Ekkitab_Catalog";
         					  			$controller = "product";
         					  			$action = "show";
+                                        $path[0] = "book";
+                                        $path[1] = $this->getISBN($path[1]);
         					  			break; 
         		case 'book-collection': $module = "ekkitab_catalog"; 
         								$realModule = "Ekkitab_Catalog";
