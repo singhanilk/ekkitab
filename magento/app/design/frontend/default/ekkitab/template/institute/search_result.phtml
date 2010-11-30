@@ -32,64 +32,68 @@
 		}
 		return $resStr;
 	}
+	$queryTxt = trim($this->helper('ekkitab_institute')->getEscapedQueryText());
 
 	$institutes = $this->getSearchInstitutes();
-	if(!is_null($institutes)){
 ?>
 <div class="intro">The Ekkitab Network comprises of organizations (mostly schools and colleges, but not confined to them) that wish to advertise their library and book requirements through Ekkitab. As an online bookstore, we provide a channel for well-wishers interested in the spread of literacy and reading, to contribute and donate books purchased from our bookstore to any organization listed here, anywhere in India. Your donation will be sent direct to the specified organization and you will be notified by us when it is successfully delivered. We hope that a thriving network of donors can be built through this process and that books will eventually become available to those who do not have them today. We thank you for supporting our <a href="<?php echo $this->getUrl('ekkitab-vision')?>" alt="Donate Books via Ekkitab - the online Indian bookstore" title="Donate Books via Ekkitab - the online Indian bookstore">vision.</a><br/><br/>
 If you are a school/college/library and wish to join our network, <a href="<?php echo $this->getUrl('ekkitab_institute/account/create')?>" alt="Join the Ekkitab Network" title="Join the Ekkitab Network">please click here.</a></div>
-<div class="searchResTop">
-	<div class="leftArea orangeTxtPlain">
-		&nbsp;
-		<?php if($this->getLastPageNumber()>1): ?>
-			<?php if($this->getTotalNum() >= 1000): ?>
-				<?php echo $this->__('Showing %s to %s of more than %s Institutes. ', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
-			<?php else : ?>
-				<?php echo $this->__('Showing %s to %s of %s Institutes. ', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+<?php
+	if(!is_null($institutes) &&  $institutes->count() > 0 ){ 
+	
+	
+	?>
+	<div class="searchResTop">
+		<div class="leftArea orangeTxtPlain">
+			&nbsp;
+			<?php if($this->getLastPageNumber()>1): ?>
+				<?php if($this->getTotalNum() >= 1000): ?>
+					<?php echo $this->__('Showing %s to %s of more than %s Institutes. ', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+				<?php else : ?>
+					<?php echo $this->__('Showing %s to %s of %s Institutes. ', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+				<?php endif; ?>
+			<?php elseif($this->getTotalNum() > 1): ?>
+				<?php echo $this->__('Showing all %s Institutes', $this->getTotalNum()) ?>
+			<?php elseif($this->getTotalNum() == 1): ?>
+				<?php echo $this->__('Showing %s Institute', $this->getTotalNum()) ?>
 			<?php endif; ?>
-		<?php elseif($this->getTotalNum() > 1): ?>
-			<?php echo $this->__('Showing all %s Institutes', $this->getTotalNum()) ?>
-		<?php elseif($this->getTotalNum() == 1): ?>
-			<?php echo $this->__('Showing %s Institute', $this->getTotalNum()) ?>
-		<?php endif; ?>
-	</div><!-- leftArea -->
-	<div class="rightArea">
-    <?php if($this->getLastPageNumber()>1): ?>
-		<div class="topPaginationArea">
-			<ul>
-				<?php if (!$this->isFirstPage()): ?>
-					<li><a href="<?php echo $this->getPreviousPageUrl() ?>" id="prev"><?php echo $this->__('Prev') ?></a></li>
-				<?php else: ?>
-					<li class="nolink"><?php echo $this->__('Prev') ?></li>
-				<?php endif; ?>
-				
-				<?php foreach ($this->getPages() as $_page): ?>
-					<?php if ($this->isPageCurrent($_page)): ?>
-						<li><span><?php echo $_page ?></span></li>
+		</div><!-- leftArea -->
+		<div class="rightArea">
+		<?php if($this->getLastPageNumber()>1): ?>
+			<div class="topPaginationArea">
+				<ul>
+					<?php if (!$this->isFirstPage()): ?>
+						<li><a href="<?php echo $this->getPreviousPageUrl() ?>" id="prev"><?php echo $this->__('Prev') ?></a></li>
 					<?php else: ?>
-						<li><a href="<?php echo $this->getPageUrl($_page) ?>"><?php echo $_page ?></a></li>
-					<?php endif ?>
-				<?php endforeach; ?>
+						<li class="nolink"><?php echo $this->__('Prev') ?></li>
+					<?php endif; ?>
+					
+					<?php foreach ($this->getPages() as $_page): ?>
+						<?php if ($this->isPageCurrent($_page)): ?>
+							<li><span><?php echo $_page ?></span></li>
+						<?php else: ?>
+							<li><a href="<?php echo $this->getPageUrl($_page) ?>"><?php echo $_page ?></a></li>
+						<?php endif ?>
+					<?php endforeach; ?>
 
-				<?php if (!$this->isLastPage()): ?>
-					<li><a href="<?php echo $this->getNextPageUrl() ?>"><?php echo $this->__('Next') ?></a></li>
-				<?php else: ?>
-					<li><b id="sep"><?php echo $this->__('Next') ?></b></li>
-				<?php endif; ?>
+					<?php if (!$this->isLastPage()): ?>
+						<li><a href="<?php echo $this->getNextPageUrl() ?>"><?php echo $this->__('Next') ?></a></li>
+					<?php else: ?>
+						<li><b id="sep"><?php echo $this->__('Next') ?></b></li>
+					<?php endif; ?>
 
-			</ul>
-		</div>
-	<?php endif; ?>
-	</div><!-- rightArea -->
-	<div class="clear"></div>
-</div><!-- searchResTop -->
-<table class="custom-data-table box-table" id="institute-table" cellspacing="0">
+				</ul>
+			</div>
+		<?php endif; ?>
+		</div><!-- rightArea -->
+		<div class="clear"></div>
+	</div><!-- searchResTop -->
+	<table class="custom-data-table box-table" id="institute-table" cellspacing="0">
 		<col width="110"/>
 		<col width="300"/>
 		<col width="540"/>
 		<tbody>
-<?	foreach ($institutes as $institute): 
-?>	
+<?	foreach ($institutes as $institute): ?>	
 			<tr>
 				<td><img src="<?php echo $this->helper('ekkitab_institute')->resize($institute->getImage(),'small_image',false,90,null); ?>" class="img-border" /></td>
 				<td><a href="<?php echo $this->helper('ekkitab_institute')->getViewLink() ?>id/<?php echo $institute->getId() ?>"><?php echo $institute->getName(); ?></a>
@@ -108,8 +112,19 @@ If you are a school/college/library and wish to join our network, <a href="<?php
 <?php	endforeach; ?>
 		</tbody>
 	</table>
-<?php	}
-?>
+<?php	}else{ ?>
+		<div class="inLeft">
+			<div class="boldFont">Your search for <span class="orangeTxt12">'<?php echo urldecode($queryTxt) ?>'</span> did not match any institute.</div>
+			<div class="clear"></div>
+			<div class="content">
+			<p> We suggest you:</p> 
+				<ul>
+					<li> Make sure all words are spelled correctly.</li> 
+					<li> Try different keywords.</li> 
+				</ul>
+			</div>
+		</div>
+<?php } ?>
 <div class="clear"></div>
 </div><!-- allCategoriesArea -->
 
