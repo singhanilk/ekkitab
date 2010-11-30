@@ -21,9 +21,14 @@ class Ekkitab_Institute_SearchController extends Mage_Core_Controller_Front_Acti
 
 	public function indexAction()
     {
-		$this->loadLayout();
-		$this->_initLayoutMessages('checkout/session');
-		$this->renderLayout();
+		$queryText = trim($this->getRequest()->getParam(Mage::helper('ekkitab_institute')->getQueryParamName()));
+		if (is_null($queryText) || $queryText === null || $queryText=='') {
+			$this->_redirect('ekkitab_institute/search/listall');
+		}else{
+			$this->loadLayout();
+			$this->_initLayoutMessages('checkout/session');
+			$this->renderLayout();
+		}
 
     }
 
