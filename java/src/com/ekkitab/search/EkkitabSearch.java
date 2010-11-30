@@ -333,6 +333,14 @@ public class EkkitabSearch {
         return (fd == null ? null : fd.stringValue());
     }*/
     
+    private String preprocessQuery(String str) {
+        final String replacewords[] = {"C\\+\\+", "Cplusplus"};
+        for (int i=0; i<replacewords.length; i+=2) {
+            str = str.replaceAll(replacewords[i], replacewords[i+1]);
+        }
+        return str;
+    }
+    
     private String createSearchQuery(String query, String[] categories, String searchfield, MATCH_MODE mode) {
 
         if ((categories == null) && 
@@ -343,6 +351,8 @@ public class EkkitabSearch {
         if ((searchfield != null) && (searchfield.equals("exact"))) {
         	return query;
         }
+        
+        query = preprocessQuery(query);
 
         StringBuffer sb = new StringBuffer();
         List<String> terms = new ArrayList<String>();        

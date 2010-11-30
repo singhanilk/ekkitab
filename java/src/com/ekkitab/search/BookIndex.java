@@ -340,6 +340,14 @@ public class BookIndex {
 		return doc;
 	}
 	
+	private String preprocessTitle(String str) {
+        final String replacewords[] = {"C\\+\\+", "Cplusplus"};
+        for (int i=0; i<replacewords.length; i+=2) {
+            str = str.replaceAll(replacewords[i], replacewords[i+1]);
+        }
+        return str;
+    }
+	
     public void addDocument(List<Map<String, String>> books) throws Exception {
 
         Iterator<Map<String, String>> iter = books.iterator();
@@ -371,6 +379,7 @@ public class BookIndex {
                 j++;
             }
             value = book.get("title");
+            value = preprocessTitle(value);
             if (value != null) {
                 doc.add(new Field("title", value, Field.Store.YES, Field.Index.ANALYZED));
                 String[] words = value.split(" ");
