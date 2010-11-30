@@ -35,6 +35,13 @@ $development_config["database"]["password"] = "dev";
 $development_config["database"]["ekkitab_db"] = "ekkitab_books";
 $development_config["database"]["ref_db"] = "development";
 
+// Set up the reference_config to be used by initDatabase.
+$production_config = Array();
+$production_config["database"]["server"] = "localhost";
+$production_config["database"]["user"] = "root";
+$production_config["database"]["password"] = "root";
+$production_config["database"]["db_name"] = "ekkitab_books";
+
 #---- All the programs to be referred to. -----.
 #Catalog Stock Generator Method.
 $catalogStockGeneratorCode = $EKKITAB_HOME. "/catalogtools/catalog_stock_generator.php";

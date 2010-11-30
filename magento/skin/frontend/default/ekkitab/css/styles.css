@@ -235,7 +235,7 @@ a:hover {
 	color: #666;
 	line-height: 1.6em;
 }
-.searchArea .dropDown, .searchArea .textField, .topSearchArea .dropDown, .topSearchArea .textField, .instituteArea .dropDown, .instituteArea .textField{
+.searchArea .dropDown, .searchArea .textField,  .contentArea .textField, .topSearchArea .dropDown, .topSearchArea .textField, .instituteArea .dropDown, .instituteArea .textField{
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	color: #000;
@@ -326,6 +326,12 @@ a:hover {
 	float: left;
 	height:17px;
 }
+.contentArea .textField {
+	padding: 0px 0px 0px 2px;
+	font-size: 12px;
+	width: 200px;
+	height:17px;
+}
 .topSearchArea .selectField {
 	padding-left:2px;
 	margin-left:5px;
@@ -333,7 +339,7 @@ a:hover {
 	border:1px inset #000;
 	height:20px;
 }
-.topSearchArea .searchBut {
+.topSearchArea .searchBut , .contentArea .searchBut{
 	width: 21px;
 	height: 21px;
 	float: left;
@@ -2068,6 +2074,13 @@ a:hover {
 	margin:2px 0px;
 }
 
+.orangeTxtPlain{
+	font-size: 11px;
+	color: #c60;
+	font-weight:normal;
+	margin:2px 0px;
+}
+
 .greyTxtBoldIt {
 	font-size: 11px;
 	color: #717476;
@@ -3125,4 +3138,12 @@ dt .hdr {
 	font-size: 11px;
 	font-style: italic;
 	text-align: left;
+}
+
+.contentArea .searchText {
+	color: #000;
+	font-size: 12px;
+	font-weight: bold;
+	float: left;
+	margin-right: 8px;
 }

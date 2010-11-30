@@ -1,0 +1,148 @@
+<?php
+include "setenv.php";
+
+$errorList = Array();
+$institutes = Array();
+$save = false;
+$update = false;
+$filename = '';
+$command = '';
+$institute = Array();
+$systemOutput = "";
+$atLeastOnePreorder=false;
+
+// Task is set or not
+if(isset($_GET['task'])) {$task = $_GET['task']; } elseif(isset($_POST['task'])) { $task = $_POST['task']; } else { $task = ""; }
+$instituteId = "";
+/* If the task is get all the institutes where the invalid flag is set to 0.
+*/
+$db = initializeDatabase($production_config);
+if ( $task == "getDetails" ) {
+ if(isset($_GET['institute_id'])) {$instituteId = $_GET['institute_id']; } elseif(isset($_POST['institute_id'])) { $instituteId = $_POST['institute_id']; } else { $instituteId = ""; }
+ $query = "select * from ek_social_institutes where id = $instituteId";
+ try {
+   $result = mysqli_query($db,$query);
+   if (!$result) {
+     $institute = null;
+   } else {
+       $institute = mysqli_fetch_assoc($result); 
+   }
+  } catch(exception $e) {
+    $institute = null;
+ }
+} else if ( $task == "update" ) {
+  $institute = Array(); 
+ if(isset($_GET['institute_id'])) {$institute['id'] = $_GET['institute_id']; } elseif(isset($_POST['institute_id'])) { $institute['id'] = $_POST['institute_id']; } else { $institute['id']= ""; }
+ if(isset($_GET['name'])) {$institute['name'] = $_GET['name']; } elseif(isset($_POST['name'])) { $institute['name'] = $_POST['name']; } else { $institute['name']= ""; }
+ if(isset($_GET['city'])) {$institute['city'] = $_GET['city']; } elseif(isset($_POST['city'])) { $institute['city'] = $_POST['city']; } else { $institute['city']= ""; }
+ if(isset($_GET['state'])) {$institute['state'] = $_GET['state']; } elseif(isset($_POST['state'])) { $institute['state'] = $_POST['state']; } else { $institute['state']= ""; }
+ if(isset($_GET['is_valid'])) {$institute['is_valid'] = 1; } elseif(isset($_POST['is_valid'])) { $institute['is_valid'] = 1; } else { $institute['is_valid']= 0; }
+
+ $instituteId = $institute['id'];
+ if ( $institute['name'] == "" ) { $errorList[] = "Name cannot be empty"; }
+ if ( $institute['city'] == "" ) { $errorList[] = "City cannot be empty"; }
+ if ( $institute['state'] == "" ) { $errorList[] = "State cannot be empty"; }
+ if ( empty($errorList) )  { 
+  $query = "update ek_social_institutes set name='" . $institute['name']. "', city='" . $institute['city'] . "', state='" . $institute['state'] . "'"; 
+  $query .=  ", is_valid=" . $institute['is_valid'] . " where id=" . $institute['id'];
+  try {
+   $result = mysqli_query($db,$query);
+   $institute = null;
+   $instituteId = "";
+  } catch(exception $e) {
+ }
+ }
+}
+$query = "select * from ek_social_institutes";
+try {
+   $result = mysqli_query($db,$query);
+   if (!$result) {
+     $institutes = null;
+   } else {
+       while ( $row = mysqli_fetch_assoc($result)) {
+       $institutes[] = $row;
+      }
+   }
+   mysqli_free_result($result);
+  } catch(exception $e) {
+    $institutes = null;
+}
+closeDatabase($db);
+# HTML CODE FROM BELOW
+?>
+<html>
+<head>
+</head>
+<body>
+<div id="updates" >
+  <h5><?php print_r($execOutput) ; ?></h5>
+</div>
+<div id="errors">
+  <table class="redFont" border="1">
+  <?php 
+  $counter = 0;
+  foreach ($errorList as $error ){
+   $counter++;
+   echo "<tr><td>";
+   echo "$counter . $error";
+   echo "</td></tr>";
+  }
+  ?>
+  </table>
+</div>
+<br>
+<h5>Validate Institute</h5>
+<?php if ( $instituteId == "" ) { ?>
+<div id="div_validateInstitute" style="display:none;background-color:#929bb1">
+<?php } else { ?>
+<div id="div_validateInstitute" style="background-color:#929bb1">
+<?php } ?>
+<form id="form_validateInstitute" action='validateInstitutes.phtml' method='post'>
+ <table border='0'>
+ <tr>
+  <td>Name</td>
+  <td>
+    <input type='text' name ='name' size='50' maxlength='20' value='<?php if($institute) { echo $institute['name']; } ?>' />
+  </td>
+ </tr>
+ <tr>
+  <td>City</td>
+  <td><input type='text' name ='city' size="50" maxlength='255' value='<?php if($institute) { echo $institute['city']; } ?>' /></td>
+ </tr>
+ <tr>
+  <td>State</td>
+  <td><input type='text' name ='state' size='50' maxlength='120' value='<?php if($institute) { echo $institute['state']; } ?>' /></td>
+ </tr>
+ <tr>
+  <td>Valid</td>
+  <td><input type='checkbox' name ='is_valid' <?php if($institute) { if ( $institute['is_valid'] == 1 ) echo 'checked'; } ?>/></td>
+ </tr>
+ <tr><td>
+  <input id='input_task' type='hidden' name='task' value='update'/>
+  <input id='input_task' type='hidden' name='institute_id' value='<?php if($institute) { echo $institute['id']; }?>'/>
+  <input id='input_submit' type='submit' value='Update Institute' />
+ </tr>
+</table>
+</form>
+</div>
+<div id="div_AddedInstitutes">
+<table border="1">
+ <tr><td>Name</td><td>City</td><td>State</td><td>Status</td></tr> 
+<?php 
+ $counter = 1;
+ foreach ( $institutes as $tmpInstitute ) {
+?>
+ <tr>
+   <td><a href=validateInstitutes.phtml?task=getDetails&institute_id=<?php echo $tmpInstitute['id'] ?>><?php echo $tmpInstitute['name'] ?></a></td>
+   <td><?php echo $tmpInstitute['city'] ?></td>
+   <td><?php echo $tmpInstitute['state'] ?></td>
+   <td><?php if ( $tmpInstitute['is_valid'] == 0 ) echo "Not Validated"; else echo "Validated";  ?></td>
+ </tr>
+<?php 
+  $counter++;
+ }
+?>
+</table>
+</div>
+</body>
+</html>

@@ -40,6 +40,22 @@
     </ekkitab_institute_search_listall>
 
 	
+	<ekkitab_institute_search_index>
+        <!-- Mage_ekkitab_institute -->
+        <remove name="left"/>
+
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+        <reference name="content">
+            <block type="ekkitab_institute/institute" name="ekkitab_institute_listall" template="institute/search_result.phtml">
+				<action method="addSearchInstitutesBreadCrumb"/>
+				<action method="setPageSize"><count>15</count></action>
+			</block>
+        </reference>
+    </ekkitab_institute_search_index>
+
+	
 	<ekkitab_institute_search_myinstitutes>
         <!-- Mage_ekkitab_institute -->
         <update handle="customer_account"/>
@@ -67,7 +83,7 @@
         </reference>
     </ekkitab_institute_account_view>
 
-	    <ekkitab_institute_account_edit>
+	<ekkitab_institute_account_edit>
         <reference name="root">
             <action method="setTemplate"><template>page/1column.phtml</template></action>
             <action method="setHeaderTitle" translate="title" module="customer"><title>Edit Institute Account Info</title></action>

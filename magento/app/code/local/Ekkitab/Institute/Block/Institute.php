@@ -39,7 +39,8 @@ class Ekkitab_Institute_Block_Institute extends Mage_Core_Block_Template
 	protected $_displayPages = 5;
 	protected $_instituteCollection;
 	protected $__instituteCollectionCount;
-	
+	protected $_queryText;
+
 	public function addMyInstituteBreadcrumb()
     {
 		$title ='Manage My Institutes ';
@@ -74,7 +75,7 @@ class Ekkitab_Institute_Block_Institute extends Mage_Core_Block_Template
 		}
     }
 
-	public function addListAllInstitutesBreadCrumb($title='My Account',$label='My Account',$link='customer/account')
+	public function addListAllInstitutesBreadCrumb()
     {
 		$title ='Members of the Ekkitab Network';
 	
@@ -103,6 +104,39 @@ class Ekkitab_Institute_Block_Institute extends Mage_Core_Block_Template
 		}
     }
 
+	public function addSearchInstitutesBreadCrumb($title='My Account',$label='My Account',$link='customer/account')
+    {
+	   $this->_queryText = $this->helper('ekkitab_institute')->getEscapedQueryText();
+	   $title ='';
+		if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
+			$breadcrumbs->addCrumb('home', array(
+				'label'=>Mage::helper('ekkitab_institute')->__('Home'),
+				'title'=>Mage::helper('ekkitab_institute')->__('Go to Home Page'),
+				'link'=>Mage::getBaseUrl()
+			));
+			$breadcrumbs->addCrumb('Ekkitab Network Members', array(
+				'label'=>Mage::helper('ekkitab_institute')->__('Members of the Ekkitab Network'),
+				'title'=>Mage::helper('ekkitab_institute')->__('Members of the Ekkitab Network'),
+				'link'=>$this->getUrl('ekkitab_institute/search/listAll')
+			));
+
+		   if(isset($this->_queryText) && strlen($this->_queryText)>0){
+				$title = $this->__("Search for '%s' in Ekkitab Network", urldecode($this->_queryText));
+				$label = $this->__("Search for '%s' in Ekkitab Network", urldecode($this->_queryText));
+				$link='';
+			}else{
+				$title = $this->__("Search in Ekkitab Network");
+				$label = $this->__("Search in Ekkitab Network");
+				$link='';
+			}
+			$breadcrumbs->addCrumb('Institute Search', array(
+				'label'=>$label,
+				'title'=>$title,
+				'link'=>$link
+			));
+		}
+    }
+
 	public function setPageSize($count)
     {
         if (intval($count) > 0) {
@@ -120,6 +154,20 @@ class Ekkitab_Institute_Block_Institute extends Mage_Core_Block_Template
     {
         return $this->_pageNo;
     }
+
+	/**
+     * Retrieve search result count
+     *
+     * @return string
+     */
+    public function getQueryText()
+    {
+		if(is_null($this->_queryText)){
+			$this->_queryText = $this->helper('ekkitab_institute')->getEscapedQueryText();
+		}
+		return $this->_queryText;
+    }
+
 
 	protected function getAllInstitutes() 
     {
@@ -161,9 +209,26 @@ class Ekkitab_Institute_Block_Institute extends Mage_Core_Block_Template
 
     }
  
+	protected function getSearchInstitutes() 
+    {
+		$institutes = Mage::getModel('ekkitab_institute/institute')->getCollection()
+			->addAuthenticateFilter()
+			->addSearchFilter($this->getQueryText());
+		
+		if($this->getCurrentPageNumber() > 0){
+			$institutes->setCurPage($this->getCurrentPageNumber());
+		}
+		if($this->getPageSize() && $this->getPageSize() > 0 ){
+			$institutes->setPageSize($this->getPageSize());
+			//$collection->setLimit($limit);
+		}
+		$this->_instituteCollection =$institutes;
+		return $this->_instituteCollection;
+
+    }
+ 
 		
 	public function getInstituteCollection(){
-
 		return $this->_instituteCollection;
     }
 	
@@ -172,27 +237,10 @@ class Ekkitab_Institute_Block_Institute extends Mage_Core_Block_Template
      *
      * @return string
      */
-    public function getResultCount()
-    {
-	   $size =0;
-	   if (!$this->getData('result_count')) {
-            $size = $this->getInstituteCollection()->getSize();
-            $this->setResultCount($size);
-        }
-        return $this->getData('result_count');
-    }
-
-
-
-	/**
-     * Retrieve search result count
-     *
-     * @return string
-     */
     public function getLastPageNumber()
     {
 		if(is_null($this->_lastPageNo)){
-			$this->_lastPageNo = ceil((int)$this->getResultCount() / $this->_pageSize);
+			$this->_lastPageNo = ceil((int)$this->getTotalResultCount() / $this->_pageSize);
 		}
 		return $this->_lastPageNo;
     }
@@ -234,7 +282,7 @@ class Ekkitab_Institute_Block_Institute extends Mage_Core_Block_Template
 
     public function getPageUrl($page)
     {
-		return $this->getPagerUrl(array($this->helper('ekkitab_institute')->getPageNoVarName()=>$page));
+		return $this->getPagerUrl(array($this->helper('ekkitab_institute')->getPageNoVarName()=>$page,$this->helper('ekkitab_institute')->getQueryParamName()=>urlencode(urldecode($this->helper('ekkitab_institute')->getEscapedQueryText()))));
     }
 
 	 public function getPagerUrl($params=array(),$queryParams=null)
@@ -276,8 +324,49 @@ class Ekkitab_Institute_Block_Institute extends Mage_Core_Block_Template
 
     public function getLastNum()
     {
-        $collection = $this->getCollection();
         return $this->getPageSize()*($this->getCurrentPageNumber()-1)+$this->getResultCount();
+    }
+
+	public function getTotalNum()
+    {
+        return $this->getTotalResultCount();
+    }
+
+		/**
+     * Retrieve search result count
+     *
+     * @return string
+     */
+    public function getTotalResultCount()
+    {
+	   if (!$this->getData('total_result_count')) {
+			$results = $this->getInstituteCollection();
+			if(!is_null($results)){
+				$size = $results->getSize();
+			}else{
+				$size = 0;
+			}
+			$this->setTotalResultCount($size);
+        }
+        return $this->getData('total_result_count');
+    }
+
+	/**
+     * Retrieve search result count
+     *
+     * @return string
+     */
+    public function getResultCount()
+    {
+		$size =0;
+		if (!$this->getData('result_count')) {
+			$results = $this->getInstituteCollection();
+			if(!is_null($results)){
+				$size = $results->count();
+			}
+			$this->setResultCount($size);
+		}
+		return $this->getData('result_count');
     }
 
 	public function getPages()
