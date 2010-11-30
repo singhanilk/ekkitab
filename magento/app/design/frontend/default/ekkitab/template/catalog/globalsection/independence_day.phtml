@@ -86,11 +86,11 @@
 
 			if(isset($authorArr['a']) && strlen(trim($authorArr['a'])) > 0)
 			{
-				$auth=trim($authorArr['a'])."__";
+				$auth=trim($authorArr['a'])."-";
 			}else{
 				$auth="";
 			}
-			$bookName=$this->helper('ekkitab_catalog')->getProductUrl($auth,$title,$product->getIsbn());
+			$bookName=$this->helper('ekkitab_catalog')->getProductUrl($auth,$fullTitle,$product->getIsbn());
 			$image = $product->getImage();
 	?>
 				<div class="vColumns" style="width:<?php echo $width ?>%;"><div class="discImageBox"><div class="image">

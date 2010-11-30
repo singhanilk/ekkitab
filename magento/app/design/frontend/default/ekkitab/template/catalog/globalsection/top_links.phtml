@@ -42,7 +42,7 @@ if($scrollSize):
 <?php 	foreach($_links as $_link){ 
 		  $counter = 0; ?>	
 			sections[0][counter] = '<?php echo $_link->getSectionId()?>';
-			sections[1][counter] = '<?php echo Mage::helper("ekkitab_catalog")->getGlobalSectionViewUrl($_link->getSectionId())?>';
+			sections[1][counter] = '<?php echo Mage::helper("ekkitab_catalog")->getGlobalSectionViewUrl(urlencode($_link->getDisplayName()))?>';
 			sections[2][counter] = "<?php echo $_link->getDisplayName()?>";
 			counter++;
 <?php		

@@ -333,7 +333,7 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
     public function getProductUrl($author,$title,$isbn,$urlPrefix=null)
     {
 		if(is_null($urlPrefix) || $urlPrefix=='' ){
-			$urlPrefix='ekkitab_catalog/product/view/book/';
+			$urlPrefix='book/';
 		}
 		$url='';
 		if(isset($author) && strlen(trim($author)) > 0)
@@ -343,7 +343,7 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
 			if(substr($author,-1,1)=='-'){
 				$author = substr($author,0,-1);
 			}
-			$url=$author."__";
+			$url=$author."-";
 		}
 
 		$url=$url.$title;
@@ -353,7 +353,7 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
 			$url = substr($url,0,-1);
 		}
 		
-		$url=$urlPrefix.$url."__".$isbn.".html";
+		$url=$urlPrefix.$url."-".$isbn.".html";
 		return $url;
 	}
 
@@ -365,7 +365,7 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
      */
     public function getSearchResultProductUrl($author,$title,$isbn)
     {
-		$urlPrefix='ekkitab_catalog/product/show/book/';
+		$urlPrefix='book-detail/';
 		return $this->getProductUrl($author,$title,$isbn,$urlPrefix);
 	}
 
@@ -527,7 +527,8 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
      */
     public function getGlobalSectionViewUrl($sectionId)
     {
-        return $this->_getUrl('ekkitab_catalog/globalsection/view/', array('id'=>$sectionId));
+        $url='book-collection/'.$sectionId;
+		return $this->_getUrl($url);
     }
 
 	public function getSearchCriteriaTemplateUrl()

@@ -1312,7 +1312,7 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
      */
     public function getProductUrl($useSid = true)
     {
-		$urlPrefix='ekkitab_catalog/product/view/book/';
+		$urlPrefix='book/';
 		$url='';
 		$author=$this->_getData('author');
 		$title=$this->getName();
@@ -1324,7 +1324,7 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
 			if(substr($author,-1,1)=='-'){
 				$author = substr($author,0,-1);
 			}
-			$url=$url.$author."__";
+			$url=$url.$author."-";
 		}
 
 		$url=$url.$title;
@@ -1334,7 +1334,7 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
 			$url = substr($url,0,-1);
 		}
 		
-		$url=$urlPrefix.$url."__".$isbn.".html";
+		$url=$urlPrefix.$url."-".$isbn.".html";
 		return $url;
     }
 

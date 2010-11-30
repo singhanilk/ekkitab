@@ -17,34 +17,40 @@ class Ekkitab_Review_Block_Form extends Mage_Review_Block_Form
 
 		$productUrl  = (String) $this->getRequest()->getParam('book');
 
-		// insert the split function here.....and get the product Id
-		if(strrpos($productUrl, "__")){
-			$productIdStartIndex = strrpos($productUrl, "__")+2; 	 
-		}else{
-			$productIdStartIndex=0;
-		}
-		$productIdEndIndex = strpos($productUrl, ".html"); 	
-		$productIdEndIndex = $productIdEndIndex - $productIdStartIndex;  //.html/	
-		$productId = trim(urldecode(substr($productUrl,$productIdStartIndex,$productIdEndIndex)));
-
-		if( $productId && $this->isIsbn($productId)){
-			//this is isbn.....
+		if($productUrl && $this->isIsbn($productUrl)){
 			$product = Mage::getModel('ekkitab_catalog/product')
 				->setStoreId(Mage::app()->getStore()->getId())
-				->load($productId,'isbn');
-		}else {
-			if (is_null($productId) || $productId =='') {
-				$productId  = $this->getRequest()->getParam('id');
+				->load($productUrl,'isbn');
+		}else{
+			// insert the split function here.....and get the product Id
+			if(strrpos($productUrl, "__")){
+				$productIdStartIndex = strrpos($productUrl, "__")+2; 	 
+			}else{
+				$productIdStartIndex=0;
 			}
-			if (!is_numeric($productId)) {
-				 return false;
-			}
-			else{
+			$productIdEndIndex = strpos($productUrl, ".html"); 	
+			$productIdEndIndex = $productIdEndIndex - $productIdStartIndex;  //.html/	
+			$productId = trim(urldecode(substr($productUrl,$productIdStartIndex,$productIdEndIndex)));
+
+			if( $productId && $this->isIsbn($productId)){
+				//this is isbn.....
 				$product = Mage::getModel('ekkitab_catalog/product')
 					->setStoreId(Mage::app()->getStore()->getId())
-					->load((int)$productId);
-			}
+					->load($productId,'isbn');
+			}else {
+				if (is_null($productId) || $productId =='') {
+					$productId  = $this->getRequest()->getParam('id');
+				}
+				if (!is_numeric($productId)) {
+					 return false;
+				}
+				else{
+					$product = Mage::getModel('ekkitab_catalog/product')
+						->setStoreId(Mage::app()->getStore()->getId())
+						->load((int)$productId);
+				}
 
+			}
 		}
 		return $product;
     }
@@ -100,11 +106,14 @@ class Ekkitab_Review_Block_Form extends Mage_Review_Block_Form
 	public function getAction()
     {
 		$productUrl  = (String) Mage::app()->getRequest()->getParam('book');
-
-		$productIdStartIndex = strrpos($productUrl, "__")+2; 	  
-		$productIdEndIndex = strpos($productUrl, ".html"); 	
-		$productIdEndIndex = $productIdEndIndex - $productIdStartIndex;  //.html/	
-		$productId = trim(urldecode(substr($productUrl,$productIdStartIndex,$productIdEndIndex)));
+		if($productUrl && $this->isIsbn($productUrl)){
+			$productId = $productUrl;
+		}else{
+			$productIdStartIndex = strrpos($productUrl, "__")+2; 	  
+			$productIdEndIndex = strpos($productUrl, ".html"); 	
+			$productIdEndIndex = $productIdEndIndex - $productIdStartIndex;  //.html/	
+			$productId = trim(urldecode(substr($productUrl,$productIdStartIndex,$productIdEndIndex)));
+		}
         return Mage::getUrl('ekkitab_review/product/post', array('id' => $productId));
     }
 

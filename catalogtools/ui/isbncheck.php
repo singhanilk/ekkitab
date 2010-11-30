@@ -87,7 +87,15 @@ function createForm($isbnno, $displayString){
 
   $htmlString = "<html>
                  <body>
-                 <!--#include FILE='links.html' -->
+<br><U>List of Utilities</U><br><br>
+<ol>
+<li><a href='isbncheck.php'>ISBNCHECK.PHP - Isbn Check Program for checking a particular isbn in reference database</a></li></br>
+<li><a href='missingimages.phtml'>MISSINGIMAGES.PHTML - Program which runs google get images for all missing images for a selected supplier</a></li></br>
+<li><a href='pdftoimages.phtml'>PDFTOIMAGES.PHTML - Program takes a PDF file and extracts images, after specifying the respective isbn can be uploaded</a></li></br>
+<li><a href='bookupdate.phtml'>BOOKUPDATE.PHTML - Data entry for a single book</a></li></br>
+<li><a href='ignoreisbns.phtml'>IGNOREISBNS.PHTML - Program to maintain the ignore isbn list. Provides functionality to add a single book to the ignore list</a></li></br>
+<li><a href='loadimages.phtml'>LOADIMAGES.PHTML - Program to load single and multiple images onto the staging environment</a></li></br>
+</ol>
                  <h4> Please enter an ISBN No. ( Checks the Reference.books table, Reference. )</h4>
                   <table border='0'>
                    <tr>

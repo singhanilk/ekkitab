@@ -77,7 +77,7 @@
 			$fullTitle= $this->htmlEscape($product->getTitle());
 			if(isset($authorArr['a']) && strlen(trim($authorArr['a'])) > 0)
 			{
-				$auth=trim($authorArr['a'])."__";
+				$auth=trim($authorArr['a'])."-";
 			}else{
 				$auth="";
 			}
@@ -104,7 +104,7 @@
 			}	//end of foreach...	?>
 			</div><!-- hmInScrollRow -->
 			<div class="clear">&nbsp;</div>
-			<div class="readMore"><a href="<?php echo Mage::helper('ekkitab_catalog')->getGlobalSectionViewUrl($section->getSectionId()) ?>">See All...</a></div>
+			<div class="readMore"><a href="<?php echo Mage::helper('ekkitab_catalog')->getGlobalSectionViewUrl(urlencode($section->getDisplayName())) ?>">See All...</a></div>
 			<div class="clear hmInScrollRowSep"></div>
 			<div class="clear"></div>
 <?php	} else { //end of if(products not null )... ?>
