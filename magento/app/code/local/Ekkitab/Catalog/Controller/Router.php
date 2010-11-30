@@ -15,6 +15,11 @@ class Ekkitab_Catalog_Controller_Router extends Mage_Core_Controller_Varien_Rout
         					  			$controller = "product";
         					  			$action = "view";
         					  			break; 
+        		case 'book-detail':  	$module = "ekkitab_catalog";
+        					  			$realModule = "Ekkitab_Catalog";
+        					  			$controller = "product";
+        					  			$action = "show";
+        					  			break; 
         		case 'book-collection': $module = "ekkitab_catalog"; 
         								$realModule = "Ekkitab_Catalog";
         								$controller = "globalsection";
