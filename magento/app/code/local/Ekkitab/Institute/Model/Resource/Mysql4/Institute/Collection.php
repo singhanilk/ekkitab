@@ -38,6 +38,16 @@ class Ekkitab_Institute_Model_Resource_Mysql4_Institute_Collection extends Mage_
 		return $this;
 	}
 
+	public function addSearchFilter($query){
+        $this->getSelect()->reset(Zend_Db_Select::FROM)->distinct(true)
+            ->from(
+                array('main_table' => $this->getTable('institute')),
+                array()
+            )
+            ->where('name LIKE ? OR street LIKE ? OR state LIKE ? OR city LIKE ?', '%'.$query.'%');
+		return $this;
+	}
+
 	    /**
      * Add section to filter
      *

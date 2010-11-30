@@ -9,12 +9,12 @@
  */
 ?>
 <div class="contentArea">
-<div class="pageHeader" style="width:100%">The Ekkitab Network
-<div class="right padderRight15px">
+<div class="pageHeader" style="width:100%; padding-bottom:2px">The Ekkitab Network
+<div class="right">
 	<form id="institute_search_form" action="<?php echo $this->helper('ekkitab_institute')->getInstituteSearchResultUrl() ?>" method="get">
 		<fieldset>
-			<div class="left searchText"><?php echo $this->__('Search for') ?> &nbsp; <input id="instituteSearch" type="text" class="textField" name="<?php echo $this->helper('ekkitab_institute')->getQueryParamName() ?>" value="<?php echo $this->helper('ekkitab_institute')->getEscapedQueryText() ?>" /></div>
-			<div class="left searchBut padderLeft15px"><input type="image" src="<?php echo $this->getSkinUrl('images/search_button.png') ?>"  width="21" height="21" alt="<?php echo $this->__('Go') ?>" border="0" /></div>
+			<div class="left searchText"><?php echo $this->__('Search member') ?> &nbsp; <input id="instituteSearch" type="text" class="textField" name="<?php echo $this->helper('ekkitab_institute')->getQueryParamName() ?>" value="<?php echo $this->helper('ekkitab_institute')->getEscapedQueryText() ?>" /></div>
+			<div class="left searchBut"><input type="image" src="<?php echo $this->getSkinUrl('images/search_button.png') ?>"  width="21" height="21" alt="<?php echo $this->__('Go') ?>" border="0" /></div>
 		</fieldset>	</form>
 	   </div> </div>
 <?php
@@ -33,14 +33,25 @@
 		return $resStr;
 	}
 
-	$institutes = $this->getAllInstitutes();
+	$institutes = $this->getSearchInstitutes();
 	if(!is_null($institutes)){
 ?>
 <div class="intro">The Ekkitab Network comprises of organizations (mostly schools and colleges, but not confined to them) that wish to advertise their library and book requirements through Ekkitab. As an online bookstore, we provide a channel for well-wishers interested in the spread of literacy and reading, to contribute and donate books purchased from our bookstore to any organization listed here, anywhere in India. Your donation will be sent direct to the specified organization and you will be notified by us when it is successfully delivered. We hope that a thriving network of donors can be built through this process and that books will eventually become available to those who do not have them today. We thank you for supporting our <a href="<?php echo $this->getUrl('ekkitab-vision')?>" alt="Donate Books via Ekkitab - the online Indian bookstore" title="Donate Books via Ekkitab - the online Indian bookstore">vision.</a><br/><br/>
 If you are a school/college/library and wish to join our network, <a href="<?php echo $this->getUrl('ekkitab_institute/account/create')?>" alt="Join the Ekkitab Network" title="Join the Ekkitab Network">please click here.</a></div>
 <div class="searchResTop">
-	<div class="leftArea">
-		<div class="left orangeTxt">&nbsp;<?php echo $this->__("Members:") ?></div>
+	<div class="leftArea orangeTxtPlain">
+		&nbsp;
+		<?php if($this->getLastPageNumber()>1): ?>
+			<?php if($this->getTotalNum() >= 1000): ?>
+				<?php echo $this->__('Showing %s to %s of more than %s Institutes. ', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+			<?php else : ?>
+				<?php echo $this->__('Showing %s to %s of %s Institutes. ', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+			<?php endif; ?>
+		<?php elseif($this->getTotalNum() > 1): ?>
+			<?php echo $this->__('Showing all %s Institutes', $this->getTotalNum()) ?>
+		<?php elseif($this->getTotalNum() == 1): ?>
+			<?php echo $this->__('Showing %s Institute', $this->getTotalNum()) ?>
+		<?php endif; ?>
 	</div><!-- leftArea -->
 	<div class="rightArea">
     <?php if($this->getLastPageNumber()>1): ?>

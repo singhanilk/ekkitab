@@ -93,8 +93,10 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 				if(!is_null($parentCatArr) && sizeof($parentCatArr) > 0){
 					$link=$this->getSubCategorySearchUrl('',1);
 				}
-				$title = $this->__("Buy Books on '%s' Online @ Ekkitab.com", urldecode($queryText));
-				$label = $this->__("Search for '%s'", urldecode($queryText));
+				//$title = $this->__("Buy Books on '%s' Online @ Ekkitab.com", urldecode($queryText));
+				$title = $this->__("Buy Books on '%s' Online @ Ekkitab.com", $queryText);
+				//$label = $this->__("Search for '%s'", urldecode($queryText));
+				$label = $this->__("Search for '%s'", $queryText);
 				
 				$breadcrumbs->addCrumb('search', array(
 					'label'=>$label,
@@ -210,7 +212,11 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 			// this is to filter the search by title / author / or both
 			$filterBy = strlen($this->getFilterByText()) > 0 ?($this->getFilterByText().":"):""; 
 			//this is to check if the query text is all numbers...then maybe its isbn... so append isbn: before the query text... 
-			$query = urldecode($this->helper('ekkitab_catalog')->getEscapedQueryText());
+			Mage::log("In getSearchResults() .... getQueryText is :".$this->helper('ekkitab_catalog')->getQueryText());
+			Mage::log("In getSearchResults() .... getEscapedQueryText is :".$this->helper('ekkitab_catalog')->getEscapedQueryText());
+			//$query = urldecode($this->helper('ekkitab_catalog')->getEscapedQueryText());
+			$query = $this->helper('ekkitab_catalog')->getEscapedQueryText();
+			Mage::log("In getSearchResults() .... urldecode(query) is : $query");
 			if($this->isIsbn($this->helper('ekkitab_catalog')->getEscapedQueryText())){
 				$query = $this->_isbn;
 				$filterBy = "isbn:"; 
@@ -429,12 +435,12 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 
     public function getPageUrl($page)
     {
-        return $this->getPagerUrl(array($this->helper('ekkitab_catalog')->getCategoryVarName()=>$this->getCurrentCategoryPath(),$this->helper('ekkitab_catalog')->getQueryParamName()=>urlencode(urldecode($this->helper('ekkitab_catalog')->getEscapedQueryText())),$this->helper('ekkitab_catalog')->getPageNoVarName()=>$page,$this->helper('ekkitab_catalog')->getQueryFilterName()=>$this->helper('ekkitab_catalog')->getQueryFilterByText()));
+        return $this->getPagerUrl(array($this->helper('ekkitab_catalog')->getCategoryVarName()=>$this->getCurrentCategoryPath(),$this->helper('ekkitab_catalog')->getPageNoVarName()=>$page,$this->helper('ekkitab_catalog')->getQueryFilterName()=>$this->helper('ekkitab_catalog')->getQueryFilterByText()),array($this->helper('ekkitab_catalog')->getQueryParamName()=>$this->helper('ekkitab_catalog')->getEscapedQueryText()));
     }
 
     public function getSubCategorySearchUrl($categoryPath,$page)
     {
-        return $this->getPagerUrl(array($this->helper('ekkitab_catalog')->getCategoryVarName()=>$categoryPath,$this->helper('ekkitab_catalog')->getQueryParamName()=>urlencode(urldecode($this->helper('ekkitab_catalog')->getEscapedQueryText())),$this->helper('ekkitab_catalog')->getPageNoVarName()=>$page,$this->helper('ekkitab_catalog')->getQueryFilterName()=>$this->helper('ekkitab_catalog')->getQueryFilterByText()));
+        return $this->getPagerUrl(array($this->helper('ekkitab_catalog')->getCategoryVarName()=>$categoryPath,$this->helper('ekkitab_catalog')->getPageNoVarName()=>$page,$this->helper('ekkitab_catalog')->getQueryFilterName()=>$this->helper('ekkitab_catalog')->getQueryFilterByText()),array($this->helper('ekkitab_catalog')->getQueryParamName()=>$this->helper('ekkitab_catalog')->getEscapedQueryText()));
     }
 
 	 public function getPagerUrl($params=array(),$queryParams=null)
@@ -451,8 +457,8 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
             }
         }
         $urlParams = array();
-       // $urlParams['_current']  = true;
-       // $urlParams['_query']    = $queryParams;
+        $urlParams['_current']  = true;
+        $urlParams['_query']    = $queryParams;
 		$url = $this->getUrl($url,$urlParams);
         return $url;
     }

@@ -10,12 +10,21 @@
 class Ekkitab_Institute_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const QUERY_PAGE_NO = 'p';
+    const QUERY_VAR_NAME = 'iq';
 
 
     /*
      * @var int
      */
     protected $_pageNo;
+
+
+    /**
+     * Query string
+     *
+     * @var string
+     */
+    protected $_queryText;
 
 
 	/**
@@ -44,6 +53,48 @@ class Ekkitab_Institute_Helper_Data extends Mage_Core_Helper_Abstract
      * @var int
      */
     protected $_custOrg;
+
+    /**
+     * Retrieve search query parameter name
+     *
+     * @return string
+     */
+    public function getQueryParamName()
+    {
+        return self::QUERY_VAR_NAME;
+    }
+	
+    /**
+     * Retrieve search query text
+     *
+     * @return string
+     */
+    public function getQueryText()
+    {
+        if (is_null($this->_queryText)) {
+            $this->_queryText = $this->_getRequest()->getParam($this->getQueryParamName());
+            if ($this->_queryText === null) {
+                $this->_queryText = '';
+            } else {
+                if (is_array($this->_queryText)) {
+                    $this->_queryText = null;
+                }
+                $this->_queryText = trim($this->_queryText);
+                $this->_queryText = Mage::helper('core/string')->cleanString($this->_queryText);
+            }
+        }
+        return $this->_queryText;
+    }
+
+    /**
+     * Retrieve HTML escaped search query
+     *
+     * @return string
+     */
+    public function getEscapedQueryText()
+    {
+        return $this->htmlEscape($this->getQueryText());
+    }
 
 	/**
      * Retrieve search query text
@@ -97,6 +148,16 @@ class Ekkitab_Institute_Helper_Data extends Mage_Core_Helper_Abstract
     public function getRegisterUrl()
     {
         return $this->_getUrl('ekkitab_institute/account/create');
+    }
+
+    /**
+     * Retrieve customer register form url
+     *
+     * @return string
+     */
+    public function getInstituteSearchResultUrl()
+    {
+        return $this->_getUrl('ekkitab_institute/search/index');
     }
 
     /**
