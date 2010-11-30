@@ -9,12 +9,12 @@
  */
 ?>
 <div class="contentArea">
-<div class="pageHeader" style="width:100%">The Ekkitab Network
-<div class="right padderRight15px">
+<div class="pageHeader" style="width:100%; padding-bottom:2px">The Ekkitab Network
+<div class="right">
 	<form id="institute_search_form" action="<?php echo $this->helper('ekkitab_institute')->getInstituteSearchResultUrl() ?>" method="get">
 		<fieldset>
-			<div class="left searchText"><?php echo $this->__('Search for') ?> &nbsp; <input id="instituteSearch" type="text" class="textField" name="<?php echo $this->helper('ekkitab_institute')->getQueryParamName() ?>" value="<?php echo $this->helper('ekkitab_institute')->getEscapedQueryText() ?>" /></div>
-			<div class="left searchBut padderLeft15px"><input type="image" src="<?php echo $this->getSkinUrl('images/search_button.png') ?>"  width="21" height="21" alt="<?php echo $this->__('Go') ?>" border="0" /></div>
+			<div class="left searchText"><?php echo $this->__('Search member') ?> &nbsp; <input id="instituteSearch" type="text" class="textField" name="<?php echo $this->helper('ekkitab_institute')->getQueryParamName() ?>" value="<?php echo $this->helper('ekkitab_institute')->getEscapedQueryText() ?>" /></div>
+			<div class="left searchBut"><input type="image" src="<?php echo $this->getSkinUrl('images/search_button.png') ?>"  width="21" height="21" alt="<?php echo $this->__('Go') ?>" border="0" /></div>
 		</fieldset>	</form>
 	   </div> </div>
 <?php
