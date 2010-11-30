@@ -65,7 +65,11 @@ class Ekkitab_Catalog_Block_Globalsection_View extends Mage_Core_Block_Template
 			if (!Mage::registry('sectionId')) {
 				Mage::register('sectionId', Mage::helper('ekkitab_catalog/globalsection_data')->getSectionId());
 			}
-			$this->_globalsection = Mage::getModel('ekkitab_catalog/globalsection')->load(Mage::registry('sectionId'));
+			if(is_numeric(Mage::registry('sectionId'))){
+				$this->_globalsection = Mage::getModel('ekkitab_catalog/globalsection')->load(Mage::registry('sectionId'));
+			}else{
+				$this->_globalsection = Mage::getModel('ekkitab_catalog/globalsection')->load(urldecode(Mage::registry('sectionId')),'display_name');
+			}
 		}
 		return $this->_globalsection;
 	}

@@ -23,11 +23,12 @@ class Ekkitab_Catalog_GlobalsectionController extends Mage_Core_Controller_Front
      */
     public function viewAction()
     {
-		$sectionId  = (int) $this->getRequest()->getParam('id');
+//		$sectionId  = (int) $this->getRequest()->getParam('id');
+		$sectionId  = $this->getRequest()->getParam('id');
 
-		if (!(is_int($sectionId) && $sectionId > 0 )) {
-			$this->_forward('noRoute');
-		}
+		//if (!(is_int($sectionId) && $sectionId > 0 )) {
+		//	$this->_forward('noRoute');
+		//}
 
 		Mage::register('sectionId', $sectionId);
 		$this->loadLayout();

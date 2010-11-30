@@ -36,7 +36,8 @@ class Ekkitab_Catalog_Helper_Globalsection_Data extends Mage_Core_Helper_Abstrac
     public function getSectionId()	
     {
         if (is_null($this->_sectionId)) {
-			$_sectionId  = (int) $this->_getRequest()->getParam('id');
+			//$_sectionId  = (int) $this->_getRequest()->getParam('id');
+			$_sectionId  = $this->_getRequest()->getParam('id');
         }
         return $this->_sectionId;
     }

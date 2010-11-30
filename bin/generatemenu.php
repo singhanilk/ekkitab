@@ -103,10 +103,10 @@ function printUtilityFunctions($fh) {
    fprintf($fh, "%s\n", '       }');
    fprintf($fh, "%s\n", '       for ($i=0; $i < $sections[$id][\'highlight\']; $i++) {');
    fprintf($fh, "%s\n", '           $link = array();');
-   fprintf($fh, "%s\n", '           $url = strtolower(preg_replace("/\W+/", "_", $books[$id][$i][\'title\'])) . "__" . $books[$id][$i][\'id\'];');
+   fprintf($fh, "%s\n", '           $url = strtolower(preg_replace("/\W+/", "-", $books[$id][$i][\'title\'])) . "-" . $books[$id][$i][\'id\'];');
    fprintf($fh, "%s\n", '           $name = $books[$id][$i][\'title\'] . " __by__ " . $books[$id][$i][\'author\'];');
    fprintf($fh, "%s\n", '           $link[\'name\'] = $name;');
-   fprintf($fh, "%s\n", '           $link[\'url\'] = "ekkitab_catalog/product/view/book/" . $url . ".html";');
+   fprintf($fh, "%s\n", '           $link[\'url\'] = "book/" . $url . ".html";');
    fprintf($fh, "%s\n", '			if ($sections[$id][\'showThumbnails\'] == "yes") {');
    fprintf($fh, "%s\n", '				$link[\'image\'] = $books[$id][$i][\'image\'];');
    fprintf($fh, "%s\n", '			}');

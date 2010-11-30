@@ -37,27 +37,30 @@ class Ekkitab_Catalog_Helper_Product_Data extends Mage_Core_Helper_Abstract
     {
 		if (is_null($this->_productId)) {
 			$productUrl  = (String) $this->getRequest()->getParam('book');
+			if($productUrl && $this->isIsbn($productUrl)){
+				$this->_productId = $productUrl;
+			}else{
+				// insert the split function here.....and get the product Id
+				$productIdStartIndex = strrpos($productUrl, "__")+2; 	  
+				$productIdEndIndex = strpos($productUrl, ".html"); 	
+				$productIdEndIndex = $productIdEndIndex - $productIdStartIndex;  //.html/	
+				$productId = trim(urldecode(substr($productUrl,$productIdStartIndex,$productIdEndIndex)));
 
-			// insert the split function here.....and get the product Id
-			$productIdStartIndex = strrpos($productUrl, "__")+2; 	  
-			$productIdEndIndex = strpos($productUrl, ".html"); 	
-			$productIdEndIndex = $productIdEndIndex - $productIdStartIndex;  //.html/	
-			$productId = trim(urldecode(substr($productUrl,$productIdStartIndex,$productIdEndIndex)));
-
-		
-			if( $productId && $this->isIsbn($productId)){
-				//this is isbn.....
-				 $this->_productId = $productId;
-			}else {
-				$productId = (int) $productId;
-				if (!$productId || $productId <= 0) {
-					$productId  = (int) $this->getRequest()->getParam('id');
-				}
-				if (!$productId || $productId <= 0) {
-					$this->_productId = 0;
-				}
-				else{
-					$this->_productId = $productId;
+			
+				if( $productId && $this->isIsbn($productId)){
+					//this is isbn.....
+					 $this->_productId = $productId;
+				}else {
+					$productId = (int) $productId;
+					if (!$productId || $productId <= 0) {
+						$productId  = (int) $this->getRequest()->getParam('id');
+					}
+					if (!$productId || $productId <= 0) {
+						$this->_productId = 0;
+					}
+					else{
+						$this->_productId = $productId;
+					}
 				}
 			}
 
@@ -73,17 +76,50 @@ class Ekkitab_Catalog_Helper_Product_Data extends Mage_Core_Helper_Abstract
     public function isIsbn($str)
     {
 		$str=trim($str);
-		if(preg_match("/^[0-9]*$/",$str)){
-			if (strlen($str) == 12 || strlen($str) == 10 || strlen($str) == 13) {
+		if (preg_match("/^[0-9X\-_]+$/", $str)) {
+			$str = preg_replace("/[-_]/", "", $str);
+		}
+		if(preg_match("/^[0-9X]*$/",$str)){
+			if (strlen($str) == 12) {
+				$this->_isbn =  '0'.$str;
+				return true;
+			}else if (strlen($str) == 10) {
+				$this->_isbn = $this->isbn10to13($str);
+				return true;
+			}else if (strlen($str) == 13) {
+				$this->_isbn = $str;
 				return true;
 			}else{
 				return false;
 			}
-		}else{
+		}else {
 			return false;
 		}
-		
     }
+
+	public	function genchksum13($isbn) {
+		$isbn = trim($isbn);
+		if (strlen($isbn) != 12) {
+			return -1;
+		}
+		$sum = 0;
+		for ($i = 0; $i < 12; $i+=2) {
+			$sum += ($isbn[$i] * 1);
+			$sum += ($isbn[$i+1] * 3);
+		}
+		$sum = $sum % 10;
+		$sum = 10 - $sum;
+		return ($sum == 10 ? 0 : $sum);
+	}
+
+	public	function isbn10to13($isbn10) {
+		$isbn13 = "";
+		$isbn13 = substr("978" . $isbn10, 0, -1);
+		$chksum =  $this->genchksum13($isbn13);
+		$isbn13 = $isbn13.$chksum;
+		return ($isbn13);
+	}
+
 
 
 }
