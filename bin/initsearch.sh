@@ -21,7 +21,7 @@ echo "Building search library ...."
 echo "Copying search library to tomcat location ...."
 ( cd $EKKITAB_HOME/java/bin; sudo cp ekkitabsearch.jar $searchlib/ekkitabsearch.jar ) 
 echo "Deleting old lucene jar file that came with JavaBridge distribution..."
-rm -f $searchlib/lucene.jar 
+sudo rm -f $searchlib/lucene.jar 
 echo "Copying missing libraries to tomcat location ..."
 ( 
    cd $EKKITAB_HOME/java/lib; for i in *.jar ; 
