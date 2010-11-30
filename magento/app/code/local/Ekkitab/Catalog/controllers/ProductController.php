@@ -28,7 +28,7 @@ class Ekkitab_Catalog_ProductController extends Mage_Core_Controller_Front_Actio
     {
 		Mage::getSingleton('core/session')->setCurrentCategoryPath(array('current_category_path'=>''));
         Mage::getSingleton('core/session')->setCurrentQueryText(array('current_query_text'=>''));
-		$productUrl  = (String) $this->getRequest()->getParam('book');
+		//$productUrl  = (String) $this->getRequest()->getParam('book');
 		
 		//$this->_redirect('ekkitab_catalog/product/show/book/'.$productUrl);
 		$this->_forward('show');
@@ -42,32 +42,37 @@ class Ekkitab_Catalog_ProductController extends Mage_Core_Controller_Front_Actio
     public function showAction()
     {
 		$productUrl  = (String) $this->getRequest()->getParam('book');
-
-		// insert the split function here.....and get the product Id
-		if(strrpos($productUrl, "__")){
-			$productIdStartIndex = strrpos($productUrl, "__")+2; 	 
-		}else{
-			$productIdStartIndex=0;
-		}
-		$productIdEndIndex = strpos($productUrl, ".html"); 	
-		$productIdEndIndex = $productIdEndIndex - $productIdStartIndex;  //.html/	
-		$productId = trim(urldecode(substr($productUrl,$productIdStartIndex,$productIdEndIndex)));
-		if( $productId && $this->isIsbn($productId)){
-			//this is isbn.....
+		if($productUrl && $this->isIsbn($productUrl)){
 			Mage::register('productId', $this->_isbn);
 			$this->loadLayout();
 			$this->renderLayout();
-		}else {
-			if (is_null($productId) || $productId =='') {
-				$productId  = $this->getRequest()->getParam('id');
+		}else{
+			// insert the split function here.....and get the product Id
+			if(strrpos($productUrl, "__")){
+				$productIdStartIndex = strrpos($productUrl, "__")+2; 	 
+			}else{
+				$productIdStartIndex=0;
 			}
-			if (!is_numeric($productId)) {
-				$this->_forward('noRoute');
-			}
-			else{
-				Mage::register('productId', (int)$productId);
+			$productIdEndIndex = strpos($productUrl, ".html"); 	
+			$productIdEndIndex = $productIdEndIndex - $productIdStartIndex;  //.html/	
+			$productId = trim(urldecode(substr($productUrl,$productIdStartIndex,$productIdEndIndex)));
+			if( $productId && $this->isIsbn($productId)){
+				//this is isbn.....
+				Mage::register('productId', $this->_isbn);
 				$this->loadLayout();
 				$this->renderLayout();
+			}else {
+				if (is_null($productId) || $productId =='') {
+					$productId  = $this->getRequest()->getParam('id');
+				}
+				if (!is_numeric($productId)) {
+					$this->_forward('noRoute');
+				}
+				else{
+					Mage::register('productId', (int)$productId);
+					$this->loadLayout();
+					$this->renderLayout();
+				}
 			}
 		}
     }

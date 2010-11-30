@@ -67,7 +67,7 @@ class Ekkitab_Content_Helper_Data extends Mage_Core_Helper_Abstract
 
 	public function getProductUrl($bookUrl)
 	{
-		$urlPrefix='ekkitab_catalog/product/view/book/';
+		$urlPrefix='book/';
 		$bookUrl = urlencode(preg_replace('#[^A-Za-z0-9\_]+#', '-', $bookUrl));
 		//this is to remove '-' from end of title string if any
 		if(substr($bookUrl,-1,1)=='-'){

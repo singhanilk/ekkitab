@@ -174,7 +174,7 @@ class Ekkitab_Checkout_CartController extends Mage_Checkout_CartController
 								Mage::getSingleton('checkout/session')->addError($e->getMessage());
 								$url = Mage::getSingleton('checkout/session')->getRedirectUrl(true);
 								if ($url) {
-									$url = Mage::getModel('core/url')->getUrl("ekkitab_catalog/product/view/book/unable-to-add-to__wishlist__".$product->getId().".html"
+									$url = Mage::getModel('core/url')->getUrl("book/unable-to-add-to-wishlist-".$product->getId().".html"
 									,array('wishlist_next'=>1));
 									Mage::getSingleton('checkout/session')->setSingleWishlistId($item->getId());
 									$this->getResponse()->setRedirect($url);
@@ -237,7 +237,7 @@ class Ekkitab_Checkout_CartController extends Mage_Checkout_CartController
 							Mage::getSingleton('checkout/session')->addError($e->getMessage());
 							$url = Mage::getSingleton('checkout/session')->getRedirectUrl(true);
 							if ($url) {
-								$url = Mage::getModel('core/url')->getUrl("ekkitab_catalog/product/view/book/unable-to-add-to__wishlist__".$product->getId().".html"
+								$url = Mage::getModel('core/url')->getUrl("book/unable-to-add-to-wishlist-".$product->getId().".html"
 								,array('wishlist_next'=>1));
 								Mage::getSingleton('checkout/session')->setSingleWishlistId($item->getId());
 								$this->getResponse()->setRedirect($url);
@@ -294,7 +294,7 @@ class Ekkitab_Checkout_CartController extends Mage_Checkout_CartController
 				Mage::getSingleton('checkout/session')->addError($e->getMessage());
 				$url = Mage::getSingleton('checkout/session')->getRedirectUrl(true);
 				if ($url) {
-					$url = Mage::getModel('core/url')->getUrl("ekkitab_catalog/product/view/book/unable-to-add-to__wishlist__".$product->getId().".html"
+					$url = Mage::getModel('core/url')->getUrl("book/unable-to-add-to-wishlist-".$product->getId().".html"
 					,array('wishlist_next'=>1));
 					Mage::getSingleton('checkout/session')->setSingleWishlistId($item->getId());
 					$this->getResponse()->setRedirect($url);
