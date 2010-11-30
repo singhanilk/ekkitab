@@ -56,6 +56,22 @@
 					$savings= $listPrice - $discPrice;
 					$savingsPerct= round(($listPrice >0 )? (($listPrice - $discPrice)/ $listPrice ) * 100 : 0);
 					$stock=$item->getInStock();
+					$authorArr = $item->getAuthor();
+					$author = $authorArr['a'] ;
+					
+					$parsedAuthor = "";
+					$editors=$authorArr['e'];
+					$translators=$authorArr['t'];
+					$illustrators=$authorArr['i'];
+					$photographers=$authorArr['p'];
+					$others=$authorArr['o'];
+				
+					$parsedAuthor.= strlen($editors) > 0 ?(strlen($parsedAuthor) > 0 ? " & ":"").$editors: "";
+					$parsedAuthor.= strlen($translators) > 0 ? (strlen($parsedAuthor) > 0 ? " & ":"").$translators: "";
+					$parsedAuthor.= strlen($illustrators) > 0 ? (strlen($parsedAuthor) > 0 ? " & ":"").$illustrators: "";
+					$parsedAuthor.= strlen($photographers) > 0 ? (strlen($parsedAuthor) > 0 ? " & ":"").$photographers: "";
+					$parsedAuthor.= strlen($others) > 0 ? (strlen($parsedAuthor) > 0 ? " & ":"").$others: "";
+
 			?>
 				<tr >
 					<td>
@@ -63,6 +79,8 @@
 					</td>
 					<td align="left">
 						<div><a href="<?php echo $this->getUrl($item->getProductUrl()) ?>" title="<?php echo $this->htmlEscape($item->getName()) ?>"><?php echo $this->htmlEscape($item->getName()) ?></a></div>
+						<?php if($author && trim($author)!=''):?><div class="lineHeight14em">Author: <a href="<?php echo $this->getUrl('ekkitab_catalog/search/index/author/'.$author)?>"><?php echo $author ?></a></div><?php endif; ?>
+						<?php if($parsedAuthor && trim($parsedAuthor)!=''): ?><div class="lineHeight14em">With Contributions from: <?php echo $parsedAuthor ?></div><?php endif; ?>
 						<div class="lineHeight14em">Added on: <?php echo $this->getFormatedDate($item->getAddedAt()) ?>
 						<?php if($savings > 0):?>
 							<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($discPrice,true,false) ?> ( Save <?php echo $savingsPerct ?>%)</div>

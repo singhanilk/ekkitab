@@ -1314,9 +1314,16 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
     {
 		$urlPrefix='book/';
 		$url='';
-		$author=$this->_getData('author');
+		$authorArr=$this->getAuthor();
+		//$author=$this->_getData('author');
 		$title=$this->getName();
 		$isbn=$this->_getData('isbn');
+		if(isset($authorArr['a']) && strlen(trim($authorArr['a'])) > 0)
+		{
+			$author=trim($authorArr['a'])."-";
+		}else{
+			$author="";
+		}
 		if(isset($author) && strlen(trim($author)) > 0)
 		{
 			$author = urlencode(preg_replace('#[^A-Za-z0-9\_]+#', '-', $author));
