@@ -390,4 +390,18 @@
             </filesystem>
         </system>
     </default>
+
+    <stores>
+        <default>
+            <web>
+                <routers>                               
+                    <ekkitabcatalogroute>
+                        <area>frontend</area>
+                        <class>Ekkitab_Catalog_Controller_Router</class>
+                    </ekkitabcatalogroute>
+                </routers>
+            </web>
+        </default>
+    </stores>
+
 </config>
