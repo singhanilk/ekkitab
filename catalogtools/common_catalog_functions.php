@@ -502,6 +502,32 @@ function logMessage($logFile, $outputString){
   fwrite($logFile, $outputString);
 }
 
+function initializeDatabase($config) {
+  if (! $config) return NULL;
+
+  $database_server = $config["database"]["server"];
+  $database_user   = $config["database"]["user"];
+  $database_psw    = $config["database"]["password"];
+  $db_name          = $config["database"]["db_name"];
+  $db  = NULL;
+  try  {
+    $db = mysqli_connect($database_server,$database_user,$database_psw,$db_name);
+  } catch (exception $e) {
+    fatal($e->getmessage());
+  }
+  $query = "set autocommit = 0";
+  try {
+   $result = mysqli_query($db,$query);
+   if (!$result) {
+     fatal("Failed to set autocommit mode.");
+   }
+  } catch(exception $e) {
+    fatal($e->getmessage());
+  }
+   return $db;
+
+}
+
 function initDatabase($config){
 
   if (! $config) return NULL;
