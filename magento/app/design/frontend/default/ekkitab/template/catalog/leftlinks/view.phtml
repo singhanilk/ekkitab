@@ -77,7 +77,7 @@
 				<!-- skuImage -->
 				<div class="detailsArea">
 					<div class="bkTitle"><a href="<?php echo $this->getUrl($url)?>"  title="<?php echo $title ?>"><?php echo $title ?></a></div><!-- bkTitle -->
-					<div class="lineHeight14em">Author: <a href="<?php echo $this->getUrl('ekkitab_catalog/search/index/author/'.$author)?>"><?php echo $author ?></a></div>
+					<div class="lineHeight14em">Author: <a href="<?php echo $this->helper('ekkitab_catalog')->getSearchResultByIndexUrl(null,array('author' => urlencode($author))) ?>"><?php echo $author ?></a></div>
 					<div class="lineHeight14em">ISBN: <?php echo $isbn ?></div>
 					<div class="lineHeight14em">Binding: <?php echo $binding ?></div>
 					<div class="lineHeight14em">Language : <?php echo $language ?> </div>
