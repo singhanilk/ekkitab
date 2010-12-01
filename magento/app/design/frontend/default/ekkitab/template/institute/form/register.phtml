@@ -91,7 +91,7 @@
 						<!-- input type="text" name="cntry" id="cntry" value="" title="ctry" class="required-entry input-text"/>
 						 
 						<input type="hidden" name="country_id" value="IN" title="country" id="country" class="required-entry input-text"/ -->
-						<?php   echo $this->getCountryHtmlSelect() ?>
+						<?php  echo $this->getCountryHtmlSelect()	?>
 					</div>
 				</li>
 				<li>
@@ -106,8 +106,8 @@
 				</li>
 				<li>
 					<div class="input-box">
-						<label for="telephone"><?php echo $this->__('About the school') ?></label><br/>
-						<textarea name="aboutus" rows="5" id="aboutus" title="<?php echo $this->__('About the school') ?>>"<?php echo $this->htmlEscape($this->getFormData()->getAboutus()) ?></textarea>
+						<label for="aboutus"><?php echo $this->__('About the school') ?></label><br/>
+						<textarea name="aboutus" rows="5" id="aboutus" title="<?php echo $this->__('About the school') ?>" ><?php echo $this->htmlEscape($this->getFormData()->getAboutus()) ?></textarea>
 					</div>
 					<div class="input-box">
 						<label for="image"><?php echo $this->__('Institute Photo') ?></label><br/>
