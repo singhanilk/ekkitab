@@ -1,0 +1,20 @@
+Release Date - 01/December/2010
+
+Enhancements
+1. Bug Fixes to Social Institute Creation and Wishlist page has been incorporated
+2. Self Registration of Schools/Colleges/Libraries. 
+3. Changes to the Vision Page and Home page to provide links to the schools registration
+4. Book URL rewrites to shorten the URL for SEO
+
+Issue Fixes
+Priority 1 ( P1 )
+None.
+
+Priority 1 ( P2 )
+None.
+
+Priority 1 ( P3 )
+None.
+
+Priority 1 ( P4 )
+None.
