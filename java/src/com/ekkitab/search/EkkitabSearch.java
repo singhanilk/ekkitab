@@ -334,9 +334,9 @@ public class EkkitabSearch {
     }*/
     
     private String preprocessQuery(String str) {
-        final String replacewords[] = {"C\\+\\+", "Cplusplus"};
+        final String replacewords[] = {"C\\\\\\+\\\\\\+", "Cplusplus"};
         for (int i=0; i<replacewords.length; i+=2) {
-            str = str.replaceAll(replacewords[i], replacewords[i+1]);
+            str = str.replaceAll("(?i)" + replacewords[i], replacewords[i+1]);
         }
         return str;
     }

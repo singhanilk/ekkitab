@@ -2,7 +2,8 @@
 include "setenv.php";
 
 $errorList = Array();
-$institutes = Array();
+$institutesToValidate = Array();
+$validInstitutes = Array();
 $save = false;
 $update = false;
 $filename = '';
@@ -53,19 +54,35 @@ if ( $task == "getDetails" ) {
  }
  }
 }
-$query = "select * from ek_social_institutes";
+/* Obtain the list of institutes which are invalid */
+$query = "select * from ek_social_institutes where is_valid = 0";
 try {
    $result = mysqli_query($db,$query);
    if (!$result) {
-     $institutes = null;
+     $institutesToValidate = null;
    } else {
        while ( $row = mysqli_fetch_assoc($result)) {
-       $institutes[] = $row;
+       $institutesToValidate[] = $row;
       }
    }
    mysqli_free_result($result);
   } catch(exception $e) {
-    $institutes = null;
+    $institutesToValidate = null;
+}
+/* Obtain the list of institutes which are valid */
+$query = "select * from ek_social_institutes where is_valid = 1";
+try {
+   $result = mysqli_query($db,$query);
+   if (!$result) {
+     $validInstitutes = null;
+   } else {
+       while ( $row = mysqli_fetch_assoc($result)) {
+       $validInstitutes[] = $row;
+      }
+   }
+   mysqli_free_result($result);
+  } catch(exception $e) {
+    $validInstitutes = null;
 }
 closeDatabase($db);
 # HTML CODE FROM BELOW
@@ -91,7 +108,7 @@ closeDatabase($db);
   </table>
 </div>
 <br>
-<h5>Validate Institute</h5>
+<h4>Please click on the name of the institute to either validate or update details</h4>
 <?php if ( $instituteId == "" ) { ?>
 <div id="div_validateInstitute" style="display:none;background-color:#929bb1">
 <?php } else { ?>
@@ -125,12 +142,34 @@ closeDatabase($db);
 </table>
 </form>
 </div>
-<div id="div_AddedInstitutes">
+<br>
+<h5>Added Institutes To be validated</h5>
+<div id="div_InstitutesToValidate">
 <table border="1">
  <tr><td>Name</td><td>City</td><td>State</td><td>Status</td></tr> 
 <?php 
  $counter = 1;
- foreach ( $institutes as $tmpInstitute ) {
+ foreach ( $institutesToValidate as $tmpInstitute ) {
+?>
+ <tr>
+   <td><a href=validateInstitutes.phtml?task=getDetails&institute_id=<?php echo $tmpInstitute['id'] ?>><?php echo $tmpInstitute['name'] ?></a></td>
+   <td><?php echo $tmpInstitute['city'] ?></td>
+   <td><?php echo $tmpInstitute['state'] ?></td>
+   <td><?php if ( $tmpInstitute['is_valid'] == 0 ) echo "Not Validated"; else echo "Validated";  ?></td>
+ </tr>
+<?php 
+  $counter++;
+ }
+?>
+</table>
+</div>
+<h5>Validated Institutes</h5>
+<div id="div_ValidInstitutes">
+<table border="1">
+ <tr><td>Name</td><td>City</td><td>State</td><td>Status</td></tr> 
+<?php 
+ $counter = 1;
+ foreach ( $validInstitutes as $tmpInstitute ) {
 ?>
  <tr>
    <td><a href=validateInstitutes.phtml?task=getDetails&institute_id=<?php echo $tmpInstitute['id'] ?>><?php echo $tmpInstitute['name'] ?></a></td>
