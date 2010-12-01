@@ -178,7 +178,7 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
      */
     public function getSearchResultByIndexUrl($query = null,$params=null)
     {
-		$urlprefix = 'ekkitab_catalog/search/index';
+		$urlprefix = 'book-';
 		$url='';
 		if(!is_null($params) && is_array($params)){
 			foreach ($params as $param => $value) {
@@ -188,12 +188,12 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
             }
         }  
 		if(isset($url) && strlen($url) > 0){
-			$url= $urlprefix."/".$url;
+			$url= $urlprefix.$url;
 		}else{
 			$url= $urlprefix;
 		}
         $urlParams = array();
-        $urlParams['_current']  = true;
+        $urlParams['_current']  = false;
         $urlParams['_query']    = array(self::QUERY_VAR_NAME =>$query);
 		$url = $this->_getUrl($url,$urlParams);
         return $url;

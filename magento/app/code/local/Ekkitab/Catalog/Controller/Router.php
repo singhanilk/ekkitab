@@ -46,6 +46,17 @@ class Ekkitab_Catalog_Controller_Router extends Mage_Core_Controller_Varien_Rout
         							 	$action = "view";
         							 	$path[0] = "page";
         							 	break;
+        		case 'book-author':		$module = "ekkitab_catalog";
+        							 	$realModule = "Ekkitab_Catalog";
+        							 	$controller = "search";
+        							 	$action = "index";
+        							 	$path[0] = "author";
+        							 	break;
+        		case 'books':			$module = "ekkitab_catalog";
+        							 	$realModule = "Ekkitab_Catalog";
+        							 	$controller = "search";
+        							 	$action = "select";
+        							 	break;
         		default: return false;
         	}	
         }

@@ -269,7 +269,7 @@ if(!is_null($results) && is_array($results)){
 			<!-- skuImage -->
 			<div class="detailsArea">
 			<div class="bkTitle"><a href="<?php echo $this->getUrl($url)?>" title="<?php echo $title ?>"><?php echo $title ?></a></div><!-- bkTitle -->
-			<?php if($author && trim($author)!=''):?><div class="lineHeight14em">Author: <a href="<?php echo $this->getUrl('ekkitab_catalog/search/index/author/'.$author)?>"><?php echo $author ?></a></div><?php endif; ?>
+			<?php if($author && trim($author)!=''):?><div class="lineHeight14em">Author: <a href="<?php echo $this->helper('ekkitab_catalog')->getSearchResultByIndexUrl(null,array('author' => urlencode($author)))?>"><?php echo $author ?></a></div><?php endif; ?>
 			<?php if($parsedAuthor && trim($parsedAuthor)!=''): ?><div class="lineHeight14em">With Contributions from: <?php echo $parsedAuthor ?></div><?php endif; ?>
 			<div class="lineHeight14em">ISBN:  <?php echo $isbn ?></div>
 			<?php if(trim($binding)!=''): ?><div class="lineHeight14em">Binding: <?php echo $binding ?></div><?php endif; ?>

@@ -66,7 +66,7 @@ function printCollectionLink($fh, $z, $name, $ids) {
 function printSearchLink($fh, $z, $name, $displayname, $field) {
    
     $key = strtolower(preg_replace('/\W+/', '_', $name));;
-    $url = "ekkitab_catalog/search/index/" . $field . "/" . urlencode($name);
+    $url = "book-" . $field . "/" . urlencode($name);
 
     fprintf($fh, "%s\n", '$sections[\''.$z.'\'][\'' . $key . '\'] = array();');
     fprintf($fh, "%s\n", '$sections[\''.$z.'\'][\'' . $key . '\'][\'name\'] = "'. $displayname . '";');

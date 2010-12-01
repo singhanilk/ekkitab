@@ -95,7 +95,7 @@
         </div>
 		
 		<div class="midArea">
-			<div class="finDetBkTitle"><?php echo $_product->getTitle() ?> <?php echo (strlen($author) > 0 )?( "<br/><span class=\"lineHeight14em\"> by <span class=\"boldFont\"><a href=\"".$this->getUrl('ekkitab_catalog/search/index/author/'.$author)."\">".$author ."</a></span></span>" ):""?></div><!-- authorEtc -->
+			<div class="finDetBkTitle"><?php echo $_product->getTitle() ?> <?php echo (strlen($author) > 0 )?( "<br/><span class=\"lineHeight14em\"> by <span class=\"boldFont\"><a href=\"".$this->helper('ekkitab_catalog')->getSearchResultByIndexUrl(null,array('author' => urlencode($author)))."\">".$author ."</a></span></span>" ):""?></div><!-- authorEtc -->
 					
 			<?php if($inStock==0 || $listPrice <= 0):?>
 				<div class="marginTop5px"><img src="<?php echo $this->getSkinUrl('images/out_of_stock_image.png')?>" align="absmiddle"> &nbsp; <a href="<?php echo $this->helper('ekkitab_catalog')->getWishListAddUrl($_product->getId()) ?>">Add to Wishlist</a> </div>
