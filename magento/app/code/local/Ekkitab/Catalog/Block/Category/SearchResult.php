@@ -212,11 +212,11 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
 			// this is to filter the search by title / author / or both
 			$filterBy = strlen($this->getFilterByText()) > 0 ?($this->getFilterByText().":"):""; 
 			//this is to check if the query text is all numbers...then maybe its isbn... so append isbn: before the query text... 
-			Mage::log("In getSearchResults() .... getQueryText is :".$this->helper('ekkitab_catalog')->getQueryText());
-			Mage::log("In getSearchResults() .... getEscapedQueryText is :".$this->helper('ekkitab_catalog')->getEscapedQueryText());
+			//Mage::log("In getSearchResults() .... getQueryText is :".$this->helper('ekkitab_catalog')->getQueryText());
+			//Mage::log("In getSearchResults() .... getEscapedQueryText is :".$this->helper('ekkitab_catalog')->getEscapedQueryText());
 			//$query = urldecode($this->helper('ekkitab_catalog')->getEscapedQueryText());
 			$query = $this->helper('ekkitab_catalog')->getEscapedQueryText();
-			Mage::log("In getSearchResults() .... urldecode(query) is : $query");
+			//Mage::log("In getSearchResults() .... urldecode(query) is : $query");
 			if($this->isIsbn($this->helper('ekkitab_catalog')->getEscapedQueryText())){
 				$query = $this->_isbn;
 				$filterBy = "isbn:"; 
