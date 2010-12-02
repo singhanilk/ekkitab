@@ -63,7 +63,7 @@
 				$image = $product->getImage();
 				$savingsPerct= round(($product->getPrice() >0 )?	(($product->getPrice() - $product->getFinalPrice())/ $product->getPrice() ) * 100 : 0); 
 				$authorArr = $product->getAuthor();
-				$author = (($author = $authorArr['a'])!='')? "by ".$this->helper('ekkitab_catalog')->getAuthorUrl(null,$author):"" ;
+				$author = (($author = $authorArr['a'])!='')? $authorArr['a']:"" ;
 
 				$fullTitle= $this->htmlEscape($product->getTitle());
 				if(isset($authorArr['a']) && strlen(trim($authorArr['a'])) > 0)
@@ -83,7 +83,7 @@
            <a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $fullTitle ?>"><img src="<?php echo $this->helper('ekkitab_catalog')->resize($image,'image',false,null, 200); ?>" alt="<?php echo $fullTitle ?>" title="<?php echo $fullTitle ?>" /></a> 
         </div>
 		<div class="hdr"><?php echo $section->getDisplayName() ?></div>	
-		<div class="finDetBkTitle"><a href="<?php echo $this->getUrl($bookName)?>"  title="<?php echo $fullTitle ?>" ><?php echo ucwords($fullTitle)?></a>  <?php echo (strlen($author) > 0 )?( "<div class=\"lineHeight14em\">by <span class=\"boldFont\"><a href=\"".$this->helper('ekkitab_catalog')->getSearchResultByIndexUrl(null,array('author' => urlencode($author)))."\">".$author ."</a></span></div>" ):""?></div> <!-- bkTitle -->
+		<div class="finDetBkTitle"><a href="<?php echo $this->getUrl($bookName)?>"  title="<?php echo $fullTitle ?>" ><?php echo ucwords($fullTitle)?></a>  <?php echo (strlen($author) > 0 )?( "<div class=\"lineHeight14em\">by <span class=\"boldFont\">".$this->helper('ekkitab_catalog')->getAuthorUrl(null,$author)."</span></div>" ):""?></div> <!-- bkTitle -->
 		<div class="bookDetArea"><?php echo $shortDesc?>... <a href="<?php echo $this->getUrl($bookName)?>" title="<?php echo $fullTitle ?>">More details</a></div>
 		<div class="textArea">
 			<div class="youSave">Our Price: <?php echo Mage::helper('core')->currency($discPrice,true,false) ?></div>
