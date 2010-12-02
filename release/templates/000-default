@@ -58,4 +58,14 @@
         Satisfy Any
     </Location>
 
+    <Location ~ "/internalutils(/|$)">
+        Order deny,allow
+        Deny from all
+        AuthName "Restricted"
+        AuthType Basic
+        AuthUserFile EKKITAB_HOME/.htpasswd
+        Require valid-user
+        Satisfy Any
+    </Location>
+
 </VirtualHost>
