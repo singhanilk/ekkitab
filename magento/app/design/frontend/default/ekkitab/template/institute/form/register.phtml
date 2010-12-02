@@ -31,7 +31,7 @@
  * @see Ekkitab_Institute_Block_Form_Register
  */
 ?>
-<div class="pageHeader"><?php echo $this->__('Create your Institute Account') ?></div>
+<div class="pageHeader" style="width:98%"><div class="left"><?php echo $this->__('Create your Institute Account') ?></div><div class="orangeTxtPlain right"><a href="javascript:showHelp()">Help?</a></div></div>
 <div class="clear"></div>
 <div class="myAccCopy">
 	<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
@@ -91,7 +91,7 @@
 						<!-- input type="text" name="cntry" id="cntry" value="" title="ctry" class="required-entry input-text"/>
 						 
 						<input type="hidden" name="country_id" value="IN" title="country" id="country" class="required-entry input-text"/ -->
-						<?php  echo $this->getCountryHtmlSelect()	?>
+						<?php echo $this->getCountryHtmlSelect()?>
 					</div>
 				</li>
 				<li>
@@ -201,6 +201,11 @@
 			registerCfrmPwdDiv.style.display="block";
 			obj.value="n";
 		}
+	}
+	
+	function showHelp(){
+		newwindow=window.open('/institute_help.html','name','height=200,width=300,menubar=0,status=0,location=0,toolbar=0,scrollbars=0');
+		if (window.focus) {newwindow.focus()}
 	}
 	
 	showLoginForm();
