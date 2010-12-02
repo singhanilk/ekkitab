@@ -115,6 +115,8 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     for (my $i = $startrow; $i <= $endrow; $i++) {
         if(defined($assumptions{$oWkS->get_name()})){
             $deliverydays = $assumptions{$oWkS->get_name()};
+        }else {
+            $deliverydays = "";
         }
 	    $enteredcount++;
         my $value = '';
@@ -154,7 +156,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             elsif ($currency =~ /EUR/) {
                    $currency = 'E';
             }
-            elsif ($currency =~ /US$/) {
+            elsif ($currency =~ /US/) {
                    $currency = 'U';
             }
         }
