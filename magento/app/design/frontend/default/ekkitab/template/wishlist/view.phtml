@@ -79,7 +79,7 @@
 					</td>
 					<td align="left">
 						<div><a href="<?php echo $this->getUrl($item->getProductUrl()) ?>" title="<?php echo $this->htmlEscape($item->getName()) ?>"><?php echo $this->htmlEscape($item->getName()) ?></a></div>
-						<?php if($author && trim($author)!=''):?><div class="lineHeight14em">Author: <a href="<?php echo $this->helper('ekkitab_catalog')->getSearchResultByIndexUrl(null,array('author' => urlencode($author))) ?>"><?php echo $author ?></a></div><?php endif; ?>
+						<?php if($author && trim($author)!=''):?><div class="lineHeight14em">Author: <?php echo $this->helper('ekkitab_catalog')->getAuthorUrl(null,$author) ?></div><?php endif; ?>
 						<?php if($parsedAuthor && trim($parsedAuthor)!=''): ?><div class="lineHeight14em">With Contributions from: <?php echo $parsedAuthor ?></div><?php endif; ?>
 						<div class="lineHeight14em">Added on: <?php echo $this->getFormatedDate($item->getAddedAt()) ?>
 						<?php if($savings > 0):?>
