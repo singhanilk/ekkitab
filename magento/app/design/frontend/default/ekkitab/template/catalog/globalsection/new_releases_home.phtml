@@ -63,7 +63,8 @@
 				$image = $product->getImage();
 				$savingsPerct= round(($product->getPrice() >0 )?	(($product->getPrice() - $product->getFinalPrice())/ $product->getPrice() ) * 100 : 0); 
 				$authorArr = $product->getAuthor();
-				$author = (($author = $authorArr['a'])!='')? "<a href=\"".$this->helper('ekkitab_catalog')->getSearchResultByIndexUrl(null,array('author' => urlencode($author)))."\">".$author."</a>":"" ;
+				$author = (($author = $authorArr['a'])!='')? "by ".$this->helper('ekkitab_catalog')->getAuthorUrl(null,$author):"" ;
+
 				$fullTitle= $this->htmlEscape($product->getTitle());
 				if(isset($authorArr['a']) && strlen(trim($authorArr['a'])) > 0)
 				{

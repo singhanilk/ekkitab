@@ -59,7 +59,7 @@
 			$counter+=1;
 			$savingsPerct= round(($product->getPrice() >0 )?	(($product->getPrice() - $product->getFinalPrice())/ $product->getPrice() ) * 100 : 0); 
 			$authorArr = $product->getAuthor();
-			$author = (($author = $authorArr['a'])!='')? "by <a href=\"".$this->helper('ekkitab_catalog')->getSearchResultByIndexUrl(null,array('author' => urlencode($author)))."\">".$author."</a>":"" ;
+			$author = (($author = $authorArr['a'])!='')? "by ".$this->helper('ekkitab_catalog')->getAuthorUrl(null,$author):"" ;
 			$binding = trim($product->getBinding());
 			$lang = trim($product->getLanguage());
 			$langNbind=strlen($lang) > 0 ? ("[".ucfirst($lang).(strlen($binding) > 0 ?" - ".ucfirst($binding)."]":"]")):(strlen($binding) > 0 ?"[".ucfirst($binding)."]":"");
