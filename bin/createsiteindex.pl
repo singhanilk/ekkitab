@@ -188,6 +188,24 @@ sub getBooks {
 }
 
 
+sub getAllCategoryLinks {
+    my ($ua) = @_;
+    my $url = 'http://EkkitabUser:eki22AbSt0re@www.ekkitab.co.in/ekkitab_catalog/category/viewAll/';
+    my $htmlpage = getUrl($ua, $url);
+    if ($htmlpage eq "") {
+        die "[Fatal] Could not read categories at: $url\n";
+    }
+    my %sitelinks;
+    my @links = $htmlpage =~ m/(http:\/\/[^ \n\'\"]*)/gs;
+    foreach my $link (@links) {
+        $link =~ s/ekkitab\.co\.in/ekkitab\.com/g;
+        SWITCH: {
+           $link =~ /book-category/ && do { $sitelinks{$link} = "weekly"; last SWITCH; };
+        }
+    }
+    return %sitelinks;
+}
+
 sub getHomePageLinks {
     my ($ua) = @_;
     my $url = 'http://EkkitabUser:eki22AbSt0re@www.ekkitab.co.in';
@@ -200,11 +218,9 @@ sub getHomePageLinks {
     foreach my $link (@links) {
         $link =~ s/ekkitab\.co\.in/ekkitab\.com/g;
         SWITCH: {
-           $link =~ /globalsection/ && do { $sitelinks{$link} = "weekly"; last SWITCH; };
+           $link =~ /book-collection/ && do { $sitelinks{$link} = "weekly"; last SWITCH; };
            $link =~ /leftlinks/ && do { $sitelinks{$link} = "weekly"; last SWITCH; };
-           $link =~ /category\/viewAll/ && do { $sitelinks{$link} = "weekly"; last SWITCH; };
-           #$link =~ /all-books/ && do { $sitelinks{$link} = "daily"; last SWITCH; };
-           #$link =~ /blog\.ekkitab\.com/ && do { $sitelinks{$link} = "weekly"; last SWITCH; };
+           $link =~ /book-author/ && do { $sitelinks{$link} = "weekly"; last SWITCH; };
         }
     }
     return %sitelinks;
@@ -250,11 +266,19 @@ if ($updatemode == 0) {
     my $fd = getSitemapHandle();
     print $fd "<url>\n  <loc>http://www.ekkitab.com/</loc>\n  <priority>0.9</priority>\n  <changefreq>weekly</changefreq>\n</url>\n";
     foreach my $link (keys(%sitelinks)) {
-        print $fd "<url>\n  <loc>" . $link . "</loc>\n  <priority>0.5</priority>\n  <changefreq>" . $sitelinks{$link} . "</changefreq>\n</url>" . "\n";
+       #print $fd "<url>\n  <loc>" . $link . "</loc>\n  <priority>0.5</priority>\n  <changefreq>" . $sitelinks{$link} . "</changefreq>\n</url>" . "\n";
+       print $fd "<url>\n  <loc>$link</loc>\n</url>\n";
     }
+    my %sitelinks = getAllCategoryLinks($ua);
+    my $categories = 0;
+    foreach my $link (keys(%sitelinks)) {
+       print $fd "<url>\n  <loc>$link</loc>\n</url>\n";
+       $categories++;
+    }
+    print "[Info] Found $categories category links.\n";
     closeSitemapFile();
 }
-    
+
 ##########################################################
 # Now, create the sitemaps for the books. 
 ##########################################################
