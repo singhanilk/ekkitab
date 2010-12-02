@@ -215,7 +215,7 @@ class Ekkitab_Institute_Helper_Data extends Mage_Core_Helper_Abstract
 					$url = $imageModel->saveFile()->getUrl();
 				}
 			} catch( Exception $e ) {
-				 $url = Mage::getDesign()->getSkinUrl($this->getPlaceholder($imageModel->getDestinationSubdir()));
+				 $url = Mage::getDesign()->getSkinUrl($imageModel->getPlaceholder($imageModel->getDestinationSubdir()));
 			}
 			return $url;
 		}else{
