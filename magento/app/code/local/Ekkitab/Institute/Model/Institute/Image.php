@@ -171,4 +171,11 @@ class Ekkitab_Institute_Model_Institute_Image extends Mage_Catalog_Model_Product
         return implode($result);
     }
 
+	public function getPlaceholder($attr)
+    {
+        return 'images/social_institutes/placeholder/'.$attr.'.png';
+
+    }
+
+
 }

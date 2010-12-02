@@ -74,7 +74,7 @@ class Ekkitab_Content_Helper_Data extends Mage_Core_Helper_Abstract
 			$url = substr($bookUrl,0,-1);
 		}
 		
-		$url=$urlPrefix.$bookUrl.".html";
+		$url=strtolower($urlPrefix.$bookUrl.".html");
 		return $url;
 	}
 

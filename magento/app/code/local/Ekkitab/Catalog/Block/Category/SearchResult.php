@@ -459,7 +459,7 @@ class Ekkitab_Catalog_Block_Category_SearchResult extends Mage_Core_Block_Templa
         $urlParams = array();
         $urlParams['_current']  = true;
         $urlParams['_query']    = $queryParams;
-		$url = $this->getUrl($url,$urlParams);
+		$url = $this->getUrl(strtolower($url),$urlParams);
         return $url;
     }
 
