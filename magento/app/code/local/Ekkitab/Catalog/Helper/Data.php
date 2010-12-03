@@ -550,7 +550,7 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
      */
     public function getGlobalSectionViewUrl($sectionId)
     {
-        $url='book-collection/'.$sectionId;
+        $url='book-collection/'.urlencode(strtolower(str_replace(" ","-",urldecode($sectionId))));
 		return $this->_getUrl($url);
     }
 
