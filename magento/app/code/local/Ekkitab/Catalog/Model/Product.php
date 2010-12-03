@@ -1341,7 +1341,7 @@ class Ekkitab_Catalog_Model_Product extends Mage_Catalog_Model_Product
 			$url = substr($url,0,-1);
 		}
 		
-		$url=$urlPrefix.$url."-".$isbn.".html";
+		$url=strtolower($urlPrefix.$url."-".$isbn.".html");
 		return $url;
     }
 

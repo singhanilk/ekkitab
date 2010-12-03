@@ -206,6 +206,29 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
      * @param   string $query
      * @return  string
      */
+    public function getAuthorUrl($query = null,$authors)
+    {
+		$authorArr = explode("&",$authors);
+		$str='';
+		$size=count($authorArr);
+		$counter=0;
+		foreach($authorArr as $auth){
+			$str.='<a href="'.$this->getSearchResultByIndexUrl($query,array('author' => urlencode(preg_replace('#[^A-Za-z0-9\_.]+#', '-',trim(strtolower($auth)))))).'">'.trim($auth).'</a>';
+			$counter++;
+			if($counter < $size){
+				$str.=' & ';
+			}
+		}
+
+        return $str;
+    }
+
+    /**
+     * Retrieve result page url
+     *
+     * @param   string $query
+     * @return  string
+     */
     public function getFormSearchResultByIndexUrl($query = null)
     {
 		return $this->_getUrl('ekkitab_catalog/search/index', array('_query' => array(
@@ -353,7 +376,7 @@ class Ekkitab_Catalog_Helper_Data extends Mage_CatalogSearch_Helper_Data
 			$url = substr($url,0,-1);
 		}
 		
-		$url=$urlPrefix.$url."-".$isbn.".html";
+		$url=strtolower($urlPrefix.$url."-".$isbn.".html");
 		return $url;
 	}
 

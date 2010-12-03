@@ -65,8 +65,13 @@ function printCollectionLink($fh, $z, $name, $ids) {
 
 function printSearchLink($fh, $z, $name, $displayname, $field) {
    
-    $key = strtolower(preg_replace('/\W+/', '_', $name));;
-    $url = "book-" . $field . "/" . urlencode($name);
+    $key = strtolower(preg_replace('/\W+/', '_', $name));
+	if(strtolower($field)!='category'){
+		$name= urlencode( strtolower(preg_replace('#[^A-Za-z0-9\_]+#', '-', $name)));
+	}else{
+		$name= urlencode(strtolower($name));
+	}
+    $url = "book-" . $field . "/" . $name;
 
     fprintf($fh, "%s\n", '$sections[\''.$z.'\'][\'' . $key . '\'] = array();');
     fprintf($fh, "%s\n", '$sections[\''.$z.'\'][\'' . $key . '\'][\'name\'] = "'. $displayname . '";');

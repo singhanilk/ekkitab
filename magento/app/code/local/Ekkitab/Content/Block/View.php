@@ -63,7 +63,7 @@ class Ekkitab_Content_Block_View extends Mage_Core_Block_Template
 			$url = substr($bookUrl,0,-1);
 		}
 		
-		$url=$urlPrefix.$bookUrl.".html";
+		$url=strtolower($urlPrefix.$bookUrl.".html");
 		return $url;
 	}
 
