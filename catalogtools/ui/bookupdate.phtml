@@ -343,7 +343,15 @@ if ( $save ){
 </table>
 </form>
 </div>
-<h5>Book Catalog Creation From tab delimited file</h5>
+<h5>Catalog Creation from Tab Delimited File. PLEASE DO NOT UPLOAD AN EXCEL SHEET. </h5>
+<table>
+ <tr>
+  <td colspan="3">Tab delimited format should be in this order. Do not include the header row. The columns after description will be ignored<br><br>
+   ISBN-TITLE-AUTHOR-SUPPLIER-PUBLISHER-IMPRINT-PRICE-CURRENCY-AVAILABILITY-PUBLISHING_DATE-DELIVERY_PERIOD-BINDING-PAGES-LANGUAGE-WEIGHT-<br>DIMENSION-SHIPPING_REGION-SUBJECT-DESCRIPTION
+   <br><br>
+  </td>
+ </tr>
+</table>
 <div id="div_multiBookUpdate" style="background-color:#c8c8c8">
 <form id="form_multiBookUpdate" enctype="multipart/form-data" action="bookupdate.phtml" method='post'>
  <table border='1'>
@@ -374,13 +382,5 @@ if ( $save ){
 </table>
 </form>
 </div>
-<table>
- <tr>
-  <td colspan="3">
-   The standard format is as follows<br>
-   ISBN  TITLE   AUTHOR  SUPPLIER    PUBLISHER   IMPRINT PRICE   CURRENCY    AVAILABILITY    PUBLISHING_DATE DELIVERY_PERIOD BINDING PAGES   LANGUAGE    WEIGHT  DIMENSION   SHIPPING_REGION SUBJECT DESCRIPTION<br>
-  </td>
- </tr>
-</table>
 </body>
 </html>
