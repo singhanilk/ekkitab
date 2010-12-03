@@ -25,4 +25,6 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 00 1 * * 0     ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/db && ./trim_ekkitab_books_log_tables.sh
 # Inform users of failed transactions. (Production only)
 00 22  * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && /mnt2/scm/bin/checkfailedtx.pl
+# Check for institutes added and inform administrator. (Production)
+10 1   * * *   ubuntu  export EKKITAB_HOME=/mnt2/scm && cd /mnt2/scm/bin && ./checkaddedinstitutes.sh | php $EKKITAB_HOME/bin/sendmail.php -s "Institutes Added for Approval" anil@ekkitab.com  vijay@ekkitab.com prasad@ekkitab.com
 
