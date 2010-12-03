@@ -55,7 +55,7 @@ class Ekkitab_Institute_Block_Institute_View extends Mage_Core_Block_Template
 				$breadcrumbs->addCrumb('Members of the Ekkitab Network', array(
 					'label'=>Mage::helper('ekkitab_institute')->__('Members of the Ekkitab Network'),
 					'title'=>Mage::helper('ekkitab_institute')->__('Ekkitab Network List'),
-					'link'=> '/ekkitab_institute/search/listAll'
+					'link'=> '/institutes'
 				));
 	   
 
@@ -174,7 +174,7 @@ class Ekkitab_Institute_Block_Institute_View extends Mage_Core_Block_Template
         if ($this->getRefererUrl()) {
             return $this->getRefererUrl();
         }
-        return $this->getUrl('ekkitab_institute/search/listAll');
+        return $this->getUrl('institutes');
     }
 
 

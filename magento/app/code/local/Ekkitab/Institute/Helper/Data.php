@@ -147,7 +147,18 @@ class Ekkitab_Institute_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getRegisterUrl()
     {
-        return $this->_getUrl('ekkitab_institute/account/create');
+        return $this->_getUrl('create-institute');
+    }
+
+
+    /**
+     * Retrieve customer register form url
+     *
+     * @return string
+     */
+    public function getAllInstitutesUrl()
+    {
+        return $this->_getUrl('institutes');
     }
 
     /**
