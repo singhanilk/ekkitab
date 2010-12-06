@@ -117,7 +117,7 @@ class Ekkitab_Institute_Block_Institute extends Mage_Core_Block_Template
 			$breadcrumbs->addCrumb('Ekkitab Network Members', array(
 				'label'=>Mage::helper('ekkitab_institute')->__('Members of the Ekkitab Network'),
 				'title'=>Mage::helper('ekkitab_institute')->__('Members of the Ekkitab Network'),
-				'link'=>$this->getUrl('ekkitab_institute/search/listAll')
+				'link'=>'/institutes'
 			));
 
 		   if(isset($this->_queryText) && strlen($this->_queryText)>0){

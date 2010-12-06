@@ -13,7 +13,27 @@ class Ekkitab_Catalog_Controller_Router extends Mage_Core_Controller_Varien_Rout
         
         // Mage::log("In Custom Router: " . $request->getPathInfo());
                 
-        if (count($path) == 2) {
+        if (count($path) == 1) {
+        	switch ($path[0]) {
+        		case 'institutes':			$module = "ekkitab_institute";
+        							 		$realModule = "Ekkitab_Institute";
+        							 		$controller = "search";
+        							 		$action = "listAll";
+        							 		break;
+        		case 'my-institutes':		$module = "ekkitab_institute";
+        							 		$realModule = "Ekkitab_Institute";
+        							 		$controller = "search";
+        							 		$action = "myinstitutes";
+        							 		break;
+        		case 'create-institute':	$module = "ekkitab_institute";
+	        							 	$realModule = "Ekkitab_Institute";
+	        							 	$controller = "account";
+	        							 	$action = "create";
+	        							 	break;
+        		default: return false;
+			}
+		}
+        elseif (count($path) == 2) {
         	switch ($path[0]) {
         		case 'book':  			$module = "ekkitab_catalog";
         					  			$realModule = "Ekkitab_Catalog";
@@ -57,8 +77,15 @@ class Ekkitab_Catalog_Controller_Router extends Mage_Core_Controller_Varien_Rout
         							 	$controller = "search";
         							 	$action = "select";
         							 	break;
+        		case 'view-institute':	$module = "ekkitab_institute";
+										$realModule = "Ekkitab_Institute";
+										$controller = "account";
+										$action = "view";
+        							 	$path[0] = "id";
+        							 	break;
         		default: return false;
         	}	
+			$request->setParam($path[0], $path[1]);
         }
         else {
         	return false;
@@ -84,7 +111,6 @@ class Ekkitab_Catalog_Controller_Router extends Mage_Core_Controller_Varien_Rout
         	$request->setControllerModule($realModule);	
         }
         
-        $request->setParam($path[0], $path[1]);
         
     	return false;
     }

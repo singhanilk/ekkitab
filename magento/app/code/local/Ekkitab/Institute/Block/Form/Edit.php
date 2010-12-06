@@ -52,7 +52,7 @@ class Ekkitab_Institute_Block_Form_Edit extends Mage_Core_Block_Template
 			$breadcrumbs->addCrumb('myInstitutes', array(
 				'label'=>Mage::helper('ekkitab_institute')->__('Manage Institutes'),
 				'title'=>Mage::helper('ekkitab_institute')->__('Manage Institutes'),
-				'link'=>$this->getUrl('ekkitab_institute/search/myInstitutes')
+				'link'=>$this->getUrl('my-institutes')
 			));
 			$breadcrumbs->addCrumb('Edit Institute', array(
 				'label'=>Mage::helper('ekkitab_institute')->__('Edit Institute'),

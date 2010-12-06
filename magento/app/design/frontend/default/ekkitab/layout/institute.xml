@@ -1,15 +1,14 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
     <default>
-        <!-- Mage_Customer
-        <reference name="top.links">
-            <action method="addLink" translate="label title" module="ekkitab_institute"><label>Register Institute</label><url helper="ekkitab_institute/getRegisterUrl"/><title>Register Institute</title><prepare/><urlParams/><position>10</position></action>
-        </reference> -->
+         <reference name="top.links">
+            <action method="addLink" translate="label title" module="ekkitab_institute"><label>Ekkitab Network</label><url helper="ekkitab_institute/getAllInstitutesUrl"/><title>Ekkitab Network</title><prepare/><urlParams/><position>2</position></action>
+        </reference> 
     </default>
 
     <customer_account>
 		<reference name="customer_account_navigation">
-			<action method="addLink" translate="label" module="ekkitab_institute"><name>institute</name><path>ekkitab_institute/search/myInstitutes</path><label>Manage Insitutes</label></action>
+			<action method="addLink" translate="label" module="ekkitab_institute"><name>institute</name><path>my-institutes</path><label>Manage Insitutes</label></action>
 		</reference>
     </customer_account>
 
