@@ -171,6 +171,18 @@ if ( $save ){
     var form_singleBookUpdate = document.getElementById("form_singleBookUpdate");
     form_singleBookUpdate.submit();
  }
+/* Function to toggle between divs */
+ function toggle(divName){
+    var singleDiv = document.getElementById("div_singleBookUpdate"); 
+    var multiDiv = document.getElementById("div_multiBookUpdate"); 
+    if( divName == 'single') {
+       singleDiv.style.display='block';
+       multiDiv.style.display='none';
+    } else {
+       singleDiv.style.display='none';
+       multiDiv.style.display='block';
+    }
+ }
  </script>
 </head>
 <body>
@@ -192,8 +204,10 @@ if ( $save ){
   </table>
 </div>
 <br>
-<h5>Single Book Catalog Creation</h5>
-<div id="div_singleBookUpdate" style="background-color:#929bb1">
+<table border="1"><tr><td><a href="javascript:toggle('single');">Single Book Catalog Creation</a></td><td>
+<a href="javascript:toggle('multi');">Multi Book Catalog Creation.</a>
+</td></tr></table>
+<div id="div_singleBookUpdate" style="display:block;background-color:#929bb1">
 <form id="form_singleBookUpdate" action='bookupdate.phtml' method='post'>
  <table border='0'>
  <tr>
@@ -343,7 +357,7 @@ if ( $save ){
 </table>
 </form>
 </div>
-<h5>Catalog Creation from Tab Delimited File. PLEASE DO NOT UPLOAD AN EXCEL SHEET. </h5>
+<div id="div_multiBookUpdate" style="display:none;background-color:#c8c8c8">
 <table>
  <tr>
   <td colspan="3">Tab delimited format should be in this order. Do not include the header row. The columns after description will be ignored<br><br>
@@ -352,7 +366,6 @@ if ( $save ){
   </td>
  </tr>
 </table>
-<div id="div_multiBookUpdate" style="background-color:#c8c8c8">
 <form id="form_multiBookUpdate" enctype="multipart/form-data" action="bookupdate.phtml" method='post'>
  <table border='1'>
  <tr>
