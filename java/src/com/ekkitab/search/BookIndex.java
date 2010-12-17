@@ -322,7 +322,7 @@ public class BookIndex {
 			importantBooks = initImportantBooks(inputFile);
 		}
 		if (importantBooks.contains(book.get("isbn"))) {
-			boost += 5;
+			boost += 20;
 		}
 		if ((book.get("sourcedfrom")).equalsIgnoreCase("India")) {
         	boost += 1;
