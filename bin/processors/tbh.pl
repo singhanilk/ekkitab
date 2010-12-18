@@ -61,8 +61,14 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                     }
                 }
                 if ($pricecol == -1) {
-                    if ($oWkC->Value =~ /CURR\sINR/) {
+                    if ($oWkC->Value =~ /PRICE/) {
                         $pricecol = $iC;
+                        next;
+                    }
+                }
+                if ($currencycol == -1) {
+                    if ($oWkC->Value =~ /CURR/) {
+                        $currencycol = $iC;
                         next;
                     }
                 }
@@ -101,7 +107,6 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 
     for (my $i = $startrow; $i <= $endrow; $i++) {
         my $value = '';
-        my $currency = 'I';
         eval { $value = $oWkS->{Cells}[$i][$isbncol]; };
         if ($@) {
            print STDERR "Unexpected read value. Line $i\n";
@@ -145,6 +150,22 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            $author = $value->Value;
            $author =~ s/\n//g;
         }
+        $value = $oWkS->{Cells}[$i][$currencycol];
+        my $currency;
+        if (defined ($value)) {
+            $currency = $value->Value;
+            $currency =~ s/\n//g;
+            if ($currency =~ /INR/) {
+                $currency ='I';
+            }
+            elsif ($currency =~ /UKP/) {
+                   $currency = 'P';
+            }
+            elsif ($currency =~ /USD/) {
+                   $currency = 'U';
+            }
+        }
+
         if (defined ($isbn)  && 
             defined ($price) && 
             defined ($currency) && 
