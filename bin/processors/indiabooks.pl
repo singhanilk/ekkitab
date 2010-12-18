@@ -132,9 +132,15 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if (defined ($value)) {
            $currency = $value->Value;
            $currency =~ s/\n//g;
-           if ($currency =~ /\$/) {
+           if (($currency =~ /\$/) or ($currency =~ /USD/)) {
                   $currency = 'U';
-         }
+           }
+           elsif ($currency =~ /UKP/) {
+                  $currency = 'P';
+           }
+           elsif ($currency =~ /INR/) {
+                  $currency = 'I';
+           }
         }
         $value = $oWkS->{Cells}[$i][$titlecol];
         my $title;
@@ -175,10 +181,10 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 		    if (int($price) gt 0){
 			$actualPrice = $price;
 		    }
-		    if (int($price1) gt 0){
-			$actualPrice = $price1;
-			$currency = "I";
-		    }
+		    #if (int($price1) gt 0){
+			#$actualPrice = $price1;
+			#$currency = "I";
+		    #}
             $printedcount++;
                   print $isbn . "\t" . $actualPrice . "\t" . $currency . "\t"  
     		      . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\n" ;
