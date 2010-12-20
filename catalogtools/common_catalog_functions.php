@@ -29,7 +29,7 @@ $availabilityList = array("1" => "Available", "0" => "Not Available", "2" => "Pr
 # valid binding
 $bindingList = array("None" => "", "Paperback" => "Paperback", "Hardcover" => "Hardcover", "Hardback" => "Hardback");
 # valid Language
-$languageList = array("English" => "English", "Hindi" => "Hindi", "Gujarati" => "Gujarati");
+$languageList = array("English" => "English", "Hindi" => "Hindi", "Gujarati" => "Gujarati" , "Sanskrit + English"=>"Sanskrit + English" , "Sanskrit"=>"Sanskrit");
 # The valid suppliers as of now. This is taken from /mnt4/publisherdata/
 $supplierList = array (
 "APK" => "APK",
@@ -46,6 +46,7 @@ $supplierList = array (
 "INDIABOOKS" => "INDIABOOKS",
 "JAICO" => "JAICO",
 "MEDIASTAR" => "MEDIASTAR",
+"MOTILAL" => "MOTILAL",
 "NARI" => "NARI",
 "NEWINDIABOOKSOURCE" => "NEWINDIABOOKSOURCE",
 "ORIENTBLACKSWAN" => "ORIENTBLACKSWAN",

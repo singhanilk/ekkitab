@@ -113,6 +113,8 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     for (my $i = $startrow; $i <= $endrow; $i++) {
         if(defined($assumptions{$oWkS->get_name()})){
             $deliverydays = $assumptions{$oWkS->get_name()};
+        } else {
+            $deliverydays = "";
         }
 	    $enteredcount++;
         my $value = '';
@@ -155,10 +157,15 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             }
         }
         $value = $oWkS->{Cells}[$i][$availcol];
-        my $availability;
+        my $availability = 0;
+        my $tmpValue;
             if(defined ($value)) {
-                $availability = $value->Value;
-                $availability =~ s/\n//g;
+                $tmpValue = $value->Value;
+                $tmpValue =~ s/\n//g;
+                $tmpValue =~ s/ no//g;
+                $tmpValue =~ s/^\s+//;
+                $tmpValue =~ s/\s+$//;
+                $availability = $tmpValue;
 	        if ($availability > $threshold){
 	            $availability = 'Available';
             }
@@ -194,7 +201,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
 		    print $isbn . "\t" . $price . "\t" . $currency . "\t"  
     		      . $availability . "\t" . $imprint .  "\t" . $title .  "\t" . $author . "\t" . "$deliverydays" . "\n" ;
              }
-        }
+        } 
     }
     my $ratio = ($printedcount/$enteredcount)*100;
     if (int($ratio) < 70){
