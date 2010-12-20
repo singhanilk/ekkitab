@@ -35,9 +35,66 @@ if (not defined $oBook) {
 
 # The columns are defined as follows. The corresponding arrays are declared accordingly. Total 19 Fields
 #ISBN  PRICE    CURRENCY    AVAILABILITY    IMPRINT DELIVERY-DATE TITLE   AUTHOR  BINDING DESCRIPTION PUBLISH-DATE    PUBLISHER   PAGES   LANGUAGE    WEIGHT  DIMENSION   SHIP-REGION BISACCODE SUPPLIER
-my @columnNames = ('ISBN','PRICE','CURRENCY','AVAILABILITY','IMPRINT','DELIVERY-DATE', 'TITLE','AUTHOR','BINDING','DESCRIPTION','PUBLISH-DATE','PUBLISHER','PAGES','LANGUAGE','WEIGHT','DIMENSION','SHIP-REGION','BISACCODE', 'SUPPLIER');
-my @columnPresent = (-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, -1);
-my @columnValues = ('','','','','','','','','','','','','','','','','','','');
+my @columnNames = ('ISBN',
+                   'TITLE',
+                   'AUTHOR', 
+                   'SUPPLIER',
+                   'PUBLISHER',
+                   'IMPRINT',
+                   'PRICE',
+                   'CURRENCY',
+                   'AVAILABILITY',
+                   'PUBLISHING_DATE',
+                   'DELIVERY_PERIOD', 
+                   'BINDING',
+                   'PAGES',
+                   'LANGUAGE',
+                   'WEIGHT',
+                   'DIMENSION',
+                   'SHIPPING_REGION',
+                   'SUBJECT', 
+                   'DESCRIPTION'
+                  );
+my @columnPresent = (-1,
+                     -1,
+                     -1,
+                     -1,
+                     -1,
+                     -1,
+                     -1,
+                     -1,
+                     -1,
+                     -1,
+                     -1,
+                     -1,
+                     -1,
+                     -1,
+                     -1,
+                     -1,
+                     -1,
+                     -1, 
+                     -1
+                     );
+my @columnValues = ('',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    ''
+                   );
 
 #Standard pattern
 #my @columnPatterns = ('ISBN', 'TITLE', 'AUTHOR', 'FORMAT', 'DESCRIPTION', 'PUBLISH-DATE', 'PUBLISHER', 'PAGES', 'LANGUAGE', 'WEIGHT', 'DIMENSION', 'SHIP-REGION', 'CATEGORY' );
@@ -52,7 +109,26 @@ my @columnValues = ('','','','','','','','','','','','','','','','','','','');
 #Cambridge
 #my @columnPatterns = ('ISBN13','name','AUTHOR1','BINDINGTYPE','DESCRIPTION','PUBLISH-DATE','PUBLISHER','PAGES','LANGUAGE','WEIGHT','DIMENSION','SHIP-REGION','BISACCODE');
 #New Arrivals
-my @columnPatterns = ('ISBN','PRICE','CURRENCY','AVAILABILITY','IMPRINT','DELIVERY-DATE', 'TITLE','AUTHOR','BINDING','DESCRIPTION','PUBLISH-DATE','PUBLISHER','PAGES','LANGUAGE','WEIGHT','DIMENSION','SHIP-REGION','SUBJECT', 'SUPPLIER');
+my @columnPatterns = ('ISBN',
+                   'TITLE',
+                   'AUTHOR', 
+                   'SUPPLIER',
+                   'PUBLISHER',
+                   'IMPRINT',
+                   'PRICE',
+                   'CURRENCY',
+                   'AVAILABILITY',
+                   'PUBLISHING_DATE',
+                   'DELIVERY_PERIOD', 
+                   'BINDING',
+                   'PAGES',
+                   'LANGUAGE',
+                   'WEIGHT',
+                   'DIMENSION',
+                   'SHIPPING_REGION',
+                   'SUBJECT', 
+                   'DESCRIPTION'
+                  );
 
 for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
     $oWkS = $oBook->{Worksheet}[$iSheet];
@@ -71,7 +147,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             }
          }
     # Check for ISBN , TITLE and AUTHOR for catalog and price file.
-    if (($columnPresent[0] >= 0) && ($columnPresent[6] >= 0) && ($columnPresent[7] >= 0)) {
+    if (($columnPresent[0] >= 0) && ($columnPresent[2] >= 0) && ($columnPresent[6] >= 0)) {
             $startrow = $iR + 1;
             $endrow   = $oWkS->{MaxRow};
             last;
@@ -107,18 +183,16 @@ sub printColumnValues{
       my $availabilityString = "";
 
       # The initial check for isbn, title and author to be present has been modified to just isbn and title as we are loading data without author also.
-      if (($columnValues[0] ne '') && ($columnValues[6] ne '')) {
-        $tmpString = $columnValues[0]."\t".$columnValues[6]."\t".$columnValues[7]."\t".$columnValues[8]."\t".$columnValues[9]."\t".
-                                 $columnValues[10]."\t".$columnValues[11]."\t".$columnValues[12]."\t".$columnValues[13]."\t".$columnValues[14]."\t".
-                                 $columnValues[15]."\t".$columnValues[16]."\t".$columnValues[17]."\n";
+      if (($columnValues[0] ne '') && ($columnValues[1] ne '')) {
+        $tmpString = $columnValues[0] ."\t". $columnValues[1] ."\t" . $columnValues[2] . "\t" . $columnValues[11] . "\t" . $columnValues[19] . "\t" .  $columnValues[9] ."\t".$columnValues[4]."\t".$columnValues[12]."\t".$columnValues[13]."\t".$columnValues[14]."\t". $columnValues[15]."\t".$columnValues[16]."\t".$columnValues[17]."\n";
        print catalogFilehandle $tmpString;
       }
       
      if ( $stockFilename ne '') {
-      $availabilityString = ($preorder ne "") ? $preorder : $columnValues[3];
-      if (($columnValues[0] ne '') && ($columnValues[1] ne '') && ($columnValues[2] ne '') && ($columnValues[3] ne '') && ($columnValues[18] ne '')) {
-        $tmpString = $columnValues[0]."\t".$columnValues[1]."\t".$columnValues[2]."\t".$availabilityString ."\t".$columnValues[18]."\t".
-                               $columnValues[6]."\t".$columnValues[7]."\t".$columnValues[5]."\n";
+      $availabilityString = ($preorder ne "") ? $preorder : $columnValues[8];
+      if (($columnValues[0] ne '') && ($columnValues[1] ne '') && ($columnValues[2] ne '') && ($columnValues[8] ne '') && ($columnValues[3] ne '')) {
+        $tmpString = $columnValues[0]."\t".$columnValues[6]."\t".$columnValues[7]."\t".$availabilityString ."\t".$columnValues[3]."\t".
+                               $columnValues[1]."\t".$columnValues[2]."\t".$columnValues[10]."\n";
         print stockFilehandle $tmpString;
       }
      }
@@ -138,7 +212,7 @@ sub formatValue {
     if ( $columnNames[$iCounter] eq 'TITLE') { $value =~ s/\n//g; }
     if ( $columnNames[$iCounter] eq 'AUTHOR') { $value =~ s/\n//g; }
     if ( $columnNames[$iCounter] eq 'DESCRIPTION') { $value =~ s/\n//g; }
-    if ( $columnNames[$iCounter] eq 'PUBLISH-DATE') { $value =~ s/\n//g; }
+    if ( $columnNames[$iCounter] eq 'PUBLISHING_DATE') { $value =~ s/\n//g; }
     if ( $columnNames[$iCounter] eq 'PUBLISHER') { $value =~ s/\n//g; }
     if ( $columnNames[$iCounter] eq 'PAGES') { $value =~ s/\n//g; }
     if ( $columnNames[$iCounter] eq 'LANGUAGE') {
@@ -150,8 +224,8 @@ sub formatValue {
     }
     if ( $columnNames[$iCounter] eq 'WEIGHT') { $value =~ s/\n//g; }
     if ( $columnNames[$iCounter] eq 'DIMENSION') { $value =~ s/\n//g; }
-    if ( $columnNames[$iCounter] eq 'SHIP-REGION') { $value =~ s/\n//g; }
-    if ( $columnNames[$iCounter] eq 'BISACCODE') { $value =~ s/\n//g; }
+    if ( $columnNames[$iCounter] eq 'SHIPPING_REGION') { $value =~ s/\n//g; }
+    if ( $columnNames[$iCounter] eq 'SUBJECT') { $value =~ s/\n//g; }
     if ( $columnNames[$iCounter] eq 'PRICE') { $value =~ s/\n//g; }
     if ( $columnNames[$iCounter] eq 'CURRENCY') {
            $value =~ s/\n//g;
