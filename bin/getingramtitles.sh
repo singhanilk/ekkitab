@@ -37,7 +37,7 @@ else
    if (cd $targetdir; wget -O $targetfile ftp://w20M0695:ees695@ftp1.ingrambook.com/titleswk/$targetfile >/dev/null 2>&1) ; then
         echo "done."
         echo -n "[Get Titles] Unzipping file $targetfile..."
-        (cd $targetdir; rm -f $datafile; unzip $targetfile >/dev/null 2>&1 && chmod a+r $datafile)
+        (cd $targetdir; rm -f $datafile; unzip $targetfile >/dev/null 2>&1 && chmod a+r $datafile && touch $datafile)
         echo "done."
    else
         echo "failed."
