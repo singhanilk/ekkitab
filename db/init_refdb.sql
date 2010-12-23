@@ -41,9 +41,9 @@ insert into ek_discount_setting (`info_source`, `discount_percent`) values ('Ing
                                                                            ('Tulika', 0),
                                                                            ('Roli', 30),
                                                                            ('Fortytwobookzgalaxy', 20),
+                                                                           ('Scholastic', 20),
                                                                            ('Anebooks', 33),
                                                                            ('Shroff', 30);
-
 --
 -- Seed data for table `ek_supplier_params`
 --
@@ -97,5 +97,6 @@ insert into ek_supplier_params (`info_source`, `publisher`, `supplier_discount`,
                                ('Roli', 'Any', 30, 3),
                                ('Fortytwobookzgalaxy', 'Any', 20, 3),
                                ('Anebooks', 'Any', 33, 3),
+                               ('Scholastic', 'Any', 20, 5),
                                ('Shroff', 'Any', 30, 3),
                                ('Unknown', 'Any', 25, 5);
