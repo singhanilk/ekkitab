@@ -28,7 +28,7 @@ checkfilesizes() {
 
 targetdir="/mnt4/publisherdata/Ingram"
 targetfile="ttlingv2.zip"
-datafile="TTLINGV2.TXT"
+datafile="ttlingv2.txt"
 checkfilesizes $targetdir $datafile
 if (( $? == 0 )) ; then
    echo "[Get Titles] File $datafile is uptodate"
