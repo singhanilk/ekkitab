@@ -5140,3 +5140,5 @@ INSERT INTO `ek_bisac_category_map` (`bisac_code`, `level1`, `level2`, `level3`,
 ('VID535000', 'video & dvd genre', 'reality', '', '', '', '', '', '5557,5610','video-dvd-genre/reality.html'),
 ('VID536000', 'video & dvd genre', 'special interest', '', '', '', '', '', '5557,5611','video-dvd-genre/special-interest.html'),
 ('ZZT000000', 'translations', 'general', '', '', '', '', '', '5612,5613','translations/general.html');
+INSERT INTO `ek_bisac_category_map` (`bisac_code`, `level1`, `level2`, `level3`, `level4`, `level5`, `level6`, `level7`, `category_id`, `rewrite_url`) VALUES
+('KAN001000', 'kannada', '', '', '', '', '', '', '6000','kannada.html');
