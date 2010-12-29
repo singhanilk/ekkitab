@@ -131,7 +131,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if(defined ($value)) {
            $availability = $value->Value;
            $availability =~ s/\n//g;
-           if ($availability >  $threshold){
+           if (($availability ne '') and ($availability > $threshold)) {
 	       $availability = 'Available';
            }
            else{
@@ -163,6 +163,12 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             }
             elsif ($currency =~ /USD/) {
                    $currency = 'U';
+            }
+            elsif ($currency =~ /EUR/) {
+                   $currency = 'E';
+            }
+            elsif ($currency =~ /SGD/) {
+                   $currency = 'S';
             }
         }
 
