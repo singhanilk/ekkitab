@@ -47,44 +47,44 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             $oWkC = $oWkS->{Cells}[$iR][$iC];
             if (defined $oWkC) {
                 if ($isbncol == -1) {
-                    if ($oWkC->Value =~ /ISBN\/Code/) {
+                    if ($oWkC->Value =~ /ISBN13/) {
                         $isbncol = $iC;
                         next;
                     }
                 }
                 if ($pricecol == -1) {
-                    if ($oWkC->Value =~ /S.P/) {
+                    if ($oWkC->Value =~ /Price/i) {
                         $pricecol = $iC;
                         next;
                     }
                 }
 		        if ($pricecol1 == -1) {
-                    if ($oWkC->Value =~ /RATE\sRs./) {
+                    if ($oWkC->Value =~ /REGULARSELLINGPRICE/i) {
                         $pricecol1 = $iC;
                         next;
                     }
                 }
                 if ($currencycol == -1) {
-                    if ($oWkC->Value =~ /CURR./) {
+                    if ($oWkC->Value =~ /CURRENCY/i) {
                         $currencycol = $iC;
                         next;
                     }
                 }
     	        if ($availcol == -1) {
-    		        if ($oWkC->Value =~ /QTY/) {
+    		        if ($oWkC->Value =~ /STOCK/i) {
                         $availcol = $iC-1;
                         next;
     		        }
                 }
     	        if ($titlecol == -1) {
-    		        if ($oWkC->Value =~ /TITLE/) {
+    		        if ($oWkC->Value =~ /name/i) {
                         $titlecol = $iC;
                         next;
     		        }
                 }
     
     	        if ($authorcol == -1) {
-    		        if ($oWkC->Value =~ /AUTHOR/) {
+    		        if ($oWkC->Value =~ /AUTHOR1/i) {
                         $authorcol = $iC;
                         next;
     		        }
