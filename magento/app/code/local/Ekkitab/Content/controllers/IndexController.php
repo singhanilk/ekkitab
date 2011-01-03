@@ -50,7 +50,6 @@ class Ekkitab_Content_IndexController extends Mage_Core_Controller_Front_Action
      * Initialize requested product object
      *
      * @return Mage_Catalog_Model_Product
-     */
     public function overleafAction()
     {
 		$contentUrl  = trim((String) $this->getRequest()->getParam('product'));
@@ -72,5 +71,6 @@ class Ekkitab_Content_IndexController extends Mage_Core_Controller_Front_Action
 
 		}
     }
+    */
 
 }

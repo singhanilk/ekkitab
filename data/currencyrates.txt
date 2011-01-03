@@ -1,6 +1,6 @@
-USD   47.4
+USD   47.6
 CAN   47.1
-BRI   75.9
-EUR   65.0
+BRI   74.5
+EUR   63.1
 SGD   36.7
 AUD   47.1

@@ -1,4 +1,12 @@
 #!/bin/bash
+
+fixdate() {
+  let d=$1;
+  let d2=$d%100;
+  let d=${d2}*10000+$d/100
+  echo $d
+}
+
 if [ -z $EKKITAB_HOME ] ; then
     echo "EKKITAB_HOME is not set..."
     exit 1;
@@ -26,6 +34,7 @@ if [ $# -ne 2 ] ; then
 else 
     d1=10#$2
 fi;
+d1=`fixdate $d1`
 #echo "Please input password 'ees695' when prompted."
 ftp ftp1.ingrambook.com > $tmpfile <<!
 passive
@@ -38,6 +47,7 @@ filestransferred=0
 for i in $(cat $tmpfile | grep zip$ | sed 's/.* \([^ ]*.zip\)/\1/g') 
 do 
     d2=10#`echo $i | sed 's/\([0-9]*\)j400.*/\1/g'`
+    d2=`fixdate $d2`
     if (( $d2 >= $d1 )); then 
             dir=`echo $i | sed 's/^\([0-9]*\).*\([0-9]of[0-9]\).*/\1-\2/'`
             echo -n "[Get Images] Starting ftp for file $i"
