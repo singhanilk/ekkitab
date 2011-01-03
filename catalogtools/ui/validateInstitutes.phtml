@@ -35,8 +35,12 @@ if ( $task == "getDetails" ) {
   $institute = Array(); 
  if(isset($_GET['institute_id'])) {$institute['id'] = $_GET['institute_id']; } elseif(isset($_POST['institute_id'])) { $institute['id'] = $_POST['institute_id']; } else { $institute['id']= ""; }
  if(isset($_GET['name'])) {$institute['name'] = $_GET['name']; } elseif(isset($_POST['name'])) { $institute['name'] = $_POST['name']; } else { $institute['name']= ""; }
+ if(isset($_GET['street'])) {$institute['street'] = $_GET['street']; } elseif(isset($_POST['street'])) { $institute['street'] = $_POST['street']; } else { $institute['street']= ""; }
+ if(isset($_GET['locality'])) {$institute['locality'] = $_GET['locality']; } elseif(isset($_POST['locality'])) { $institute['locality'] = $_POST['locality']; } else { $institute['locality']= ""; }
  if(isset($_GET['city'])) {$institute['city'] = $_GET['city']; } elseif(isset($_POST['city'])) { $institute['city'] = $_POST['city']; } else { $institute['city']= ""; }
  if(isset($_GET['state'])) {$institute['state'] = $_GET['state']; } elseif(isset($_POST['state'])) { $institute['state'] = $_POST['state']; } else { $institute['state']= ""; }
+ if(isset($_GET['postcode'])) {$institute['postcode'] = $_GET['postcode']; } elseif(isset($_POST['postcode'])) { $institute['postcode'] = $_POST['postcode']; } else { $institute['postcode']= ""; }
+ if(isset($_GET['telephone'])) {$institute['telephone'] = $_GET['telephone']; } elseif(isset($_POST['telephone'])) { $institute['telephone'] = $_POST['telephone']; } else { $institute['telephone']= ""; }
  if(isset($_GET['is_valid'])) {$institute['is_valid'] = 1; } elseif(isset($_POST['is_valid'])) { $institute['is_valid'] = 1; } else { $institute['is_valid']= 0; }
 
  $instituteId = $institute['id'];
@@ -45,6 +49,7 @@ if ( $task == "getDetails" ) {
  if ( $institute['state'] == "" ) { $errorList[] = "State cannot be empty"; }
  if ( empty($errorList) )  { 
   $query = "update ek_social_institutes set name='" . $institute['name']. "', city='" . $institute['city'] . "', state='" . $institute['state'] . "'"; 
+  $query .= ", street='" . $institute['street']. "', locality='" . $institute['locality'] . "', postcode='" . $institute['postcode'] . "', telephone='" . $institute['telephone']. "'"; 
   $query .=  ", is_valid=" . $institute['is_valid'] . " where id=" . $institute['id'];
   try {
    $result = mysqli_query($db,$query);
@@ -123,12 +128,42 @@ closeDatabase($db);
   </td>
  </tr>
  <tr>
+  <td>Generated Email</td>
+  <td>
+    <input type='text' name ='email' size='50' maxlength='20' readonly value='<?php if($institute) { echo $institute['email']; } ?>' />
+  </td>
+ </tr>
+ <tr>
+  <td>Street</td>
+  <td>
+    <textarea name ='street' rows='10' cols='30' ><?php if($institute) { echo $institute['street']; } ?></textarea>
+  </td>
+ </tr>
+ <tr>
+  <td>Locality</td>
+  <td>
+    <input type='text' name ='locality' size='50' maxlength='30' value='<?php if($institute) { echo $institute['locality']; } ?>' />
+  </td>
+ </tr>
+ <tr>
   <td>City</td>
   <td><input type='text' name ='city' size="50" maxlength='255' value='<?php if($institute) { echo $institute['city']; } ?>' /></td>
  </tr>
  <tr>
   <td>State</td>
   <td><input type='text' name ='state' size='50' maxlength='120' value='<?php if($institute) { echo $institute['state']; } ?>' /></td>
+ </tr>
+ <tr>
+  <td>Postcode</td>
+  <td>
+    <input type='text' name ='postcode' size='50' maxlength='20' value='<?php if($institute) { echo $institute['postcode']; } ?>' />
+  </td>
+ </tr>
+ <tr>
+  <td>Telephone</td>
+  <td>
+    <input type='text' name ='telephone' size='50' maxlength='20' value='<?php if($institute) { echo $institute['telephone']; } ?>' />
+  </td>
  </tr>
  <tr>
   <td>Valid</td>

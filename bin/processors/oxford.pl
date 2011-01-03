@@ -37,13 +37,13 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
             $oWkC = $oWkS->{Cells}[$iR][$iC];
             if (defined $oWkC) {
                 if ($isbncol == -1) {
-                    if ($oWkC->Value =~ /ISBN/) {
+                    if ($oWkC->Value =~ /ISBN/i) {
                         $isbncol = $iC;
                         next;
                     }
                 }
                 if ($pricecol == -1) {
-                    if ($oWkC->Value =~ /INR\sPrice/) {
+                    if ($oWkC->Value =~ /INR\sPrice/i) {
                         $pricecol = $iC;
                        # print "INR PRICE -- $pricecol [" . $oWkS->get_name() . "]\n";
                         next;
@@ -56,22 +56,34 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
                     }
                 }
                 if ($pricecol == -1) {
-                    if ($oWkC->Value =~ /Price/) {
+                    if ($oWkC->Value =~ /Selling\sPrice/i) {
                         $pricecol = $iC;
                         next;
                     }
                 }
+                if ($currencycol == -1) {
+                    if ($oWkC->Value =~ /Price\scurrency/i) {
+                        $currencycol = $iC;
+                        next;
+                    }
+                }
                 if ($titlecol == -1) {
-    		        if ($oWkC->Value =~ /Title/) {
+    		        if ($oWkC->Value =~ /Title/i) {
                         $titlecol = $iC;
                         next;
     		        }
                 }
                 if ($authorcol == -1) {
-    		        if ($oWkC->Value =~ /Author/) {
+    		        if ($oWkC->Value =~ /Author/i) {
                         $authorcol = $iC;
                         next;
     		        }
+                }
+                if ($availcol == -1) {
+                    if ($oWkC->Value =~ /Stock/i) {
+                        $availcol = $iC;
+                        next;
+                    }
                 }
             }
         }
@@ -113,6 +125,7 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
         if (defined ($value)) {
            $price = $value->unformatted();
            $price =~ s/\n//g;
+           if ( $currencycol == -1 ) {
            my @z = $price =~ m/([A-Z]{2,})/g;
            foreach my $name (@z) {
                 foreach my $currencyname (keys(%currencynames)) {
@@ -140,7 +153,23 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            if ($currency eq "") {
                 $currency = "I";
            }
+        }else {
+          my $currvalue = $oWkS->{Cells}[$i][$currencycol];
+          if (defined ($currvalue)) {
+           $currvalue = $currvalue->Value;
+           $currvalue =~ s/\n//g;
+          SWITCH: {
+                        $currvalue eq "INR" && do { $currency = "I"; last SWITCH; };
+                        $currvalue eq "USD" && do { $currency = "U"; last SWITCH; };
+                        $currvalue eq "GBP" && do { $currency = "P"; last SWITCH; };
+                        $currvalue eq "" && do { last SWITCH; };
+                        $currency = "UNKNOWN";
+          }
+         } else {
+           $currency = "UNKNOWN";
+         }
         }
+       }
         $value = $oWkS->{Cells}[$i][$titlecol];
         my $title;
         if (defined ($value)) {
@@ -153,6 +182,25 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
            $author = $value->Value;
            $author =~ s/\n//g;
         }
+        if ( $availcol != -1 ) {
+        $value = $oWkS->{Cells}[$i][$availcol];
+        $availability = 0;
+        my $tmpValue;
+            if(defined ($value)) {
+                $tmpValue = $value->Value;
+                $tmpValue =~ s/\n//g;
+                $tmpValue =~ s/,//g;
+                $tmpValue =~ s/^\s+//;
+                $tmpValue =~ s/\s+$//;
+                $availability = $tmpValue;
+	        if ($availability > 1){
+	            $availability = 'Available';
+            }
+            else{
+                $availability = 'Not Available' . '[' . $availability . ']';
+            }        
+        }
+       }
         if (defined ($isbn)  && 
             defined ($price) && 
             defined ($currency) && 
